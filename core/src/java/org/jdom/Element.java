@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.121 2002/05/11 07:47:12 jhunter Exp $
+ $Id: Element.java,v 1.122 2002/05/11 07:50:04 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.121 $, $Date: 2002/05/11 07:47:12 $
+ * @version $Revision: 1.122 $, $Date: 2002/05/11 07:50:04 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.121 $ $Date: 2002/05/11 07:47:12 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.122 $ $Date: 2002/05/11 07:50:04 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -752,23 +752,6 @@ public class Element implements Serializable, Cloneable {
     public Element setContent(List newContent) {
         content.clearAndSet(newContent);
         return this;
-    }
-
-    /**
-     * Test whether this element has a child element.
-     * This method can be used before a call to {@link #getContent},
-     * which always creates a "live" list, to improve performance.
-     *
-     * @return <code>true</code> if this element has at least
-     *         one child element
-     */
-    public boolean hasChildren() {
-        for (int i = 0; i < content.size(); i++) {
-            if (content.get(i) instanceof Element) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -1606,4 +1589,23 @@ public class Element implements Serializable, Cloneable {
         return deletedSome;
     }
 
+    /**
+     * Test whether this element has a child element.
+     * This method can be used before a call to {@link #getContent},
+     * which always creates a "live" list, to improve performance.
+     *
+     * @deprecated Deprecated in Beta 9, instead of this method you can check
+     * the size of a getChildren() call
+     *
+     * @return <code>true</code> if this element has at least
+     *         one child element
+     */
+    public boolean hasChildren() {
+        for (int i = 0; i < content.size(); i++) {
+            if (content.get(i) instanceof Element) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
