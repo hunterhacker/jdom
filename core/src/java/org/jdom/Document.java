@@ -379,24 +379,6 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add an element to the <code>Document</code>.
-     * </p>
-     *
-     * @param element <code>Element</code> to add.
-     * @return <code>Document</code> - this object modified.
-     */
-    public Document addContent(Element element) {
-        if (getRootElement() != null) {
-            throw new IllegalAddException(
-                this, element, "The document already has a root element");
-        }
-        setRootElement(element);
-
-        return this;
-    }
-
-    /**
-     * <p>
      * This will return all content for the <code>Document</code>.
      * The returned list is "live" and changes to it affect the
      * document's actual content.
@@ -427,7 +409,7 @@ public class Document implements Serializable, Cloneable {
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                addContent((Element)obj);
+                setRootElement((Element)obj);
             }
             else if (obj instanceof Comment) {
                 addContent((Comment)obj);
@@ -532,7 +514,7 @@ public class Document implements Serializable, Cloneable {
             Object obj = i.next();
             if (obj instanceof Element) {
                 Element e = (Element)obj;
-                doc.addContent((Element)e.clone());
+                doc.setRootElement((Element)e.clone());
             }
             else if (obj instanceof Comment) {
                 Comment c = (Comment)obj;
@@ -550,6 +532,37 @@ public class Document implements Serializable, Cloneable {
 
         return doc;
     }
+
+    /**
+     * <p>
+     * This removes the specified <code>ProcessingInstruction</code>.
+     * </p>
+     *
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(ProcessingInstruction pi) {
+        if (content == null) {
+            return false;
+        }
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Comment</code>.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Comment comment) {
+        if (content == null) {
+            return false;
+        }
+        return content.remove(comment);
+    }
+
 
     /**
      * @deprecated use addContent(Comment) instead
@@ -580,12 +593,23 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * @deprecated use doc.getMixedContent().remove(PI) instead
+     * @deprecated use doc.removeContent(PI) instead
      */
     public boolean removeProcessingInstruction(ProcessingInstruction pi) {
         return getMixedContent().remove(pi);
     }
+
+    /**
+     * @deprecated Deprecated in beta6, use setRootElement() instead
+     */
+    public Document addContent(Element element) {
+        if (getRootElement() != null) {
+            throw new IllegalAddException(
+                this, element, "The document already has a root element");
+        }
+        setRootElement(element);
+
+        return this;
+    }
 }
-
-
 
