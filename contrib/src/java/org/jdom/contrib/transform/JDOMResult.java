@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.3 2001/04/13 17:20:38 jhunter Exp $
+ $Id: JDOMResult.java,v 1.4 2001/05/18 22:38:05 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,12 +195,6 @@ public class JDOMResult extends SAXResult {
   private class DocumentBuilder extends XMLFilterImpl
                                 implements LexicalHandler {
     /**
-     * The JDOM document to populate as a result of the XSL
-     * Transformation.
-     */
-    private Document resultDocument = null;
-
-    /**
      * The actual JDOM document builder.
      */
     private SAXHandler saxHandler = null;
@@ -224,7 +218,8 @@ public class JDOMResult extends SAXResult {
      *         or <code>null</code> if none is available.
      */
     public Document getDocument() {
-      return (this.documentReady == true) ? this.resultDocument : null;
+      return (this.documentReady == true) ? 
+                       this.saxHandler.getDocument() : null;
     }
 
     //----------------------------------------------------------------------
@@ -254,8 +249,7 @@ public class JDOMResult extends SAXResult {
         // ContentHandler on the superclass (XMLFilterImpl): this
         // implementation will take care of propagating the LexicalHandler
         // events.
-        this.resultDocument = new Document((Element)null);
-        this.saxHandler     = new SAXHandler(this.resultDocument);
+        this.saxHandler     = new SAXHandler();
         super.setContentHandler(this.saxHandler);
 
         // And propagate event.
