@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.52 2001/05/30 01:27:41 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.53 2001/06/15 20:55:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,10 +84,14 @@ import org.jdom.*;
  * <p> There are <code>output(...)</code> methods to print any of the
  * standard JDOM classes, including <code>Document</code> and
  * <code>Element</code>, to either a <code>Writer</code> or an
- * <code>OutputStream</code>.  Warning: using your own
- * <code>Writer</code> may cause the outputter's preferred character
- * encoding to be ignored.  If you use encodings other than UTF8, we
- * recommend using the method that takes an OutputStream instead.
+ * <code>OutputStream</code>.  Warning: When outputting to a Writer make 
+ * sure the writer's encoding matches the encoding expected by the 
+ * XMLOutputter.  This ensures the encoding in which the content is written 
+ * (controlled by the Writer configuration) matches the encoding placed in 
+ * the document's declaration (controlled by the XMLOutputter).  Because a 
+ * Writer cannot be queried for its encoding, the information must be passed 
+ * to the XMLOutputter manually in its constructor or via the setEncoding() 
+ * method.  The default XMLOutputter encoding is UTF-8.
  * </p>
  *
  * <p> The methods <code>outputString(...)</code> are for convenience
@@ -108,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.52 $ $Date: 2001/05/30 01:27:41 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.53 $ $Date: 2001/06/15 20:55:52 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -118,7 +122,7 @@ public class XMLOutputter implements Cloneable {
     private boolean suppressDeclaration = false;
 
     /** The encoding format */
-    private String encoding = "UTF8";
+    private String encoding = "UTF-8";
 
     /** Whether or not to output the encoding in the XML declaration 
       * - default is <code>false</code> */
@@ -193,7 +197,8 @@ public class XMLOutputter implements Cloneable {
      *        of spaces
      * @param newlines <code>true</code> indicates new lines should be
      *                 printed, else new lines are ignored (compacted).
-     * @param encoding set encoding format.
+     * @param encoding set encoding format.  Use XML-style names like
+     *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      */
     public XMLOutputter(String indent, boolean newlines, String encoding) {
        this.indent = indent;
@@ -259,7 +264,8 @@ public class XMLOutputter implements Cloneable {
      * Sets the output encoding.  The name should be an accepted XML
      * encoding.
      *
-     * @param encoding encoding format
+     * @param encoding the encoding format.  Use XML-style names like
+     *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      **/
     public void setEncoding(String encoding) {
         this.encoding = encoding;
@@ -422,18 +428,22 @@ public class XMLOutputter implements Cloneable {
      */
     protected Writer makeWriter(OutputStream out)
                          throws java.io.UnsupportedEncodingException {
-        Writer writer = new OutputStreamWriter
-            (new BufferedOutputStream(out), this.encoding);
-        return writer;
+        return makeWriter(out, this.encoding);
     }
     
     /**
      * Get an OutputStreamWriter, use specified encoding.
      */
-    protected Writer makeWriter(OutputStream out, String encoding)
+    protected Writer makeWriter(OutputStream out, String enc)
                          throws java.io.UnsupportedEncodingException {
+        // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate into 
+        // "UTF8" which works with all JDKs. 
+        if ("UTF-8".equals(enc)) {
+            enc = "UTF8";
+        }
+
         Writer writer = new OutputStreamWriter
-            (new BufferedOutputStream(out), encoding);
+            (new BufferedOutputStream(out), enc);
         return writer;
     }
     
@@ -461,7 +471,7 @@ public class XMLOutputter implements Cloneable {
      *
      * <p> Warning: using your own Writer may cause the outputter's
      * preferred character encoding to be ignored.  If you use
-     * encodings other than UTF8, we recommend using the method that
+     * encodings other than UTF-8, we recommend using the method that
      * takes an OutputStream instead.  </p>
      *
      * @param doc <code>Document</code> to format.
@@ -474,7 +484,6 @@ public class XMLOutputter implements Cloneable {
 
         if (doc.getDocType() != null) {
             printDocType(doc.getDocType(), out);
-            maybePrintln(out);
         }
         
         // Print out root element, as well as any root level
@@ -852,20 +861,11 @@ public class XMLOutputter implements Cloneable {
         // Only print the declaration if it's not being suppressed
         if (!suppressDeclaration) {
             // Assume 1.0 version
-            if (encoding.equals("UTF8")) {
-                out.write("<?xml version=\"1.0\"");
-                if (!omitEncoding) {
-                    out.write(" encoding=\"UTF-8\"");
-                }
-                out.write("?>");
+            out.write("<?xml version=\"1.0\"");
+            if (!omitEncoding) {
+                out.write(" encoding=\"" + encoding + "\"");
             }
-            else {
-                out.write("<?xml version=\"1.0\"");
-                if (!omitEncoding) {
-                    out.write(" encoding=\"" + encoding + "\"");
-                }
-                out.write("?>");
-            }
+            out.write("?>");
 
             // Print new line after decl always, even if no other new lines
             // Helps the output look better and is semantically
@@ -909,6 +909,11 @@ public class XMLOutputter implements Cloneable {
             out.write("\"");
         }
         out.write(">");
+
+        // Print new line after decl always, even if no other new lines
+        // Helps the output look better and is semantically
+        // inconsequential
+        out.write(lineSeparator);
     }
 
     /**
