@@ -346,7 +346,7 @@ public class XMLOutputter implements Cloneable {
      * will run the three separate words together into a single word).
      *
      * This setting is not too useful if you haven't also called
-     * {@link setTrimText()}.</p>
+     * {@link #setTrimText(boolean)}.</p>
      * 
      * <p>Default: false </p>
      *
