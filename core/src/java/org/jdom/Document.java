@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.38 2001/04/27 18:21:20 jhunter Exp $
+ $Id: Document.java,v 1.39 2001/04/28 01:13:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.38 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.39 $ $Date: 2001/04/28 01:13:43 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -257,151 +257,6 @@ public class Document implements Serializable, Cloneable {
         }
 
         this.docType = docType;
-        return this;
-    }
-
-    /**
-     * <p>
-     * This will return the list of
-     *   <code>{@link ProcessingInstruction}</code>s
-     *   for this <code>Document</code> located at the document level 
-     *   (outside the root element).
-     * The returned list is "live" in document order and changes to it 
-     * affect the document's actual content.
-     * </p>
-     *
-     * @return <code>List</code> - PIs for document.
-     */
-    public List getProcessingInstructions() {
-        PartialList pis = new PartialList(content);
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                pis.addPartial(obj);
-            }
-        }
-
-        return pis;
-    }
-
-    /**
-     * <p>
-     * This returns the processing instructions for this
-     *   <code>Document</code> located at the document level
-     *   (outside the root element) which have the supplied target.
-     * The returned list is "live" in document order and changes to it 
-     * affect the document's actual content.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to return.
-     * @return <code>List</code> - all PIs with the specified
-     *         target.
-     */
-    public List getProcessingInstructions(String target) {
-        PartialList pis = new PartialList(content);
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
-                    pis.addPartial(obj);
-                }
-            }
-        }
-
-        return pis;
-    }
-
-    /**
-     * <p>
-     * This returns the first processing instruction for this
-     *   <code>Document</code> located at the document level 
-     *   (outside the root element) for the supplied target, or null if
-     *   no such processing instruction exists.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to return.
-     * @return <code>ProcessingInstruction</code> - the first PI
-     *         with the specified target, or null if no such PI exists.
-     */
-    public ProcessingInstruction getProcessingInstruction(String target) {
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
-                    return (ProcessingInstruction)obj;
-                }
-            }
-        }
-
-        // If we got here, none found
-        return null;
-    }
-
-    /**
-     * <p>
-     * This will remove the first PI with the specified target.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to remove.
-     * @return <code>boolean</code> - whether the requested PI was removed.
-     */
-    public boolean removeProcessingInstruction(String target) {
-        ProcessingInstruction pi = getProcessingInstruction(target);
-        if (pi == null) {
-            return false;
-        }
-        else {
-            return removeContent(pi);
-        }
-    }
-
-    /**
-     * <p>
-     * This will remove all PIs with the specified target.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to remove.
-     * @return <code>boolean</code> - whether the requested PIs were removed.
-     */
-    public boolean removeProcessingInstructions(String target) {
-        boolean deletedSome = false;
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                ProcessingInstruction pi = (ProcessingInstruction)obj;
-                if (pi.getTarget().equals(target)) {
-                    deletedSome = true;
-                    i.remove();
-                    pi.setDocument(null);
-                }
-            }
-        }
-        return deletedSome;
-    }
-
-    /**
-     * <p>
-     * This sets the PIs for this <code>Document</code> to those in the
-     *   <code>List</code supplied (removing all other PIs).
-     * </p>
-     *
-     * @param pis <code>List</code> of PIs to use.
-     * @return <code>Document</code> - this Document modified.
-     */
-    public Document setProcessingInstructions(List pis) {
-        // XXX Sanity check List contains only parentless and documentless PIs
-
-        List current = getProcessingInstructions();
-        for (Iterator i = current.iterator(); i.hasNext(); ) {
-            i.remove();
-        }
-
-        content.addAll(pis);
-
         return this;
     }
 
@@ -719,6 +574,9 @@ public class Document implements Serializable, Cloneable {
         }
     }
 
+
+    // Deprecated below here
+
     /**
      * <p>
      *  This will return the <code>Document</code> in XML format,
@@ -736,4 +594,166 @@ public class Document implements Serializable, Cloneable {
           "Document.getSerializedForm() is not yet implemented");
     }
 
+    /**
+     * <p>
+     * This will return the list of
+     *   <code>{@link ProcessingInstruction}</code>s
+     *   for this <code>Document</code> located at the document level 
+     *   (outside the root element).
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
+     * </p>
+     *
+     * @return <code>List</code> - PIs for document.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * PIs manually
+     */
+    public List getProcessingInstructions() {
+        PartialList pis = new PartialList(content);
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                pis.addPartial(obj);
+            }
+        }
+
+        return pis;
+    }
+
+    /**
+     * <p>
+     * This returns the processing instructions for this
+     *   <code>Document</code> located at the document level
+     *   (outside the root element) which have the supplied target.
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
+     * </p>
+     *
+     * @param target <code>String</code> target of PI to return.
+     * @return <code>List</code> - all PIs with the specified
+     *         target.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * PIs manually
+     */
+    public List getProcessingInstructions(String target) {
+        PartialList pis = new PartialList(content);
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    pis.addPartial(obj);
+                }
+            }
+        }
+
+        return pis;
+    }
+
+    /**
+     * <p>
+     * This returns the first processing instruction for this
+     *   <code>Document</code> located at the document level 
+     *   (outside the root element) for the supplied target, or null if
+     *   no such processing instruction exists.
+     * </p>
+     *
+     * @param target <code>String</code> target of PI to return.
+     * @return <code>ProcessingInstruction</code> - the first PI
+     *         with the specified target, or null if no such PI exists.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * PIs manually
+     */
+    public ProcessingInstruction getProcessingInstruction(String target) {
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    return (ProcessingInstruction)obj;
+                }
+            }
+        }
+
+        // If we got here, none found
+        return null;
+    }
+
+    /**
+     * <p>
+     * This will remove the first PI with the specified target.
+     * </p>
+     *
+     * @param target <code>String</code> target of PI to remove.
+     * @return <code>boolean</code> - whether the requested PI was removed.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and remove
+     * PIs manually
+     */
+    public boolean removeProcessingInstruction(String target) {
+        ProcessingInstruction pi = getProcessingInstruction(target);
+        if (pi == null) {
+            return false;
+        }
+        else {
+            return removeContent(pi);
+        }
+    }
+
+    /**
+     * <p>
+     * This will remove all PIs with the specified target.
+     * </p>
+     *
+     * @param target <code>String</code> target of PI to remove.
+     * @return <code>boolean</code> - whether the requested PIs were removed.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and remove
+     * PIs manually
+     */
+    public boolean removeProcessingInstructions(String target) {
+        boolean deletedSome = false;
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                ProcessingInstruction pi = (ProcessingInstruction)obj;
+                if (pi.getTarget().equals(target)) {
+                    deletedSome = true;
+                    i.remove();
+                    pi.setDocument(null);
+                }
+            }
+        }
+        return deletedSome;
+    }
+
+    /**
+     * <p>
+     * This sets the PIs for this <code>Document</code> to those in the
+     *   <code>List</code supplied (removing all other PIs).
+     * </p>
+     *
+     * @param pis <code>List</code> of PIs to use.
+     * @return <code>Document</code> - this Document modified.
+     *
+     * @deprecated Deprecated in beta7, use getMixedContent() and add
+     * PIs manually
+     */
+    public Document setProcessingInstructions(List pis) {
+        // XXX Sanity check List contains only parentless and documentless PIs
+
+        List current = getProcessingInstructions();
+        for (Iterator i = current.iterator(); i.hasNext(); ) {
+            i.remove();
+        }
+
+        content.addAll(pis);
+
+        return this;
+    }
 }
