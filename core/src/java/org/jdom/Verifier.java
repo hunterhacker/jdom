@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.39 2002/06/17 13:54:14 jhunter Exp $
+ $Id: Verifier.java,v 1.40 2002/06/26 01:44:26 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.39 $, $Date: 2002/06/17 13:54:14 $
+ * @version $Revision: 1.40 $, $Date: 2002/06/26 01:44:26 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.39 $ $Date: 2002/06/17 13:54:14 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.40 $ $Date: 2002/06/26 01:44:26 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -117,14 +117,7 @@ final public class Verifier {
             return reason;
         }
 
-        // Allow xml:space and xml:lang as special cases
-        if (name.equals("xml:space") ||
-            name.equals("xml:lang")) {
-            return null;
-        }
-
-        // Otherwise, no colons are allowed,
-        // since attributes handle this internally
+        // No colons are allowed, since attributes handle this internally
         if (name.indexOf(":") != -1) {
             return "Attribute names cannot contain colons";
         }

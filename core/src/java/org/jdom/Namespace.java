@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.36 2002/04/29 13:38:16 jhunter Exp $
+ $Id: Namespace.java,v 1.37 2002/06/26 01:44:26 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -75,7 +75,7 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.36 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.37 $, $Date: 2002/06/26 01:44:26 $
  */
 public final class Namespace {
 
@@ -83,7 +83,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.36 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.37 $ $Date: 2002/06/26 01:44:26 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -137,12 +137,10 @@ public final class Namespace {
             uri = "";
         }
 
-        // Handle XML namespace
-        if (prefix.equals("xml")) {
-            return XML_NAMESPACE;
-        }
-
-        // Return existing namespace if found
+        // Return existing namespace if found. The preexisting namespaces
+        // should all be legal. In other words, an illegal namespace won't
+        // have been placed in this.  Thus we can do this test before
+        // verifying the URI and prefix.
         String lookup = new StringBuffer(64)
             .append(prefix).append('&').append(uri).toString();
         Namespace preexisting = (Namespace) namespaces.get(lookup);
@@ -163,6 +161,25 @@ public final class Namespace {
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
                 "Namespace URIs must be non-null and non-empty Strings");
+        }
+
+        // Handle XML namespace mislabels. If the user requested the correct
+        // namespace and prefix -- xml, http://www.w3.org/XML/1998/namespace
+        // -- then it was already returned from the preexisting namespaces.
+        // Thus any use of the xml prefix or the
+        // http://www.w3.org/XML/1998/namespace URI at this point must be
+        // incorrect. 
+        if (prefix.equals("xml")) {
+            throw new IllegalNameException(prefix, "Namespace prefix",
+             "The xml prefix can only be bound to " +
+             "http://www.w3.org/XML/1998/namespace");        
+        }
+        // The erratum to Namespaces in XML 1.0 that suggests this 
+        // next check is controversial. Not everyone accepts it. 
+        if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
+            throw new IllegalNameException(uri, "Namespace URI",
+             "The http://www.w3.org/XML/1998/namespace must be bound to " +
+             "the xml prefix.");        
         }
 
         // Finally, store and return
