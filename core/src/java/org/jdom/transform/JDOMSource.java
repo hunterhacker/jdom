@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.15 2003/04/30 09:55:13 jhunter Exp $
+ $Id: JDOMSource.java,v 1.16 2003/05/01 02:23:11 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -94,14 +94,14 @@ import org.xml.sax.*;
  *
  * @see org.jdom.transform.JDOMResult
  *
- * @version $Revision: 1.15 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.16 $, $Date: 2003/05/01 02:23:11 $
  * @author Laurent Bihanic
  * @author Jason Hunter
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.15 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.16 $ $Date: 2003/05/01 02:23:11 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -126,7 +126,7 @@ public class JDOMSource extends SAXSource {
   private XMLReader xmlReader = null;
 
   /**
-   * Creates a JDOM TRaX source wrapping a JDOM document.
+   * Creates a JDOM TrAX source wrapping a JDOM document.
    *
    * @param  source   the JDOM document to use as source for the
    *                  transformations
@@ -139,7 +139,7 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Creates a JDOM TRaX source wrapping a list of JDOM nodes.
+   * Creates a JDOM TrAX source wrapping a list of JDOM nodes.
    *
    * @param  source   the JDOM nodes to use as source for the
    *                  transformations
@@ -152,7 +152,7 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Creates a JDOM TRaX source wrapping a JDOM element.
+   * Creates a JDOM TrAX source wrapping a JDOM element.
    *
    * @param  source   the JDOM element to use as source for the
    *                  transformations
@@ -168,7 +168,7 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Sets the source document used by this TRaX source.
+   * Sets the source document used by this TrAX source.
    *
    * @param  source   the JDOM document to use as source for the
    *                  transformations
@@ -183,9 +183,9 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Returns the source document used by this TRaX source.
+   * Returns the source document used by this TrAX source.
    *
-   * @return the source document used by this TRaX source or
+   * @return the source document used by this TrAX source or
    *         <code>null</code> if the source is a node list.
    *
    * @see    #setDocument
@@ -201,7 +201,7 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Sets the source node list used by this TRaX source.
+   * Sets the source node list used by this TrAX source.
    *
    * @param  source   the JDOM nodes to use as source for the
    *                  transformations
@@ -216,9 +216,9 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
-   * Returns the source node list used by this TRaX source.
+   * Returns the source node list used by this TrAX source.
    *
-   * @return the source node list used by this TRaX source or
+   * @return the source node list used by this TrAX source or
    *         <code>null</code> if the source is a JDOM document.
    *
    * @see    #setDocument
