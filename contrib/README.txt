@@ -14,6 +14,6 @@ that someone else might pick up on, post to jdom-interest.
 Building instructions
 =====================
 
-Building jdom-test is the same as building jdom.  See the README.txt in the
+Building jdom-contrib is the same as building jdom.  See the README.txt in the
 jdom module.
 
