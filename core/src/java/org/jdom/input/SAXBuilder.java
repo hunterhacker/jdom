@@ -131,32 +131,13 @@ public class SAXBuilder {
  
     /**
      * <p>
-     * This allows the validation features to be turned on/off
-     *   in the builder at creation, as well as set the
-     *   SAX driver class to use.
+     * Creates a new SAXBuilder which will attempt to first locate
+     * a parser via JAXP, then will try to use a set of default 
+     * SAX Drivers. The underlying parser will not validate.
      * </p>
-     *
-     * @param saxDriverClass <code>String</code> name of SAX Driver
-     *                       to use for parsing.
-     * @param validate <code>boolean</code> indicating if
-     *                 validation should occur.
      */
-    public SAXBuilder(String saxDriverClass, boolean validate) {
-        this.saxDriverClass = saxDriverClass;
-        this.validate = validate;
-    }
-
-    /**
-     * <p>
-     * This sets the SAX Driver class to use, and leaves
-     *   validation off.
-     * </p>
-     *
-     * @param saxDriverClass <code>String</code> name of SAX Driver
-     *                       to use for parsing.
-     */
-    public SAXBuilder(String saxDriverClass) {
-        this(saxDriverClass, false);
+    public SAXBuilder() {
+        this(false);
     }
 
     /**
@@ -176,13 +157,32 @@ public class SAXBuilder {
 
     /**
      * <p>
-     * Creates a new SAXBuilder which will attempt to first locate
-     * a parser via JAXP, then will try to use a set of default 
-     * SAX Drivers. The underlying parser will not validate.
+     * Creates a new SAXBuilder using the specified SAX parser.
+     * The underlying parser will not validate.
      * </p>
+     *
+     * @param saxDriverClass <code>String</code> name of SAX Driver
+     *                       to use for parsing.
      */
-    public SAXBuilder() {
-        this(false);
+    public SAXBuilder(String saxDriverClass) {
+        this(saxDriverClass, false);
+    }
+
+    /**
+     * <p>
+     * Creates a new SAXBuilder using the specified SAX parser.
+     * The underlying parser will validate or not
+     * according to the given parameter.
+     * </p>
+     *
+     * @param saxDriverClass <code>String</code> name of SAX Driver
+     *                       to use for parsing.
+     * @param validate <code>boolean</code> indicating if
+     *                 validation should occur.
+     */
+    public SAXBuilder(String saxDriverClass, boolean validate) {
+        this.saxDriverClass = saxDriverClass;
+        this.validate = validate;
     }
 
     /**

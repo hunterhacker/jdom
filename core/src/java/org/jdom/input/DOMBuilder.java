@@ -88,7 +88,9 @@ import org.xml.sax.*;
  */
 public class DOMBuilder {
 
-    /** Default adapter class */
+    /** Default adapter class to use. This is used when no other parser
+      * is given and JAXP isn't available. 
+      */
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";
 
@@ -100,37 +102,21 @@ public class DOMBuilder {
 
     /**
      * <p>
-     * This allows the validation features to be turned on/off
-     *   in the builder at creation, as well as set the
-     *   DOM Adapter class to use.
+     * This creates a new DOMBuilder which will attempt to first locate
+     * a parser via JAXP, then will try to use a set of default parsers.
+     * The underlying parser will not validate.
      * </p>
-     *
-     * @param adapterClass <code>String</code> name of class
-     *                     to use for DOM building.
-     * @param validate <code>boolean</code> indicating if
-     *                 validation should occur.
      */
-    public DOMBuilder(String adapterClass, boolean validate) {
-        this.adapterClass = adapterClass;
-        setValidation(validate);
+    public DOMBuilder() {
+        this(false);
     }
 
     /**
      * <p>
-     * This sets the DOM Adapter class to use, and leaves
-     *   validation off.
-     * </p>
-     *
-     * @param validate <code>boolean</code> indicating if
-     *                 validation should occur.
-     */
-    public DOMBuilder(String adapterClass) {
-        this(adapterClass, false);
-    }
-
-    /**
-     * <p>
-     * This sets validation for the <code>Builder</code>.
+     * This creates a new DOMBuilder which will attempt to first locate
+     * a parser via JAXP, then will try to use a set of default parsers.
+     * The underlying parser will validate or not according to the given
+     * parameter.
      * </p>
      *
      * @param validate <code>boolean</code> indicating if
@@ -142,12 +128,34 @@ public class DOMBuilder {
 
     /**
      * <p>
-     * This creates a <code>DOMBuilder</code> with
-     *   the default parser and no validation.
+     * This creates a new DOMBuilder using the specified DOMAdapter
+     * implementation as a way to choose the underlying parser.
+     * The underlying parser will not validate.
      * </p>
+     *
+     * @param adapterClass <code>String</code> name of class
+     *                     to use for DOM building.
      */
-    public DOMBuilder() {
-        this(false);
+    public DOMBuilder(String adapterClass) {
+        this(adapterClass, false);
+    }
+
+    /**
+     * <p>
+     * This creates a new DOMBuilder using the specified DOMAdapter
+     * implementation as a way to choose the underlying parser.
+     * The underlying parser will validate or not according to the given
+     * parameter.
+     * </p>
+     *
+     * @param adapterClass <code>String</code> name of class
+     *                     to use for DOM building.
+     * @param validate <code>boolean</code> indicating if
+     *                 validation should occur.
+     */
+    public DOMBuilder(String adapterClass, boolean validate) {
+        this.adapterClass = adapterClass;
+        setValidation(validate);
     }
 
     /**
@@ -254,9 +262,9 @@ public class DOMBuilder {
                 }
             }
 
-            // Check to see if we got a domDoc yet, if not, try to use a
-            // hard coded default
-            if (domDoc == null) {
+            // If we don't have a domDoc yet and there's no adapter, try
+            // the hard coded default parser
+            if (domDoc == null && adapterClass == null) {
                 try {
                     DOMAdapter adapter = (DOMAdapter)
                         Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();

@@ -84,8 +84,9 @@ public class DOMOutputter {
 
     /**
      * <p>
-     * This creates a <code>DOMOutputter</code> using the default DOM
-     * adapter.
+     * This creates a new DOMOutputter which will attempt to first locate
+     * a DOM implementation to use via JAXP, and if JAXP does not exist or
+     * there's a problem, will fall back to the default parser.
      * </p>
      */
     public DOMOutputter() {
@@ -94,8 +95,8 @@ public class DOMOutputter {
 
     /**
      * <p>
-     * This creates a <code>DOMOutputter</code> using the specified DOM
-     * adapter.
+     * This creates a new DOMOutputter using the specified DOMAdapter
+     * implementation as a way to choose the underlying parser.
      * </p>
      *
      * @param adapterClass <code>String</code> name of class
@@ -109,9 +110,8 @@ public class DOMOutputter {
     /**
      * <p>
      * This converts the JDOM <code>Document</code> parameter to a 
-     * DOM Document, returning the DOM version.  The specified DOM adapter
-     * class (see org.jdom.adapters.*) is used, as a way to choose the 
-     * DOM implementation.
+     * DOM Document, returning the DOM version.  The DOM implementation
+     * is the one chosen in the constructor.
      * </p>
      *
      * @param document <code>Document</code> to output.
@@ -393,8 +393,7 @@ public class DOMOutputter {
     /**
      * <p>
      * This converts the JDOM <code>Attribute</code> parameter to a
-     * DOM <code>Attr</code>, returning the 
-     * DOM version.
+     * DOM <code>Attr</code>, returning the DOM version.
      * </p>
      * @param attribute <code>Attribute</code> to output.
      * @return an <code>org.w3c.dom.Attr</code> version
