@@ -891,75 +891,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes the specified <code>Element</code>.
-     * </p>
-     *
-     * @param child <code>Element</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Element element) {
-        if (content == null) {
-            return false;
-        }
-
-        if (content.remove(element)) {
-            element.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>ProcessingInstruction</code>.
-     * </p>
-     *
-     * @param child <code>ProcessingInstruction</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(ProcessingInstruction pi) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(pi);
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Entity</code>.
-     * </p>
-     *
-     * @param child <code>Entity</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Entity entity) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(entity);
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Comment</code>.
-     * </p>
-     *
-     * @param comment <code>Comment</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Comment comment) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(comment);
-    }
-
-    /**
-     * <p>
      * This removes the first child element (one level deep) with the
      * given local name and belonging to no namespace.
      * Returns true if a child was removed.
@@ -1500,31 +1431,104 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * @deprecated Use removeContent(Element) instead
+     * @deprecated Use getMixedContent().remove(element) instead
      */
     public boolean removeChild(Element element) {
        return removeContent(element);
     }
 
     /**
-     * @deprecated Use removeContent(ProcessingInstruction) instead
+     * @deprecated Use getMixedContent().remove(pi) instead
      */
     public boolean removeChild(ProcessingInstruction pi) {
        return removeContent(pi);
     }
 
     /**
-     * @deprecated Use removeContent(Entity) instead
+     * @deprecated Use getMixedContent().remove(entity) instead
      */
     public boolean removeChild(Entity entity) {
        return removeContent(entity);
     }
 
     /**
-     * @deprecated Use removeContent(Comment) instead
+     * @deprecated Use getMixedContent().remove(comment) instead
      */
     public boolean removeChild(Comment comment) {
        return removeContent(comment);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Element</code>.
+     * </p>
+     *
+     * @param child <code>Element</code> to delete
+     * @return whether deletion occurred
+     * @deprecated Use getMixedContent().remove(element) instead
+     */
+    public boolean removeContent(Element element) {
+        if (content == null) {
+            return false;
+        }
+
+        if (content.remove(element)) {
+            element.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>ProcessingInstruction</code>.
+     * </p>
+     *
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
+     * @deprecated Use getMixedContent().remove(pi) instead
+     */
+    public boolean removeContent(ProcessingInstruction pi) {
+        if (content == null) {
+            return false;
+        }
+
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Entity</code>.
+     * </p>
+     *
+     * @param child <code>Entity</code> to delete
+     * @return whether deletion occurred
+     * @deprecated Use getMixedContent().remove(entity) instead
+     */
+    public boolean removeContent(Entity entity) {
+        if (content == null) {
+            return false;
+        }
+
+        return content.remove(entity);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Comment</code>.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
+     * @deprecated Use getMixedContent().remove(comment) instead
+     */
+    public boolean removeContent(Comment comment) {
+        if (content == null) {
+            return false;
+        }
+
+        return content.remove(comment);
     }
 
 }
