@@ -85,7 +85,7 @@ import org.jdom.input.SAXBuilder;
  *
  * @author Steven Gould <steven.gould@cgiusa.com>
  */
-public class JDOMEasterEgg {
+public class JDOMAbout {
     /**
      * The main(!) method executed when this JAR file is run. Outputs
      * information about the JAR, as extracted from the META-INF/info.xml
@@ -93,7 +93,7 @@ public class JDOMEasterEgg {
      * @param args Ignored. 
      */
     public static void main(String args[]) {
-        JDOMEasterEgg.Info info = new JDOMEasterEgg().new Info();
+        JDOMAbout.Info info = new JDOMAbout().new Info();
 
         // Shortcut for info.title (because it's used so much)
         String title = info.title;

@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.21 2001/06/23 17:39:26 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.22 2001/06/25 18:41:20 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -151,9 +151,9 @@ For instructions on how to build JDOM, please view the README.txt file.
   </target>
 
   <!-- =================================================================== -->
-  <!-- Compiles the Easter Egg code unless JDK1.1 is being used            -->
+  <!-- Compiles the "About" code unless JDK1.1 is being used               -->
   <!-- =================================================================== -->
-  <target name="egg" unless="coll.present">
+  <target name="about" unless="coll.present">
     <javac srcdir="${package.dir}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -173,7 +173,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="compile,egg">
+  <target name="package" depends="compile,about">
     <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
     <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
     <copydir src="${package.dir}/META-INF"
