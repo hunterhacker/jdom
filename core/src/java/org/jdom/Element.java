@@ -381,7 +381,7 @@ public class Element implements Serializable, Cloneable {
      */
     public String getText() {
         // If we hold only a String, return it directly
-        if (content.size() == 1) {
+        if ((content != null) && (content.size() == 1)) {
             if (content.get(0) == null) {
                 return null;
             } else if (content.get(0) instanceof String) {
