@@ -1,6 +1,6 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.39 2003/05/05 07:41:18 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.40 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,7 +56,6 @@
 
 package org.jdom;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -65,16 +64,16 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.39 $, $Date: 2003/05/05 07:41:18 $
+ * @version $Revision: 1.40 $, $Date: 2003/05/20 21:53:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
  */
 
-public class ProcessingInstruction implements Serializable, Cloneable {
+public class ProcessingInstruction implements Child {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.39 $ $Date: 2003/05/05 07:41:18 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.40 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -86,7 +85,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     protected Map mapData;
 
     /** Parent element, document, or null if none */
-    protected Object parent;
+    protected Parent parent;
 
     /**
      * Default, no-args constructor for implementations
@@ -146,11 +145,21 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *
      * @return parent of this <code>ProcessingInstruction</code>
      */
-    public Element getParent() {
+    public Parent getParent() {
         if (parent instanceof Element) {
             return (Element) parent;
         }
         return null;
+    }
+
+    /**
+     * Returns the XPath 1.0 string value of this element, which is the
+     * data of this PI.
+     *
+     * @return the data of this PI
+     */
+    public String getValue() {
+        return rawData;
     }
 
     /**
@@ -161,7 +170,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @param parent <code>Element</code> to be new parent.
      * @return this <code>ProcessingInstruction</code> modified.
      */
-    protected ProcessingInstruction setParent(Element parent) {
+    protected ProcessingInstruction setParent(Parent parent) {
         this.parent = parent;
         return this;
     }
@@ -173,12 +182,9 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - this
      * <code>ProcessingInstruction</code> modified.
      */
-    public ProcessingInstruction detach() {
-        if (parent instanceof Element) {
-            ((Element) parent).removeContent(this);
-        }
-        else if (parent instanceof Document) {
-            ((Document) parent).removeContent(this);
+    public Child detach() {
+        if (parent != null) {
+            parent.removeContent(this);
         }
         return this;
     }
@@ -198,17 +204,6 @@ public class ProcessingInstruction implements Serializable, Cloneable {
             return ((Element)parent).getDocument();
         }
         return null;
-    }
-
-    /**
-     * This sets the <code>{@link Document}</code> parent of this PI.
-     *
-     * @param document <code>Document</code> parent
-     * @return this <code>PI</code> modified
-     */
-    protected ProcessingInstruction setDocument(Document document) {
-        this.parent = document;
-        return this;
     }
 
     /**

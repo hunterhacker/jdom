@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.12 2003/05/20 21:54:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import org.saxpath.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/20 21:54:00 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.12 $ $Date: 2003/05/20 21:54:00 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
@@ -338,14 +338,11 @@ class JaxenXPath extends    XPath {             // package protected
                   elt = (Element)ctx;
                } else if (ctx instanceof Attribute) {
                   elt = ((Attribute)ctx).getParent();
-               } else if (ctx instanceof Text) {
-                  elt = ((Text)ctx).getParent();
-               } else if (ctx instanceof ProcessingInstruction) {
-                  elt = ((ProcessingInstruction)ctx).getParent();
-               } else if (ctx instanceof Comment) {
-                  elt = ((Comment)ctx).getParent();
-               } else if (ctx instanceof EntityRef) {
-                  elt = ((EntityRef)ctx).getParent();
+               } else if (ctx instanceof Child) {
+                  Parent p = ((Child) ctx).getParent();
+                  if (p instanceof Element) {
+                     elt = (Element) p;
+                  }
                } else if (ctx instanceof Document) {
                   elt = ((Document)ctx).getRootElement();
                }
@@ -358,7 +355,7 @@ class JaxenXPath extends    XPath {             // package protected
                }
             }
          }
-         return (uri);
+         return uri;
       }
    }
 }

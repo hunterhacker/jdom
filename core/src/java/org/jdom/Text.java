@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.16 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Text.java,v 1.17 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,22 +56,20 @@
 
 package org.jdom;
 
-import java.io.Serializable;
-
 /**
  * Character-based XML content. Provides a modular, parentable method of
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.16 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.17 $, $Date: 2003/05/20 21:53:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
  */
-public class Text implements Serializable, Cloneable {
+public class Text implements Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.16 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.17 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -82,7 +80,7 @@ public class Text implements Serializable, Cloneable {
     protected String value;
 
     /** This <code>Text</code> node's parent. */
-    protected Object parent;
+    protected Element parent;
 
     /**
      * This is the protected, no-args constructor standard in all JDOM
@@ -238,8 +236,18 @@ public class Text implements Serializable, Cloneable {
      *
      * @return <code>Element</code> - this node's parent.
      */
-    public Element getParent() {
-        return (Element) parent;
+    public Parent getParent() {
+        return parent;
+    }
+
+    /**
+     * Returns the XPath 1.0 string value of this element, which is the
+     * text itself.
+     *
+     * @return the text
+     */
+    public String getValue() {
+        return value;
     }
 
     /**
@@ -251,7 +259,7 @@ public class Text implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return ((Element)parent).getDocument();
+            return parent.getDocument();
         }
         return null;
     }
@@ -279,11 +287,10 @@ public class Text implements Serializable, Cloneable {
      *
      * @return <code>Text</code> - this <code>Text</code> modified.
      */
-    public Text detach() {
+    public Child detach() {
         if (parent != null) {
-            ((Element) parent).removeContent(this);
+            parent.removeContent(this);
         }
-        parent = null;
         return this;
     }
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.66 2003/05/01 02:42:50 jhunter Exp $
+ $Id: Document.java,v 1.67 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,7 +56,6 @@
 
 package org.jdom;
 
-import java.io.*;
 import java.util.*;
 
 import org.jdom.filter.*;
@@ -65,16 +64,16 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.66 $, $Date: 2003/05/01 02:42:50 $
+ * @version $Revision: 1.67 $, $Date: 2003/05/20 21:53:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
-public class Document implements Serializable, Cloneable {
+public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.66 $ $Date: 2003/05/01 02:42:50 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.67 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -139,6 +138,31 @@ public class Document implements Serializable, Cloneable {
         this(content, null);
     }
 
+    public int getChildCount() {
+        return content.size();
+    }
+
+    public int childIndex(Child child) {
+        return content.indexOf(child);
+    }
+
+    /**
+     * Starting at the given index (inclusive), return the index of
+     * the first child matching the supplied filter, or -1
+     * if none is found.
+     *
+     * @return index of child, or -1 if none found.
+     */
+    private int childIndex(int start, Filter filter) {
+        int size = getChildCount();
+        for (int i = start; i < size; i++) {
+            if (filter.matches(getContent(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * This will return <code>true</code> if this document has a
      * root element, <code>false</code> otherwise.
@@ -198,12 +222,6 @@ public class Document implements Serializable, Cloneable {
         return (Element) removeContent(index);
     }
 
-    // Remove Object at given index, or null if index is out of
-    // range or content cannot be removed.
-    private Object removeContent(int index) {
-        return content.remove(index);
-    }
-
     /**
      * This will return the <code>{@link DocType}</code>
      * declaration for this <code>Document</code>, or
@@ -261,41 +279,49 @@ public class Document implements Serializable, Cloneable {
     /**
      * Adds the specified PI to the document.
      *
-     * @param pi the ProcessingInstruction to add.
+     * @param child the Child to add
      * @return <code>Document</code> this document modified.
      * @throws IllegalAddException if the given processing instruction
      *         already has a parent element.
      */
-    public Document addContent(ProcessingInstruction pi) {
-        content.add(pi);
+    public Parent addContent(Child child) {
+        content.add(child);
         return this;
     }
 
-    /**
-     * This will add a comment to the <code>Document</code>.
-     *
-     * @param comment <code>Comment</code> to add.
-     * @return <code>Document</code> - this object modified.
-     * @throws IllegalAddException if the given comment already has a
-     *         parent element.
-     */
-    public Document addContent(Comment comment) {
-        content.add(comment);
+    public Parent addContent(Collection c) {
+        content.addAll(c);
         return this;
     }
 
-    /**
-     * This will add a doctype to the <code>Document</code>.
-     *
-     * @param doctype <code>DocType</code> to add.
-     * @return <code>Document</code> - this object modified.
-     * @throws IllegalAddException if the given doctype already has a
-     *         parent or if the DocType is being added after the root element.
-     */
-    public Document addContent(DocType doctype) {
-        content.add(doctype);
+    public Parent addContent(int index, Child child) {
+        content.add(index, child);
         return this;
     }
+
+    public Parent addContent(int index, Collection c) {
+        content.addAll(index, c);
+        return this;
+    }
+
+    public List cloneContent() {
+        int size = getChildCount();
+        List list = new ArrayList(size);
+        for (int i = 0; i < size; i++) {
+            Child child = getContent(i);
+            list.add(child.clone());
+        }
+        return list;
+    }
+
+    public Child getContent(int index) {
+        return (Child) content.get(index);
+    }
+
+//    public Child getChild(Filter filter) {
+//        int i = childIndex(0, filter);
+//        return (i < 0) ? null : getContent(i);
+//    }
 
     /**
      * This will return all content for the <code>Document</code>.
@@ -337,6 +363,33 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
+     * Removes all child content from this parent.
+     *
+     * @return list of the old children detached from this parent
+     */
+    public List removeContent() {
+        List old = new ArrayList(content);
+        content.clear();
+        return old;
+    }
+
+    /**
+     * Remove all child content from this parent matching the supplied filter.
+     *
+     * @return list of the old children detached from this parent
+     */
+    public List removeContent(Filter filter) {
+        List old = new ArrayList();
+        Iterator itr = content.getView(filter).iterator();
+        while (itr.hasNext()) {
+            Child child = (Child) itr.next();
+            old.add(child);
+            itr.remove();
+        }
+        return old;
+    }
+
+    /**
      * This sets the content of the <code>Document</code>.  The supplied
      * List should contain only objects of type <code>Element</code>,
      * <code>Comment</code>, and <code>ProcessingInstruction</code>.
@@ -370,33 +423,63 @@ public class Document implements Serializable, Cloneable {
      * @throws IllegalAddException if the List contains objects of
      *         illegal types.
      */
-    public Document setContent(List newContent) {
+    public Parent setContent(Collection newContent) {
         content.clearAndSet(newContent);
         return this;
     }
 
     /**
-     * This removes the specified <code>ProcessingInstruction</code>.
-     * If the specified <code>ProcessingInstruction</code> is not a child of
-     * this <code>Document</code>, this method does nothing.
+     * Replace the current child the given index with the supplied child.
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the supplied child will be unaltered.
+     * </p>
      *
-     * @param pi <code>ProcessingInstruction</code> to delete
-     * @return whether deletion occurred
+     * @param index - index of child to replace.
+     * @param child - child to add.
+     * @throws IllegalAddException if the supplied child is already attached
+     *                             or not legal content for this parent.
+     * @throws IndexOutOfBoundsException if index is negative or greater
+     *         than the current number of children.
      */
-    public boolean removeContent(ProcessingInstruction pi) {
-        return content.remove(pi);
+    public Parent setContent(int index, Child child) {
+        content.set(index, child);
+        return this;
     }
 
     /**
-     * This removes the specified <code>Comment</code>.
-     * If the specified <code>Comment</code> is not a child of
-     * this <code>Document</code>, this method does nothing.
+     * Replace the child at the given index whith the supplied
+     * collection.
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the content in the supplied collection will be unaltered.
+     * </p>
      *
-     * @param comment <code>Comment</code> to delete
-     * @return whether deletion occurred
+     * @param index - index of child to replace.
+     * @param collection - collection of content to add.
+     * @throws IllegalAddException if the collection contains objects of
+     *         illegal types.
+     * @throws IndexOutOfBoundsException if index is negative or greater
+     *         than the current number of children.
      */
-    public boolean removeContent(Comment comment) {
-        return content.remove(comment);
+    public Parent setContent(int index, Collection collection) {
+        content.remove(index);
+        content.addAll(index, collection);
+        return this;
+    }
+
+    public boolean removeContent(Child child) {
+        return content.remove(child);
+    }
+
+    public Child removeContent(int index) {
+        return (Child) content.remove(index);
+    }
+
+    public Parent setContent(Child child) {
+        content.clear();
+        content.add(child);
+        return this;
     }
 
     /**

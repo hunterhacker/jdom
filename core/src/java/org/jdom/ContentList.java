@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.24 2003/05/01 02:42:50 jhunter Exp $
+ $Id: ContentList.java,v 1.25 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.24 $, $Date: 2003/05/01 02:42:50 $
+ * @version $Revision: 1.25 $, $Date: 2003/05/20 21:53:59 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.24 $ $Date: 2003/05/01 02:42:50 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.25 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -176,15 +176,15 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (element.getParent() != null) {
-            throw new IllegalAddException(
-                          "The element already has an existing parent \"" +
-                          element.getParent().getQualifiedName() + "\"");
-        }
-
         if (element.getDocument() != null) {
             throw new IllegalAddException(element.getDocument(), element,
-                          "The element already has an existing parent");
+                                          "The element already has an existing parent");
+        }
+
+        if (element.getParent() != null) {
+            throw new IllegalAddException(
+                     "The element already has an existing parent \"" +
+                     ((Element)element.getParent()).getQualifiedName() + "\"");
         }
 
         if (element == parent) {
@@ -212,7 +212,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 throw new IllegalAddException(
                         "A root element cannot be added before the DocType");
             }
-            element.setDocument((Document) parent);
+            element.setParent((Document) parent);
         }
         else {
             element.setParent((Element) parent);
@@ -267,7 +267,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 throw new IllegalAddException(
                         "Cannot add a second doctype, only one is allowed");
             }
-            doctype.setDocument((Document) parent);
+            doctype.setParent((Document) parent);
         }
 
         ensureCapacity(size + 1);
@@ -294,15 +294,15 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (comment.getParent() != null) {
-            throw new IllegalAddException(
-                          "The comment already has an existing parent \"" +
-                          comment.getParent().getQualifiedName() + "\"");
-        }
-
         if (comment.getDocument() != null) {
             throw new IllegalAddException(comment.getDocument(), comment,
-                          "The comment already has an existing parent");
+                                 "The comment already has an existing parent");
+        }
+
+        if (comment.getParent() != null) {
+            throw new IllegalAddException(
+                     "The comment already has an existing parent \"" +
+                     ((Element)comment.getParent()).getQualifiedName() + "\"");
         }
 
         if (index<0 || index>size) {
@@ -310,8 +310,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                                                 " Size: " + size());
         }
 
+        // XXX We can simplify this
         if (parent instanceof Document) {
-            comment.setDocument((Document) parent);
+            comment.setParent((Document) parent);
         }
         else {
             comment.setParent((Element) parent);
@@ -340,15 +341,15 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
+        if (pi.getDocument() != null) {
+            throw new IllegalAddException(pi.getDocument(), pi,
+                   "The processing instruction already has an existing parent");
+        }
+
         if (pi.getParent() != null) {
             throw new IllegalAddException(
                           "The PI already has an existing parent \"" +
-                          pi.getParent().getQualifiedName() + "\"");
-        }
-
-        if (pi.getDocument() != null) {
-            throw new IllegalAddException(pi.getDocument(), pi,
-                          "The processing instruction already has an existing parent");
+                          ((Element)pi.getParent()).getQualifiedName() + "\"");
         }
 
         if (index<0 || index>size) {
@@ -356,8 +357,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                                                 " Size: " + size());
         }
 
+        // XXX We can simplify this
         if (parent instanceof Document) {
-            pi.setDocument((Document) parent);
+            pi.setParent((Document) parent);
         }
         else {
             pi.setParent((Element) parent);
@@ -393,8 +395,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
         if (cdata.getParent() != null) {
             throw new IllegalAddException(
-                          "The CDATA already has an existing parent \"" +
-                          cdata.getParent().getQualifiedName() + "\"");
+                       "The CDATA already has an existing parent \"" +
+                       ((Element)cdata.getParent()).getQualifiedName() + "\"");
         }
 
         if (index<0 || index>size) {
@@ -434,8 +436,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
         if (text.getParent() != null) {
             throw new IllegalAddException(
-                          "The Text already has an existing parent \"" +
-                          text.getParent().getQualifiedName() + "\"");
+                       "The Text already has an existing parent \"" +
+                       ((Element)text.getParent()).getQualifiedName() + "\"");
         }
 
         if (index<0 || index>size) {
@@ -475,8 +477,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
         if (entity.getParent() != null) {
             throw new IllegalAddException(
-                          "The EntityRef already has an existing parent \"" +
-                          entity.getParent().getQualifiedName() + "\"");
+                      "The EntityRef already has an existing parent \"" +
+                      ((Element)entity.getParent()).getQualifiedName() + "\"");
         }
 
         if (index<0 || index>size) {
@@ -726,7 +728,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
         else if (obj instanceof DocType) {
             DocType dt = (DocType) obj;
-            dt.setDocument(null);
+            dt.setParent(null);
         }
         else {
             // Should never happen.

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.14 2003/04/30 09:55:12 jhunter Exp $
+ $Id: EntityRef.java,v 1.15 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,15 +62,15 @@ import java.io.Serializable;
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  * 
- * @version $Revision: 1.14 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.15 $, $Date: 2003/05/20 21:53:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
  */
-public class EntityRef implements Serializable, Cloneable {
+public class EntityRef implements Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.14 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.15 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -82,7 +82,7 @@ public class EntityRef implements Serializable, Cloneable {
     protected String systemID;
 
     /** Parent element or null if none */
-    protected Object parent;
+    protected Element parent;
 
     /**
      * Default, no-args constructor for implementations to use if needed.
@@ -161,10 +161,9 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @return <code>Entity</code> - this <code>Entity</code> modified.
      */
-    public EntityRef detach() {
-        Element p = getParent();
-        if (p != null) {
-            p.removeContent(this);
+    public Child detach() {
+        if (parent != null) {
+            parent.removeContent(this);
         }
         return this;
     }
@@ -190,7 +189,7 @@ public class EntityRef implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return ((Element)parent).getDocument();
+            return parent.getDocument();
         }
 
         return null;
@@ -211,8 +210,17 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @return parent of this <code>EntityRef</code>
      */
-    public Element getParent() {
-        return (Element) parent;
+    public Parent getParent() {
+        return parent;
+    }
+
+    /**
+     * Returns the empty string since entity references don't have an XPath
+     * 1.0 string value.
+     * @return the empty string
+     */
+    public String getValue() {
+        return "";  // entity references don't have XPath string values
     }
 
     /**

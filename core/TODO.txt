@@ -12,8 +12,8 @@ Items that need to be done:
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?
 
-* Try to remove the number of protected fields and methods.  Use the strategy
-  pattern instead for example.
+* Try to remove the number of protected fields and methods in SAXHandler,
+  SAXOutputter, and XMLOutputter.  Use the strategy pattern instead perhaps.
 
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
@@ -21,11 +21,6 @@ Items that need to be done:
 * Should there be XPath support within Element, Document, etc?
 
 * Add methods to recursively get content and get filtered content.
-
-* Figure out if there's a role for a Node interface.  It sounds easy but all 
-  attempts so far have hit obstacles.  Amy Lewis talks about it here:
-  http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
-  There were many follow-on threads.
 
 * Consider moving JDOMFactory to org.jdom.
 
@@ -35,9 +30,7 @@ Items that need to be done:
 * Fix the sorting problem.
   Alex idea: http://www.servlets.com/archive/servlet/ReadMsg?msgId=211785
 
-* Should we have an elt/doc.getContentDetached() call to make moving items in
-	bulk easier?  Should adds just do detach automatically?  Why do we throw on
-  that?
+* Should adds just do detach automatically?  Why do we throw on that?
 
 * Look at Attribute.get/setAttributeType() and see if we should make them just
   get/setType().

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.27 2003/04/30 09:55:11 jhunter Exp $
+ $Id: Comment.java,v 1.28 2003/05/20 21:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,26 +56,24 @@
 
 package org.jdom;
 
-import java.io.*;
-
 /**
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
  *
- * @version $Revision: 1.27 $, $Date: 2003/04/30 09:55:11 $
+ * @version $Revision: 1.28 $, $Date: 2003/05/20 21:53:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
-public class Comment implements Serializable, Cloneable {
+public class Comment implements Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.27 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.28 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
 
     /** Parent element, document, or null if none */
-    protected Object parent;
+    protected Parent parent;
 
     /**
      * Default, no-args constructor for implementations to use if needed.
@@ -97,11 +95,21 @@ public class Comment implements Serializable, Cloneable {
      *
      * @return parent of this <code>Comment</code>
      */
-    public Element getParent() {
+    public Parent getParent() {
         if (parent instanceof Element) {
             return (Element) parent;
         }
         return null;
+    }
+
+    /**
+     * Returns the XPath 1.0 string value of this element, which is the
+     * text of this comment.
+     *
+     * @return the text of this comment
+     */
+    public String getValue() {
+        return text;
     }
 
     /**
@@ -110,7 +118,7 @@ public class Comment implements Serializable, Cloneable {
      * @param parent <code>Element</code> to be new parent.
      * @return this <code>Comment</code> modified.
      */
-    protected Comment setParent(Element parent) {
+    protected Comment setParent(Parent parent) {
         this.parent = parent;
         return this;
     }
@@ -122,12 +130,9 @@ public class Comment implements Serializable, Cloneable {
      * @return <code>Comment</code> - this 
      * <code>Comment</code> modified.
      */
-    public Comment detach() {
-        if (parent instanceof Element) {
-            ((Element) parent).removeContent(this);
-        }
-        else if (parent instanceof Document) {
-            ((Document) parent).removeContent(this);
+    public Child detach() {
+        if (parent != null) {
+            parent.removeContent(this);
         }
         return this;
     }
@@ -144,20 +149,9 @@ public class Comment implements Serializable, Cloneable {
             return (Document) parent;
         }
         if (parent instanceof Element) {
-            return (Document) ((Element)parent).getDocument();
+            return ((Element)parent).getDocument();
         }
         return null;
-    }
-
-    /**
-     * This sets the <code>{@link Document}</code> parent of this comment.
-     *
-     * @param document <code>Document</code> parent
-     * @return this <code>Comment</code> modified
-     */
-    protected Comment setDocument(Document document) {
-        this.parent = document;
-        return this;
     }
 
     /**
