@@ -216,6 +216,10 @@ Items that need to be done:
 
 --- UNTIED TO A JDOM VERSION ---
 
+* Create a builder based on Xerces' XNI, which will be more featureful and
+  probably faster than the one based on SAX.
+  See http://lists.denveronline.net/lists/jdom-interest/2001-July/007362.html
+
 * Contribute the samples from Elliotte's XML DevCon talk to the samples/
   directory.  http://metalab.unc.edu/xml/slides/xmlsig/jdom/JDOM.html
 
