@@ -1370,13 +1370,13 @@ public class Element implements Serializable, Cloneable {
             for (Iterator i = content.iterator(); i.hasNext(); ) {
                 Object obj = i.next();
                 if (obj instanceof String) {
-                    element.addChild((String)obj);
+                    element.addContent((String)obj);
                 } else if (obj instanceof Comment) {
-                    element.addChild((Comment)((Comment)obj).clone());
+                    element.addContent((Comment)((Comment)obj).clone());
                 } else if (obj instanceof Entity) {
-                    element.addChild((Entity)((Entity)obj).clone());
+                    element.addContent((Entity)((Entity)obj).clone());
                 } else if (obj instanceof Element) {
-                    element.addChild((Element)((Element)obj).clone());
+                    element.addContent((Element)((Element)obj).clone());
                 }
             }
         }
@@ -1417,7 +1417,6 @@ public class Element implements Serializable, Cloneable {
      Methods below here are deprecated and will 
      be removed before final release!
 *************************************************************/
-
 
     /**
      * @deprecated Use getText() and getTextTrim() instead
@@ -1527,4 +1526,5 @@ public class Element implements Serializable, Cloneable {
     public boolean removeChild(Comment comment) {
        return removeContent(comment);
     }
+
 }

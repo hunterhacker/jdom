@@ -99,7 +99,7 @@ public class SAXBuilderDemo {
         Document doc = builder.build(new File(filename));
 
         // Create an outputter with default formatting
-        XMLOutputter outputter = new XMLOutputter();
+        XMLOutputter outputter = new XMLOutputter("", false);
         outputter.output(doc, out);                
     }
 

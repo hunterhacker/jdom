@@ -505,7 +505,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         if (atRoot) {
             document.addProcessingInstruction(target, data);
         } else {
-            ((Element)stack.peek()).addChild(new ProcessingInstruction(target, data));
+            ((Element)stack.peek()).addContent(new ProcessingInstruction(target, data));
         }
     }
 
@@ -627,7 +627,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
             stack.push(element);
             atRoot = false;
         } else {
-            ((Element)stack.peek()).addChild(element);
+            ((Element)stack.peek()).addContent(element);
             stack.push(element);
         }
     }
@@ -672,13 +672,13 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         String data = new String(ch, start, end);
 
         if (inCDATA) {
-            ((Element)stack.peek()).addChild(data);
-        } else if ((!inDTD) && (!data.trim().equals(""))) {
+            ((Element)stack.peek()).addContent(data);
+        } else if (!inDTD) {
             if (inEntity) {
                 ((Entity)stack.peek()).setContent(data);
             } else {
                 Element e = (Element)stack.peek();
-                e.addChild(data);
+                e.addContent(data);
             }
         }
     }
@@ -800,7 +800,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
             (!name.equals("quot"))) {
 
             Entity entity = new Entity(name);
-            ((Element)stack.peek()).addChild(entity);
+            ((Element)stack.peek()).addContent(entity);
             stack.push(entity);
             inEntity = true;
         }
@@ -854,7 +854,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 document.addComment(
                    new Comment(commentText));
             } else {
-                ((Element)stack.peek()).addChild(
+                ((Element)stack.peek()).addContent(
                     new Comment(commentText));
             }
         }

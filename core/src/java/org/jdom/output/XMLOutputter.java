@@ -82,11 +82,11 @@ import org.jdom.ProcessingInstruction;
  */
 public class XMLOutputter {
 
-    /** The default indent, two spaces */
-    private String indent = "  ";
+    /** The default indent is no spaces (as original document) */
+    private String indent = "";
 
-    /** The default new line flag, set to do new lines */
-    private boolean newlines = true;
+    /** The default new line flag, set to do new lines only as in original document */
+    private boolean newlines = false;
 
     /** The encoding format */
     private String enc = "UTF8";
@@ -398,7 +398,7 @@ public class XMLOutputter {
             // Print the tag  with String on same line
             // Example: <tag name="value">content</tag>
             out.write(">");
-            out.write(escapeElementEntities(element.getContent()));
+            out.write(escapeElementEntities(element.getText()));
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");

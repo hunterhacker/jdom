@@ -314,7 +314,7 @@ public class DOMBuilder {
                     doc.setRootElement(element);
                 } else {
                     // else add to parent element
-                    current.addChild(element);
+                    current.addContent(element);
                 }
 
                 // Handle attributes
@@ -344,14 +344,14 @@ public class DOMBuilder {
                     if (node.getNextSibling() == null) {
                         text = rtrim(text);
                     }
-                    current.addChild(text);
+                    current.addContent(text);
                 }
                 break;
 
             case Node.CDATA_SECTION_NODE:
                 String cdata = node.getNodeValue();
                 if (!cdata.equals("")) {
-                    current.addChild(cdata);
+                    current.addContent(cdata);
                 }
                 break;
 
@@ -362,7 +362,7 @@ public class DOMBuilder {
                         node.getNodeName(),
                         node.getNodeValue());
                 } else {
-                    current.addChild(
+                    current.addContent(
                         new ProcessingInstruction(node.getNodeName(),
                                                   node.getNodeValue()));
                 }
@@ -372,7 +372,7 @@ public class DOMBuilder {
                 if (atRoot) {
                     doc.addComment(new Comment(node.getNodeValue()));
                 } else {
-                    current.addChild(new Comment(node.getNodeValue()));
+                    current.addContent(new Comment(node.getNodeValue()));
                 }
                 break;
 
@@ -382,7 +382,7 @@ public class DOMBuilder {
                 // XXX: Temp Hack (brett)
                 entity.setContent(node.getFirstChild().getNodeValue());
 
-                current.addChild(entity);
+                current.addContent(entity);
                 break;
 
             case Node.ENTITY_NODE:
