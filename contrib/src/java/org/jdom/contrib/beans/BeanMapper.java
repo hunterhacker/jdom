@@ -379,9 +379,9 @@ public class BeanMapper {
 		    if (value == null)
 			value = "";  // no such thing as null attribute in XML
 		    if (childElementName == null)  // add attr to parent
-			element.addAttribute(mapping.attribute, (String)value);
+			element.setAttribute(mapping.attribute, (String)value);
 		    else                           // add attr to child
-			child.addAttribute(mapping.attribute, (String)value);
+			child.setAttribute(mapping.attribute, (String)value);
 		}
 		catch (ClassCastException e) {
 		    throw new BeanMapperException(
