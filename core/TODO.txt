@@ -59,9 +59,9 @@ Items that need to be done:
 * Start shipping Xerces 2.0+
   Xerces 2.0.0 bugs found when using DOMBuilder:
    * In cdata.xml we're getting entity callbacks for chars inside CDATA
-     sections (bug 6316 in Xerces' Bugzilla)
+     sections (bug 6316 in Xerces' Bugzilla, fixed Feb 2002)
    * In web.xml we're seeing the comments from the external DTD appear in our
-     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar)
+     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar 2002)
 
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
