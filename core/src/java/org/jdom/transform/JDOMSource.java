@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.17 2004/02/06 09:28:32 jhunter Exp $
+ $Id: JDOMSource.java,v 1.18 2004/08/31 04:43:48 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -87,21 +87,21 @@ import org.xml.sax.*;
  *       return out.getResult();
  *     }
  *     catch (TransformerException e) {
- *       throw new JDOMException("XSLT Trandformation failed", e);
+ *       throw new JDOMException("XSLT Transformation failed", e);
  *     }
  *   }
  * </code></pre>
  *
  * @see org.jdom.transform.JDOMResult
  *
- * @version $Revision: 1.17 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.18 $, $Date: 2004/08/31 04:43:48 $
  * @author Laurent Bihanic
  * @author Jason Hunter
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.17 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.18 $ $Date: 2004/08/31 04:43:48 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
