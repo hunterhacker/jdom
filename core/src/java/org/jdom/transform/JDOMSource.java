@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.6 2002/01/08 09:17:10 jhunter Exp $
+ $Id: JDOMSource.java,v 1.7 2002/04/28 08:44:29 jhunter Exp $
 
- Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
+ Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+    written permission, please contact <pm AT jdom DOT org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+    from the JDOM Project Management <pm AT jdom DOT org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -48,9 +48,9 @@
 
  This software consists of voluntary contributions made by many 
  individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
- JDOM Project, please see <http://www.jdom.org/>.
+ created by Jason Hunter <jhunter AT jdom DOT org> and
+ Brett McLaughlin <brett AT jdom DOT org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
  
  */
 
@@ -98,7 +98,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.6 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.7 $, $Date: 2002/04/28 08:44:29 $
  */
 public class JDOMSource extends SAXSource {
 
