@@ -54,10 +54,9 @@
 
 import java.io.*;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom.*;
+import org.jdom.input.*;
+import org.jdom.output.*;
 
 /**
  * <p><code>SAXBuilderDemo</code> demonstrates how to
@@ -121,10 +120,7 @@ public class SAXBuilderDemo {
 
             Document doc = builder.build(filename);
 
-            XMLOutputter outputter = new XMLOutputter();
-            outputter.setTextTrim(true);
-            outputter.setIndent("  ");
-            outputter.setNewlines(true);
+            XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
             //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
