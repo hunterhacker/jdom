@@ -123,7 +123,7 @@ public class SAXBuilderDemo {
             Document doc = builder.build(filename);
 
             XMLOutputter outputter = new XMLOutputter();
-            //outputter.setTrimText(true);
+            //outputter.setTextTrim(true);
             //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
