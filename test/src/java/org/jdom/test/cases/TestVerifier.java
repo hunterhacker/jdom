@@ -291,7 +291,7 @@ public final class TestVerifier extends junit.framework.TestCase {
 	/**
 	 * This method is called before a test is executed.
 	 */
-	public void setUp() throws FileNotFoundException, JDOMException {
+	public void setUp() throws IOException, JDOMException {
 		
 		// get the ranges of valid characters from the xmlchars.xml resource
 		resourceRoot = rb.getString("test.resourceRoot");
