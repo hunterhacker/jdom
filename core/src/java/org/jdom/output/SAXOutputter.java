@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.37 2004/09/03 06:11:00 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.38 2004/12/11 00:15:24 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.37 $, $Date: 2004/09/03 06:11:00 $
+ * @version $Revision: 1.38 $, $Date: 2004/12/11 00:15:24 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.37 $ $Date: 2004/09/03 06:11:00 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.38 $ $Date: 2004/12/11 00:15:24 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -1215,11 +1215,22 @@ public class SAXOutputter {
             if (atts == null) {
                 atts = new AttributesImpl();
             }
-            atts.addAttribute("",                          // namespace
-                              "",                          // local name
-                              "xmlns:" + ns.getPrefix(),   // qualified name
-                              "CDATA",                     // type
-                              ns.getURI());                // value
+
+            String prefix = ns.getPrefix();
+            if (prefix.equals("")) {
+                atts.addAttribute("",                        // namespace
+                                  "",                        // local name
+                                  "xmlns",                   // qualified name
+                                  "CDATA",                   // type
+                                  ns.getURI());              // value
+            }
+            else {
+                atts.addAttribute("",                        // namespace
+                                  "",                        // local name
+                                  "xmlns:" + ns.getPrefix(), // qualified name
+                                  "CDATA",                   // type
+                                  ns.getURI());              // value
+            }
         }
         return atts;
     }
