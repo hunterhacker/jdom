@@ -88,6 +88,7 @@ import org.jdom.adapters.DOMAdapter;
  * @author Jason Hunter
  * @author Matthew Merlo
  * @author Dan Schaffer
+ * @author Yusuf Goolamabbas
  * @version 1.0
  */
 public class DOMOutputter {
@@ -114,7 +115,7 @@ public class DOMOutputter {
      * @param document <code>Document</code> to output.
      * @return an <code>org.w3c.dom.Document</code> version
      */
-    public org.w3c.dom.Document output(Document document) {
+    public org.w3c.dom.Document output(Document document) throws JDOMException {
         return output(document, DEFAULT_ADAPTER_CLASS);
     }
 
@@ -128,8 +129,23 @@ public class DOMOutputter {
      * @param element <code>Element</code> to output.
      * @return an <code>org.w3c.dom.Element</code> version
      */
-    public org.w3c.dom.Element output(Element element) {
+    public org.w3c.dom.Element output(Element element) throws JDOMException {
         return output(element, DEFAULT_ADAPTER_CLASS);
+    }
+
+    /**
+     * <p>
+     * This converts the JDOM <code>Attribute</code> parameter to a
+     * DOM <code>Attr</code>, returning the DOM version.  
+     * The default DOM adapter class is used.
+     * </p>
+     *
+     * @param attribute <code>Attribute</code> to output.
+     * @return an <code>org.w3c.dom.Attr</code> version
+     */
+
+    public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
+        return output(attribute, DEFAULT_ADAPTER_CLASS);
     }
 
     /** 
@@ -144,7 +160,8 @@ public class DOMOutputter {
      * @param domAdapterClass DOM adapter class to use
      * @return an <code>org.w3c.dom.Element</code> version
      */
-    public org.w3c.dom.Element output(Element element, String domAdapterClass) {
+    public org.w3c.dom.Element output(Element element, String domAdapterClass) 
+                                      throws JDOMException {
          LinkedList namespaces = new LinkedList();
          org.w3c.dom.Document domDoc = null ;
          try {
@@ -155,7 +172,8 @@ public class DOMOutputter {
 
              buildDOMTree(element, domDoc, null, true, namespaces);
          } catch (Exception e) {
-             e.printStackTrace();
+             throw new JDOMException("Exception outputting Element " +
+                                     element.getQualifiedName(), e);
          }
        
          return domDoc.getDocumentElement();       
@@ -174,7 +192,8 @@ public class DOMOutputter {
      * @return an <code>org.w3c.dom.Document</code> version
      */
     public org.w3c.dom.Document output(Document document,
-                                       String domAdapterClass) {
+                                       String domAdapterClass)
+                                       throws JDOMException {
         LinkedList namespaces = new LinkedList();
         org.w3c.dom.Document domDoc = null;
         try {
@@ -213,12 +232,44 @@ public class DOMOutputter {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new JDOMException("Exception outputting Document", e);
         }
 
         return domDoc;
     }
 
+    /**
+     * <p>
+     * This converts the JDOM <code>Attribute</code> parameter to a
+     * DOM Attr, returning the DOM version. The specified DOM adapter
+     * class (see org.jdom.adapters.*) is used, as a way to choose the 
+     * DOM implementation
+     * </p>
+     * @param attribute <code>Attribute</code> to output.
+     * @param domAdapterClass DOM adapter class to use
+     * @return an <code>org.w3c.dom.Attr</code> version
+     */
+ 
+    public org.w3c.dom.Attr output(Attribute attribute,
+                                   String domAdapterClass)
+                                   throws JDOMException {
+         org.w3c.dom.Document domDoc = null;
+         org.w3c.dom.Attr domAttr = null;
+         try {
+             DOMAdapter adapter =
+                 (DOMAdapter)Class.forName(domAdapterClass).newInstance();
+               
+             domDoc = adapter.createDocument();
+             domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
+                                                attribute.getQualifiedName());
+             domAttr.setValue(attribute.getValue());
+         } catch (Exception e) {
+             throw new JDOMException("Exception outputting Attribute " +
+                                     attribute.getQualifiedName(), e);
+         }
+
+         return domAttr;
+    }
 
     /**
      * <p>
