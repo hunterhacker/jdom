@@ -12,10 +12,10 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:./lib/junit.jar:../jdom/lib/xerces.jar:../jdom/lib/ant.jar:../jdom/build/classes:$JAVA_HOME/lib/dev.jar
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:./lib/junit.jar:../jdom/lib/xerces.jar:../jdom/lib/ant.jar:../jdom/build/classes:$JAVA_HOME/lib/dev.jar:$ADDITIONALCLASSPATH
 ANT_HOME=./lib
 
-echo Building with classpath $CLASSPATH:$LOCALCLASSPATH
+echo Building with classpath $CLASSPATH:$LOCALCLASSPATH:$ADDITIONALCLASSPATH
 echo
 
 echo Starting Ant...

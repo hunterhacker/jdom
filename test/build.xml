@@ -62,6 +62,11 @@ These are the meaningful targets for this build file:
     <filter token="date" value="${TODAY}"/>
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
+
+    <!-- JDK1.1 collections -->
+    <property name="coll.import" value="com.sun.java.util.collections"/>
+    <available classname="${coll.import}.Collection" property="coll.present"/>
+
   </target>
 
   <!-- =================================================================== -->
@@ -109,6 +114,27 @@ These are the meaningful targets for this build file:
   </target>
 
   <!-- =================================================================== -->
+  <!-- Does replacement on files for dealing with collections.             -->
+  <!-- XXX The efficiency could be improved here; all replacements should  -->
+  <!-- XXX happen during one read/write phase and only for files that have -->
+  <!-- XXX changed.                                                        -->
+  <!-- =================================================================== -->
+  <target name="collections" if="coll.present" depends="prepare-src">
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.Collection" value="${coll.import}.Collection"/>
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.Map" value="${coll.import}.Map"/>
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.HashMap" value="${coll.import}.HashMap"/>
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.List" value="${coll.import}.List"/>
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.Iterator" value="${coll.import}.Iterator"/>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Prepares the example code                                            -->
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
@@ -125,7 +151,7 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="prepare-src">
+  <target name="compile" depends="collections">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
