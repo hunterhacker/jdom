@@ -1,5 +1,64 @@
 * * * * * * 1.0 (future tag: jdom_1_0) from Beta10 * * * * * *
 
+Added a new lib/jaxen-jdom.jar that solves some XPath ancestry problems
+introduced by the Parent interface.  See the new lib/jaxen.readme for
+details.
+
+Moved the addContent() and setContent() methods from Parent into Element and
+Document directly.  This re-enables method chaining that some people missed.
+
+Fixed a few bugs in SAXOutputter: start/endPrefixMapping was not being fired
+for no namespace, DocType was being improperly constructed, changed to use a
+DefaultHandler with the dtd parser to better suppress unimportant problems.
+
+Added SAXOutputter support for outputting fragments of documents with the
+new methods:
+  output(Content)
+  outputFragment(List)
+  outputFragment(Content)
+
+Added support in XMLOutputter for ignoring the JAXP processing instructions
+<?javax.xml.transform.enable-output-escaping?> and
+<?javax.xml.transform.disable-output-escaping?>.  Respect for these PIs is
+toggled by the Format.set/getIgnoreTrAXEscapingPIs() feature, default false.
+
+Added to JDOMFactory the methods document(Element rootElement, DocType
+docType, String baseURI) and entityRef(String elementName, String systemID).
+These match constructors that were previously overlooked.  Also added
+implementations to DefaultJDOMFactory and UnverifiedJDOMFactory.
+
+Fixed bug in FilterIterator that affected next() calls.
+
+Fixed bug in DOMOutputter regarding extraneous namespace declarations
+appearing under certain conditions.
+
+Changed XMLOutputter to clone the Format objects when they're set/get
+
+Fixed bug in JDOMResult where the result list could include incomplete
+results in certain situations, fixed by forcing a flush.
+
+Made SAXHandler.flushCharacters() protected again after being private.  It's
+needed for the above fix.
+
+Changed Verifier.isXXX() methods from private to public as it was well
+argued that they're based on unchanging spec productions and can be
+generally useful even apart from JDOM.
+
+Added support for surrogate pairs in the Verifier.  (Surrogate pairs don't
+yet have any special output support.)
+
+Fixed bug in SAXBuilder to avoid an IllegalStateException when apps access
+the partial document when parse failure occurs right after the beginning of
+the parse.
+
+Updated JaxenXPath to avoid the deprecated XPath.valueOf().
+
+Brought the jdom-contrib ElementScanner up to date.
+
+Fixed various Javadoc typos.
+
+Removed the build-time dependence on saxpath.jar.
+
 Removed all deprecated methods.
 
 Fixed bug where in "pretty print" output EntityRef instances would erroneously
@@ -27,6 +86,45 @@ internal variables and methods that we may have reason to change later.
   Now static final:
     preserveFormat
 
+Removed some unnecessary casts.
+
+Made a few private methods static where it made sense.  Also a select
+few protected methods.
+
+Made the Format constructor private.  It used to be pkg protected which
+doesn't make a lot of sense.
+
+Removed equals() from AbstractFilter since it's better to let concrete
+subclasses define that, as they already were.
+
+Removed some unnecessary instanceof and != null checks.
+
+--
+Added an UncheckedJDOMFactory class which builds without doing any
+content or structure checks, letting you gain speed in a situation
+where you have 100% confidence in your parser. The Javadocs for
+the class naturally includes a serious warning.
+
+It's not used by default, but you can select it with a
+builder.setFactory(new UncheckedJDOMFactory()) call.
+
+I also added to JDOMFactory a few methods:
+  addContent(Parent, Content)
+  setAttribute(Element, Attribute)
+  addNamespaceDeclaration(Element, Namespace)
+
+These are called during the build to do the adds. The default builder
+just calls parent.addContent(Content) while the "unchecked" factory does
+the work without checks using package protected methods on ContentList
+and AttributeList.
+
+A perk of having these methods in the factory and used by the builder
+is you can write a custom factory to do certain things during the adds.
+Like you could ignore all elements named "foo" by not doing the add if
+the Content was an Elt foo. That's not perfect since the elements
+underneath foo would still be built into a subtree that got ignored,
+but it's an easy solution to save memory in the resulting document. 
+--
 
 * * * * * * Beta10 (tag: jdom_1_0_b10) from Beta9 * * * * * *
 
