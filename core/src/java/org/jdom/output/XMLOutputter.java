@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.56 2001/06/19 20:25:32 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.57 2001/06/20 18:36:26 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.56 $ $Date: 2001/06/19 20:25:32 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.57 $ $Date: 2001/06/20 18:36:26 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -838,6 +838,21 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(doctype, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+   /**
+     * Return a string representing an entity. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     *
+     * @param doc <code>EntityRef</code> to format.
+     **/
+    public String outputString(EntityRef entity) {
+        StringWriter out = new StringWriter();
+        try {
+            output(entity, out);  // output() flushes
         } catch (IOException e) { }
         return out.toString();
     }
