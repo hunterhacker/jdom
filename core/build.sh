@@ -28,4 +28,7 @@ echo
 echo Starting Ant...
 echo
 
+# One person found a seg fault with jdk 1.3.0 on Linux where adding -classic
+# to the following line fixed the issue
+
 $JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*
