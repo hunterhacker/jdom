@@ -113,6 +113,9 @@ public class XMLOutputter {
     /** The default indent is no spaces (as original document) */
     private String indent = "";
 
+    /** Whether or not to expand empty elements to &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
+    private boolean expandEmptyElements = false;
+
     /** The default new line flag, set to do new lines only as in original document */
     private boolean newlines = false;
 
@@ -219,6 +222,19 @@ public class XMLOutputter {
      */
     public void setOmitEncoding(boolean omitEncoding) {
         this.omitEncoding = omitEncoding;
+    }
+
+    /**
+     * <p>
+     *  This will set whether empty elements are expanded from <code>&lt;tagName%gt;</code> to
+     *    <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
+     * </p>
+     *
+     * @param expandEmptyElements <code>boolean</code> indicating whether or not
+     *        empty elements should be expanded.
+     */
+    public void setExpandEmptyElements(boolean expandEmptyElements) {
+        this.expandEmptyElements = expandEmptyElements;
     }
 
     /**
@@ -551,7 +567,13 @@ public class XMLOutputter {
 
         if (empty) {
             // Simply close up
-            out.write(" />");
+            if (!expandEmptyElements) {
+                out.write(" />");
+            } else {
+                out.write("></");
+                out.write(element.getQualifiedName());
+                out.write(">");
+            }
             maybePrintln(out);
         } else if (stringOnly) {
             // Print the tag  with String on same line
