@@ -25,4 +25,3 @@ echo location of the Java Virtual Machine you want to use.
 :end
 
 set LOCALCLASSPATH=
-
