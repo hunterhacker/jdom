@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.40 2002/04/11 06:19:10 jhunter Exp $
+ $Id: SAXHandler.java,v 1.41 2002/04/12 03:05:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.40 $, $Date: 2002/04/11 06:19:10 $
+ * @version $Revision: 1.41 $, $Date: 2002/04/12 03:05:52 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.40 $ $Date: 2002/04/11 06:19:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.41 $ $Date: 2002/04/12 03:05:52 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -189,21 +189,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                               new Integer(Attribute.NOTATION_ATTRIBUTE));
         attrNameToTypeMap.put("ENUMERATION",
                               new Integer(Attribute.ENUMERATED_ATTRIBUTE));
-    }
-
-    /**
-     * <p>
-     * This will set the <code>Document</code> to use.
-     * </p>
-     *
-     * @param document <code>Document</code> being parsed.
-     *
-     * @deprecated Deprecated in beta7, use SAXHandler() instead and let
-     * SAXHandler create the Document, then retrieve it with getDocument()
-     */
-    public SAXHandler(Document document) {
-        this(new DefaultJDOMFactory());
-        this.document = document;
     }
 
     /**
