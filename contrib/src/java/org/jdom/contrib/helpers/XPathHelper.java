@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPathHelper.java,v 1.3 2004/02/06 09:57:48 jhunter Exp $
+ $Id: XPathHelper.java,v 1.4 2004/09/03 06:15:23 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -210,15 +210,10 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            // XXX We can clean this up later
-            Parent parent = to.getParent();
-            Element elt = null;
-            if (parent instanceof Element) {
-                elt = (Element) parent;
-            }
+            Element parent = getParentElement(to);
             List siblings = null;
             int nodeType = ContentFilter.TEXT;
-            StringBuffer path = getElementPath(from, elt, false);
+            StringBuffer path = getElementPath(from, parent, false);
 
             if (parent != null) {
                 siblings = parent.getContent(new ContentFilter(nodeType));
@@ -274,15 +269,10 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            // XXX We can clean this up later
-            Parent parent = to.getParent();
-            Element elt = null;
-            if (parent instanceof Element) {
-                elt = (Element) parent;
-            }
+            Element parent = getParentElement(to);
             List siblings = null;
             int nodeType = ContentFilter.COMMENT;
-            StringBuffer path = getElementPath(from, elt, false);
+            StringBuffer path = getElementPath(from, parent, false);
 
             if (parent != null) {
                 siblings = parent.getContent(new ContentFilter(nodeType));
@@ -341,15 +331,10 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            // XXX We can clean this up later
-            Parent parent = to.getParent();
-            Element elt = null;
-            if (parent instanceof Element) {
-                elt = (Element) parent;
-            }
+            Element parent = getParentElement(to);
             List siblings = null;
             int nodeType = ContentFilter.PI;
-            StringBuffer path = getElementPath(from, elt, false);
+            StringBuffer path = getElementPath(from, parent, false);
 
             if (parent != null) {
                 siblings = parent.getContent(new ContentFilter(nodeType));
@@ -492,13 +477,8 @@ public class XPathHelper {
             boolean isRoot = false;
             List siblings = null;
 
-            // XXX We can clean this up later
-            Parent parent = to.getParent();
-            Element elt = null;
-            if (parent instanceof Element) {
-                elt = (Element) parent;
-            }
-            if (elt == null) {
+            Element parent = getParentElement(to);
+            if (parent == null) {
                 // Oops! No more parent but I haven't yet reached the from node.
                 if (parent != from) {
                     // Ouch! from node is not an ancestor.
@@ -511,11 +491,11 @@ public class XPathHelper {
                 }
             }
             else {
-                siblings = elt.getChildren(to.getName(), null);
+                siblings = parent.getChildren(to.getName(), null);
             }
 
             if (parent != from) {
-                path = getElementPath(from, elt, false, path);
+                path = getElementPath(from, parent, false, path);
             }
 
             Namespace ns = to.getNamespace();
@@ -584,4 +564,10 @@ public class XPathHelper {
         }
         return buffer;
     }
+
+    private static Element getParentElement(Content c) {
+        Parent parent = c.getParent();
+        return (Element)((parent instanceof Element)? parent: null);
+    }
 }
+
