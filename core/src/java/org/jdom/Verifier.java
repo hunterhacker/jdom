@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.43 2003/04/10 04:22:35 jhunter Exp $
+ $Id: Verifier.java,v 1.44 2003/04/14 19:24:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.43 $, $Date: 2003/04/10 04:22:35 $
+ * @version $Revision: 1.44 $, $Date: 2003/04/14 19:24:40 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.43 $ $Date: 2003/04/10 04:22:35 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.44 $ $Date: 2003/04/14 19:24:40 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -591,8 +591,8 @@ final public class Verifier {
             return "XML names cannot begin with the character \"" + 
                    first + "\"";
         }
-        // Ensure legal content
-        for (int i=0, len = name.length(); i<len; i++) {
+        // Ensure legal content for non-first chars
+        for (int i=1, len = name.length(); i<len; i++) {
             char c = name.charAt(i);
             if (!isXMLNameCharacter(c)) {
                 return "XML names cannot contain the character \"" + c + "\"";
