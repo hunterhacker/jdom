@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.122 2002/05/11 07:50:04 jhunter Exp $
+ $Id: Element.java,v 1.123 2002/05/11 07:52:48 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.122 $, $Date: 2002/05/11 07:50:04 $
+ * @version $Revision: 1.123 $, $Date: 2002/05/11 07:52:48 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.122 $ $Date: 2002/05/11 07:50:04 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.123 $ $Date: 2002/05/11 07:52:48 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -787,34 +787,6 @@ public class Element implements Serializable, Cloneable {
      */
     public List getChildren() {
         return content.getView(new ElementFilter());
-    }
-
-    /**
-     * This sets the content of the element the same as {@link #setContent},
-     * except only <code>Element</code> objects are allowed in the supplied
-     * list.
-     *
-     * @param children <code>List</code> of <code>Element</code> objects to add
-     * @return this element modified
-     */
-    public Element setChildren(List children) {
-        List list = content.getView(new ElementFilter());
-        // Save initial size
-        int size = list.size();
-        try {
-            // Try adding the list
-            list.addAll(children);
-        }
-        catch(RuntimeException exception) {
-            // Restore to original state by removing
-            // items that where appended
-            removeRange(list, size, list.size());
-            throw exception;
-        }
-
-        // Add was sucessful, remove old children
-        removeRange(list, 0, size);
-        return this;
     }
 
     /** Remove a range of items from a list */
@@ -1608,4 +1580,35 @@ public class Element implements Serializable, Cloneable {
         }
         return false;
     }
+
+    /**
+     * This sets the content of the element the same as {@link #setContent},
+     * except only <code>Element</code> objects are allowed in the supplied
+     * list.
+     *
+     * @deprecated Deprecated in Beta 9, use setContent(List) instead
+     *
+     * @param children <code>List</code> of <code>Element</code> objects to add
+     * @return this element modified
+     */
+    public Element setChildren(List children) {
+        List list = content.getView(new ElementFilter());
+        // Save initial size
+        int size = list.size();
+        try {
+            // Try adding the list
+            list.addAll(children);
+        }
+        catch(RuntimeException exception) {
+            // Restore to original state by removing
+            // items that where appended
+            removeRange(list, size, list.size());
+            throw exception;
+        }
+
+        // Add was sucessful, remove old children
+        removeRange(list, 0, size);
+        return this;
+    }
+
 }
