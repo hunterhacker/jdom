@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.15 2001/03/15 06:07:17 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.16 2001/03/16 07:33:30 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -285,8 +285,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * <p>
      * This will return the value for a specific
      *   name/value pair on the PI.  If no such pair is
-     *   found for this PI, an empty <code>String</code>
-     *   will result.
+     *   found for this PI, null is returned.
      * </p>
      *
      * @param name <code>String</code> name of name/value pair
@@ -294,11 +293,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>String</code> - value of name/value pair.
      */
     public String getValue(String name) {
-        if (mapData.containsKey(name)) {
-            return (String)mapData.get(name);
-        }
-
-        return "";
+        return (String)mapData.get(name);
     }
 
     /**
@@ -405,7 +400,11 @@ public class ProcessingInstruction implements Serializable, Cloneable {
                     name = inputData.substring(startName, pos).trim();
                     value = extractQuotedString(
                                      inputData.substring(pos+1).trim());
-                    pos = inputData.indexOf(value) + value.length() + 1;
+                    // A null value means a parse error and we return empty!
+                    if (value == null) {
+                        return new HashMap();
+                    }
+                    pos += value.length() + 1;  // skip over equals and value
                     break;
                 }
                 else if (Character.isWhitespace(previousChar)
@@ -424,8 +423,14 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
             // If both a name and a value have been found, then add
             // them to the data Map
-            if (name.length( )> 0 && value.length() > 0) {
-                data.put(name, value);
+            if (name.length() > 0 && value != null) {
+                //if (data.containsKey(name)) {
+                    // A repeat, that's a parse error, so return a null map
+                    //return new HashMap();
+                //}
+                //else {
+                    data.put(name, value);
+                //}
             }
         }
 
@@ -481,7 +486,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
         // Should we throw an exception if no quoted string was found,
         // or simply return an empty string???
-        return "";
+        return null;
     }
     
     /**
