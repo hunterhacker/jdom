@@ -1,10 +1,14 @@
 Items that need to be done:
 
---- API CONSIDERATIONS FOR 1.0 ---
+--- ITEMS REMAINING BEFORE 1.0 ---
 
 None!
 
---- BUGS NOT NEEDING TO BE RESOLVED FOR 1.0.0 ---
+--- ITEMS TO CONSIDER FOR 1.1 ---
+
+* Output support for surrogate pairs.
+
+* Integrate the contributed StAXBuilder.
 
 * Rusty's "base uri" support for Element and the rest.
 
@@ -15,6 +19,27 @@ None!
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013261.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013262.html
   NOW DONE?
+
+* Investigate a way to do in-memory validation.  First step is probably
+  to get an in-memory representation of a DTD as per
+  http://xmlhack.com/read.php?item=626
+  http://www.wutka.com/dtdparser.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-July/001431.html
+  http://lists.denveronline.net/lists/jdom-interest/2001-February/004661.html
+  Maybe new DTDValidator(dtd).validate(doc);
+  Then later new SchemaValidator(schema).validate(doc);
+  Could instead do doc.validate(dtd/schema) but then we'd have to dynamically
+  switch between recognizing DTDs and the various schemas.
+  The method would probably either throw InvalidDocumentException or might
+  take an ErrorHandler-style interface implementation if there are non-fatal
+  errors possible.
+  It'd also be possible to have a programmatic verifier, that determined for
+  example if an orderid="100" entry was valid against a database entry.
+  http://dcb.sun.com/practices/devnotebook/xml_msv.jsp
+  http://www.sun.com/software/xml/developers/multischema/
+
+* Create an HTMLOutputter to handle the HTML specific aspects (closing tags,
+  escaped characters like &eacute;, etc).
 
 --- FUTURE IDEAS ---
 
@@ -33,9 +58,6 @@ None!
   switchover using javax.xml.jdom as interfaces and default impl, use org.jdom
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?  Experimentation happening in jdom-javax module.
-
-* Add Laurent's <?javax.xml.transform.disable-output-escaping?>
-  and <?javax.xml.transform.enable-output-escaping?> support
 
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
   started by Joe Bowbeer.
@@ -64,32 +86,10 @@ None!
   Use fixcrlf in dist (instead of package as currently done)
   Probably include source with jdom.jar built
 
-* Consider changing the Verifier method signatures to throw the
-  IllegalXXXException directly instead of returning null on error,
-  and let the caller pass the exception through
-
 * Populate jdom-test.  Hong Zhang <Hong.Zhang AT Sun.COM> once volunteered to
   help with the J2EE CTS.
 
 * Add setIgnoringAllWhitespace(boolean) method.
-
-* Investigate a way to do in-memory validation.  First step is probably
-  to get an in-memory representation of a DTD as per
-  http://xmlhack.com/read.php?item=626
-  http://www.wutka.com/dtdparser.html
-  http://lists.denveronline.net/lists/jdom-interest/2000-July/001431.html
-  http://lists.denveronline.net/lists/jdom-interest/2001-February/004661.html
-  Maybe new DTDValidator(dtd).validate(doc);
-  Then later new SchemaValidator(schema).validate(doc);
-  Could instead do doc.validate(dtd/schema) but then we'd have to dynamically
-  switch between recognizing DTDs and the various schemas.
-  The method would probably either throw InvalidDocumentException or might
-  take an ErrorHandler-style interface implementation if there are non-fatal
-  errors possible.
-  It'd also be possible to have a programmatic verifier, that determined for
-  example if an orderid="100" entry was valid against a database entry.
-  http://dcb.sun.com/practices/devnotebook/xml_msv.jsp
-  http://www.sun.com/software/xml/developers/multischema/
 
 * Consider a listener interface so you could listen to doc changes.
   (Probably after 1.1 honestly; this can be done through manual subclasses
@@ -180,9 +180,6 @@ None!
 * Work on creating a deferred builder that parses only what's necessary to
   satisfy the programmer's requests.  See Ayal Spitz' post at
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005685.html
-
-* Create an HTMLOutputter to handle the HTML specific aspects (closing tags,
-  escaped characters like &eacute;, etc).
 
 * Change the various setAttributeValue() methods in Element and
   Attribute to check the attribute type and normalize the string
