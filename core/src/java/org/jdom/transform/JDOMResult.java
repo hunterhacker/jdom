@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.3 2001/06/14 22:07:00 jhunter Exp $
+ $Id: JDOMResult.java,v 1.4 2001/06/19 20:33:19 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -123,28 +123,21 @@ public class JDOMResult extends SAXResult {
   private Document result = null;
 
   /**
-   * The XML filter responsible for building the JDOM document
-   * result of a transformation whenever this object is used as a
-   * {@link #SAXResult} by a {@link javax.xml.transform.Transformer}.
+   * The custom JDOM factory to use when building the result document
+   * or <code>null</code> to use the default JDOM classes.
    */
-  private DocumentBuilder documentBuilder = null;
+  private JDOMFactory factory = null;
 
   /**
    * Default empty constructor.
    */
   public JDOMResult() {
-    documentBuilder = new DocumentBuilder();
-    super.setHandler(this.documentBuilder);
-    super.setLexicalHandler(this.documentBuilder);
-  }
+    // Allocate custom builder object...
+    DocumentBuilder builder = new DocumentBuilder();
 
-  /**
-   * Returns the document produced as result of an XSL Transformation.
-   *
-   * @return the transformation result as a JDOM document.
-   */
-  public Document getDocument() {
-    return (result != null)? result: documentBuilder.getDocument();
+    // And use it as ContentHandler and LexicalHandler.
+    super.setHandler(builder);
+    super.setLexicalHandler(builder);
   }
 
   /**
@@ -165,26 +158,64 @@ public class JDOMResult extends SAXResult {
     this.result = document;
   }
 
+  /**
+   * Returns the document produced as result of an XSL Transformation.
+   *
+   * @return the transformation result as a JDOM document.
+   */
+  public Document getDocument() {
+    return this.result;
+  }
+
+  /**
+   * Sets a custom JDOMFactory to use when building the result
+   * document. Use a custom factory to build the tree with your
+   * own subclasses of the JDOM classes.
+   *
+   * @param  factory   the custom <code>JDOMFactory</code> to use or
+   *                   <code>null</code> to use the default JDOM
+   *                   classes.
+   *
+   * @see    #getFactory
+   */
+  public void setFactory(JDOMFactory factory) {
+    this.factory = factory;
+  }
+
+  /**
+   * Returns the custom JDOMFactory used to build the result
+   * document.
+   *
+   * @return the custom <code>JDOMFactory</code> used to build the
+   *         result document or <code>null</code> if the default
+   *         JDOM classes are being used.
+   *
+   * @see    #setFactory
+   */
+  public JDOMFactory getFactory() {
+    return this.factory;
+  }
+
   //-------------------------------------------------------------------------
   // SAXResult overwritten methods
   //-------------------------------------------------------------------------
 
   /**
-   * Set the target to be a SAX2 ContentHandler.
+   * Sets the target to be a SAX2 ContentHandler.
    *
    * @param handler Must be a non-null ContentHandler reference.
    */
   public void setHandler(ContentHandler handler) { }
 
   /**
-   * Set the SAX2 LexicalHandler for the output.
-   *
-   * <p>This is needed to handle XML comments and the like.  If the
+   * Sets the SAX2 LexicalHandler for the output.
+   * <p>
+   * This is needed to handle XML comments and the like.  If the
    * lexical handler is not set, an attempt should be made by the
    * transformer to cast the ContentHandler to a LexicalHandler.</p>
    *
    * @param handler A non-null LexicalHandler for
-   * handling lexical parse events.
+   *                handling lexical parse events.
    */
   public void setLexicalHandler(LexicalHandler handler) { }
 
@@ -201,27 +232,9 @@ public class JDOMResult extends SAXResult {
     private SAXHandler saxHandler = null;
 
     /**
-     * Whether the transformation is complete.
-     */
-    private boolean documentReady = true;
-
-    /**
      * Public default constructor.
      */
     DocumentBuilder() { }
-
-    /**
-     * Returns the JDOM document result of the last transformation
-     * or <code>null</code> if no transformation occurred or if the
-     * transformation is not yet complete.
-     *
-     * @return the JDOM document result of the last transformation
-     *         or <code>null</code> if none is available.
-     */
-    public Document getDocument() {
-      return (this.documentReady == true) ? 
-                       this.saxHandler.getDocument() : null;
-    }
 
     //----------------------------------------------------------------------
     // XMLFilterImpl overwritten methods
@@ -243,14 +256,11 @@ public class JDOMResult extends SAXResult {
         // Reset any previously set result document.
         setDocument(null);
 
-        // Mark the current document as "under construction".
-        this.documentReady  = false;
-
         // Create the actual JDOM document builder and register it as
         // ContentHandler on the superclass (XMLFilterImpl): this
         // implementation will take care of propagating the LexicalHandler
         // events.
-        this.saxHandler     = new SAXHandler();
+        this.saxHandler = new SAXHandler(getFactory());
         super.setContentHandler(this.saxHandler);
 
         // And propagate event.
@@ -264,17 +274,14 @@ public class JDOMResult extends SAXResult {
     /**
      * Processes an end of document event.
      * <p>
-     * This implementation marks the built document as available.</p>
+     * This implementation makes the built document available.</p>
      *
      * @throws SAXException   if thrown by the actual document
      *                        builder.
      */
     public void endDocument() throws SAXException {
-      // Reset any previously set result document.
-      setDocument(null);
-
       // Make the result document available.
-      this.documentReady = true;
+      setDocument(this.saxHandler.getDocument());
 
       // And propagate event.
       super.endDocument();

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.3 2001/06/14 22:07:00 jhunter Exp $
+ $Id: JDOMSource.java,v 1.4 2001/06/19 20:33:19 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -480,10 +480,12 @@ public class JDOMSource extends SAXSource {
         this.features.put(name, new Boolean(value));
       }
       else {
-        if ((name.equals("http://xml.org/sax/features/namespaces")) &&
-            (value != true)) {
-           // namespaces feature always supported.
-           throw new SAXNotSupportedException(name);
+        if (name.equals("http://xml.org/sax/features/namespaces")) {
+          if (value != true) {
+            // namespaces feature always supported.
+            throw new SAXNotSupportedException(name);
+          }
+          // Else: true is OK!
         }
         else {
           throw new SAXNotRecognizedException(name);
