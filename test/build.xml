@@ -87,17 +87,13 @@ These are the meaningful targets for this build file:
       <pathelement location="${jdom-core.jar}"/>
       <pathelement location="${jakarta-regexp.jar}"/>
 
-      <!-- Include CLASSPATH environment variable in compilation path as
-           it contains the path to the JDK 1.1 collections when these are
-           to be used.
-       -->
+      <!-- We used to include the CLASSPATH environment variable in
+           compilation path as it might contain the path to the JDK 1.1
+           collections.  That's not needed anymore.  We'll keep it here
+           in case there's a future need to include the CLASSPATH.
       <pathelement path="${java.class.path}" />
+       -->
     </path>
-
-    <!-- JDK1.1 collections -->
-    <property name="coll.import" value="com.sun.java.util.collections"/>
-    <available classname="${coll.import}.Collection" property="coll.present"
-               classpathref="compile.class.path"/>
 
     <!-- Tests configuration -->
     <echo message="Running tests against ${jdom-core.jar} using parser ${parser.jar}"/>
@@ -175,36 +171,9 @@ These are the meaningful targets for this build file:
   </target>
 
   <!-- =================================================================== -->
-  <!-- Does replacement on files for dealing with collections.             -->
-  <!-- XXX The efficiency could be improved here; all replacements should  -->
-  <!-- XXX happen during one read/write phase and only for files that have -->
-  <!-- XXX changed.                                                        -->
-  <!-- =================================================================== -->
-  <target name="collections" if="coll.present" depends="prepare-src">
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.Collection" value="${coll.import}.Collection"/>
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.Map" value="${coll.import}.Map"/>
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.HashMap" value="${coll.import}.HashMap"/>
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.List" value="${coll.import}.List"/>
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.Iterator" value="${coll.import}.Iterator"/>
-    <!-- The following replace handles the "import java.util.*" case by    -->
-    <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
-    <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
-    <replace dir="${build.src}" includes="org/**"
-             token="java.util.*"
-             value="java.util.*;\u000aimport ${coll.import}.*"/>
-  </target>
-
-  <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="prepare-src,collections">
+  <target name="compile" depends="prepare-src">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
