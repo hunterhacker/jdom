@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.123 2002/05/11 07:52:48 jhunter Exp $
+ $Id: Element.java,v 1.124 2002/05/17 15:45:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.123 $, $Date: 2002/05/11 07:52:48 $
+ * @version $Revision: 1.124 $, $Date: 2002/05/17 15:45:03 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.123 $ $Date: 2002/05/11 07:52:48 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.124 $ $Date: 2002/05/17 15:45:03 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -139,6 +139,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of element.
      * @param namespace <code>Namespace</code> to put element in.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         element name.
      */
     public Element(String name, Namespace namespace) {
         setName(name);
@@ -150,6 +152,8 @@ public class Element implements Serializable, Cloneable {
      * <code>{@link Namespace}</code>.
      *
      * @param name <code>String</code> name of element.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         element name.
      */
     public Element(String name) {
         this(name, (Namespace) null);
@@ -165,6 +169,9 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of element.
      * @param uri <code>String</code> URI for <code>Namespace</code> element
      *        should be in.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         element name or the given URI is illegal as a
+     *         namespace URI
      */
     public Element(String name, String uri) {
         this(name, Namespace.getNamespace("", uri));
@@ -179,6 +186,9 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of element.
      * @param uri <code>String</code> URI for <code>Namespace</code> element
      *        should be in.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         element name, the given prefix is illegal as a namespace
+     *         prefix, or the given URI is illegal as a namespace URI
      */
     public Element(String name, String prefix, String uri) {
         this(name, Namespace.getNamespace(prefix, uri));
@@ -304,9 +314,8 @@ public class Element implements Serializable, Cloneable {
      * This returns the full name of the
      * <code>Element</code>, in the form
      * [namespacePrefix]:[localName].  If
-     * no namespace prefix exists for the
-     * <code>Element</code>, simply the
-     * local name is returned.
+     * the <code>Element</code> does not have a namespace prefix,
+     * then the local name is returned.
      *
      * @return <code>String</code> - full name of element.
      */
@@ -482,7 +491,7 @@ public class Element implements Serializable, Cloneable {
      * this single element, including whitespace and CDATA
      * sections if they exist.  It's essentially the concatenation of
      * all <code>Text</code> and <code>CDATA</code> nodes returned by
-     * getContent().  The call does not recurse into child elements.
+     * <code>getContent()</code>.  The call does not recurse into child elements.
      * If no textual value exists for the
      * element, an empty <code>String</code> ("") is returned.
      *
@@ -661,6 +670,9 @@ public class Element implements Serializable, Cloneable {
      *
      * @param text new content for the element
      * @return this element modified
+     * @throws IllegalDataException if <code>text</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *         by {@link org.jdom.Verifier#checkCharacterData})
      */
     public Element setText(String text) {
         content.clear();
@@ -877,6 +889,9 @@ public class Element implements Serializable, Cloneable {
      *
      * @param str <code>String</code> to add
      * @return this element modified
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *         by {@link org.jdom.Verifier#checkCharacterData})
      */
     public Element addContent(String str) {
         return addContent(new Text(str));
@@ -888,6 +903,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param text <code>Text</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the <code>Text</code> object 
+     *         you're attempting to add already has a parent element.
      */
     public Element addContent(Text text) {
         content.add(text);
@@ -1188,8 +1205,10 @@ public class Element implements Serializable, Cloneable {
      *
      * @param attributes <code>List</code> of attributes to set
      * @return this element modified
-     * @throws IllegalAddException if the List contains objects of
-     *         illegal types.
+     * @throws IllegalAddException if the List contains objects 
+     *         that are not instances of <code>Attribute</code>,
+     *         or if any of the <code>Attribute</code> objects have 
+     *         conflicting namespace prefixes.
      */
     public Element setAttributes(List newAttributes) {
         attributes.clearAndSet(newAttributes);
@@ -1205,6 +1224,11 @@ public class Element implements Serializable, Cloneable {
      * @param name name of the attribute to set
      * @param value value of the attribute to set
      * @return this element modified
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}).
      */
     public Element setAttribute(String name, String value) {
         return setAttribute(new Attribute(name, value));
@@ -1220,6 +1244,14 @@ public class Element implements Serializable, Cloneable {
      * @param value value of the attribute to set
      * @param ns namespace of the attribute to set
      * @return this element modified
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name, or if the namespace is an unprefixed default
+     *         namespace
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}).
+     * @throws IllegalAddException if the attribute namespace prefix 
+     *         collides with another namespace prefix on the element.
      */
     public Element setAttribute(String name, String value, Namespace ns) {
         return setAttribute(new Attribute(name, value, ns));
@@ -1543,7 +1575,8 @@ public class Element implements Serializable, Cloneable {
      * This removes all child elements.  Returns true if any were removed.
      * </p>
      * @deprecated Deprecated in Beta 9, instead of this method you can call
-     * clear() on the list returned by getChildren() or by getContent()
+     * <code>clear()</code> on the list returned by <code>getChildren()</code> or by 
+     * <code>getContent()</code>
      *
      * @return whether deletion occurred
      */
