@@ -23,9 +23,9 @@ Items that need to be done:
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
-* Determine if setMixedContent(), setAttributes(), setPIs(), setChildren(),
+* Determine if setContent(), setAttributes(), setPIs(), setChildren(),
   and addAll() should be atomic on failure (such as when an illegal object 
-  is added from the list).  Currently setMixedContent() has been changed to 
+  is added from the list).  Currently setContent() has been changed to 
   be atomic.
 
 * Examine if it's worth doing an intern() on element and attribute names,
@@ -43,7 +43,7 @@ Items that need to be done:
 * Integrate FilterList (currently developed in the jdom-wip CVS module)
   which replaced PartialList by more efficiently driving directly off the
   backing list.
-  - Find a way to reuse the FilterList impls returned by getMixedContent().
+  - Find a way to reuse the FilterList impls returned by getContent().
     Possible way: store content in a FilterList but give it a pkg prot 
     accessor method to retrieve the raw list?
   - Make sure FilterList doesn't let an elt be added as a child (or 
@@ -109,6 +109,8 @@ Items that need to be done:
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
 * Expand class-level Javadocs for inclusion into Frame using the MIF Doclet.
+
+* Note in the docs where necessary our multithreading policy.
 
 --- FOR JDOM 1.0 ---
 
