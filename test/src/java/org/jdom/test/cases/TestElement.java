@@ -707,7 +707,8 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(pi);
 		EntityRef entity = new EntityRef("wizards");
 		element.addContent(entity);
-		element.addContent("finally a new wand!");
+		Text text = new Text("finally a new wand!");
+		element.addContent(text);
 
 		List list = element.getContent();
 
@@ -719,7 +720,7 @@ public void test_TCM__boolean_hasChildren() {
 		assertEquals("wrong CDATA", cdata, list.get(4));
 		assertEquals("wrong ProcessingInstruction", pi, list.get(5));
 		assertEquals("wrong EntityRef", entity, list.get(6));
-		assertEquals("wrong text", "finally a new wand!", list.get(7));
+		assertEquals("wrong text", text, list.get(7));
 		
 
 	}
@@ -797,7 +798,7 @@ public void test_TCM__boolean_hasChildren() {
 		entity = null;
 		assertEquals("incorrect deep clone EntityRef", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
-		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getContent().get(4)));
+		assertEquals("incorrect deep clone test", "finally a new wand!", ((Text)deepClone.getContent().get(4)).getText());
 		
 			
 		
@@ -1228,7 +1229,8 @@ public void test_TCM__boolean_hasChildren() {
 		list.add(pi);
 		EntityRef entity = new EntityRef("wizards");
 		list.add(entity);
-		list.add("finally a new wand!");
+		Text text = new Text("finally a new wand!");
+		list.add(text);
 
 		element.setContent(list);
 		List contentList = element.getContent();
@@ -1241,7 +1243,7 @@ public void test_TCM__boolean_hasChildren() {
 		assertEquals("wrong CDATA", cdata, contentList.get(4));
 		assertEquals("wrong ProcessingInstruction", pi, contentList.get(5));
 		assertEquals("wrong EntityRef", entity, contentList.get(6));
-		assertEquals("wrong text", "finally a new wand!", contentList.get(7));
+		assertEquals("wrong text", text, contentList.get(7));
 
 		ArrayList newList = new ArrayList();
 		//test adding a bad object type in the list
@@ -1264,7 +1266,7 @@ public void test_TCM__boolean_hasChildren() {
 		assertEquals("wrong CDATA after failed add", cdata, contentList.get(4));
 		assertEquals("wrong ProcessingInstruction after failed add", pi, contentList.get(5));
 		assertEquals("wrong EntityRef after failed add", entity, contentList.get(6));
-		assertEquals("wrong text after failed add", "finally a new wand!", contentList.get(7));
+		assertEquals("wrong text after failed add", text, contentList.get(7));
 		
 		
 		//nulls should reset the list
@@ -1656,6 +1658,9 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	//here is what we expect back after serialization
 	String bufWithEmptyNS = 
 	"<element xmlns=\"http://foo\"><child1 xmlns=\"\" anAttribute=\"no namespace\" /><child2 xmlns=\"\" xmlns:x=\"http://foo\" x:anAttribute=\"with namespace\"><descendent /></child2></element>";
+
+	File dir = new File(scratchDir);
+	dir.mkdirs();
 
 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(scratchDir + "/object.ser"));
 	out.writeObject(element);

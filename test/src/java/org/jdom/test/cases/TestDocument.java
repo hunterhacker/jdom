@@ -308,7 +308,7 @@ public static Test suite () {
 		entity = null;
 		assertEquals("incorrect deep clone Entity", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
-		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getContent().get(4)));
+		assertEquals("incorrect deep clone test", "finally a new wand!", ((Text)deepClone.getContent().get(4)).getText());
 		
 			
 	}
@@ -413,6 +413,9 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	String bufWithNoNS = "<element xmlns=\"http://foo\"><child1 /><child2 /></element>";
 	
 	String bufWithEmptyNS = "<element xmlns=\"http://foo\"><child1 xmlns=\"\" /><child2 xmlns=\"\" /></element>";
+
+	File dir = new File(scratchDir);
+	dir.mkdirs();
 
 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(scratchDir + "/object.ser"));
 	out.writeObject(doc);
