@@ -986,7 +986,7 @@ public final class FilterListRandomizer
 			super(s);
 		}
 
-		public CDATA setParent(Element parent)
+		public Text setParent(Element parent)
 		{
 			return super.setParent(parent);
 		}
