@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementFilter.java,v 1.13 2003/05/29 02:51:11 jhunter Exp $
+ $Id: ElementFilter.java,v 1.14 2004/02/04 23:43:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,14 +61,14 @@ import org.jdom.*;
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.13 $, $Date: 2003/05/29 02:51:11 $
+ * @version $Revision: 1.14 $, $Date: 2004/02/04 23:43:25 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
 public class ElementFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.13 $ $Date: 2003/05/29 02:51:11 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.14 $ $Date: 2004/02/04 23:43:25 $ $Name:  $";
 
     /** The element name */
     private String name;
@@ -119,25 +119,10 @@ public class ElementFilter extends AbstractFilter {
      */
     public boolean matches(Object obj) {
         if (obj instanceof Element) {
-            Element element = (Element) obj;
-            if (name == null) {
-                if (namespace == null) {
-                    return true;
-                }
-                else {
-                    return namespace.equals(element.getNamespace());
-                }
-            }
-            else {
-                if (name.equals(element.getName())) {
-                    if (namespace == null) {
-                        return true;
-                    }
-                    else {
-                        return namespace.equals(element.getNamespace());
-                    }
-                }
-            }
+            Element el = (Element) obj;
+            return
+              (this.name == null || this.name.equals(el.getName())) &&
+              (this.namespace == null || this.namespace.equals(el.getNamespace()));
         }
         return false;
     }
