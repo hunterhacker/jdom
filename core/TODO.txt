@@ -2,10 +2,9 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Automate build process, using ant tasks to EOL handling
-  Consider .zip readable by JAR
-  Consider releasing source with jdom.jar as sole distribution
-  Write todos/tounix tasks (Alex Chaffee?)
+* Create "build dist" for distribution
+  Use fixcrlf in dist (instead of package as currently done)
+  Probably include source with jdom.jar built
 
 * Consider changing XMLOutputter to have more set methods like Enhydra's
   DOMFormatter.  Possible good ones:
@@ -22,9 +21,13 @@ Items that need to be done:
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
 
+* XMLOutputter exceptions should be sent up the stack, not printed out 
+
 * Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
 
 --- FOR JDOM 1.0 ---
+
+* Probably change DOMAdapter to take File for a filename.  (Brett's call)
 
 * Figure out if adding an element as a child of itself (or grandchild or
   great-grandchild) should be stopped.  Probably so.  The logic to implement
@@ -76,7 +79,7 @@ Items that need to be done:
 
 * Have Jools populate jdom-test
 
-* Implement SAXOutputter
+* Implement SAXOutputter (Fred_Trimble@vertexinc.com)
 
 * Implement inline entities:
         <?xml version='1.0' ?>
@@ -100,6 +103,7 @@ Items that need to be done:
 
 * Consider enhancing SAXBuilder to use filters per
   http://www.megginson.com/SAX/Java/filters.html
+  That would let someone remove surrounding whitespace and other fancy things.
 
 * Writing a "Getting started" guide for newbies 
   (Tom Clements <clements@eng.sun.com>)
@@ -119,6 +123,11 @@ Items that need to be done:
 
 * Look at standard parser features (http://apache.org/xml/features/dom) for
   ideas on things that may be needed.
+
+* Perhaps have builder flags to indicate if surrounding whitespace (not just
+  ignorable whitespace) should be trimmed, if entity refs should be expanded,
+  if CDATA sections should be included, and if comment sections should be
+  included.  All seem like reasonable customizations.
 
 * Look at the issue that PartialList.listIterator() may return an Iterator
   that doesn't have logic to change the backing List and sanity check the
