@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.18 2001/06/22 09:00:27 jhunter Exp $
+ $Id: SAXHandler.java,v 1.19 2001/08/01 00:30:28 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.18 $ $Date: 2001/06/22 09:00:27 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.19 $ $Date: 2001/08/01 00:30:28 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -359,9 +359,17 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             element = factory.element(localName, elementNamespace);
 
             // Remove this namespace from those in the temp declared list
+/**
+ * I've commented out these lines to ensure that element's that have a namespace
+ *   make those namespaces available to their attributes, which this seems to
+ *   break. However, I'm not 100% sure that this doesn't cause some other
+ *   problems. My gut feeling is "no", but I'm not sure, so I'm just commenting
+ *   it out. We'll remove for good in the next drop I think.
+ * - Brett, 07/30/2001
             if (declaredNamespaces.size() > 0) {
                 declaredNamespaces.remove(elementNamespace);
             }
+ */
         } else {
             element = factory.element(localName);
         }
