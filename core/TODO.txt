@@ -1,21 +1,16 @@
 Items that need to be done:
 
---- RIGHT AWAY ---
+--- RIGHT AWAY, FOR BETA 8 ---
+
+* Start shipping a more recent Xerces (maybe even 2.0 if possible).
+
+* Fix a tiny bug in XMLOutputter regarding xml:space default within a preserve
+  block when trim all white is turned on.
 
 * Fix JDOM->DOM->JDOM bug as reported by "Xuemin Guan" <xuemin@appresso.com>.
    http://www.servlets.com/archive/servlet/SearchList?listName=jdom-interest&
    searchText=%22JDom+2+Dom%2C+then+Dom+2+JDom%22&defaultField=subject&
    Search=Search
-
-* Fix SlowParse problem reported by Mark Bennett <mbennett@ideaeng.com> which
-  is triggered by content with lots of entity escapes and is caused by 
-  addContent(String) doing repeated string concatentaions.  (phil@trilog and
-  Brad Huffman may help)
-
-* Run extensive tests on new XMLOutputter implementation.
-
-* Verify we have a solution for when entities are unexpanded and present in
-  attribute values.  (Phil Nelson)
 
 * Finish implementing the ability to output the same DOCTYPE as was input.  
   Open issues:  Making SAXOutputter output the right SAX events for the
@@ -32,14 +27,6 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
 
-* Look again at if XMLOutputter output methods taking a Writer should 
-  auto-flush.  Currently they do, but is that overstepping the contract?
-
-* Look at where Namespace may need to be synchronized or made no longer a
-  flyweight.  See
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
-  and follow-ups.
-
 * Look into having a flag to turn off DTD loading, since parsers often load
   the DTD even if validation is off.
   Xerces has a custom option: http://xml.apache.org/xerces-j/features.html
@@ -55,19 +42,24 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005644.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
+  Brad Huffman has a good proposal.
 
-* Determine if there should be a way to output everything on one line
-  (including the decl and doctype)
+--- AFTER BETA 8 ---
 
-* Performance optimize.  See following thread for test data.
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
+* Look at where Namespace may need to be synchronized or made no longer a
+  flyweight.  See
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
+  and follow-ups.
 
 * Look into how the factory builder model could support giving the factory
   extra knowledge about the context (line number, element stack, etc), and 
   allow it to report errors or to return a code indicating the element should 
   be ignored.
   (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
+
+* Performance optimize.  See following thread for test data.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
@@ -162,9 +154,6 @@ Items that need to be done:
     ProcIns XPath.getProcIns(Element e, String xpath)
     Entity  XPath.getEntity(Element e, String xpath)
     String  XPath.getText(Element e, String xpath)
-
-* Eliminate string hardcoding.  Use resource bundles to allow for
-  localization.
 
 * Investigate a way to do in-memory validation.  First step is probably 
   to get an in-memory representation of a DTD as per
