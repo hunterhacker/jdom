@@ -87,7 +87,8 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
      * </p>
      *
      * @param in <code>InputStream</code> to parse.
-     * @param validate <code>boolean</code> to indicate if validation should occur.
+     * @param validate <code>boolean</code> to indicate if validation 
+     * should occur.
      * @return <code>Document</code> - instance ready for use.
      * @throws <code>IOException</code> when errors occur in
      *                                  parsing.
@@ -97,33 +98,36 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
 
         try {
             // Load the parser class
-            Class parserClass = Class.forName("org.apache.xerces.parsers.DOMParser");
+            Class parserClass =
+                Class.forName("org.apache.xerces.parsers.DOMParser");
             Object parser = parserClass.newInstance();
 
             // Set validation
-            Method setFeature =
-                parserClass.getMethod("setFeature",
-                                      new Class[] {java.lang.String.class,
-                                                   boolean.class});
-            setFeature.invoke(parser, new Object[] {"http://xml.org/sax/features/validation",
-                                                    new Boolean(validate)});
+            Method setFeature = parserClass.getMethod(
+                "setFeature",
+                new Class[] {java.lang.String.class, boolean.class});
+            setFeature.invoke(parser, 
+                new Object[] {"http://xml.org/sax/features/validation",
+                new Boolean(validate)});
 
-            // Set namespaces
-            setFeature.invoke(parser, new Object[] {"http://xml.org/sax/features/namespaces",
-                                                    new Boolean(false)});
+            // Set namespaces true
+            setFeature.invoke(parser,
+                new Object[] {"http://xml.org/sax/features/namespaces",
+                new Boolean(true)});
 
             // Set the error handler
             if (validate) {
-                Method setErrorHandler =
-                    parserClass.getMethod("setErrorHandler",
-                        new Class[] {ErrorHandler.class});
-                setErrorHandler.invoke(parser, new Object[] {new XercesErrHandler()});
+                Method setErrorHandler = parserClass.getMethod(
+                    "setErrorHandler",
+                    new Class[] {ErrorHandler.class});
+                setErrorHandler.invoke(parser,
+                    new Object[] {new XercesErrHandler()});
             }
 
             // Parse the document
-            Method parse =
-                parserClass.getMethod("parse",
-                                      new Class[] {org.xml.sax.InputSource.class});
+            Method parse = parserClass.getMethod(
+                "parse",
+                new Class[] {org.xml.sax.InputSource.class});
             parse.invoke(parser, new Object[]{new InputSource(in)});
 
             // Get the Document object
@@ -134,9 +138,12 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
             if (targetException instanceof org.xml.sax.SAXParseException) {
-                SAXParseException parseException = (SAXParseException)targetException;
-                throw new IOException("Error on line " + parseException.getLineNumber() +
-                                      " of XML document: " + parseException.getMessage());
+                SAXParseException parseException =
+                    (SAXParseException)targetException;
+                throw new IOException("Error on line " +
+                                      parseException.getLineNumber() +
+                                      " of XML document: " +
+                                      parseException.getMessage());
             } else {
                 throw new IOException(targetException.getMessage());
             }
@@ -156,11 +163,8 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
      */
     public Document createDocument() throws IOException {
         try {
-            return
-                (Document)Class.forName(
-                    "org.apache.xerces.dom.DocumentImpl")
-                    .newInstance();
-
+            return (Document)Class.forName(
+                "org.apache.xerces.dom.DocumentImpl").newInstance();
         } catch (Exception e) {
             throw new IOException(e.getMessage());
         }

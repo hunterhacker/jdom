@@ -54,33 +54,19 @@
 
 package org.jdom.input;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.jdom.Attribute;
-import org.jdom.CDATA;
+import org.jdom.*;
 import org.jdom.Comment;
-import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Entity;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
-import org.jdom.adapters.DOMAdapter;
+import org.jdom.adapters.*;
 
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
 /**
@@ -106,9 +92,6 @@ public class DOMBuilder {
     /** Adapter class to use */
     private String adapterClass;
 
-    /** Prefixed Namespaces for this Document */
-    private Map prefixedNamespaces;
-
     /**
      * <p>
      * This allows the validation features to be turned on/off
@@ -124,8 +107,6 @@ public class DOMBuilder {
     public DOMBuilder(String adapterClass, boolean validate) {
         this.adapterClass = adapterClass;
         this.validate = validate;
-        prefixedNamespaces = new HashMap();
-        prefixedNamespaces.put("xml", Namespace.XML_NAMESPACE);
     }
 
     /**
@@ -166,9 +147,9 @@ public class DOMBuilder {
     /**
      * <p>
      * This builds a document from the supplied
-     *   input stream by constructing a DOM tree and reading information from the
-     *   DOM to create a JDOM document, a slower approach than SAXBuilder but 
-     *   useful for debugging.
+     *   input stream by constructing a DOM tree and reading information from
+     *   the DOM to create a JDOM document, a slower approach than SAXBuilder 
+     *   but useful for debugging.
      * </p>
      *
      * @param in <code>InputStream</code> to read from.
@@ -177,22 +158,18 @@ public class DOMBuilder {
      *                                    parsing.
      */
     public Document build(InputStream in) throws JDOMException {
-
         Document doc = new Document(null);
-
         try {
             DOMAdapter adapter =
-                (DOMAdapter)Class.forName(adapterClass)
-                                 .newInstance();
+                (DOMAdapter)Class.forName(adapterClass).newInstance();
 
-            org.w3c.dom.Document domDoc =
-                adapter.getDocument(in, validate);
+            org.w3c.dom.Document domDoc = adapter.getDocument(in, validate);
 
             // Start out at root level
             buildTree(domDoc, doc, null, true);
-
-        } catch (Exception e) {
-            throw new JDOMException(e.getMessage(), e);
+        }
+        catch (Exception e) {
+            throw new JDOMException("Error in building from stream", e);
         }
 
         return doc;
@@ -215,8 +192,9 @@ public class DOMBuilder {
         try {
             FileInputStream in = new FileInputStream(file);
             return build(in);
-        } catch (FileNotFoundException e) {
-            throw new JDOMException(e.getMessage(), e);
+        }
+        catch (FileNotFoundException e) {
+            throw new JDOMException("Error in building from " + file, e);
         }
     }
 
@@ -236,8 +214,9 @@ public class DOMBuilder {
     public Document build(URL url) throws JDOMException {
         try {
             return build(url.openStream());
-        } catch (IOException e) {
-            throw new JDOMException(e.getMessage(), e);
+        }
+        catch (IOException e) {
+            throw new JDOMException("Error in building from " + url, e);
         }
     }
 
@@ -251,9 +230,7 @@ public class DOMBuilder {
      */
     public Document build(org.w3c.dom.Document domDocument) {
         Document doc = new Document(null);
-
         buildTree(domDocument, doc, null, true);
-
         return doc;
     }
 
@@ -267,7 +244,6 @@ public class DOMBuilder {
      */
     public org.jdom.Element build(org.w3c.dom.Element domElement) {
         Document doc = new Document(null);
-               
         buildTree(domElement, doc, null, true);
         return doc.getRootElement();               
     }
@@ -288,6 +264,7 @@ public class DOMBuilder {
                            Document doc,
                            Element current,
                            boolean atRoot) {
+        LinkedList additionalNamespaces = new LinkedList();
 
         // Recurse through the tree
         switch (node.getNodeType()) {
@@ -299,47 +276,56 @@ public class DOMBuilder {
                 break;
 
             case Node.ELEMENT_NODE:
-                // Get attributes first, as they may contain namespace declarations
-                NamedNodeMap attributeList = node.getAttributes();
-                List elementAttributes = new LinkedList();
-                for (int i=0, size=attributeList.getLength(); i<size; i++) {
-                    Node att = attributeList.item(i);
-
-                    // Distinguish between namespace and attribute
-                    if (att.getNodeName().startsWith("xmlns:")) {
-                        String prefix;
-                        String uri = att.getNodeValue();
-                        int colon;
-                        if ((colon = att.getNodeName().indexOf(":")) != -1) {
-                            prefix = att.getNodeName().substring(colon + 1);
-                        } else {
-                            prefix = "";
-                        }
-
-                        // Get the namespace, essentially
-                        Namespace ns = Namespace.getNamespace(prefix, uri);
-                        // Only store if a prefix
-                        if (!prefix.equals("")) {
-                            prefixedNamespaces.put(prefix, ns);
-                        }
-                    } else {
-                        // We have to save these for later, and handle
-                        //   namespaces first.
-                        elementAttributes.add(att);
-                    }
+                String localName = node.getLocalName();
+                String prefix = node.getPrefix();
+                String uri = node.getNamespaceURI();
+                Element element = null;
+                Namespace ns = null;
+                if (uri == null) {
+                    element = new Element(localName);
+                }
+                else {
+                    ns = Namespace.getNamespace(prefix, uri);
+                    element = new Element(localName, ns);
                 }
 
-                // Get name and split on colon
-                Element element = null;
-                String qualifiedName = node.getNodeName();
-                int split;
-                if ((split = qualifiedName.indexOf(":")) != -1) {
-                    String prefix = qualifiedName.substring(0, split);
-                    String localName = qualifiedName.substring(split + 1);
-                    String uri = ((Namespace)prefixedNamespaces.get(prefix)).getURI();
-                    element = new Element(localName, prefix, uri);
-                } else {
-                    element = new Element(qualifiedName);
+                // Add attributes
+                NamedNodeMap attributeList = node.getAttributes();
+                for (int i=0, size=attributeList.getLength(); i<size; i++) {
+                    Attr att = (Attr) attributeList.item(i);
+
+                    // Distinguish between namespace and attribute
+                    String attname = att.getName();
+                    String attvalue = att.getValue();
+
+                    // Don't add xmlns attributes, but do add them as
+                    // additional namespaces if they're different than this
+                    // element's namespace (perhaps we should also have logic
+                    // not to mark them as additional if it's been done
+                    // already, but it probably doesn't matter)
+                    if (attname.equals("xmlns")) {
+                        Namespace declaredNS =
+                            Namespace.getNamespace("", attvalue);
+                        if (!declaredNS.equals(ns)) {
+                            element.addNamespaceDeclaration(declaredNS);
+                        }
+                    }
+                    else if (attname.startsWith("xmlns:")) {
+                        String attsubname = attname.substring(6);
+                        Namespace declaredNS =
+                            Namespace.getNamespace(attsubname, attvalue);
+                        if (!declaredNS.equals(ns)) {
+                            element.addNamespaceDeclaration(declaredNS);
+                        }
+                    }
+                    else {
+                        prefix = att.getPrefix();
+                        uri = att.getNamespaceURI();
+                        Namespace attns = Namespace.getNamespace(prefix, uri);
+                        Attribute attribute =
+                            new Attribute(attname, attvalue, attns);
+                        element.addAttribute(attribute);
+                    }
                 }
 
                 if (atRoot) {
@@ -348,26 +334,6 @@ public class DOMBuilder {
                 } else {
                     // else add to parent element
                     current.addContent(element);
-                }
-
-                // Handle attributes
-                for (int i=0, size=elementAttributes.size(); i<size; i++) {
-                    Node att = (Node)elementAttributes.get(i);
-
-                    if ((split = att.getNodeName().indexOf(":")) == -1) {
-                        // No namespace prefix on attribute
-                        element.addAttribute(att.getNodeName(),
-                                             att.getNodeValue());
-                    } else {
-                        String qName = att.getNodeName();
-                        String prefix = qName.substring(0, split);
-                        String localName = qName.substring(split+1);
-                        element.addAttribute(
-                            new Attribute(localName, 
-                                          prefix, 
-                                          ((Namespace)prefixedNamespaces.get(prefix)).getURI(),
-                                          att.getNodeValue()));
-                    }
                 }
 
                 // Recurse on child nodes

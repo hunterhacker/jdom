@@ -93,8 +93,6 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
     public Document getDocument(InputStream in, boolean validate)
         throws IOException  {
 
-            System.out.println("foo");
-
         try {
             // Load the parser class
             Class parserClass = Class.forName("oracle.xml.parser.XMLParser");
