@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.124 2002/05/17 15:45:03 jhunter Exp $
+ $Id: Element.java,v 1.125 2002/06/08 02:13:22 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.124 $, $Date: 2002/05/17 15:45:03 $
+ * @version $Revision: 1.125 $, $Date: 2002/06/08 02:13:22 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.124 $ $Date: 2002/05/17 15:45:03 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.125 $ $Date: 2002/06/08 02:13:22 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1458,7 +1458,7 @@ public class Element implements Serializable, Cloneable {
             // Can't happen
         }
 
-        // name and namespace are references to imutable objects
+        // name and namespace are references to immutable objects
         // so super.clone() handles them ok
 
         // Reference to parent is copied by super.clone()
@@ -1486,15 +1486,15 @@ public class Element implements Serializable, Cloneable {
                 if (obj instanceof Element) {
                     Element elt = (Element)((Element)obj).clone();
                     element.content.add(elt);
+                }  else if (obj instanceof CDATA) {
+                    CDATA cdata = (CDATA)((CDATA)obj).clone();
+                    element.content.add(cdata);
                 } else if (obj instanceof Text) {
                     Text text = (Text)((Text)obj).clone();
                     element.content.add(text);
                 } else if (obj instanceof Comment) {
                     Comment comment = (Comment)((Comment)obj).clone();
                     element.content.add(comment);
-                } else if (obj instanceof CDATA) {
-                    CDATA cdata = (CDATA)((CDATA)obj).clone();
-                    element.content.add(cdata);
                 } else if (obj instanceof ProcessingInstruction) {
                     ProcessingInstruction pi = (ProcessingInstruction)
                         ((ProcessingInstruction)obj).clone();
