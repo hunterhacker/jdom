@@ -103,9 +103,9 @@ public final class Verifier {
             return reason;
         }
 
-        // Allow xml:space and xml:language as special cases
+        // Allow xml:space and xml:lang as special cases
         if (name.equals("xml:space") ||
-            name.equals("xml:language")) {
+            name.equals("xml:lang")) {
             return null;
         }
 
