@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.42 2002/02/12 06:15:20 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.43 2002/04/03 04:43:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -87,12 +87,12 @@ import org.xml.sax.*;
  * @author Yusuf Goolamabbas
  * @author Dan Schaffer
  * @author Bradley S. Huffman
- * @version $Revision: 1.42 $, $Date: 2002/02/12 06:15:20 $
+ * @version $Revision: 1.43 $, $Date: 2002/04/03 04:43:21 $
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.42 $ $Date: 2002/02/12 06:15:20 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.43 $ $Date: 2002/04/03 04:43:21 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -411,6 +411,14 @@ public class DOMBuilder {
 
                 Element element = factory.element(localName, ns);
 
+                if (atRoot) {
+                    // If at root, set as document root
+                    doc.setRootElement(element);
+                } else {
+                    // else add to parent element
+                    current.addContent(element);
+                }
+
                 // Add namespaces
                 NamedNodeMap attributeList = node.getAttributes();
                 int attsize = attributeList.getLength();
@@ -419,7 +427,6 @@ public class DOMBuilder {
                     Attr att = (Attr) attributeList.item(i);
 
                     String attname = att.getName();
-
                     if (attname.startsWith("xmlns")) {
                         String attPrefix = "";
                         colon = attname.indexOf(':');
@@ -476,14 +483,6 @@ public class DOMBuilder {
                             factory.attribute(attLocalName, attvalue, attns);
                         element.setAttribute(attribute);
                     }
-                }
-
-                if (atRoot) {
-                    // If at root, set as document root
-                    doc.setRootElement(element);
-                } else {
-                    // else add to parent element
-                    current.addContent(element);
                 }
 
                 // Recurse on child nodes
