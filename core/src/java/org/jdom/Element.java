@@ -1316,7 +1316,7 @@ public class Element implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Element</code>
      */
-    public final String toString() {
+    public String toString() {
         StringBuffer stringForm = new StringBuffer()
             .append("[Element: <")
             .append(getQualifiedName())

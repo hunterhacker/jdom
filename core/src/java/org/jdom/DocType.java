@@ -217,7 +217,7 @@ public class DocType implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>DocType</code>
      */
-    public final String toString() {
+    public String toString() {
         return new StringBuffer()
             .append("[DocType: ")
             .append(getSerializedForm())

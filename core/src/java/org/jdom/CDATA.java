@@ -128,7 +128,7 @@ public class CDATA implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
      */
-    public final String toString() {
+    public String toString() {
 	return new StringBuffer()
 	    .append("[CDATA: ")
 	    .append(getSerializedForm())

@@ -386,6 +386,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> - this object modified.
      */
     public Document addContent(Element element) {
+System.out.println("in addC(E) with root: " + getRootElement());
         if (getRootElement() != null) {
             throw new IllegalAddException(
                 this, element, "The document already has a root element");
@@ -456,7 +457,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Document</code>
      */
-    public final String toString() {
+    public String toString() {
         StringBuffer stringForm = new StringBuffer()
             .append("[Document: ");
 

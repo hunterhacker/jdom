@@ -348,7 +348,7 @@ public class Entity implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Entity</code>
      */
-    public final String toString() {
+    public String toString() {
         return new StringBuffer()
             .append("[Entity: ")
             .append(getSerializedForm())

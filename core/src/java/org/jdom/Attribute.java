@@ -291,7 +291,7 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
      */
-    public final String toString() {
+    public String toString() {
         return new StringBuffer()
             .append("[Attribute: ")
             .append(getSerializedForm())
