@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.7 2002/05/11 07:42:28 jhunter Exp $
+ $Id: ElementFilter.java,v 1.8 2003/04/02 01:56:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,12 +64,12 @@ import org.jdom.*;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.7 $, $Date: 2002/05/11 07:42:28 $
+ * @version $Revision: 1.8 $, $Date: 2003/04/02 01:56:58 $
  */
 public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.7 $ $Date: 2002/05/11 07:42:28 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.8 $ $Date: 2003/04/02 01:56:58 $ $Name:  $";
 
     /** The element name */
     protected String name;
@@ -109,30 +109,6 @@ public class ElementFilter implements Filter {
     public ElementFilter(String name, Namespace namespace) {
         this.name   = name;
         this.namespace = namespace;
-    }
-
-    /**
-     * Only allow the adding of Element objects.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be added.
-     * @throws IllegalAddException if the object can be added.
-     */
-    public boolean canAdd(Object obj) {
-        return matches(obj);
-    }
-
-    /**
-     * Check to see if the object can be removed from the list.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be removed.
-     */
-    public boolean canRemove(Object obj) {
-        if (obj instanceof Element) {
-            return true;
-        }
-        return false;
     }
 
     /**

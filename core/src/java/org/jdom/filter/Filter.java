@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.4 2002/04/29 13:38:16 jhunter Exp $
+ $Id: Filter.java,v 1.5 2003/04/02 01:56:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,25 +66,9 @@ import org.jdom.*;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.4 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.5 $, $Date: 2003/04/02 01:56:58 $
  */
 public interface Filter {
-    /**
-     * Check to see if the object can be added to the list.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be added.
-     */
-    public boolean canAdd(Object obj);
-
-    /**
-     * Check to see if the object can be removed from the list.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be removed.
-     */
-    public boolean canRemove(Object obj);
-
     /**
      * Check to see if the object matches a predefined set of rules.
      *

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ContentFilter.java,v 1.5 2002/04/29 13:38:16 jhunter Exp $
+ $Id: ContentFilter.java,v 1.6 2003/04/02 01:56:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -89,12 +89,12 @@ import org.jdom.*;
  * </p>
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.6 $, $Date: 2003/04/02 01:56:58 $
  */
 public class ContentFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.5 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.6 $ $Date: 2003/04/02 01:56:58 $ $Name:  $";
 
     /** Mask for JDOM <code>Element</code> objects */
     public static final int ELEMENT   = 1;
@@ -279,26 +279,6 @@ public class ContentFilter implements Filter {
         else {
             filterMask &= ~ENTITYREF;
         }
-    }
-
-    /**
-     * Check to see if the object can be added to the list.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be added.
-     */
-    public boolean canAdd(Object obj) {
-        return matches(obj);
-    }
-
-    /**
-     * Check to see if the object can be removed from the list.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object can be removed.
-     */
-    public boolean canRemove(Object obj) {
-        return matches(obj);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.18 2002/08/16 09:47:39 jhunter Exp $
+ $Id: ContentList.java,v 1.19 2003/04/02 01:56:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.18 $, $Date: 2002/08/16 09:47:39 $
+ * @version $Revision: 1.19 $, $Date: 2003/04/02 01:56:58 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -81,7 +81,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.18 $ $Date: 2002/08/16 09:47:39 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.19 $ $Date: 2003/04/02 01:56:58 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -752,7 +752,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
          * throws IndexOutOfBoundsException if index < 0 || index > size()
          */
         public void add(int index, Object obj) {
-            if (filter.canAdd(obj)) {
+            if (filter.matches(obj)) {
                 int adjusted = getAdjustedIndex(index);
                 ContentList.this.add(adjusted, obj);
                 expected++;
@@ -795,7 +795,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         public Object remove(int index) {
             int adjusted = getAdjustedIndex(index);
             Object old = ContentList.this.get(adjusted);
-            if (filter.canRemove(old)) {
+            if (filter.matches(old)) {
                 old = ContentList.this.remove(adjusted);
                 expected++;
                 count--;
@@ -820,10 +820,10 @@ class ContentList extends AbstractList implements java.io.Serializable {
          */
         public Object set(int index, Object obj) {
             Object old = null;
-            if (filter.canAdd(obj)) {
+            if (filter.matches(obj)) {
                 int adjusted = getAdjustedIndex(index);
                 old = ContentList.this.get(adjusted);
-                if (!filter.canRemove(old)) {
+                if (!filter.matches(old)) {
                     throw new IllegalAddException("Filter won't allow the " +
                                              (old.getClass()).getName() +
                                              " '" + old + "' (index " + index +
@@ -1074,7 +1074,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         public void add(Object obj) {
             checkConcurrentModification();
 
-            if (filter.canAdd(obj)) {
+            if (filter.matches(obj)) {
                 last++;
                 ContentList.this.add(last, obj);
             }
@@ -1105,7 +1105,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
             }
 
             Object old = ContentList.this.get(last);
-            if (filter.canRemove(old)) {
+            if (filter.matches(old)) {
                 ContentList.this.remove(last);
             }
             else throw new IllegalAddException("Filter won't allow " +
@@ -1133,9 +1133,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                                                 "prev() or next()");
             }
 
-            if (filter.canAdd(obj)) {
+            if (filter.matches(obj)) {
                 Object old = ContentList.this.get(last);
-                if (!filter.canRemove(old)) {
+                if (!filter.matches(old)) {
                     throw new IllegalAddException("Filter won't allow " +
                                   (old.getClass()).getName() + " (index " +
                                   last + ") to be removed");
