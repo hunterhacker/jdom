@@ -95,6 +95,10 @@ public final class Namespace {
         // Add the "empty" namespace
         namespaces.put("", NO_NAMESPACE);
         mappings.put("", "");
+
+        // Add the "xml" namespace
+        namespaces.put("xml", "http://www.w3.org/XML/1998/namespace");
+        mappings.put("", "http://www.w3.org/XML/1998/namespace");
     }
 
     /**
@@ -139,7 +143,7 @@ public final class Namespace {
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
-                "Namespace URIs must be non-null and non-empty Strings.");
+                "Namespace URIs must be non-null and non-empty Strings");
         }
 
         // Return existing namespace if found
