@@ -120,6 +120,8 @@ For instructions on how to build JDOM, please view the README.txt file.
     <replace dir="${build.src}" includes="**"
              token="java.util.*"
              value="java.util.*;\u000aimport ${coll.import}.*"/>
+    <replace dir="${build.src}" includes="**"
+             token="@throws" value="@exception"/>
   </target>
 
   <!-- =================================================================== -->
