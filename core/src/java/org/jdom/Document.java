@@ -376,6 +376,7 @@ public class Document implements Serializable, Cloneable {
             Object obj = i.next();
             if (obj instanceof ProcessingInstruction) {
                 if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    deletedSome = true;
                     i.remove();
                 }
             }
