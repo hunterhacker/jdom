@@ -1,10 +1,10 @@
-@REM echo off
+@echo off
 
 echo Building...
 
 if "%JAVA_HOME%" == "" goto error
 
-set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;..\jdom\lib\xerces.jar;..\jdom\lib\ant.jar;..\jdom\build\classes;taskdefs\taskdefs.jar;lib\antlr_full.jar
+set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;..\jdom\lib\xerces.jar;..\jdom\lib\ant.jar;..\jdom\build\classes;.\taskdefs\taskdefs.jar;.\lib\antlr_full.jar;%CLASSPATH%
 set ANT_HOME=../jdom/lib
 
 echo Building with classpath %LOCALCLASSPATH%
