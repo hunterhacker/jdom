@@ -8,15 +8,22 @@ Items that need to be done:
 
 * Add notes that element content returned by List is ordered.
 
+* Fix bug with clone() that string concatenates:
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003528.html
+  This is due to addContent() being called in the clone and addContent() 
+  will merge neighboring strings.  Probably clone should have a back-door
+  that doesn't use the addContent() calls.  Would be faster besides.  See
+  following item.
+
+* Try clone() without the constructor call.  See above item too.  (Ken Helland)
+
+* Integrate element factories in SAXBuilder.  (Ken Helland)
+
 * Figure out how Namespace.equals() should work.  The issue's been brought up
   again.  Historic info is in
   http://lists.denveronline.net/lists/jdom-interest/2000-August/subject.html
   First message in the thread is
   http://lists.denveronline.net/lists/jdom-interest/2000-August/002171.html
-
-* Try clone() without the constructor call.  (Ken Helland)
-
-* Integrate element factories in SAXBuilder.  (Ken Helland)
 
 * Investigate ClassLoader.loadClass() instead of Class.forName() for those
   times when the classes aren't on the system classpath.  (Suggested by Alex
@@ -43,7 +50,8 @@ Items that need to be done:
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html
-  Probably turn off SAX interning and do it ourselves?
+  Probably turn off SAX interning and do it ourselves?  Note commentary:
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
 
@@ -58,6 +66,8 @@ Items that need to be done:
   Methods would exist on Document and Element
   FYI, DOM's much overweight Traversal-Range spec is at
     http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
+  Joe Bowbeer has ideas at:
+  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
 
 * Make entity.clone() truly a deep copy.
 
@@ -82,6 +92,13 @@ Items that need to be done:
   supporting EntityReferences.  Make DOMBuilder and SAXBuilder work
   equivalently.  Like have DOCTYPE support entity defs.  Make sure Entity
   addChild() becomes addContent().  Make sure addContent(Comment) is added.
+  It should probably have methods to get the public and system IDs too, per
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/002838.html.
+  May also want to read:
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/002844.html.
+
+* Look to keep around an embedded DTD, per
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003540.html
 
 * Test SinglyLinkedList vs ArrayList for speed and memory consumption.
   (With OptimizeIt)
@@ -92,8 +109,28 @@ Items that need to be done:
 * Deal with getSerializedForm() calls, either implement or remove
   Note the Document and Element impls from Elliotte are at:
   http://lists.denveronline.net/lists/jdom-interest/2000-July/001327.html
+  Also
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003142.html
 
 * Consider Element.hasAttributes() and Element.isEmpty()
+
+* Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
+
+* Look at where Namespace may need to be synchronized.  See
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
+  and follow-ups.
+
+* Fix unconfirmed bug of unwanted line breaks occurring between tags.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003241.html
+
+* Fix issue where XMLOutputter has protected methods dependent on
+  NamespaceStack, as pointed out by elharo:
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003538.html
+
+* Look into having a flag to turn off DTD loading, since parsers often load
+  the DTD even if validation is off.
+  Xerces has a custom option: http://xml.apache.org/xerces-j/features.html
+  Crimson doesn't, nor probably do others.  That makes it tricky.
 
 --- FOR JDOM 1.0 ---
 
@@ -168,12 +205,18 @@ Items that need to be done:
   (Tom Clements <clements@eng.sun.com>)
 
 * Make sure we have a plan for supporting obj serialization across current and
-  future JDOM versions
+  future JDOM versions.  See "serialVersionUID" thread especially 
+  Peter V. Gadjokov's remarks at
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
 
 * Perhaps have builder flags to indicate if surrounding whitespace (not just
   ignorable whitespace) should be trimmed, if entity refs should be expanded,
   if CDATA sections should be included, and if comment sections should be
   included.  All seem like reasonable customizations.
+
+* Performance optimize.  See following thread for test data.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
 
 --- FOR JDOM 1.1 ---
 
@@ -209,7 +252,8 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-July/001600.html
 
 * Consider a "locator" ability for nodes to remember the line number on which
-  they were declared, to help debug semantic errors
+  they were declared, to help debug semantic errors.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003422.html
 
 --- UNTIED TO A JDOM VERSION ---
 
@@ -248,7 +292,8 @@ Items that need to be done:
 --- WILD IDEAS ---
 
 * Figure out if there's a role for a Node interface.  It sounds easy but all 
-  attempts so far have hit obstacles.
+  attempts so far have hit obstacles.  Amy Lewis talks about it here:
+  http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
 
 * Consider having element.getChild("foo") use the namespace of the invoked 
   element.  Currently is would be the default namespace.  With this new
@@ -317,4 +362,14 @@ Items that need to be done:
   instead of making a DOM Document or XML stream first.  That would be a lot 
   faster, use less memory, and make our dist smaller.  See
   http://www3.sympatico.ca/ac.quick/ for Tidy.
+
+* Look at a (contrib?) outputter option using SAX filters per
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003303.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003304.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003318.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003535.html
+
+* Look at event-based parsing as per the following thread:
+  http://lists.denveronline.net/lists/jdom-interest/2000-November/003613.html
+  and replies.
 
