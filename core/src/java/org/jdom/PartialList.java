@@ -224,22 +224,11 @@ class PartialList extends LinkedList {
      *         range (<tt>index &lt; 0 || index &gt; size()</tt>).
      */
     public boolean addAll(Collection c) {
-        int index = backingList.indexOf(getLast());
-
-        if (index != -1) {
-            backingList.addAll(index, c);
+        if (backingList.isEmpty()) {
+            return addAll(0, c);
         } else {
-            backingList.addAll(c);
+            return addAll(backingList.indexOf(getLast()), c);
         }
-
-        for (Iterator i = c.iterator(); i.hasNext(); ) {
-            Object o = i.next();
-            if (o instanceof Element) {
-                ((Element)o).setParent(parent);  // null is OK
-            }
-        }
-
-        return super.addAll(c);
     }
 
     /**
@@ -257,14 +246,14 @@ class PartialList extends LinkedList {
      *            range (<tt>index &lt; 0 || index &gt; size()</tt>).
      */
     public boolean addAll(int index, Collection c) {
-        int insertIndex = backingList.indexOf(get(index));
-
-        if (insertIndex != -1) {
-            backingList.addAll(insertIndex, c);
-        } else {
+        // We can only add start of an empty list (of course) !
+        if (backingList.isEmpty()) {
             backingList.addAll(c);
+        } else {
+            backingList.addAll(index, c);
         }
 
+        // XXX What if the element already has a parent?
         for (Iterator i = c.iterator(); i.hasNext(); ) {
             Object o = i.next();
             if (o instanceof Element) {
