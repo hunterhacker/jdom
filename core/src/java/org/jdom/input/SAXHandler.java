@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.37 2002/03/02 13:31:53 jhunter Exp $
+ $Id: SAXHandler.java,v 1.38 2002/03/07 18:48:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.37 $, $Date: 2002/03/02 13:31:53 $
+ * @version $Revision: 1.38 $, $Date: 2002/03/07 18:48:47 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.37 $ $Date: 2002/03/02 13:31:53 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.38 $ $Date: 2002/03/07 18:48:47 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -1061,7 +1061,8 @@ if (!inDTD) {
     private int getAttributeType(String typeName) {
         Integer type = (Integer)(attrNameToTypeMap.get(typeName));
         if (type == null) {
-            if (typeName.charAt(0) == '(') {
+            if (typeName != null && typeName.length() > 0 &&
+                typeName.charAt(0) == '(') {
                 // Xerces 1.4.X reports attributes of enumerated type with
                 // a type string equals to the enumeration definition, i.e.
                 // starting with an parenthesis.
