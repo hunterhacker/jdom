@@ -183,7 +183,7 @@ public class sxql {
     Document doc = builder.build();
 
     // Convert the result to XML (as String)
-    XMLOutputter outputter = new XMLOutputter("  ", true);
+    XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
     ByteArrayOutputStream output = new ByteArrayOutputStream();
     outputter.output(doc, output);
     return output.toString();
