@@ -53,26 +53,20 @@
  */
 package samples;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
-import org.jdom.adapters.DOMAdapter;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
 
 /**
  * <p><code>DOMBuilderDemo</code> demonstrates how to
- *   build a JDOM <code>Document</code> using a DOM
- *   tree.
+ *   build a JDOM <code>Document</code> using a DOM Level 2
+ *   parser.
  * </p>
- *
+ * 
  * @author Brett McLaughlin
- * @author Philip Nelson
  * @author Jason Hunter
  * @version 1.0
  */
@@ -81,31 +75,33 @@ public class DOMBuilderDemo {
     /**
      * <p>
      * This provides a static entry point for creating a JDOM
-     *   <code>{@link Document}</code> object using a DOM
-     *   tree.
+     *   <code>{@link Document}</code> object using a DOM Level 2
+     *   parser (an <code>XMLReader</code> implementation).
      * </p>
      *
      * @param args <code>String[]</code>
      *        <ul>
      *         <li>First argument: filename of XML document to parse</li>
-     *         <li>Second argument: optional name of DOM Adapter class</li>
+     *         <li>Second argument: optional String name of a DOM adapter
+     *         to use</li>
      *        </ul>
      */
     public static void main(String[] args) {
-        if ((args.length < 1) || (args.length > 2)) {
+        if ((args.length != 1) && (args.length != 2)) {
             System.out.println(
-                "Usage: java samples.DOMBuilderTest " +
-                "[XML document filename] ([DOM Adapter Class])");
-            System.exit(-1);
+              "Usage: java samples.DOMBuilderTest " +
+              "[XML document filename] ([DOM Adapter Class])");
+            return;
         }
 
-        // Load filename and SAX driver class
+        // Load filename and DOM adapter class
         String filename = args[0];
         String domAdapterClass = null;
-        if (args.length == 2) {
+        if (args.length > 1) {
             domAdapterClass = args[1];
         }
 
+        // Create an instance of the tester and test
         try {
             DOMBuilder builder = null;
             if (domAdapterClass == null) {
@@ -113,18 +109,17 @@ public class DOMBuilderDemo {
             } else {
                 builder = new DOMBuilder(domAdapterClass);
             }
+
             Document doc = builder.build(new File(filename));
+
             XMLOutputter outputter = new XMLOutputter();
+            //outputter.setTrimText(true);
+            //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
-            if (e.getRootCause() != null) {
-                e.getRootCause().printStackTrace();
-            } else {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
             e.printStackTrace();
-        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
     }
-
 }

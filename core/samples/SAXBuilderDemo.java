@@ -53,9 +53,7 @@
  */
 package samples;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -84,14 +82,17 @@ public class SAXBuilderDemo {
      * @param args <code>String[]</code>
      *        <ul>
      *         <li>First argument: filename of XML document to parse</li>
-     *         <li>Second argument: optional name of SAX Driver class</li>
+     *         <li>Second argument: optional boolean on whether to expand
+     *         entities</li>
+     *         <li>Third argument: optional String name of a SAX Driver class
+     *         to use</li>
      *        </ul>
      */
     public static void main(String[] args) {
-        if ((args.length != 1) && (args.length != 2)) {
+        if ((args.length < 1) || (args.length > 3)) {
             System.out.println(
-                "Usage: java samples.SAXBuilderTest " +
-                "[XML document filename] ([expandEntities] [SAX Driver Class])");
+              "Usage: java samples.SAXBuilderTest " +
+              "[XML document filename] ([expandEntities] [SAX Driver Class])");
             return;
         }
 
@@ -118,21 +119,17 @@ public class SAXBuilderDemo {
                 builder = new SAXBuilder(saxDriverClass);
             }
             builder.setExpandEntities(expandEntities);
+
             Document doc = builder.build(filename);
-            // Create an outputter
+
             XMLOutputter outputter = new XMLOutputter();
             //outputter.setTrimText(true);
             //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
-            if (e.getRootCause() != null) {
-                e.getRootCause().printStackTrace();
-            } else {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }    
     }
-
 }
