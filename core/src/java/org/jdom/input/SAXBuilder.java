@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.87 2004/08/30 22:48:12 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.88 2004/08/31 06:06:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.87 $, $Date: 2004/08/30 22:48:12 $
+ * @version $Revision: 1.88 $, $Date: 2004/08/31 06:06:57 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.87 $ $Date: 2004/08/30 22:48:12 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.88 $ $Date: 2004/08/31 06:06:57 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -457,15 +457,18 @@ public class SAXBuilder {
             return contentHandler.getDocument();
         }
         catch (SAXParseException e) {
+            Document doc = contentHandler.getDocument();
+            if (doc.hasRootElement() == false) {
+                doc = null;
+            }
+
             String systemId = e.getSystemId();
             if (systemId != null) {
                 throw new JDOMParseException("Error on line " +
-                    e.getLineNumber() + " of document " + systemId,
-                    e, contentHandler.getDocument());
+                    e.getLineNumber() + " of document " + systemId, e, doc);
             } else {
                 throw new JDOMParseException("Error on line " +
-                    e.getLineNumber(), e,
-                    contentHandler.getDocument());
+                    e.getLineNumber(), e, doc);
             }
         }
         catch (SAXException e) {
