@@ -1451,6 +1451,72 @@ public class Element implements Serializable, Cloneable {
             (String)in.readObject(), (String)in.readObject());
     }
 
+    /**
+     * <p>
+     * This removes the specified <code>Element</code>.
+     * </p>
+     *
+     * @param child <code>Element</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Element element) {
+        if (content == null) {
+            return false;
+        }
+
+        if (content.remove(element)) {
+            element.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>ProcessingInstruction</code>.
+     * </p>
+     *
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(ProcessingInstruction pi) {
+        if (content == null) {
+            return false;
+        }
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Entity</code>.
+     * </p>
+     *
+     * @param child <code>Entity</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Entity entity) {
+        if (content == null) {
+            return false;
+        }
+        return content.remove(entity);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Comment</code>.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Comment comment) {
+        if (content == null) {
+            return false;
+        }
+        return content.remove(comment);
+    }
+
 /************************************************************
      Methods below here are deprecated and will 
      be removed before final release!
@@ -1565,77 +1631,6 @@ public class Element implements Serializable, Cloneable {
        return removeContent(comment);
     }
 
-    /**
-     * <p>
-     * This removes the specified <code>Element</code>.
-     * </p>
-     *
-     * @param child <code>Element</code> to delete
-     * @return whether deletion occurred
-     * @deprecated Use getMixedContent().remove(element) instead
-     */
-    public boolean removeContent(Element element) {
-        if (content == null) {
-            return false;
-        }
 
-        if (content.remove(element)) {
-            element.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>ProcessingInstruction</code>.
-     * </p>
-     *
-     * @param child <code>ProcessingInstruction</code> to delete
-     * @return whether deletion occurred
-     * @deprecated Use getMixedContent().remove(pi) instead
-     */
-    public boolean removeContent(ProcessingInstruction pi) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(pi);
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Entity</code>.
-     * </p>
-     *
-     * @param child <code>Entity</code> to delete
-     * @return whether deletion occurred
-     * @deprecated Use getMixedContent().remove(entity) instead
-     */
-    public boolean removeContent(Entity entity) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(entity);
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Comment</code>.
-     * </p>
-     *
-     * @param comment <code>Comment</code> to delete
-     * @return whether deletion occurred
-     * @deprecated Use getMixedContent().remove(comment) instead
-     */
-    public boolean removeContent(Comment comment) {
-        if (content == null) {
-            return false;
-        }
-
-        return content.remove(comment);
-    }
 
 }
