@@ -106,7 +106,7 @@ public class JTreeOutputter {
     protected void processElement(Element el, DefaultMutableTreeNode dmtn) {
         DefaultMutableTreeNode dmtnLocal = 
             new DefaultMutableTreeNode(el.getName());
-        String elText = el.getTextTrim();
+        String elText = el.getTextNormalize();
         if (elText != null && !elText.equals("")) {
             dmtnLocal.add(new DefaultMutableTreeNode(elText));
         }
