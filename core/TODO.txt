@@ -2,10 +2,16 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Fix DOMOutputter to set DOM2 namespaces, and to add xmlns attributes
-  following the same logic as XMLOutputter, on the first use and also where an
-  element has additional declares
-  (help from Yusuf Goolamabbas <yusufg@outblaze.com>?)
+* Change adapters to support creating a Document with a DOCTYPE, to allow 
+  DOMBuilder to set the DOCTYPE on a built document
+
+* Verify attribute namespaces work correctly.  (There must be no default
+  namespace, no prefix == NO_NAMESPACE, element and attrib with same prefix
+  are always same namespace, and an attribute with a namespace needs xmlns.)
+
+* Add Namespace Element.getNamespace(String prefix) to return the namespace
+  in scope for a given prefix, to help with attributes like <xsl:template
+  match="sg:title">.  (elharo's request)
 
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
   same prefix already existing on the element or being the document's prefix
@@ -23,10 +29,6 @@ Items that need to be done:
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
   If necessary, that is.
-
-* Add an Attribute.getParent() method (to help XPath)
-  Also on Comment, PI, and Entity.  Maybe on CDATA.
-  But do we return Element or Document or some new Node interface?
 
 * Fix DOMBuilder to attach xmlns declarations on the proper nodes.
   Change code to depend on DOM2 handling of namespaces, so we can read 
@@ -213,6 +215,9 @@ Items that need to be done:
 
 --- WILD IDEAS ---
 
+* Figure out if there's a role for a Node interface.  It sounds easy but all 
+  attempts so far have hit obstacles.
+
 * Consider having element.getChild("foo") use the namespace of the invoked 
   element.  Currently is would be the default namespace.  With this new
   approach you'd pass null to use the default.  This would be more convenient,
@@ -231,4 +236,9 @@ Items that need to be done:
   http://xml.apache.org/xerces-j/features.html
 
 * Create a JDOM logo
+
+* Create a Verifier lookup table as an int[256] growable to int[64K] where 
+  bits in the returned value indicate that char's ability to be used for a
+  task.  So "lookup[(int)'x'] & LETTER_MASK" tells us if it's a letter
+  or not.
 
