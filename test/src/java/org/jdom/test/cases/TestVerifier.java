@@ -539,6 +539,8 @@ public static Test suite () {
 		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName("test" + (char)0xD800 + "ing") == null));
 		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName((char)0xD800 + "test") == null));
 		assertTrue("validated invalid name with :" , !(Verifier.checkAttributeName("test" + ':' + "local") == null));
+		assertTrue("validated invalid name with xml:lang" , !(Verifier.checkAttributeName("xml:lang") == null));
+		assertTrue("validated invalid name with xml:space" , !(Verifier.checkAttributeName("xml:space") == null));
 
 		//invalid start characters
 		assertTrue("validated invalid name with startin -" , !(Verifier.checkAttributeName('-' + "test")== null));
@@ -548,8 +550,6 @@ public static Test suite () {
 		assertTrue("invalidated valid name with starting _" , Verifier.checkAttributeName('_' + "test")== null);
 		assertTrue("invalidated valid name with _" , Verifier.checkAttributeName("test" + '_') == null);
 		assertTrue("invalidated valid name with ." , Verifier.checkAttributeName("test" + '.' + "name") == null);
-		assertTrue("invalidated valid name with xml:space" , Verifier.checkAttributeName("xml:space") == null);
-		assertTrue("invalidated valid name with xml:lang" , Verifier.checkAttributeName("xml:lang") == null);
 		assertTrue("invalidated valid name with 0x00B7" , Verifier.checkAttributeName("test" + (char)0x00B7) == null);
 		assertTrue("invalidated valid name with 0x4E01" , Verifier.checkAttributeName("test" + (char)0x4E01) == null);
 		assertTrue("invalidated valid name with 0x0301" , Verifier.checkAttributeName("test" + (char)0x0301) == null);
