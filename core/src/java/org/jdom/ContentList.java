@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.12 2002/04/02 09:02:17 jhunter Exp $
+ $Id: ContentList.java,v 1.13 2002/04/05 09:05:46 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.12 $, $Date: 2002/04/02 09:02:17 $
+ * @version $Revision: 1.13 $, $Date: 2002/04/05 09:05:46 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +83,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.12 $ $Date: 2002/04/02 09:02:17 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.13 $ $Date: 2002/04/05 09:05:46 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -101,7 +101,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
     private static final int REMOVE  = 6;
 
     /** Our backing list */
-    protected ArrayList list;
+//    protected ArrayList list;
+    private Object elementData[];
+    private int size;
 
     /** Document or Element this list belongs to */
     protected Object parent;
@@ -117,7 +119,6 @@ class ContentList extends AbstractList implements java.io.Serializable {
      */
     protected ContentList(Document document) {
         this.parent = document;
-        ensureCapacity(INITIAL_ARRAY_SIZE);
     }
 
     /**
@@ -128,7 +129,6 @@ class ContentList extends AbstractList implements java.io.Serializable {
      */
     protected ContentList(Element parent) {
         this.parent = parent;
-        ensureCapacity(INITIAL_ARRAY_SIZE);
     }
 
     /**
@@ -204,14 +204,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 "The element cannot be added as a descendent of itself");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
 
         if (parent instanceof Document) {
@@ -225,7 +220,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
             element.setParent((Element) parent);
         }
 
-        list.add(index, element);
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = element;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = element;
+            size++;
+        }
         modCount++;
     }
 
@@ -249,14 +251,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           comment.getParent().getQualifiedName() + "\"");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
 
         if (parent instanceof Document) {
@@ -266,7 +263,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
             comment.setParent((Element) parent);
         }
 
-        list.add(index, comment);
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = comment;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = comment;
+            size++;
+        }
         modCount++;
     }
 
@@ -290,14 +294,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           pi.getParent().getQualifiedName() + "\"");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
 
         if (parent instanceof Document) {
@@ -307,7 +306,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
             pi.setParent((Element) parent);
         }
 
-        list.add(index, pi);
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = pi;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = pi;
+            size++;
+        }
         modCount++;
     }
 
@@ -336,17 +342,21 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           cdata.getParent().getQualifiedName() + "\"");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
-        list.add(index, cdata);
+
         cdata.setParent((Element) parent);
+
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = cdata;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = cdata;
+            size++;
+        }
         modCount++;
     }
 
@@ -375,18 +385,21 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           text.getParent().getQualifiedName() + "\"");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
 
-        list.add(index, text);
         text.setParent((Element) parent);
+
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = text;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = text;
+            size++;
+        }
         modCount++;
     }
 
@@ -415,18 +428,21 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           entity.getParent().getQualifiedName() + "\"");
         }
 
-        if (list == null) {
-            if (index == 0) {
-                ensureCapacity(INITIAL_ARRAY_SIZE);
-            }
-            else {
-                throw new IndexOutOfBoundsException("Index: " + index +
-                                                    " Size: " + size());
-            }
+        if (index<0 || index>size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
         }
 
-        list.add(index, entity);
         entity.setParent((Element) parent);
+
+        ensureCapacity(size+1);
+        if( index==size ) {
+            elementData[size++] = entity;
+        } else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = entity;
+            size++;
+        }
         modCount++;
     }
 
@@ -457,7 +473,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
     public boolean addAll(int index, Collection collection) {
-        if ((list == null) && (index != 0)) {
+        if (index<0 || index>size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
         }
@@ -487,6 +503,23 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
     /**
      * <p>
+     * Clear the current list.
+     * </p>
+     */
+    public void clear() {
+        if (elementData != null) {
+            for (int i = 0; i < size; i++) {
+                Object obj = elementData[i];
+                removeParent(obj);
+            }
+            elementData = null;
+            size = 0;
+        }
+        modCount++;
+    }
+
+    /**
+     * <p>
      * Clear the current list and set it to the contents
      * of the <code>Collection</code>.
      * object.
@@ -495,8 +528,11 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param collection The collection to use.
      */
     protected void clearAndSet(Collection collection) {
-        ArrayList old = list;
-        list = null;
+        Object[] old = elementData;
+        int oldSize = size;
+
+        elementData = null;
+        size = 0;
 
         if ((collection != null) && (collection.size() != 0)) {
             ensureCapacity(collection.size());
@@ -504,16 +540,18 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 addAll(0, collection);
             }
             catch (RuntimeException exception) {
-                list = old;
+                elementData = old;
+                size = oldSize;
                 throw exception;
             }
         }
 
         if (old != null) {
-            for (int i = 0; i < old.size(); i++) {
-                removeParent(old.get(i));
+            for (int i = 0; i < oldSize; i++) {
+                removeParent(old[i]);
             }
         }
+        modCount++;
     }
 
     /**
@@ -526,11 +564,18 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param minCapacity the desired minimum capacity.
      */
     protected void ensureCapacity(int minCapacity) {
-        if (list == null) {
-            list = new ArrayList(minCapacity);
-        }
-        else {
-            list.ensureCapacity(minCapacity);
+        if( elementData==null ) {
+            elementData = new Object[INITIAL_ARRAY_SIZE];
+        } else {
+            int oldCapacity = elementData.length;
+            if (minCapacity > oldCapacity) {
+                Object oldData[] = elementData;
+                int newCapacity = (oldCapacity * 3)/2 + 1;
+                if (newCapacity < minCapacity)
+                    newCapacity = minCapacity;
+                elementData = new Object[newCapacity];
+                System.arraycopy(oldData, 0, elementData, 0, size);
+            }
         }
     }
 
@@ -543,12 +588,11 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return The Object which was returned.
      */
     public Object get(int index) {
-        if (list == null) {
+        if (index<0 || index>=size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
         }
-
-        return list.get(index);
+        return elementData[index];
     }
 
     /**
@@ -573,9 +617,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return index of first element, or -1 if one doesn't exist
      */
     protected int indexOfFirstElement() {
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof Element) {
+        if( elementData!=null ) {
+            for (int i = 0; i < size; i++) {
+                if (elementData[i] instanceof Element) {
                     return i;
                 }
             }
@@ -592,16 +636,20 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return The Object which was removed.
      */
     public Object remove(int index) {
-        if (list == null)
+        if (index<0 || index>=size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
-        Object old = list.get(index);
+        Object old = elementData[index];
         removeParent(old);
-        list.remove(index);
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(elementData, index+1, elementData, index,numMoved);
+        elementData[--size] = null; // Let gc do its work
         modCount++;
         return old;
     }
+
 
     /** Remove the parent of a Object */
     private void removeParent(Object obj) {
@@ -647,7 +695,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
     public Object set(int index, Object obj) {
-        if (list == null)
+        if (index<0 || index>=size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
@@ -678,9 +726,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return The number of items in this list.
      */
     public int size() {
-        if (list == null)
-            return 0;
-        return list.size();
+        return size;
     }
 
     /**
@@ -691,9 +737,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return The number of items in this list.
      */
     public String toString() {
-        if ((list != null) && (list.size() > 0))
-             return list.toString();
-        else return "[]";
+        return super.toString();
     }
 
     /** Give access of ContentList.modCount to FilterList */
@@ -865,7 +909,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
             count = 0;
             for (int i = 0; i < ContentList.this.size(); i++) {
-                Object obj = ContentList.this.list.get(i);
+                Object obj = ContentList.this.elementData[i];
                 if (filter.matches(obj)) {
                     count++;
                 }
@@ -884,8 +928,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
          */
         final private int getAdjustedIndex(int index) {
             int adjusted = 0;
-            for (int i = 0; i < ContentList.this.list.size(); i++) {
-                Object obj = ContentList.this.list.get(i);
+            for (int i = 0; i < ContentList.this.size; i++) {
+                Object obj = ContentList.this.elementData[i];
                 if (filter.matches(obj)) {
                     if (index == adjusted) {
                         return i;
@@ -895,10 +939,10 @@ class ContentList extends AbstractList implements java.io.Serializable {
             }
 
             if (index == adjusted) {
-                return list.size();
+                return ContentList.this.size;
             }
 
-            return list.size() + 1;
+            return ContentList.this.size + 1;
         }
     }
 
