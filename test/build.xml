@@ -35,7 +35,7 @@ These are the meaningful targets for this build file:
     <property name="Name" value="JDOM Test suite"/>
     <property name="name" value="jdom-test"/>
     <property name="version" value="1.0 prerelease"/>
-    <property name="year" value="2000"/>
+    <property name="year" value="2001"/>
 
     <echo message="----------- ${Name} ${version} [${year}] ------------"/>
 
@@ -52,6 +52,11 @@ These are the meaningful targets for this build file:
     <property name="build.src" value="./build/src"/>
     <property name="build.dest" value="./build/classes"/>
     <property name="build.javadocs" value="./build/apidocs"/>
+
+    <property name="test.jarFile" value="./build/jdom-test.jar"/>
+    <property name="test.outputDir" value="./testOutput"/>
+	<!-- choose between xml and plain text output for tests -->
+    <property name="test.outputFormat" value="xml"/>
 
     <property name="dist.root" value="./dist"/>
     <property name="dist.dir" value="${dist.root}/${name}-${version}"/>
@@ -83,6 +88,7 @@ These are the meaningful targets for this build file:
     <echo message="   compile  --> compiles the contributed source code"/>
     <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> restores the distribution to its clean state"/>
+    <echo message="   test     --> runs JUnit tests for all tests in build"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
     <echo message="-------------------------------------------------------------"/>
@@ -96,6 +102,13 @@ These are the meaningful targets for this build file:
   <target name="prepare" depends="init">
     <mkdir dir="${build.dir}"/>
   </target>
+  <!-- =================================================================== -->
+  <!-- Prepares the test output directory                                  -->
+  <!-- =================================================================== -->
+  <target name="prepare-tests" depends="init">
+    <mkdir dir="${test.outputDir}"/>
+  </target>
+
 
   <!-- =================================================================== -->
   <!-- Prepares the source code                                            -->
@@ -194,7 +207,24 @@ These are the meaningful targets for this build file:
     <delete file="${Name}-${version}.tar"/>
     <delete file="${Name}-${version}.zip"/>
   </target>
+  
+  <target name="test" depends="init, prepare-tests">
+    <junit printSummary="yes">
+	  <classpath>
+        <pathelement location="${test.jarFile}" />
+        <pathelement path="${java.class.path}" />
+      </classpath>
+  
+	  <formatter type="${test.outputFormat}" />
 
+      <batchtest fork="yes" todir="${test.outputDir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test*.java" />
+          <exclude name="**/generate/**" />
+        </fileset>
+      </batchtest>
+	</junit>
+  </target>
 </project>
 
 <!-- End of file -->
