@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.17 2002/04/29 13:38:15 jhunter Exp $
+ $Id: ContentList.java,v 1.18 2002/08/16 09:47:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.17 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.18 $, $Date: 2002/08/16 09:47:39 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -81,7 +81,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.17 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.18 $ $Date: 2002/08/16 09:47:39 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -180,6 +180,11 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           element.getParent().getQualifiedName() + "\"");
         }
 
+        if (element.getDocument() != null) {
+            throw new IllegalAddException(element.getDocument(), element,
+                          "The element already has an existing parent");
+        }
+
         if (element == parent) {
             throw new IllegalAddException(
                 "The element cannot be added to itself");
@@ -236,6 +241,11 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           comment.getParent().getQualifiedName() + "\"");
         }
 
+        if (comment.getDocument() != null) {
+            throw new IllegalAddException(comment.getDocument(), comment,
+                          "The comment already has an existing parent");
+        }
+
         if (index<0 || index>size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -275,6 +285,11 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException(
                           "The PI already has an existing parent \"" +
                           pi.getParent().getQualifiedName() + "\"");
+        }
+
+        if (pi.getDocument() != null) {
+            throw new IllegalAddException(pi.getDocument(), pi,
+                          "The processing instruction already has an existing parent");
         }
 
         if (index<0 || index>size) {
