@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.77 2001/05/19 00:18:29 jhunter Exp $
+ $Id: Element.java,v 1.78 2001/05/19 00:43:23 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.77 $ $Date: 2001/05/19 00:18:29 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.78 $ $Date: 2001/05/19 00:43:23 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -600,29 +600,55 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the textual content of this element with all 
+     * surrounding whitespace removed.  If no textual value exists for 
+     * the element, or if only whitespace exists, the empty string is
+     * returned.
+     * </p>
+     *
+     * @return trimmed text content for this element, or empty string
+     * if none
+     */
+    public String getTextTrim() {
+        return getText().trim();
+    }
+
+    /**
+     * <p>
+     * This returns the textual content of this element with all 
      * surrounding whitespace removed and internal whitespace normalized
      * to a single space.  If no textual value exists for the element,
-     * or if only whitespace exists, the empty string is
-     * returned.
+     * or if only whitespace exists, the empty string is returned.
      * </p>
      *
      * @return normalized text content for this element, or empty string
      * if none
      */
-    public String getTextTrim() {
-        String text = getText();
+    public String getTextNormalize() {
+        return normalizeString(getText());
+    }
 
-        StringBuffer textContent = new StringBuffer();
-        StringTokenizer tokenizer = new StringTokenizer(text);
-        while (tokenizer.hasMoreTokens()) {
-            String str = tokenizer.nextToken();
-            textContent.append(str);
-            if (tokenizer.hasMoreTokens()) {
-                textContent.append(" ");  // separator
+    // Support method for fast string normalization
+    private static String normalizeString(String value) {
+        char[] c = value.toCharArray();
+        char[] n = new char[c.length];
+        boolean white = true;
+        int pos = 0;
+        for (int i = 0; i < c.length; i++) {
+            if (" \t\n\r".indexOf(c[i]) != -1) {
+                if (!white) {
+                    n[pos++] = ' ';
+                    white = true;
+                }
+            }
+            else {
+                n[pos++] = c[i];
+                white = false;
             }
         }
-
-        return textContent.toString();
+        if (white && pos > 0) {
+            pos--;
+        }
+        return new String(n, 0, pos);
     }
 
     /**

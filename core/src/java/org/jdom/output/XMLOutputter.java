@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.49 2001/05/09 05:52:21 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.50 2001/05/19 00:43:24 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -75,7 +75,7 @@ import org.jdom.*;
  * single line.</p>
  *
  * <p>For compact machine-readable output create a default
- * XMLOutputter and call setTrimText(true) to strip any whitespace
+ * XMLOutputter and call setTextNormalize(true) to normalize any whitespace
  * that was preserved from the source.</p>
  *
  * <p>For pretty output, set the indent to "  ", set the new lines feature 
@@ -108,7 +108,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.49 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.50 $ $Date: 2001/05/19 00:43:24 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -138,8 +138,8 @@ public class XMLOutputter implements Cloneable {
     /** New line separator */
     private String lineSeparator = "\r\n";
 
-    /** should we preserve whitespace or not in text nodes? */
-    private boolean trimText = false;
+    /** Should we preserve whitespace or not in text nodes */
+    private boolean textNormalize = false;
 
     /**
      * <p>
@@ -217,7 +217,7 @@ public class XMLOutputter implements Cloneable {
         this.newlines = that.newlines;
         this.encoding = that.encoding;
         this.lineSeparator = that.lineSeparator;
-        this.trimText = that.trimText;
+        this.textNormalize = that.textNormalize;
     }
     
     /**
@@ -311,16 +311,31 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p> This will set whether the text is output verbatim (false)
-     *  or with whitespace stripped as per <code>{@link
-     *  org.jdom.Element#getTextTrim()}</code>.<p>
+     *  or with whitespace normalized as per <code>{@link
+     *  org.jdom.Element#getTextNormalize()}</code>.<p>
+     *
+     * <p>Default: false </p>
+     *
+     * @param textNormalize <code>boolean</code> true=>normalize the 
+     * whitespace, false=>use text verbatim
+     **/
+    public void setTextNormalize(boolean textNormalize) {
+        this.textNormalize = textNormalize;
+    }
+
+    /**
+     * <p> This will set whether the text is output verbatim (false)
+     *  or with whitespace stripped.<p>
      *
      * <p>Default: false </p>
      *
      * @param trimText <code>boolean</code> true=>trim the whitespace, 
      * false=>use text verbatim
+     *
+     * @deprecated Deprecated in beta7, use setTextNormalize() instead
      **/
-    public void setTrimText(boolean trimText) {
-        this.trimText = trimText;
+    public void setTrimText(boolean textTrim) {
+        this.textNormalize = textTrim;
     }
 
     /**
@@ -1032,7 +1047,7 @@ public class XMLOutputter implements Cloneable {
         boolean empty = false;
         if (stringOnly) {
             String elementText =
-                trimText ? element.getTextTrim() : element.getText();
+                textNormalize ? element.getTextNormalize() : element.getText();
             if (elementText == null || elementText.equals("")) {
                 empty = true;
             }
@@ -1104,7 +1119,7 @@ public class XMLOutputter implements Cloneable {
                 if (content instanceof String) {
                     String scontent = (String) content;
                     if (justOutput == CDATA.class && 
-                          trimText &&
+                          textNormalize &&
                           startsWithWhite(scontent)) {
                         out.write(" ");
                     }
@@ -1115,7 +1130,7 @@ public class XMLOutputter implements Cloneable {
                 else {
                     // We're in a CDATA section
                     if (justOutput == String.class &&
-                          trimText &&
+                          textNormalize &&
                           endedWithWhite) {
                         out.write(" ");  // padding
                     }
@@ -1145,7 +1160,7 @@ public class XMLOutputter implements Cloneable {
                 else if (content instanceof String) {
                     String scontent = (String) content;
                     if (justOutput == CDATA.class && 
-                          trimText &&
+                          textNormalize &&
                           startsWithWhite(scontent)) {
                         out.write(" ");
                     }
@@ -1187,7 +1202,7 @@ public class XMLOutputter implements Cloneable {
                 }
                 else if (content instanceof CDATA) {
                     if (justOutput == String.class &&
-                          trimText &&
+                          textNormalize &&
                           endedWithWhite) {
                         out.write(" ");  // padding
                     }
@@ -1215,7 +1230,7 @@ public class XMLOutputter implements Cloneable {
         s = escapeElementEntities(s);
         // patch by Brad Morgan to strip interior whitespace
         // (Brad.Morgan@e-pubcorp.com)
-        if (trimText) {
+        if (textNormalize) {
             StringTokenizer tokenizer = new StringTokenizer(s);
             while (tokenizer.hasMoreTokens()) {
                 String token = tokenizer.nextToken();
@@ -1439,8 +1454,8 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-lineSeparator")) {
                 setLineSeparator(args[++i]);
             }
-            else if (args[i].equals("-trimText")) {
-                setTrimText(true);
+            else if (args[i].equals("-textNormalize")) {
+                setTextNormalize(true);
             }
             else {
                 return i;
