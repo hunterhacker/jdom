@@ -31,4 +31,14 @@ public class Step
   {
     _predicates.add(pred);
   }
+
+  public String getNodeTest()
+  {
+    return _nodeTest;
+  }
+
+  public String getAxis()
+  {
+    return _axis;
+  }
 }
