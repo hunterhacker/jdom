@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.86 2001/06/18 14:37:10 bmclaugh Exp $
+ $Id: Element.java,v 1.87 2001/06/18 15:38:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.86 $ $Date: 2001/06/18 14:37:10 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.87 $ $Date: 2001/06/18 15:38:10 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -634,6 +634,7 @@ public class Element implements Serializable, Cloneable {
     }
 
     // Support method for fast string normalization
+    // Per XML 1.0 Production 3 whitespace includes: #x20, #x9, #xD, #xA
     private static String normalizeString(String value) {
         char[] c = value.toCharArray();
         char[] n = new char[c.length];
@@ -1931,7 +1932,7 @@ public class Element implements Serializable, Cloneable {
      * @param cdata <code>CDATA</code> to delete
      * @return whether deletion occurred
      */
-    public boolean removeCDATA(CDATA cdata) {
+    public boolean removeContent(CDATA cdata) {
         if (content == null) {
             return false;
         }
