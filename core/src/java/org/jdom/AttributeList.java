@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.21 2004/02/06 09:28:30 jhunter Exp $
+ $Id: AttributeList.java,v 1.22 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.21 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.22 $, $Date: 2004/02/27 11:32:57 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,7 +78,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.21 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.22 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -95,6 +95,8 @@ class AttributeList extends AbstractList
     /**
      * Create a new instance of the AttributeList representing
      * Element content
+     *
+     * @param parent element whose attributes are to be held
      */
     AttributeList(Element parent) {
         this.parent = parent;
@@ -105,7 +107,8 @@ class AttributeList extends AbstractList
      * attribute with the same name and <code>Namespace</code>.
      *
      * @param obj The object to insert into the list.
-     * throws IndexOutOfBoundsException if index < 0 || index > size()
+     * @return true (as per the general contract of Collection.add).
+     * @throws IndexOutOfBoundsException if index < 0 || index > size()
      */
     public boolean add(Object obj) {
         if (obj instanceof Attribute) {
@@ -340,8 +343,9 @@ class AttributeList extends AbstractList
 
     /**
      * Return the <code>Attribute</code> with the
-     * given <code>Namespace</code>.
+     * given name and <code>Namespace</code>.
      *
+     * @param name name of attribute to return
      * @param namespace <code>Namespace</code> to match
      * @return the <code>Attribute</code>, or null if one doesn't exist.
      */

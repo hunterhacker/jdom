@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.22 2004/02/06 09:28:30 jhunter Exp $
+ $Id: JDOMException.java,v 1.23 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -69,14 +69,14 @@ import org.xml.sax.*;
  * can be caught to handle all JDOM specific problems (some methods may throw
  * {@link java.io.IOException} and such).
  *
- * @version $Revision: 1.22 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.23 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.22 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.23 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     private Throwable cause;
@@ -193,23 +193,23 @@ public class JDOMException extends Exception {
 
         // Print the stack trace for each nested exception.
         while((child = getNestedException(parent)) != null) {
-            if (child != null) {
-                System.err.print("Caused by: ");
-                child.printStackTrace();
-                // Any nested JDOMException will print its own children,
-                // so we need to break out of here.
-                if (child instanceof JDOMException) {
-                    break;
-                }
-                parent = child;
+            System.err.print("Caused by: ");
+            child.printStackTrace();
+            // Any nested JDOMException will print its own children,
+            // so we need to break out of here.
+            if (child instanceof JDOMException) {
+                break;
             }
+            parent = child;
         }
     }
 
     /**
-     * This prints the stack trace of the <code>Exception</code> to the given
+     * Prints the stack trace of the <code>Exception</code> to the given
      * PrintStream. If there is a root cause, the stack trace of the root
      * <code>Exception</code> is printed right after.
+     *
+     * @param s PrintStream to print to
      */
     public void printStackTrace(PrintStream s) {
         // Print the stack trace for this exception.
@@ -220,23 +220,23 @@ public class JDOMException extends Exception {
 
         // Print the stack trace for each nested exception.
         while((child = getNestedException(parent)) != null) {
-            if (child != null) {
-                s.print("Caused by: ");
-                child.printStackTrace(s);
-                // Any nested JDOMException will print its own children,
-                // so we need to break out of here.
-                if (child instanceof JDOMException) {
-                    break;
-                }
-                parent = child;
+            s.print("Caused by: ");
+            child.printStackTrace(s);
+            // Any nested JDOMException will print its own children,
+            // so we need to break out of here.
+            if (child instanceof JDOMException) {
+                break;
             }
+            parent = child;
         }
     }
 
     /**
-     * This prints the stack trace of the <code>Exception</code> to the given
+     * Prints the stack trace of the <code>Exception</code> to the given
      * PrintWriter. If there is a root cause, the stack trace of the root
      * <code>Exception</code> is printed right after.
+     *
+     * @param w PrintWriter to print to
      */
     public void printStackTrace(PrintWriter w) {
         // Print the stack trace for this exception.
@@ -247,16 +247,14 @@ public class JDOMException extends Exception {
 
         // Print the stack trace for each nested exception.
         while((child = getNestedException(parent)) != null) {
-            if (child != null) {
-                w.print("Caused by: ");
-                child.printStackTrace(w);
-                // Any nested JDOMException will print its own children,
-                // so we need to break out of here.
-                if (child instanceof JDOMException) {
-                    break;
-                }
-                parent = child;
+            w.print("Caused by: ");
+            child.printStackTrace(w);
+            // Any nested JDOMException will print its own children,
+            // so we need to break out of here.
+            if (child instanceof JDOMException) {
+                break;
             }
+            parent = child;
         }
     }
 

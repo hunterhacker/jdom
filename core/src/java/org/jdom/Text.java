@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.23 2004/02/11 21:12:43 jhunter Exp $
+ $Id: Text.java,v 1.24 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,7 +61,7 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.23 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.24 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
@@ -69,7 +69,7 @@ package org.jdom;
 public class Text extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.23 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.24 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 
@@ -171,6 +171,7 @@ public class Text extends Content {
      * This will set the value of this <code>Text</code> node.
      *
      * @param str value for node's content.
+     * @return the object on which the method was invoked
      * @throws IllegalDataException if <code>str</code> contains an
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})

@@ -1,6 +1,6 @@
 /*--
 
- $Id: DescendantIterator.java,v 1.4 2004/02/06 09:28:30 jhunter Exp $
+ $Id: DescendantIterator.java,v 1.5 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.Parent;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.4 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.5 $, $Date: 2004/02/27 11:32:57 $
  */
 class DescendantIterator implements Iterator {
 
@@ -76,10 +76,12 @@ class DescendantIterator implements Iterator {
     private List stack = new ArrayList();
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.4 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.5 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /**
      * Iterator for the descendants of the supplied object.
+     *
+     * @param parent document or element whose descendants will be iterated
      */
     DescendantIterator(Parent parent) {
         if (parent == null) {
@@ -90,6 +92,8 @@ class DescendantIterator implements Iterator {
 
     /**
      * Returns true> if the iteration has more {@link Content} descendants.
+     *
+     * @return true is the iterator has more descendants
      */
     public boolean hasNext() {
         if (iterator != null && iterator.hasNext()) return true;
@@ -100,6 +104,8 @@ class DescendantIterator implements Iterator {
 
     /**
      * Returns the next {@link Content} descendant.
+     *
+     * @return the next descendant
      */
     public Object next() {
         if (!hasNext()) {

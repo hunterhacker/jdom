@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.20 2004/02/06 09:28:32 jhunter Exp $
+ $Id: JDOMResult.java,v 1.21 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -96,14 +96,14 @@ import org.xml.sax.helpers.*;
  *
  * @see      org.jdom.transform.JDOMSource
  *
- * @version $Revision: 1.20 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.21 $, $Date: 2004/02/27 11:32:58 $
  * @author  Laurent Bihanic
  * @author  Jason Hunter
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.20 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.21 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -265,7 +265,7 @@ public class JDOMResult extends SAXResult {
           JDOMFactory f = this.getFactory();
           if (f == null) { f = new DefaultJDOMFactory(); }
 
-          doc = f.document((Element)null);
+          doc = f.document(null);
           doc.setContent((List)result);
 
           result = doc;

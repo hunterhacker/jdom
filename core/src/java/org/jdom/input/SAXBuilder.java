@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.84 2004/02/06 09:28:31 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.85 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.84 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.85 $, $Date: 2004/02/27 11:32:58 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.84 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.85 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -205,7 +205,7 @@ public class SAXBuilder {
         return factory;
     }
 
-    /*
+    /**
      * This sets a custom JDOMFactory for the builder.  Use this to build
      * the tree with your own subclasses of the JDOM classes.
      *
@@ -236,7 +236,7 @@ public class SAXBuilder {
 
     /**
      * Returns the {@link ErrorHandler} assigned, or null if none.
-     * @return
+     * @return the ErrorHandler assigned, or null if none
      */
     public ErrorHandler getErrorHandler() {
         return saxErrorHandler;
@@ -911,8 +911,13 @@ public class SAXBuilder {
 //        return new URL("file", "", path);
 //    }
 
-    // Custom File.toUrl() implementation to handle special chars in file names
-    protected URL fileToURL(File file) throws MalformedURLException {
+    /** Custom File.toUrl() implementation to handle special chars in file names
+     *
+     * @param file file object whose path will be converted
+     * @return URL form of the file, with special characters handled
+     * @throws MalformedURLException if there's a problem constructing a URL
+     */
+    protected static URL fileToURL(File file) throws MalformedURLException {
         StringBuffer buffer = new StringBuffer();
         String path = file.getAbsolutePath();
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: DOMBuilder.java,v 1.56 2004/02/19 00:53:50 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.57 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.56 $, $Date: 2004/02/19 00:53:50 $
+ * @version $Revision: 1.57 $, $Date: 2004/02/27 11:32:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ import org.w3c.dom.*;
 public class DOMBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.56 $ $Date: 2004/02/19 00:53:50 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.57 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available.
@@ -137,7 +137,7 @@ public class DOMBuilder {
      * @return <code>Document</code> - JDOM document object.
      */
     public Document build(org.w3c.dom.Document domDocument) {
-        Document doc = factory.document((Element)null);
+        Document doc = factory.document(null);
         buildTree(domDocument, doc, null, true);
         return doc;
     }
@@ -149,7 +149,7 @@ public class DOMBuilder {
      * @return <code>Element</code> - JDOM Element object
      */
     public org.jdom.Element build(org.w3c.dom.Element domElement) {
-        Document doc = factory.document((Element)null);
+        Document doc = factory.document(null);
         buildTree(domElement, doc, null, true);
         return doc.getRootElement();
     }

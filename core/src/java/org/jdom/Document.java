@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.82 2004/02/19 06:02:20 jhunter Exp $
+ $Id: Document.java,v 1.83 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.82 $, $Date: 2004/02/19 06:02:20 $
+ * @version $Revision: 1.83 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.82 $ $Date: 2004/02/19 06:02:20 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.83 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -82,8 +82,9 @@ public class Document implements Parent {
      */
     ContentList content = new ContentList(this);
 
-    // See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/
-    //                                     core.html#baseURIs-Considerations
+    /**
+     *  See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/core.html#baseURIs-Considerations
+     */
     protected String baseURI = null;
 
     // Supports the setProperty/getProperty calls
@@ -278,6 +279,7 @@ public class Document implements Parent {
      * IllegalAddException being thrown.
      *
      * @param docType <code>DocType</code> declaration.
+     * @return object on which the method was invoked
      * @throws IllegalAddException if the given docType is
      *   already attached to a Document.
      */
@@ -406,6 +408,7 @@ public class Document implements Parent {
     /**
      * Remove all child content from this parent matching the supplied filter.
      *
+     * @param filter filter to select which content to remove
      * @return list of the old children detached from this parent
      */
     public List removeContent(Filter filter) {
@@ -512,6 +515,7 @@ public class Document implements Parent {
      *
      * @param index - index of child to replace.
      * @param collection - collection of content to add.
+     * @return object on which the method was invoked
      * @throws IllegalAddException if the collection contains objects of
      *         illegal types.
      * @throws IndexOutOfBoundsException if index is negative or greater
@@ -652,6 +656,7 @@ public class Document implements Parent {
      * With filters you can match only Elements, only Comments, Elements or
      * Comments, only Elements with a given name and/or prefix, and so on.
      *
+     * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants within a filter
      */
     public Iterator getDescendants(Filter filter) {

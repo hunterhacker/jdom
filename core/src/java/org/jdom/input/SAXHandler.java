@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.64 2004/02/06 09:28:31 jhunter Exp $
+ $Id: SAXHandler.java,v 1.65 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.64 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.65 $, $Date: 2004/02/27 11:32:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.64 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.65 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -183,7 +183,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * using the default factory.
      */
     public SAXHandler() {
-        this((JDOMFactory)null);
+        this(null);
     }
 
     /**
@@ -205,7 +205,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         declaredNamespaces = new ArrayList();
         externalEntities = new HashMap();
 
-        document = this.factory.document((Element)null);
+        document = this.factory.document(null);
     }
 
     /**
@@ -339,6 +339,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param type <code>String</code> attribute type
      * @param valueDefault <code>String</code> default value of attribute
      * @param value <code>String</code> value of attribute
+     * @throws SAXException
      */
     public void attributeDecl(String eName, String aName, String type,
                               String valueDefault, String value)
@@ -373,6 +374,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      *
      * @param name <code>String</code> name of element
      * @param model <code>String</code> model of the element in DTD syntax
+     * @throws SAXException
      */
     public void elementDecl(String name, String model) throws SAXException {
         // Skip elements that come from the external subset
@@ -390,6 +392,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      *
      * @param name <code>String</code> name of entity
      * @param value <code>String</code> value of the entity
+     * @throws SAXException
      */
     public void internalEntityDecl(String name, String value)
         throws SAXException {
@@ -578,6 +581,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param ch <code>char[]</code> character array with character data
      * @param start <code>int</code> index in array where data starts.
      * @param length <code>int</code> length of data.
+     * @throws SAXException
      */
     public void characters(char[] ch, int start, int length)
                     throws SAXException {
@@ -624,6 +628,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * Flush the given string into the document.  This is a protected method
      * so subclassers can control text handling without knowledge of the
      * internals of this class.
+     *
+     * @param data string to flush
      */
     protected void flushCharacters(String data) throws SAXException {
         if (data.length() == 0) {
@@ -709,6 +715,8 @@ if (!inDTD) {
 
     /**
      * This signifies that the reading of the DTD is complete.
+     *
+     * @throws SAXException
      */
     public void endDTD() throws SAXException {
 
@@ -780,6 +788,8 @@ if (!inDTD) {
 
     /**
      * Report a CDATA section
+     *
+     * @throws SAXException
      */
     public void startCDATA() throws SAXException {
         if (suppress) return;
@@ -806,6 +816,7 @@ if (!inDTD) {
      * @param ch <code>ch[]</code> array of comment characters.
      * @param start <code>int</code> index to start reading from.
      * @param length <code>int</code> length of data.
+     * @throws SAXException
      */
     public void comment(char[] ch, int start, int length)
         throws SAXException {
@@ -900,6 +911,7 @@ if (!inDTD) {
      * Returns the being-parsed element.
      *
      * @return <code>Element</code> - element being built.
+     * @throws SAXException
      */
     public Element getCurrentElement() throws SAXException {
         if (currentElement == null) {
@@ -921,7 +933,7 @@ if (!inDTD) {
      * @see Attribute#setAttributeType
      * @see Attributes#getType
      */
-    private int getAttributeType(String typeName) {
+    private static int getAttributeType(String typeName) {
         Integer type = (Integer)(attrNameToTypeMap.get(typeName));
         if (type == null) {
             if (typeName != null && typeName.length() > 0 &&

@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.29 2004/02/06 09:28:30 jhunter Exp $
+ $Id: CDATA.java,v 1.30 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ package org.jdom;
  * CDATA makes no guarantees about the underlying textual representation of
  * character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.29 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.30 $, $Date: 2004/02/27 11:32:57 $
  * @author  Dan Schaffer
  * @author  Brett McLaughlin
  * @author  Jason Hunter
@@ -72,7 +72,7 @@ package org.jdom;
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.29 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.30 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /**
      * This is the protected, no-args constructor standard in all JDOM
@@ -99,6 +99,7 @@ public class CDATA extends Text {
      * This will set the value of this <code>CDATA</code> node.
      *
      * @param str value for node's content.
+     * @return the object on which the method was invoked
      * @throws IllegalDataException if <code>str</code> contains an 
      *         illegal character such as a vertical tab (as determined
      *          by {@link org.jdom.Verifier#checkCharacterData})

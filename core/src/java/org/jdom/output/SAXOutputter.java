@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.34 2004/02/06 09:28:32 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.35 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.34 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.35 $, $Date: 2004/02/27 11:32:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.34 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.35 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -1166,7 +1166,7 @@ public class SAXOutputter {
      * @see org.jdom.Attribute#getAttributeType
      * @see org.xml.sax.Attributes#getType
      */
-    private String getAttributeTypeName(int type) {
+    private static String getAttributeTypeName(int type) {
         if ((type < 0) || (type >= attrTypeToNameMap.length)) {
             type = Attribute.UNDECLARED_TYPE;
         }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.38 2004/02/16 21:05:33 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.39 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.38 $, $Date: 2004/02/16 21:05:33 $
+ * @version $Revision: 1.39 $, $Date: 2004/02/27 11:32:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.38 $ $Date: 2004/02/16 21:05:33 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.39 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -417,7 +417,7 @@ public class DOMOutputter {
      *
      * @param ns <code>Namespace</code> to add definition of
      */
-    private String getXmlnsTagFor(Namespace ns) {
+    private static String getXmlnsTagFor(Namespace ns) {
         String attrName = "xmlns";
         if (!ns.getPrefix().equals("")) {
             attrName += ":";

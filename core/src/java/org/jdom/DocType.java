@@ -1,6 +1,6 @@
 /*--
 
- $Id: DocType.java,v 1.30 2004/02/11 21:12:43 jhunter Exp $
+ $Id: DocType.java,v 1.31 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,12 +62,12 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.30 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.31 $, $Date: 2004/02/27 11:32:57 $
  */
 public class DocType extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.30 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.31 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -189,6 +189,7 @@ public class DocType extends Content {
      * This will set the public ID of an externally
      * referenced DTD.
      *
+     * @param publicID id to set
      * @return DocType <code>DocType</code> this DocType object
      * @throws IllegalDataException if the given public ID is not a legal
      *         public ID.
@@ -218,6 +219,7 @@ public class DocType extends Content {
      * This will set the system ID of an externally
      * referenced DTD.
      *
+     * @param systemID id to set
      * @return systemID <code>String</code> system ID of
      *                  referenced DTD.
      * @throws IllegalDataException if the given system ID is not a legal

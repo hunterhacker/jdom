@@ -1,6 +1,6 @@
 /*--
 
- $Id: EntityRef.java,v 1.20 2004/02/11 21:12:43 jhunter Exp $
+ $Id: EntityRef.java,v 1.21 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,7 +60,7 @@ package org.jdom;
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  *
- * @version $Revision: 1.20 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.21 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -68,7 +68,7 @@ package org.jdom;
 public class EntityRef extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.20 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.21 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -100,6 +100,7 @@ public class EntityRef extends Content {
      * with the supplied name and system id.
      *
      * @param name <code>String</code> name of element.
+     * @param systemID system id of the entity reference being constructed
      * @throws IllegalNameException if the given name is not a legal
      *         XML name.
      * @throws IllegalDataException if the given system ID is not a legal
@@ -114,6 +115,8 @@ public class EntityRef extends Content {
      * with the supplied name, public id, and system id.
      *
      * @param name <code>String</code> name of element.
+     * @param publicID public id of the entity reference being constructed
+     * @param systemID system id of the entity reference being constructed
      * @throws IllegalDataException if the given system ID is not a legal
      *         system literal or the the given public ID is not a
      *         legal public ID

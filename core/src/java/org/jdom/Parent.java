@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.10 2004/02/19 06:02:20 jhunter Exp $
+ $Id: Parent.java,v 1.11 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.10 $, $Date: 2004/02/19 06:02:20 $
+ * @version $Revision: 1.11 $, $Date: 2004/02/27 11:32:57 $
  */
 public interface Parent extends Cloneable, Serializable {
 
@@ -122,6 +122,7 @@ public interface Parent extends Cloneable, Serializable {
     /**
      * Inserts the child into the content list at the given index.
      *
+     * @param index location for adding the collection
      * @param child      child to insert
      * @return           the parent on which the method was called
      * @throws IndexOutOfBoundsException if index is negative or beyond
@@ -135,6 +136,7 @@ public interface Parent extends Cloneable, Serializable {
      * will be unchanged and the objects in the supplied collection will be
      * unaltered.
      *
+     * @param index location for adding the collection
      * @param collection  collection to insert
      * @return            the parent on which the method was called
      * @throws IndexOutOfBoundsException if index is negative or beyond
@@ -348,6 +350,7 @@ public interface Parent extends Cloneable, Serializable {
      * only Comments, Elements or Comments, only Elements with a given name
      * and/or prefix, and so on.
      *
+     * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants that match a filter
      */
     Iterator getDescendants(Filter filter);

@@ -1,6 +1,6 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.45 2004/02/17 02:29:23 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.46 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.45 $, $Date: 2004/02/17 02:29:23 $
+ * @version $Revision: 1.46 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -73,7 +73,7 @@ import java.util.*;
 public class ProcessingInstruction extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.45 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.46 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -206,6 +206,7 @@ public class ProcessingInstruction extends Content {
      * this PI.  The keys should be the pair name
      * and the values should be the pair values.
      *
+     * @param data new map data to use
      * @return <code>ProcessingInstruction</code> - modified PI.
      */
     public ProcessingInstruction setData(Map data) {
@@ -264,6 +265,7 @@ public class ProcessingInstruction extends Content {
     /**
      * This will remove the pseudo attribute with the specified name.
      *
+     * @param name name of pseudo attribute to remove
      * @return <code>boolean</code> - whether the requested
      *         instruction was removed.
      */
@@ -280,6 +282,7 @@ public class ProcessingInstruction extends Content {
      * This will convert the Map to a string representation.
      *
      * @param mapData <code>Map</code> PI data to convert
+     * @return a string representation of the Map as appropriate for a PI
      */
     private String toString(Map mapData) {
         StringBuffer rawData = new StringBuffer();
@@ -304,8 +307,6 @@ public class ProcessingInstruction extends Content {
     /**
      * This will parse and load the instructions for the PI.
      * This is separated to allow it to occur once and then be reused.
-     *
-     * @param rawData <code>String</code> PI data to parse
      */
     private Map parseData(String rawData) {
         // The parsing here is done largely "by hand" which means the code
@@ -398,7 +399,7 @@ public class ProcessingInstruction extends Content {
      *         returned.
      * @see #parseData
      */
-    private int[] extractQuotedString(String rawData) {
+    private static int[] extractQuotedString(String rawData) {
         // Remembers whether we're actually in a quoted string yet
         boolean inQuotes = false;
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.40 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Namespace.java,v 1.41 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.40 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.41 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -84,7 +84,7 @@ public final class Namespace {
     // No one has ever reported this over the many years, so don't worry yet.
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.40 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.41 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -96,7 +96,8 @@ public final class Namespace {
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
-    public static final Namespace XML_NAMESPACE = 
+    /** Define a <code>Namespace</code> for the standard xml prefix. */
+    public static final Namespace XML_NAMESPACE =
         new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
 
     /** The prefix mapped to this namespace */

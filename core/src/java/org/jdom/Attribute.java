@@ -1,6 +1,6 @@
 /*--
 
- $Id: Attribute.java,v 1.50 2004/02/17 02:29:23 jhunter Exp $
+ $Id: Attribute.java,v 1.51 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.50 $, $Date: 2004/02/17 02:29:23 $
+ * @version $Revision: 1.51 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -71,7 +71,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.50 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.51 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -350,6 +350,7 @@ public class Attribute implements Serializable, Cloneable {
     /**
      * This sets the local name of the <code>Attribute</code>.
      *
+     * @param name the new local name to set
      * @return <code>Attribute</code> - the attribute modified.
      * @throws IllegalNameException if the given name is illegal as an
      *         attribute name.
@@ -437,6 +438,7 @@ public class Attribute implements Serializable, Cloneable {
      * If the provided namespace is null, the attribute will have no namespace.
      * The namespace must have a prefix.
      *
+     * @param namespace the new namespace
      * @return <code>Element</code> - the element modified.
      * @throws IllegalNameException if the new namespace is the default
      *         namespace. Attributes cannot be in a default namespace.

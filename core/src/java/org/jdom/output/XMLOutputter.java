@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.106 2004/02/27 00:52:39 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.107 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.106 $, $Date: 2004/02/27 00:52:39 $
+ * @version $Revision: 1.107 $, $Date: 2004/02/27 11:32:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.106 $ $Date: 2004/02/27 00:52:39 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.107 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -318,7 +318,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * Get an OutputStreamWriter, use specified encoding.
      */
-    private Writer makeWriter(OutputStream out, String enc)
+    private static Writer makeWriter(OutputStream out, String enc)
                          throws java.io.UnsupportedEncodingException {
         // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
         // into "UTF8" which works with all JDKs.
@@ -1240,7 +1240,7 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if there is no more non-CDATA,
     // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
-    private int nextNonText(List content, int start) {
+    private static int nextNonText(List content, int start) {
         if (start < 0) {
             start = 0;
         }
@@ -1303,7 +1303,7 @@ public class XMLOutputter implements Cloneable {
 
     // Determine if a character is a XML whitespace.
     // XXX should this method be in Verifier
-    private boolean isWhitespace(char c) {
+    private static boolean isWhitespace(char c) {
         if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
             return true;
         }

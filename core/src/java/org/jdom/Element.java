@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.146 2004/02/19 06:02:20 jhunter Exp $
+ $Id: Element.java,v 1.147 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.146 $, $Date: 2004/02/19 06:02:20 $
+ * @version $Revision: 1.147 $, $Date: 2004/02/27 11:32:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.146 $ $Date: 2004/02/19 06:02:20 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.147 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -687,6 +687,7 @@ public class Element extends Content implements Parent {
     /**
      * Remove all child content from this parent matching the supplied filter.
      *
+     * @param filter filter to select which content to remove
      * @return list of the old children detached from this parent
      */
     public List removeContent(Filter filter) {
@@ -749,6 +750,7 @@ public class Element extends Content implements Parent {
      *
      * @param index - index of child to replace.
      * @param child - child to add.
+     * @return object on which this method was invoked
      * @throws IllegalAddException if the supplied child is already attached
      *                             or not legal content for this parent.
      * @throws IndexOutOfBoundsException if index is negative or greater
@@ -769,6 +771,7 @@ public class Element extends Content implements Parent {
      *
      * @param index - index of child to replace.
      * @param collection - collection of content to add.
+     * @return object on which this method was invoked
      * @throws IllegalAddException if the collection contains objects of
      *         illegal types.
      * @throws IndexOutOfBoundsException if index is negative or greater
@@ -1168,7 +1171,7 @@ public class Element extends Content implements Parent {
 
         Element element = null;
 
-            element = (Element) super.clone();
+        element = (Element) super.clone();
 
         // name and namespace are references to immutable objects
         // so super.clone() handles them ok
@@ -1299,6 +1302,7 @@ public class Element extends Content implements Parent {
      * With filters you can match only Elements, only Comments, Elements or
      * Comments, only Elements with a given name and/or prefix, and so on.
      *
+     * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants within a filter
      */
     public Iterator getDescendants(Filter filter) {

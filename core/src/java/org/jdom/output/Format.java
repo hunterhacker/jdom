@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.6 2004/02/11 20:56:43 jhunter Exp $
+ $Id: Format.java,v 1.7 2004/02/27 11:32:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.6 $, $Date: 2004/02/11 20:56:43 $
+ * @version $Revision: 1.7 $, $Date: 2004/02/27 11:32:58 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.6 $ $Date: 2004/02/11 20:56:43 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.7 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -161,7 +161,7 @@ public class Format implements Cloneable {
     /**
      * Creates a new Format instance with default (raw) behavior.
      */
-    Format() { }
+    private Format() { }
 
     /**
      * Sets the {@link EscapeStrategy} to use for character escaping.

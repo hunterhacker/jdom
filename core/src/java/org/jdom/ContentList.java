@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.37 2004/02/19 06:02:19 jhunter Exp $
+ $Id: ContentList.java,v 1.38 2004/02/27 11:32:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.37 $, $Date: 2004/02/19 06:02:19 $
+ * @version $Revision: 1.38 $, $Date: 2004/02/27 11:32:57 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.37 $ $Date: 2004/02/19 06:02:19 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.38 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -137,11 +137,11 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      */
     private void documentCanContain(int index, Content child) throws IllegalAddException {
         if (child instanceof Element) {
-            if (child instanceof Element && indexOfFirstElement() >= 0) {
+            if (indexOfFirstElement() >= 0) {
                 throw new IllegalAddException(
                         "Cannot add a second root element, only one is allowed");
             }
-            if (child instanceof Element && indexOfDocType() > index) {
+            if (indexOfDocType() > index) {
                 throw new IllegalAddException(
                         "A root element cannot be added before the DocType");
             }
@@ -170,7 +170,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
         }
     }
 
-    private void elementCanContain(int index, Content child) throws IllegalAddException {
+    private static void elementCanContain(int index, Content child) throws IllegalAddException {
         if (child instanceof DocType) {
             throw new IllegalAddException(
                     "A DocType is not allowed except at the document level");
@@ -445,7 +445,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 
 
     /** Remove the parent of a Object */
-    private void removeParent(Content c) {
+    private static void removeParent(Content c) {
         c.setParent(null);
     }
 
