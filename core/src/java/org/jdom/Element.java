@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.84 2001/06/11 00:05:23 jhunter Exp $
+ $Id: Element.java,v 1.85 2001/06/15 23:43:28 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.84 $ $Date: 2001/06/11 00:05:23 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.85 $ $Date: 2001/06/15 23:43:28 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -428,17 +428,21 @@ public class Element implements Serializable, Cloneable {
      *    that exist, <i>excluding</i> the namespace of the element
      *    itself, which can be obtained through
      *    <code>{@link #getNamespace()}</code>. If there are no additional
-     *    declarations, this returns an empty list.
+     *    declarations, this returns an empty list.  Note, the returned 
+     *    list is not live, for performance reasons.
      * </p>
      *
      * @return <code>List</code> - the additional namespace declarations.
      */
     public List getAdditionalNamespaces() {
+        // Not having the returned list be live allows us to avoid creating a
+        // new list object when XMLOutputter calls this method on an elt
+        // with an empty list.
         if (additionalNamespaces == null) {
             return Collections.EMPTY_LIST;
         }
         else {
-            return additionalNamespaces;
+            return Collections.unmodifiableList(additionalNamespaces);
         }
     }
 
