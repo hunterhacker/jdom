@@ -1,6 +1,6 @@
 /*--
 
- $Id: JAXPParserFactory.java,v 1.4 2004/02/06 09:28:31 jhunter Exp $
+ $Id: JAXPParserFactory.java,v 1.5 2004/02/27 21:08:47 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,13 +66,13 @@ import org.xml.sax.*;
 /**
  * A non-public utility class to allocate JAXP SAX parsers.
  *
- * @version $Revision: 1.4 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.5 $, $Date: 2004/02/27 21:08:47 $
  * @author  Laurent Bihanic
  */
 class JAXPParserFactory {               // package protected
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: JAXPParserFactory.java,v $ $Revision: 1.4 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: JAXPParserFactory.java,v $ $Revision: 1.5 $ $Date: 2004/02/27 21:08:47 $ $Name:  $";
 
     /** JAXP 1.2 schema language property id. */
     private static final String JAXP_SCHEMA_LANGUAGE_PROPERTY =
@@ -89,6 +89,19 @@ class JAXPParserFactory {               // package protected
     private JAXPParserFactory() {
         // Never called.
     }
+
+    /* Implementor's note regarding createParser() design: The features and
+    properties are normally set in SAXBuilder, but we take them in
+    createParser() as well because some features or properties may need to be
+    applied during the JAXP parser construction. Today, for example, properties
+    is used as it's the only way to configure schema validation: JAXP defines
+    schema validation properties but SAX does not. This reflects in the Apache
+    Xerces implementation where the SAXParser implementation supports the JAXP
+    properties but the XMLReader does not. Hence, configuring schema validation
+    must be done on the SAXParser object which is only visible in
+    JAXParserFactory. Features is also passed in case some future JAXP release
+    defines JAXP-specific features.
+     */
 
     /**
      * Creates a SAX parser allocated through the configured JAXP SAX
