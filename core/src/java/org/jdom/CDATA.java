@@ -1,5 +1,7 @@
 /*-- 
 
+ $Header: /home/cvspublic/jdom/src/java/org/jdom/CDATA.java,v 1.9 2001/03/15 05:55:47 jhunter Exp $
+
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
  
@@ -66,7 +68,7 @@ import java.io.Serializable;
  * @author Dan Schaffer
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.8 $
+ * @version 1.0
  */
 public class CDATA implements Serializable, Cloneable {
 
