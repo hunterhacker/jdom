@@ -6,21 +6,11 @@ None!
 
 --- ITEMS TO CONSIDER FOR 1.1 ---
 
-* Path up contrib's IdAttribute.  Laurent has a patch that needs testing.
-
 * Output support for surrogate pairs.
 
 * Integrate the contributed StAXBuilder.
 
 * Rusty's "base uri" support for Element and the rest.
-
-* Possibly change whitespace escape rules to aid round tripping.  See:
-  http://lists.denveronline.net/lists/jdom-interest/2003-July/013224.html
-  http://lists.denveronline.net/lists/jdom-interest/2003-July/013226.html
-  http://lists.denveronline.net/lists/jdom-interest/2003-July/013227.html
-  http://lists.denveronline.net/lists/jdom-interest/2003-July/013261.html
-  http://lists.denveronline.net/lists/jdom-interest/2003-July/013262.html
-  NOW DONE?
 
 * Investigate a way to do in-memory validation.  First step is probably
   to get an in-memory representation of a DTD as per
@@ -170,11 +160,6 @@ None!
 
 * Considering that local vars are considerably faster that instance vars, test
   if using local vars can speed building.
-
-* Consider Mike Jennings' proposal of two new methods on Element:
-  public String getAttributeValue(String name, String default)
-  public String getAttributeValue(String name, Namespace ns, String default)
-  http://lists.denveronline.net/lists/jdom-interest/2000-December/004155.html
 
 * Consider using a List of instance data so elements only use what they really
   need (saving attrib list, namespace list)
