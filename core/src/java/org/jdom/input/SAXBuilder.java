@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.71 2003/02/26 23:53:59 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.72 2003/02/27 00:00:48 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,12 +83,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.71 $, $Date: 2003/02/26 23:53:59 $
+ * @version $Revision: 1.72 $, $Date: 2003/02/27 00:00:48 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.71 $ $Date: 2003/02/26 23:53:59 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.72 $ $Date: 2003/02/27 00:00:48 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -129,6 +129,15 @@ public class SAXBuilder {
 
     /** User-specified properties to be set on the SAX parser */
     private HashMap properties = new HashMap(5);
+
+    /**
+     * Whether parser reuse is allowed.
+     * <p>Default: <code>false</code></p>
+     */
+    private boolean reuseParser = false;
+
+    /** The current SAX parser, if parser reuse has been activated. */
+    private XMLReader saxParser = null;
 
     /**
      * Creates a new SAXBuilder which will attempt to first locate
@@ -250,6 +259,24 @@ public class SAXBuilder {
     }
 
     /**
+     * Specifies whether this builder shall reuse the same SAX parser
+     * when performing subsequent parses or allocate a new parser for
+     * each parse.  The default value of this setting is
+     * <code>false</code> (i.e. no parser reuse).
+     * <p>
+     * <strong>Note</strong>: As SAX parser instances may not be used
+     * in multiple threads running concurrently, the parser reuse
+     * feature shall not be used with SAXBuilder instances shared
+     * among threads.</p>
+     *
+     * @param reuseParser Whether to reuse the SAX parser.
+     */
+    public void setReuseParser(boolean reuseParser) {
+        this.reuseParser = reuseParser;
+        this.saxParser   = null;
+    }
+
+    /**
      * This sets a feature on the SAX parser. See the SAX documentation for
      * </p>
      * <p>
@@ -308,24 +335,36 @@ public class SAXBuilder {
             contentHandler = createContentHandler();
             configureContentHandler(contentHandler);
 
-            // Create and configure the parser.
-            XMLReader parser = createParser();
+            XMLReader parser = this.saxParser;
+            if (parser == null) {
+                // Create and configure the parser.
+                parser = createParser();
 
-            // Install optional filter
-            if (saxXMLFilter != null) {
-                // Connect filter chain to parser
-                XMLFilter root = saxXMLFilter;
-                while (root.getParent() instanceof XMLFilter) {
-                    root = (XMLFilter)root.getParent();
+                // Install optional filter
+                if (saxXMLFilter != null) {
+                    // Connect filter chain to parser
+                    XMLFilter root = saxXMLFilter;
+                    while (root.getParent() instanceof XMLFilter) {
+                        root = (XMLFilter)root.getParent();
+                    }
+                    root.setParent(parser);
+
+                    // Read from filter
+                    parser = saxXMLFilter;
                 }
-                root.setParent(parser);
 
-                // Read from filter
-                parser = saxXMLFilter;
+                // Configure parser
+                configureParser(parser, contentHandler);
+
+                if (reuseParser == true) {
+                    this.saxParser = parser;
+                }
             }
-
-            // Configure parser
-            configureParser(parser, contentHandler);
+            else {
+                // Reset content handler as SAXHandler instances can not
+                // be reused
+                parser.setContentHandler(contentHandler);
+            }
 
             // Parse the document.
             parser.parse(in);
