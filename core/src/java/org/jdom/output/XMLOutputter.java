@@ -94,6 +94,7 @@ import org.jdom.ProcessingInstruction;
  * @author Jason Reid
  * @author Wolfgang Werner
  * @author Elliotte Rusty Harold
+ * @author David & Will (from Post Tool Design)
  * @version 1.0
  */
 public class XMLOutputter {
@@ -530,11 +531,17 @@ public class XMLOutputter {
         } else if (stringOnly) {
             // Print the tag  with String on same line
             // Example: <tag name="value">content</tag>
-            out.write(">");
-            out.write(escapeElementEntities(element.getText()));
-            out.write("</");
-            out.write(element.getQualifiedName());
-            out.write(">");
+            // Also handle "" being added to content
+            String elementText = element.getText();
+            if ((elementText != null) && (!elementText.equals(""))) {
+                out.write(">");
+                out.write(escapeElementEntities(element.getText()));
+                out.write("</");
+                out.write(element.getQualifiedName());
+                out.write(">");
+            } else {
+                out.write(" />");
+            }
             maybePrintln(out);
         } else {
             /**
