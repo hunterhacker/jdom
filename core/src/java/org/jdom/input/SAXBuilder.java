@@ -88,6 +88,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -113,14 +114,17 @@ public class SAXBuilder {
     /** Adapter class to use */
     private String saxDriverClass;
 
-     /** ErrorHandler class to use */
-     private ErrorHandler saxErrorHandler = null;
+    /** ErrorHandler class to use */
+    private ErrorHandler saxErrorHandler = null;
  
-     /** EntityResolver class to use */
-     private EntityResolver saxEntityResolver = null;
+    /** EntityResolver class to use */
+    private EntityResolver saxEntityResolver = null;
 
-     /** DTDHandler class to use */
-     private DTDHandler saxDTDHandler = null;
+    /** DTDHandler class to use */
+    private DTDHandler saxDTDHandler = null;
+
+    /** XMLFilter instance to use */
+    private XMLFilter saxXMLFilter = null;
  
     /**
      * <p>
@@ -220,6 +224,17 @@ public class SAXBuilder {
 
     /**
      * <p>
+     * This sets custom XMLFilter for the <code>Builder</code>.
+     * </p>
+     *
+     * @param xmlFilter <code>XMLFilter</code>
+     */
+    public void setXMLFilter(XMLFilter xmlFilter) {
+        saxXMLFilter = xmlFilter;
+    }
+
+    /**
+     * <p>
      * This builds a document from the supplied
      *   input source.
      * </p>
@@ -236,6 +251,19 @@ public class SAXBuilder {
         try {
             XMLReader parser =
                 XMLReaderFactory.createXMLReader(saxDriverClass);
+
+            // Install optional filter
+            if (saxXMLFilter != null) {
+                // Connect filter chain to parser
+                XMLFilter root = saxXMLFilter;
+                while (root.getParent() instanceof XMLFilter) {
+                    root = (XMLFilter)root.getParent();
+                }
+                root.setParent(parser);
+
+                // Read from filter
+                parser = saxXMLFilter;
+            }
 
             DefaultHandler contentHandler =
                 new SAXHandler(doc);
