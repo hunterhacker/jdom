@@ -55,6 +55,8 @@ These are the meaningful targets for this build file:
     <property name="build.dest" value="./build/classes"/>
     <property name="build.javadocs" value="./build/apidocs"/>
 
+    <property name="xpath.parser.dir" value="${build.src}/org/jdom/contrib/xpath/parser/"/>
+
     <property name="dist.root" value="./dist"/>
     <property name="dist.dir" value="${dist.root}/${name}-${version}"/>
 
@@ -63,6 +65,8 @@ These are the meaningful targets for this build file:
     <filter token="date" value="${TODAY}"/>
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
+
+    <taskdef name="antlr" classname="Antlr"/>
   </target>
 
   <!-- =================================================================== -->
@@ -107,6 +111,8 @@ These are the meaningful targets for this build file:
     <copydir src="${src.dir}"
              dest="${build.src}"
              filtering="on"/>
+    <antlr grammar="${build.src}/org/jdom/contrib/xpath/parser/xpath.g"/>
+    <antlr grammar="${build.src}/org/jdom/contrib/xpath/parser/xpath_lexer.g"/>
   </target>
 
   <!-- =================================================================== -->
