@@ -46,6 +46,7 @@ These are the meaningful targets for this build file:
     <property name="deprecation" value="off"/>
 
     <property name="src.dir" value="./src/java"/>
+    <property name="samples.dir" value="./samples"/>
     <property name="lib.dir" value="./lib"/>
     <property name="packages" value="org.jdom.test.*"/>
 
@@ -83,7 +84,7 @@ These are the meaningful targets for this build file:
     <echo message="   package  --> generates the jdom-test.jar file (default)"/>
     <echo message="   compile  --> compiles the contributed source code"/>
     <echo message="   samples  --> compiles the contributed samples"/>
-    <echo message="   javadoc  --> generates the API documentation (java 1.2 only)"/>
+    <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> restores the distribution to its clean state"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
