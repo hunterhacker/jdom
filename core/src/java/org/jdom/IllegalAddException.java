@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.23 2003/05/29 02:47:40 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.24 2003/05/31 06:25:56 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,14 +59,14 @@ package org.jdom;
 /**
  * Thrown when trying to add a illegal object to a JDOM construct.
  *
- * @version $Revision: 1.23 $, $Date: 2003/05/29 02:47:40 $
+ * @version $Revision: 1.24 $, $Date: 2003/05/31 06:25:56 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.23 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.24 $ $Date: 2003/05/31 06:25:56 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -115,12 +115,10 @@ public class IllegalAddException extends IllegalArgumentException {
      * that the addition of the <code>{@link Element}</code>
      * to the <code>{@link Document}</code> is illegal.
      *
-     * @param base <code>Document</code> that the <code>Element</code>
-     *        couldn't be added to
      * @param added <code>Element</code> that could not be added
      * @param reason cause of the problem
      */
-    IllegalAddException(Document base, Element added, String reason) {
+    IllegalAddException(Element added, String reason) {
         super(new StringBuffer()
               .append("The element \"")
               .append(added.getQualifiedName())
@@ -156,12 +154,10 @@ public class IllegalAddException extends IllegalArgumentException {
      * that the addition of the <code>{@link ProcessingInstruction}</code>
      * to the <code>{@link Document}</code> is illegal.
      *
-     * @param base <code>Document</code> that the
-     *        <code>ProcessingInstruction</code> couldn't be added to
      * @param added <code>ProcessingInstruction</code> that could not be added
      * @param reason cause of the problem
      */
-    IllegalAddException(Document base, ProcessingInstruction added,
+    IllegalAddException(ProcessingInstruction added,
                                String reason) {
         super(new StringBuffer()
               .append("The PI \"")
@@ -240,12 +236,10 @@ public class IllegalAddException extends IllegalArgumentException {
      * that the addition of the <code>{@link Comment}</code>
      * to the <code>{@link Document}</code> is illegal.
      *
-     * @param base <code>Document</code> that the <code>Comment</code>
-     *             couldn't be added to
      * @param added <code>Comment</code> that could not be added
      * @param reason cause of the problem
      */
-    IllegalAddException(Document base, Comment added, String reason) {
+    IllegalAddException(Comment added, String reason) {
         super(new StringBuffer()
               .append("The comment \"")
               .append(added.getText())
@@ -305,12 +299,10 @@ public class IllegalAddException extends IllegalArgumentException {
      * that the addition of the <code>{@link DocType}</code>
      * to the <code>{@link Document}</code> is illegal.
      *
-     * @param base <code>Document</code> that the <code>DocType</code>
-     *             couldn't be added to
      * @param added <code>DocType</code> that could not be added
      * @param reason cause of the problem
      */
-    IllegalAddException(Document base, DocType added, String reason) {
+    IllegalAddException(DocType added, String reason) {
         super(new StringBuffer()
               .append("The DOCTYPE ")
               .append(added.toString())

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.70 2003/05/29 02:47:39 jhunter Exp $
+ $Id: Document.java,v 1.71 2003/05/31 06:25:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.70 $, $Date: 2003/05/29 02:47:39 $
+ * @version $Revision: 1.71 $, $Date: 2003/05/31 06:25:54 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.70 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.71 $ $Date: 2003/05/31 06:25:54 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -285,8 +285,8 @@ public class Document implements Parent {
             return this;
         }
 
-        if (docType.getDocument() != null) {
-            throw new IllegalAddException(this, docType,
+        if (docType.getParent() != null) {
+            throw new IllegalAddException(docType,
                               "The DocType already is attached to a document");
         }
 

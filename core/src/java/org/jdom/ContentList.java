@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.26 2003/05/29 02:47:39 jhunter Exp $
+ $Id: ContentList.java,v 1.27 2003/05/31 06:25:53 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.26 $, $Date: 2003/05/29 02:47:39 $
+ * @version $Revision: 1.27 $, $Date: 2003/05/31 06:25:53 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.26 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.27 $ $Date: 2003/05/31 06:25:53 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -176,15 +176,17 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (element.getDocument() != null) {
-            throw new IllegalAddException(element.getDocument(), element,
-                                          "The element already has an existing parent");
-        }
-
         if (element.getParent() != null) {
-            throw new IllegalAddException(
+            Parent p = element.getParent();
+            if (p instanceof Document) {
+                throw new IllegalAddException(element,
+                        "The element is the root element of another document");
+            }
+            else {
+                throw new IllegalAddException(
                      "The element already has an existing parent \"" +
-                     ((Element)element.getParent()).getQualifiedName() + "\"");
+                     ((Element)p).getQualifiedName() + "\"");
+            }
         }
 
         if (element == parent) {
@@ -241,9 +243,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (doctype.getDocument() != null) {
-            throw new IllegalAddException(doctype.getDocument(), doctype,
-                                          "The doctype already has an existing parent");
+        if (doctype.getParent() != null) {
+            throw new IllegalAddException(doctype,
+                               "The doctype already has an existing document");
         }
 
         if (index < 0 || index > size) {
@@ -294,15 +296,17 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (comment.getDocument() != null) {
-            throw new IllegalAddException(comment.getDocument(), comment,
-                                 "The comment already has an existing parent");
-        }
-
         if (comment.getParent() != null) {
-            throw new IllegalAddException(
+            Parent p = comment.getParent();
+            if (p instanceof Document) {
+                throw new IllegalAddException(comment,
+                        "The comment is already attached to a document");
+            }
+            else {
+                throw new IllegalAddException(
                      "The comment already has an existing parent \"" +
-                     ((Element)comment.getParent()).getQualifiedName() + "\"");
+                     ((Element)p).getQualifiedName() + "\"");
+            }
         }
 
         if (index<0 || index>size) {
@@ -341,15 +345,17 @@ class ContentList extends AbstractList implements java.io.Serializable {
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (pi.getDocument() != null) {
-            throw new IllegalAddException(pi.getDocument(), pi,
-                   "The processing instruction already has an existing parent");
-        }
-
         if (pi.getParent() != null) {
-            throw new IllegalAddException(
+            Parent p = pi.getParent();
+            if (p instanceof Document) {
+                throw new IllegalAddException(
+                        "The PI is already attached to a document");
+            }
+            else {
+                throw new IllegalAddException(
                           "The PI already has an existing parent \"" +
-                          ((Element)pi.getParent()).getQualifiedName() + "\"");
+                          ((Element)p).getQualifiedName() + "\"");
+            }
         }
 
         if (index<0 || index>size) {
