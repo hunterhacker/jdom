@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.120 2002/04/29 13:38:15 jhunter Exp $
+ $Id: Element.java,v 1.121 2002/05/11 07:47:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.120 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.121 $, $Date: 2002/05/11 07:47:12 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.120 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.121 $ $Date: 2002/05/11 07:47:12 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1089,27 +1089,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes all child elements.  Returns true if any were removed.
-     * </p>
-     *
-     * @return whether deletion occurred
-     */
-    public boolean removeChildren() {
-        boolean deletedSome = false;
-
-        List old = content.getView(new ElementFilter());
-        Iterator i = old.iterator();
-        while (i.hasNext()) {
-            i.next();
-            i.remove();
-            deletedSome = true;
-        }
-
-        return deletedSome;
-    }
-
-    /**
-     * <p>
      * This returns the complete set of attributes for this element, as a
      * <code>List</code> of <code>Attribute</code> objects in no particular
      * order, or an empty list if there are none.
@@ -1603,4 +1582,28 @@ public class Element implements Serializable, Cloneable {
     public boolean removeContent(CDATA cdata) {
         return content.remove(cdata);
     }
+
+    /**
+     * <p>
+     * This removes all child elements.  Returns true if any were removed.
+     * </p>
+     * @deprecated Deprecated in Beta 9, instead of this method you can call
+     * clear() on the list returned by getChildren() or by getContent()
+     *
+     * @return whether deletion occurred
+     */
+    public boolean removeChildren() {
+        boolean deletedSome = false;
+
+        List old = content.getView(new ElementFilter());
+        Iterator i = old.iterator();
+        while (i.hasNext()) {
+            i.next();
+            i.remove();
+            deletedSome = true;
+        }
+
+        return deletedSome;
+    }
+
 }
