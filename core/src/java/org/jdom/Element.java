@@ -867,10 +867,11 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content.size() > 0) {
-            Object ob = content.get(content.size() - 1);
+            int lastIndex = content.size() - 1;
+            Object ob = content.get(lastIndex);
             if (ob instanceof String) {
                 text = (String)ob + text;
-                content.remove(ob);
+                content.remove(lastIndex);
             }
         }
         content.add(text);
