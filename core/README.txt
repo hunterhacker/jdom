@@ -51,7 +51,7 @@ If you're compiling for JDK 1.1, then use the build11 scripts:
   ./build11.sh (unix)
   .\build11.bat (win32)
 
-If something went wrong, go to the FAQ section below.
+If something went wrong, go to the FAQ at http://www.jdom.org/docs/faq.html.
 
 Also, you'll note that reusing a single JVM instance for each task, increases
 tremendously the performance of the whole build system, compared to other
