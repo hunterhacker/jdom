@@ -143,11 +143,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         this.namespace = namespace;
-        attributes = new LinkedList();
-        content = new LinkedList();
         isRootElement = false;
-	textualContent = null;
-	trimmedContent = null;
     }
 
     /**
@@ -211,37 +207,6 @@ public class Element implements Serializable, Cloneable {
         clone.name = name;
 
         return clone;
-    }
-
-    /**
-     * <p>
-     *  This creates a copy of this <code>Element</code>, with the new
-     *    name specified, and in the <code>{@link Namespace}</code> identified
-     *    by the supplied URI.
-     * </p>
-     *
-     * @param name <code>String</code> name of new <code>Element</code> copy.
-     * @param uri <code>String</code> URI for copy's <code>{@link Namespace}</code>.
-     * @return <code>Element</code> copy of this <code>Element</code>.
-     */
-    public Element getCopy(String name, String uri) {
-        return getCopy(name, Namespace.getNamespace("", uri));
-    }
-
-    /**
-     * <p>
-     *  This creates a copy of this <code>Element</code>, with the new
-     *    name specified, and in the <code>{@link Namespace}</code> identified
-     *    by the supplied prefix and URI.
-     * </p>
-     *
-     * @param name <code>String</code> name of new <code>Element</code> copy.
-     * @param prefix <code>String</code> prefix for copy's <code>{@link Namespace}</code>.
-     * @param uri <code>String</code> URI for copy's <code>{@link Namespace}</code>.
-     * @return <code>Element</code> copy of this <code>Element</code>.
-     */
-    public Element getCopy(String name, String prefix, String uri) {
-        return getCopy(name, Namespace.getNamespace(prefix, uri));
     }
 
     /**
@@ -407,25 +372,27 @@ public class Element implements Serializable, Cloneable {
      * @return text content for this element, or null if none
      */
     public String getText() {
-	// Use "cached" text if available
-	if (textualContent == null) {	
+        // Use "cached" text if available
+        if (textualContent == null) {	
+            if (content == null) {
+                return null;
+            }
 
-    	    StringBuffer textContent = new StringBuffer();
+            StringBuffer textContent = new StringBuffer();
 
-	    Iterator i = content.iterator();
-	    while (i.hasNext()) {
-		Object obj = i.next();
-		if (obj instanceof String) {
+            Iterator i = content.iterator();
+            while (i.hasNext()) {
+                Object obj = i.next();
+                if (obj instanceof String) {
                     textContent.append((String)obj);
-		}
-	    }
-	    textualContent = textContent.toString();
-	}
+                }
+            }
+            textualContent = textContent.toString();
+        }
 	
         if (textualContent.length() == 0) {
             return null;
-        }
-        else {
+        } else {
             return textualContent;
         }
     }
@@ -442,26 +409,25 @@ public class Element implements Serializable, Cloneable {
      * @return normalized text content for this element, or null if none
      */
     public String getTextTrim() {
-	// Use "cached" trimmed text if available
-	if (trimmedContent == null) {	
-
+        // Use "cached" trimmed text if available
+        if (trimmedContent == null) {	
             String text = getText();
             if (text == null) {
                 return null;
             }
 
-    	    StringBuffer textContent = new StringBuffer();
+            StringBuffer textContent = new StringBuffer();
             StringTokenizer tokenizer = new StringTokenizer(text);
-	    while (tokenizer.hasMoreTokens()) {
-		String str = tokenizer.nextToken();
+            while (tokenizer.hasMoreTokens()) {
+                String str = tokenizer.nextToken();
                 textContent.append(str);
                 if (tokenizer.hasMoreTokens()) {
                     textContent.append(" ");  // separator
                 }
             }
 
-	    trimmedContent = textContent.toString();
-	}
+            trimmedContent = textContent.toString();
+        }
 	
         return trimmedContent;
     }
@@ -480,8 +446,7 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name);
         if (child == null) {
             return null;
-        }
-        else {
+        } else {
             return child.getText();
         }
     }
@@ -501,8 +466,7 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name);
         if (child == null) {
             return null;
-        }
-        else {
+        } else {
             return child.getTextTrim();
         }
     }
@@ -522,8 +486,7 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name, ns);
         if (child == null) {
             return null;
-        }
-        else {
+        } else {
             return child.getText();
         }
     }
@@ -544,8 +507,7 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name, ns);
         if (child == null) {
             return null;
-        }
-        else {
+        } else {
             return child.getTextTrim();
         }
     }
@@ -562,8 +524,12 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setText(String text) {
-        content.clear();
-	clearContentCache();
+        if (content != null) {
+            content.clear();
+            clearContentCache();
+        } else {
+            content = new LinkedList();
+        }
         content.add(text);
 
         return this;
@@ -582,6 +548,10 @@ public class Element implements Serializable, Cloneable {
      *         is mixed content (both textual data and elements).
      */
     public boolean hasMixedContent() {
+        if (content == null) {
+            return false;
+        }
+
         Class prevClass = null;
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -618,8 +588,12 @@ public class Element implements Serializable, Cloneable {
      *         <code>{@link Entity}</code> objects.
      */
     public List getMixedContent() {
+        if (content == null) {
+            content = new LinkedList();
+        }
+
         PartialList result = new PartialList(content, this);
-	result.addAllPartial(content);
+        result.addAllPartial(content);
         return result;
     }
 
@@ -634,8 +608,13 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setMixedContent(List mixedContent) {
-        content.clear();
-        clearContentCache();
+        if (content != null) {
+            content.clear();
+            clearContentCache();
+        } else {
+            content = new LinkedList();
+        }
+
         content.addAll(mixedContent);
         return this;
     }
@@ -666,6 +645,10 @@ public class Element implements Serializable, Cloneable {
      * @return list of child <code>Element</code> objects for this element
      */
     public List getChildren() {
+        if (content == null) {
+            content = new LinkedList();
+        }
+ 
         PartialList elements = new PartialList(content, this);
 
         Iterator i = content.iterator();
@@ -697,43 +680,6 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This returns a <code>List</code> of all the child elements
      * nested directly (one level deep) within this element with the given
-     * local name and belonging to a namespace at the given URI, returned as 
-     * <code>Element</code> objects.  If this target element has no nested 
-     * elements with the given name in the given namespace URI, an empty List 
-     * is returned.  The returned list is "live"
-     * and changes to it affect the element's actual contents.
-     * </p>
-     * <p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     * for a code example.
-     * </p>
-     *
-     * @param name local name for the children to match
-     * @param uri namespace URI for the children to belong to
-     * @return all matching child elements
-     */
-    protected List getChildren(String name, String uri) {
-        PartialList children = new PartialList(getChildren(), this);
-
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                Element element = (Element)obj;
-                if ((element.getNamespaceURI().equals(uri)) &&
-                    (element.getName().equals(name))) {
-                    children.addPartial(element);
-                }
-            }
-        }
-
-        return children;
-    }
-
-    /**
-     * <p>
-     * This returns a <code>List</code> of all the child elements
-     * nested directly (one level deep) within this element with the given
      * local name and belonging to no namespace, returned as 
      * <code>Element</code> objects.  If this target element has no nested 
      * elements with the given name outside a namespace, an empty List 
@@ -749,7 +695,7 @@ public class Element implements Serializable, Cloneable {
      * @return all matching child elements
      */
     public List getChildren(String name) {
-        return getChildren(name, "");
+        return getChildren(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -772,22 +718,44 @@ public class Element implements Serializable, Cloneable {
      * @return all matching child elements
      */
     public List getChildren(String name, Namespace ns) {
-        return getChildren(name, ns.getURI());
+        PartialList children = new PartialList(getChildren(), this);
+
+        if (content != null) {
+            String uri = ns.getURI();
+            Iterator i = content.iterator();
+            while (i.hasNext()) {
+                Object obj = i.next();
+                if (obj instanceof Element) {
+                    Element element = (Element)obj;
+                    if ((element.getNamespaceURI().equals(uri)) &&
+                        (element.getName().equals(name))) {
+                        children.addPartial(element);
+                    }
+                }
+            }
+        }
+
+        return children;
     }
 
     /**
      * <p>
      * This returns the first child element within this element with the 
-     * given local name and belonging to a namespace at the given URI.
-     * If no elements exist for the specified name, null is returned.
+     * given local name and belonging to the given namespace.
+     * If no elements exist for the specified name and namespace, null is 
+     * returned.
      * </p>
      *
      * @param name local name of child element to match
-     * @param uri namespace URI the child must belong to
+     * @param ns <code>Namespace</code> to search within
      * @return the first matching child element, or null if not found
      */
-    protected Element getChild(String name, String uri) {
+    public Element getChild(String name, Namespace ns) {
+        if (content == null) {
+            return null;
+        }
 
+        String uri = ns.getURI();
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
@@ -807,22 +775,6 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the first child element within this element with the 
-     * given local name and belonging to the given namespace.
-     * If no elements exist for the specified name and namespace, null is 
-     * returned.
-     * </p>
-     *
-     * @param name local name of child element to match
-     * @param ns <code>Namespace</code> to search within
-     * @return the first matching child element, or null if not found
-     */
-    public Element getChild(String name, Namespace ns) {
-        return getChild(name, ns.getURI());
-    }
-
-    /**
-     * <p>
-     * This returns the first child element within this element with the 
      * given local name and belonging to no namespace.
      * If no elements exist for the specified name and namespace, null is 
      * returned.
@@ -832,7 +784,7 @@ public class Element implements Serializable, Cloneable {
      * @return the first matching child element, or null if not found
      */
     public Element getChild(String name) {
-        return getChild(name, "");
+        return getChild(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -845,7 +797,12 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(String text) {
-        clearContentCache();
+        if (content != null) {
+            clearContentCache();
+        } else {
+            content = new LinkedList();
+        }
+
         if (content.size() > 0) {
             Object ob = content.get(content.size() - 1);
             if (ob instanceof String) {
@@ -872,6 +829,10 @@ public class Element implements Serializable, Cloneable {
             throw new IllegalAddException(element, this);
         }
 
+        if (content == null) {
+            content = new LinkedList();
+        }
+
         element.setParent(this);
         content.add(element);
         return this;
@@ -886,6 +847,10 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(ProcessingInstruction pi) {
+        if (content == null) {
+            content = new LinkedList();
+        }
+
         content.add(pi);
         return this;
     }
@@ -899,6 +864,10 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Entity entity) {
+        if (content == null) {
+            content = new LinkedList();
+        }
+
         content.add(entity);
         return this;
     }
@@ -912,6 +881,10 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Comment comment) {
+        if (content == null) {
+            content = new LinkedList();
+        }
+
         content.add(comment);
         return this;
     }
@@ -925,6 +898,10 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeContent(Element element) {
+        if (content == null) {
+            return false;
+        }
+
         if (content.remove(element)) {
             element.setParent(null);
             return true;
@@ -942,6 +919,10 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeContent(ProcessingInstruction pi) {
+        if (content == null) {
+            return false;
+        }
+
         return content.remove(pi);
     }
 
@@ -954,6 +935,10 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeContent(Entity entity) {
+        if (content == null) {
+            return false;
+        }
+
         return content.remove(entity);
     }
 
@@ -966,6 +951,10 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeContent(Comment comment) {
+        if (content == null) {
+            return false;
+        }
+
         return content.remove(comment);
     }
 
@@ -995,6 +984,10 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeChild(String name, Namespace ns) {
+        if (content == null) {
+            return false;
+        }
+
         String uri = ns.getURI();
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -1017,17 +1010,35 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes all child elements (one level deep) with the
-     * given local name and belonging to a namespace at the given URI.
+     * given local name and belonging to no namespace.
      * Returns true if any were removed.
      * </p>
      *
      * @param name the name of child elements to remove
-     * @param uri the namespace URI of elements to remove
      * @return whether deletion occurred
      */
-    protected boolean removeChildren(String name, String uri) {
-        boolean deletedSome = false;
+    public boolean removeChildren(String name) {
+        return removeChildren(name, Namespace.NO_NAMESPACE);
+    }
 
+    /**
+     * <p>
+     * This removes all child elements (one level deep) with the
+     * given local name and belonging to the given namespace.
+     * Returns true if any were removed.
+     * </p>
+     *
+     * @param name the name of child elements to remove
+     * @param ns <code>Namespace</code> to search within
+     * @return whether deletion occurred
+     */
+    public boolean removeChildren(String name, Namespace ns) {
+        if (content == null) {
+            return false;
+        }
+
+        String uri = ns.getURI();
+        boolean deletedSome = false;
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
@@ -1047,46 +1058,19 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes all child elements (one level deep) with the
-     * given local name and belonging to no namespace.
-     * Returns true if any were removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @return whether deletion occurred
-     */
-    public boolean removeChildren(String name) {
-        return removeChildren(name, "");
-    }
-
-    /**
-     * <p>
-     * This removes all child elements (one level deep) with the
-     * given local name and belonging to the given namespace.
-     * Returns true if any were removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @param ns <code>Namespace</code> to search within
-     * @return whether deletion occurred
-     */
-    public boolean removeChildren(String name, Namespace ns) {
-        return removeChildren(name, ns.getURI());
-    }
-
-    /**
-     * <p>
      * This removes all child elements.  Returns true if any were removed.
      * </p>
      *
      * @return whether deletion occurred
      */
     public boolean removeChildren() {
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                i.remove();
+        if (content != null) {
+            Iterator i = content.iterator();
+            while (i.hasNext()) {
+                Object obj = i.next();
+                if (obj instanceof Element) {
+                    i.remove();
+                }
             }
         }
 
@@ -1105,6 +1089,10 @@ public class Element implements Serializable, Cloneable {
      * @return attributes for the element
      */
     public List getAttributes() {
+        if (attributes == null) {
+            attributes = new LinkedList();
+        }
+
         PartialList atts = new PartialList(attributes, this);
         atts.addAllPartial(attributes);
         return atts;
@@ -1134,6 +1122,10 @@ public class Element implements Serializable, Cloneable {
      * @return attribute for the element
      */
     public Attribute getAttribute(String name, Namespace ns) {
+        if (attributes == null) {
+            return null;
+        }        
+
         String uri = ns.getURI();
         Iterator i = attributes.iterator();
         while (i.hasNext()) {
@@ -1177,8 +1169,7 @@ public class Element implements Serializable, Cloneable {
         Attribute attrib = getAttribute(name, ns);
         if (attrib == null) {
             return null;
-        }
-        else {
+        } else {
             return attrib.getValue();
         }
     }
@@ -1213,6 +1204,10 @@ public class Element implements Serializable, Cloneable {
                                           "Duplicate attributes are not allowed.");
         }
 
+        if (attributes == null) {
+            attributes = new LinkedList();
+        }
+
         attributes.add(attribute);
         return this;
     }
@@ -1228,9 +1223,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addAttribute(String name, String value) {
-        Attribute attribute = new Attribute(name, value);
-        attributes.add(attribute);
-        return this;
+        return addAttribute(new Attribute(name, value));
     }
 
     /**
@@ -1266,7 +1259,7 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(String name) {
-        return removeAttribute(name, "");
+        return removeAttribute(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1280,7 +1273,21 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(String name, Namespace ns) {
-        return removeAttribute(name, ns.getURI());
+        if (attributes == null) {
+            return false;
+        }
+
+        String uri = ns.getURI();
+        Iterator i = attributes.iterator();
+        while (i.hasNext()) {
+            Attribute att = (Attribute)i.next();
+            if ((att.getNamespaceURI().equals(uri)) &&
+                (att.getName().equals(name))) {
+                i.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1351,22 +1358,26 @@ public class Element implements Serializable, Cloneable {
     public final Object clone() {
         Element element = new Element(name, namespace);
 
-        List list = new LinkedList();
-        for (Iterator i = attributes.iterator(); i.hasNext(); ) {
-            list.add(((Attribute)i.next()).clone());
+        if (attributes != null) {
+            List list = new LinkedList();
+            for (Iterator i = attributes.iterator(); i.hasNext(); ) {
+                list.add(((Attribute)i.next()).clone());
+            }
+            element.attributes = list;
         }
-        element.attributes = list;
 
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof String) {
-                element.addChild((String)obj);
-            } else if (obj instanceof Comment) {
-                element.addChild((Comment)((Comment)obj).clone());
-            } else if (obj instanceof Entity) {
-                element.addChild((Entity)((Entity)obj).clone());
-            } else if (obj instanceof Element) {
-                element.addChild((Element)((Element)obj).clone());
+        if (content != null) {
+            for (Iterator i = content.iterator(); i.hasNext(); ) {
+                Object obj = i.next();
+                if (obj instanceof String) {
+                    element.addChild((String)obj);
+                } else if (obj instanceof Comment) {
+                    element.addChild((Comment)((Comment)obj).clone());
+                } else if (obj instanceof Entity) {
+                    element.addChild((Entity)((Entity)obj).clone());
+                } else if (obj instanceof Element) {
+                    element.addChild((Element)((Element)obj).clone());
+                }
             }
         }
 
@@ -1396,13 +1407,11 @@ public class Element implements Serializable, Cloneable {
     }
 
     private void readObject(ObjectInputStream in)
-                     throws IOException, ClassNotFoundException {
+        throws IOException, ClassNotFoundException {
+        
         namespace = Namespace.getNamespace(
-                      (String)in.readObject(), (String)in.readObject());
+            (String)in.readObject(), (String)in.readObject());
     }
-
-
-
 
 /************************************************************
      Methods below here are deprecated and will 
