@@ -276,6 +276,10 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>Attribute</code> - this Attribute modified.
      */
     public Attribute setValue(String value) {
+        String reason = null;
+        if ((reason = Verifier.checkCharacterData(value)) != null) {
+            throw new IllegalDataException(value, "attribute", reason);
+        }
         this.value = value;
         return this;
     }

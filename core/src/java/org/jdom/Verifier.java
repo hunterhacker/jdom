@@ -154,6 +154,9 @@ public final class Verifier {
      *         <code>null</code> if name is OK.
      */
     public static final String checkCharacterData(String text) {
+        if (text == null) {
+            return "A null is not a legal XML value";
+        }
 
         // do check
         for (int i = 0; i < text.length(); i++) {
