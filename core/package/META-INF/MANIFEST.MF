@@ -28,6 +28,30 @@ Name: org/jdom/adapters/
 Specification-Title: JDOM Adapter Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.adapter
+Implementation-Title: org.jdom.adapters
+Implementation-Version: @version.impl@
+Implementation-Vendor: jdom.org
+
+Name: org/jdom/filter/
+Specification-Title: JDOM Filter Classes
+Specification-Version: @version.spec@
+Specification-Vendor: jdom.org
+Implementation-Title: org.jdom.filter
+Implementation-Version: @version.impl@
+Implementation-Vendor: jdom.org
+
+Name: org/jdom/transform/
+Specification-Title: JDOM Transformation Classes
+Specification-Version: @version.spec@
+Specification-Vendor: jdom.org
+Implementation-Title: org.jdom.transform
+Implementation-Version: @version.impl@
+Implementation-Vendor: jdom.org
+
+Name: org/jdom/xpath/
+Specification-Title: JDOM XPath Classes
+Specification-Version: @version.spec@
+Specification-Vendor: jdom.org
+Implementation-Title: org.jdom.xpath
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
