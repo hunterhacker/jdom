@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.7 2002/10/28 09:40:08 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.8 2003/01/23 02:23:31 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -74,9 +74,14 @@ import org.jaxen.JaxenException;
  * A JDOM-oriented wrapper around XPath engines.
  *
  * @author Laurent Bihanic
+ * @version $Revision: 1.8 $, $Date: 2003/01/23 02:23:31 $
  */
 class JaxenXPath extends    XPath               // package protected
                  implements NamespaceContext {
+
+    private static final String CVS_ID =
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.8 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+
    /**
     * The compiled XPath object to select nodes.  This attribute can
     * not be made final as it needs to be set upon object

@@ -1,6 +1,6 @@
 /*--
 
- $Id: TextBuffer.java,v 1.4 2002/04/29 13:38:16 jhunter Exp $
+ $Id: TextBuffer.java,v 1.5 2003/01/23 02:23:31 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,9 +72,13 @@ package org.jdom.input;
  *
  * @author Bradley S. Huffman
  * @author Alex Rosen
- * @version $Revision: 1.4 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.5 $, $Date: 2003/01/23 02:23:31 $
  */
 class TextBuffer {
+
+    private static final String CVS_ID =
+    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.5 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */
     private String prefixString;

@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.7 2002/10/28 09:40:08 jhunter Exp $
+ $Id: XPath.java,v 1.8 2003/01/23 02:23:31 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -74,11 +74,12 @@ import org.jdom.IllegalNameException;
  * A JDOM-oriented wrapper around XPath engines.
  * 
  * @author Laurent Bihanic
+ * @version $Revision: 1.8 $, $Date: 2003/01/23 02:23:31 $
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.7 $ $Date: 2002/10/28 09:40:08 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.8 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the

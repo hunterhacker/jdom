@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.10 2002/10/18 05:43:25 jhunter Exp $
+ $Id: JDOMSource.java,v 1.11 2003/01/23 02:23:31 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,9 +100,12 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.10 $, $Date: 2002/10/18 05:43:25 $
+ * @version $Revision: 1.11 $, $Date: 2003/01/23 02:23:31 $
  */
 public class JDOMSource extends SAXSource {
+
+    private static final String CVS_ID =
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.11 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}

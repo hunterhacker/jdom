@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.25 2002/10/18 05:43:25 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.26 2003/01/23 02:23:31 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -103,12 +103,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.25 $, $Date: 2002/10/18 05:43:25 $
+ * @version $Revision: 1.26 $, $Date: 2003/01/23 02:23:31 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.25 $ $Date: 2002/10/18 05:43:25 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.26 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -656,7 +656,6 @@ public class SAXOutputter {
      * This parses a DTD declaration to fire the related events towards
      * the registered handlers.
      *
-
      * @param document <code>JDOM Document</code> the DocType is to
      *                 process.
      */
@@ -1087,10 +1086,6 @@ public class SAXOutputter {
 
     /**
      * <p>
-     * Appends a namespace declaration in the form of a xmlns attribute to
-     * an attribute list, crerating this latter if needed.
-     * </p>
-     *
      * This will invoke the <code>ContentHandler.skippedEntity</code>
      * callback when an entity reference is encountered.
      * </p>
@@ -1113,6 +1108,10 @@ public class SAXOutputter {
 
     /**
      * <p>
+     * Appends a namespace declaration in the form of a xmlns attribute to
+     * an attribute list, crerating this latter if needed.
+     * </p>
+     *
      * @param atts <code>AttributeImpl</code> where to add the attribute.
      * @param ns <code>Namespace</code> the namespace to declare.
      *
