@@ -137,9 +137,9 @@ public class Comment implements Serializable, Cloneable {
      */
     public final String getSerializedForm() {
         return new StringBuffer()
-            .append("<!-- ")
+            .append("<!--")
             .append(text)
-            .append(" -->")
+            .append("-->")
             .toString();
     }
 
