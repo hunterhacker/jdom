@@ -1,6 +1,13 @@
 <body>
 
-Classes to represent an XML document.  The Verifier is a special class useful
-in ensuring well-formedness of documents.
+Classes to represent the components of an XML document.  The Verifier is a
+special class useful in ensuring well-formedness of documents.  The Parent
+interface is implemented by Document and Element exposing their commonality.
+The Content abstract class is extended by all the node types of a document
+except Document itself.
+
+The JDOMFactory interface and DefaultJDOMFactory standard implementation
+provide advanced users with the ability to create subtypes of the org.jdom
+classes.
 
 </body>

@@ -1,7 +1,15 @@
 <body>
-Classes to output JDOM documents to various destinations.  The most
-common outputter class is XMLOutputter which outputs a document as a stream of
-bytes.  SAXOutputter lets you output as a stream of SAX events (handy
-especially in transformations) and DOMOutputter lets you output as a DOM tree.
-JDOMLocator helps observe the SAX output process.
+
+Classes to output JDOM documents to various destinations.  The most common
+outputter class is XMLOutputter which outputs a document (or part of a
+document) as a stream of bytes.  Format and EscapeStrategy support the
+XMLOutputter in letting you choose how the output should be formatted and how
+special characters should be escaped.
+
+SAXOutputter lets you output as a stream of SAX events (handy especially in
+transformations).  JDOMLocator supports SAXOutputter and helps you observe the
+SAX output process.
+
+DOMOutputter lets you output a JDOM document as a DOM tree.
+
 </body>
