@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.42 2001/06/22 20:04:05 jhunter Exp $
+ $Id: Document.java,v 1.43 2001/06/26 04:02:13 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.42 $ $Date: 2001/06/22 20:04:05 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.43 $ $Date: 2001/06/26 04:02:13 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -375,7 +375,9 @@ public class Document implements Serializable, Cloneable {
                         // Manually remove old root's doc ref, because
                         // setRootElement() can't see the old content list to
                         // do it for us
-                        oldRoot.setDocument(null);
+                        if (oldRoot != null) {
+                            oldRoot.setDocument(null);
+                        }
                         didRoot = true;
                     }
                     else {
@@ -412,7 +414,9 @@ public class Document implements Serializable, Cloneable {
             if (ex != null) {
                 // Restore the original state and parentage and throw
                 content = oldContent;
-                oldRoot.setDocument(this);
+                if (oldRoot != null) {
+                    oldRoot.setDocument(this);
+                }
                 // Unmodify all modified elements.  DO NOT change any later
                 // elements tho because they may already have parents!
                 Iterator itr = mixedContent.iterator();
