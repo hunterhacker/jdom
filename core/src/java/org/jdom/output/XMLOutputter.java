@@ -541,6 +541,9 @@ public class XMLOutputter implements Cloneable {
                 printCDATASection((CDATA)obj, writer, indentLevel);
             }
         }
+
+        // Output final line separator
+        writer.write(lineSeparator);
     }
 
     // output element
