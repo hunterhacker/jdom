@@ -103,7 +103,7 @@ public static Test suite () {
                 //how about replacing it in our live list
                 try {
                     Element oldRoot = doc.getRootElement();
-                    int i = doc.childIndex(oldRoot);
+                    int i = doc.indexOf(oldRoot);
                     list.set(i, bogus);
                 } catch (Exception e) {
                     fail("Root replacement shouldn't have throw a exception");
@@ -163,7 +163,7 @@ public static Test suite () {
                 //how about replacing it in our live list
                 try {
                     Element oldRoot = doc.getRootElement();
-                    int i = doc.childIndex(oldRoot);
+                    int i = doc.indexOf(oldRoot);
                     list.set(i,bogus);
                 } catch (Exception e) {
                     fail("Root replacement shouldn't have throw a exception");
