@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentFilter.java,v 1.10 2003/05/21 09:17:45 jhunter Exp $
+ $Id: ContentFilter.java,v 1.11 2003/05/27 19:44:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,37 +79,40 @@ import org.jdom.*;
  * <p>
  * The default is to allow all valid JDOM objects.
  *
- * @version $Revision: 1.10 $, $Date: 2003/05/21 09:17:45 $
+ * @version $Revision: 1.11 $, $Date: 2003/05/27 19:44:44 $
  * @author Bradley S. Huffman
  */
 public class ContentFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.10 $ $Date: 2003/05/21 09:17:45 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.11 $ $Date: 2003/05/27 19:44:44 $ $Name:  $";
 
-    /** Mask for JDOM <code>Element</code> objects */
+    /** Mask for JDOM {@link Element} objects */
     public static final int ELEMENT   = 1;
 
-    /** Mask for JDOM <code>CDATA</code> objects */
+    /** Mask for JDOM {@link CDATA} objects */
     public static final int CDATA     = 2;
 
-    /** Mask for JDOM <code>Text</code> objects */
+    /** Mask for JDOM {@link Text} objects */
     public static final int TEXT      = 4;
 
-    /** Mask for JDOM <code>Comment</code> objects */
+    /** Mask for JDOM {@link Comment} objects */
     public static final int COMMENT   = 8;
 
-    /** Mask for JDOM <code>ProcessingInstruction</code> objects */
+    /** Mask for JDOM {@link ProcessingInstruction} objects */
     public static final int PI        = 16;
 
-    /** Mask for JDOM <code>EntityRef</code> objects */
+    /** Mask for JDOM {@link EntityRef} objects */
     public static final int ENTITYREF = 32;
 
-    /** Mask for JDOM <code>Document</code> object */
+    /** Mask for JDOM {@link Document} object */
     public static final int DOCUMENT  = 64;
 
+    /** Mask for JDOM {@link DocType} object */
+    public static final int DOCTYPE = 128;
+
     /** The JDOM object mask */
-    protected int filterMask;
+    private int filterMask;
 
     /**
      * Default constructor that allows any legal JDOM objects.
@@ -162,7 +165,7 @@ public class ContentFilter extends AbstractFilter {
      */
     public void setDefaultMask() {
         filterMask = ELEMENT | CDATA | TEXT | COMMENT |
-                     PI | ENTITYREF | DOCUMENT;
+                     PI | ENTITYREF | DOCUMENT | DOCTYPE;
     }
 
     /**
@@ -170,7 +173,7 @@ public class ContentFilter extends AbstractFilter {
      * document content.
      */
     public void setDocumentContent() {
-        filterMask = ELEMENT | COMMENT | PI;
+        filterMask = ELEMENT | COMMENT | PI | DOCTYPE;
     }
 
     /**
@@ -273,6 +276,21 @@ public class ContentFilter extends AbstractFilter {
     }
 
     /**
+     * Set visiblity of <code>DocType</code> objects.
+     *
+     * @param visible whether the DocType is visible, <code>true</code>
+     *        if yes, <code>false</code> if not
+     */
+    public void setDocTypeVisible(boolean visible) {
+        if (visible) {
+            filterMask |= DOCTYPE;
+        }
+        else {
+            filterMask &= ~DOCTYPE;
+        }
+    }
+
+    /**
      * Check to see if the object matches according to the filter mask.
      *
      * @param obj The object to verify.
@@ -283,7 +301,7 @@ public class ContentFilter extends AbstractFilter {
         if (obj instanceof Element) {
             return (filterMask & ELEMENT) != 0;
         }
-        else if (obj instanceof CDATA) {
+        else if (obj instanceof CDATA) {  // must come before Text check
             return (filterMask & CDATA) != 0;
         }
         else if (obj instanceof Text) {
@@ -301,8 +319,10 @@ public class ContentFilter extends AbstractFilter {
         else if (obj instanceof Document) {
             return (filterMask & DOCUMENT) != 0;
         }
+        else if (obj instanceof DocType) {
+            return (filterMask & DOCTYPE) != 0;
+        }
 
-        //XXX throw exception instead????
         return false;
     }
 
