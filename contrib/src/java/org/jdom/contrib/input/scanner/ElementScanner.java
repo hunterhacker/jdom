@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.2 2002/04/16 07:55:32 arosen Exp $
+ $Id: ElementScanner.java,v 1.3 2002/05/11 07:22:54 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -672,7 +672,6 @@ public class ElementScanner extends XMLFilterImpl {
          return (new ElementBuilder(new EmptyDocumentFactory(factory)));
       }
 
-
       //----------------------------------------------------------------------
       // Specific implementation
       //----------------------------------------------------------------------
@@ -742,13 +741,12 @@ public class ElementScanner extends XMLFilterImpl {
    private static class ElementBuilder extends SAXHandler {
 
       /**
-       * Creates a new EmptyDocumentFactory wrapping the specified
-       * JDOM factory implementation.
+       * Creates a new ElementBuilder using the specified factory to
+       * to create JDOM objects.
        *
-       * @param  factory   the JDOM factory to use to create JDOM
-       *                   objects.
-       *
-       * @throws IOException  if thrown by superclass implementation.
+       * @param  factory   the factory to use to create JDOM objects
+       *                   or <code>null</code> to use the default
+       *                   JDOM factory.
        */
       public ElementBuilder(JDOMFactory factory) {
          super(factory);

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JakartaRegExpXPathMatcher.java,v 1.1 2002/03/08 07:11:24 jhunter Exp $
+ $Id: JakartaRegExpXPathMatcher.java,v 1.2 2002/05/11 07:22:54 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,13 +59,12 @@ package org.jdom.contrib.input.scanner;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.xpath.XPath;
 
 import org.xml.sax.Attributes;
 
 import org.apache.regexp.RE;
 // import org.apache.regexp.RESyntaxException;
-
-import org.jaxen.jdom.XPath;
 
 
 /* package */ class JakartaRegExpXPathMatcher extends XPathMatcher {
@@ -101,7 +100,7 @@ import org.jaxen.jdom.XPath;
          if (testPattern != null) {
             testPattern = "." + testPattern;
 
-            this.test = new XPath(testPattern);
+            this.test = XPath.newInstance(testPattern);
          }
          else {
             this.test = null;
