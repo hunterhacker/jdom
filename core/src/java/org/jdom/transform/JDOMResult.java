@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.14 2003/04/02 00:59:39 jhunter Exp $
+ $Id: JDOMResult.java,v 1.15 2003/04/02 20:40:40 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -104,12 +104,12 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.14 $, $Date: 2003/04/02 00:59:39 $
+ * @version $Revision: 1.15 $, $Date: 2003/04/02 20:40:40 $
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.14 $ $Date: 2003/04/02 00:59:39 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.15 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -371,7 +371,7 @@ public class JDOMResult extends SAXResult {
       // transformation can output node lists instead of well-formed
       // documents.
       this.getDocument().setRootElement(dummyRoot);
-      this.stack.push(dummyRoot);
+      this.currentElement = dummyRoot;
       this.atRoot = false;
     }
 

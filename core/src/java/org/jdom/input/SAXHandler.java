@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.48 2002/04/29 13:38:16 jhunter Exp $
+ $Id: SAXHandler.java,v 1.49 2003/04/02 20:40:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.48 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.49 $, $Date: 2003/04/02 20:40:40 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.48 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.49 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -92,12 +92,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** <code>Document</code> object being built */
     private Document document;
 
-    // Note: keeping a "current element" variable to avoid the constant
-    // peek() calls to the top of the stack has shown to cause no noticeable
-    // performance improvement.
-
-    /** Element stack */
-    protected Stack stack;
+    /** <code>Element</code> object being built */
+    protected Element currentElement;
 
     /** Indicator of where in the document we are */
     protected boolean atRoot;
@@ -128,10 +124,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
-    protected LinkedList declaredNamespaces;
-
-    /** The namespaces in scope and actually attached to an element */
-    protected LinkedList availableNamespaces;
+    protected List declaredNamespaces;
 
     /** Temporary holder for the internal subset */
     private StringBuffer internalSubset = new StringBuffer();
@@ -215,10 +208,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         }
 
         atRoot = true;
-        stack = new Stack();
-        declaredNamespaces = new LinkedList();
-        availableNamespaces = new LinkedList();
-        availableNamespaces.add(Namespace.XML_NAMESPACE);
+        declaredNamespaces = new ArrayList();
         externalEntities = new HashMap();
 
         document = this.factory.document((Element)null);
@@ -462,33 +452,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * This will add the prefix mapping to the JDOM
-     * <code>Document</code> object.
-     *
-     * @param prefix <code>String</code> namespace prefix.
-     * @param uri <code>String</code> namespace URI.
-     */
-    public void endPrefixMapping(String prefix)
-        throws SAXException {
-
-        if (suppress) return;
-
-        // Remove the namespace from the available list
-        // (Should find the namespace fast because recent adds
-        // are at the front of the list.  It may not be the head
-        // tho because endPrefixMapping calls on the same element
-        // can come in any order.)
-        Iterator itr = availableNamespaces.iterator();
-        while (itr.hasNext()) {
-            Namespace ns = (Namespace) itr.next();
-            if (prefix.equals(ns.getPrefix())) {
-                itr.remove();
-                return;
-            }
-        }
-    }
-
-    /**
      * This reports the occurrence of an actual element.  It will include
      * the element's attributes, with the exception of XML vocabulary
      * specific attributes, such as
@@ -523,19 +486,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             Namespace elementNamespace =
                 Namespace.getNamespace(prefix, namespaceURI);
             element = factory.element(localName, elementNamespace);
-
-            // Remove this namespace from those in the temp declared list
-/**
- * I've commented out these lines to ensure that element's that have a namespace
- *   make those namespaces available to their attributes, which this seems to
- *   break. However, I'm not 100% sure that this doesn't cause some other
- *   problems. My gut feeling is "no", but I'm not sure, so I'm just commenting
- *   it out. We'll remove for good in the next drop I think.
- * - Brett, 07/30/2001
-            if (declaredNamespaces.size() > 0) {
-                declaredNamespaces.remove(elementNamespace);
-            }
- */
         } else {
             element = factory.element(localName);
         }
@@ -564,8 +514,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
             if (!attQName.equals(attLocalName)) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
+                Namespace attNs = Namespace.getNamespace(attPrefix,
+                                                         atts.getURI(i));
+
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
-                                              attType, getNamespace(attPrefix));
+                                              attType, attNs);
             } else {
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
                                               attType);
@@ -577,12 +530,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         if (atRoot) {
             document.setRootElement(element);
-            stack.push(element);
             atRoot = false;
         } else {
             getCurrentElement().addContent(element);
-            stack.push(element);
         }
+        currentElement = element;
     }
 
     /**
@@ -595,29 +547,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         Iterator i = declaredNamespaces.iterator();
         while (i.hasNext()) {
             Namespace ns = (Namespace)i.next();
-            availableNamespaces.addFirst(ns);
-            element.addNamespaceDeclaration(ns);
-        }
-        declaredNamespaces.clear();
-    }
-
-    /**
-     * For a given namespace prefix, this will return the
-     * <code>{@link Namespace}</code> object for that prefix,
-     * within the current scope.
-     *
-     * @param prefix namespace prefix.
-     * @return <code>Namespace</code> - namespace for supplied prefix.
-     */
-    private Namespace getNamespace(String prefix) {
-        Iterator i = availableNamespaces.iterator();
-        while (i.hasNext()) {
-            Namespace ns = (Namespace)i.next();
-            if (prefix.equals(ns.getPrefix())) {
-                return ns;
+            if (ns != element.getNamespace()) {
+                element.addNamespaceDeclaration(ns);
             }
         }
-        return Namespace.NO_NAMESPACE;
+        declaredNamespaces.clear();
     }
 
     /**
@@ -713,22 +647,16 @@ if (!inDTD) {
 
         flushCharacters();
 
-        try {
-            Element element = (Element)stack.pop();
-
-            // Remove the namespaces that this element makes available
-            List addl = element.getAdditionalNamespaces();
-            if (addl.size() > 0) {
-                availableNamespaces.removeAll(addl);
+        if (!atRoot) {
+            currentElement = currentElement.getParent();
+            if (currentElement == null) {
+               atRoot = true;
             }
         }
-        catch (EmptyStackException ex1) {
+        else {
             throw new SAXException(
                 "Ill-formed XML document (missing opening tag for " +
                 localName + ")");
-        }
-        if (stack.empty()) {
-            atRoot = true;
         }
     }
 
@@ -794,13 +722,13 @@ if (!inDTD) {
                   sys = ids[1];  // may be null, that's OK
                 }
                 /**
-                 * if stack is empty, this entity belongs to an attribute
+                 * if no current element, this entity belongs to an attribute
                  * in these cases, it is an error on the part of the parser
                  * to call startEntity but this will help in some cases.
                  * See org/xml/sax/ext/LexicalHandler.html#startEntity(java.lang.String)
                  * for more information
                  */
-                if (!(atRoot || stack.isEmpty())) {
+                if (!atRoot) {
                     flushCharacters();
                     EntityRef entity = factory.entityRef(name, pub, sys);
 
@@ -868,12 +796,10 @@ if (!inDTD) {
             return;
         }
         if ((!inDTD) && (!commentText.equals(""))) {
-            if (stack.empty()) {
-                document.addContent(
-                   factory.comment(commentText));
+            if (atRoot) {
+                document.addContent(factory.comment(commentText));
             } else {
-                getCurrentElement().addContent(
-                    factory.comment(commentText));
+                getCurrentElement().addContent(factory.comment(commentText));
             }
         }
     }
@@ -947,16 +873,14 @@ if (!inDTD) {
     /**
      * Returns the being-parsed element.
      *
-     * @return <code>Element</code> - element at the top of the stack.
+     * @return <code>Element</code> - element being built.
      */
     protected Element getCurrentElement() throws SAXException {
-        try {
-            return (Element)(stack.peek());
-        }
-        catch (EmptyStackException ex1) {
+        if (currentElement == null) {
             throw new SAXException(
                 "Ill-formed XML document (multiple root elements detected)");
         }
+        return currentElement;
     }
 
     /**

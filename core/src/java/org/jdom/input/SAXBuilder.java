@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.72 2003/02/27 00:00:48 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.73 2003/04/02 20:40:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,12 +83,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.72 $, $Date: 2003/02/27 00:00:48 $
+ * @version $Revision: 1.73 $, $Date: 2003/04/02 20:40:40 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.72 $ $Date: 2003/02/27 00:00:48 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.73 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -436,8 +436,10 @@ public class SAXBuilder {
         if (saxDriverClass != null) {
             // The user knows that they want to use a particular class
             try {
-              parser = XMLReaderFactory.createXMLReader(saxDriverClass);
-              // System.out.println("using specific " + saxDriverClass);
+                parser = XMLReaderFactory.createXMLReader(saxDriverClass);
+
+                // Configure parser
+                setFeaturesAndProperties(parser, true);
             }
             catch (SAXException e) {
               throw new JDOMException("Could not load " + saxDriverClass, e); 
@@ -448,42 +450,33 @@ public class SAXBuilder {
             // available then the getXMLReader call fails and we skip
             // to the hard coded default parser
             try {
+                // Get factory class and method.
                 Class factoryClass = 
-                    Class.forName("javax.xml.parsers.SAXParserFactory");
+                    Class.forName("org.jdom.input.JAXPParserFactory");
 
-                // factory = SAXParserFactory.newInstance();
-                Method newParserInstance = 
-                    factoryClass.getMethod("newInstance", null);
-                Object factory = newParserInstance.invoke(null, null);
+                Method createParser = 
+                    factoryClass.getMethod("createParser",
+                        new Class[] { boolean.class, Map.class, Map.class });
 
-                // factory.setValidating(validate);
-                Method setValidating = 
-                    factoryClass.getMethod("setValidating", 
-                                           new Class[]{boolean.class});
-                setValidating.invoke(factory, 
-                                     new Object[]{new Boolean(validate)});
+                // Create SAX parser.
+                parser = (XMLReader)createParser.invoke(null,
+                                new Object[] { new Boolean(validate),
+                                               features, properties });
 
-                // jaxpParser = factory.newSAXParser();
-                Method newSAXParser = 
-                    factoryClass.getMethod("newSAXParser", null);
-                Object jaxpParser  = newSAXParser.invoke(factory, null);
-
-                // parser = jaxpParser.getXMLReader();
-                Class parserClass = jaxpParser.getClass();
-                Method getXMLReader = 
-                    parserClass.getMethod("getXMLReader", null);
-                parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
-
-                // System.out.println("Using jaxp " +
-                //   parser.getClass().getName());
-            } catch (ClassNotFoundException e) {
-                //e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                //e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                //e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                //e.printStackTrace();
+                // Configure parser
+                setFeaturesAndProperties(parser, false);
+            }
+            catch (JDOMException e) {
+                throw e;
+            }
+            catch (NoClassDefFoundError e) {
+                // The class loader failed to resolve the dependencies
+                // of org.jdom.input.JAXPParserFactory. This probably means
+                // that no JAXP parser is present in its class path.
+                // => Ignore and try allocating default SAX parser instance.
+            }
+            catch (Exception e) {
+                // Ignore and try allocating default SAX parser instance.
             }
         }
 
@@ -494,6 +487,9 @@ public class SAXBuilder {
                 parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
                 // System.out.println("using default " + DEFAULT_SAX_DRIVER);
                 saxDriverClass = parser.getClass().getName();
+
+                // Configure parser
+                setFeaturesAndProperties(parser, true);
             }
             catch (SAXException e) {
                 throw new JDOMException("Could not load default SAX parser: "
@@ -538,22 +534,6 @@ public class SAXBuilder {
              parser.setErrorHandler(new BuilderErrorHandler());
         }
 
-        // Set any user-specified features on the parser.
-        Iterator iter = features.keySet().iterator();
-        while(iter.hasNext()) {
-            String name = (String)iter.next();
-            Boolean value = (Boolean)features.get(name);
-            internalSetFeature(parser, name, value.booleanValue(), name);
-        }
-
-        // Set any user-specified properties on the parser.
-        Iterator iter2 = properties.keySet().iterator();
-        while(iter2.hasNext()) {
-            String name = (String)iter2.next();
-            Object value = properties.get(name);
-            internalSetProperty(parser, name, value, name);
-        }
-
         // Setup lexical reporting.
         boolean lexicalReporting = false;
         try {
@@ -592,23 +572,48 @@ public class SAXBuilder {
                 // No lexical reporting available
             }
         }
+    }
 
-        // Set validation.
-        try {
-            internalSetFeature(parser, "http://xml.org/sax/features/validation", 
-                    validate, "Validation");
-        } catch (JDOMException e) {
-            // If validation is not supported, and the user is requesting
-            // that we don't validate, that's fine - don't throw an exception.
-            if (validate)
-                throw e;
+    private void setFeaturesAndProperties(XMLReader parser,
+                                          boolean coreFeatures)
+                                                        throws JDOMException {
+        // Set any user-specified features on the parser.
+        Iterator iter = features.keySet().iterator();
+        while (iter.hasNext()) {
+            String  name  = (String)iter.next();
+            Boolean value = (Boolean)features.get(name);
+            internalSetFeature(parser, name, value.booleanValue(), name);
         }
 
-        // Setup some namespace features.
-        internalSetFeature(parser, "http://xml.org/sax/features/namespaces", 
-                true, "Namespaces");
-        internalSetFeature(parser, "http://xml.org/sax/features/namespace-prefixes", 
-                false, "Namespace prefixes");
+        // Set any user-specified properties on the parser.
+        iter = properties.keySet().iterator();
+        while (iter.hasNext()) {
+            String name = (String)iter.next();
+            internalSetProperty(parser, name, properties.get(name), name);
+        }
+
+        if (coreFeatures) {
+            // Set validation.
+            try {
+                internalSetFeature(parser,
+                        "http://xml.org/sax/features/validation",
+                        validate, "Validation");
+            } catch (JDOMException e) {
+                // If validation is not supported, and the user is requesting
+                // that we don't validate, that's fine - don't throw an
+                // exception.
+                if (validate)
+                    throw e;
+            }
+
+            // Setup some namespace features.
+            internalSetFeature(parser,
+                        "http://xml.org/sax/features/namespaces",
+                        true, "Namespaces");
+            internalSetFeature(parser,
+                        "http://xml.org/sax/features/namespace-prefixes", 
+                        false, "Namespace prefixes");
+        }
 
         // Set entity expansion
         // Note SAXHandler can work regardless of how this is set, but when
@@ -621,24 +626,9 @@ public class SAXBuilder {
             if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
                 parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
             }
-
         }
-        catch (SAXNotRecognizedException e) {
-        /*
-            // No entity expansion available
-            throw new JDOMException(
-              "Entity expansion feature not recognized by " + 
-              parser.getClass().getName());
-        */
-        }
-        catch (SAXNotSupportedException e) {
-        /*
-            // No entity expansion available
-            throw new JDOMException(
-              "Entity expansion feature not supported by " +
-              parser.getClass().getName());
-        */
-        }
+        catch (SAXNotRecognizedException e) { /* Ignore... */ }
+        catch (SAXNotSupportedException  e) { /* Ignore... */ }
     }
 
     /**
