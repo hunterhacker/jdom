@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.111 2002/02/20 10:41:44 jhunter Exp $
+ $Id: Element.java,v 1.112 2002/02/21 03:27:25 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.111 $, $Date: 2002/02/20 10:41:44 $
+ * @version $Revision: 1.112 $, $Date: 2002/02/21 03:27:25 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.111 $ $Date: 2002/02/20 10:41:44 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.112 $ $Date: 2002/02/21 03:27:25 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1002,16 +1002,6 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Text text) {
-        int size = content.size();
-        if (size > 0) {
-            Object ob = content.get(size - 1);
-            if (ob instanceof Text) {
-                Text old = (Text) ob;
-                old.append(text);
-                return this;
-            }
-        }
-
         content.add(text);
         return this;
     }
@@ -1025,16 +1015,6 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(CDATA cdata) {
-        int size = content.size();
-        if (size > 0) {
-            Object ob = content.get(size - 1);
-            if (ob instanceof CDATA) {
-                CDATA old = (CDATA) ob;
-                old.append(cdata);
-                return this;
-            }
-        }
-
         content.add(cdata);
         return this;
     }
