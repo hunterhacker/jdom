@@ -80,7 +80,7 @@ public class IllegalTargetException extends IllegalArgumentException {
         super(new StringBuffer()
               .append("The target \"")
               .append(target)
-              .append("\" is not legal for JDOM/XML Processing Instrucitons: ")
+              .append("\" is not legal for JDOM/XML Processing Instructions: ")
               .append(reason)
               .append(".")
               .toString());
