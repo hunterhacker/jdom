@@ -399,7 +399,7 @@ public class Element implements Serializable, Cloneable {
      *   sections if they exist.  It's essentially the concatenation of
      *   all String nodes returned by getMixedContent().  The call does not
      *   recurse into child elements.  If no textual value exists for the 
-     *   element, null is returned.
+     *   element, an empty <code>String</code> ("") is returned.
      * </p>
      *
      * @return text content for this element, or null if none
@@ -431,7 +431,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (!hasText) {
-            return null;
+            return "";
         } else {
             return textContent.toString();
         }
@@ -441,8 +441,8 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This returns the textual content of this element with all 
      * surrounding whitespace removed and internal whitespace normalized
-     * to a single space.  If no textual value exists for the element, 
-     * null is returned; if only whitespace exists, the empty string is
+     * to a single space.  If no textual value exists for the element,
+     * or if only whitespace exists, the empty string is
      * returned.
      * </p>
      *
@@ -450,9 +450,6 @@ public class Element implements Serializable, Cloneable {
      */
     public String getTextTrim() {
         String text = getText();
-        if (text == null) {
-            return null;
-        }
 
         StringBuffer textContent = new StringBuffer();
         StringTokenizer tokenizer = new StringTokenizer(text);
@@ -469,9 +466,10 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This convenience method returns the textual content of the named
-     * child element, or returns null if there's no such child or if the 
-     * child has no textual content.
+     *  This convenience method returns the textual content of the named
+     *    child element, or returns an empty <code>String</code> ("")
+     *    if the child has no textual content. However, if the child does
+     *    not exist, <code>null</code> is returned.
      * </p>
      *
      * @param name the name of the child
@@ -488,10 +486,9 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This convenience method returns the trimmed textual content of the 
-     * named child element, or returns null if there's no such child or if the 
-     * child has no textual content.  See <code>getTextTrim()</code> for
-     * details of text trimming.
+     *  This convenience method returns the trimmed textual content of the 
+     *    named child element, or returns null if there's no such child.  
+     *    See <code>{@link #getTextTrim()}</code> for details of text trimming.
      * </p>
      *
      * @param name the name of the child
@@ -509,8 +506,7 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This convenience method returns the textual content of the named
-     * child element, or returns null if there's no such child or if the 
-     * child has no textual content.
+     * child element, or returns null if there's no such child.
      * </p>
      *
      * @param name the name of the child
@@ -528,10 +524,10 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This convenience method returns the trimmed textual content of the 
-     * named child element, or returns null if there's no such child or if the 
-     * child has no textual content.  See <code>getTextTrim()</code> for
-     * details of text trimming.
+     *  This convenience method returns the trimmed textual content of the 
+     *    named child element, or returns null if there's no such child.  
+     *    See <code>{@link #getTextTrim()}</code> for
+     *    details of text trimming.
      * </p>
      *
      * @param name the name of the child
