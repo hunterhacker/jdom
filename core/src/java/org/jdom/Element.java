@@ -1356,6 +1356,9 @@ public class Element implements Serializable, Cloneable {
     // Support a custom Namespace serialization so no two namespace
     // object instances may exist for the same prefix/uri pair
     private void writeObject(ObjectOutputStream out) throws IOException {
+
+        out.defaultWriteObject();
+
         // We use writeObject() and not writeUTF() to minimize space
         // This allows for writing pointers to already written strings
         out.writeObject(namespace.getPrefix());
@@ -1365,6 +1368,8 @@ public class Element implements Serializable, Cloneable {
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
         
+        in.defaultReadObject();
+
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
     }
