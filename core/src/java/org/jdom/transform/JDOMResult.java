@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.11 2002/10/18 05:43:25 jhunter Exp $
+ $Id: JDOMResult.java,v 1.12 2002/10/19 02:21:37 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -108,7 +108,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.11 $, $Date: 2002/10/18 05:43:25 $
+ * @version $Revision: 1.12 $, $Date: 2002/10/19 02:21:37 $
  */
 public class JDOMResult extends SAXResult {
 
@@ -252,7 +252,7 @@ public class JDOMResult extends SAXResult {
    *
    * @deprecated As per the XSLT 1.0 specification, the output of an
    * XSL transformation is not a well-formed XML document but a list
-   * of nodes. Please use {@link getResult} instead.
+   * of nodes. Please use {@link #getResult} instead.
    *
    * @see    #getResult
    */
