@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.43 2002/04/29 13:38:15 jhunter Exp $
+ $Id: Attribute.java,v 1.44 2002/05/16 08:08:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -71,12 +71,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.43 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.44 $, $Date: 2002/05/16 08:08:25 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.43 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.44 $ $Date: 2002/05/16 08:08:25 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -196,6 +196,12 @@ public class Attribute implements Serializable, Cloneable {
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
      * @param namespace <code>Namespace</code> namespace for new attribute.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name or if if the new namespace is the default
+     *         namespace. Attributes cannot be in a default namespace.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}).
      */
     public Attribute(String name, String value, Namespace namespace) {
         setName(name);
@@ -212,6 +218,14 @@ public class Attribute implements Serializable, Cloneable {
      * @param value <code>String</code> value for new attribute.
      * @param type <code>int</code> type for new attribute.
      * @param namespace <code>Namespace</code> namespace for new attribute.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name or if if the new namespace is the default
+     *         namespace. Attributes cannot be in a default namespace.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}) or
+     *         if the given attribute type is not one of the 
+     *         supported types.
      */
     public Attribute(String name, String value, int type, Namespace namespace) {
         setName(name);
@@ -231,6 +245,11 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}).
      */
     public Attribute(String name, String value) {
         this(name, value, UNDECLARED_ATTRIBUTE, Namespace.NO_NAMESPACE);
@@ -248,6 +267,13 @@ public class Attribute implements Serializable, Cloneable {
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
      * @param type <code>int</code> type for new attribute.
+     * @throws IllegalNameException if the given name is illegal as an
+     *         attribute name.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}) or
+     *         if the given attribute type is not one of the 
+     *         supported types.
      */
     public Attribute(String name, String value, int type) {
         this(name, value, type, Namespace.NO_NAMESPACE);
