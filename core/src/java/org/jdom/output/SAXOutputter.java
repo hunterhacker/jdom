@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.21 2002/04/29 13:38:16 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.22 2002/05/11 07:15:04 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -103,12 +103,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.21 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.22 $, $Date: 2002/05/11 07:15:04 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.21 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.22 $ $Date: 2002/05/11 07:15:04 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -117,6 +117,10 @@ public class SAXOutputter {
     /** Shortcut for SAX namespace-prefixes core feature */
     private static final String NS_PREFIXES_SAX_FEATURE =
                         "http://xml.org/sax/features/namespace-prefixes";
+
+    /** Shortcut for SAX validation core feature */
+    private static final String VALIDATION_SAX_FEATURE =
+                        "http://xml.org/sax/features/validation";
 
     /** Shortcut for SAX-ext. lexical handler property */
     private static final String LEXICAL_HANDLER_SAX_PROPERTY =
@@ -182,6 +186,12 @@ public class SAXOutputter {
      *  SAX namespace specifications</a>
      */
     private boolean declareNamespaces = false;
+
+    /**
+     * Whether to report DTD events to DeclHandlers and LexicalHandlers.
+     * Defaults to <code>true</code>.
+     */
+    private boolean reportDtdEvents = true;
 
     /**
      * This will create a <code>SAXOutputter</code> without any
@@ -374,6 +384,17 @@ public class SAXOutputter {
     }
 
     /**
+     * This will define whether to report DTD events to SAX DeclHandlers
+     * and LexicalHandlers if these handlers are registered and the
+     * document to output includes a DocType declaration.
+     *
+     * @param reportDtdEvents whether to notify DTD events.
+     */
+    public void setReportDTDEvents(boolean reportDtdEvents) {
+        this.reportDtdEvents = reportDtdEvents;
+    }
+
+    /**
      * This will set the state of a SAX feature.
      * <p>
      * All XMLReaders are required to support setting  to true and  to false.
@@ -419,8 +440,14 @@ public class SAXOutputter {
                 // Else: true is OK!
             }
             else {
-                // Not a supported feature.
-                throw new SAXNotRecognizedException(name);
+                if (VALIDATION_SAX_FEATURE.equals(name)) {
+                    // Report DTD events.
+                    this.setReportDTDEvents(value);
+                }
+                else {
+                    // Not a supported feature.
+                    throw new SAXNotRecognizedException(name);
+                }
             }
         }
     }
@@ -450,8 +477,14 @@ public class SAXOutputter {
                 return (true);
             }
             else {
-                // Not a supported feature.
-                throw new SAXNotRecognizedException(name);
+                if (VALIDATION_SAX_FEATURE.equals(name)) {
+                    // Report DTD events.
+                    return (this.reportDtdEvents);
+                }
+                else {
+                    // Not a supported feature.
+                    throw new SAXNotRecognizedException(name);
+                }
             }
         }
     }
@@ -552,7 +585,9 @@ public class SAXOutputter {
         startDocument();
 
         // Fire DTD events
-        dtdEvents(document);
+        if (this.reportDtdEvents) {
+           dtdEvents(document);
+        }
 
         // Handle root element, as well as any root level
         // processing instructions and CDATA sections
