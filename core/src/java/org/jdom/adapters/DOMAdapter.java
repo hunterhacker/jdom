@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.10 2001/04/27 18:21:20 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.11 2001/04/28 01:09:45 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,9 +76,6 @@ import org.jdom.DocType;
  * @version 1.0
  */
 public interface DOMAdapter {
-
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMAdapter.java,v $ $Revision: 1.10 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * <p>
