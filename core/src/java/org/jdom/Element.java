@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.71 2001/04/20 07:30:35 jhunter Exp $
+ $Id: Element.java,v 1.72 2001/04/24 23:33:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,6 +76,9 @@ import java.util.*;
  * @version 1.0
  */
 public class Element implements Serializable, Cloneable {
+
+    private static final String CVS_ID =
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.72 $ $Date: 2001/04/24 23:33:10 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
