@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.49 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Verifier.java,v 1.50 2004/08/31 06:37:10 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.49 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.50 $, $Date: 2004/08/31 06:37:10 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.49 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.50 $ $Date: 2004/08/31 06:37:10 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -155,15 +155,36 @@ final public class Verifier {
             return "A null is not a legal XML value";
         }
 
-        // do check
+        // Do check
         for (int i = 0, len = text.length(); i<len; i++) {
-            if (!isXMLCharacter(text.charAt(i))) {
+
+            int ch = text.charAt(i);
+            
+            // Check if high part of a surrogate pair
+            if (ch >= 0xD800 && ch <= 0xDBFF) {
+                // Check if next char is the low-surrogate
+                i++;
+                if (i < len) {
+                    char low = text.charAt(i);
+                    if (low < 0xDC00 || low > 0xDFFF) {
+                        return "Illegal Surrogate Pair";
+                    }
+                    // It's a good pair, calculate the true value of
+                    // the character to then fall thru to isXMLCharacter
+                    ch = 0x10000 + (ch - 0xD800) * 0x400 + (low - 0xDC00);
+                }
+                else {
+                    return "Surrogate Pair Truncated";
+                }
+            }
+
+            if (!isXMLCharacter(ch)) {
                 // Likely this character can't be easily displayed
                 // because it's a control so we use it'd hexadecimal 
                 // representation in the reason.
-                return ("0x" + Integer.toHexString(text.charAt(i)) 
-                 + " is not a legal XML character");    
-            }       
+                return ("0x" + Integer.toHexString(ch) +
+                        " is not a legal XML character");
+            }
         }
 
         // If we got here, everything is OK
@@ -719,7 +740,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's a character, 
      *                                false otherwise
      */
-    private static boolean isXMLCharacter(char c) {
+    private static boolean isXMLCharacter(int c) {
     
         if (c == '\n') return true;
         if (c == '\r') return true;
