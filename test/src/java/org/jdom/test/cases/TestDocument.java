@@ -204,7 +204,7 @@ public static Test suite () {
 		assert("incorrect comment removed",! doc.removeContent(new Comment("hi")));
 		assert("didn't remove comment", doc.removeContent(comment));
 			
-		assert("comment not removed", doc.getMixedContent().size() == 1);
+		assert("comment not removed", doc.getContent().size() == 1);
 	}
 	/**
 	 * Test removeContent with the supplied ProcessingInstruction.
@@ -220,7 +220,7 @@ public static Test suite () {
 		assert("incorrect pi removed",! doc.removeContent(new ProcessingInstruction("hi", "there")));
 		assert("didn't remove pi", doc.removeContent(pi));
 			
-		assert("PI not removed", doc.getMixedContent().size() == 1);
+		assert("PI not removed", doc.getContent().size() == 1);
 	
 	}
 	/**
@@ -241,20 +241,6 @@ public static Test suite () {
 		int x = doc2.hashCode();
 		assert("Different Elements with same value have same hashcode", x != i);
 
-	}
-	/**
-	 * Test getMixedContent
-	 */
-	public void test_TCM__List_getMixedContent() {
-		Element element = new Element("element");
-		Comment comment = new Comment("comment");
-		ArrayList list = new ArrayList();
-
-		list.add(element);
-		list.add(comment);
-		Document doc = new Document(list);
-		assertEquals("missing mixed content", list, doc.getMixedContent());
-		assertEquals("wrong number of elements", 2, doc.getMixedContent().size());
 	}
 	/**
 	 * Test code goes here. Replace this comment.
@@ -297,32 +283,32 @@ public static Test suite () {
 		child2 = null;
 		child1 = null;
 		
-		List list = docClone.getRootElement().getMixedContent();
+		List list = docClone.getRootElement().getContent();
 
 		//finally the test
-		assertEquals("wrong comment", ((Comment)docClone.getMixedContent().get(1)).getText(), "some comment");
+		assertEquals("wrong comment", ((Comment)docClone.getContent().get(1)).getText(), "some comment");
 		assertEquals("wrong child element", ((Element)list.get(0)).getName(), "child" );
 		assertEquals("wrong child element", ((Element)list.get(1)).getName(), "child" );
 		Element deepClone = ((Element)list.get(0)).getChild("firstChild", Namespace.getNamespace("urn:hogwarts"));
 		
 		assertEquals("wrong nested element","firstChild", deepClone.getName());
 		//comment
-		assert("deep clone comment not a clone", deepClone.getMixedContent().get(0) != comment);
+		assert("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
 		comment = null;
-		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getMixedContent().get(0)).getText());
+		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getContent().get(0)).getText());
 		//CDATA
 	
-		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getMixedContent().get(1)).getText());
+		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getContent().get(1)).getText());
 		//PI
-		assert("deep clone PI not a clone", deepClone.getMixedContent().get(2) != pi);
+		assert("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
 		pi = null;
-		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getMixedContent().get(2)).getData());
+		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getContent().get(2)).getData());
 		//entity
-		assert("deep clone Entity not a clone", deepClone.getMixedContent().get(3) != entity);
+		assert("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
 		entity = null;
-		assertEquals("incorrect deep clone Entity", "wizards", ((EntityRef)deepClone.getMixedContent().get(3)).getName());
+		assertEquals("incorrect deep clone Entity", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
-		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getMixedContent().get(4)));
+		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getContent().get(4)));
 		
 			
 	}
@@ -349,7 +335,7 @@ public static Test suite () {
 		Document doc = new Document(element);
 		doc.addContent(comment);
 		doc.addContent(comment2);
-		List content = doc.getMixedContent();
+		List content = doc.getContent();
 		
 		assertEquals("wrong number of comments in List", 3, content.size());
 		assertEquals("wrong comment", comment, content.get(1));
@@ -366,7 +352,7 @@ public static Test suite () {
 		Document doc = new Document(element);
 		doc.addContent(pi);
 		doc.addContent(pi2);
-		List content = doc.getMixedContent();
+		List content = doc.getContent();
 		
 		assertEquals("wrong number of PI's in List", 3, content.size());
 		assertEquals("wrong PI", pi, content.get(1));
@@ -383,28 +369,6 @@ public static Test suite () {
 		doc.setDocType(docType);
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 		assertEquals("incorrect doc type returned", docType, doc.getDocType());
-    }
-    /**
-     * Test that setMixedContent works according to specs.
-     */
-    public void test_TCM__OrgJdomDocument_setMixedContent_List() {
-		Element element = new Element("element");
-		Element newElement = new Element("newEl");
-		Comment comment = new Comment("comment");
-		ProcessingInstruction pi = new ProcessingInstruction("foo", "bar");
-		ArrayList list = new ArrayList();
-		
-		list.add(newElement);
-		list.add(comment);
-		list.add(pi);
-		
-		
-		Document doc = new Document(element);
-		doc.setMixedContent(list);
-		assertEquals("wrong number of elements", 3, doc.getMixedContent().size());
-		assertEquals("missing element", newElement, doc.getMixedContent().get(0));
-		assertEquals("missing comment", comment, doc.getMixedContent().get(1));
-		assertEquals("missing pi", pi, doc.getMixedContent().get(2));
     }
     /**
      * Test that a Document can return a root element.
@@ -464,4 +428,42 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	assert("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
 
 }
+
+	/**
+	 * Test getContent
+	 */
+	public void test_TCM__List_getContent() {
+		Element element = new Element("element");
+		Comment comment = new Comment("comment");
+		ArrayList list = new ArrayList();
+
+		list.add(element);
+		list.add(comment);
+		Document doc = new Document(list);
+		assertEquals("missing mixed content", list, doc.getContent());
+		assertEquals("wrong number of elements", 2, doc.getContent().size());
+	}
+
+    /**
+     * Test that setContent works according to specs.
+     */
+    public void test_TCM__OrgJdomDocument_setContent_List() {
+		Element element = new Element("element");
+		Element newElement = new Element("newEl");
+		Comment comment = new Comment("comment");
+		ProcessingInstruction pi = new ProcessingInstruction("foo", "bar");
+		ArrayList list = new ArrayList();
+		
+		list.add(newElement);
+		list.add(comment);
+		list.add(pi);
+		
+		
+		Document doc = new Document(element);
+		doc.setContent(list);
+		assertEquals("wrong number of elements", 3, doc.getContent().size());
+		assertEquals("missing element", newElement, doc.getContent().get(0));
+		assertEquals("missing comment", comment, doc.getContent().get(1));
+		assertEquals("missing pi", pi, doc.getContent().get(2));
+    }
 }
