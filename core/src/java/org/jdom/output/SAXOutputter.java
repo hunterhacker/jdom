@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.11 2001/06/28 00:25:31 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.12 2001/08/02 23:56:26 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -61,6 +61,7 @@ import java.util.*;
 
 import org.xml.sax.*;
 import org.xml.sax.Locator;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -100,7 +101,7 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.11 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.12 $ $Date: 2001/08/02 23:56:26 $ $Name:  $";
 
     /** registered <code>ContentHandler</code> */
     private ContentHandler contentHandler;
@@ -113,6 +114,9 @@ public class SAXOutputter {
    
     /** registered <code>EntityResolver</code> */
     private EntityResolver entityResolver;
+
+    /** registered <code>LexicalHandler</code> */
+    private LexicalHandler lexicalHandler;
    
     /**
      * Whether to report attribute namespace declarations as xmlns attributes.
@@ -133,9 +137,9 @@ public class SAXOutputter {
      * callback methods
      */
     public SAXOutputter(ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
+        this(contentHandler, null, null, null, null);
     }
-   
+
     /**
      * <p>
      * This will create a <code>SAXOutputter</code> with the
@@ -154,10 +158,34 @@ public class SAXOutputter {
                         ErrorHandler   errorHandler,
                         DTDHandler     dtdHandler,
                         EntityResolver entityResolver) {
+        this(contentHandler, errorHandler, dtdHandler, entityResolver, null);
+    }
+   
+    /**
+     * <p>
+     * This will create a <code>SAXOutputter</code> with the
+     * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
+     * and <code>EntityResolver</code> are supported.
+     * </p>
+     *
+     * @param contentHandler contains <code>ContentHandler</code> 
+     * callback methods
+     * @param errorHandler contains <code>ErrorHandler</code> callback methods
+     * @param dtdHandler contains <code>DTDHandler</code> callback methods
+     * @param entityResolver contains <code>EntityResolver</code> 
+     * callback methods
+     * @param lexicalHandler contains <code>LexicalHandler</code> callbacks.
+     */
+    public SAXOutputter(ContentHandler contentHandler,
+                        ErrorHandler   errorHandler,
+                        DTDHandler     dtdHandler,
+                        EntityResolver entityResolver,
+                        LexicalHandler lexicalHandler) {
         this.contentHandler = contentHandler;
         this.errorHandler = errorHandler;
         this.dtdHandler = dtdHandler;
         this.entityResolver = entityResolver;
+        this.lexicalHandler = lexicalHandler;
     }
    
     /**
@@ -203,6 +231,17 @@ public class SAXOutputter {
      */
     public void setEntityResolver(EntityResolver entityResolver) {
         this.entityResolver = entityResolver;
+    }
+
+    /**
+     * <p>
+     *  This will set the <code>LexicalHandler</code>.
+     * </p>
+     *
+     * @param lexicalHandler contains lexical callback methods.
+     */
+    public void setLexicalHandler(LexicalHandler lexicalHandler) {
+        this.lexicalHandler = lexicalHandler;
     }
    
     /**
@@ -260,6 +299,10 @@ public class SAXOutputter {
             else if (obj instanceof CDATA) {
                 // contentHandler.characters()
                 characters(((CDATA) obj).getText());
+            }
+            else if (obj instanceof Comment) {
+                // lexicalHandler.comment()
+                comment(((Comment)obj).getText()); 
             }
         }
        
@@ -619,6 +662,24 @@ public class SAXOutputter {
         }
         catch (SAXException se) {
             throw new JDOMException("Exception in characters", se);
+        }
+    }
+
+    /**
+     * <p>
+     *  This will be called for each chunk of comment data encontered.
+     * </p>
+     *
+     * @param commentText all text in a comment, including whitespace.
+     */
+    private void comment(String commentText) throws JDOMException {
+        if (lexicalHandler != null) {
+            char[] c = commentText.toCharArray();
+            try {
+                lexicalHandler.comment(c, 0, c.length);
+            } catch (SAXException se) {
+                throw new JDOMException("Exception in comment", se);
+            }
         }
     }
 
