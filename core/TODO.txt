@@ -2,10 +2,7 @@ Items that need to be done:
 
 --- API CHANGES FOR 1.0 ---
 
-* Deprecate all XMLOutputter setIndent methods except setIndent(String).
-
-* Rework SAXBuilder exception strategy, throwing IOEx when an underlying IOEx
-  is raised instead of wrapping it in a JDOMEx.
+* Should CDATA be a flag on Text or a subclass of Text?
 
 * Finalize the XPath class interface.
 
@@ -37,6 +34,19 @@ Items that need to be done:
   E.g. should getNestedException find 1.4-type nested exceptions? Do both
   1.4-type nested exceptions and JDOMException both try to print child
   stack traces, causing them to be printed twice?
+
+* Figure out if there's a role for a Node interface.  It sounds easy but all 
+  attempts so far have hit obstacles.  Amy Lewis talks about it here:
+  http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
+  There were many follow-on threads.
+
+* Consider moving JDOMFactory to org.jdom.
+
+* Make sure we have a story for serialization.  How much work is it to support
+  serialization across current and future JDOM versions?  
+  See "serialVersionUID" thread especially Peter V. Gadjokov's remarks at
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
+  It may be OK to worry about fast short-term serialization only.
 
 --- AFTER BETA 8 ---
 
@@ -111,12 +121,6 @@ Items that need to be done:
 * Populate jdom-test.  Jools is leading this but Phil Nelson is currently
   doing a lot of work.  Hong Zhang <Hong.Zhang@Sun.COM> is helping with the
   J2EE CTS.
-
-* Make sure we have a plan for supporting obj serialization across current and
-  future JDOM versions.  See "serialVersionUID" thread especially 
-  Peter V. Gadjokov's remarks at
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
-  It may be OK to worry about fast short-term serialization only.
 
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
   started by Joe Bowbeer.
@@ -221,11 +225,6 @@ Items that need to be done:
 * Consider having the license be clear org.jdom is a protected namespace.
 
 --- WILD IDEAS ---
-
-* Figure out if there's a role for a Node interface.  It sounds easy but all 
-  attempts so far have hit obstacles.  Amy Lewis talks about it here:
-  http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
-  There were many follow-on threads.
 
 * Think about somewhat crazy idea of using more inheritance in JDOM to allow
   lightweight but not XML 1.0 complete implementations.  For example Element
