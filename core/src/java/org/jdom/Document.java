@@ -386,7 +386,6 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> - this object modified.
      */
     public Document addContent(Element element) {
-System.out.println("in addC(E) with root: " + getRootElement());
         if (getRootElement() != null) {
             throw new IllegalAddException(
                 this, element, "The document already has a root element");
