@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMTransformer.java,v 1.4 2003/05/05 08:10:00 jhunter Exp $
+ $Id: XSLTransformer.java,v 1.1 2003/05/05 08:30:23 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,11 +66,11 @@ import org.jdom.*;
  * A convenience class to handle simple transformations. The JAXP TrAX classes
  * have more bells and whistles and can be used with {@link JDOMSource} and
  * {@link JDOMResult} for advanced uses. This class handles the common case and
- * presents a simple interface.  JDOMTransformer is thread safe and may be
+ * presents a simple interface.  XSLTransformer is thread safe and may be
  * used from multiple threads.
  *
  * <pre><code>
- * JDOMTransformer transformer = new JDOMTransformer("file.xsl");
+ * XSLTransformer transformer = new XSLTransformer("file.xsl");
  *
  * Document x2 = transformer.transform(x);  // x is a Document
  * Document y2 = transformer.transform(y);  // y is a Document
@@ -109,25 +109,25 @@ import org.jdom.*;
  *       Xalan 2.2d10. </li>
  *    </ol>
 
- * @version $Revision: 1.4 $, $Date: 2003/05/05 08:10:00 $
+ * @version $Revision: 1.1 $, $Date: 2003/05/05 08:30:23 $
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
  */
-public class JDOMTransformer {
+public class XSLTransformer {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.4 $ $Date: 2003/05/05 08:10:00 $ $Name:  $";
+            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.1 $ $Date: 2003/05/05 08:30:23 $ $Name:  $";
 
     private Templates templates;
 
     // Internal constructor to support the other constructors
-    private JDOMTransformer(Source stylesheet) throws JDOMException {
+    private XSLTransformer(Source stylesheet) throws XSLTransformException {
         try {
             templates = TransformerFactory.newInstance()
                     .newTemplates(stylesheet);
         }
         catch (TransformerException e) {
-            throw new JDOMException("Could not construct JDOMTransformer", e);
+            throw new XSLTransformException("Could not construct XSLTransformer", e);
         }
     }
 
@@ -135,69 +135,69 @@ public class JDOMTransformer {
      * Creates a transformer for a given stylesheet system id.
      *
      * @param  stylesheetSystemId  source stylesheet as a Source object
-     * @throws JDOMException       if there's a problem in the TrAX back-end
+     * @throws XSLTransformException       if there's a problem in the TrAX back-end
      */
-    public JDOMTransformer(String stylesheetSystemId) throws JDOMException {
+    public XSLTransformer(String stylesheetSystemId) throws XSLTransformException {
         this(new StreamSource(stylesheetSystemId));
     }
 
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * This will create a new <code>XSLTransformer</code> by
      *  reading the stylesheet from the specified
      *   <code>InputStream</code>.
      * </p>
      *
      * @param stylesheet <code>InputStream</code> from which the stylesheet is read.
-     * @throws JDOMException when an IOException, format error, or
+     * @throws XSLTransformException when an IOException, format error, or
      * something else prevents the stylesheet from being compiled
      */
-    public JDOMTransformer(InputStream stylesheet) throws JDOMException {
+    public XSLTransformer(InputStream stylesheet) throws XSLTransformException {
         this(new StreamSource(stylesheet));
     }
 
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * This will create a new <code>XSLTransformer</code> by
      *  reading the stylesheet from the specified
      *   <code>Reader</code>.
      * </p>
      *
      * @param stylesheet <code>Reader</code> from which the stylesheet is read.
-     * @throws JDOMException when an IOException, format error, or
+     * @throws XSLTransformException when an IOException, format error, or
      * something else prevents the stylesheet from being compiled
      */
-    public JDOMTransformer(Reader stylesheet) throws JDOMException {
+    public XSLTransformer(Reader stylesheet) throws XSLTransformException {
         this(new StreamSource(stylesheet));
     }
 
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * This will create a new <code>XSLTransformer</code> by
      *  reading the stylesheet from the specified
      *   <code>File</code>.
      * </p>
      *
      * @param stylesheet <code>File</code> from which the stylesheet is read.
-     * @throws JDOMException when an IOException, format error, or
+     * @throws XSLTransformException when an IOException, format error, or
      * something else prevents the stylesheet from being compiled
      */
-    public JDOMTransformer(File stylesheet) throws JDOMException {
+    public XSLTransformer(File stylesheet) throws XSLTransformException {
         this(new StreamSource(stylesheet));
     }
 
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * This will create a new <code>XSLTransformer</code> by
      *  reading the stylesheet from the specified
      *   <code>Document</code>.
      * </p>
      *
      * @param stylesheet <code>Document</code> containing the stylesheet.
-     * @throws JDOMException when the supplied <code>Document</code>
+     * @throws XSLTransformException when the supplied <code>Document</code>
      *  is not syntactically correct XSLT
      */
-    public JDOMTransformer(Document stylesheet) throws JDOMException {
+    public XSLTransformer(Document stylesheet) throws XSLTransformException {
         this(new JDOMSource(stylesheet));
     }
 
@@ -206,9 +206,9 @@ public class JDOMTransformer {
      *
      * @param  inputNodes          input nodes
      * @return                     transformed output nodes
-     * @throws JDOMException       if there's a problem in the transformation
+     * @throws XSLTransformException       if there's a problem in the transformation
      */
-    public List transform(List inputNodes) throws JDOMException {
+    public List transform(List inputNodes) throws XSLTransformException {
         JDOMSource source = new JDOMSource(inputNodes);
         JDOMResult result = new JDOMResult();
         try {
@@ -216,7 +216,7 @@ public class JDOMTransformer {
             return result.getResult();
         }
         catch (TransformerException e) {
-            throw new JDOMException("Could not perform transformation", e);
+            throw new XSLTransformException("Could not perform transformation", e);
         }
     }
 
@@ -225,9 +225,9 @@ public class JDOMTransformer {
      *
      * @param  inputDoc            input document
      * @return                     transformed output document
-     * @throws JDOMException       if there's a problem in the transformation
+     * @throws XSLTransformException       if there's a problem in the transformation
      */
-    public Document transform(Document inputDoc) throws JDOMException {
+    public Document transform(Document inputDoc) throws XSLTransformException {
         JDOMSource source = new JDOMSource(inputDoc);
         JDOMResult result = new JDOMResult();
         try {
@@ -235,7 +235,7 @@ public class JDOMTransformer {
             return result.getDocument();
         }
         catch (TransformerException e) {
-            throw new JDOMException("Could not perform transformation", e);
+            throw new XSLTransformException("Could not perform transformation", e);
         }
     }
 }

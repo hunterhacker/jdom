@@ -9,7 +9,7 @@ public class XSLTransform {
 
   public static void main(String[] args) throws Exception {
     if (args.length != 2) {
-      System.err.println("Usage: samples.XSLTransform [some.xml] [some.xsl]");
+      System.err.println("Usage: samples.XSLTransformer [some.xml] [some.xsl]");
       return;
     }
 
@@ -18,13 +18,10 @@ public class XSLTransform {
     SAXBuilder builder = new SAXBuilder();
     Document doc = builder.build(docname);
 
-    JDOMTransformer transformer = new JDOMTransformer(sheetname);
+    XSLTransformer transformer = new XSLTransformer(sheetname);
     Document doc2 = transformer.transform(doc);
 
-    XMLOutputter outp = new XMLOutputter();
-    outp.setTextNormalize(true);
-    outp.setIndent("  ");
-    outp.setNewlines(true);
+    XMLOutputter outp = new XMLOutputter(Format.getPrettyFormat());
     outp.output(doc2, System.out);
   }
 }
