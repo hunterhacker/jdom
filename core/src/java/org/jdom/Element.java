@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.69 2001/04/18 16:13:58 jhunter Exp $
+ $Id: Element.java,v 1.70 2001/04/18 17:19:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -484,7 +484,7 @@ public class Element implements Serializable, Cloneable {
         else {
             Document d = getDocument();
             if (d != null) {
-                d.setRootElement(new Element("placeholder"));
+                d.setRootElement(new Element("root-element-was-detached"));
             }
         }
         return this;
