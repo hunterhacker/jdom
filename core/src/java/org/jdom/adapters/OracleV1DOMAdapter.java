@@ -146,7 +146,6 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
                     .newInstance();
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new IOException(e.getMessage());
         }
     }
