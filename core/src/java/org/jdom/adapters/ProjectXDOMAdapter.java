@@ -58,7 +58,6 @@ import org.xml.sax.SAXParseException;
  *   <code>Document</code> object from a Sun Project X DOM parser.
  * </p>
  *
- * @deprecated Project X is now part of Apache Xerces (codenamed Crimson)
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @version 1.0
