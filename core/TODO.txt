@@ -265,8 +265,6 @@ Items that need to be done:
   task.  So "lookup[(int)'x'] & LETTER_MASK" tells us if it's a letter
   or not.
 
-* Use new Ant regexp task for more efficient JDK 1.1 package renaming.
-
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
   by Bob to help with XPath.)
