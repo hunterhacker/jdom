@@ -161,6 +161,8 @@ public static Test suite () {
 		assertEquals("wrong result from indexOf", 0, children.indexOf(bar));
 		assertEquals("wrong result from indexOf", 1, children.indexOf(baz));
 		assertEquals("wrong result from indexOf", 2, children.indexOf(quux));
+		assertEquals("wrong result from indexOf", -1, children.indexOf(foo));
+		assertEquals("wrong result from indexOf", -1, children.indexOf(text1));
 
 		List content = foo.getContent();
 		assertEquals("wrong result from indexOf", 0, content.indexOf(text1));
@@ -171,6 +173,8 @@ public static Test suite () {
 		assertEquals("wrong result from indexOf", 5, content.indexOf(comment));
 		assertEquals("wrong result from indexOf", 6, content.indexOf(quux));
 		assertEquals("wrong result from indexOf", 7, content.indexOf(text4));
+		assertEquals("wrong result from indexOf", -1, content.indexOf(comment2));
+		assertEquals("wrong result from indexOf", -1, content.indexOf(new Integer(17)));
     }
 
     public void test_TCM__int_lastIndexOf_Object() {
@@ -178,6 +182,8 @@ public static Test suite () {
 		assertEquals("wrong result from lastIndexOf", 0, children.lastIndexOf(bar));
 		assertEquals("wrong result from lastIndexOf", 1, children.lastIndexOf(baz));
 		assertEquals("wrong result from lastIndexOf", 2, children.lastIndexOf(quux));
+		assertEquals("wrong result from lastIndexOf", -1, children.lastIndexOf(text3));
+		assertEquals("wrong result from lastIndexOf", -1, children.lastIndexOf(new Integer(17)));
 
 		List content = foo.getContent();
 		assertEquals("wrong result from lastIndexOf", 0, content.lastIndexOf(text1));
@@ -188,6 +194,8 @@ public static Test suite () {
 		assertEquals("wrong result from lastIndexOf", 5, content.lastIndexOf(comment));
 		assertEquals("wrong result from lastIndexOf", 6, content.lastIndexOf(quux));
 		assertEquals("wrong result from lastIndexOf", 7, content.lastIndexOf(text4));
+		assertEquals("wrong result from lastIndexOf", -1, content.lastIndexOf(comment2));
+		assertEquals("wrong result from lastIndexOf", -1, content.lastIndexOf(new Integer(17)));
     }
 
     public void test_TCM__Object_get_int() {
@@ -258,6 +266,10 @@ public static Test suite () {
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
 		try {
+			children.set(1, new Comment("test"));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
+		try {
 			content.set(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
@@ -265,6 +277,10 @@ public static Test suite () {
 			content.set(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
+		try {
+			content.set(1, new Integer(17));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
     }
 
     public void test_TCM__void_add_int_Object() {
@@ -305,6 +321,10 @@ public static Test suite () {
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
 		try {
+			children.add(1, new Comment("test"));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
+		try {
 			content.add(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
@@ -312,6 +332,10 @@ public static Test suite () {
 			content.add(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
 		} catch(IndexOutOfBoundsException ex) {}
+		try {
+			content.add(1, new Integer(17));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
     }
 
     public void test_TCM__boolean_add_Object() {
@@ -343,6 +367,15 @@ public static Test suite () {
 		assertEquals("wrong element from add", text5, content.get(8));
 		assertEquals("wrong element from add", blah, content.get(9));
 		assertTrue("parent is not correct", comment.getParent() == foo);
+
+		try {
+			children.add(new Comment("test"));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
+		try {
+			content.add(new Integer(17));
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
     }
 
 	public void testModification() {
@@ -561,6 +594,8 @@ public static Test suite () {
 		assertTrue("bad contains", content.contains(text2));
 		assertTrue("bad contains", content.contains(text3));
 		assertTrue("bad contains", content.contains(text4));
+		assertTrue("bad contains", !content.contains(comment2));
+		assertTrue("bad contains", !content.contains(new Integer(17)));
 
 		assertTrue("bad contains", !children.contains(foo));
 		assertTrue("bad contains", children.contains(bar));
@@ -571,6 +606,8 @@ public static Test suite () {
 		assertTrue("bad contains", !children.contains(text2));
 		assertTrue("bad contains", !children.contains(text3));
 		assertTrue("bad contains", !children.contains(text4));
+		assertTrue("bad contains", !children.contains(comment2));
+		assertTrue("bad contains", !children.contains(new Integer(17)));
     }
 
     public void test_TCM__void_clear() {
@@ -651,12 +688,21 @@ public static Test suite () {
 		List content = foo.getContent();
 		List children = foo.getChildren();
 		
-		// \n, bar, \n, baz, \n, comment, quux, \n
-		content.remove(text1); // first /n
-		children.remove(bar); // bar
-		content.remove(comment); // comment
-		content.remove(text2); // second /n
-		// baz, \n, quux, \n
+		// contents: \n, bar, \n, baz, \n, comment, quux, \n
+		assertTrue("bad removal", content.remove(text1));			// first /n
+		assertTrue("bad removal", children.remove(bar));			// bar
+		assertTrue("bad removal", content.remove(comment));			// comment
+		assertTrue("bad removal", content.remove(text2));			// second /n
+		// contents: baz, \n, quux, \n
+
+		// None of these should have any effect.
+		assertTrue("bad removal", !children.remove(bar));
+		assertTrue("bad removal", !children.remove(text2));
+		assertTrue("bad removal", !children.remove(comment2));
+		assertTrue("bad removal", !children.remove(new Integer(17)));
+		assertTrue("bad removal", !content.remove(bar));
+		assertTrue("bad removal", !content.remove(comment2));
+		assertTrue("bad removal", !content.remove(new Integer(17)));
 
 		assertTrue("bad removal", children.size() == 2);
 		assertTrue("bad removal", children.get(0) == baz);
