@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementFilter.java,v 1.17 2004/02/27 10:01:30 jhunter Exp $
+ $Id: ElementFilter.java,v 1.18 2004/09/07 06:37:20 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,14 +62,14 @@ import org.jdom.*;
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.17 $, $Date: 2004/02/27 10:01:30 $
+ * @version $Revision: 1.18 $, $Date: 2004/09/07 06:37:20 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
 public class ElementFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.17 $ $Date: 2004/02/27 10:01:30 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.18 $ $Date: 2004/09/07 06:37:20 $ $Name:  $";
 
     /** The element name */
     private String name;
@@ -129,8 +129,8 @@ public class ElementFilter extends AbstractFilter {
     }
 
     /**
-     * Returns whether the two filters are equivalent (i.e. the matching names
-     * and namespace are equivalent).
+     * Returns whether the two filters are equivalent (i&#46;e&#46; the
+     * matching names and namespace are equivalent).
      *
      * @param  obj                   the object to compare against
      * @return                     whether the two filters are equal

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.9 2004/08/31 04:41:39 jhunter Exp $
+ $Id: Format.java,v 1.10 2004/09/07 06:37:20 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.9 $, $Date: 2004/08/31 04:41:39 $
+ * @version $Revision: 1.10 $, $Date: 2004/09/07 06:37:20 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.9 $ $Date: 2004/08/31 04:41:39 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.10 $ $Date: 2004/09/07 06:37:20 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -304,7 +304,7 @@ public class Format implements Cloneable {
      * This will set whether JAXP TrAX processing instructions for
      * disabling/enabling output escaping are ignored.  Disabling
      * output escaping allows using XML text as element content and
-     * outputing it verbatim, i.e. as element children would be.
+     * outputing it verbatim, i&#46;e&#46; as element children would be.
      * <p>
      * When processed, these processing instructions are removed from
      * the generated XML text and control whether the element text

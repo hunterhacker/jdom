@@ -1,6 +1,6 @@
 /*--
 
- $Id: Content.java,v 1.4 2004/09/03 06:35:39 jhunter Exp $
+ $Id: Content.java,v 1.5 2004/09/07 06:37:20 jhunter Exp $
 
  Copyright (C) 2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import java.io.*;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.4 $, $Date: 2004/09/03 06:35:39 $
+ * @version $Revision: 1.5 $, $Date: 2004/09/07 06:37:20 $
  */
 public abstract class Content implements Cloneable, Serializable {
 
@@ -170,8 +170,8 @@ public abstract class Content implements Cloneable, Serializable {
     /**
      * This tests for equality of this Content object to the supplied object.
      * Content items are considered equal only if they are referentially equal
-     * (i.e. the same object).  User code may choose to compare objects based
-     * on their properties instead.
+     * (i&#46;e&#46; the same object).  User code may choose to compare objects
+     * based on their properties instead.
      *
      * @param ob <code>Object</code> to compare to.
      * @return <code>boolean</code> - whether the <code>Content</code> is
