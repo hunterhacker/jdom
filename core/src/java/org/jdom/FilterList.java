@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: FilterList.java,v 1.1 2001/12/11 07:32:04 jhunter Exp $
+ $Id: FilterList.java,v 1.2 2001/12/28 14:48:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -206,7 +206,7 @@ public class FilterList implements List, Serializable {
         List list = getBackingList(false);
 
         if (list == null) {
-            return false;
+            return (c.size() == 0);
         }
         
         if (filter.matchesAll()) {
