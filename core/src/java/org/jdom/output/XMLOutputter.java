@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.70 2002/01/25 18:44:05 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.71 2002/01/26 05:09:48 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.70 $, $Date: 2002/01/25 18:44:05 $
+ * @version $Revision: 1.71 $, $Date: 2002/01/26 05:09:48 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.70 $ $Date: 2002/01/25 18:44:05 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.71 $ $Date: 2002/01/26 05:09:48 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1647,7 +1647,7 @@ public class XMLOutputter implements Cloneable {
             out.write("=");
 
             out.write("\"");
-            out.write( escapeAttributeEntities(attribute.getValue()));
+            out.write(escapeAttributeEntities(attribute.getValue()));
             out.write("\"");
         }
     }
@@ -1895,13 +1895,17 @@ public class XMLOutputter implements Cloneable {
                     buffer = new StringBuffer(str.length() + 20);
                     // Copy previous skipped characters and fall through
                     // to pickup current character
-                    buffer.append( str.substring( 0, i));
+                    buffer.append(str.substring(0, i));
+                    buffer.append(entity);
                 }
             }
             else {
-                if (entity == null)
-                     buffer.append( ch);
-                else buffer.append(entity);
+                if (entity == null) {
+                    buffer.append(ch);
+                }
+                else {
+                    buffer.append(entity);
+                }
             }
         }
 
@@ -1952,13 +1956,17 @@ public class XMLOutputter implements Cloneable {
                     buffer = new StringBuffer(str.length() + 20);
                     // Copy previous skipped characters and fall through
                     // to pickup current character
-                    buffer.append( str.substring( 0, i));
+                    buffer.append(str.substring(0, i));
+                    buffer.append(entity);
                 }
             }
             else {
-                if (entity == null)
-                     buffer.append( ch);
-                else buffer.append(entity);
+                if (entity == null) {
+                    buffer.append(ch);
+                }
+                else {
+                    buffer.append(entity);
+                }
             }
         }
 
