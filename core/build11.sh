@@ -8,7 +8,7 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-if [ `echo $OSTYPE | grep -n cygwin` ]; then
+if [ `uname | grep -n CYGWIN` ]; then
   PS=";"
 else
   PS=":"
