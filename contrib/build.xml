@@ -65,9 +65,37 @@ These are the meaningful targets for this build file:
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
 
+    <!-- JDOM home & libraries -->
+    <property name="jdom.dir"           value="../jdom"/>
+    <property name="jdom.lib.dir"       value="${jdom.dir}/lib"/>
+    <property name="jdom.build.dir"     value="${jdom.dir}/build"/>
+
+    <!-- Default JAR libraries -->
+    <property name="xml-apis.jar"       value="${jdom.lib.dir}/xml-apis.jar"/>
+    <property name="parser.jar"         value="${jdom.lib.dir}/xerces.jar"/>
+    <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
+    <property name="jdom-contrib"       value="${build.dest}"/>
+    <property name="jakarta-regexp.jar" value="${lib.dir}/jakarta-regexp-1.1.jar"/>
+
+    <!-- Compilation class path -->
+    <path id="compile.class.path">
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${jdom-core.jar}"/>
+      <pathelement location="${jdom-contrib}"/>
+      <pathelement location="${jakarta-regexp.jar}"/>
+
+      <!-- Include CLASSPATH environment variable in compilation path as
+           it contains the path to the JDK 1.1 collections when these are
+           to be used.
+       -->
+      <pathelement path="${java.class.path}" />
+    </path>
+
     <!-- JDK1.1 collections -->
     <property name="coll.import" value="com.sun.java.util.collections"/>
-    <available classname="${coll.import}.Collection" property="coll.present"/>
+    <available classname="${coll.import}.Collection" property="coll.present"
+               classpathref="compile.class.path"/>
   </target>
 
   <!-- =================================================================== -->
@@ -76,7 +104,7 @@ These are the meaningful targets for this build file:
   <target name="usage">
     <echo message=""/>
     <echo message=""/>
-    <echo message="JDOM Build file"/>
+    <echo message="JDOM Contributions Build file"/>
     <echo message="-------------------------------------------------------------"/>
     <echo message=""/>
     <echo message=" available targets are:"/>
@@ -163,13 +191,16 @@ These are the meaningful targets for this build file:
   <target name="compile" depends="prepare-src,collections">
     <!-- Compile the JTree demo only if the Swing classes are found -->
     <available property="swing.present"
-               classname="javax.swing.tree.DefaultMutableTreeNode" />
+               classname="javax.swing.tree.DefaultMutableTreeNode"
+               classpathref="compile.class.path" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}">
       <exclude name="**/*JTree*.java" unless="swing.present" />
+
+      <classpath refid="compile.class.path"/>
     </javac>
   </target>
 
@@ -182,6 +213,8 @@ These are the meaningful targets for this build file:
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}">
+
+      <classpath refid="compile.class.path"/>
     </javac>
   </target>
 
@@ -201,9 +234,7 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="javadoc" depends="prepare-src">
     <mkdir dir="${build.javadocs}"/>
-    <javadoc packagenames="${packages}"
-             sourcepath="${build.src}"
-             destdir="${build.javadocs}"
+    <javadoc destdir="${build.javadocs}"
              author="true"
              version="true"
              use="true"
@@ -211,8 +242,14 @@ These are the meaningful targets for this build file:
              noindex="false"
              windowtitle="${Name} API"
              doctitle="${Name}"
-             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved."
-    />
+             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
+
+      <packageset dir="${build.src}">
+        <exclude name="**/doc-files" />
+      </packageset>
+
+      <classpath refid="compile.class.path"/>
+    </javadoc>
   </target>
 
   <!-- =================================================================== -->

@@ -18,7 +18,7 @@ else
   PS=":"
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}$JAVA_HOME/lib/dev.jar${PS}../jdom/lib/xerces.jar${PS}../jdom/lib/xml-apis.jar${PS}../jdom/lib/ant.jar${PS}../jdom/build/classes${PS}./lib/jakarta-regexp-1.1.jar${PS}../jdom/lib/jaxen-jdom.jar${PS}../jdom/lib/jaxen-core.jar${PS}../jdom/lib/saxpath.jar${PS}./build/classes
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}$JAVA_HOME/lib/dev.jar${PS}../jdom/lib/ant.jar${PS}../jdom/lib/xml-apis.jar${PS}../jdom/lib/xerces.jar
 ANT_HOME=../jdom/lib
 
 echo Building with classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH
