@@ -2,8 +2,12 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't seem to run,
-  which causes needed xpath/parser/*.java files to not be created)
+* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't run,
+  which causes needed xpath/parser/*.java files to not be created.  Cause
+  is -Duser.dir flag being ignored in JDK 1.1 so relative classpaths
+  can't be followed and antlr.Tool can't be found.  Fix is to use new Antlr
+  release that doesn't need the special "cd", coming from Terence by Aug 21 
+  per Bob.)
 
 * Make JDK 1.1 builds work for jdom-test (besides problems caused by
   the XPath bug above, ClassGenerator uses file.createNewFile() from JDK 1.2
