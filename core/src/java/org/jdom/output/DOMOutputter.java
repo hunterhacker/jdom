@@ -204,6 +204,8 @@ public class DOMOutputter {
 
             // XXX We could reuse some of the "walking" code
 
+            // XXX Should use an iterator and not get(i) for speed
+
             // XXX Should whitespace handling be configurable?
 
             List docContent = document.getMixedContent();
