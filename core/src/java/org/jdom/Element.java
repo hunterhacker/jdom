@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.99 2001/08/29 21:45:28 jhunter Exp $
+ $Id: Element.java,v 1.100 2001/10/06 01:12:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,12 +73,13 @@ import java.util.*;
  * @author Kevin Regan
  * @author Dan Schaffer
  * @author Yusuf Goolamabbas
+ * @author Kent C. Johnson
  * @version 1.0
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.99 $ $Date: 2001/08/29 21:45:28 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.100 $ $Date: 2001/10/06 01:12:52 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -706,6 +707,26 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     *  This convenience method returns the normalized textual content of the 
+     *    named child element, or returns null if there's no such child.  
+     *    See <code>{@link #getTextNormalize()}</code> for details of text
+     *    normalizing.
+     * </p>
+     *
+     * @param name the name of the child
+     * @return normalized text content for the named child, or null if none
+     */
+    public String getChildTextNormalize(String name) {
+        Element child = getChild(name);
+        if (child == null) {
+            return null;
+        } else {
+            return child.getTextNormalize();
+        }
+    }
+
+    /**
+     * <p>
      * This convenience method returns the textual content of the named
      * child element, or returns null if there's no such child.
      * </p>
@@ -741,6 +762,27 @@ public class Element implements Serializable, Cloneable {
             return null;
         } else {
             return child.getTextTrim();
+        }
+    }
+
+    /**
+     * <p>
+     *  This convenience method returns the normalized textual content of the 
+     *    named child element, or returns null if there's no such child.  
+     *    See <code>{@link #getTextNormalize()}</code> for
+     *    details of text normalizing.
+     * </p>
+     *
+     * @param name the name of the child
+     * @param ns the namespace of the child
+     * @return normalized text content for the named child, or null if none
+     */
+    public String getChildTextNormalize(String name, Namespace ns) {
+        Element child = getChild(name, ns);
+        if (child == null) {
+            return null;
+        } else {
+            return child.getTextNormalize();
         }
     }
 
