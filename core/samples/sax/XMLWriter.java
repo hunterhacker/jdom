@@ -71,7 +71,7 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Filter to write an XML document from a SAX event stream.
  *
- * <i>Code and comments adapted from DataWriter-0.2, written
+ * <i>Code and comments adapted from XMLWriter-0.2, written
  * by David Megginson and released into the public domain,
  * without warranty.</i>
  *

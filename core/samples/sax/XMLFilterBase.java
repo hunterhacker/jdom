@@ -63,6 +63,10 @@ import org.xml.sax.helpers.XMLFilterImpl;
 /**
  * Adds convenience methods to base SAX2 Filter implementation.
  *
+ * <i>Code and comments adapted from XMLWriter-0.2, written
+ * by David Megginson and released into the public domain,
+ * without warranty.</i>
+ *
  * <p>The convenience methods are provided so that clients do not have to
  * create empty attribute lists or provide empty strings as parameters;
  * for example, the method invocation</p>
