@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.105 2004/02/19 09:30:25 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.106 2004/02/27 00:52:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.105 $, $Date: 2004/02/19 09:30:25 $
+ * @version $Revision: 1.106 $, $Date: 2004/02/27 00:52:39 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.105 $ $Date: 2004/02/19 09:30:25 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.106 $ $Date: 2004/02/27 00:52:39 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1014,7 +1014,7 @@ public class XMLOutputter implements Cloneable {
         int size = content.size();
         if (start < size) {
             // And remove trialing whitespace-only nodes
-            end = skipTrialingWhite(content, end);
+            end = skipTrailingWhite(content, end);
 
             for (int i = start; i < end; i++) {
                 node = content.get(i);
@@ -1217,7 +1217,7 @@ public class XMLOutputter implements Cloneable {
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrialingWhite(List content, int start) {
+    private int skipTrailingWhite(List content, int start) {
         int size = content.size();
         if (start > size) {
             start = size;
