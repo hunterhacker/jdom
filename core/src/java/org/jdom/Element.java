@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.129 2003/04/08 04:14:49 jhunter Exp $
+ $Id: Element.java,v 1.130 2003/04/10 05:02:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -78,12 +78,12 @@ import org.jdom.filter.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.129 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.130 $, $Date: 2003/04/10 05:02:40 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.129 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.130 $ $Date: 2003/04/10 05:02:40 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1483,6 +1483,16 @@ public class Element implements Serializable, Cloneable {
             }
         }
 
+        // Cloning additional namespaces
+        if (additionalNamespaces != null) {
+            int additionalSize = additionalNamespaces.size();
+            element.additionalNamespaces = new ArrayList(additionalSize);
+            for (int i = 0; i < additionalSize; i++) {
+                Object additional = additionalNamespaces.get(i);
+                element.additionalNamespaces.add(additional);
+            }
+        }
+
         // Cloning content
         if (content != null) {
             for (int i = 0; i < content.size(); i++) {
@@ -1530,6 +1540,19 @@ public class Element implements Serializable, Cloneable {
         // This allows for writing pointers to already written strings
         out.writeObject(namespace.getPrefix());
         out.writeObject(namespace.getURI());
+
+        if (additionalNamespaces == null) {
+            out.write(0);
+        }
+        else {
+            int size = additionalNamespaces.size();
+            out.write(size);
+            for (int i = 0; i < size; i++) {
+                Namespace additional = (Namespace) additionalNamespaces.get(i);
+                out.writeObject(additional.getPrefix());
+                out.writeObject(additional.getURI());
+            }
+        }
     }
 
     private void readObject(ObjectInputStream in)
@@ -1539,6 +1562,17 @@ public class Element implements Serializable, Cloneable {
 
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
+
+        int size = in.read();
+
+        if (size != 0) { 
+            additionalNamespaces = new ArrayList(size);
+            for (int i = 0; i < size; i++) {
+                Namespace additional = Namespace.getNamespace(
+                    (String)in.readObject(), (String)in.readObject());
+                additionalNamespaces.add(additional);
+            }
+        }
     }
 
     /**
