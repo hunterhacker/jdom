@@ -5,14 +5,6 @@ Items that need to be done:
 * Change adapters to support creating a Document with a DOCTYPE, to allow 
   DOMBuilder to set the DOCTYPE on a built document
 
-* Verify attribute namespaces work correctly.  (There must be no default
-  namespace, no prefix == NO_NAMESPACE, element and attrib with same prefix
-  are always same namespace, and an attribute with a namespace needs xmlns.)
-
-* Add Namespace Element.getNamespace(String prefix) to return the namespace
-  in scope for a given prefix, to help with attributes like <xsl:template
-  match="sg:title">.  (elharo's request)
-
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
   same prefix already existing on the element or being the document's prefix
   already
