@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.35 2002/04/28 08:44:28 jhunter Exp $
+ $Id: Verifier.java,v 1.36 2002/04/29 02:30:47 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm AT jdom DOT org>.
+    written permission, please contact <pm_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm AT jdom DOT org>.
+    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -48,8 +48,8 @@
 
  This software consists of voluntary contributions made by many 
  individuals on behalf of the JDOM Project and was originally 
- created by Jason Hunter <jhunter AT jdom DOT org> and
- Brett McLaughlin <brett AT jdom DOT org>.  For more information
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
  
  */
@@ -68,12 +68,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.35 $, $Date: 2002/04/28 08:44:28 $
+ * @version $Revision: 1.36 $, $Date: 2002/04/29 02:30:47 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.35 $ $Date: 2002/04/28 08:44:28 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.36 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
 
     /**
      * <p>
