@@ -20,6 +20,7 @@ environment property is set to match the top level directory containing the
 JVM you want to use. For example:
 
 C:\> set JAVA_HOME=C:\jdk1.2.2
+  (or jdk1.3.1, etc.)
 
 or on Unix:
 
