@@ -1,3 +1,5 @@
+package org.jdom.test.generate;
+
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter. All rights reserved.
@@ -6,20 +8,20 @@
  tion, are permitted provided that the following conditions are met:
  
  1. Redistributions of source code must retain the above copyright notice,
-    this list of conditions, and the following disclaimer.
+	this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions, the disclaimer that follows these conditions,
-    and/or other materials provided with the distribution.
+	this list of conditions, the disclaimer that follows these conditions,
+	and/or other materials provided with the distribution.
  
  3. The names "JDOM" and "Java Document Object Model" must not be used to
-    endorse or promote products derived from this software without prior
-    written permission. For written permission, please contact
-    license@jdom.org.
+	endorse or promote products derived from this software without prior
+	written permission. For written permission, please contact
+	license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor may
-    "JDOM" appear in their name, without prior written permission from the
-    JDOM Project Management (pm@jdom.org).
+	"JDOM" appear in their name, without prior written permission from the
+	JDOM Project Management (pm@jdom.org).
  
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
@@ -39,8 +41,6 @@
  Project, please see <http://www.jdom.org/>.
  
  */
-
-package org.jdom.test.generate;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
@@ -68,7 +68,22 @@ final class NameMangler {
 
 	/** No instances */
 	private NameMangler() {}
+	/**
+	 * Return a name which represents the supplied constructor.
+	 *
+	 * @param ctor   The constructor object to mangle.
+	 * @param buffer The buffer to place the result into.
+	 * @return A StringBuffer containing the mangled name.
+	 */
+	static StringBuffer getMangledName(Constructor ctor, StringBuffer buffer) {
+		// Add parameters if there are any.
+		Class[] argTypes = ctor.getParameterTypes();
+		if (argTypes.length>0) {
+			getNormalized(argTypes, buffer);
+		}
 
+		return buffer;
+	}
 	/**
 	 * Return a string representation of the <code>Method</code> object.
 	 *
@@ -92,25 +107,6 @@ final class NameMangler {
 
 		return buffer;
 	}
-
-	/**
-	 * Return a name which represents the supplied constructor.
-	 *
-	 * @param ctor   The constructor object to mangle.
-	 * @param buffer The buffer to place the result into.
-	 * @return A StringBuffer containing the mangled name.
-	 */
-	static StringBuffer getMangledName(Constructor ctor, StringBuffer buffer) {
-		// Add parameters if there are any.
-		Class[] argTypes = ctor.getParameterTypes();
-		if (argTypes.length>0) {
-			getNormalized(argTypes, buffer);
-		}
-
-		return buffer;
-	}
-
-
 	/**
 	 * Normalize a set of classes and put the output into a supplied buffer.
 	 *
@@ -130,8 +126,6 @@ final class NameMangler {
 		
 		return buffer;
 	}
-
-
 	/**
 	 * Normalize a class and put the output into a supplied buffer.
 	 *
