@@ -161,8 +161,7 @@ These are the meaningful targets for this build file:
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"
-		   excludes="org/jdom/test/contrib/**"/>
+           optimize="${optimize}"/>
   </target>
 
   <!-- =================================================================== -->
