@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.8 2001/05/09 05:52:21 jhunter Exp $
+ $Id: SAXHandler.java,v 1.9 2001/05/09 06:42:34 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,42 +56,14 @@
 
 package org.jdom.input;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.util.*;
 
-import org.jdom.Attribute;
-import org.jdom.CDATA;
-import org.jdom.Comment;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.EntityRef;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.ProcessingInstruction;
+import org.jdom.*;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -105,7 +77,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.8 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.9 $ $Date: 2001/05/09 06:42:34 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -117,13 +89,20 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     private boolean atRoot;
 
     /** Indicator of whether we are in a DTD */
-    private boolean inDTD;
+    private boolean inDTD = false;
 
     /** Indicator of whether we are in a CDATA */
-    private boolean inCDATA;
+    private boolean inCDATA = false;
 
-    /** Indicator of whether we are in an <code>Entity</code> */
-    private boolean inEntity;
+    /** Indicator of whether we should expand entities */
+    private boolean expand = true;
+
+    /** Indicator of whether we are actively suppressing (non-expanding) a 
+        current entity */
+    private boolean suppress = false;
+
+    /** How many nested entities we're currently within */
+    private int entityDepth = 0;
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
@@ -147,9 +126,21 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
         declaredNamespaces = new LinkedList();
         availableNamespaces = new LinkedList();
         availableNamespaces.add(Namespace.XML_NAMESPACE);
-        inEntity = false;
-        inDTD = false;
-        inCDATA = false;
+    }
+
+    /**
+     * <p>
+     * This sets whether or not to expand entities during the build.
+     * A true means to expand entities as normal content.  A false means to
+     * leave entities unexpanded as <code>EntityRef</code> objects.  The
+     * default is true.
+     * </p>
+     *
+     * @param expand <code>boolean</code> indicating whether entity expansion
+     * should occur.
+     */
+    public void setExpandEntities(boolean expand) {
+        this.expand = expand;
     }
 
     /**
@@ -166,6 +157,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void processingInstruction(String target, String data)
         throws SAXException {
+
+        if (suppress) return;
 
         if (atRoot) {
             document.addContent(new ProcessingInstruction(target, data));
@@ -187,6 +180,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void startPrefixMapping(String prefix, String uri)
         throws SAXException {
 
+        if (suppress) return;
+
         Namespace ns = Namespace.getNamespace(prefix, uri);
         declaredNamespaces.add(ns);
     }
@@ -202,6 +197,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void endPrefixMapping(String prefix)
         throws SAXException {
+
+        if (suppress) return;
 
         // Remove the namespace from the available list
         // (Should find the namespace fast because recent adds
@@ -240,6 +237,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void startElement(String namespaceURI, String localName,
                              String qName, Attributes atts)
                              throws SAXException {
+        if (suppress) return;
+
         Element element = null;
 
         if ((namespaceURI != null) && (!namespaceURI.equals(""))) {
@@ -349,26 +348,26 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void characters(char[] ch, int start, int length)
         throws SAXException {
 
+        if (suppress) return;
+
         String data = new String(ch, start, length);
+
+/**
+ * This is commented out because of some problems with
+ * the inline DTDs that Xerces seems to have.
+if (!inDTD) {
+  if (inEntity) {
+    ((Entity)stack.peek()).setContent(data);
+  } else {
+    Element e = (Element)stack.peek();
+  e.addContent(data);
+}
+*/
 
         if (inCDATA) {
             ((Element)stack.peek()).addContent(new CDATA(data));
- 
-        /**
-         * This is commented out because of some problems with
-         *   the inline DTDs that Xerces seems to have.
-        } else if (!inDTD) {
-            if (inEntity) {
-                ((Entity)stack.peek()).setContent(data);
-            } else {
-                Element e = (Element)stack.peek();
-                e.addContent(data);
-            }
-         */
-        } else if (inEntity) {
-            //XXX: always ignore entity content so this section should be removed
-            //((Entity)stack.peek()).setContent(data);
-        } else {
+        }
+        else {
             Element e = (Element)stack.peek();
             e.addContent(data);
         }
@@ -386,6 +385,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void ignorableWhitespace(char[] ch, int start,int length) throws SAXException {
          
+        if (suppress) return;
+
         ((Element)stack.peek()).addContent(new String(ch, start, length));
 
     }
@@ -406,6 +407,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void endElement(String namespaceURI, String localName,
                            String qName) throws SAXException {
+
+        if (suppress) return;
 
         Element element = (Element)stack.pop();
         
@@ -451,8 +454,14 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     public void startEntity(String name)
         throws SAXException {
-        //XXX: todo, figure out how to indicate to this method
-        //that we should add the entity refs if expansion is off
+
+        entityDepth++;
+
+        if (expand || entityDepth > 1) {
+            // Short cut out if we're expanding or if we're nested
+            return;
+        }
+
         // Ignore DTD references, and translate the standard 5
         if ((!inDTD) &&
             (!name.equals("amp")) &&
@@ -461,18 +470,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             (!name.equals("apos")) &&
             (!name.equals("quot"))) {
 
-            //EntityRef entity = new EntityRef(name);
-            //((Element)stack.peek()).addContent(entity);
-            
+            if (!expand) {
+                // XXX Need system and public IDs also!!
+                EntityRef entity = new EntityRef(name);
+                ((Element)stack.peek()).addContent(entity);
+                suppress = true;
+            }
         }
     }
 
     public void endEntity(String name) throws SAXException {
-        /* XXX:remove me
-        if (inEntity) {
-            stack.pop();
-            inEntity = false;
-        } */
+        entityDepth--;
+        if (entityDepth == 0) {
+            // No way are we suppressing if not in an entity,
+            // regardless of the "expand" value
+            suppress = false;
+        }
     }
 
     /**
@@ -481,6 +494,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      * </p>
      */
     public void startCDATA() throws SAXException {
+        if (suppress) return;
+
         inCDATA = true;
     }
 
@@ -490,6 +505,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      * </p>
      */
     public void endCDATA() throws SAXException {
+        if (suppress) return;
+
         inCDATA = false;
     }
 
@@ -508,6 +525,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void comment(char[] ch, int start, int end)
         throws SAXException {
 
+        if (suppress) return;
+
         String commentText = new String(ch, start, end);
         if ((!inDTD) && (!commentText.equals(""))) {
             if (stack.empty()) {
@@ -519,5 +538,4 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             }
         }
     }
-
 }

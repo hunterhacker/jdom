@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.42 2001/05/09 06:03:12 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.43 2001/05/09 06:42:34 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,7 +80,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.42 $ $Date: 2001/05/09 06:03:12 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.43 $ $Date: 2001/05/09 06:42:34 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -307,8 +307,8 @@ public class SAXBuilder {
                 parser = saxXMLFilter;
             }
 
-            DefaultHandler contentHandler =
-                new SAXHandler(doc);
+            SAXHandler contentHandler = new SAXHandler(doc);
+            contentHandler.setExpandEntities(expand);  // pass thru behavior
 
             parser.setContentHandler(contentHandler);
 
@@ -375,6 +375,7 @@ public class SAXBuilder {
                 }
             }
 
+/*
             // Set entity expansion
             try {
                 //Crimson doesn't support this feature but does report it 
@@ -396,6 +397,7 @@ public class SAXBuilder {
                   "Entity expansion feature not supported by " +
                   saxDriverClass);
             }
+*/
             
             parser.parse(in);
 
