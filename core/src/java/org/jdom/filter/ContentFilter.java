@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ContentFilter.java,v 1.1 2002/03/12 07:00:50 jhunter Exp $
+ $Id: ContentFilter.java,v 1.2 2002/04/13 04:16:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -91,12 +91,12 @@ import org.jdom.*;
  * </p>
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2002/03/12 07:00:50 $
+ * @version $Revision: 1.2 $, $Date: 2002/04/13 04:16:42 $
  */
 public class ContentFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.1 $ $Date: 2002/03/12 07:00:50 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.2 $ $Date: 2002/04/13 04:16:42 $ $Name:  $";
 
     /** Mask for JDOM <code>Element</code> objects */
     public static final int ELEMENT   = 1;
@@ -113,7 +113,7 @@ public class ContentFilter implements Filter {
     /** Mask for JDOM <code>ProcessingInstruction</code> objects */
     public static final int PI        = 16;
 
-    /** Mask for JDOM <code>EnitityRef</code> objects */
+    /** Mask for JDOM <code>EntityRef</code> objects */
     public static final int ENTITYREF = 32;
 
     /** Mask for JDOM <code>Document</code> object */
