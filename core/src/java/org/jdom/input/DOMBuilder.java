@@ -88,6 +88,7 @@ import org.xml.sax.InputSource;
  * @author Jason Hunter
  * @author Philip Nelson
  * @author Kevin Regan
+ * @author Yusuf Goolamabbas
  * @version 1.0
  */
 public class DOMBuilder {
@@ -251,6 +252,21 @@ public class DOMBuilder {
         buildTree(domDocument, doc, null, true);
 
         return doc;
+    }
+
+    /**
+     * <p>
+     * This will build a JDOM Element from an existing DOM Element
+     * </p>
+     *
+     * @param domElement <code> org.w3c.dom.Element</code> object
+     * @return <code>Element</code> - JDOM Element object
+     */
+    public org.jdom.Element build(org.w3c.dom.Element domElement) {
+        Document doc = new Document(null);
+               
+        buildTree(domElement, doc, null, true);
+        return doc.getRootElement();               
     }
 
     /**
