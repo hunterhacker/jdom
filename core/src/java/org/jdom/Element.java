@@ -1398,6 +1398,9 @@ public class Element implements Serializable, Cloneable {
             }
         }
 
+        // Handle additional namespaces
+        element.additionalNamespaces = additionalNamespaces;
+
         // Remove out the parent
         element.setParent(null);
 
