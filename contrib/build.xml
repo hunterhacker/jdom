@@ -61,7 +61,7 @@ These are the meaningful targets for this build file:
     <property name="build.compiler" value="classic"/>
     <property name="debug" value="on"/>
     <property name="optimize" value="on"/>
-    <property name="deprecation" value="off"/>
+    <property name="deprecation" value="on"/>
 
     <property name="src.dir" value="./src/java"/>
     <property name="samples.dir" value="./samples"/>

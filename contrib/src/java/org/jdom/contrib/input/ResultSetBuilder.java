@@ -122,12 +122,12 @@ public class ResultSetBuilder {
             else {
               Element child = new Element(name, ns);
               if (!rs.wasNull()) {
-                child.setContent(value);
+                child.setText(value);
               }
-              entry.addChild(child);
+              entry.addContent(child);
             }
           }
-          root.addChild(entry);
+          root.addContent(entry);
         }
 
         return doc;
