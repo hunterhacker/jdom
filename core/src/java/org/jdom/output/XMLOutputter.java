@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.69 2002/01/25 18:42:52 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.70 2002/01/25 18:44:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.69 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.70 $, $Date: 2002/01/25 18:44:05 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.69 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.70 $ $Date: 2002/01/25 18:44:05 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -517,7 +517,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void setIndent(boolean doIndent) {
         if (doIndent) {
-            defaultFormat.indent = STANDARD_INDENT;
+            defaultFormat.indent = Format.STANDARD_INDENT;
         }
         else {
             defaultFormat.indent = null;
