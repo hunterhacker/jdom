@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.85 2004/02/27 11:32:58 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.86 2004/02/27 20:56:04 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.85 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.86 $, $Date: 2004/02/27 20:56:04 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.85 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.86 $ $Date: 2004/02/27 20:56:04 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -917,7 +917,7 @@ public class SAXBuilder {
      * @return URL form of the file, with special characters handled
      * @throws MalformedURLException if there's a problem constructing a URL
      */
-    protected static URL fileToURL(File file) throws MalformedURLException {
+    private static URL fileToURL(File file) throws MalformedURLException {
         StringBuffer buffer = new StringBuffer();
         String path = file.getAbsolutePath();
 
