@@ -2,6 +2,14 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Fix bug where an element not in any namespace will still inherit the default
+  namespace from an ancestor (and do much more testing on this)
+
+* Shouldn't there be a removeNamespaceDeclaration(Namespace)?
+
+* Shouldn't addNamespaceDeclaration() have a name to match
+  getAdditionalNamespaces()
+
 * Examine if it's worth doing an intern() on element and attribute names,
   of if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html
@@ -12,15 +20,22 @@ Items that need to be done:
 
 * Add an Attribute.getParent() method (to help XPath)
   Also on Comment, PI, and Entity.  Maybe on CDATA.
+  But do we return Element or Document or some new Node interface?
 
-* Since DOMOutputter is just DOM1, consider a DOM2 outputter
-  Probably support DOM2 only, in theory of tracking latest versions
+* Make sure it's OK to support DOM2 only for DOMOutputter.
+  (Yusuf Goolamabbas <yusufg@outblaze.com>)
 
 * Consider enhancing SAXBuilder to use filters per
   http://www.megginson.com/SAX/Java/filters.html
   That would let someone remove surrounding whitespace and other fancy things.
 
 * Consider visitor pattern (again, just to be sure)
+  Use cases: count elements, count nodes, translate comments, remove PIs
+  Would implement with option to visit depth or breadth first
+  Maybe go crazy with pre-order, in-order, and post-order too :-)
+  Methods would exist on Document and Element
+  FYI, DOM's much overweight Traversal-Range spec is at
+    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
 
 * Make entity.clone() truly a deep copy.
 
@@ -47,7 +62,13 @@ Items that need to be done:
 * Test LinkedList vs ArrayList for speed and memory consumption.
   (With OptimizeIt)
 
+* Verify we get good error handling if someone passes null to any add/set
+  method.
+
 --- FOR JDOM 1.0 ---
+
+* Fix DOMBuilder to attach xmlns declarations on the proper nodes.
+  (But do we use DOM1 and try to handle namespaces manually or DOM2?)
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
@@ -76,11 +97,15 @@ Items that need to be done:
   use a trick of new Document(null).  Elliotte thinks we should go the 
   opposite way and disallow creating docs without roots, thus enforcing the
   rule that JDOM only creates well-formed docs and docs are well-formed from
-  the beginning.  That makes severaly ugly code though.
+  the beginning.  That makes sense to me, actually.  The builders can create a
+  List and then at the end assign it as the doc's mixed content.  Wonder if we
+  should have a Document(List) constructor?  Prob'ly not.
 
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
    causes a 20% performance penalty on building docs.)
+  Probably go with sanity checking input unless it adds significant time to
+  a SAX build.
 
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
@@ -140,6 +165,8 @@ Items that need to be done:
 * Investigate a way to do in-memory validation.  First step is probably 
   to get an in-memory representation of a DTD as per
   http://xmlhack.com/read.php?item=626
+  http://www.wutka.com/dtdparser.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-July/001431.html
 
 --- UNTIED TO A JDOM VERSION ---
 
@@ -197,4 +224,6 @@ Items that need to be done:
 * Look at Xerces parser features (http://apache.org/xml/features/dom) for
   ideas on things that may be needed.
   http://xml.apache.org/xerces-j/features.html
+
+* Create a JDOM logo
 
