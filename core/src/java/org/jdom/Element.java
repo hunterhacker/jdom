@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.94 2001/06/28 00:25:31 jhunter Exp $
+ $Id: Element.java,v 1.95 2001/06/29 00:53:49 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.94 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.95 $ $Date: 2001/06/29 00:53:49 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1600,8 +1600,8 @@ public class Element implements Serializable, Cloneable {
         // for attributes without a namespace, and a little testing shows no
         // real difference in build times anyway.
         String prefix = attribute.getNamespace().getPrefix();
+        String uri = attribute.getNamespace().getURI();
         if (!prefix.equals("")) {
-          String uri = attribute.getNamespace().getURI();
           if (prefix.equals(getNamespacePrefix()) && 
                 !uri.equals(getNamespaceURI())) {
               throw new IllegalAddException(this, attribute,
@@ -1620,26 +1620,28 @@ public class Element implements Serializable, Cloneable {
                   }
               }
           }
-          if (attributes != null && attributes.size() > 0) {
-              Iterator itr = attributes.iterator();
-              while (itr.hasNext()) {
-                  Attribute att = (Attribute)itr.next();
-                  Namespace ns = att.getNamespace();
-                  // Keep track if we have an existing attribute
-                  if (attribute.getName().equals(att.getName()) &&
-                        ns.getURI().equals(att.getNamespaceURI())) {
-                      preExisting = true;
-                  }
+        }
 
-                  if (prefix.equals(ns.getPrefix()) && 
-                        !uri.equals(ns.getURI())) {
-                      throw new IllegalAddException(this, attribute,
-                          "The attribute namespace prefix \"" + prefix +
-                          "\" collides with another attribute namespace on " +
-                          "the element");
-                  }
-              }
-          }
+        // Walk the attributes looking for one to replace, or for a ns conflict
+        if (attributes != null && attributes.size() > 0) {
+            Iterator itr = attributes.iterator();
+            while (itr.hasNext()) {
+                Attribute att = (Attribute)itr.next();
+                Namespace ns = att.getNamespace();
+                // Keep track if we have an existing attribute
+                if (attribute.getName().equals(att.getName()) &&
+                      ns.getURI().equals(att.getNamespaceURI())) {
+                    preExisting = true;
+                }
+
+                if (!prefix.equals("") && prefix.equals(ns.getPrefix()) && 
+                      !uri.equals(ns.getURI())) {
+                    throw new IllegalAddException(this, attribute,
+                        "The attribute namespace prefix \"" + prefix +
+                        "\" collides with another attribute namespace on " +
+                        "the element");
+                }
+            }
         }
   
         if (attributes == null) {
