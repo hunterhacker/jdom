@@ -7,10 +7,6 @@ Items that need to be done:
     <?pi href = 'http://hi/a=b' ?>
   Bug found by Jerome Jacobsen, 2/2/01
 
-* Have DOMBuilder and DOMOutputter use JAXP model like SAXBuilder does
-
-* Add \n at end of XMLOutputter
-
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
   necessary
 
@@ -42,11 +38,11 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
-  If necessary, that is.
 
 * Consider enhancing SAXBuilder to use filters per
   http://www.megginson.com/SAX/Java/filters.html
   That would let someone remove surrounding whitespace and other fancy things.
+  We should probably respect xml:space.
 
 * Consider visitor pattern (again, just to be sure)
   Use cases: count elements, count nodes, translate comments, remove PIs
@@ -76,7 +72,8 @@ Items that need to be done:
     27 Sep 2000.
 
 * Straighten up the Entity API, bringing its API in line with Element and
-  supporting EntityReferences.
+  supporting EntityReferences.  Make DOMBuilder and SAXBuilder work
+  equivalently.  Like have DOCTYPE support entity defs.
 
 * Test SinglyLinkedList vs ArrayList for speed and memory consumption.
   (With OptimizeIt)
@@ -87,6 +84,11 @@ Items that need to be done:
 * Deal with getSerializedForm() calls, either implement or remove
 
 --- FOR JDOM 1.0 ---
+
+* Expand class-level Javadocs.
+
+* Make sure Illegal*Exception should extend IllegalArgumentException and not
+  JDOMException.
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
