@@ -1,5 +1,12 @@
 Items that need to be done:
 
+* Set up build to automatically handle JDK 1.1 + Collections using an Ant task
+  to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
+
+* Set up contrib structure as jdom-contrib
+
+* Set up test structure as jdom-test (Elliotte, Jools, I forget his name)
+
 * Implement DOMOutputter
 
 * Automate build process, using ant tasks to EOL handling

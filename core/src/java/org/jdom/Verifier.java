@@ -103,7 +103,14 @@ public final class Verifier {
             return reason;
         }
 
-        // No colons allowed, since attributes handle this internally
+        // Allow xml:space and xml:language as special cases
+        if (name.equals("xml:space") ||
+            name.equals("xml:language")) {
+            return null;
+        }
+
+        // Otherwise, no colons are allowed,
+        // since attributes handle this internally
         if (name.indexOf(":") != -1) {
             return "Attribute names cannot contain colons.";
         }

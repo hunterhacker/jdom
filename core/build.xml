@@ -1,13 +1,8 @@
 <!-- ===========================================================================
 
 
-                            Java and XML Code Samples
-                            =========================
-
-                                     by
-
-                     Brett McLaughlin <brettmclaughlin@earthlink.net>
-
+                                 JDOM Build File
+                                 ===============
 
 
 Introduction
@@ -45,7 +40,7 @@ That's it!
 Building instructions
 =====================
 
-Ok, let's build the samples. First, make sure your current working directory is
+Ok, let's build the code. First, make sure your current working directory is
 where this very file is located. Then type
 
   ./build.sh (unix)
@@ -66,8 +61,9 @@ tools (i.e. make or shell scripts) where a new JVM is started for each task.
 Build targets
 =============
 
-The build system is not only responsible of compiling Java and XML into a jar file,
-but is also responsible for creating the HTML documentation in the form of javadocs.
+The build system is not only responsible of compiling JDOM into a jar file,
+but is also responsible for creating the HTML documentation in the form of
+javadocs.
 
 These are the meaningful targets for this build file:
 
@@ -86,7 +82,7 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="init">
     <tstamp/>
-    <property name="Name" value="Java Document Object Model (JDOM)"/>
+    <property name="Name" value="JDOM"/>
     <property name="name" value="jdom-b4"/>
     <property name="version" value="1.0beta4"/>
     <property name="year" value="2000"/>
@@ -99,7 +95,7 @@ These are the meaningful targets for this build file:
     <property name="deprecation" value="off"/>
 
     <property name="src.dir" value="./src/java"/>
-    <property name="examples.dir" value="./samples"/>
+    <property name="samples.dir" value="./samples"/>
     <property name="lib.dir" value="./lib"/>
     <property name="packages" value="org.jdom.*"/>
 
@@ -124,7 +120,7 @@ These are the meaningful targets for this build file:
   <target name="usage">
     <echo message=""/>
     <echo message=""/>
-    <echo message="Java Document Object Model (JDOM) Build file"/>
+    <echo message="JDOM Build file"/>
     <echo message="-------------------------------------------------------------"/>
     <echo message=""/>
     <echo message=" available targets are:"/>
@@ -170,7 +166,7 @@ These are the meaningful targets for this build file:
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${examples.dir}"
+    <copydir src="${samples.dir}"
              dest="${build.src}"
              filtering="on"/>
   </target>
