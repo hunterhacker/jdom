@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.110 2004/03/01 23:58:29 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.111 2004/08/31 05:37:41 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,6 +59,8 @@ package org.jdom.output;
 import java.io.*;
 import java.util.*;
 
+import javax.xml.transform.Result;
+
 import org.jdom.*;
 
 /**
@@ -98,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.110 $, $Date: 2004/03/01 23:58:29 $
+ * @version $Revision: 1.111 $, $Date: 2004/08/31 05:37:41 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.110 $ $Date: 2004/03/01 23:58:29 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.111 $ $Date: 2004/08/31 05:37:41 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -123,6 +125,10 @@ public class XMLOutputter implements Cloneable {
 
     // What's currently in use
     protected Format currentFormat = userFormat;
+
+    /** Whether output escaping is enabled for the being processed
+      * Element - default is <code>true</code> */
+    private boolean escapeOutput = true;
 
     // * * * * * * * * * * Constructors * * * * * * * * * *
     // * * * * * * * * * * Constructors * * * * * * * * * *
@@ -136,7 +142,8 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * This will create an <code>XMLOutputter</code> with the specified
-     * format characteristics.
+     * format characteristics.  The format object is retained directly
+     * (not cloned).
      */
     public XMLOutputter(Format format) {
         userFormat = format;
@@ -170,7 +177,8 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
-     * Returns the current format object in use by the outputter.
+     * Returns the current format object in use by the outputter.  The object
+     * is returned directly (not cloned).
      */
     public Format getFormat() {
         return userFormat;
@@ -496,7 +504,13 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(ProcessingInstruction pi, Writer out)
                                  throws IOException {
+        boolean currentEscapingPolicy = currentFormat.ignoreTrAXEscapingPIs;
+
+        // Output PI verbatim, disregarding TrAX escaping PIs.
+        currentFormat.setIgnoreTrAXEscapingPIs(true);
         printProcessingInstruction(out, pi);
+        currentFormat.setIgnoreTrAXEscapingPIs(currentEscapingPolicy);
+
         out.flush();
     }
 
@@ -740,20 +754,34 @@ public class XMLOutputter implements Cloneable {
     protected void printProcessingInstruction(Writer out, ProcessingInstruction pi
                                               ) throws IOException {
         String target = pi.getTarget();
-        String rawData = pi.getData();
+        boolean piProcessed = false;
 
-        // Write <?target data?> or if no data then just <?target?>
-        if (!"".equals(rawData)) {
-            out.write("<?");
-            out.write(target);
-            out.write(" ");
-            out.write(rawData);
-            out.write("?>");
+        if (currentFormat.ignoreTrAXEscapingPIs == false) {
+            if (target.equals(Result.PI_DISABLE_OUTPUT_ESCAPING)) {
+                escapeOutput = false;
+                piProcessed  = true;
+            }
+            else if (target.equals(Result.PI_ENABLE_OUTPUT_ESCAPING)) {
+                escapeOutput = true;
+                piProcessed  = true;
+            }
         }
-        else {
-            out.write("<?");
-            out.write(target);
-            out.write("?>");
+        if (piProcessed == false) {
+            String rawData = pi.getData();
+
+            // Write <?target data?> or if no data then just <?target?>
+            if (!"".equals(rawData)) {
+                out.write("<?");
+                out.write(target);
+                out.write(" ");
+                out.write(rawData);
+                out.write("?>");
+            }
+            else {
+                out.write("<?");
+                out.write(target);
+                out.write("?>");
+            }
         }
     }
 
@@ -1403,6 +1431,8 @@ public class XMLOutputter implements Cloneable {
      * @return <code>String</code> with escaped content.
      */
     public String escapeElementEntities(String str) {
+        if (escapeOutput == false) return str;
+
         StringBuffer buffer;
         char ch;
         String entity;
