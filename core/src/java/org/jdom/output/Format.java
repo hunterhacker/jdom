@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.5 2004/02/06 09:28:32 jhunter Exp $
+ $Id: Format.java,v 1.6 2004/02/11 20:56:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,19 +68,21 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.5 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.6 $, $Date: 2004/02/11 20:56:43 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.5 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.6 $ $Date: 2004/02/11 20:56:43 $ $Name:  $";
 
     /**
-     * Returns a Format object that performs no whitespace changes, uses
+     * Returns a new Format object that performs no whitespace changes, uses
      * the UTF-8 encoding, doesn't expand empty elements, includes the
      * declaration and encoding, and uses the default entity escape strategy.
-     *
+     * Tweaks can be made to the returned Format instance without affecting
+     * other instances.
+
      * @return                     a Format with no whitespace changes
      */
     public static Format getRawFormat() {
@@ -88,10 +90,12 @@ public class Format implements Cloneable {
     }
 
     /**
-     * Returns a Format object that performs whitespace beautification with
+     * Returns a new Format object that performs whitespace beautification with
      * 2-space indents, uses the UTF-8 encoding, doesn't expand empty elements,
      * includes the declaration and encoding, and uses the default entity
      * escape strategy.
+     * Tweaks can be made to the returned Format instance without affecting
+     * other instances.
      *
      * @return                     a Format with whitespace beautification
      */
@@ -103,9 +107,11 @@ public class Format implements Cloneable {
     }
 
     /**
-     * Returns a Format object that performs whitespace normalization, uses
+     * Returns a new Format object that performs whitespace normalization, uses
      * the UTF-8 encoding, doesn't expand empty elements, includes the
      * declaration and encoding, and uses the default entity escape strategy.
+     * Tweaks can be made to the returned Format instance without affecting
+     * other instances.
      *
      * @return                     a Format with whitespace normalization
      */
