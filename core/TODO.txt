@@ -2,6 +2,11 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Add setName() and setNamespace().  Deprecate getCopy().
+
+* Figure out if elt.getAdditionalNamespaces() should return a mutable list.
+  If so, we have to stop using EMPTY_LIST and need to sanity check additions.
+
 * Add to Javadocs @throws clauses for all runtime exceptions like 
   IllegalAddException
 
@@ -92,9 +97,11 @@ Items that need to be done:
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
 
-* Consider providing a SAX XMLFilter that would let someone remove 
-  surrounding whitespace and other fancy things.
-  We should probably respect xml:space.
+* Perhaps have builder flags to indicate if surrounding whitespace (not just
+  ignorable whitespace) should be trimmed, if entity refs should be expanded,
+  if CDATA sections should be included, and if comment sections should be
+  included.  All seem like reasonable customizations.  The whitespace flag
+  should respect xml:space.  It might use an XMLFilter to do the job.
 
 * Consider visitor pattern (again, just to be sure)
   Use cases: count elements, count nodes, translate comments, remove PIs
@@ -182,6 +189,10 @@ Items that need to be done:
 
 * Expand class-level Javadocs.
 
+* Use MIF Doclet to include javadoc output into MIF/Word/Frame/PDF file.
+  http://java.sun.com/j2se/1.3/docs/tooldocs/javadoc/index.html
+  http://java.sun.com/j2se/javadoc/mifdoclet/index.html (mifdoclet_C.zip)
+
 * Make sure Illegal*Exception should extend IllegalArgumentException and not
   JDOMException.
 
@@ -240,11 +251,6 @@ Items that need to be done:
   Peter V. Gadjokov's remarks at
   http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
 
-* Perhaps have builder flags to indicate if surrounding whitespace (not just
-  ignorable whitespace) should be trimmed, if entity refs should be expanded,
-  if CDATA sections should be included, and if comment sections should be
-  included.  All seem like reasonable customizations.
-
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
@@ -282,6 +288,8 @@ Items that need to be done:
   The method would probably either throw InvalidDocumentException or might
   take an ErrorHandler-style interface implementation if there are non-fatal
   errors possible.
+  It'd also be possible to have a programmatic verifier, that determined for
+  example if an orderid="100" entry was valid against a database entry.
 
 * Consider a listener interface so you could listen to doc changes.  
   (Probably after 1.1 honestly; this can be done through manual subclasses
