@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.1 2002/03/12 06:53:57 jhunter Exp $
+ $Id: ElementFilter.java,v 1.2 2002/03/13 06:25:33 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -66,12 +66,12 @@ import org.jdom.*;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2002/03/12 06:53:57 $
+ * @version $Revision: 1.2 $, $Date: 2002/03/13 06:25:33 $
  */
 public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.1 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.2 $ $Date: 2002/03/13 06:25:33 $ $Name:  $";
 
     /** The element name */
     protected String name;
@@ -162,15 +162,21 @@ public class ElementFilter implements Filter {
         if (obj instanceof Element) {
             Element element = (Element) obj;
             if (name == null) {
-                if (namespace == null)
-                     return true;
-                else namespace.equals(element.getNamespace());
+                if (namespace == null) {
+                    return true;
+                }
+                else {
+                    return namespace.equals(element.getNamespace());
+                }
             }
             else {
                 if (name.equals(element.getName())) {
-                    if (namespace == null)
-                         return true;
-                    else return namespace.equals(element.getNamespace());
+                    if (namespace == null) {
+                        return true;
+                    }
+                    else {
+                        return namespace.equals(element.getNamespace());
+                    }
                 }
             }
         }
