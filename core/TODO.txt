@@ -2,6 +2,13 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* How about if we add getTextNormalize() for normalized and make getTextTrim()
+  only do a trim?
+
+* Investigate Elliotte's bug report at
+  http://lists.denveronline.net/lists/jdom-interest/2001-April/006052.html
+  It's probably a SAX-ism, but we should verify.
+
 * Determine if getSerializedForm() should be brought back and implemented
   to call XMLOutputter.outputString() methods.
 
@@ -14,43 +21,13 @@ Items that need to be done:
 
 * Fix JDK 1.1 build issues introduced with the Manifest work. (Jools?)
 
-* Straighten up the Entity API.  Have a builder flag on whether or not to 
-  expand entities.  Have a default of expansion.  That produces a doc without 
-  regard for entity sources.  If expansion is off, then populate the doc with 
-  EntityRef nodes which hold the information about the entity but don't 
-  contain its contents.  XMLOutputter will in the non-expanded case be able 
-  to retain the original entity names and locations.  The reason not to do a 
-  hybrid of keeping entities and expanding is that then what do you do if you 
-  change the content within the "entity"?  You can't do anything because on 
-  output you aren't writing the file that holds that content.  So either it's 
-  this doc's content now, or it's held only as a ref.  Make sure DOMBuilder 
-  and SAXBuilder work equivalently.  This means making an EntityRef class
-  instead of Entity.  It should probably have a name, public ID, and system 
-  ID per
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/002838.html.
-  May also want to read:
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/002844.html.
-  Also see:
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003540.html
-  We may need to keep track of entity declarations coming in so that we can 
-  map the name in startEntity(String) to the public ID and system ID.
-  Give Entity a decent clone() method too.  And have its equals() be based on
-  == because it's a node in the tree.
-
 * Figure out if we by default do:
-    public void ignorableWhitespace(char[] ch, int start, int length)
-                             throws SAXException {
-        characters(ch, start, length);
-    }
   With a setIgnoringElementContentWhitespace(boolean) and 
   setIgnoringAllWhitespace(boolean) pair of methods.
 
 * Make it so elt.getAdditionalNamespaces() returns a mutable list.
   This means we have to stop using EMPTY_LIST and need to sanity check 
   additions.
-
-* Add to Javadocs @throws clauses for all runtime exceptions like 
-  IllegalAddException
 
 * Fix bug where DOMOutputter creates nodes with "" as their
   node.getNamespaceURI() even if the node is not in a namespace.
