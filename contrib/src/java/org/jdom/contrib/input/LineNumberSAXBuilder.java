@@ -2,8 +2,8 @@ package org.jdom.contrib.input;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.input.DefaultJDOMFactory;
-import org.jdom.input.JDOMFactory;
+import org.jdom.DefaultJDOMFactory;
+import org.jdom.JDOMFactory;
 import org.jdom.input.SAXBuilder;
 import org.jdom.input.SAXHandler;
 import org.xml.sax.Attributes;

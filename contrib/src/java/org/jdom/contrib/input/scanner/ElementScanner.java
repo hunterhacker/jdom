@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementScanner.java,v 1.8 2003/06/03 18:41:54 jhunter Exp $
+ $Id: ElementScanner.java,v 1.9 2004/02/06 04:51:37 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,8 +70,8 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import org.jdom.*;
-import org.jdom.input.DefaultJDOMFactory;
-import org.jdom.input.JDOMFactory;
+import org.jdom.DefaultJDOMFactory;
+import org.jdom.JDOMFactory;
 import org.jdom.input.SAXBuilder;
 import org.jdom.input.SAXHandler;
 

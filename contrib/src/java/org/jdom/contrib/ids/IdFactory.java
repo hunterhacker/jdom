@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IdFactory.java,v 1.1 2002/02/07 01:27:29 jhunter Exp $
+ $Id: IdFactory.java,v 1.2 2004/02/06 04:51:37 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -60,7 +60,7 @@ import org.jdom.Document;
 import org.jdom.DocType;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.input.DefaultJDOMFactory;
+import org.jdom.DefaultJDOMFactory;
 
 
 /**
