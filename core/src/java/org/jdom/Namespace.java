@@ -216,6 +216,8 @@ public final class Namespace {
      * @param prefix <code>String</code> prefix of the existing <code>Namespace</code>.
      * @param context <code>Element</code> against which this prefix is resolved.
      * @return <code>Namespace</code> - ready to use namespace.
+     *
+     * @deprecated Deprecated in beta6, use elt.getNamespace(prefix) instead
      */
     public static Namespace getNamespace(String prefix, Element context) {
        
