@@ -109,9 +109,9 @@ public class WarReader {
         while (i.hasNext()) {
             Element servlet = (Element) i.next();
             out.print("\t" + servlet.getChild("servlet-name")
-                                    .getText() +
+                                    .getTextTrim() +
                       " for " + servlet.getChild("servlet-class")
-                                       .getText());
+                                       .getTextTrim());
             List initParams = servlet.getChildren("init-param");
             out.println(" (it has " + initParams.size() + " init params)"); 
         }
@@ -127,7 +127,7 @@ public class WarReader {
             i = roleNames.iterator();
             while (i.hasNext()) {
                 Element e = (Element) i.next();
-                out.println("\t" + e.getText());
+                out.println("\t" + e.getTextTrim());
             }
         }
         
