@@ -64,7 +64,8 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * This <code>Document</code>'s
-     *   <code>{@link Comment}</code>s and
+     *   <code>{@link Comment}</code>s,  
+     *   <code>{@link ProcessingInstruction}</code>s and
      *   the root <code>{@link Element}</code>
      */
     protected List content;
