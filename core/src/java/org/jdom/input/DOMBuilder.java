@@ -1,6 +1,6 @@
 /*--
 
- $Id: DOMBuilder.java,v 1.57 2004/02/27 11:32:58 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.58 2004/02/28 03:42:23 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.57 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.58 $, $Date: 2004/02/28 03:42:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ import org.w3c.dom.*;
 public class DOMBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.57 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.58 $ $Date: 2004/02/28 03:42:23 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available.
@@ -202,10 +202,10 @@ public class DOMBuilder {
 
                 if (atRoot) {
                     // If at root, set as document root
-                    doc.setRootElement(element);
+                    doc.setRootElement(element);  // XXX should we use a factory call?
                 } else {
                     // else add to parent element
-                    current.addContent(element);
+                    factory.addContent(current, element);
                 }
 
                 // Add namespaces
@@ -237,7 +237,7 @@ public class DOMBuilder {
                             element.setNamespace(declaredNS);
                         }
                         else {
-                            element.addNamespaceDeclaration(declaredNS);
+                            factory.addNamespaceDeclaration(element, declaredNS);
                         }
                     }
                 }
@@ -270,7 +270,7 @@ public class DOMBuilder {
 
                         Attribute attribute =
                             factory.attribute(attLocalName, attvalue, attns);
-                        element.setAttribute(attribute);
+                        factory.setAttribute(element, attribute);
                     }
                 }
 
@@ -291,22 +291,22 @@ public class DOMBuilder {
 
             case Node.TEXT_NODE:
                 String data = node.getNodeValue();
-                current.addContent(factory.text(data));
+                factory.addContent(current, factory.text(data));
                 break;
 
             case Node.CDATA_SECTION_NODE:
                 String cdata = node.getNodeValue();
-                current.addContent(factory.cdata(cdata));
+                factory.addContent(current, factory.cdata(cdata));
                 break;
 
 
             case Node.PROCESSING_INSTRUCTION_NODE:
                 if (atRoot) {
-                    doc.addContent(
+                    factory.addContent(doc,
                         factory.processingInstruction(node.getNodeName(),
                                                       node.getNodeValue()));
                 } else {
-                    current.addContent(
+                    factory.addContent(current,
                         factory.processingInstruction(node.getNodeName(),
                                                       node.getNodeValue()));
                 }
@@ -314,15 +314,15 @@ public class DOMBuilder {
 
             case Node.COMMENT_NODE:
                 if (atRoot) {
-                    doc.addContent(factory.comment(node.getNodeValue()));
+                    factory.addContent(doc, factory.comment(node.getNodeValue()));
                 } else {
-                    current.addContent(factory.comment(node.getNodeValue()));
+                    factory.addContent(current, factory.comment(node.getNodeValue()));
                 }
                 break;
 
             case Node.ENTITY_REFERENCE_NODE:
                 EntityRef entity = factory.entityRef(node.getNodeName());
-                current.addContent(entity);
+                factory.addContent(current, entity);
                 break;
 
             case Node.ENTITY_NODE:
@@ -340,7 +340,7 @@ public class DOMBuilder {
                 docType.setSystemID(systemID);
                 docType.setInternalSubset(internalDTD);
 
-                doc.setDocType(docType);
+                factory.addContent(doc, docType);
                 break;
         }
     }
