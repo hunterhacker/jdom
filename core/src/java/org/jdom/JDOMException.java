@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.8 2001/06/15 20:28:54 jhunter Exp $
+ $Id: JDOMException.java,v 1.9 2001/08/02 00:07:11 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -58,6 +58,12 @@ package org.jdom;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.ExceptionInInitializerError;
+import java.rmi.RemoteException;
+import org.xml.sax.SAXException;
 
 /**
  * <b><code>JDOMException</code></b>
@@ -77,7 +83,7 @@ import java.io.PrintWriter;
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.8 $ $Date: 2001/06/15 20:28:54 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.9 $ $Date: 2001/08/02 00:07:11 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;
@@ -112,7 +118,7 @@ public class JDOMException extends Exception {
      *
      * @param message <code>String</code> message indicating
      *                the problem that occurred.
-     * @param exception <code>Exception</code> that caused this
+     * @param cause <code>Throwable</code> that caused this
      *                  to be thrown.
      */    
     public JDOMException(String message, Throwable cause)  {
@@ -120,21 +126,72 @@ public class JDOMException extends Exception {
         this.cause = cause;
     }    
 
+    /** 
+     * <p>
+     * Intializes the cause of this exception to be the specified value.
+     * </p>
+     * @param cause <code>Throwable</code> that caused this
+     *                  to be thrown.
+     */
+    // Created to match the JDK 1.4 Throwable method.
+    public Throwable initCause(Throwable cause)  {
+        this.cause = cause;
+        return cause;
+    }    
+
     /**
      * <p>
      * This returns the message for the <code>Exception</code>. If
-     *   there is a root cause, the message associated with the root
-     *   <code>Exception</code> is appended.
+     *   there are one or more nested exceptions, their messages
+     *   are appended.
      * </p>
      *
      * @return <code>String</code> - message for <code>Exception</code>.
      */
     public String getMessage() {
-        if (cause != null) {
-            return super.getMessage() + ": " + cause.getMessage();
-        } else {
-            return super.getMessage();
+        // Get this exception's message.
+        String msg = super.getMessage();
+
+        Throwable parent = this;
+        Throwable child;
+        
+        // Look for nested exceptions.
+        while((child = getNestedException(parent)) != null) {
+            // Get the child's message.
+            String msg2 = child.getMessage();
+            
+            // Special case: If a SAXException has no message of its own, but has a 
+            // nested exception, then it returns the nested exception's message as its
+            // message. We don't want to add that message twice.
+            if (child instanceof SAXException) {
+                Throwable grandchild = ((SAXException)child).getException();
+                // If the SAXException tells us that it's message is identical to 
+                // its nested exception's message, then we skip it, so we don't
+                // add it twice.
+                if (grandchild != null && msg2 != null && msg2.equals(grandchild.getMessage())) {
+                    msg2 = null;
+                }
+            }
+
+            // If we found a message for the child exception, we append it.
+            if (msg2 != null) {
+                if (msg != null) {
+                    msg += ": " + msg2;
+                } else {
+                    msg = msg2;
+                }
+            }
+
+            // Any nested JDOMException will append its own children,
+            // so we need to break out of here.
+            if (child instanceof JDOMException) {
+                break;
+            }
+            parent = child;
         }
+
+        // Return the completed message.
+        return msg;
     }
 
     /**
@@ -145,10 +202,24 @@ public class JDOMException extends Exception {
      * </p>
      */
     public void printStackTrace() {
+        // Print the stack trace for this exception.
         super.printStackTrace();
-        if (cause != null) {
-            System.err.print("Root cause: ");
-            cause.printStackTrace();
+
+        Throwable parent = this;
+        Throwable child;
+
+        // Print the stack trace for each nested exception.
+        while((child = getNestedException(parent)) != null) {
+            if (child != null) {
+                System.err.print("Caused by: ");
+                child.printStackTrace();
+                // Any nested JDOMException will print its own children,
+                // so we need to break out of here.
+                if (child instanceof JDOMException) {
+                    break;
+                }
+                parent = child;
+            }
         }
     }
 
@@ -160,10 +231,24 @@ public class JDOMException extends Exception {
      * </p>
      */
     public void printStackTrace(PrintStream s) {
+        // Print the stack trace for this exception.
         super.printStackTrace(s);
-        if (cause != null) {
-            s.print("Root cause: ");
-            cause.printStackTrace(s);
+
+        Throwable parent = this;
+        Throwable child;
+
+        // Print the stack trace for each nested exception.
+        while((child = getNestedException(parent)) != null) {
+            if (child != null) {
+                System.err.print("Caused by: ");
+                child.printStackTrace(s);
+                // Any nested JDOMException will print its own children,
+                // so we need to break out of here.
+                if (child instanceof JDOMException) {
+                    break;
+                }
+                parent = child;
+            }
         }
     }
 
@@ -175,10 +260,24 @@ public class JDOMException extends Exception {
      * </p>
      */
     public void printStackTrace(PrintWriter w) {
+        // Print the stack trace for this exception.
         super.printStackTrace(w);
-        if (cause != null) {
-            w.print("Root cause: ");
-            cause.printStackTrace(w);
+
+        Throwable parent = this;
+        Throwable child;
+
+        // Print the stack trace for each nested exception.
+        while((child = getNestedException(parent)) != null) {
+            if (child != null) {
+                System.err.print("Caused by: ");
+                child.printStackTrace(w);
+                // Any nested JDOMException will print its own children,
+                // so we need to break out of here.
+                if (child instanceof JDOMException) {
+                    break;
+                }
+                parent = child;
+            }
         }
     }
 
@@ -209,4 +308,72 @@ public class JDOMException extends Exception {
         return cause;             
     }
 
+    // If this Throwable has a nested (child) exception, then we return it.
+    // Otherwise we return null.
+    private static Throwable getNestedException(Throwable parent) {
+        if (parent instanceof JDOMException) {
+            return ((JDOMException)parent).getCause();
+        }
+        
+        if (parent instanceof SAXException) {
+            return ((SAXException)parent).getException();
+        }
+        
+        if (parent instanceof SQLException) {
+            return ((SQLException)parent).getNextException();
+        }
+        
+        if (parent instanceof InvocationTargetException) {
+            return ((InvocationTargetException)parent).getTargetException();
+        }
+        
+        if (parent instanceof ExceptionInInitializerError) {
+            return ((ExceptionInInitializerError)parent).getException();
+        }
+        
+        if (parent instanceof RemoteException) {
+            return ((RemoteException)parent).detail;
+        }
+        
+        // These classes are not part of standard JDK 1.1 or 1.2, so we 
+        // use reflection to access them.
+
+        Throwable nestedException = getNestedException(parent, "javax.naming.NamingException", "getRootCause");
+        if (nestedException != null) {
+            return nestedException;
+        }
+        
+        nestedException = getNestedException(parent, "javax.servlet.ServletException", "getRootCause");
+        if (nestedException != null) {
+            return nestedException;
+        }
+
+        return null;
+    }
+
+    // This method uses reflection to obtain the nest exception of a Throwable. We use reflection
+    // because the desired class may not exist in the currently-running VM.
+    private static Throwable getNestedException(
+                                 Throwable parent, String className, String methodName) {
+        try {
+            // See if this Throwable is of the desired type, by using isAssignableFrom().
+            Class testClass = Class.forName(className);
+            Class objectClass = parent.getClass();
+            if (testClass.isAssignableFrom(objectClass)) {
+                // Use reflection to call the specified method.
+                Class[] argClasses = new Class[0];
+                Method method = testClass.getMethod(methodName, argClasses);
+                Object[] args = new Object[0];
+                return (Throwable)method.invoke(parent, args);
+            }
+        }
+        catch(Exception ex) {
+            // Most likely, the desired class is not available in this VM. That's fine.
+            // Even if it's caused by something else, we don't want to display an error
+            // here, since we're already in the process of trying to display the original
+            // error - another error here will just confuse things.
+        }
+
+        return null;
+    }
 }
