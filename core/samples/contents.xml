@@ -6,10 +6,14 @@
 <?cocoon-process type="xslt"?>
 
 <!-- Java and XML -->
-<JavaXML:Book xmlns:JavaXML="http://www.oreilly.com/catalog/javaxml/" ora:category="Java" xmlns:ora="http://www.oreilly.com">
+<JavaXML:Book xmlns:JavaXML="http://www.oreilly.com/catalog/javaxml/" 
+              ora:category="Java" 
+              xmlns:ora="http://www.oreilly.com"
+              xmlns:unused="http://www.unused.com"
+> 
  <JavaXML:Title>Java and XML</JavaXML:Title>
- <JavaXML:Contents>
-  <JavaXML:Chapter focus="XML">
+ <JavaXML:Contents xmlns:topic="http://www.oreilly.com/topics">
+  <JavaXML:Chapter topic:focus="XML">
    <JavaXML:Heading>Introduction</JavaXML:Heading>
    <JavaXML:Topic subSections="7">
      What Is It?
@@ -25,7 +29,7 @@
    </JavaXML:Topic>
   </JavaXML:Chapter>
 
-  <JavaXML:Chapter focus="XML">
+  <JavaXML:Chapter topic:focus="XML">
    <JavaXML:Heading>Creating XML</JavaXML:Heading>
    <JavaXML:Topic subSections="0">An XML Document</JavaXML:Topic>
    <JavaXML:Topic subSections="2">The Header</JavaXML:Topic>
@@ -33,7 +37,7 @@
    <JavaXML:Topic subSections="1">What's Next?</JavaXML:Topic>
   </JavaXML:Chapter>
 
-  <JavaXML:Chapter focus="Java">
+  <JavaXML:Chapter topic:focus="Java">
    <JavaXML:Heading>Parsing XML</JavaXML:Heading>
    <JavaXML:Topic subSections="3">Getting Prepared</JavaXML:Topic>
    <JavaXML:Topic subSections="3">SAX Readers</JavaXML:Topic>
@@ -48,7 +52,7 @@
 
   <JavaXML:SectionBreak/>
 
-  <JavaXML:Chapter focus="Java">
+  <JavaXML:Chapter topic:focus="Java">
    <JavaXML:Heading>Web Publishing Frameworks</JavaXML:Heading>
    <JavaXML:Topic subSections="4">Selecting a Framework</JavaXML:Topic>
    <JavaXML:Topic subSections="4">Installation</JavaXML:Topic>
