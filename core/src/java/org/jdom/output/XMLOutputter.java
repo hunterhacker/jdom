@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.71 2002/01/26 05:09:48 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.72 2002/01/30 03:32:11 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.71 $, $Date: 2002/01/26 05:09:48 $
+ * @version $Revision: 1.72 $, $Date: 2002/01/30 03:32:11 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.71 $ $Date: 2002/01/26 05:09:48 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.72 $ $Date: 2002/01/30 03:32:11 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -803,7 +803,8 @@ public class XMLOutputter implements Cloneable {
         }
 
         // Output final line separator
-        newline(out);
+        // We output this no matter what the newline flags say
+        out.write(defaultFormat.lineSeparator);
 
         out.flush();
     }
