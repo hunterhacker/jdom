@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementScanner.java,v 1.11 2004/02/28 03:47:08 jhunter Exp $
+ $Id: ElementScanner.java,v 1.12 2004/08/31 20:53:02 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -707,7 +707,7 @@ public class ElementScanner extends XMLFilterImpl {
       //----------------------------------------------------------------------
 
       protected SAXHandler createContentHandler() {
-         return (new SAXHandler(new EmptyDocumentFactory(getFactory())));
+         return (new FragmentHandler(new EmptyDocumentFactory(getFactory())));
       }
 
       //----------------------------------------------------------------------
@@ -764,6 +764,31 @@ public class ElementScanner extends XMLFilterImpl {
          catch (Exception ex1) {
             throw (new SAXException(ex1.getMessage(), ex1));
          }
+      }
+   }
+
+   //-------------------------------------------------------------------------
+   // FragmentHandler nested class
+   //-------------------------------------------------------------------------
+
+   /**
+    * FragmentHandler extends SAXHandler to support matching nodes
+    * without a common ancestor. This class inserts a dummy root
+    * element in the being-built document. This prevents the document
+    * to have, from SAXHandler's point of view, multiple root
+    * elements (which would cause the parse to fail).
+    */
+   private static class FragmentHandler extends SAXHandler {
+      /**
+       * Public constructor.
+       */
+      public FragmentHandler(JDOMFactory factory) {
+         super(factory);
+
+         // Add a dummy root element to the being-built document as XSL
+         // transformation can output node lists instead of well-formed
+         // documents.
+         this.pushElement(new Element("root", null, null));
       }
    }
 
