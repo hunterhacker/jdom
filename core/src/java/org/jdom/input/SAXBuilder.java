@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.88 2004/08/31 06:06:57 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.89 2004/09/03 18:24:28 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.88 $, $Date: 2004/08/31 06:06:57 $
+ * @version $Revision: 1.89 $, $Date: 2004/09/03 18:24:28 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.88 $ $Date: 2004/08/31 06:06:57 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.89 $ $Date: 2004/09/03 18:24:28 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -346,9 +346,7 @@ public class SAXBuilder {
      * Specifies whether this builder shall reuse the same SAX parser
      * when performing subsequent parses or allocate a new parser for
      * each parse.  The default value of this setting is
-     * <code>true</code> (parser reuse).  Setting the value to
-     * <code>false</code> can result in a performance improvement when parsing
-     * large numbers of files in sequence.
+     * <code>true</code> (parser reuse).
      * <p>
      * <strong>Note</strong>: As SAX parser instances are not thread safe,
      * the parser reuse feature should not be used with SAXBuilder instances
