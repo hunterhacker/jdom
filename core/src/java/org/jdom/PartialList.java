@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: PartialList.java,v 1.14 2001/10/09 23:26:49 jhunter Exp $
+ $Id: PartialList.java,v 1.15 2001/10/16 19:50:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -74,7 +74,7 @@ import java.util.*;
 class PartialList extends LinkedList {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.14 $ $Date: 2001/10/09 23:26:49 $ $Name:  $";
+      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.15 $ $Date: 2001/10/16 19:50:52 $ $Name:  $";
 
     /** The actual backing <code>List</code> */
     protected List backingList;
@@ -400,35 +400,94 @@ class PartialList extends LinkedList {
        return new PartialItr();
    }
 
-   // Thanks to Noam Tamim <noamt@yahoo.com> for this little class
-   private class PartialItr implements Iterator {
-       Iterator selfIterator = PartialList.super.iterator();
-       Object lastReturned;  // so we can remove it if needed
-                
-       public boolean hasNext() {
-           return selfIterator.hasNext();
-       }
-        
-       public Object next() {
-           lastReturned=selfIterator.next();
-           return lastReturned;
-       }
-        
-       public void remove() {
-           selfIterator.remove();
-           backingList.remove(lastReturned);
-           // Note that selfIterator iterates over the PartialList,
-           // so I can change the backingList as I want.
-       }
-    }               
-
    public ListIterator listIterator() {
-       throw new UnsupportedOperationException(
-         "PartialList.listIterator() is not yet implemented");
+       return new PartialItr();
    }
 
    public ListIterator listIterator(int index) {
-       throw new UnsupportedOperationException(
-         "PartialList.listIterator() is not yet implemented");
+       return new PartialItr(index);
+   }
+
+   // Thanks to Noam Tamim <noamt@yahoo.com> for this little class
+   private class PartialItr implements ListIterator {
+       ListIterator iterator;
+       Object lastReturned;
+        
+       PartialItr() {
+           this(0);
+       }
+
+       PartialItr(int index) {
+           iterator = PartialList.super.listIterator(index);
+       }
+        
+       // Next
+
+       public boolean hasNext() {
+           return iterator.hasNext();
+       }
+        
+       public Object next() {
+           lastReturned=iterator.next();
+           return lastReturned;
+       }
+        
+       public int nextIndex() {
+           return iterator.nextIndex();
+       }
+        
+       // Previous
+
+       public boolean hasPrevious() {
+           return iterator.hasPrevious();
+       }
+        
+       public Object previous() {
+           lastReturned=iterator.previous();
+           return lastReturned;
+       }
+        
+       public int previousIndex() {
+           return iterator.previousIndex();
+       }
+
+       // Actions
+
+       public void remove() {
+           iterator.remove();
+           backingList.remove(lastReturned);
+       }
+        
+       // This method is untested so currently it throws
+       public void add(Object o) {
+/*
+           iterator.add(o);
+           ListIterator i=backingList.listIterator();
+           Object obj=null;
+           while (i.hasNext()) {
+               obj=i.next();
+               if (!obj.equals(lastReturned)) continue;
+               else i.add(o);
+           }                
+*/
+           throw new UnsupportedOperationException(
+               "ListIterator.add(Object) is not yet implemented");
+       }
+        
+       // This method is untested so currently it throws
+       public void set(Object o) {
+/*
+           iterator.set(o);
+           ListIterator i=backingList.listIterator();
+           Object obj=null;
+           while (i.hasNext()) {
+               obj=i.next();
+               if (!obj.equals(lastReturned)) continue;
+               else i.set(o);
+           }                
+*/
+           throw new UnsupportedOperationException(
+               "ListIterator.set(Object) is not yet implemented");
+       }
    }
 }
