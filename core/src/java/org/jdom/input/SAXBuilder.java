@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.56 2001/08/02 00:13:43 bmclaugh Exp $
+ $Id: SAXBuilder.java,v 1.57 2001/08/03 22:06:55 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.56 $ $Date: 2001/08/02 00:13:43 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.57 $ $Date: 2001/08/03 22:06:55 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -124,6 +124,9 @@ public class SAXBuilder {
 
     /** User-specified features to be set on the SAX parser */
     private HashMap features = new HashMap(5);
+
+    /** User-specified properties to be set on the SAX parser */
+    private HashMap properties = new HashMap(5);
 
     /**
      * <p>
@@ -286,6 +289,28 @@ public class SAXBuilder {
     public void setFeature(String name, boolean value) {
         // Save the specified feature for later.
         features.put(name, new Boolean(value));
+    }
+
+    /**
+     * <p>
+     * This sets a property on the SAX parser. See the SAX documentation for
+     * more information.
+     * </p>
+     * <p>
+     * NOTE: SAXBuilder requires that some particular properties of the SAX parser be
+     * set up in certain ways for it to work properly. The list of such properties
+     * may change in the future. Therefore, the use of this method may cause
+     * parsing to break, and even if it doesn't break anything today it might 
+     * break parsing in a future JDOM version, because what JDOM parsers require 
+     * may change over time. Use with caution.
+     * </p>
+     *
+     * @param name The property name, which is a fully-qualified URI.
+     * @param value The requested value for the property.
+     */
+    public void setProperty(String name, Object value) {
+        // Save the specified property for later.
+        properties.put(name, value);
     }
 
     /**
@@ -490,6 +515,8 @@ public class SAXBuilder {
              parser.setErrorHandler(saxErrorHandler);
         } else {
              parser.setErrorHandler(new BuilderErrorHandler());
+        }
+
         // Set any user-specified features on the parser.
         Iterator iter = features.keySet().iterator();
         while(iter.hasNext()) {
@@ -498,6 +525,12 @@ public class SAXBuilder {
             internalSetFeature(parser, name, value.booleanValue(), name);
         }
 
+        // Set any user-specified properties on the parser.
+        Iterator iter2 = properties.keySet().iterator();
+        while(iter2.hasNext()) {
+            String name = (String)iter2.next();
+            Object value = properties.get(name);
+            internalSetProperty(parser, name, value, name);
         }
 
         // Setup lexical reporting.
@@ -599,10 +632,29 @@ public class SAXBuilder {
             parser.setFeature(feature, value);
         } catch (SAXNotSupportedException e) {
             throw new JDOMException(
-                displayName + " not supported for SAX driver " + saxDriverClass);
+                displayName + " feature not supported for SAX driver " + saxDriverClass);
         } catch (SAXNotRecognizedException e) {
             throw new JDOMException(
                 displayName + " feature not recognized for SAX driver " + saxDriverClass);
+        }
+    }
+
+    /**
+     * <p>
+     * Tries to set a property on the parser. If the property cannot be set,
+     * throws a JDOMException describing the problem.
+     * </p>
+     */
+    private void internalSetProperty(XMLReader parser, String property, 
+                    Object value, String displayName) throws JDOMException {
+        try {
+            parser.setProperty(property, value);
+        } catch (SAXNotSupportedException e) {
+            throw new JDOMException(
+                displayName + " property not supported for SAX driver " + saxDriverClass);
+        } catch (SAXNotRecognizedException e) {
+            throw new JDOMException(
+                displayName + " property not recognized for SAX driver " + saxDriverClass);
         }
     }
 
