@@ -127,20 +127,30 @@ These are the meaningful targets for this build file:
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
   <target name="compile" depends="prepare-src">
+    <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
+    <available property="spitfire.present"
+     classname="com.XML_Technologies.Spitfire.Parsers.Element" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+           optimize="${optimize}">
+      <exclude name="**/Spitfire*.java" unless="spitfire.present" />
+    </javac>
   </target>
 
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                       -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples">
+    <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
+    <available property="spitfire.present"
+     classname="com.XML_Technologies.Spitfire.Parsers.Element" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+           optimize="${optimize}">
+      <exclude name="**/Spitfire*.java" unless="spitfire.present" />
+    </javac>
   </target>
 
   <!-- =================================================================== -->
