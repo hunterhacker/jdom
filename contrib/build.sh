@@ -12,13 +12,19 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dev.jar:../jdom/lib/xerces.jar:../jdom/lib/xml-apis.jar:../jdom/lib/ant.jar:../jdom/build/classes:./lib/jakarta-regexp-1.1.jar:../jdom/lib/jaxen-jdom.jar:../jdom/lib/jaxen-core.jar:../jdom/lib/saxpath.jar:./build/classes
+if [ `uname | grep -n CYGWIN` ]; then
+  PS=";"
+else
+  PS=":"
+fi
+
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}$JAVA_HOME/lib/dev.jar${PS}../jdom/lib/xerces.jar${PS}../jdom/lib/xml-apis.jar${PS}../jdom/lib/ant.jar${PS}../jdom/build/classes${PS}./lib/jakarta-regexp-1.1.jar${PS}../jdom/lib/jaxen-jdom.jar${PS}../jdom/lib/jaxen-core.jar${PS}../jdom/lib/saxpath.jar${PS}./build/classes
 ANT_HOME=../jdom/lib
 
-echo Building with classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH
+echo Building with classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH
 echo
 
 echo Starting Ant...
 echo
 
-$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*
+$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*

@@ -8,10 +8,15 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip:$JAVA_HOME/lib/rt.jar:../jdom/lib/collections.jar
+if [ `uname | grep -n CYGWIN` ]; then
+  PS=";"
+else
+  PS=":"
+fi
+
+ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip${PS}$JAVA_HOME/lib/rt.jar${PS}../jdom/lib/collections.jar
 export ADDITIONALCLASSPATH
 
 ./build.sh $*
 
-ADDITIONALCLASSPATH=
-export ADDITIONALCLASSPATH
+unset ADDITIONALCLASSPATH

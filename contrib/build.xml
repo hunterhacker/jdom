@@ -35,10 +35,10 @@ These are the meaningful targets for this build file:
     <tstamp/>
     <property name="Name" value="JDOM Contributions"/>
     <property name="name" value="jdom-contrib"/>
-    <property name="version" value="1.0 prerelease"/>
-    <property name="year" value="2000"/>
+    <property name="version" value="1.0beta9-dev"/>
+    <property name="year" value="2003"/>
 
-    <echo message="----------- ${Name} ${version} [${year}] ------------"/>
+    <echo message="----------- ${Name} ${version} ------------"/>
 
     <property name="build.compiler" value="classic"/>
     <property name="debug" value="on"/>
@@ -55,8 +55,6 @@ These are the meaningful targets for this build file:
     <property name="build.src" value="./build/src"/>
     <property name="build.dest" value="./build/classes"/>
     <property name="build.javadocs" value="./build/apidocs"/>
-
-    <property name="xpath.parser.dir" value="${build.src}/org/jdom/contrib/xpath/parser/"/>
 
     <property name="dist.root" value="./dist"/>
     <property name="dist.dir" value="${dist.root}/${name}-${version}"/>
@@ -110,9 +108,10 @@ These are the meaningful targets for this build file:
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${src.dir}"
-             dest="${build.src}"
-             filtering="on"/>
+    <copy todir="${build.src}"
+          filtering="yes">
+      <fileset dir="${src.dir}"/>
+    </copy>
   </target>
 
   <!-- =================================================================== -->
@@ -152,27 +151,24 @@ These are the meaningful targets for this build file:
     <mkdir dir="${samples.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${samples.dir}"
-             dest="${samples.dest}"
-             filtering="on"/>
+    <copy todir="${samples.dest}"
+          filtering="yes">
+          <fileset dir="${samples.dir}"/>
+    </copy>
   </target>
 
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
   <target name="compile" depends="prepare-src,collections">
-    <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
-    <available property="spitfire.present"
-     classname="com.XML_Technologies.Spitfire.Parsers.Element" />
     <!-- Compile the JTree demo only if the Swing classes are found -->
     <available property="swing.present"
-     classname="javax.swing.tree.DefaultMutableTreeNode" />
+               classname="javax.swing.tree.DefaultMutableTreeNode" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}">
-      <exclude name="**/Spitfire*.java" unless="spitfire.present" />
       <exclude name="**/*JTree*.java" unless="swing.present" />
     </javac>
   </target>
@@ -181,9 +177,6 @@ These are the meaningful targets for this build file:
   <!-- Compiles the samples directory                                       -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples">
-    <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
-    <available property="spitfire.present"
-     classname="com.XML_Technologies.Spitfire.Parsers.Element" />
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
            debug="${debug}"
@@ -196,8 +189,8 @@ These are the meaningful targets for this build file:
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
   <target name="package" depends="compile">
-    <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
-    <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
+    <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
+    <fixcrlf srcdir="." includes="**/*.sh"  excludes="build*.*" eol="lf"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
          includes="org/**"/>
@@ -218,7 +211,7 @@ These are the meaningful targets for this build file:
              noindex="false"
              windowtitle="${Name} API"
              doctitle="${Name}"
-             bottom="Copyright &#169; ${year} Brett McLaughlin, Jason Hunter. All Rights Reserved."
+             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved."
     />
   </target>
 
@@ -226,14 +219,14 @@ These are the meaningful targets for this build file:
   <!-- Clean targets                                                       -->
   <!-- =================================================================== -->
   <target name="clean" depends="init">
-    <deltree dir="${build.dir}"/>
+    <delete dir="${build.dir}"/>
     <delete file="${docs.dir}/changes.xml"/>
     <delete file="${docs.dir}/todo.xml"/>
     <delete file="${docs.dir}/book.xml"/>
   </target>
 
   <target name="distclean" depends="clean">
-    <deltree dir="${dist.root}"/>
+    <delete dir="${dist.root}"/>
     <delete file="${Name}-${version}.tar.gz"/>
     <delete file="${Name}-${version}.tar"/>
     <delete file="${Name}-${version}.zip"/>
