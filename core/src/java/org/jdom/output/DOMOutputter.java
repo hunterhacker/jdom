@@ -52,16 +52,37 @@ import org.jdom.Document;
  */
 public class DOMOutputter {
 
+    private static final String DEFAULT_ADAPTER_CLASS =
+        "org.jdom.adapters.XercesDOMAdapter";
+
     /**
      * <p>
-     * This will output the <code>Document</code>, returning
-     *   the JDOM <code>Document</code> as a DOM <code>Document</code>.
+     * This will convert the JDOM <code>Document</code> parameter to a 
+     * DOM Document, returning the DOM version.  The default DOM adapter class
+     * is used.
      * </p>
      *
      * @param document <code>Document</code> to output.
-     * @param domTree <code>org.w3c.dom.Document</code> to output to.
+     * @return an <code>org.w3c.dom.Document</code> version
      */
-    public void output(Document document, org.w3c.dom.Document domTree) {
+    public org.w3c.dom.Document output(Document document) {
+        return output(document, DEFAULT_ADAPTER_CLASS);
+    }
+
+    /**
+     * <p>
+     * This will convert the JDOM <code>Document</code> parameter to a 
+     * DOM Document, returning the DOM version.  The specified DOM adapter
+     * class is used, as a way to choose the DOM implementation.
+     * </p>
+     *
+     * @param document <code>Document</code> to output.
+     * @param domAdapterClass DOM adapter class to use
+     * @return an <code>org.w3c.dom.Document</code> version
+     */
+    public org.w3c.dom.Document output(Document document,
+                                       String domAdapterClass) {
         // To be implemented
+        return null;
     }
 }
