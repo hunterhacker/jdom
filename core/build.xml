@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.41 2003/04/04 04:08:41 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.42 2003/04/04 04:16:27 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -50,7 +50,7 @@ For instructions on how to build JDOM, please view the README.txt file.
     <!-- Default JAR libraries -->
     <property name="xml-apis.jar"       value="${lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"         value="${lib.dir}/xerces.jar"/>
-    <property name="jdom-core"      value="${build.dest}"/>
+    <property name="jdom-core"          value="${build.dest}"/>
     <property name="jaxen-jdom.jar"     value="${lib.dir}/jaxen-jdom.jar"/>
     <property name="jaxen-core.jar"     value="${lib.dir}/jaxen-core.jar"/>
     <property name="jaxen-saxpath.jar"  value="${lib.dir}/saxpath.jar"/>
@@ -59,7 +59,6 @@ For instructions on how to build JDOM, please view the README.txt file.
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
-      <pathelement location="${jdom-core}"/>
       <pathelement location="${jaxen-jdom.jar}"/>
       <pathelement location="${jaxen-core.jar}"/>
       <pathelement location="${jaxen-saxpath.jar}"/>
@@ -70,6 +69,11 @@ For instructions on how to build JDOM, please view the README.txt file.
            in case there's a future need to include the CLASSPATH.
       <pathelement path="${java.class.path}" />
        -->
+    </path>
+
+    <path id="run.class.path">
+      <path refid="compile.class.path"/>
+      <pathelement location="${jdom-core}"/>
     </path>
 
   </target>
@@ -169,13 +173,13 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples"
+  <target name="samples" depends="prepare-samples,compile"
           description="Compiles the samples directory">
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
            debug="${debug}"
            optimize="${optimize}">
-      <classpath refid="compile.class.path"/>
+      <classpath refid="run.class.path"/>
     </javac>
   </target>
 
@@ -217,7 +221,7 @@ For instructions on how to build JDOM, please view the README.txt file.
              windowtitle="${Name} API"
              doctitle="${Name}"
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
-      <classpath refid="compile.class.path"/>
+      <classpath refid="run.class.path"/>
     </javadoc>
   </target>
 
@@ -240,7 +244,7 @@ For instructions on how to build JDOM, please view the README.txt file.
              doctitle="${Name}"
              link="http://java.sun.com/j2se/1.4/docs/api"
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
-      <classpath refid="compile.class.path"/>
+      <classpath refid="run.class.path"/>
     </javadoc>
   </target>
 
