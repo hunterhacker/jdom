@@ -2,6 +2,27 @@ Items that need to be done:
 
 --- API CHANGES FOR 1.0 ---
 
+* Remove canAdd() and canRemove() from Filter.
+
+* Add DocType to the content list returned by Document so it can have a
+  location.  Fix the outputters and builders to respect it.  Keep the easy get
+  method however.
+
+* Look at interfaces for the core classes, Element with ConcreteElement being
+  our code.  Base on the factory model.  Allow no access between objects
+  except using the public API, to avoid the import node problem.  Do the big
+  switchover using javax.xml.jdom as interfaces and default impl, use org.jdom
+  for the concretes.  May not need to break existing code (sick and wrong).
+  - read-only?
+
+* Strategy pattern for XMLOutputter and others.
+    If need for override, make others final and leave the protected.
+
+* Make transforming easier, with a one-line method.
+
+* Should there be ValidityException and MalformedException subclasses of
+  JDOMException?  Elharo has a proposal.
+
 * Should CDATA be a flag on Text or a subclass of Text?
 
 * Finalize the XPath class interface.
@@ -29,11 +50,6 @@ Items that need to be done:
   allow it to report errors or to return a code indicating the element should 
   be ignored.
   (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
-
-* Make sure that JDOMException is compatible with JDK 1.4 nested exceptions.
-  E.g. should getNestedException find 1.4-type nested exceptions? Do both
-  1.4-type nested exceptions and JDOMException both try to print child
-  stack traces, causing them to be printed twice?
 
 * Figure out if there's a role for a Node interface.  It sounds easy but all 
   attempts so far have hit obstacles.  Amy Lewis talks about it here:
@@ -119,7 +135,7 @@ Items that need to be done:
   and let the caller pass the exception through
 
 * Populate jdom-test.  Jools is leading this but Phil Nelson is currently
-  doing a lot of work.  Hong Zhang <Hong.Zhang@Sun.COM> is helping with the
+  doing a lot of work.  Hong Zhang <Hong.Zhang AT Sun.COM> is helping with the
   J2EE CTS.
 
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
@@ -210,7 +226,7 @@ Items that need to be done:
 * Add a search for jdom.org using Google with site:www.jdom.org, imitating
   http://www.zope.org/SiteIndex/searchForm
 
-* Fix it so check-in messages include diffs.  (jools@jools.org)
+* Fix it so check-in messages include diffs.  (jools AT jools.org)
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 

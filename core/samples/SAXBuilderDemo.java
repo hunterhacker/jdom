@@ -91,7 +91,7 @@ public class SAXBuilderDemo {
     public static void main(String[] args) {
         if ((args.length < 1) || (args.length > 3)) {
             System.out.println(
-              "Usage: java samples.SAXBuilderTest " +
+              "Usage: java samples.SAXBuilderDemo " +
               "[XML document filename] ([expandEntities] [SAX Driver Class])");
             return;
         }
@@ -123,7 +123,9 @@ public class SAXBuilderDemo {
             Document doc = builder.build(filename);
 
             XMLOutputter outputter = new XMLOutputter();
-            //outputter.setTextTrim(true);
+            outputter.setTextTrim(true);
+            outputter.setIndent("  ");
+            outputter.setNewlines(true);
             //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
