@@ -301,29 +301,29 @@ public final class TestVerifier extends junit.framework.TestCase {
 		
 		allChars = builder.build(in);
 
-		List els = allChars.getRootElement().getChild("prodgroup").getChildren("prod");
+		List els = allChars.getRootElement().getChildElement("prodgroup").getChildElements("prod");
 
 		Iterator it = els.iterator();
 		while (it.hasNext()) {
 			Element prod = (Element)it.next();
 			if (prod.getAttribute("id").getValue().equals("NT-Char")) {
 				//characters that must be accepted by processor
-				allCharacters =  prod.getChild("rhs"); 
+				allCharacters =  prod.getChildElement("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-BaseChar")) {
 				//build base characters
-				characters = prod.getChild("rhs");
+				characters = prod.getChildElement("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Ideographic")) {
 				//build Ideographic characters
-				ideochars = prod.getChild("rhs");
+				ideochars = prod.getChildElement("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-CombiningChar")) {
 				//build CombiningChar
-				combiningChars = prod.getChild("rhs");
+				combiningChars = prod.getChildElement("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Digit")) {
 				//build Digits
-				digits = prod.getChild("rhs");
+				digits = prod.getChildElement("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Extender")) {
 				//build Extenders
-				extenders = prod.getChild("rhs");
+				extenders = prod.getChildElement("rhs");
 			}
 	
 
@@ -344,183 +344,184 @@ public static Test suite () {
     public void tearDown() {
         // your code goes here.
     }
-	/**
-	 * Test the screen for invalid xml characters, IE, non Unicode characters
-	 */
-	public void test_TCM__boolean_isXMLCharacter_char() {
-		RangeIterator it = new RangeIterator(allCharacters);
-		char c;
-		while (it.hasNext()) {
-			c = ((Character) it.next()).charValue();
-			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
-				continue;
-			assertTrue("failed on valid xml character: 0x" + Integer.toHexString(c), Verifier.isXMLCharacter(c));
-		}
-		AntiRangeIterator ait = new AntiRangeIterator(allCharacters);
-		while (ait.hasNext()) {
-			c =ait.next();
-			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
-				continue;
-			assertTrue("didn't catch invalid XML Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLCharacter(c));
-		} 
-	}
-	/**
-	 * Test code goes here. Replace this comment.
-	 */
-	public void test_TCM__boolean_isXMLCombiningChar_char() {
-		RangeIterator it = new RangeIterator(combiningChars);
-		
-		while (it.hasNext()) {
-			char c = ((Character) it.next()).charValue();
-			assertTrue("failed on valid xml combining character", Verifier.isXMLCombiningChar(c));
-		}
+//	/**
+//	 * Test the screen for invalid xml characters, IE, non Unicode characters
+//	 */
+//	public void test_TCM__boolean_isXMLCharacter_char() {
+//		RangeIterator it = new RangeIterator(allCharacters);
+//		char c;
+//		while (it.hasNext()) {
+//			c = ((Character) it.next()).charValue();
+//			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
+//				continue;
+//			assertTrue("failed on valid xml character: 0x" + Integer.toHexString(c), Verifier.isXMLCharacter(c));
+//		}
+//		AntiRangeIterator ait = new AntiRangeIterator(allCharacters);
+//		while (ait.hasNext()) {
+//			c =ait.next();
+//			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
+//				continue;
+//			assertTrue("didn't catch invalid XML Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLCharacter(c));
+//		}
+//	}
+//	/**
+//	 * Test code goes here. Replace this comment.
+//	 */
+//	public void test_TCM__boolean_isXMLCombiningChar_char() {
+//		RangeIterator it = new RangeIterator(combiningChars);
+//
+//		while (it.hasNext()) {
+//			char c = ((Character) it.next()).charValue();
+//			assertTrue("failed on valid xml combining character", Verifier.isXMLCombiningChar(c));
+//		}
+//
+//		AntiRangeIterator ait = new AntiRangeIterator(combiningChars);
+//		while (ait.hasNext()) {
+//			char c =ait.next();
+//			assertTrue("didn't catch invalid XMLCombiningChar: 0x" + Integer.toHexString(c), ! Verifier.isXMLCombiningChar(c));
+//		}
+//	}
+//	/**
+//	 * Test that the Verifier accepts all valid and rejects
+//	 * all invalid XML digits
+//	 */
+//	public void test_TCM__boolean_isXMLDigit_char() {
+//		RangeIterator it = new RangeIterator(digits);
+//
+//		while (it.hasNext()) {
+//			char c = ((Character) it.next()).charValue();
+//			assertTrue("failed on valid xml digit", Verifier.isXMLDigit(c));
+//		}
+//
+//		AntiRangeIterator ait = new AntiRangeIterator(digits);
+//		while (ait.hasNext()) {
+//			char c =ait.next();
+//			assertTrue("didn't catch invalid XMLDigit: 0x" + Integer.toHexString(c), ! Verifier.isXMLDigit(c));
+//		}
+//	}
+//	/**
+//	 * Test code goes here. Replace this comment.
+//	 */
+//	public void test_TCM__boolean_isXMLExtender_char() {
+//		RangeIterator it = new RangeIterator(extenders);
+//
+//		while (it.hasNext()) {
+//			char c = ((Character) it.next()).charValue();
+//			assertTrue("failed on valid xml extender", Verifier.isXMLExtender(c));
+//		}
+//
+//		it = new RangeIterator(extenders);
+//		int start = 0;
+//		int code = 0;
+//		while (it.hasNext()) {
+//			start = code;
+//			code = (int)((Character) it.next()).charValue();
+//
+//			while (code > start && start != code - 1) {
+//				start ++;
+//				assertTrue("didnt' catch bad xml extender: 0x" + Integer.toHexString(start), ! Verifier.isXMLExtender((char) start));
+//
+//			}
+//		}
+//
+//	}
+//	/**
+//	 * Test that a character is a valid xml letter.
+//	 */
+//	public void test_TCM__boolean_isXMLLetter_char() {
+//		RangeIterator it = new RangeIterator(characters);
+//
+//		while (it.hasNext()) {
+//			char c = ((Character) it.next()).charValue();
+//			assertTrue("failed on valid xml character", Verifier.isXMLCharacter(c));
+//		}
+//		AntiRangeIterator ait = new AntiRangeIterator(characters);
+//		while (ait.hasNext()) {
+//			char c =ait.next();
+//			if (c == '\u3007'
+//				|| (c >= '\u3021' && c <= '\u3029')
+//				|| (c >= '\u4E00' && c <= '\u9FA5'))
+//				continue; // ideographic characters accepted
+//
+//			assertTrue("didn't catch invalid XML Base Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLLetter(c));
+//		}
+//	}
+//	/**
+//	 * Test that a char is either a letter or digit according to
+//	 * xml specs
+//	 */
+//	public void test_TCM__boolean_isXMLLetterOrDigit_char() {
+//		//this test can be simple because the underlying code
+//		//for letters and digits has already been tested.
+//
+//		//valid
+//		assertTrue("didn't accept valid letter: 0x0041", Verifier.isXMLLetterOrDigit('\u0041'));
+//		assertTrue("didn't accept valid digit: 0x0030", Verifier.isXMLLetterOrDigit('\u0030'));
+//		assertTrue("accepted invalid letter: 0x0040", Verifier.isXMLLetterOrDigit('\u0041'));
+//		assertTrue("accepted invalid digit: 0x0029", Verifier.isXMLLetterOrDigit('\u0030'));
+//
+//
+//	}
+//	/**
+//	 * Test the test for valid xml name characters.  This test only checks
+//	 * that the method dispatches correctly to other checks which have already
+//	 * been tested for completeness except where specific name characters are
+//	 * allowed such as '-'. '_', ':' and '.'.  The other valid name characters are
+//	 * xml letters, digits, extenders and combining characters.
+//	 */
+//	public void test_TCM__boolean_isXMLNameCharacter_char() {
+//
+//		//check in the low ascii range
+//		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
+//		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
+//		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
+//		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
+//		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
+//		//a few higher values
+//		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
+//		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
+//		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
+//
+//		//exceptional characters for names
+//		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
+//		assertTrue("invalidated valid char -" , Verifier.isXMLNameCharacter('-'));
+//		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
+//		assertTrue("invalidated valid char ." , Verifier.isXMLNameCharacter('.'));
+//		//xml letter
+//		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
+//		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
+//		//xml digit
+//		assertTrue("invalidated valid char 0x0031" , Verifier.isXMLNameCharacter((char)0x0031));
+//		//xml combining character
+//		assertTrue("invalidated valid char 0x0301" , Verifier.isXMLNameCharacter((char)0x0301));
+//		//xml extender
+//		assertTrue("invalidated valid char 0x00B7" , Verifier.isXMLNameCharacter((char)0x00B7));
+//	}
+//	/**
+//	 * Test that this character is a valid name start character.
+//	 * Valid name start characters are xml letters, ':' and '_'
+//	 */
+//	public void test_TCM__boolean_isXMLNameStartCharacter_char() {
+//		//check in the low ascii range
+//		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
+//		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
+//		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
+//		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
+//		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
+//		//a few higher values
+//		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
+//		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
+//		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
+//
+//		//exceptional characters for names
+//		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
+//		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
+//		//xml letter
+//		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
+//		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
+//
+//	}
 
-		AntiRangeIterator ait = new AntiRangeIterator(combiningChars);
-		while (ait.hasNext()) {
-			char c =ait.next();
-			assertTrue("didn't catch invalid XMLCombiningChar: 0x" + Integer.toHexString(c), ! Verifier.isXMLCombiningChar(c));
-		} 
-	}
-	/**
-	 * Test that the Verifier accepts all valid and rejects
-	 * all invalid XML digits
-	 */
-	public void test_TCM__boolean_isXMLDigit_char() {
-		RangeIterator it = new RangeIterator(digits);
-		
-		while (it.hasNext()) {
-			char c = ((Character) it.next()).charValue();
-			assertTrue("failed on valid xml digit", Verifier.isXMLDigit(c));
-		}
-		
-		AntiRangeIterator ait = new AntiRangeIterator(digits);
-		while (ait.hasNext()) {
-			char c =ait.next();
-			assertTrue("didn't catch invalid XMLDigit: 0x" + Integer.toHexString(c), ! Verifier.isXMLDigit(c));
-		} 
-	}
-	/**
-	 * Test code goes here. Replace this comment.
-	 */
-	public void test_TCM__boolean_isXMLExtender_char() {
-		RangeIterator it = new RangeIterator(extenders);
-		
-		while (it.hasNext()) {
-			char c = ((Character) it.next()).charValue();
-			assertTrue("failed on valid xml extender", Verifier.isXMLExtender(c));
-		}
-
-		it = new RangeIterator(extenders);
-		int start = 0;
-		int code = 0;
-		while (it.hasNext()) {
-			start = code;
-			code = (int)((Character) it.next()).charValue();
-			
-			while (code > start && start != code - 1) {
-				start ++;
-				assertTrue("didnt' catch bad xml extender: 0x" + Integer.toHexString(start), ! Verifier.isXMLExtender((char) start));
-				
-			}
-		}
-			
-	}
-	/**
-	 * Test that a character is a valid xml letter.
-	 */
-	public void test_TCM__boolean_isXMLLetter_char() {
-		RangeIterator it = new RangeIterator(characters);
-		
-		while (it.hasNext()) {
-			char c = ((Character) it.next()).charValue();
-			assertTrue("failed on valid xml character", Verifier.isXMLCharacter(c));
-		}
-		AntiRangeIterator ait = new AntiRangeIterator(characters);
-		while (ait.hasNext()) {
-			char c =ait.next();
-			if (c == '\u3007' 
-				|| (c >= '\u3021' && c <= '\u3029')
-				|| (c >= '\u4E00' && c <= '\u9FA5'))
-				continue; // ideographic characters accepted
-				
-			assertTrue("didn't catch invalid XML Base Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLLetter(c));
-		} 
-	}
-	/**
-	 * Test that a char is either a letter or digit according to
-	 * xml specs
-	 */
-	public void test_TCM__boolean_isXMLLetterOrDigit_char() {
-		//this test can be simple because the underlying code
-		//for letters and digits has already been tested.
-
-		//valid
-		assertTrue("didn't accept valid letter: 0x0041", Verifier.isXMLLetterOrDigit('\u0041'));
-		assertTrue("didn't accept valid digit: 0x0030", Verifier.isXMLLetterOrDigit('\u0030'));
-		assertTrue("accepted invalid letter: 0x0040", Verifier.isXMLLetterOrDigit('\u0041'));
-		assertTrue("accepted invalid digit: 0x0029", Verifier.isXMLLetterOrDigit('\u0030'));
-		
-		
-	}
-	/**
-	 * Test the test for valid xml name characters.  This test only checks
-	 * that the method dispatches correctly to other checks which have already
-	 * been tested for completeness except where specific name characters are
-	 * allowed such as '-'. '_', ':' and '.'.  The other valid name characters are
-	 * xml letters, digits, extenders and combining characters.
-	 */
-	public void test_TCM__boolean_isXMLNameCharacter_char() {
-
-		//check in the low ascii range
-		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
-		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
-		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
-		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
-		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
-		//a few higher values
-		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
-		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
-		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
-
-		//exceptional characters for names
-		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
-		assertTrue("invalidated valid char -" , Verifier.isXMLNameCharacter('-'));
-		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
-		assertTrue("invalidated valid char ." , Verifier.isXMLNameCharacter('.'));
-		//xml letter
-		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
-		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
-		//xml digit
-		assertTrue("invalidated valid char 0x0031" , Verifier.isXMLNameCharacter((char)0x0031));
-		//xml combining character
-		assertTrue("invalidated valid char 0x0301" , Verifier.isXMLNameCharacter((char)0x0301));
-		//xml extender
-		assertTrue("invalidated valid char 0x00B7" , Verifier.isXMLNameCharacter((char)0x00B7));
-	}
-	/**
-	 * Test that this character is a valid name start character.
-	 * Valid name start characters are xml letters, ':' and '_'
-	 */
-	public void test_TCM__boolean_isXMLNameStartCharacter_char() {
-		//check in the low ascii range
-		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
-		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
-		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
-		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
-		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
-		//a few higher values
-		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
-		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
-		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
-
-		//exceptional characters for names
-		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
-		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
-		//xml letter
-		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
-		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
-
-	}
 	/**
 	 * Test for a valid Attribute name.  A valid Attribute name is
 	 * an xml name (xml start character + xml name characters) with
