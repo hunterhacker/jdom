@@ -71,7 +71,7 @@ public Alltests(String arg1) {
  * @param args java.lang.String[]
  */
 public static void main(String[] args) {
-	if (args[0] != null && args[0].equals("-ui") ) {
+	if (args.length > 0 && args[0] != null && args[0].equals("-ui") ) {
 		String newargs[] = {"org.jdom.test.cases.Alltests"};
 		junit.swingui.TestRunner.main(newargs);
 	} else {
@@ -94,6 +94,7 @@ public static Test suite() {
 		suite.addTest(TestDocType.suite());
 		suite.addTest(TestElement.suite());
 		suite.addTest(TestDocument.suite());
+		suite.addTest(TestFilterList.suite());
 		return suite;
 }
 }
