@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.62 2001/06/28 00:25:31 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.63 2001/07/20 03:31:34 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.62 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.63 $ $Date: 2001/07/20 03:31:34 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -1142,28 +1142,26 @@ public class XMLOutputter implements Cloneable {
                 Object content = itr.next();
                 if (content instanceof String) {
                     String scontent = (String) content;
-                    if (justOutput == CDATA.class && 
-                          textNormalize &&
-                          startsWithWhite(scontent)) {
+                    if ((justOutput == CDATA.class) && 
+                        (textNormalize) &&
+                        (startsWithWhite(scontent))) {
                         out.write(" ");
                     }
                     printString(scontent, out);
                     endedWithWhite = endsWithWhite(scontent);
                     justOutput = String.class;
-                }
-                else {
+                } else {
                     // We're in a CDATA section
-                    if (justOutput == String.class &&
-                          textNormalize &&
-                          endedWithWhite) {
+                    if ((justOutput == String.class) &&
+                        (textNormalize) &&
+                        (endedWithWhite)) {
                         out.write(" ");  // padding
                     }
                     printCDATA((CDATA)content, out);
                     justOutput = CDATA.class;
                 }
             }
-        }
-        else {
+        } else {
             // Iterate through children
             Object content = null;
             Class justOutput = null;
@@ -1174,64 +1172,63 @@ public class XMLOutputter implements Cloneable {
                 content = itr.next();
                 // See if text, an element, a PI or a comment
                 if (content instanceof Comment) {
-                    if (!(justOutput == String.class && wasFullyWhite)) {
+                    if (!((justOutput == String.class) && (wasFullyWhite))) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
                     printComment((Comment) content, out);
                     justOutput = Comment.class;
-                }
-                else if (content instanceof String) {
+                } else if (content instanceof String) {
                     String scontent = (String) content;
-                    if (justOutput == CDATA.class && 
-                          textNormalize &&
-                          startsWithWhite(scontent)) {
+                    if ((justOutput == CDATA.class) && 
+                        (textNormalize) &&
+                        (startsWithWhite(scontent))) {
+
                         out.write(" ");
-                    }
-                    else if (justOutput != CDATA.class && 
-                             justOutput != String.class) {
+                    } else if ((justOutput != CDATA.class) && 
+                               (justOutput != String.class) &&
+                               (justOutput != null) &&
+                               (justOutput != Element.class)) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
-                    printString(scontent, out);
-                    endedWithWhite = endsWithWhite(scontent);
-                    justOutput = String.class;
-                    wasFullyWhite = (scontent.trim().length() == 0);
-                }
-                else if (content instanceof Element) {
-                    if (!(justOutput == String.class && wasFullyWhite)) {
+                    if (!((scontent.length() == 1) && 
+                         ("\r\n".indexOf(scontent.charAt(0)) != -1))) {
+                        printString(scontent, out);
+                        endedWithWhite = endsWithWhite(scontent);
+                        justOutput = String.class;
+                        wasFullyWhite = (scontent.trim().length() == 0);
+                    }
+                } else if (content instanceof Element) {
+                    if (!((justOutput == String.class) && (wasFullyWhite))) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
                     printElement((Element) content, out,
                                  indentLevel, namespaces);
                     justOutput = Element.class;
-                }
-                else if (content instanceof EntityRef) {
-                    if (!(justOutput == String.class && wasFullyWhite)) {
+                } else if (content instanceof EntityRef) {
+                    if (!((justOutput == String.class) && (wasFullyWhite))) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
                     printEntityRef((EntityRef) content, out);
                     justOutput = EntityRef.class;
-                }
-                else if (content instanceof ProcessingInstruction) {
-                    if (!(justOutput == String.class && wasFullyWhite)) {
+                } else if (content instanceof ProcessingInstruction) {
+                    if (!((justOutput == String.class) && (wasFullyWhite))) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
                     printProcessingInstruction((ProcessingInstruction) content,
                                                out);
                     justOutput = ProcessingInstruction.class;
-                }
-                else if (content instanceof CDATA) {
-                    if (justOutput == String.class &&
-                          textNormalize &&
-                          endedWithWhite) {
+                } else if (content instanceof CDATA) {
+                    if ((justOutput == String.class) &&
+                        (textNormalize) &&
+                        (endedWithWhite)) {
                         out.write(" ");  // padding
-                    }
-                    else if (justOutput != String.class &&
-                             justOutput != CDATA.class) {
+                    } else if ((justOutput != String.class) &&
+                               (justOutput != CDATA.class)) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
