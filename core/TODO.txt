@@ -25,6 +25,12 @@ Items that need to be done:
   First message in the thread is
   http://lists.denveronline.net/lists/jdom-interest/2000-August/002171.html
 
+* Consider a builder.setFeature() pass-through method that allows any 
+  features to be set that aren't in the http://xml.org namespace.  Make
+  those in http://xml.org not to be touched because either we have specific
+  requirements for them to be set one way, or we have the feature exposed
+  through a Java method.
+
 * Investigate ClassLoader.loadClass() instead of Class.forName() for those
   times when the classes aren't on the system classpath.  (Suggested by Alex
   Rosen)
@@ -42,6 +48,7 @@ Items that need to be done:
 * Consider Mike Jennings' proposal of two new methods on Element:
   public String getAttributeValue(String name, String default)
   public String getAttributeValue(String name, Namespace ns, String default)
+  http://lists.denveronline.net/lists/jdom-interest/2000-December/004155.html
 
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
   same prefix already existing on the element or being the element's own 
@@ -131,6 +138,15 @@ Items that need to be done:
   the DTD even if validation is off.
   Xerces has a custom option: http://xml.apache.org/xerces-j/features.html
   Crimson doesn't, nor probably do others.  That makes it tricky.
+
+* Figure out how to deal with XMLOutputter writing of special characters like
+  &#160.  Should it char escape only chars unprintable in the current
+  character set?  Or should there be a fancy API for selecting what's escaped?
+  http://lists.denveronline.net/lists/jdom-interest/2001-February/004521.html
+
+* Investigate the capabilities of David Megginson's XMLWriter at 
+  http://www.megginson.com/Software/ as a way to output a document.
+  More info: http://xmlhack.com/read.php?item=777
 
 --- FOR JDOM 1.0 ---
 
@@ -239,6 +255,7 @@ Items that need to be done:
   http://xmlhack.com/read.php?item=626
   http://www.wutka.com/dtdparser.html
   http://lists.denveronline.net/lists/jdom-interest/2000-July/001431.html
+  http://lists.denveronline.net/lists/jdom-interest/2001-February/004661.html
   Maybe new DTDValidator(dtd).validate(doc);
   Then later new SchemaValidator(schema).validate(doc);
   Could instead do doc.validate(dtd/schema) but then we'd have to dynamically 
@@ -346,6 +363,8 @@ Items that need to be done:
   method also for engines that recognize JDOMSource.  Similar on JDOMResult
   extending SAXResult with a setDocument()/getDocument() method pair or 
   whatever.
+  See the work of Laurent Bihanic <laurent.bihanic@atosorigin.com>:
+  http://lists.denveronline.net/lists/jdom-interest/2001-March/004838.html
 
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
