@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.46 2001/04/27 18:21:21 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.47 2001/05/08 22:17:27 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -129,7 +129,7 @@ import org.jdom.ProcessingInstruction;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.46 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.47 $ $Date: 2001/05/08 22:17:27 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -277,6 +277,9 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
+     * Sets the output encoding.  The name should be an accepted XML
+     * encoding.
+     *
      * @param encoding encoding format
      **/
     public void setEncoding(String encoding) {
