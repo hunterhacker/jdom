@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.148 2004/02/27 21:27:27 jhunter Exp $
+ $Id: Element.java,v 1.149 2004/03/01 23:58:28 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.148 $, $Date: 2004/02/27 21:27:27 $
+ * @version $Revision: 1.149 $, $Date: 2004/03/01 23:58:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.148 $ $Date: 2004/02/27 21:27:27 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.149 $ $Date: 2004/03/01 23:58:28 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -308,6 +308,8 @@ public class Element extends Content implements Parent {
      *                             namespace prefix)
      */
     public String getQualifiedName() {
+        // Note: Any changes here should be reflected in
+        // XMLOutputter.printQualifiedName()
         if (namespace.getPrefix().equals("")) {
             return getName();
         }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.109 2004/02/27 21:42:18 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.110 2004/03/01 23:58:29 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.109 $, $Date: 2004/02/27 21:42:18 $
+ * @version $Revision: 1.110 $, $Date: 2004/03/01 23:58:29 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.109 $ $Date: 2004/02/27 21:42:18 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.110 $ $Date: 2004/03/01 23:58:29 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -852,7 +852,7 @@ public class XMLOutputter implements Cloneable {
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
         out.write("<");
-        out.write(element.getQualifiedName());
+        printQualifiedName(out, element);
 
         // Mark our namespace starting point
         int previouslyDeclaredNamespaces = namespaces.size();
@@ -878,7 +878,7 @@ public class XMLOutputter implements Cloneable {
             // Case content is empty or all insignificant whitespace
             if (currentFormat.expandEmptyElements) {
                 out.write("></");
-                out.write(element.getQualifiedName());
+                printQualifiedName(out, element);
                 out.write(">");
             }
             else {
@@ -905,7 +905,7 @@ public class XMLOutputter implements Cloneable {
                 printTextRange(out, content, start, size);
             }
             out.write("</");
-            out.write(element.getQualifiedName());
+            printQualifiedName(out, element);
             out.write(">");
         }
 
@@ -1118,7 +1118,7 @@ public class XMLOutputter implements Cloneable {
             }
 
             out.write(" ");
-            out.write(attribute.getQualifiedName());
+            printQualifiedName(out, attribute);
             out.write("=");
 
             out.write("\"");
@@ -1538,6 +1538,33 @@ public class XMLOutputter implements Cloneable {
     protected class NamespaceStack
         extends org.jdom.output.NamespaceStack
     {
+    }
+
+    // Support method to print a name without using elt.getQualifiedName()
+    // and thus avoiding a StringBuffer creation and memory churn
+    private void printQualifiedName(Writer out, Element e) throws IOException {
+        if (e.getNamespace().getPrefix().length() == 0) {
+            out.write(e.getName());
+        }
+        else {
+            out.write(e.getNamespace().getPrefix());
+            out.write(':');
+            out.write(e.getName());
+        }
+    }
+
+    // Support method to print a name without using att.getQualifiedName()
+    // and thus avoiding a StringBuffer creation and memory churn
+    private void printQualifiedName(Writer out, Attribute a) throws IOException {
+        String prefix = a.getNamespace().getPrefix();
+        if ((prefix != null) && (!prefix.equals(""))) {
+            out.write(prefix);
+            out.write(':');
+            out.write(a.getName());
+        }
+        else {
+            out.write(a.getName());
+        }
     }
 
     // * * * * * * * * * * Deprecated methods * * * * * * * * * *

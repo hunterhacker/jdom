@@ -1,6 +1,6 @@
 /*--
 
- $Id: Attribute.java,v 1.51 2004/02/27 11:32:57 jhunter Exp $
+ $Id: Attribute.java,v 1.52 2004/03/01 23:58:28 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.51 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.52 $, $Date: 2004/03/01 23:58:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -71,7 +71,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.51 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.52 $ $Date: 2004/03/01 23:58:28 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -384,7 +384,8 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>String</code> - full name for this element.
      */
     public String getQualifiedName() {
-        // Add prefix, if needed
+        // Note: Any changes here should be reflected in
+        // XMLOutputter.printQualifiedName()
         String prefix = namespace.getPrefix();
         if ((prefix != null) && (!prefix.equals(""))) {
             return new StringBuffer(prefix)
