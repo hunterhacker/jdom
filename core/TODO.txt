@@ -2,6 +2,8 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Make setAttributes() atomic
+
 * Determine if setMixedContent() should remain atomic on failure or not.
 
 * Fix JDK 1.1 build issues introduced with the Manifest work. (Jools?)
@@ -133,6 +135,7 @@ Items that need to be done:
   (With OptimizeIt, Joe Bowbeer may lead this)
 
 * Verify we get good error handling if someone passes null to any add/set
+  method.  Consensus is throw an NPE if passing null to a setList-style
   method.
 
 * Remove getSerializedForm() calls.  Move logic into XMLOutputter.
@@ -402,4 +405,8 @@ Items that need to be done:
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
+
+* Work on creating a deferred builder that parses only what's necessary to
+  satisfy the programmer's requests.  See Ayal Spitz' post at
+  http://lists.denveronline.net/lists/jdom-interest/2001-April/005685.html
 

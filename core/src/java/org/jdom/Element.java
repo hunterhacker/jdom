@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.66 2001/04/13 03:41:12 jhunter Exp $
+ $Id: Element.java,v 1.67 2001/04/18 06:32:40 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -1444,15 +1444,19 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This adds an attribute to this element.  Any existing attribute with
-     * the same name and namespace URI is removed.  (TODO: Code the
+     * This sets an attribute value for this element.  Any existing attribute 
+     * with the same name and namespace URI is removed.  (TODO: Code the
      * replacement logic.)
      * </p>
      *
      * @param attribute <code>Attribute</code> to add
      * @return this element modified
+     * @throws IllegalAddException if an attribute by the same name/namespace
+     *   already exists, if the attribute being added already has a parent, 
+     *   or if the attribute namespace prefix collides with another namespace 
+     *   prefix on the element
      */
-    public Element addAttribute(Attribute attribute) {
+    public Element setAttribute(Attribute attribute) {
         if (getAttribute(attribute.getName(), attribute.getNamespace())
                  != null) {
             throw new IllegalAddException(
@@ -1465,8 +1469,44 @@ public class Element implements Serializable, Cloneable {
                 attribute.getParent().getQualifiedName() + "\"");
         }
 
-        // XXX Should verify attribute ns prefix doesn't collide with
+        // Verify the attribute's namespace prefix doesn't collide with
         // another attribute prefix or this element's prefix
+        // This is unfortunately pretty heavyweight but light testing doesn't 
+        // show a huge difference in build times.
+        String prefix = attribute.getNamespace().getPrefix();
+        String uri = attribute.getNamespace().getURI();
+        if (prefix.equals(getNamespacePrefix()) && 
+              !uri.equals(getNamespaceURI())) {
+            throw new IllegalAddException(this, attribute,
+                "The attribute namespace prefix \"" + prefix + "\" collides " +
+                "with its element namespace prefix");
+        }
+        if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
+            Iterator itr = additionalNamespaces.iterator();
+            while (itr.hasNext()) {
+                Namespace ns = (Namespace) itr.next();
+                if (prefix.equals(ns.getPrefix()) && 
+                      !uri.equals(ns.getURI())) {
+                    throw new IllegalAddException(this, attribute,
+                        "The attribute namespace prefix \"" + prefix +
+                        "\" collides with a namespace declared by its element");
+                }
+            }
+        }
+        if (attributes != null && attributes.size() > 0) {
+            Iterator itr = attributes.iterator();
+            while (itr.hasNext()) {
+                Namespace ns = 
+                   (Namespace) ((Attribute)itr.next()).getNamespace();
+                if (prefix.equals(ns.getPrefix()) && 
+                      !uri.equals(ns.getURI())) {
+                    throw new IllegalAddException(this, attribute,
+                        "The attribute namespace prefix \"" + prefix +
+                        "\" collides with another attribute namespace on " +
+                        "its element");
+                }
+            }
+        }
 
         if (attributes == null) {
             attributes = new LinkedList();
@@ -1837,6 +1877,43 @@ public class Element implements Serializable, Cloneable {
      */
     public Element getCopy(String name) {
         return getCopy(name, Namespace.NO_NAMESPACE);
+    }
+
+    /**
+     * <p>
+     * This adds an attribute to this element.  Any existing attribute with
+     * the same name and namespace URI is removed.  (TODO: Code the
+     * replacement logic.)
+     * </p>
+     *
+     * @param attribute <code>Attribute</code> to add
+     * @return this element modified
+     *
+     * @deprecated Deprecated in beta7, use setAttribute(Attribute) instead
+     */
+    public Element addAttribute(Attribute attribute) {
+        if (getAttribute(attribute.getName(), attribute.getNamespace())
+                 != null) {
+            throw new IllegalAddException(
+                this, attribute, "Duplicate attributes are not allowed");
+        }
+
+        if (attribute.getParent() != null) {
+            throw new IllegalAddException(this, attribute,
+                "The attribute already has an existing parent \"" +
+                attribute.getParent().getQualifiedName() + "\"");
+        }
+
+        // XXX Should verify attribute ns prefix doesn't collide with
+        // another attribute prefix or this element's prefix
+
+        if (attributes == null) {
+            attributes = new LinkedList();
+        }
+
+        attributes.add(attribute);
+        attribute.setParent(this);
+        return this;
     }
 
 }

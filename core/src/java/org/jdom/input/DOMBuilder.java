@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.31 2001/04/16 03:58:19 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.32 2001/04/18 06:32:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -418,7 +418,7 @@ public class DOMBuilder {
                         Namespace attns = Namespace.getNamespace(prefix, uri);
                         Attribute attribute =
                             new Attribute(attLocalName, attvalue, attns);
-                        element.addAttribute(attribute);
+                        element.setAttribute(attribute);
                     }
                 }
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.4 2001/04/12 18:06:39 jhunter Exp $
+ $Id: SAXHandler.java,v 1.5 2001/04/18 06:32:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -281,7 +281,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
                 attribute = new Attribute(attLocalName, atts.getValue(i));
             }
 
-            element.addAttribute(attribute);
+            element.setAttribute(attribute);
         }
 
         if (atRoot) {
