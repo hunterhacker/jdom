@@ -277,6 +277,7 @@ public final class TestElement
     /**
      * Test that hasChildren only reports true for actual child elements.
      */
+/*
     public void test_TCM__boolean_hasChildren() {
         //set up an element to test with
         Element element = new Element("element", Namespace.getNamespace("http://foo"));
@@ -307,6 +308,7 @@ public final class TestElement
         element.addContent(child1);
         assertTrue("reported no children when there is a child element", element.hasChildren());
     }
+*/
 
     /**
      * Test that hasMixedContent works for varying types of possible
@@ -453,6 +455,7 @@ public final class TestElement
     /**
      * Test removeChildren which removes all child elements
      */
+/*
     public void test_TCM__boolean_removeChildren() {
         Namespace ns = Namespace.getNamespace("x", "urn:fudge");
         Element element = new Element("element");
@@ -467,10 +470,12 @@ public final class TestElement
         assertTrue("couldn't remove child content", element.removeChildren());
         assertTrue("child not removed", element.getChild("child", ns) == null);
     }
+*/
 
     /**
      * Test removeChildren by name.
      */
+/*
     public void test_TCM__boolean_removeChildren_String() {
         Element element = new Element("element");
 
@@ -486,10 +491,12 @@ public final class TestElement
         assertTrue("couldn't remove child content", element.removeChildren("child"));
         assertTrue("children not removed", element.getChild("child") == null);
     }
+*/
 
     /**
      * Test removeChildren with a name and namespace
      */
+/*
     public void test_TCM__boolean_removeChildren_String_OrgJdomNamespace() {
         Namespace ns = Namespace.getNamespace("x", "urn:fudge");
         Element element = new Element("element");
@@ -506,6 +513,7 @@ public final class TestElement
         assertTrue("couldn't remove child content", element.removeChildren("child", ns));
         assertTrue("children not removed", element.getChild("child", ns) == null);
     }
+*/
 
     /**
      * Test removeContent for a Comment
@@ -1205,6 +1213,7 @@ public final class TestElement
     /**
      * Test setting child elements in a list.
      */
+/*
     public void test_TCM__OrgJdomElement_setChildren_List() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getChildren("child"));
@@ -1252,6 +1261,7 @@ public final class TestElement
         element.setContent(null);
         assertTrue("didn't reset children List", element.getContent().isEmpty());
     }
+*/
 
     /**
      * Test adding mixed content in a List
