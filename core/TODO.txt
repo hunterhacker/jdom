@@ -4,7 +4,22 @@ Items that need to be done:
 
 * Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
 
+* Straighten up the Entity API, bringing its API in line with Element and
+  supporting EntityReferences.
+
+* Make entity.clone() truly a deep copy.
+
+* Test LinkedList vs ArrayList for speed and memory consumption.
+
 --- FOR JDOM 1.0 ---
+
+* Add elt.hasChildren().
+
+* Look at undeprecating elt.removeContent(), because not having it makes
+  moving elements a pain
+
+* Investigate doc.getDescription() to let people add doc descriptions.  It's
+  an idea from IBM's parser suggested by andyk.
 
 * Create "build dist" for distribution
   Use fixcrlf in dist (instead of package as currently done)
@@ -33,6 +48,7 @@ Items that need to be done:
   Smiley.  (Work being done by trebor.a.rude@lmco.com)
 
 * Probably add an Attribute.getParent() method (to help XPath)
+  Also on Comment, PI, and Entity.  Maybe on CDATA.
 
 * Add better handling of bogus undeclared prefixes like <bogus:foo/>
 
@@ -176,4 +192,7 @@ Items that need to be done:
 * Investigate adding Andy's library (jhunter)
 
 * Verify JDOM is compliant with Infoset
+
+* Consider a builder for a read-only document.  It could "intern" objects to
+  reduce memory consumption.
 
