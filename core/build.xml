@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.40 2003/04/04 00:59:49 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.41 2003/04/04 04:08:41 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -64,17 +64,13 @@ For instructions on how to build JDOM, please view the README.txt file.
       <pathelement location="${jaxen-core.jar}"/>
       <pathelement location="${jaxen-saxpath.jar}"/>
 
-      <!-- Include CLASSPATH environment variable in compilation path as
-           it contains the path to the JDK 1.1 collections when these are
-           to be used.
-       -->
+      <!-- We used to include the CLASSPATH environment variable in 
+           compilation path as it might contain the path to the JDK 1.1 
+           collections.  That's not needed anymore.  We'll keep it here
+           in case there's a future need to include the CLASSPATH.
       <pathelement path="${java.class.path}" />
+       -->
     </path>
-
-    <!-- JDK1.1 collections -->
-    <property name="coll.import" value="com.sun.java.util.collections"/>
-    <available classname="${coll.import}.Collection" property="coll.present"
-               classpathref="compile.class.path"/>
 
   </target>
 
@@ -123,47 +119,6 @@ For instructions on how to build JDOM, please view the README.txt file.
   </target>
 
   <!-- =================================================================== -->
-  <!-- Does replacement on files for dealing with collections.             -->
-  <!-- XXX The efficiency could be improved here; all replacements should  -->
-  <!-- XXX happen during one read/write phase and only for files that have -->
-  <!-- XXX changed.                                                        -->
-  <!-- =================================================================== -->
-  <target name="collections" if="coll.present" depends="prepare-src">
-    <replace dir="${build.src}" includes="**"
-             token="java.util.Collection" value="${coll.import}.Collection"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.Map" value="${coll.import}.Map"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.HashMap" value="${coll.import}.HashMap"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.List" value="${coll.import}.List"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.AbstractList" value="${coll.import}.AbstractList"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.Set" value="${coll.import}.Set"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.HashSet" value="${coll.import}.HashSet"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.Iterator" value="${coll.import}.Iterator"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.ConcurrentModificationException" value="${coll.import}.ConcurrentModificationException"/>
-    <replace dir="${build.src}" includes="**"
-             token="UnsupportedOperationException" value="${coll.import}.UnsupportedOperationException"/>
-    <replace dir="${build.src}" includes="**"
-             token="java.util.ArrayList" value="${coll.import}.ArrayList"/>
-    <!-- The following replace handles the "import java.util.*" case by    -->
-    <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
-    <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
-    <replace dir="${build.src}" includes="**"
-             token="java.util.*"
-             value="java.util.*;\u000aimport ${coll.import}.*"/>
-    <replace dir="${build.src}" includes="**"
-             token="@throws" value="@exception"/>
-  </target>
-
-  <!-- =================================================================== -->
   <!-- Prepares the example code                                           -->
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
@@ -180,7 +135,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="prepare-src,collections"
+  <target name="compile" depends="prepare-src"
           description="Compiles the source code">
     <!-- Compile the JaxenXPath adapter only if Jaxen classes are found -->
     <available property="jaxen.present"
@@ -214,7 +169,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples,collections"
+  <target name="samples" depends="prepare-samples"
           description="Compiles the samples directory">
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
@@ -248,7 +203,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
   <!-- =================================================================== -->
-  <target name="javadoc" depends="prepare-src,collections"
+  <target name="javadoc" depends="prepare-src"
           description="Creates the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"
@@ -270,7 +225,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Creates the API documentation, with links to JDK 1.4 classes        -->
   <!-- We can use linkoffline with a newer Ant and avoid this target       -->
   <!-- =================================================================== -->
-  <target name="javadoc-link" depends="prepare-src,collections"
+  <target name="javadoc-link" depends="prepare-src"
           description="Creates the API documentation with links to JDK 1.4 classes">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"

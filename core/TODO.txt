@@ -1,10 +1,5 @@
 Items that need to be done:
 
---- API CHANGES FOR Beta 9 ---
-
-* Laurent's various build script and builder fixes.
-
-
 --- API CHANGES FOR 1.0 ---
 
 * Make sure the filter classes have hashCode() methods.

@@ -13,7 +13,7 @@ Apache projects and extended by many developers.
 
 Ant is a little but very handy tool that uses a build file written in XML
 (build.xml) as building instructions. For more information refer to
-"http://jakarta.apache.org/ant/".
+"http://ant.apache.org".
 
 The only thing that you have to make sure of is that the "JAVA_HOME"
 environment property is set to match the top level directory containing the
@@ -44,18 +44,14 @@ where the build.xml file is located. Then type
 if everything is right and all the required packages are visible, this action
 will generate a file called "jdom.jar" in the "./build" directory. Note, that
 if you do further development, compilation time is reduced since Ant is able
-to detect which files have changed an to recompile them at need.
+to detect which files have changed and recompile them as needed.
 
-If you're compiling for JDK 1.1, then use the build11 scripts:
-
-  ./build11.sh (unix)
-  .\build11.bat (win32)
+If for some crazy reason you're still using JDK 1.1, please note that JDOM no
+longer supports JDK 1.1 compiles.  If you're despreate for JDK 1.1 support,
+you can retrieve the CVS code from April 2nd, 2003, (use the -D flag).  This
+was the last day JDK 1.1 was supported.  Then run the "build11" scripts.
 
 If something went wrong, go to the FAQ at http://www.jdom.org/docs/faq.html.
-
-Also, you'll note that reusing a single JVM instance for each task, increases
-tremendously the performance of the whole build system, compared to other
-tools (i.e. make or shell scripts) where a new JVM is started for each task.
 
 
 Build targets

@@ -17,6 +17,10 @@ the parser about the error.  It has a getPartialDocument() that gives access
 to whatever part of the input document that was successfully parsed before the
 parser fired a SAXParseException.
 
+Added org.jdom.output.JDOMLocator, an implementation of org.xml.sax.Locator
+which a ContentHandler could use to determine the document object on which an
+error occurred.
+
 
 NEW METHODS
 -----------
@@ -592,7 +596,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.9 2003/04/02 10:18:06 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.10 2003/04/04 04:08:41 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
