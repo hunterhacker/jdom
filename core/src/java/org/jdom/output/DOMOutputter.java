@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.23 2001/05/09 05:52:21 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.24 2001/05/19 03:10:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ import org.w3c.dom.DOMImplementation;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.23 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.24 $ $Date: 2001/05/19 03:10:05 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -268,9 +268,16 @@ public class DOMOutputter {
         try {
             int previouslyDeclaredNamespaces = namespaces.size();
 
-            org.w3c.dom.Element domElement = 
-                domDoc.createElementNS(element.getNamespaceURI(),
-                                       element.getQualifiedName());
+            org.w3c.dom.Element domElement = null;
+            if ("".equals(element.getNamespacePrefix())) {
+                // No namespace, use createElement
+                domElement = domDoc.createElement(element.getQualifiedName());
+            }
+            else {
+                domElement = domDoc.createElementNS(
+                                          element.getNamespaceURI(),
+                                          element.getQualifiedName());
+            }
 
             // Add namespace attributes, beginning with the element's own
             // Do this only if it's not the XML namespace and it's
@@ -417,8 +424,14 @@ public class DOMOutputter {
                                       throws JDOMException {
          org.w3c.dom.Attr domAttr = null;
          try {
-             domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
-                                                attribute.getQualifiedName());
+             if ("".equals(attribute.getNamespacePrefix())) {
+                 // No namespace, use createAttribute
+                 domAttr = domDoc.createAttribute(attribute.getQualifiedName());
+             }
+             else {
+                 domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
+                                                  attribute.getQualifiedName());
+             }
              domAttr.setValue(attribute.getValue());
          } catch (Exception e) {
              throw new JDOMException("Exception outputting Attribute " +
