@@ -1,6 +1,6 @@
 /*--
 
- $Id: DescendantDemo.java,v 1.1 2003/05/21 09:17:44 jhunter Exp $
+ $Id: DescendantDemo.java,v 1.2 2004/02/06 04:33:46 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -74,7 +74,7 @@ public class DescendantDemo {
         System.out.println("All content:");
         Iterator itr = doc.getDescendants();
         while (itr.hasNext()) {
-            Child c = (Child) itr.next();
+            Content c = (Content) itr.next();
             System.out.println(c);
         }
 
@@ -82,7 +82,7 @@ public class DescendantDemo {
         System.out.println("Only elements:");
         itr = doc.getDescendants(new ElementFilter());
         while (itr.hasNext()) {
-            Child c = (Child) itr.next();
+            Content c = (Content) itr.next();
             System.out.println(c);
         }
 
@@ -90,7 +90,7 @@ public class DescendantDemo {
         System.out.println("Everything that's not an element:");
         itr = doc.getDescendants(new ElementFilter().negate());
         while (itr.hasNext()) {
-            Child c = (Child) itr.next();
+            Content c = (Content) itr.next();
             System.out.println(c);
         }
 
@@ -98,7 +98,7 @@ public class DescendantDemo {
         System.out.println("Only elements with localname of servlet:");
         itr = doc.getDescendants(new ElementFilter("servlet"));
         while (itr.hasNext()) {
-            Child c = (Child) itr.next();
+            Content c = (Content) itr.next();
             System.out.println(c);
         }
 
@@ -108,7 +108,7 @@ public class DescendantDemo {
         itr = doc.getDescendants(new ElementFilter("servlet-name")
                                  .or(new ElementFilter("servlet-class")));
         while (itr.hasNext()) {
-            Child c = (Child) itr.next();
+            Content c = (Content) itr.next();
             System.out.println(c);
         }
 

@@ -235,7 +235,7 @@ public class JDOMAbout {
             support = root.getChildTextTrim("support");
             website = root.getChildTextTrim("web-site");
 
-            List authorElements = root.getChildElements("author");
+            List authorElements = root.getChildren("author");
             authors = new LinkedList();
             Iterator it = authorElements.iterator();
             while (it.hasNext()) {
