@@ -1193,7 +1193,7 @@ public class XMLOutputter implements Cloneable {
      * @param st <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
      */
-    private String escapeAttributeEntities(String st) {
+    protected String escapeAttributeEntities(String st) {
         StringBuffer buff = new StringBuffer();
         char[] block = st.toCharArray();
         String stEntity = null;
@@ -1245,7 +1245,7 @@ public class XMLOutputter implements Cloneable {
      * @param st <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
      */
-    private String escapeElementEntities(String st) {
+    protected String escapeElementEntities(String st) {
         StringBuffer buff = new StringBuffer();
         char[] block = st.toCharArray();
         String stEntity = null;
