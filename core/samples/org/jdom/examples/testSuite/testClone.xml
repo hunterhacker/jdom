@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE library SYSTEM "DTD/testSuite.dtd">
+
+<?cocoon-process type="xslt"?>
+
+<!-- XML Document for Cloning Tests -->
+<library>
+  <author name="J. R. R. Tolkien">
+    <book subject="fantasy">
+      <title>The Hobbit</title>
+      <publicationDate>1963</publicationDate>
+    </book>
+    <book subject="fantasy">
+      <title>The Fellowship of the Ring</title>
+      <publicationDate>1965</publicationDate>
+    </book>
+  </author>
+
+  <author name="Isaac Asimov">
+    <book subject="science fiction">
+      <title>Foundation &amp; Earth</title>
+      <publicationDate>1971</publicationDate>
+    </book>
+  </author>
+</library>

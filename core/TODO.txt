@@ -1,0 +1,33 @@
+Items that need to be done:
+
+* Implement whitespace preservation for the xml:space attribute on elements
+  in SAXBuilder and DOMBuilder
+
+* Implement DOMOutputter
+
+* Implement inline entities:
+        <?xml version='1.0' ?>
+        <!DOCTYPE mydtd[
+        <!ENTITY nbsp '&#160;'>
+        <!ENTITY aring '&#229;'>
+        <!ENTITY auml '&#228;'>
+        <!ENTITY ouml '&#246;'>
+        <!ENTITY Aring '&#197;'>
+        <!ENTITY Auml '&#196;'>
+        <!ENTITY Ouml '&#214;'>]>
+
+        <DOCUMENT>
+                God forts&auml;ttning p&aring; det nya millenniet!
+        </DOCUMENT>
+
+* Fix namespace declarations for attributes
+
+* Add methods/logic to Verifier for all XML spec. constraints
+
+* Fix namespaces to handle disparate prefixes to same URI
+
+* Fix sample for JTreeOuputter 
+
+* Add ElementLocator to contrib/ directory (from Alfred Lopez)
+
+* Add SQLBuilder to contrib/ directory (from Jon Baer)
