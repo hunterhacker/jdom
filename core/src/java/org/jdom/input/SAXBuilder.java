@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.55 2001/08/02 00:01:19 bmclaugh Exp $
+ $Id: SAXBuilder.java,v 1.56 2001/08/02 00:13:43 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * <p><code>SAXBuilder</code> builds a JDOM tree using SAX.</p>
+ * <p><code>SAXBuilder</code> builds a JDOM tree using SAX.
+ * Information about SAX can be found at 
+ * <a href="http://www.megginson.com/SAX">http://www.megginson.com/SAX</a>.</p>
  *
  * <p>Known issues: Relative paths for a DocType or EntityRef may be
  * converted by the SAX parser into absolute paths</p>
@@ -84,7 +86,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.55 $ $Date: 2001/08/02 00:01:19 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.56 $ $Date: 2001/08/02 00:13:43 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -119,6 +121,9 @@ public class SAXBuilder {
 
     /** Whether to ignore ignorable whitespace */
     private boolean ignoringWhite = false;
+
+    /** User-specified features to be set on the SAX parser */
+    private HashMap features = new HashMap(5);
 
     /**
      * <p>
@@ -259,6 +264,28 @@ public class SAXBuilder {
      */
     public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
         this.ignoringWhite = ignoringWhite;
+    }
+
+    /**
+     * <p>
+     * This sets a feature on the SAX parser. See the SAX documentation for
+     * more information.
+     * </p>
+     * <p>
+     * NOTE: SAXBuilder requires that some particular features of the SAX parser be
+     * set up in certain ways for it to work properly. The list of such features
+     * may change in the future. Therefore, the use of this method may cause
+     * parsing to break, and even if it doesn't break anything today it might 
+     * break parsing in a future JDOM version, because what JDOM parsers require 
+     * may change over time. Use with caution.
+     * </p>
+     *
+     * @param name The feature name, which is a fully-qualified URI.
+     * @param value The requested state of the feature (true or false).
+     */
+    public void setFeature(String name, boolean value) {
+        // Save the specified feature for later.
+        features.put(name, new Boolean(value));
     }
 
     /**
@@ -463,6 +490,14 @@ public class SAXBuilder {
              parser.setErrorHandler(saxErrorHandler);
         } else {
              parser.setErrorHandler(new BuilderErrorHandler());
+        // Set any user-specified features on the parser.
+        Iterator iter = features.keySet().iterator();
+        while(iter.hasNext()) {
+            String name = (String)iter.next();
+            Boolean value = (Boolean)features.get(name);
+            internalSetFeature(parser, name, value.booleanValue(), name);
+        }
+
         }
 
         // Setup lexical reporting.
@@ -567,7 +602,7 @@ public class SAXBuilder {
                 displayName + " not supported for SAX driver " + saxDriverClass);
         } catch (SAXNotRecognizedException e) {
             throw new JDOMException(
-                displayName + " feature not recognized for SAX driver" + saxDriverClass);
+                displayName + " feature not recognized for SAX driver " + saxDriverClass);
         }
     }
 
