@@ -20,8 +20,6 @@ JDOM-TEST - TODO File
 * Need to be able to find out which test cases have been coded and which 
   are pending by running the test suite.
 
-* Need to cater for the 1.1 JDK. 
-
 * Need to find out if test cases can be created using a use case, how could this
   be done.
 

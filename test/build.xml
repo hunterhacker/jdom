@@ -22,11 +22,13 @@ These are the meaningful targets for this build file:
  - compile -> compiles the contributed source code
  - javadoc -> generates the API documentation in ./build/javadocs
  - clean -> restores the distribution to its original and clean state
- - test -> runs tests one test class at a time (all test cases starting with "Test")
+ - test -> runs tests one test class at a time (all test cases starting with
+   "Test")
  - testui -> runs JUnit gui and starts automatically with Alltests
  - testreport -> Calls the Ant/Junit task to build javadoc style test output
- after you have run the test task.  These aren't automatically done because it
- takes more time and that may not be desired when the tests normally succeed.
+   after you have run the test task.  These aren't automatically done because
+   it takes more time and that may not be desired when the tests normally
+   succeed.
 
 -->
 
@@ -72,7 +74,7 @@ These are the meaningful targets for this build file:
     <property name="Name" value="JDOM Test"/>
     <property name="name" value="jdom-test"/>
     <property name="version" value="1.0beta10-dev"/>
-    <property name="year" value="2003"/>
+    <property name="year" value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
