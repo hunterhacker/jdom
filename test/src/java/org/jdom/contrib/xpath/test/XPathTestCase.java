@@ -149,7 +149,7 @@ public class XPathTestCase extends TestCase {
    * deep compare on array
    */
   public void assertArrayEquals(String message, Object[] expected, Object[] actual) {
-    assertEquals("{" + message + "} length", expected.length, actual.length);
+    assertEquals("{" + message + "} length", (long)expected.length, (long)actual.length);
     System.out.print("$");
     for (int i=0; i < actual.length; i++) {
       assertEquals("{" + message + "} i=" + i, expected[i], actual[i]);
