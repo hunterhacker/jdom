@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import org.jdom.*;
 import org.jdom.contrib.xpath.XPathElement;
-import org.jdom.contrib.xpath.Keywords;
+import org.jdom.contrib.xpath.impl.Axis;
+import org.jdom.contrib.xpath.impl.Nodetype;
 import org.jdom.contrib.xpath.XPathParseException;
 
 /**
@@ -221,29 +222,30 @@ public class JDOMLocator implements XPathHandler {
    * @param prefix Namespace prefix or null.
    * @param localName Null or '*' means ALL.
    */
-  private void nodetest(String axis, String nodetype, String prefix, String localName) throws XPathParseException {
-    print("{nodetest=" + axis + " " + nodetype + " "
+  private void nodetest(String axisString, String nodetypeString, String prefix, String localName) throws XPathParseException {
+    Axis axis = new Axis(axisString);
+    Nodetype nodetype = new Nodetype(nodetypeString);
+
+    print("{nodetest=" + axis.getString() + " " + nodetype.getString() + " "
       + (prefix == null ? "" : prefix) + " "
       + (localName == null ? "" : localName)
       + "}");
 
     // normalize synonyms
-    final int axisCode = (axis == null) ? Keywords.CHILD : Keywords.axisCode(axis);
-    final int nodetypeCode = Keywords.nodetypeCode(nodetype);
     if ("*".equals(localName)) {
       localName = null;
     }
 
-    if (axisCode == Keywords.UNRECOGNIZED) {
+    if (axis.getCode() == Axis.UNRECOGNIZED) {
       throw new XPathParseException("Unrecognized axis: " + axis);
     }
 
-    if (nodetypeCode == Keywords.UNRECOGNIZED) {
+    if ((nodetype != null) && (nodetype.getCode() == Nodetype.UNRECOGNIZED)) {
       throw new XPathParseException("Unrecognized nodetype: " + nodetype);
     }
 
     // after normalizing the data, the method below does the real work
-    nodetest(axisCode, nodetypeCode, prefix, localName);
+    nodetest(axis, nodetype, prefix, localName);
   }
 
   /**
@@ -256,61 +258,61 @@ public class JDOMLocator implements XPathHandler {
    *
    * @see Keywords
    */
-  private void nodetest(int axisCode, int nodetypeCode, String prefix, String localName) throws XPathParseException {
+  private void nodetest(Axis axis, Nodetype nodetype, String prefix, String localName) throws XPathParseException {
     for (Iterator iter = pathList.iterator(); iter.hasNext(); ) {
       Object each = iter.next();
 
-      switch (axisCode) {
-      case Keywords.ANCESTOR: {
-        nodetestAncestor(each, nodetypeCode, prefix, localName, false, true);
+      switch (axis.getCode()) {
+      case Axis.ANCESTOR: {
+        nodetestAncestor(each, nodetype, prefix, localName, false, true);
         break;
       }
-      case Keywords.ANCESTOR_OR_SELF: {
-        nodetestAncestor(each, nodetypeCode, prefix, localName, true, true);
+      case Axis.ANCESTOR_OR_SELF: {
+        nodetestAncestor(each, nodetype, prefix, localName, true, true);
         break;
       }
-      case Keywords.ATTRIBUTE: {
-        nodetestAttribute(each, nodetypeCode, prefix, localName);
+      case Axis.ATTRIBUTE: {
+        nodetestAttribute(each, nodetype, prefix, localName);
         break;
       }
-      case Keywords.CHILD: {
-        nodetestChild(each, nodetypeCode, prefix, localName);
+      case Axis.CHILD: {
+        nodetestChild(each, nodetype, prefix, localName);
         break;
       }
-      case Keywords.DESCENDANT: {
-        nodetestDescendant(each, nodetypeCode, prefix, localName, false);
+      case Axis.DESCENDANT: {
+        nodetestDescendant(each, nodetype, prefix, localName, false);
         break;
       }
-      case Keywords.DESCENDANT_OR_SELF: {
-        nodetestDescendant(each, nodetypeCode, prefix, localName, true);
+      case Axis.DESCENDANT_OR_SELF: {
+        nodetestDescendant(each, nodetype, prefix, localName, true);
         break;
       }
-      case Keywords.FOLLOWING: {
+      case Axis.FOLLOWING: {
         throw new NotImplementedException("Support for axis following is not implemented. ");
         //break;
       }
-      case Keywords.FOLLOWING_SIBLING: {
+      case Axis.FOLLOWING_SIBLING: {
         throw new NotImplementedException("Support for axis following-sibling is not implemented. ");
         //break;
       }
-      case Keywords.NAMESPACE: {
-        nodetestNamespace(each, nodetypeCode, prefix, localName);
+      case Axis.NAMESPACE: {
+        nodetestNamespace(each, nodetype, prefix, localName);
         break;
       }
-      case Keywords.PARENT: {
-        nodetestAncestor(each, nodetypeCode, prefix, localName, true, false);
+      case Axis.PARENT: {
+        nodetestAncestor(each, nodetype, prefix, localName, true, false);
         break;
       }
-      case Keywords.PRECEDING: {
+      case Axis.PRECEDING: {
         throw new NotImplementedException("Support for axis preceding is not implemented. ");
         //break;
       }
-      case Keywords.PRECEDING_SIBLING: {
+      case Axis.PRECEDING_SIBLING: {
         throw new NotImplementedException("Support for axis preceding-sibling is not implemented. ");
         //break;
       }
-      case Keywords.SELF: {
-        nodetestSelf(each, nodetypeCode, prefix, localName);
+      case Axis.SELF: {
+        nodetestSelf(each, nodetype, prefix, localName);
         break;
       }
       } // end-switch
@@ -322,10 +324,10 @@ public class JDOMLocator implements XPathHandler {
    * After, stepList contains all descendant Elements and Strings of the nodes in pathList.
    * @param self If true, also add <code>element</code> if it matches.
    */
-  private void nodetestDescendant(final Object context, final int nodetypeCode, final String prefix, final String localName, final boolean self) throws XPathParseException {
-    switch (nodetypeCode) {
-    case Keywords.NODE:
-    case Keywords.ELEMENT: {
+  private void nodetestDescendant(final Object context, final Nodetype nodetype, final String prefix, final String localName, final boolean self) throws XPathParseException {
+    switch (nodetype.getCode()) {
+    case Nodetype.NODE:
+    case Nodetype.ELEMENT: {
       if (context instanceof Element) {
         stepList.addAll(elemext((Element) context).getDescendants(prefix, localName, self));
       }
@@ -338,31 +340,31 @@ public class JDOMLocator implements XPathHandler {
    * Do nodetest for axis==self.
    * After, stepList contains the same nodes as pathList.
    */
-  private void nodetestSelf(final Object context, final int nodetypeCode, final String prefix, final String localName) throws XPathParseException {
-    switch (nodetypeCode) {
-    case Keywords.NODE: {
+  private void nodetestSelf(final Object context, final Nodetype nodetype, final String prefix, final String localName) throws XPathParseException {
+    switch (nodetype.getCode()) {
+    case Nodetype.NODE: {
       stepList.add(context);
       break;
     }
-    case Keywords.ELEMENT: {
+    case Nodetype.ELEMENT: {
       if (context instanceof Element) {
         stepList.add(context);
       }
       break;
     }
-    case Keywords.COMMENT: {
+    case Nodetype.COMMENT: {
       if (context instanceof Comment) {
         stepList.add(context);
       }
       break;
     }
-    case Keywords.TEXT: {
+    case Nodetype.TEXT: {
       if (context instanceof String) {
         stepList.add(context);
       }
       break;
     }
-    case Keywords.PROCESSING_INSTRUCTION: {
+    case Nodetype.PROCESSING_INSTRUCTION: {
       if (context instanceof ProcessingInstruction) {
         if (localName == null) {
           stepList.add(context);
@@ -383,10 +385,10 @@ public class JDOMLocator implements XPathHandler {
    * <p>Only makes sense for nodetype==NODE or nodetype==ELEMENT</p>
    * @param self If true, also add <code>element</code> if it matches.
    */
-  private void nodetestAncestor(final Object context, final int nodetypeCode,
+  private void nodetestAncestor(final Object context, final Nodetype nodetype,
   final String prefix, final String localName, final boolean self,
   final boolean recursive) throws XPathParseException {
-    if ((nodetypeCode == Keywords.ELEMENT) || (nodetypeCode == Keywords.NODE)) {
+    if ((nodetype.getCode() == Nodetype.ELEMENT) || (nodetype.getCode() == Nodetype.NODE)) {
       if (context instanceof Element) {
         Element element = (Element) context;
         if (self == true) {
@@ -404,13 +406,13 @@ public class JDOMLocator implements XPathHandler {
   /**
    * Do nodetest for axis==child.
    */
-  private void nodetestChild(final Object context, final int nodetypeCode, final String prefix, final String localName) throws XPathParseException {
+  private void nodetestChild(final Object context, final Nodetype nodetype, final String prefix, final String localName) throws XPathParseException {
     if ((context instanceof Element) == false) {
       return;
     }
     Element element = (Element) context;
-    switch (nodetypeCode) {
-    case Keywords.NODE: {
+    switch (nodetype.getCode()) {
+    case Nodetype.NODE: {
       if (localName == null) {
         stepList.addAll(element.getMixedContent());
       } else {
@@ -418,11 +420,11 @@ public class JDOMLocator implements XPathHandler {
       }
       break;
     }
-    case Keywords.ELEMENT: {
+    case Nodetype.ELEMENT: {
       stepList.addAll(elemext(element).getChildren(prefix, localName) );
       break;
     }
-    case Keywords.COMMENT: {
+    case Nodetype.COMMENT: {
       if (localName == null) {
         stepList.addAll(elemext(element).getComments());
       } else {
@@ -430,7 +432,7 @@ public class JDOMLocator implements XPathHandler {
       }
       break;
     }
-    case Keywords.TEXT: {
+    case Nodetype.TEXT: {
       if (localName == null) {
         stepList.addAll(elemext(element).getTextChildren());
       } else {
@@ -438,7 +440,7 @@ public class JDOMLocator implements XPathHandler {
       }
       break;
     }
-    case Keywords.PROCESSING_INSTRUCTION: {
+    case Nodetype.PROCESSING_INSTRUCTION: {
       if (localName == null) {
         stepList.addAll(elemext(element).getProcessingInstructions());
       } else {
@@ -453,8 +455,8 @@ public class JDOMLocator implements XPathHandler {
    * Do nodetest for axis==namespace.
    * <p>Only makes sense for nodetype==NODE or nodetype==ELEMENT</p>
    */
-  private void nodetestNamespace(final Object context, final int nodetypeCode, final String prefix, final String localName) throws XPathParseException {
-    if ((nodetypeCode == Keywords.ELEMENT) || (nodetypeCode == Keywords.NODE)) {
+  private void nodetestNamespace(final Object context, final Nodetype nodetype, final String prefix, final String localName) throws XPathParseException {
+    if ((nodetype.getCode() == Nodetype.ELEMENT) || (nodetype.getCode() == Nodetype.NODE)) {
       if (context instanceof Element) {
         Element element = (Element) context;
         stepList.addAll( elemext(element).getNamespaces() );
@@ -465,13 +467,13 @@ public class JDOMLocator implements XPathHandler {
   /**
    * Do nodetest for axis==attribute.
    */
-  private void nodetestAttribute(final Object context, final int nodetypeCode, final String prefix, final String localName) throws XPathParseException {
+  private void nodetestAttribute(final Object context, final Nodetype nodetype, final String prefix, final String localName) throws XPathParseException {
     if ((context instanceof Element) == false) {
       return;
     }
     Element element = (Element) context;
-    switch (nodetypeCode) {
-    case Keywords.ELEMENT: {
+    switch (nodetype.getCode()) {
+    case Nodetype.ELEMENT: {
       if (localName == null) {
         print("*");
         stepList.addAll(element.getAttributes());
