@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.10 2002/03/16 10:24:53 jhunter Exp $
+ $Id: ContentList.java,v 1.11 2002/03/16 12:15:40 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.10 $, $Date: 2002/03/16 10:24:53 $
+ * @version $Revision: 1.11 $, $Date: 2002/03/16 12:15:40 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -82,7 +82,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.10 $ $Date: 2002/03/16 10:24:53 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.11 $ $Date: 2002/03/16 12:15:40 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -98,7 +98,6 @@ class ContentList extends AbstractList implements java.io.Serializable {
     private static final int NEXT    = 4;
     private static final int ADD     = 5;
     private static final int REMOVE  = 6;
-    private static final int SET     = 7;
 
     /** Our backing list */
     protected ArrayList list;
@@ -947,9 +946,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           break;
             case PREV:    cursor = last;
                           break;
+            case ADD:     
             case NEXT:    cursor = moveForward(last + 1);
                           break;
-            case ADD:
             case REMOVE:  cursor = moveForward(last);
                           break;
             case HASPREV: cursor = moveForward(cursor + 1);
@@ -975,7 +974,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 last = cursor;
             }
             else {
-                throw new IllegalStateException("no next item");
+                last = ContentList.this.size();
+                throw new NoSuchElementException();
             }
 
             lastOperation = NEXT;
@@ -1024,7 +1024,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 last = cursor;
             }
             else {
-                throw new IllegalStateException("no previous item");
+                last = -1;
+                throw new NoSuchElementException();
             }
 
             lastOperation = PREV;
@@ -1080,12 +1081,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
         public void add(Object obj) {
             checkConcurrentModification();
 
-            if ((lastOperation != PREV) && (lastOperation != NEXT)) {
-                throw new IllegalStateException("no preceeding call to " +
-                                                 "prev() or next()");
-            }
-
             if (filter.canAdd(obj)) {
+                last++;
                 ContentList.this.add(last, obj);
             }
             else {
@@ -1104,9 +1101,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
         public void remove() {
             checkConcurrentModification();
 
-            if ((lastOperation != PREV) && (lastOperation != NEXT)) {
+            if ((last < 0) || (lastOperation == REMOVE)) {
                 throw new IllegalStateException("no preceeding call to " +
-                                                 "prev() or next()");
+                                                "prev() or next()");
+            }
+
+            if (lastOperation == ADD) {
+                throw new IllegalStateException("cannot call remove() " +
+                                                "after add()");
             }
 
             Object old = ContentList.this.get(last);
@@ -1128,9 +1130,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
         public void set(Object obj) {
             checkConcurrentModification();
 
-            if ((lastOperation != PREV) && (lastOperation != NEXT)) {
+            if ((lastOperation == ADD) || (lastOperation == REMOVE)) {
+                throw new IllegalStateException("cannot call set() after " +
+                                                "add() or remove()");
+            }
+
+            if (last < 0) {
                 throw new IllegalStateException("no preceeding call to " +
-                                                 "prev() or next()");
+                                                "prev() or next()");
             }
 
             if (filter.canAdd(obj)) {
@@ -1149,7 +1156,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
             }
 
             expected = ContentList.this.getModCount();
-            lastOperation = REMOVE;
+            // Don't set lastOperation
         }
 
         /**
