@@ -444,7 +444,7 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This will set the textual content of the <code>Element</code>.
      *   If this <code>Element</code> will have both textual content
-     *   and nexted elements, <code>{@link #setMixedContent}</code>
+     *   and nested elements, <code>{@link #setMixedContent}</code>
      *   should be used instead,
      * </p>
      *

@@ -48,7 +48,7 @@ package org.jdom;
  * </p>
  *
  * @author Brett McLaughlin
- * @author Elliotte Rusty Harolde
+ * @author Elliotte Rusty Harold
  * @version 1.0
  */
 public final class Verifier {
@@ -244,7 +244,7 @@ public final class Verifier {
 
     /**
      * <p>
-     *  This is a utility function for sharing the baes process of checking
+     *  This is a utility function for sharing the base process of checking
      *    any XML name.
      * </p>
      *
