@@ -273,9 +273,11 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @param value <code>String</code> value for the attribute.
+     * @return <code>Attribute</code> - this Attribute modified.
      */
-    public void setValue(String value) {
+    public Attribute setValue(String value) {
         this.value = value;
+        return this;
     }
 
     /**
