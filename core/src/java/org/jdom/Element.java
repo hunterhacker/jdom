@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.97 2001/08/01 01:07:08 jhunter Exp $
+ $Id: Element.java,v 1.98 2001/08/16 16:10:55 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.97 $ $Date: 2001/08/01 01:07:08 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.98 $ $Date: 2001/08/16 16:10:55 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -575,9 +575,16 @@ public class Element implements Serializable, Cloneable {
             return "";
         }
 
-        // If we hold only a String, return it directly
-        if ((content.size() == 1) && (content.get(0) instanceof String)) {
-            return (String)content.get(0);
+        // If we hold only a String or CDATA, return it directly
+        if (content.size() == 1) {
+            Object obj = content.get(0);
+            if (obj instanceof String) {
+                return (String)obj;
+            } else if (obj instanceof CDATA) {
+                return ((CDATA)obj).getText();
+            } else {
+                return "";
+            }
         }
 
         // Else build String up
