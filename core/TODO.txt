@@ -47,3 +47,6 @@ Items that need to be done:
 
 * Consider SAXBuilder.setErrorHandler()
 
+* Add XPath support (not necessary for JDOM 1.0)
+  Much work being done by Michael Hinchey <michael.hinchey@inference.com>
+

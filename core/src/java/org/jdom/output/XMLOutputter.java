@@ -67,8 +67,8 @@ import org.jdom.ProcessingInstruction;
  *   formats it to a stream as XML.  This formatter performs typical
  *   document formatting.  The XML declaration
  *   and processing instructions are always on their own lines.  Empty
- *   elements are printed as <empty/> and text-only contents are printed as
- *   <tag>content</tag> on a single line.  Constructor parameters control the
+ *   elements are printed as &lt;empty/&gt; and text-only contents are printed as
+ *   &lt;tag&gt;content&lt;/tag&gt; on a single line.  Constructor parameters control the
  *   indent amount and whether new lines are printed between elements.  For
  *   compact machine-readable output pass in an empty string indent and a
  *   <code>false</code> for printing new lines.
@@ -193,7 +193,7 @@ public class XMLOutputter {
 
     /**
      * <p>
-     * This will print the <code>Document</code> to the given output stream.
+     * This will print the <code>Document</code> to the given Writer.
      *   The characters are printed using the specified encoding.
      * </p>
      *
@@ -215,10 +215,9 @@ public class XMLOutputter {
 
         printDocType(doc.getDocType(), writer);
 
-        // Print out processing instructions
-        printProcessingInstructions(doc.getProcessingInstructions(), writer);
-
-        // Print out elements, starting with no indention
+        // Print out root element, as well as any root level
+        // comments and processing instructions, 
+        // starting with no indentation
         try {
             Iterator i = doc.getMixedContent().iterator();
             while (i.hasNext()) {
@@ -227,7 +226,9 @@ public class XMLOutputter {
                     // 0 is indentation
                     printElement(doc.getRootElement(), writer, 0);
                 } else if (obj instanceof Comment) {
-                    writer.write(((Comment)obj).getSerializedForm());
+                    printComment((Comment) obj, writer, 0);
+                } else if (obj instanceof ProcessingInstruction) {
+                    printProcessingInstruction((ProcessingInstruction) obj, writer, 0);
                 }
             }
         } catch (NoSuchChildException e) {
@@ -256,7 +257,44 @@ public class XMLOutputter {
 
     /**
      * <p>
-     * This will write the declaration to the given output stream.
+     * This will write the comment to the specified writer.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to write.
+     * @param out <code>Writer</code> to write to.
+     * @param indentLevel Current depth in hierarchy.
+     */
+    protected void printComment(Comment comment,
+                                    Writer out, int indentLevel) throws IOException {
+                                        
+        indent(out, indentLevel);
+        out.write(comment.getSerializedForm());
+        maybePrintln(out);
+
+    }
+      
+    /**
+     * <p>
+     * This will write the processing instruction to the specified writer.
+     * </p>
+     *
+     * @param comment <code>ProcessingInstruction</code> to write.
+     * @param out <code>Writer</code> to write to.
+     * @param indentLevel Current depth in hierarchy.
+     */
+    protected void printProcessingInstruction(ProcessingInstruction pi,
+                                    Writer out, int indentLevel) throws IOException {
+                                        
+        indent(out, indentLevel);
+        out.write(pi.getSerializedForm());
+        maybePrintln(out);
+
+    }
+    
+
+    /**
+     * <p>
+     * This will write the declaration to the given Writer.
      *   Assumes XML version 1.0 since we don't directly know.
      * </p>
      *
@@ -268,13 +306,14 @@ public class XMLOutputter {
                                     String encoding)  throws IOException {
         // Assume 1.0 version
         if (encoding.equals("UTF8")) {
-            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + newline);
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         }
         else {
             out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
         }
+        maybePrintln(out);
         
-    }
+    }    
 
     /**
      * <p>
@@ -310,32 +349,7 @@ public class XMLOutputter {
             out.write("\"");
         }
         out.write(">");
-        out.write(newline);
-        out.write(newline);
-    }
-
-    /**
-     * <p>
-     * This will write the processing instructions to the given Writer.
-     *   Assumes the <code>List</code> contains nothing but
-     *   <code>ProcessingInstruction</code> objects.
-     * </p>
-     *
-     * @param pis <code>List</code> of ProcessingInstructions to print
-     * @param out <code>Writer</code> to write to
-     */
-    protected void printProcessingInstructions(List pis, Writer out) throws IOException {
-        for (int i=0, size=pis.size(); i<size; i++) {
-            ProcessingInstruction pi =
-                (ProcessingInstruction)pis.get(i);
-            out.write("<?");
-            out.write(pi.getTarget());
-            out.write(" ");
-            out.write(pi.getData());
-            out.write("?>");
-            out.write(newline);
-        }
-        out.write(newline);
+        maybePrintln(out);
     }
 
     /**
@@ -360,7 +374,11 @@ public class XMLOutputter {
             mixedContent.get(0) instanceof String;
 
         // Print beginning element tag
-        maybePrintln(out);
+        /* maybe the doctype, xml declaration, and processing instructions 
+           should only break before and not after; then this check is unnecessary,
+           or maybe the println should only come after and never before. Then the
+           output always ends with a newline */
+           
         indent(out, indentLevel);
 
         // Print the beginning of the tag plus attributes and any
@@ -380,6 +398,7 @@ public class XMLOutputter {
         if (empty) {
             // Simply close up
             out.write(" />");
+            maybePrintln(out);
         } else if (stringOnly) {
             // Print the tag  with String on same line
             // Example: <tag name="value">content</tag>
@@ -388,6 +407,7 @@ public class XMLOutputter {
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");
+            maybePrintln(out);
         } else {
             /**
              * Print with children on future lines
@@ -397,45 +417,53 @@ public class XMLOutputter {
              *          </tag>
              */
             out.write(">");
-
+            maybePrintln(out);
             // Iterate through children
             Object content = null;
             for (int i=0, size=mixedContent.size(); i<size; i++) {
                 content = mixedContent.get(i);
-                // See if text or an element
+                // See if text, an element, a processing instruction or a comment
                 if (content instanceof Comment) {
-                    maybePrintln(out);
-                    indent(out, indentLevel + 1);  // one extra
-                    out.write(((Comment)content).getSerializedForm());
+                    printComment((Comment) content, out, indentLevel + 1);
                 } else if (content instanceof String) {
-                    /*
-                     * XXX: We handle the 5 XML 1.0 entities
-                     *   but what about CDATA? (brett)
-                     */
                     out.write(escapeElementEntities(content.toString()));
                 } else if (content instanceof Element) {
-                    printElement((Element)content, out, indentLevel + 1);
+                    printElement((Element) content, out, indentLevel + 1);
                 } else if (content instanceof Entity) {
-                    out.write(((Entity)content).getSerializedForm());
+                    printEntity((Entity) content, out);
                 } else if (content instanceof ProcessingInstruction) {
-                    maybePrintln(out);
-                    indent(out, indentLevel + 1);
-                    out.write(((ProcessingInstruction)content).getSerializedForm());
+                    printProcessingInstruction((ProcessingInstruction) content, out, indentLevel + 1);
                 } // Unsupported types are *not* printed
             }
 
-            maybePrintln(out);
             indent(out, indentLevel);
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");
+            maybePrintln(out);
 
            // After recursion, remove the namespace defined on the element (if any)
-          if (printedNS) {
+           if (printedNS) {
               namespaces.removeLast();
            }
         }
     }
+    
+    /**
+     * <p>
+     * This will handle printing out an <code>{@link Entity}</code>.
+     * Only the entity reference such as <code>&amp;entity;</code>
+     * will be printed. However, subclasses are free to override 
+     * this method to print the contents of the entity instead.
+     * </p>
+     *
+     * @param entity <code>Entity</code> to output.
+     * @param out <code>Writer</code> to write to.
+     */
+    protected void printEntity(Entity entity, Writer out) throws IOException {
+        out.write(entity.getSerializedForm());
+    }
+    
 
     /**
      * <p>
