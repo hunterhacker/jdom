@@ -2,14 +2,6 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Finish making July 25th changes to Document.java, done with Element.java
-  (jhunter)
-
-* Probably remove removeContent(*) since the List API provides this
-  functionality
-
-* Polish the DOMOutputter code
-
 * Set up build to automatically handle JDK 1.1 + Collections using an Ant task
   to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
 
@@ -45,15 +37,15 @@ Items that need to be done:
    void setLineSeparator(String lineSeparator)
 
 * Finalize the license text we'll use for release.  Update all source files to
-  match most current license in jdom/LICENSE.txt.
+  match most current license in jdom/LICENSE.txt.  
+  See http://www.zope.org/Resources/ZPL point #3 for one approach to 
+  attribution.
 
 * Contribute the samples from Elliotte's XML DevCon talk to the samples/
   directory.
 
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
-
-* Add Document.setMixedContent().  Do we ensure it contains only one Element?
 
 * Add methods/logic to Verifier for all XML spec. constraints
 
@@ -115,6 +107,9 @@ Items that need to be done:
 
 --- UNTIED TO A JDOM VERSION ---
 
+* Add search for jdom.org using Google with site:www.jdom.org, imitating
+  http://www.zope.org/SiteIndex/searchForm
+
 * Fix it so check-in messages include diffs.  (jools@jools.org)  Use
   archive to create an accurate CHANGELOG.txt for what changed between betas.
 
@@ -132,4 +127,8 @@ Items that need to be done:
   version, credits, description, etc, then access/print the info using JDOM
   classes executed by a "java -jar jdom.jar" command.  
   See http://java.sun.com/docs/books/tutorial/jar/
+
+* Investigate including a library to convert XML data to instantiated Java
+  objects, probably with an XML config file dictating how to do the mapping.
+  See http://xmlhack.com/read.php?item=674 for something along these lines.
 
