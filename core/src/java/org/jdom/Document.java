@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.60 2002/04/29 13:38:15 jhunter Exp $
+ $Id: Document.java,v 1.61 2002/05/16 16:32:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,12 +70,12 @@ import org.jdom.filter.Filter;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.60 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.61 $, $Date: 2002/05/16 16:32:00 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.60 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.61 $ $Date: 2002/05/16 16:32:00 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -104,6 +104,9 @@ public class Document implements Serializable, Cloneable {
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
+     * @throws IllegalAddException if the given docType object 
+     *         is already attached to a document or the given 
+     *         rootElement already has a parent
      */
     public Document(Element rootElement, DocType docType) {
         if (rootElement != null)
@@ -118,6 +121,8 @@ public class Document implements Serializable, Cloneable {
      * declaration.
      *
      * @param rootElement <code>Element</code> for document root
+     * @throws IllegalAddException if the given rootElement already has
+     *         a parent.
      */
     public Document(Element rootElement) {
         this(rootElement, null);
