@@ -86,9 +86,9 @@ public static Test suite () {
 		list.remove(0);
 		try {
                     doc.getRootElement();
-                    assert("didn't catch missing root element", true);
+                    assertTrue("didn't catch missing root element", true);
                 } catch (IllegalStateException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
                 //set root back, then try to add another element to our
@@ -96,9 +96,9 @@ public static Test suite () {
                 doc.setRootElement(element);
                 try {
                     list.add(bogus);
-                    assert("didn't catch duplicate root element", true);
+                    assertTrue("didn't catch duplicate root element", true);
                 } catch (IllegalAddException e) {
-                    assert(true);
+                    assertTrue(true);
                 }
                 assertEquals("incorrect root element returned", element, doc.getRootElement());
   
@@ -106,22 +106,22 @@ public static Test suite () {
                 try {
                     list.set(0,bogus);
                 } catch (Exception e) {
-                    assert("Root replacement shouldn't have throw a exception", true);
+                    assertTrue("Root replacement shouldn't have throw a exception", true);
                 }
                 //and through the document
                 try {
                     doc.setRootElement(element);
                 } catch (Exception e) {
-                    assert("Root replacement shouldn't have throw a exception", true);
+                    assertTrue("Root replacement shouldn't have throw a exception", true);
                 }
  	
 		list = null;
 		try {
 			doc = new Document(list);
 		} catch (IllegalAddException e) {
-			assert("didn't handle null list", true);
+			assertTrue("didn't handle null list", true);
 		} catch (NullPointerException e) {
-			assert("didn't handle null list", true);
+			assertTrue("didn't handle null list", true);
 		}
 		
 	}
@@ -146,9 +146,9 @@ public static Test suite () {
 		list.remove(0);
                 try {
                         doc.getRootElement();
-                        assert("didn't catch missing root element", true);
+                        assertTrue("didn't catch missing root element", true);
                 } catch (IllegalStateException e) {
-                        assert(true);
+                        assertTrue(true);
                 }
                 
                 //set root back, then try to add another element to our
@@ -157,31 +157,31 @@ public static Test suite () {
 		try {
 			list.add(bogus);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		}
                 assertEquals("incorrect root element returned", element, doc.getRootElement());
  
                 //how about replacing it in our live list
                 try {
                     list.set(0,bogus);
-                    assert("didn't catch duplicate root element", true);
+                    assertTrue("didn't catch duplicate root element", true);
                 } catch (Exception e) {
-                    assert("Root replacement shouldn't have throw a exception", true);
+                    assertTrue("Root replacement shouldn't have throw a exception", true);
                 }
                 //and through the document
                 try {
                     doc.setRootElement(element);
                 } catch (Exception e) {
-                    assert("Root replacement shouldn't have throw a exception", true);
+                    assertTrue("Root replacement shouldn't have throw a exception", true);
                 }
 		
 		list = null;
 		try {
 			doc = new Document(list, docType);
 		} catch (IllegalAddException e) {
-			assert("didn't handle null list", true);
+			assertTrue("didn't handle null list", true);
 		} catch (NullPointerException e) {
-			assert("didn't handle null list", true);
+			assertTrue("didn't handle null list", true);
 		}
 		
 	}
@@ -198,9 +198,9 @@ public static Test suite () {
 		try {
 			doc = new Document(element);
 		} catch (IllegalAddException e) {
-			assert("didn't handle null element", true);
+			assertTrue("didn't handle null element", true);
 		} catch (NullPointerException e) {
-			assert("didn't handle null element", true);
+			assertTrue("didn't handle null element", true);
 		}
 		
 	}
@@ -220,9 +220,9 @@ public static Test suite () {
 		try {
 			doc = new Document(element, docType);
 		} catch (IllegalAddException e) {
-			assert("didn't handle null element", true);
+			assertTrue("didn't handle null element", true);
 		} catch (NullPointerException e) {
-			assert("didn't handle null element", true);
+			assertTrue("didn't handle null element", true);
 		}
 		
 	}
@@ -247,10 +247,10 @@ public static Test suite () {
 		list.add(element);
 		list.add(comment);
 		Document doc = new Document(list);
-		assert("incorrect comment removed",! doc.removeContent(new Comment("hi")));
-		assert("didn't remove comment", doc.removeContent(comment));
+		assertTrue("incorrect comment removed",! doc.removeContent(new Comment("hi")));
+		assertTrue("didn't remove comment", doc.removeContent(comment));
 			
-		assert("comment not removed", doc.getContent().size() == 1);
+		assertTrue("comment not removed", doc.getContent().size() == 1);
 	}
 	/**
 	 * Test removeContent with the supplied ProcessingInstruction.
@@ -263,10 +263,10 @@ public static Test suite () {
 		list.add(element);
 		list.add(pi);
 		Document doc = new Document(list);
-		assert("incorrect pi removed",! doc.removeContent(new ProcessingInstruction("hi", "there")));
-		assert("didn't remove pi", doc.removeContent(pi));
+		assertTrue("incorrect pi removed",! doc.removeContent(new ProcessingInstruction("hi", "there")));
+		assertTrue("didn't remove pi", doc.removeContent(pi));
 			
-		assert("PI not removed", doc.getContent().size() == 1);
+		assertTrue("PI not removed", doc.getContent().size() == 1);
 	
 	}
 	/**
@@ -278,14 +278,14 @@ public static Test suite () {
 	
 		//only an exception would be a problem
 		int i = doc.hashCode();
-		assert("bad hashCode", true);
+		assertTrue("bad hashCode", true);
 
 		
 		Element element2 = new Element("test");
 		Document doc2 = new Document(element2);
 		//different Documents, same text
 		int x = doc2.hashCode();
-		assert("Different Elements with same value have same hashcode", x != i);
+		assertTrue("Different Elements with same value have same hashcode", x != i);
 
 	}
 	/**
@@ -339,18 +339,18 @@ public static Test suite () {
 		
 		assertEquals("wrong nested element","firstChild", deepClone.getName());
 		//comment
-		assert("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
+		assertTrue("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
 		comment = null;
 		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getContent().get(0)).getText());
 		//CDATA
 	
 		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getContent().get(1)).getText());
 		//PI
-		assert("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
+		assertTrue("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
 		pi = null;
 		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getContent().get(2)).getData());
 		//entity
-		assert("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
+		assertTrue("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
 		entity = null;
 		assertEquals("incorrect deep clone Entity", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
@@ -474,7 +474,8 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	StringWriter sw = new StringWriter();
 	XMLOutputter op= new XMLOutputter("", false);
 	op.output(element, sw);
-	assert("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
+	//assertEquals("Incorrect data after serialization", sw.toString(), bufWithEmptyNS);
+	assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
 
 }
 

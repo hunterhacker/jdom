@@ -105,15 +105,15 @@ public static Test suite () {
 	public void test_TCM__boolean_equals_Object() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		Object ob = (Object)ns;
-	    assert("object not equal to attribute", ns.equals(ob));
+	    assertTrue("object not equal to attribute", ns.equals(ob));
 
 		ns = Namespace.NO_NAMESPACE;
 		ob = (Object)ns;
-	    assert("object not equal to attribute", ns.equals(ob));
+	    assertTrue("object not equal to attribute", ns.equals(ob));
 
 		//ns = Namespace.EMPTY_NAMESPACE;
 		//ob = (Object)ns;
-	    //assert("object not equal to attribute", ns.equals(ob));
+	    //assertTrue("object not equal to attribute", ns.equals(ob));
 	    
 	    
 	}
@@ -124,23 +124,23 @@ public static Test suite () {
 		Namespace ns = Namespace.getNamespace("test", "value");
 		//only an exception would be a problem
 		int i = ns.hashCode();
-		assert("bad hashCode", true);
+		assertTrue("bad hashCode", true);
 
 		//make sure a new one doesn't have the same value
 		Namespace ns2 = Namespace.getNamespace("test", "value2");
 		//only an exception would be a problem
 		int x = ns2.hashCode();
-		assert("duplicate hashCode", i!=x );
+		assertTrue("duplicate hashCode", i!=x );
 
 		//test hashcode for NO_NAMESPACE
 		int y = Namespace.NO_NAMESPACE.hashCode();
 		//only an exception would be a problem
-		assert("bad hashcode" , true);
+		assertTrue("bad hashcode" , true);
 
 		//test hashcode for NO_NAMESPACE
 		//y = Namespace.EMPTY_NAMESPACE.hashCode();
 		//only an exception would be a problem
-		//assert("bad hashcode" , true);
+		//assertTrue("bad hashcode" , true);
 
 			
 		
@@ -150,10 +150,10 @@ public static Test suite () {
 	 */
 	public void test_TCM__OrgJdomNamespace_getNamespace_String() {
 		Namespace ns = Namespace.getNamespace("http://some.new.place");
-		assert("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));
+		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));
 		//the is really the default NO_NAMESPACE version
 		Namespace ns2 = Namespace.getNamespace("");
-		assert("Incorrect no namespace namespace created", ns2.toString().equals("[Namespace: prefix \"\" is mapped to URI \"\"]"));
+		assertTrue("Incorrect no namespace namespace created", ns2.toString().equals("[Namespace: prefix \"\" is mapped to URI \"\"]"));
 
 	}
 	/**
@@ -161,7 +161,7 @@ public static Test suite () {
 	 */
 	public void test_TCM__OrgJdomNamespace_getNamespace_String_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
-		assert("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://some.other.place\"]"));
+		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://some.other.place\"]"));
 
 	}
 	/**
@@ -169,13 +169,13 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_getPrefix() {
 		Namespace ns = Namespace.getNamespace("prefx","http://foo");
-		assert("Incorrect namespace prefix", ns.getPrefix().equals("prefx"));
+		assertTrue("Incorrect namespace prefix", ns.getPrefix().equals("prefx"));
 
 		//ns = Namespace.EMPTY_NAMESPACE;
-		//assert("Incorrect empty namespace prefix", ns.getPrefix().equals(""));
+		//assertTrue("Incorrect empty namespace prefix", ns.getPrefix().equals(""));
 
 		ns = Namespace.NO_NAMESPACE;
-		assert("Incorrect empty namespace prefix", ns.getPrefix().equals(""));
+		assertTrue("Incorrect empty namespace prefix", ns.getPrefix().equals(""));
 
 	}
 	/**
@@ -183,7 +183,7 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_getURI() {
 		Namespace ns = Namespace.getNamespace("prefx","http://foo");
-		assert("Incorrect namespace prefix", ns.getURI().equals("http://foo"));
+		assertTrue("Incorrect namespace prefix", ns.getURI().equals("http://foo"));
 
 	}
 	/**
@@ -191,12 +191,12 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_toString() {
 		Namespace ns = Namespace.getNamespace("http://some.new.place");
-		assert("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));
+		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));
 		//the is really the default NO_NAMESPACE version
 		Namespace ns2 = Namespace.getNamespace("");
-		assert("Incorrect no namespace namespace created", ns2.toString().equals("[Namespace: prefix \"\" is mapped to URI \"\"]"));
+		assertTrue("Incorrect no namespace namespace created", ns2.toString().equals("[Namespace: prefix \"\" is mapped to URI \"\"]"));
 		ns2 = Namespace.getNamespace("prefx","http://foo");
-		assert("Incorrect namespace created", ns2.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://foo\"]"));
+		assertTrue("Incorrect namespace created", ns2.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://foo\"]"));
 
 	}
 }

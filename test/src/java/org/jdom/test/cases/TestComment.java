@@ -114,7 +114,7 @@ extends junit.framework.TestCase
 			fail("Comment constructor didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
 
-			assert(true);
+			assertTrue(true);
 		}
 	}
 	/**
@@ -125,7 +125,7 @@ extends junit.framework.TestCase
 
 	    Object ob = (Object)com;
 
-	    assert("object not equal to comment", com.equals(ob));
+	    assertTrue("object not equal to comment", com.equals(ob));
 	}
 	/**
 	 * Test that a real hashcode is returned and that a different one is returned
@@ -137,15 +137,15 @@ extends junit.framework.TestCase
 		Comment com = new Comment("test");
 		//only an exception would be a problem
 		int i = com.hashCode();
-		assert("bad hashCode", true);
+		assertTrue("bad hashCode", true);
 		Comment com2 = new Comment("test");
 		//different comments, same text
 		int x = com2.hashCode();
-		assert("Different comments with same value have same hashcode", x != i);
+		assertTrue("Different comments with same value have same hashcode", x != i);
 		Comment com3 = new Comment("test2");
 		//only an exception would be a problem
 		int y = com3.hashCode();
-		assert("Different comments have same hashcode", y != x);
+		assertTrue("Different comments have same hashcode", y != x);
 	}
 /**
  * Test setting and resetting the text value of this Comment.
@@ -174,7 +174,7 @@ public void test_TCM__OrgJdomComment_setText_String() {
 		fail("Comment setText didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
 
-		assert(true);
+		assertTrue(true);
 	}
 	try {
 		char c= 0x11;
@@ -184,7 +184,7 @@ public void test_TCM__OrgJdomComment_setText_String() {
 		fail("Comment setText didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
 
-		assert(true);
+		assertTrue(true);
 	}
 
 }
@@ -231,7 +231,7 @@ public void test_TCM__String_toString() {
         fail("Comment constructor didn't catch invalid comment string");
     } catch (IllegalDataException e) {
 
-        assert(true);
+        assertTrue(true);
     }
 
 }

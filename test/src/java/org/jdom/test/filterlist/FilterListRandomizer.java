@@ -1,3 +1,5 @@
+package org.jdom.test.filterlist;
+
 import org.jdom.*;
 import java.util.*;
 

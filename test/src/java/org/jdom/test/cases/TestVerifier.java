@@ -291,7 +291,7 @@ public final class TestVerifier extends junit.framework.TestCase {
 	/**
 	 * This method is called before a test is executed.
 	 */
-	public void setUp() throws FileNotFoundException, JDOMException, IOException {
+	public void setUp() throws FileNotFoundException, JDOMException {
 		
 		// get the ranges of valid characters from the xmlchars.xml resource
 		resourceRoot = rb.getString("test.resourceRoot");
@@ -354,14 +354,14 @@ public static Test suite () {
 			c = ((Character) it.next()).charValue();
 			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
 				continue;
-			assert("failed on valid xml character: 0x" + Integer.toHexString(c), Verifier.isXMLCharacter(c));
+			assertTrue("failed on valid xml character: 0x" + Integer.toHexString(c), Verifier.isXMLCharacter(c));
 		}
 		AntiRangeIterator ait = new AntiRangeIterator(allCharacters);
 		while (ait.hasNext()) {
 			c =ait.next();
 			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
 				continue;
-			assert("didn't catch invalid XML Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLCharacter(c));
+			assertTrue("didn't catch invalid XML Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLCharacter(c));
 		} 
 	}
 	/**
@@ -372,13 +372,13 @@ public static Test suite () {
 		
 		while (it.hasNext()) {
 			char c = ((Character) it.next()).charValue();
-			assert("failed on valid xml combining character", Verifier.isXMLCombiningChar(c));
+			assertTrue("failed on valid xml combining character", Verifier.isXMLCombiningChar(c));
 		}
 
 		AntiRangeIterator ait = new AntiRangeIterator(combiningChars);
 		while (ait.hasNext()) {
 			char c =ait.next();
-			assert("didn't catch invalid XMLCombiningChar: 0x" + Integer.toHexString(c), ! Verifier.isXMLCombiningChar(c));
+			assertTrue("didn't catch invalid XMLCombiningChar: 0x" + Integer.toHexString(c), ! Verifier.isXMLCombiningChar(c));
 		} 
 	}
 	/**
@@ -390,13 +390,13 @@ public static Test suite () {
 		
 		while (it.hasNext()) {
 			char c = ((Character) it.next()).charValue();
-			assert("failed on valid xml digit", Verifier.isXMLDigit(c));
+			assertTrue("failed on valid xml digit", Verifier.isXMLDigit(c));
 		}
 		
 		AntiRangeIterator ait = new AntiRangeIterator(digits);
 		while (ait.hasNext()) {
 			char c =ait.next();
-			assert("didn't catch invalid XMLDigit: 0x" + Integer.toHexString(c), ! Verifier.isXMLDigit(c));
+			assertTrue("didn't catch invalid XMLDigit: 0x" + Integer.toHexString(c), ! Verifier.isXMLDigit(c));
 		} 
 	}
 	/**
@@ -407,7 +407,7 @@ public static Test suite () {
 		
 		while (it.hasNext()) {
 			char c = ((Character) it.next()).charValue();
-			assert("failed on valid xml extender", Verifier.isXMLExtender(c));
+			assertTrue("failed on valid xml extender", Verifier.isXMLExtender(c));
 		}
 
 		it = new RangeIterator(extenders);
@@ -419,7 +419,7 @@ public static Test suite () {
 			
 			while (code > start && start != code - 1) {
 				start ++;
-				assert("didnt' catch bad xml extender: 0x" + Integer.toHexString(start), ! Verifier.isXMLExtender((char) start));
+				assertTrue("didnt' catch bad xml extender: 0x" + Integer.toHexString(start), ! Verifier.isXMLExtender((char) start));
 				
 			}
 		}
@@ -433,7 +433,7 @@ public static Test suite () {
 		
 		while (it.hasNext()) {
 			char c = ((Character) it.next()).charValue();
-			assert("failed on valid xml character", Verifier.isXMLCharacter(c));
+			assertTrue("failed on valid xml character", Verifier.isXMLCharacter(c));
 		}
 		AntiRangeIterator ait = new AntiRangeIterator(characters);
 		while (ait.hasNext()) {
@@ -443,7 +443,7 @@ public static Test suite () {
 				|| (c >= '\u4E00' && c <= '\u9FA5'))
 				continue; // ideographic characters accepted
 				
-			assert("didn't catch invalid XML Base Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLLetter(c));
+			assertTrue("didn't catch invalid XML Base Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLLetter(c));
 		} 
 	}
 	/**
@@ -455,10 +455,10 @@ public static Test suite () {
 		//for letters and digits has already been tested.
 
 		//valid
-		assert("didn't accept valid letter: 0x0041", Verifier.isXMLLetterOrDigit('\u0041'));
-		assert("didn't accept valid digit: 0x0030", Verifier.isXMLLetterOrDigit('\u0030'));
-		assert("accepted invalid letter: 0x0040", Verifier.isXMLLetterOrDigit('\u0041'));
-		assert("accepted invalid digit: 0x0029", Verifier.isXMLLetterOrDigit('\u0030'));
+		assertTrue("didn't accept valid letter: 0x0041", Verifier.isXMLLetterOrDigit('\u0041'));
+		assertTrue("didn't accept valid digit: 0x0030", Verifier.isXMLLetterOrDigit('\u0030'));
+		assertTrue("accepted invalid letter: 0x0040", Verifier.isXMLLetterOrDigit('\u0041'));
+		assertTrue("accepted invalid digit: 0x0029", Verifier.isXMLLetterOrDigit('\u0030'));
 		
 		
 	}
@@ -472,30 +472,30 @@ public static Test suite () {
 	public void test_TCM__boolean_isXMLNameCharacter_char() {
 
 		//check in the low ascii range
-		assert("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
-		assert("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
-		assert("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
-		assert("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
-		assert("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
+		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
+		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
+		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
+		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
+		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
 		//a few higher values
-		assert("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
-		assert("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
-		assert("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
+		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
+		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
+		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
 
 		//exceptional characters for names
-		assert("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
-		assert("invalidated valid char -" , Verifier.isXMLNameCharacter('-'));
-		assert("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
-		assert("invalidated valid char ." , Verifier.isXMLNameCharacter('.'));
+		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
+		assertTrue("invalidated valid char -" , Verifier.isXMLNameCharacter('-'));
+		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
+		assertTrue("invalidated valid char ." , Verifier.isXMLNameCharacter('.'));
 		//xml letter
-		assert("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
-		assert("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
+		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
+		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
 		//xml digit
-		assert("invalidated valid char 0x0031" , Verifier.isXMLNameCharacter((char)0x0031));
+		assertTrue("invalidated valid char 0x0031" , Verifier.isXMLNameCharacter((char)0x0031));
 		//xml combining character
-		assert("invalidated valid char 0x0301" , Verifier.isXMLNameCharacter((char)0x0301));
+		assertTrue("invalidated valid char 0x0301" , Verifier.isXMLNameCharacter((char)0x0301));
 		//xml extender
-		assert("invalidated valid char 0x00B7" , Verifier.isXMLNameCharacter((char)0x00B7));
+		assertTrue("invalidated valid char 0x00B7" , Verifier.isXMLNameCharacter((char)0x00B7));
 	}
 	/**
 	 * Test that this character is a valid name start character.
@@ -503,22 +503,22 @@ public static Test suite () {
 	 */
 	public void test_TCM__boolean_isXMLNameStartCharacter_char() {
 		//check in the low ascii range
-		assert("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
-		assert("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
-		assert("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
-		assert("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
-		assert("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
+		assertTrue("validated invalid char 0x20" ,! Verifier.isXMLNameCharacter(' '));
+		assertTrue("validated invalid char \t" ,! Verifier.isXMLNameCharacter('\t'));
+		assertTrue("validated invalid char null" ,! Verifier.isXMLNameCharacter((char)0x0));
+		assertTrue("validated invalid char \n" ,! Verifier.isXMLNameCharacter('\n'));
+		assertTrue("validated invalid char 0x29" ,! Verifier.isXMLNameCharacter((char)0x29));
 		//a few higher values
-		assert("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
-		assert("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
-		assert("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
+		assertTrue("validated invalid char 0x00B8" ,! Verifier.isXMLNameCharacter((char)0x00B8));
+		assertTrue("validated invalid char 0x02FF" ,! Verifier.isXMLNameCharacter((char)0x02FF));
+		assertTrue("validated invalid char 0x04DFF" ,! Verifier.isXMLNameCharacter((char)0x4DFF));
 
 		//exceptional characters for names
-		assert("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
-		assert("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
+		assertTrue("invalidated valid char :" , Verifier.isXMLNameCharacter(':'));
+		assertTrue("invalidated valid char _" , Verifier.isXMLNameCharacter('_'));
 		//xml letter
-		assert("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
-		assert("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
+		assertTrue("invalidated valid char 0x42" , Verifier.isXMLNameCharacter((char)0x42));
+		assertTrue("invalidated valid char 0x4E01" , Verifier.isXMLNameCharacter((char)0x4E01));
 
 	}
 	/**
@@ -530,29 +530,29 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkAttributeName_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkAttributeName(null) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkAttributeName("test" + (char)0x0) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkAttributeName("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid name with null" ,! (Verifier.checkAttributeName((char)0x0 + "test") == null));
-		assert("validated invalid name with 0x01" ,! (Verifier.checkAttributeName((char)0x01 + "test") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName("test" + (char)0xD800) == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName((char)0xD800 + "test") == null));
-		assert("validated invalid name with :" , !(Verifier.checkAttributeName("test" + ':' + "local") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkAttributeName(null) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkAttributeName("test" + (char)0x0) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkAttributeName("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkAttributeName((char)0x0 + "test") == null));
+		assertTrue("validated invalid name with 0x01" ,! (Verifier.checkAttributeName((char)0x01 + "test") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName("test" + (char)0xD800) == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkAttributeName((char)0xD800 + "test") == null));
+		assertTrue("validated invalid name with :" , !(Verifier.checkAttributeName("test" + ':' + "local") == null));
 
 		//invalid start characters
-		assert("validated invalid name with startin -" , !(Verifier.checkAttributeName('-' + "test")== null));
-		assert("validated invalid name with xmlns" , !(Verifier.checkAttributeName("xmlns")== null));
-		assert("validated invalid name with startin :" , !(Verifier.checkAttributeName(':' + "test")== null));
+		assertTrue("validated invalid name with startin -" , !(Verifier.checkAttributeName('-' + "test")== null));
+		assertTrue("validated invalid name with xmlns" , !(Verifier.checkAttributeName("xmlns")== null));
+		assertTrue("validated invalid name with startin :" , !(Verifier.checkAttributeName(':' + "test")== null));
 		//valid tests
-		assert("invalidated valid name with starting _" , Verifier.checkAttributeName('_' + "test")== null);
-		assert("invalidated valid name with _" , Verifier.checkAttributeName("test" + '_') == null);
-		assert("invalidated valid name with ." , Verifier.checkAttributeName("test" + '.' + "name") == null);
-		assert("invalidated valid name with xml:space" , Verifier.checkAttributeName("xml:space") == null);
-		assert("invalidated valid name with xml:lang" , Verifier.checkAttributeName("xml:lang") == null);
-		assert("invalidated valid name with 0x00B7" , Verifier.checkAttributeName("test" + (char)0x00B7) == null);
-		assert("invalidated valid name with 0x4E01" , Verifier.checkAttributeName("test" + (char)0x4E01) == null);
-		assert("invalidated valid name with 0x0301" , Verifier.checkAttributeName("test" + (char)0x0301) == null);
+		assertTrue("invalidated valid name with starting _" , Verifier.checkAttributeName('_' + "test")== null);
+		assertTrue("invalidated valid name with _" , Verifier.checkAttributeName("test" + '_') == null);
+		assertTrue("invalidated valid name with ." , Verifier.checkAttributeName("test" + '.' + "name") == null);
+		assertTrue("invalidated valid name with xml:space" , Verifier.checkAttributeName("xml:space") == null);
+		assertTrue("invalidated valid name with xml:lang" , Verifier.checkAttributeName("xml:lang") == null);
+		assertTrue("invalidated valid name with 0x00B7" , Verifier.checkAttributeName("test" + (char)0x00B7) == null);
+		assertTrue("invalidated valid name with 0x4E01" , Verifier.checkAttributeName("test" + (char)0x4E01) == null);
+		assertTrue("invalidated valid name with 0x0301" , Verifier.checkAttributeName("test" + (char)0x0301) == null);
 
 	}
 	/**
@@ -561,26 +561,26 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkCDATASection_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkCDATASection(null) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCDATASection("test" + (char)0x0) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCDATASection("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCDATASection((char)0x0 + "test") == null));
-		assert("validated invalid string with 0x01" ,! (Verifier.checkCDATASection((char)0x01 + "test") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection("test" + (char)0xD800) == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection((char)0xD800 + "test") == null));
-		assert("validated invalid string with ]]>" ,! (Verifier.checkCDATASection("test]]>") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkCDATASection(null) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCDATASection("test" + (char)0x0) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCDATASection("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCDATASection((char)0x0 + "test") == null));
+		assertTrue("validated invalid string with 0x01" ,! (Verifier.checkCDATASection((char)0x01 + "test") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection("test" + (char)0xD800) == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCDATASection((char)0xD800 + "test") == null));
+		assertTrue("validated invalid string with ]]>" ,! (Verifier.checkCDATASection("test]]>") == null));
 		//various valid strings
-		assert("invalidated valid string with \n" , (Verifier.checkCDATASection("test" + '\n' + "ing") == null));
-		assert("invalidated valid string with 0x29" , (Verifier.checkCDATASection("test" +(char)0x29) == null));
-		assert("invalidated valid string with ]" , (Verifier.checkCDATASection("test]") == null));
-		assert("invalidated valid string with [" , (Verifier.checkCDATASection("test[") == null));
+		assertTrue("invalidated valid string with \n" , (Verifier.checkCDATASection("test" + '\n' + "ing") == null));
+		assertTrue("invalidated valid string with 0x29" , (Verifier.checkCDATASection("test" +(char)0x29) == null));
+		assertTrue("invalidated valid string with ]" , (Verifier.checkCDATASection("test]") == null));
+		assertTrue("invalidated valid string with [" , (Verifier.checkCDATASection("test[") == null));
 		//a few higher values
-		assert("invalidated valid string with 0x0B08" , (Verifier.checkCDATASection("test" + (char)0x0B08) == null));
-		assert("invalidated valid string with \t" , (Verifier.checkCDATASection("test" + '\t') == null));
+		assertTrue("invalidated valid string with 0x0B08" , (Verifier.checkCDATASection("test" + (char)0x0B08) == null));
+		assertTrue("invalidated valid string with \t" , (Verifier.checkCDATASection("test" + '\t') == null));
 		//xml letter
-		assert("invalidated valid string with 0x42" , (Verifier.checkCDATASection("test" + (char)0x42) == null));
-		assert("invalidated valid string with 0x4E01" , (Verifier.checkCDATASection("test" + (char)0x4E01) == null));
+		assertTrue("invalidated valid string with 0x42" , (Verifier.checkCDATASection("test" + (char)0x42) == null));
+		assertTrue("invalidated valid string with 0x4E01" , (Verifier.checkCDATASection("test" + (char)0x4E01) == null));
 
 	}
 	/**
@@ -590,23 +590,23 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkCharacterData_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkCharacterData(null) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCharacterData("test" + (char)0x0) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCharacterData("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCharacterData((char)0x0 + "test") == null));
-		assert("validated invalid string with 0x01" ,! (Verifier.checkCharacterData((char)0x01 + "test") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData("test" + (char)0xD800) == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData((char)0xD800 + "test") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkCharacterData(null) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCharacterData("test" + (char)0x0) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCharacterData("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCharacterData((char)0x0 + "test") == null));
+		assertTrue("validated invalid string with 0x01" ,! (Verifier.checkCharacterData((char)0x01 + "test") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData("test" + (char)0xD800) == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCharacterData((char)0xD800 + "test") == null));
 		//various valid strings
-		assert("invalidated valid string with \n" , (Verifier.checkCharacterData("test" + '\n' + "ing") == null));
-		assert("invalidated valid string with 0x29" , (Verifier.checkCharacterData("test" +(char)0x29) == null));
+		assertTrue("invalidated valid string with \n" , (Verifier.checkCharacterData("test" + '\n' + "ing") == null));
+		assertTrue("invalidated valid string with 0x29" , (Verifier.checkCharacterData("test" +(char)0x29) == null));
 		//a few higher values
-		assert("invalidated valid string with 0x0B08" , (Verifier.checkCharacterData("test" + (char)0x0B08) == null));
-		assert("invalidated valid string with \t" , (Verifier.checkCharacterData("test" + '\t') == null));
+		assertTrue("invalidated valid string with 0x0B08" , (Verifier.checkCharacterData("test" + (char)0x0B08) == null));
+		assertTrue("invalidated valid string with \t" , (Verifier.checkCharacterData("test" + '\t') == null));
 		//xml letter
-		assert("invalidated valid string with 0x42" , (Verifier.checkCharacterData("test" + (char)0x42) == null));
-		assert("invalidated valid string with 0x4E01" , (Verifier.checkCharacterData("test" + (char)0x4E01) == null));
+		assertTrue("invalidated valid string with 0x42" , (Verifier.checkCharacterData("test" + (char)0x42) == null));
+		assertTrue("invalidated valid string with 0x4E01" , (Verifier.checkCharacterData("test" + (char)0x4E01) == null));
 
 	}
 	/**
@@ -616,24 +616,24 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkCommentData_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkCommentData(null) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCommentData("test" + (char)0x0) == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCommentData("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid string with null" ,! (Verifier.checkCommentData((char)0x0 + "test") == null));
-		assert("validated invalid string with 0x01" ,! (Verifier.checkCommentData((char)0x01 + "test") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCommentData("test" + (char)0xD800) == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCommentData("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid string with 0xD800" ,! (Verifier.checkCommentData((char)0xD800 + "test") == null));
-		assert("validated invalid string with --" ,! (Verifier.checkCommentData("--test") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkCommentData(null) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCommentData("test" + (char)0x0) == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCommentData("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid string with null" ,! (Verifier.checkCommentData((char)0x0 + "test") == null));
+		assertTrue("validated invalid string with 0x01" ,! (Verifier.checkCommentData((char)0x01 + "test") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCommentData("test" + (char)0xD800) == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCommentData("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid string with 0xD800" ,! (Verifier.checkCommentData((char)0xD800 + "test") == null));
+		assertTrue("validated invalid string with --" ,! (Verifier.checkCommentData("--test") == null));
 		//various valid strings
-		assert("invalidated valid string with \n" , (Verifier.checkCommentData("test" + '\n' + "ing") == null));
-		assert("invalidated valid string with 0x29" , (Verifier.checkCommentData("test" +(char)0x29) == null));
+		assertTrue("invalidated valid string with \n" , (Verifier.checkCommentData("test" + '\n' + "ing") == null));
+		assertTrue("invalidated valid string with 0x29" , (Verifier.checkCommentData("test" +(char)0x29) == null));
 		//a few higher values
-		assert("invalidated valid string with 0x0B08" , (Verifier.checkCommentData("test" + (char)0x0B08) == null));
-		assert("invalidated valid string with \t" , (Verifier.checkCommentData("test" + '\t') == null));
+		assertTrue("invalidated valid string with 0x0B08" , (Verifier.checkCommentData("test" + (char)0x0B08) == null));
+		assertTrue("invalidated valid string with \t" , (Verifier.checkCommentData("test" + '\t') == null));
 		//xml letter
-		assert("invalidated valid string with 0x42" , (Verifier.checkCommentData("test" + (char)0x42) == null));
-		assert("invalidated valid string with 0x4E01" , (Verifier.checkCommentData("test" + (char)0x4E01) == null));
+		assertTrue("invalidated valid string with 0x42" , (Verifier.checkCommentData("test" + (char)0x42) == null));
+		assertTrue("invalidated valid string with 0x4E01" , (Verifier.checkCommentData("test" + (char)0x4E01) == null));
 
 	}
 	/**
@@ -643,26 +643,26 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkElementName_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkElementName(null) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkElementName("test" + (char)0x0) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkElementName("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid name with null" ,! (Verifier.checkElementName((char)0x0 + "test") == null));
-		assert("validated invalid name with 0x01" ,! (Verifier.checkElementName((char)0x01 + "test") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkElementName("test" + (char)0xD800) == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkElementName("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkElementName((char)0xD800 + "test") == null));
-		assert("validated invalid name with :" , !(Verifier.checkElementName("test" + ':' + "local") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkElementName(null) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkElementName("test" + (char)0x0) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkElementName("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkElementName((char)0x0 + "test") == null));
+		assertTrue("validated invalid name with 0x01" ,! (Verifier.checkElementName((char)0x01 + "test") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkElementName("test" + (char)0xD800) == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkElementName("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkElementName((char)0xD800 + "test") == null));
+		assertTrue("validated invalid name with :" , !(Verifier.checkElementName("test" + ':' + "local") == null));
 
 		//invalid start characters
-		assert("validated invalid name with startin -" , !(Verifier.checkElementName('-' + "test")== null));
-		assert("validated invalid name with startin :" , !(Verifier.checkElementName(':' + "test")== null));
+		assertTrue("validated invalid name with startin -" , !(Verifier.checkElementName('-' + "test")== null));
+		assertTrue("validated invalid name with startin :" , !(Verifier.checkElementName(':' + "test")== null));
 		//valid tests
-		assert("invalidated valid name with starting _" , Verifier.checkElementName('_' + "test")== null);
-		assert("invalidated valid name with _" , Verifier.checkElementName("test" + '_') == null);
-		assert("invalidated valid name with ." , Verifier.checkElementName("test" + '.' + "name") == null);
-		assert("invalidated valid name with 0x00B7" , Verifier.checkElementName("test" + (char)0x00B7) == null);
-		assert("invalidated valid name with 0x4E01" , Verifier.checkElementName("test" + (char)0x4E01) == null);
-		assert("invalidated valid name with 0x0301" , Verifier.checkElementName("test" + (char)0x0301) == null);
+		assertTrue("invalidated valid name with starting _" , Verifier.checkElementName('_' + "test")== null);
+		assertTrue("invalidated valid name with _" , Verifier.checkElementName("test" + '_') == null);
+		assertTrue("invalidated valid name with ." , Verifier.checkElementName("test" + '.' + "name") == null);
+		assertTrue("invalidated valid name with 0x00B7" , Verifier.checkElementName("test" + (char)0x00B7) == null);
+		assertTrue("invalidated valid name with 0x4E01" , Verifier.checkElementName("test" + (char)0x4E01) == null);
+		assertTrue("invalidated valid name with 0x0301" , Verifier.checkElementName("test" + (char)0x0301) == null);
 
 	}
 	/**
@@ -673,31 +673,31 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkNamespacePrefix_String() {
 		//check out of range values
-		assert("validated invalid name with null" ,! (Verifier.checkNamespacePrefix("test" + (char)0x0) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkNamespacePrefix("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid name with null" ,! (Verifier.checkNamespacePrefix((char)0x0 + "test") == null));
-		assert("validated invalid name with 0x01" ,! (Verifier.checkNamespacePrefix((char)0x01 + "test") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix("test" + (char)0xD800) == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix((char)0xD800 + "test") == null));
-		assert("validated invalid name with :" , !(Verifier.checkNamespacePrefix("test" + ':' + "local") == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkNamespacePrefix("test" + (char)0x0) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkNamespacePrefix("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkNamespacePrefix((char)0x0 + "test") == null));
+		assertTrue("validated invalid name with 0x01" ,! (Verifier.checkNamespacePrefix((char)0x01 + "test") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix("test" + (char)0xD800) == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkNamespacePrefix((char)0xD800 + "test") == null));
+		assertTrue("validated invalid name with :" , !(Verifier.checkNamespacePrefix("test" + ':' + "local") == null));
 
 		//invalid start characters
-		assert("validated invalid name with startin -" , !(Verifier.checkNamespacePrefix('-' + "test")== null));
-		assert("validated invalid name with xmlns" , !(Verifier.checkNamespacePrefix("xmlns")== null));
-		assert("validated invalid name with startin :" , !(Verifier.checkNamespacePrefix(':' + "test")== null));
-		assert("validated invalid name with starting digit" , !(Verifier.checkNamespacePrefix("9") == null));
-		assert("validated invalid name with starting $" , !(Verifier.checkNamespacePrefix("$") == null));
-		assert("validated invalid name with starting ." , !(Verifier.checkNamespacePrefix(".") == null));
+		assertTrue("validated invalid name with startin -" , !(Verifier.checkNamespacePrefix('-' + "test")== null));
+		assertTrue("validated invalid name with xmlns" , !(Verifier.checkNamespacePrefix("xmlns")== null));
+		assertTrue("validated invalid name with startin :" , !(Verifier.checkNamespacePrefix(':' + "test")== null));
+		assertTrue("validated invalid name with starting digit" , !(Verifier.checkNamespacePrefix("9") == null));
+		assertTrue("validated invalid name with starting $" , !(Verifier.checkNamespacePrefix("$") == null));
+		assertTrue("validated invalid name with starting ." , !(Verifier.checkNamespacePrefix(".") == null));
 		//valid tests
-		assert("invalidated valid null" , (Verifier.checkNamespacePrefix(null) == null));
-		assert("invalidated valid name with starting _" , Verifier.checkNamespacePrefix('_' + "test")== null);
-		assert("invalidated valid name with _" , Verifier.checkNamespacePrefix("test" + '_') == null);
-		assert("invalidated valid name with ." , Verifier.checkNamespacePrefix("test" + '.' + "name") == null);
-		assert("invalidated valid name with digit" , Verifier.checkNamespacePrefix("test9") == null);
-		assert("invalidated valid name with 0x00B7" , Verifier.checkNamespacePrefix("test" + (char)0x00B7) == null);
-		assert("invalidated valid name with 0x4E01" , Verifier.checkNamespacePrefix("test" + (char)0x4E01) == null);
-		assert("invalidated valid name with 0x0301" , Verifier.checkNamespacePrefix("test" + (char)0x0301) == null);
+		assertTrue("invalidated valid null" , (Verifier.checkNamespacePrefix(null) == null));
+		assertTrue("invalidated valid name with starting _" , Verifier.checkNamespacePrefix('_' + "test")== null);
+		assertTrue("invalidated valid name with _" , Verifier.checkNamespacePrefix("test" + '_') == null);
+		assertTrue("invalidated valid name with ." , Verifier.checkNamespacePrefix("test" + '.' + "name") == null);
+		assertTrue("invalidated valid name with digit" , Verifier.checkNamespacePrefix("test9") == null);
+		assertTrue("invalidated valid name with 0x00B7" , Verifier.checkNamespacePrefix("test" + (char)0x00B7) == null);
+		assertTrue("invalidated valid name with 0x4E01" , Verifier.checkNamespacePrefix("test" + (char)0x4E01) == null);
+		assertTrue("invalidated valid name with 0x0301" , Verifier.checkNamespacePrefix("test" + (char)0x0301) == null);
 
 	}
 	/**
@@ -712,32 +712,32 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkNamespaceURI_String() {
 		//invalid start characters
-		assert("validated invalid URI with startin -" , !(Verifier.checkNamespaceURI('-' + "test")== null));
-		assert("validated invalid URI with starting digit" , !(Verifier.checkNamespaceURI("9") == null));
-		assert("validated invalid URI with starting $" , !(Verifier.checkNamespaceURI("$") == null));
+		assertTrue("validated invalid URI with startin -" , !(Verifier.checkNamespaceURI('-' + "test")== null));
+		assertTrue("validated invalid URI with starting digit" , !(Verifier.checkNamespaceURI("9") == null));
+		assertTrue("validated invalid URI with starting $" , !(Verifier.checkNamespaceURI("$") == null));
 		//valid tests
-		assert("invalidated valid null" , Verifier.checkNamespaceURI(null) == null);
-		assert("invalidated valid URI with :" , Verifier.checkNamespaceURI("test" + ':' + "local") == null);
-		assert("invalidated valid URI with _" , Verifier.checkNamespaceURI("test" + '_') == null);
-		assert("invalidated valid URI with ." , Verifier.checkNamespaceURI("test" + '.' + "URI") == null);
-		assert("invalidated valid URI with digit" , Verifier.checkNamespaceURI("test9") == null);
-		assert("invalidated valid URI with 0x00B7" , Verifier.checkNamespaceURI("test" + (char)0x00B7) == null);
-		assert("invalidated valid URI with 0x4E01" , Verifier.checkNamespaceURI("test" + (char)0x4E01) == null);
-		assert("invalidated valid URI with 0x0301" , Verifier.checkNamespaceURI("test" + (char)0x0301) == null);
+		assertTrue("invalidated valid null" , Verifier.checkNamespaceURI(null) == null);
+		assertTrue("invalidated valid URI with :" , Verifier.checkNamespaceURI("test" + ':' + "local") == null);
+		assertTrue("invalidated valid URI with _" , Verifier.checkNamespaceURI("test" + '_') == null);
+		assertTrue("invalidated valid URI with ." , Verifier.checkNamespaceURI("test" + '.' + "URI") == null);
+		assertTrue("invalidated valid URI with digit" , Verifier.checkNamespaceURI("test9") == null);
+		assertTrue("invalidated valid URI with 0x00B7" , Verifier.checkNamespaceURI("test" + (char)0x00B7) == null);
+		assertTrue("invalidated valid URI with 0x4E01" , Verifier.checkNamespaceURI("test" + (char)0x4E01) == null);
+		assertTrue("invalidated valid URI with 0x0301" , Verifier.checkNamespaceURI("test" + (char)0x0301) == null);
 		//check out of range values
 
 		/** skip these tests until the time the checks are implemented
-		assert("validated invalid URI with xmlns" , !(Verifier.checkNamespaceURI("xmlns")== null));
-		assert("validated invalid URI with startin :" , !(Verifier.checkNamespaceURI(':' + "test")== null));
-		assert("validated invalid URI with starting ." , !(Verifier.checkNamespaceURI(".") == null));
+		assertTrue("validated invalid URI with xmlns" , !(Verifier.checkNamespaceURI("xmlns")== null));
+		assertTrue("validated invalid URI with startin :" , !(Verifier.checkNamespaceURI(':' + "test")== null));
+		assertTrue("validated invalid URI with starting ." , !(Verifier.checkNamespaceURI(".") == null));
 		
-		assert("validated invalid URI with null" ,! (Verifier.checkNamespaceURI("test" + (char)0x0) == null));
-		assert("validated invalid URI with null" ,! (Verifier.checkNamespaceURI("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid URI with null" ,! (Verifier.checkNamespaceURI((char)0x0 + "test") == null));
-		assert("validated invalid URI with 0x01" ,! (Verifier.checkNamespaceURI((char)0x01 + "test") == null));
-		assert("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI("test" + (char)0xD800) == null));
-		assert("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI((char)0xD800 + "test") == null));
+		assertTrue("validated invalid URI with null" ,! (Verifier.checkNamespaceURI("test" + (char)0x0) == null));
+		assertTrue("validated invalid URI with null" ,! (Verifier.checkNamespaceURI("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid URI with null" ,! (Verifier.checkNamespaceURI((char)0x0 + "test") == null));
+		assertTrue("validated invalid URI with 0x01" ,! (Verifier.checkNamespaceURI((char)0x01 + "test") == null));
+		assertTrue("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI("test" + (char)0xD800) == null));
+		assertTrue("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid URI with 0xD800" ,! (Verifier.checkNamespaceURI((char)0xD800 + "test") == null));
 		*/
 
 
@@ -749,29 +749,29 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_checkProcessingInstructionTarget_String() {
 		//check out of range values
-		assert("validated invalid null" ,! (Verifier.checkProcessingInstructionTarget(null) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0x0) == null));
-		assert("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0x0 + "ing") == null));
-		assert("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget((char)0x0 + "test") == null));
-		assert("validated invalid name with 0x01" ,! (Verifier.checkProcessingInstructionTarget((char)0x01 + "test") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0xD800) == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0xD800 + "ing") == null));
-		assert("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget((char)0xD800 + "test") == null));
-		assert("validated invalid name with :" , !(Verifier.checkProcessingInstructionTarget("test" + ':' + "local") == null));
-		assert("validated invalid name with xml:space" , ! (Verifier.checkProcessingInstructionTarget("xml:space") == null));
-		assert("validated invalid name with xml:lang" , ! (Verifier.checkProcessingInstructionTarget("xml:lang") == null));
-		assert("validated invalid name with xml" , ! (Verifier.checkProcessingInstructionTarget("xml") == null));
-		assert("validated invalid name with xMl" , ! (Verifier.checkProcessingInstructionTarget("xMl") == null));
+		assertTrue("validated invalid null" ,! (Verifier.checkProcessingInstructionTarget(null) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0x0) == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0x0 + "ing") == null));
+		assertTrue("validated invalid name with null" ,! (Verifier.checkProcessingInstructionTarget((char)0x0 + "test") == null));
+		assertTrue("validated invalid name with 0x01" ,! (Verifier.checkProcessingInstructionTarget((char)0x01 + "test") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0xD800) == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget("test" + (char)0xD800 + "ing") == null));
+		assertTrue("validated invalid name with 0xD800" ,! (Verifier.checkProcessingInstructionTarget((char)0xD800 + "test") == null));
+		assertTrue("validated invalid name with :" , !(Verifier.checkProcessingInstructionTarget("test" + ':' + "local") == null));
+		assertTrue("validated invalid name with xml:space" , ! (Verifier.checkProcessingInstructionTarget("xml:space") == null));
+		assertTrue("validated invalid name with xml:lang" , ! (Verifier.checkProcessingInstructionTarget("xml:lang") == null));
+		assertTrue("validated invalid name with xml" , ! (Verifier.checkProcessingInstructionTarget("xml") == null));
+		assertTrue("validated invalid name with xMl" , ! (Verifier.checkProcessingInstructionTarget("xMl") == null));
 		//invalid start characters
-		assert("validated invalid name with startin -" , !(Verifier.checkProcessingInstructionTarget('-' + "test")== null));
-		assert("validated invalid name with startin :" , !(Verifier.checkProcessingInstructionTarget(':' + "test")== null));
+		assertTrue("validated invalid name with startin -" , !(Verifier.checkProcessingInstructionTarget('-' + "test")== null));
+		assertTrue("validated invalid name with startin :" , !(Verifier.checkProcessingInstructionTarget(':' + "test")== null));
 		//valid tests
-		assert("invalidated valid name with starting _" , Verifier.checkProcessingInstructionTarget('_' + "test")== null);
-		assert("invalidated valid name with _" , Verifier.checkProcessingInstructionTarget("test" + '_') == null);
-		assert("invalidated valid name with ." , Verifier.checkProcessingInstructionTarget("test" + '.' + "name") == null);
-		assert("invalidated valid name with 0x00B7" , Verifier.checkProcessingInstructionTarget("test" + (char)0x00B7) == null);
-		assert("invalidated valid name with 0x4E01" , Verifier.checkProcessingInstructionTarget("test" + (char)0x4E01) == null);
-		assert("invalidated valid name with 0x0301" , Verifier.checkProcessingInstructionTarget("test" + (char)0x0301) == null);
+		assertTrue("invalidated valid name with starting _" , Verifier.checkProcessingInstructionTarget('_' + "test")== null);
+		assertTrue("invalidated valid name with _" , Verifier.checkProcessingInstructionTarget("test" + '_') == null);
+		assertTrue("invalidated valid name with ." , Verifier.checkProcessingInstructionTarget("test" + '.' + "name") == null);
+		assertTrue("invalidated valid name with 0x00B7" , Verifier.checkProcessingInstructionTarget("test" + (char)0x00B7) == null);
+		assertTrue("invalidated valid name with 0x4E01" , Verifier.checkProcessingInstructionTarget("test" + (char)0x4E01) == null);
+		assertTrue("invalidated valid name with 0x0301" , Verifier.checkProcessingInstructionTarget("test" + (char)0x0301) == null);
 
 	}
 	/**

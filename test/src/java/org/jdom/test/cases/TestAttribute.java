@@ -105,42 +105,42 @@ public static Test suite () {
 	 */
 	public void test_TCC___String_String() {
 		Attribute attr = new Attribute("test", "value");
-		assert("incorrect attribute name", attr.getName().equals("test"));
-		assert("incoorect attribute value", attr.getValue().equals("value"));
+		assertTrue("incorrect attribute name", attr.getName().equals("test"));
+		assertTrue("incoorect attribute value", attr.getValue().equals("value"));
 		//should have been put in the NO_NAMESPACE namespace
-		assert("incorrect namespace", attr.getNamespace().equals(Namespace.NO_NAMESPACE));
+		assertTrue("incorrect namespace", attr.getNamespace().equals(Namespace.NO_NAMESPACE));
 
 
 		try {
 			attr = new Attribute(null, "value");
-			assert("didn't catch null attribute name", false);
+			assertTrue("didn't catch null attribute name", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert("NullPointerException with null attribute name", false);
+			assertTrue("NullPointerException with null attribute name", false);
 		}
 
 		try {
 			attr = new Attribute("test", null);
-			assert("didn't catch null attribute value", false);
+			assertTrue("didn't catch null attribute value", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert("NullPointerException with null attribute value", false);
+			assertTrue("NullPointerException with null attribute value", false);
 		}
 
 		try {
 			attr = new Attribute("test" + (char)0x01, "value");
-			assert("didn't catch invalid attribute name", false);
+			assertTrue("didn't catch invalid attribute name", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		try {
 			attr = new Attribute("test", "test" + (char)0x01);
-			assert("didn't catch invalid attribute value", false);
+			assertTrue("didn't catch invalid attribute value", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 	}
@@ -151,9 +151,9 @@ public static Test suite () {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
 		Attribute attr = new Attribute("test", "value", ns);
-		assert("incorrect attribute name", attr.getName().equals("test"));
-		assert("incoorect attribute value", attr.getValue().equals("value"));
-		assert("incorrect Namespace", attr.getNamespace().equals(ns));
+		assertTrue("incorrect attribute name", attr.getName().equals("test"));
+		assertTrue("incoorect attribute value", attr.getValue().equals("value"));
+		assertTrue("incorrect Namespace", attr.getNamespace().equals(ns));
 
 		//now test that the attribute cannot be created with a namespace
 		//without a prefix
@@ -161,14 +161,14 @@ public static Test suite () {
 
 		try {
 			attr = new Attribute("test", "value", ns);
-			assert("allowed creation of attribute with a default namespace", false);
+			assertTrue("allowed creation of attribute with a default namespace", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		
 		attr = new Attribute("test", "value", null);
-		assert("expected null attribute namespace", true);
+		assertTrue("expected null attribute namespace", true);
 
 
 
@@ -181,7 +181,7 @@ public static Test suite () {
 
 	    Object ob = (Object)attr;
 
-	    assert("object not equal to attribute", attr.equals(ob));
+	    assertTrue("object not equal to attribute", attr.equals(ob));
 	}
 	/**
 	 * test the convienience method getBooleanValue();
@@ -189,27 +189,27 @@ public static Test suite () {
 	public void test_TCM__boolean_getBooleanValue() {
 		Attribute attr = new Attribute("test", "true");
 		try {
-			assert("incorrect boolean true value", attr.getBooleanValue());
+			assertTrue("incorrect boolean true value", attr.getBooleanValue());
 
 			attr.setValue("false");
-			assert("incorrect boolean false value", !attr.getBooleanValue());
+			assertTrue("incorrect boolean false value", !attr.getBooleanValue());
 
 			attr.setValue("TRUE");
-			assert("incorrect boolean TRUE value", attr.getBooleanValue());
+			assertTrue("incorrect boolean TRUE value", attr.getBooleanValue());
 
 			attr.setValue("FALSE");
-			assert("incorrect boolean FALSE value", !attr.getBooleanValue());
+			assertTrue("incorrect boolean FALSE value", !attr.getBooleanValue());
 
 		} catch (DataConversionException e) {
-			assert("couldn't convert boolean value", false);
+			assertTrue("couldn't convert boolean value", false);
 		}
 
 		try {
 			attr.setValue("foo");
-			assert("incorrectly returned boolean from non boolean value", attr.getBooleanValue());
+			assertTrue("incorrectly returned boolean from non boolean value", attr.getBooleanValue());
 
 		} catch (DataConversionException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 
@@ -220,27 +220,27 @@ public static Test suite () {
 	public void test_TCM__double_getDoubleValue() {
 		Attribute attr = new Attribute("test", "11111111111111");
 		try {
-			assert("incorrect double value", attr.getDoubleValue() == 11111111111111d );
+			assertTrue("incorrect double value", attr.getDoubleValue() == 11111111111111d );
 
 			attr.setValue("0");
-			assert("incorrect double value", attr.getDoubleValue() == 0 );
+			assertTrue("incorrect double value", attr.getDoubleValue() == 0 );
 
 			attr.setValue(Double.toString(java.lang.Double.MAX_VALUE));
-			assert("incorrect double value", attr.getDoubleValue() == java.lang.Double.MAX_VALUE);
+			assertTrue("incorrect double value", attr.getDoubleValue() == java.lang.Double.MAX_VALUE);
 
 			attr.setValue(Double.toString(java.lang.Double.MIN_VALUE));
-			assert("incorrect double value", attr.getDoubleValue() == java.lang.Double.MIN_VALUE);
+			assertTrue("incorrect double value", attr.getDoubleValue() == java.lang.Double.MIN_VALUE);
 
 		} catch (DataConversionException e) {
-			assert("couldn't convert boolean value", false);
+			assertTrue("couldn't convert boolean value", false);
 		}
 
 		try {
 			attr.setValue("foo");
-			assert("incorrectly returned double from non double value" + attr.getDoubleValue(), false);
+			assertTrue("incorrectly returned double from non double value" + attr.getDoubleValue(), false);
 
 		} catch (DataConversionException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 	}
@@ -253,9 +253,9 @@ public void test_TCM__float_getFloatValue() {
     Attribute attr= new Attribute("test", "1.00000009999e+10f");
     float flt= 1.00000009999e+10f;
     try {
-        assert("incorrect float conversion", attr.getFloatValue() == flt);
+        assertTrue("incorrect float conversion", attr.getFloatValue() == flt);
     } catch (DataConversionException e) {
-        assert("couldn't convert to float", false);
+        assertTrue("couldn't convert to float", false);
     }
 
     //test an invalid float
@@ -263,9 +263,9 @@ public void test_TCM__float_getFloatValue() {
     attr.setValue("1.00000009999e");
     try {
         attr.getFloatValue();
-        assert("incorrect float conversion from non float", false);
+        assertTrue("incorrect float conversion from non float", false);
     } catch (DataConversionException e) {
-        assert("couldn't convert to float", true);
+        assertTrue("couldn't convert to float", true);
     }
 
 }
@@ -277,9 +277,9 @@ public void test_TCM__float_getFloatValue() {
 		Attribute attr = new Attribute("test", "1000");
 		int intval = 1000;
 		try {
-			assert("incorrect int conversion", attr.getIntValue() == intval); 
+			assertTrue("incorrect int conversion", attr.getIntValue() == intval); 
 		} catch (DataConversionException e) {
-			assert("couldn't convert to int", false);
+			assertTrue("couldn't convert to int", false);
 		}
 
 		//test an invalid int
@@ -287,9 +287,9 @@ public void test_TCM__float_getFloatValue() {
 		attr.setValue("10000000.aq");
 		try {
 			attr.getIntValue();
-			assert("incorrect int conversion from non int", false); 
+			assertTrue("incorrect int conversion from non int", false); 
 		} catch (DataConversionException e) {
-			assert("couldn't convert to int", true);
+			assertTrue("couldn't convert to int", true);
 		}
 	}
 	/**
@@ -299,15 +299,15 @@ public void test_TCM__float_getFloatValue() {
 		Attribute attr = new Attribute("test", "value");
 		//only an exception would be a problem
 		int i = attr.hashCode();
-		assert("bad hashCode", true);
+		assertTrue("bad hashCode", true);
 		Attribute attr2 = new Attribute("test", "value");
 		//different Attributes, same text
 		int x = attr2.hashCode();
-		assert("Different Attributes with same value have same hashcode", x != i);
+		assertTrue("Different Attributes with same value have same hashcode", x != i);
 		Attribute attr3 = new Attribute("test2", "value");
 		//only an exception would be a problem
 		int y = attr3.hashCode();
-		assert("Different Attributes have same hashcode", y != x);
+		assertTrue("Different Attributes have same hashcode", y != x);
 	}
 	/**
 	 * Test the convienience method for returning a long from an Attribute
@@ -316,9 +316,9 @@ public void test_TCM__float_getFloatValue() {
 		Attribute attr = new Attribute("test", "1000000");
 		long longval = 1000000;
 		try {
-			assert("incorrect long conversion", attr.getLongValue() == longval);
+			assertTrue("incorrect long conversion", attr.getLongValue() == longval);
 		} catch (DataConversionException e) {
-			assert("couldn't convert to long", false);
+			assertTrue("couldn't convert to long", false);
 		}
 
 		//test an invalid long
@@ -326,9 +326,9 @@ public void test_TCM__float_getFloatValue() {
 		attr.setValue("100000000000000000000000000");
 		try {
 			attr.getLongValue();
-			assert("incorrect long conversion from non long", false);
+			assertTrue("incorrect long conversion from non long", false);
 		} catch (DataConversionException e) {
-			assert("couldn't convert to long", true);
+			assertTrue("couldn't convert to long", true);
 		}
 	}
 	/**
@@ -340,16 +340,16 @@ public void test_TCM__float_getFloatValue() {
 		Attribute attr = new Attribute("test", "value");
 		Attribute attr2 = (Attribute)attr.clone();
 
-		assert("incorrect name in clone", attr2.getName().equals("test"));
-		assert("incorrect value in clone", attr2.getValue().equals("value"));
+		assertTrue("incorrect name in clone", attr2.getName().equals("test"));
+		assertTrue("incorrect value in clone", attr2.getValue().equals("value"));
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		attr = new Attribute("test", "value", ns);
 		attr2 = (Attribute)attr.clone();
-		assert("incorrect name in clone", attr2.getName().equals("test"));
-		assert("incorrect value in clone", attr2.getValue().equals("value"));
-		assert("incorrect prefix in clone", attr2.getNamespacePrefix().equals("prefx"));
-		assert("incorrect qualified name in clone", attr2.getQualifiedName().equals("prefx:test"));
-		assert("incorrect Namespace URI in clone", attr2.getNamespaceURI().equals("http://some.other.place"));
+		assertTrue("incorrect name in clone", attr2.getName().equals("test"));
+		assertTrue("incorrect value in clone", attr2.getValue().equals("value"));
+		assertTrue("incorrect prefix in clone", attr2.getNamespacePrefix().equals("prefx"));
+		assertTrue("incorrect qualified name in clone", attr2.getQualifiedName().equals("prefx:test"));
+		assertTrue("incorrect Namespace URI in clone", attr2.getNamespaceURI().equals("http://some.other.place"));
 
 	}
 /**
@@ -362,10 +362,10 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 	Attribute attr=
 		new Attribute("test", "value", ns);
 
-	assert("incorrect value before set", attr.getValue().equals("value"));
+	assertTrue("incorrect value before set", attr.getValue().equals("value"));
 	attr.setValue("foo");
 
-	assert("incorrect value after set", attr.getValue().equals("foo"));
+	assertTrue("incorrect value after set", attr.getValue().equals("foo"));
 
 	//test that the verifier is called
 	try {
@@ -373,7 +373,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		fail("Attribute setValue didn't catch null  string");
 	} catch (IllegalDataException e) {
 
-		assert(true);
+		assertTrue(true);
 	}
 	try {
 		char c= 0x11;
@@ -383,7 +383,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		fail("Attribute setValue didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
 
-		assert(true);
+		assertTrue(true);
 	}
 
 }
@@ -395,11 +395,11 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 
 		Element el = attr.getParent();
 
-		assert("attribute returned parent when there was none", el == null);
+		assertTrue("attribute returned parent when there was none", el == null);
 
 		Element root = new Element("root");
 		root.setAttribute(attr);
-		assert("invalid root element", attr.getParent().equals(root));
+		assertTrue("invalid root element", attr.getParent().equals(root));
 	
 
 	}
@@ -414,7 +414,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Attribute attr = new Attribute("test", "value", ns);
 		Namespace ns2 = Namespace.getNamespace("prefx", "http://some.other.place");
 
-		assert("incorrect Namespace", attr.getNamespace().equals(ns2));
+		assertTrue("incorrect Namespace", attr.getNamespace().equals(ns2));
 
 	}
 	/**
@@ -422,7 +422,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 	 */
 	public void test_TCM__String_getName() {
 		Attribute attr = new Attribute("test", "value");
-		assert("incorrect attribute name", attr.getName().equals("test"));
+		assertTrue("incorrect attribute name", attr.getName().equals("test"));
 
 	}
 	/**
@@ -433,7 +433,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
 		Attribute attr = new Attribute("test", "value", ns);
-		assert("incorrect prefix", attr.getNamespacePrefix().equals("prefx"));
+		assertTrue("incorrect prefix", attr.getNamespacePrefix().equals("prefx"));
 	}
 	/**
 	 * Test that an Attribute returns the correct Namespace URI.
@@ -443,7 +443,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
 		Attribute attr = new Attribute("test", "value", ns);
-		assert("incorrect URI", attr.getNamespaceURI().equals("http://some.other.place"));
+		assertTrue("incorrect URI", attr.getNamespaceURI().equals("http://some.other.place"));
 
 	}
 	/**
@@ -454,7 +454,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
 		Attribute attr = new Attribute("test", "value", ns);
-		assert("incorrect qualified name", attr.getQualifiedName().equals("prefx:test"));	
+		assertTrue("incorrect qualified name", attr.getQualifiedName().equals("prefx:test"));	
 
 	}
 	/**
@@ -466,7 +466,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		Attribute attr = new Attribute("test", "value", ns);
 		String serialized = attr.getSerializedForm();
-		assert("incorrect serialized form", serialized.equals("prefx:test=\"value\""));
+		assertTrue("incorrect serialized form", serialized.equals("prefx:test=\"value\""));
 		*/
 
 	}
@@ -477,7 +477,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		Attribute attr = new Attribute("test", "value", ns);
-		assert("incorrect value", attr.getValue().equals("value"));
+		assertTrue("incorrect value", attr.getValue().equals("value"));
 
 	}
 	/**
@@ -489,7 +489,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		Attribute attr = new Attribute("test", "value", ns);
 		String str= attr.toString();
-		assert("incorrect toString form", str.equals("[Attribute: prefx:test=\"value\"]"));
+		assertTrue("incorrect toString form", str.equals("[Attribute: prefx:test=\"value\"]"));
 
 	}
 }

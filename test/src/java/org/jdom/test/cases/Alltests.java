@@ -56,6 +56,8 @@ package org.jdom.test.cases;
 
 
 import junit.framework.*;
+import org.jdom.test.cases.input.*;
+
 
 public class Alltests extends junit.framework.TestCase {
 /**
@@ -95,6 +97,7 @@ public static Test suite() {
 		suite.addTest(TestElement.suite());
 		suite.addTest(TestDocument.suite());
 		suite.addTest(TestFilterList.suite());
+		suite.addTest(TestSAXBuilder.suite());
 		return suite;
 }
 }

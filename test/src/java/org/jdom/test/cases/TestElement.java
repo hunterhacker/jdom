@@ -132,25 +132,25 @@ public static Test suite () {
 
 		//create a new empty element
 		Element el = new Element("theElement");
-		assert("wrong element name after constructor", el.getName().equals("theElement"));
-		assert("expected NO_NAMESPACE", el.getNamespace().equals(Namespace.NO_NAMESPACE));
-		assert("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
-		assert("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
+		assertTrue("wrong element name after constructor", el.getName().equals("theElement"));
+		assertTrue("expected NO_NAMESPACE", el.getNamespace().equals(Namespace.NO_NAMESPACE));
+		assertTrue("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
+		assertTrue("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
 
 		//must have a name
 		try {
 			el = new Element("");
-			assert("allowed creation of an element with no name", false);
+			assertTrue("allowed creation of an element with no name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//name can't be null
 		try {
 			el = new Element(null);
-			assert("allowed creation of an element with null name", false);
+			assertTrue("allowed creation of an element with null name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//we can assume the Verifier has been called by now so we are done
@@ -166,25 +166,25 @@ public static Test suite () {
 
 		Namespace ns = Namespace.getNamespace("urn:foo");
 		Element el = new Element("theElement", ns);
-		assert("wrong element name after constructor", el.getName().equals("theElement"));
-		assert("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("urn:foo")));
-		assert("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
-		assert("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
+		assertTrue("wrong element name after constructor", el.getName().equals("theElement"));
+		assertTrue("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("urn:foo")));
+		assertTrue("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
+		assertTrue("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
 
 		//must have a name
 		try {
 			el = new Element("", ns);
-			assert("allowed creation of an element with no name", false);
+			assertTrue("allowed creation of an element with no name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//name can't be null
 		try {
 			el = new Element(null, ns);
-			assert("allowed creation of an element with null name", false);
+			assertTrue("allowed creation of an element with null name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//we can assume the Verifier has been called by now so we are done
@@ -198,25 +198,25 @@ public static Test suite () {
 
 		
 		Element el = new Element("theElement", "urn:foo");
-		assert("wrong element name after constructor", el.getName().equals("theElement"));
-		assert("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("urn:foo")));
-		assert("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
-		assert("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
+		assertTrue("wrong element name after constructor", el.getName().equals("theElement"));
+		assertTrue("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("urn:foo")));
+		assertTrue("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
+		assertTrue("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
 
 		//must have a name
 		try {
 			el = new Element("", "urn:foo");
-			assert("allowed creation of an element with no name", false);
+			assertTrue("allowed creation of an element with no name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//name can't be null
 		try {
 			el = new Element(null, "urn:foo");
-			assert("allowed creation of an element with null name", false);
+			assertTrue("allowed creation of an element with null name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//we can assume the Verifier has been called by now so we are done
@@ -230,25 +230,25 @@ public static Test suite () {
 
 		
 		Element el = new Element("theElement", "x", "urn:foo");
-		assert("wrong element name after constructor", el.getName().equals("theElement"));
-		assert("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("x", "urn:foo")));
-		assert("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
-		assert("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
+		assertTrue("wrong element name after constructor", el.getName().equals("theElement"));
+		assertTrue("expected urn:foo namespace", el.getNamespace().equals(Namespace.getNamespace("x", "urn:foo")));
+		assertTrue("expected no child elements", el.getChildren().equals(Collections.EMPTY_LIST));
+		assertTrue("expected no attributes", el.getAttributes().equals(Collections.EMPTY_LIST));
 
 		//must have a name
 		try {
 			el = new Element("", "x", "urn:foo");
-			assert("allowed creation of an element with no name", false);
+			assertTrue("allowed creation of an element with no name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//name can't be null
 		try {
 			el = new Element(null, "x", "urn:foo");
-			assert("allowed creation of an element with null name", false);
+			assertTrue("allowed creation of an element with null name", false);
 		} catch (IllegalNameException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//we can assume the Verifier has been called by now so we are done
@@ -261,8 +261,8 @@ public static Test suite () {
 		Element el = new Element("theElement", "x", "urn:foo");
 		Element el2 = new Element("theElement", "x", "urn:foo");
 
-		assert("incorrect equals evaluation", ((Object) el).equals(el));
-		assert("incorrect equals evaluation", !((Object) el2).equals(el));
+		assertTrue("incorrect equals evaluation", ((Object) el).equals(el));
+		assertTrue("incorrect equals evaluation", !((Object) el2).equals(el));
 
 
 	}
@@ -272,33 +272,33 @@ public static Test suite () {
 public void test_TCM__boolean_hasChildren() {
 	//set up an element to test with
 	Element element= new Element("element", Namespace.getNamespace("http://foo"));
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 	
 
 	Attribute att1 = new Attribute("anAttribute", "boo");
 	element.setAttribute(att1);
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 
 	//add some text
 	element.addContent("the text");
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 
 	//add some CDATA
 	element.addContent(new CDATA("the text"));
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 
 	//add a PI
 	element.addContent(new ProcessingInstruction("pi", "the text"));
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 
 	//add Comment
 	element.addContent(new Comment("the text"));
-	assert("reported children when there are none", ! element.hasChildren());
+	assertTrue("reported children when there are none", ! element.hasChildren());
 
 	//finally a child element
 	Element child1= new Element("child1");
 	element.addContent(child1);
-	assert("reported no children when there is a child element",  element.hasChildren());
+	assertTrue("reported no children when there is a child element",  element.hasChildren());
 	
 
 }
@@ -311,38 +311,38 @@ public void test_TCM__boolean_hasChildren() {
 	
 	//set up an element to test with
 	Element element= new Element("element", Namespace.getNamespace("http://foo"));
-	assert("reported mixed content when there is none", ! element.hasMixedContent());
+	assertTrue("reported mixed content when there is none", ! element.hasMixedContent());
 	
 
 	Attribute att1 = new Attribute("anAttribute", "boo");
 	element.setAttribute(att1);
-	assert("reported mixed content when there is none", ! element.hasMixedContent());
+	assertTrue("reported mixed content when there is none", ! element.hasMixedContent());
 
 	//add some text
 	element.addContent("the text");
-	assert("reported mixed content when there is none", ! element.hasMixedContent());
+	assertTrue("reported mixed content when there is none", ! element.hasMixedContent());
 
 	//add some CDATA
 	element.addContent(new CDATA("the text"));
-	assert("reported no mixed content when there is", element.hasMixedContent());
+	assertTrue("reported no mixed content when there is", element.hasMixedContent());
 
 	element= new Element("element");
 	//add a PI
 	element.addContent(new ProcessingInstruction("pi", "the text"));
-	assert("reported mixed content when there is none", ! element.hasMixedContent());
+	assertTrue("reported mixed content when there is none", ! element.hasMixedContent());
 
 	//add Comment
 	element.addContent(new Comment("the text"));
-	assert("reported no mixed content when there is", element.hasMixedContent());
+	assertTrue("reported no mixed content when there is", element.hasMixedContent());
 
 	element= new Element("element");
 	//finally a child element
 	Element child1= new Element("child1");
 	element.addContent(child1);
-	assert("reported mixed content when there is none", ! element.hasMixedContent());
+	assertTrue("reported mixed content when there is none", ! element.hasMixedContent());
 
 	element.addContent("some text");
-	assert("reported no mixed content when there is",  element.hasMixedContent());
+	assertTrue("reported no mixed content when there is",  element.hasMixedContent());
 	
 	*/
 	}
@@ -351,10 +351,10 @@ public void test_TCM__boolean_hasChildren() {
 	 */
 	public void test_TCM__boolean_isRootElement() {
 		Element element = new Element("element");
-		assert("incorrectly identified element as root", ! element.isRootElement());
+		assertTrue("incorrectly identified element as root", ! element.isRootElement());
 
 		Document doc = new Document(element);
-		assert("incorrectly identified element as non root", element.isRootElement());
+		assertTrue("incorrectly identified element as non root", element.isRootElement());
 
 		
 	}
@@ -367,12 +367,12 @@ public void test_TCM__boolean_hasChildren() {
 		element.setAttribute(att);
 
 		//make sure it's there
-		assert("attribute not found after add", element.getAttribute("anAttribute") != null);
+		assertTrue("attribute not found after add", element.getAttribute("anAttribute") != null);
 
 		//and remove it
-		assert("attribute not removed", element.removeAttribute("anAttribute"));
+		assertTrue("attribute not removed", element.removeAttribute("anAttribute"));
 		//make sure it's not there
-		assert("attribute found after remove", element.getAttribute("anAttribute") == null);
+		assertTrue("attribute found after remove", element.getAttribute("anAttribute") == null);
 
 		
 		
@@ -387,11 +387,11 @@ public void test_TCM__boolean_hasChildren() {
 		element.setAttribute(att);
 
 		//make sure it's there
-		assert("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
+		assertTrue("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
 		//and remove it
-		assert("attribute not removed", element.removeAttribute("anAttribute", ns));
+		assertTrue("attribute not removed", element.removeAttribute("anAttribute", ns));
 		//make sure it's not there
-		assert("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
+		assertTrue("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
 
 		
 
@@ -408,11 +408,11 @@ public void test_TCM__boolean_hasChildren() {
 		element.setAttribute(att);
 
 		//make sure it's there
-		assert("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
+		assertTrue("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
 		//and remove it
-		assert("attribute not removed", element.removeAttribute("anAttribute", "urn:test"));
+		assertTrue("attribute not removed", element.removeAttribute("anAttribute", "urn:test"));
 		//make sure it's not there
-		assert("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
+		assertTrue("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
 		*/
 
 	}
@@ -424,8 +424,8 @@ public void test_TCM__boolean_hasChildren() {
 		Element child = new Element("child");
 		element.addContent(child);
 
-		assert("couldn't remove child content", element.removeChild("child"));
-		assert("child not removed", element.getChild("child") == null);
+		assertTrue("couldn't remove child content", element.removeChild("child"));
+		assertTrue("child not removed", element.getChild("child") == null);
 		
 	}
 	/**
@@ -438,13 +438,13 @@ public void test_TCM__boolean_hasChildren() {
 		Element child2 = new Element("child", ns);
 		element.addContent(child);
 
-		assert("couldn't remove child content", element.removeChild("child", ns));
-		assert("child not removed", element.getChild("child", ns) == null);
+		assertTrue("couldn't remove child content", element.removeChild("child", ns));
+		assertTrue("child not removed", element.getChild("child", ns) == null);
 		//now test that only the first child is removed
 		element.addContent(child);
 		element.addContent(child2);
-		assert("couldn't remove child content", element.removeChild("child", ns));
-		assert("child not removed", element.getChild("child", ns) != null);
+		assertTrue("couldn't remove child content", element.removeChild("child", ns));
+		assertTrue("child not removed", element.getChild("child", ns) != null);
 		
 	}
 	/**
@@ -454,15 +454,15 @@ public void test_TCM__boolean_hasChildren() {
 		Namespace ns = Namespace.getNamespace("x", "urn:fudge");
 		Element element = new Element("element");
 
-		assert("incorrectly returned true when deleting no content", element.removeChildren() == false);
+		assertTrue("incorrectly returned true when deleting no content", element.removeChildren() == false);
 		
 		Element child = new Element("child", ns);
 		Element child2 = new Element("child", ns);
 		element.addContent(child);
 		element.addContent(child2);
 
-		assert("couldn't remove child content", element.removeChildren());
-		assert("child not removed", element.getChild("child", ns) == null);
+		assertTrue("couldn't remove child content", element.removeChildren());
+		assertTrue("child not removed", element.getChild("child", ns) == null);
 		
 
 	}
@@ -472,17 +472,17 @@ public void test_TCM__boolean_hasChildren() {
 	public void test_TCM__boolean_removeChildren_String() {
 		Element element = new Element("element");
 
-		assert("incorrectly returned true when deleting no content", element.removeChildren() == false);
+		assertTrue("incorrectly returned true when deleting no content", element.removeChildren() == false);
 		
 		Element child = new Element("child");
 		Element child2 = new Element("child");
 		element.addContent(child);
 		element.addContent(child2);
 
-		assert("incorrect return on bogus child", ! element.removeChildren("test"));
-		assert("child incorrectly removed", element.getChild("child") != null);
-		assert("couldn't remove child content", element.removeChildren("child"));
-		assert("children not removed", element.getChild("child") == null);
+		assertTrue("incorrect return on bogus child", ! element.removeChildren("test"));
+		assertTrue("child incorrectly removed", element.getChild("child") != null);
+		assertTrue("couldn't remove child content", element.removeChildren("child"));
+		assertTrue("children not removed", element.getChild("child") == null);
 
 	}
 	/**
@@ -492,17 +492,17 @@ public void test_TCM__boolean_hasChildren() {
 		Namespace ns = Namespace.getNamespace("x", "urn:fudge");
 		Element element = new Element("element");
 
-		assert("incorrectly returned true when deleting no content", element.removeChildren() == false);
+		assertTrue("incorrectly returned true when deleting no content", element.removeChildren() == false);
 		
 		Element child = new Element("child", ns);
 		Element child2 = new Element("child", ns);
 		element.addContent(child);
 		element.addContent(child2);
 
-		assert("incorrect return on bogus child", ! element.removeChildren("child"));
-		assert("child incorrectly removed", element.getChild("child", ns) != null);
-		assert("couldn't remove child content", element.removeChildren("child", ns));
-		assert("children not removed", element.getChild("child", ns) == null);
+		assertTrue("incorrect return on bogus child", ! element.removeChildren("child"));
+		assertTrue("child incorrectly removed", element.getChild("child", ns) != null);
+		assertTrue("couldn't remove child content", element.removeChildren("child", ns));
+		assertTrue("children not removed", element.getChild("child", ns) == null);
 
 	}
 	/**
@@ -513,8 +513,8 @@ public void test_TCM__boolean_hasChildren() {
 		Comment comm = new Comment("a comment");
 		element.addContent(comm);
 
-		assert("couldn't remove comment content", element.removeContent(comm));
-		assert("didn't remove comment content", element.getContent().equals(Collections.EMPTY_LIST));
+		assertTrue("couldn't remove comment content", element.removeContent(comm));
+		assertTrue("didn't remove comment content", element.getContent().equals(Collections.EMPTY_LIST));
 	}
 	/**
 	 * Test removeContent for an Element.
@@ -524,8 +524,8 @@ public void test_TCM__boolean_hasChildren() {
 		Element child = new Element("child");
 		element.addContent(child);
 
-		assert("couldn't remove element content", element.removeContent(child));
-		assert("didn't remove element content", element.getContent().equals(Collections.EMPTY_LIST));
+		assertTrue("couldn't remove element content", element.removeContent(child));
+		assertTrue("didn't remove element content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -536,8 +536,8 @@ public void test_TCM__boolean_hasChildren() {
 		EntityRef ent = new EntityRef("anEntity");
 		element.addContent(ent);
 
-		assert("couldn't remove entity content", element.removeContent(ent));
-		assert("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
+		assertTrue("couldn't remove entity content", element.removeContent(ent));
+		assertTrue("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -548,8 +548,8 @@ public void test_TCM__boolean_hasChildren() {
 		ProcessingInstruction pi = new ProcessingInstruction("aPi","something");
 		element.addContent(pi);
 
-		assert("couldn't remove entity content", element.removeContent(pi));
-		assert("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
+		assertTrue("couldn't remove entity content", element.removeContent(pi));
+		assertTrue("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -559,17 +559,17 @@ public void test_TCM__boolean_hasChildren() {
 		Element element = new Element("test");
 		//only an exception would be a problem
 		int i = element.hashCode();
-		assert("bad hashCode", true);
+		assertTrue("bad hashCode", true);
 
 		
 		Element element2 = new Element("test");
 		//different Elements, same text
 		int x = element2.hashCode();
-		assert("Different Elements with same value have same hashcode", x != i);
+		assertTrue("Different Elements with same value have same hashcode", x != i);
 		Element element3 = new Element("test2");
 		//only an exception would be a problem
 		int y = element3.hashCode();
-		assert("Different Elements have same hashcode", y != x);
+		assertTrue("Different Elements have same hashcode", y != x);
 
 	}
 	/**
@@ -584,11 +584,11 @@ public void test_TCM__boolean_hasChildren() {
 		List list = element.getAdditionalNamespaces();
 		
 		Namespace ns = (Namespace)list.get(0);
-		assert("didn't return added namespace", ns.getURI().equals("urn:foo"));
+		assertTrue("didn't return added namespace", ns.getURI().equals("urn:foo"));
 		ns = (Namespace)list.get(1);
-		assert("didn't return added namespace", ns.getURI().equals("urn:bar"));
+		assertTrue("didn't return added namespace", ns.getURI().equals("urn:bar"));
 		ns = (Namespace)list.get(2);
-		assert("didn't return added namespace", ns.getURI().equals("urn:baz"));	
+		assertTrue("didn't return added namespace", ns.getURI().equals("urn:baz"));	
 	}
 	/**
 	 * Test that getAttribute returns all attributes of this element.
@@ -734,7 +734,7 @@ public void test_TCM__boolean_hasChildren() {
 		Element element = new Element("simple");
 		Element clone = (Element)element.clone();
 
-		assert("clone should not be the same object", element != clone);
+		assertTrue("clone should not be the same object", element != clone);
 		assertEquals("clone should not have a parent", null, clone.getParent());
 		assertEquals("names do not match", element.getName(), clone.getName());
 
@@ -782,19 +782,19 @@ public void test_TCM__boolean_hasChildren() {
 		
 		assertEquals("wrong nested element","firstChild", deepClone.getName());
 		//comment
-		assert("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
+		assertTrue("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
 		comment = null;
 		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getContent().get(0)).getText());
 		//CDATA
-		assert("deep clone CDATA not a clone", ((CDATA)deepClone.getContent().get(1)).getText().equals(cdata.getText()));
+		assertTrue("deep clone CDATA not a clone", ((CDATA)deepClone.getContent().get(1)).getText().equals(cdata.getText()));
 		cdata = null;
 		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getContent().get(1)).getText());
 		//PI
-		assert("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
+		assertTrue("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
 		pi = null;
 		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getContent().get(2)).getData());
 		//entity
-		assert("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
+		assertTrue("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
 		entity = null;
 		assertEquals("incorrect deep clone EntityRef", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
@@ -859,11 +859,11 @@ public void test_TCM__boolean_hasChildren() {
 		CDATA cdata = null;
 		try {
 			element.addContent(cdata);
-			assert("didn't catch null CDATA element", false);
+			assertTrue("didn't catch null CDATA element", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert("NullPointer  Exception", false);
+			assertTrue("NullPointer  Exception", false);
 		}
 	}
 	/**
@@ -878,11 +878,11 @@ public void test_TCM__boolean_hasChildren() {
 		try {
 			comm = null;
 			element.addContent(comm);
-			assert("didn't catch null Comment", false);
+			assertTrue("didn't catch null Comment", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 	}
 	/**
@@ -896,11 +896,11 @@ public void test_TCM__boolean_hasChildren() {
 		try {
 			Element el = null;
 			element.addContent(el);
-			assert("didn't catch null Element", false);
+			assertTrue("didn't catch null Element", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 		
 	}
@@ -915,11 +915,11 @@ public void test_TCM__boolean_hasChildren() {
 		try {
 			EntityRef entity = null;
 			element.addContent(entity);
-			assert("didn't catch null EntityRef", false);
+			assertTrue("didn't catch null EntityRef", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 	}
 	/**
@@ -933,11 +933,11 @@ public void test_TCM__boolean_hasChildren() {
 		try {
 			ProcessingInstruction pi = null;
 			element.addContent(pi);
-			assert("didn't catch null ProcessingInstruction", false);
+			assertTrue("didn't catch null ProcessingInstruction", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 	}
 	/**
@@ -960,9 +960,9 @@ public void test_TCM__boolean_hasChildren() {
 			element.addContent(data);
 			List content = element.getContent();
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
                 } catch (NullPointerException e) {
-                        assert("didn't handle null String content", true);
+                        assertTrue("didn't handle null String content", true);
                 }
 
 	}
@@ -1048,12 +1048,12 @@ public void test_TCM__boolean_hasChildren() {
 		//test with bad data
 		try {
 			element.setAttribute(null);
-			assert("didn't catch null attribute", false);
+			assertTrue("didn't catch null attribute", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 			
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 	}
@@ -1074,31 +1074,31 @@ public void test_TCM__boolean_hasChildren() {
 		//try with null values
 		try {
 			element.setAttribute(new Attribute(null, "value"));
-			assert("didn't catch null attribute name", false);
+			assertTrue("didn't catch null attribute name", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		try {
 			element.setAttribute(new Attribute("name2", null));
-			assert("didn't catch null attribute value", false);
+			assertTrue("didn't catch null attribute value", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 
 		//try with bad characters
 		try {
 			element.setAttribute(new Attribute("\n", "value"));
-			assert("didn't catch null attribute name", false);
+			assertTrue("didn't catch null attribute name", false);
 		} catch (IllegalArgumentException e) {}
 		try {
 			element.setAttribute(new Attribute("name2", "" + (char)0x01));
-			assert("didn't catch null attribute value", false);
+			assertTrue("didn't catch null attribute value", false);
 		} catch (IllegalArgumentException e) {}
 		
 
@@ -1122,7 +1122,7 @@ public void test_TCM__boolean_hasChildren() {
 		assertEquals("attribute not found", one, element.getAttribute("one"));
 		assertEquals("attribute not found", two, element.getAttribute("two"));
 		assertEquals("attribute not found", three, element.getAttribute("three"));
-		assert("attribute should not have been found", element.getAttribute("type") == null);
+		assertTrue("attribute should not have been found", element.getAttribute("type") == null);
 		
 
 		//now try to add something that isn't an attribute which should still add those
@@ -1135,9 +1135,9 @@ public void test_TCM__boolean_hasChildren() {
 		newList.add(bogus);
 		try {
 			element.setAttributes(newList);
-			assert("didn't catch bad data in list", false);
+			assertTrue("didn't catch bad data in list", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		}
 		//should be an atomic operation so the original state should be preserved
 		assertEquals("wrong number of attributes after failed add", 3, element.getAttributes().size());
@@ -1148,11 +1148,11 @@ public void test_TCM__boolean_hasChildren() {
 		try {
                     element.setAttributes(null);
                     List attList = element.getAttributes();
-                    assert("null didn't clear attributes", attList.size() == 0);
+                    assertTrue("null didn't clear attributes", attList.size() == 0);
 		} catch (IllegalArgumentException e) {
-			assert("didn't handle null String content", true);
+			assertTrue("didn't handle null String content", true);
 		} catch (NullPointerException e) {
-			assert("didn't handle null String content", true);
+			assertTrue("didn't handle null String content", true);
 		}		
 	}
 	/**
@@ -1188,9 +1188,9 @@ public void test_TCM__boolean_hasChildren() {
 
 		try {
 			element.setChildren(newList);
-			assert("didn't catch a bad object in list", false);
+			assertTrue("didn't catch a bad object in list", false);
 		} catch (IllegalArgumentException e) {
-			assert("good", true);
+			assertTrue("good", true);
 		}
 		//should be an atomic operation
 		contentList = element.getChildren();
@@ -1202,7 +1202,7 @@ public void test_TCM__boolean_hasChildren() {
 		
 		//nulls should reset the list
 		element.setContent(null);
-		assert("didn't reset children List", element.getContent().isEmpty());
+		assertTrue("didn't reset children List", element.getContent().isEmpty());
 
 	}
 	/**
@@ -1253,9 +1253,9 @@ public void test_TCM__boolean_hasChildren() {
 
 		try {
 			element.setContent(list);
-			assert("didn't catch bad object type in list", false);
+			assertTrue("didn't catch bad object type in list", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assertTrue(true);
 		}
 
 		//should add content up to the point of the bad object in the list
@@ -1272,7 +1272,7 @@ public void test_TCM__boolean_hasChildren() {
 		
 		//nulls should reset the list
 		element.setContent(null);
-		assert("didn't reset mixed content List", element.getContent().isEmpty());
+		assertTrue("didn't reset mixed content List", element.getContent().isEmpty());
 
 		
 
@@ -1292,7 +1292,7 @@ public void test_TCM__boolean_hasChildren() {
 
 		
 		element.setText(null);
-		assert("didn't clear content with null text", element.getContent().isEmpty());
+		assertTrue("didn't clear content with null text", element.getContent().isEmpty());
 
 		//bad string test
 		
@@ -1305,11 +1305,11 @@ public void test_TCM__boolean_hasChildren() {
 		
 		try {
 			element.setText("test" + (char)0x01);
-			assert("didn't catch text with invalid character", false);
+			assertTrue("didn't catch text with invalid character", false);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assertTrue(true);
 		} catch (NullPointerException e) {
-			assert("NullPointerException", false);
+			assertTrue("NullPointerException", false);
 		}
 
 		*/
@@ -1331,7 +1331,7 @@ public void test_TCM__boolean_hasChildren() {
 		Element element = new Element("element", ns);
 
 		assertEquals("wrong namespace returned", ns, element.getNamespace("x"));
-		assert("no namespace should have been found", element.getNamespace("bogus") == null);
+		assertTrue("no namespace should have been found", element.getNamespace("bogus") == null);
 
 		//now make sure it can return the namespace from the additional namespaces
 		Namespace newNs = Namespace.getNamespace("y","urn:test:new");
@@ -1343,7 +1343,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(child);
 
 		assertEquals("wrong namespace returned", ns, child.getNamespace("x"));
-		assert("no namespace should have been found", child.getNamespace("bogus") == null);
+		assertTrue("no namespace should have been found", child.getNamespace("bogus") == null);
 		assertEquals("wrong namespace returned", newNs, child.getNamespace("y"));
 		
 		
@@ -1452,7 +1452,7 @@ public void test_TCM__boolean_hasChildren() {
 	 * Test getSerializedForm
 	 */
 	public void test_TCM__String_getSerializedForm() {
-		assert("method not implemented", true);
+		assertTrue("method not implemented", true);
 	}
 	/**
 	 * Test getText returns that full text of the element
@@ -1495,8 +1495,8 @@ public void test_TCM__boolean_hasChildren() {
 		List list = element.getAdditionalNamespaces();
 		
 		Namespace ns = (Namespace)list.get(0);
-		assert("didn't return added namespace", ns.getURI().equals("urn:foo"));
-		assert("didn't return added namespace prefix", ns.getPrefix().equals("x"));
+		assertTrue("didn't return added namespace", ns.getURI().equals("urn:foo"));
+		assertTrue("didn't return added namespace prefix", ns.getPrefix().equals("x"));
 
 	}
 /**
@@ -1519,9 +1519,9 @@ public void test_TCU__testAttributeNamespaces() {
 	try {
 		el.setAttribute(att);
 		el.setAttribute(att2);
-		assert("didn't catch duplicate setAttribute with different prefixes", 
+		assertTrue("didn't catch duplicate setAttribute with different prefixes", 
 			el.getAttribute("first", one).getValue().equals("second"));
-		assert("didn't catch duplicate setAttribute with different prefixes", 
+		assertTrue("didn't catch duplicate setAttribute with different prefixes", 
 			el.getAttribute("first", two).getNamespace().equals(two));
 	} catch (IllegalAddException e) {
 	}
@@ -1535,7 +1535,7 @@ public void test_TCU__testAttributeNamespaces() {
 	Namespace testNS3;
 	try {
 		testNS3= Namespace.getNamespace("test", "");
-		assert("didn't catch bad \"\" uri name", false);
+		assertTrue("didn't catch bad \"\" uri name", false);
 	} catch (Exception e) {	}
 
 	//show how you can have an empty namespace with the current scheme
@@ -1547,7 +1547,7 @@ public void test_TCU__testAttributeNamespaces() {
 		
 		el.addNamespaceDeclaration(testNS3);
 	} catch (IllegalAddException e) {
-		assert(true);
+		assertTrue(true);
 	}
 
 	att= new Attribute("prefixNS", "test");
@@ -1564,19 +1564,19 @@ public void test_TCU__testAttributeNamespaces() {
 	el.setAttribute(att4);
 
 	Attribute attback= el.getAttribute("prefixNS");
-	assert(
+	assertTrue(
 		"failed to get attribute from empty default namespace",
 		attback.getNamespaceURI().equals(""));
 	attback= el.getAttribute("prefixNS", testNS3);
-	assert(
+	assertTrue(
 		"failed to get attribute from http://bar namespace",
 		attback.getNamespaceURI().equals(""));
 	attback= el.getAttribute("prefixNS", testNS);
-	assert(
+	assertTrue(
 		"failed to get attribute from http://foo namespace",
 		attback.getNamespaceURI().equals("http://foo"));
 	attback= el.getAttribute("prefixNS", testNS2);
-	assert(
+	assertTrue(
 		"failed to get attribute from http://foo2 namespace",
 		attback.getNamespaceURI().equals("http://foo2"));
 
@@ -1604,7 +1604,7 @@ public void test_TCU__testDefaultNamespaces() throws IOException {
 	StringWriter sw = new StringWriter();
 	XMLOutputter op= new XMLOutputter("", false);
 	op.output(element, sw);
-	assert("Incorrect output for NO_NAMESPACE in a default namespace", sw.toString().equals(bufWithNoNS));
+	assertTrue("Incorrect output for NO_NAMESPACE in a default namespace", sw.toString().equals(bufWithNoNS));
 
 	//new try setting a new empty default namespace for children
 	element= new Element("element", Namespace.getNamespace("http://foo"));
@@ -1617,7 +1617,7 @@ public void test_TCU__testDefaultNamespaces() throws IOException {
 	sw = new StringWriter();
 	op= new XMLOutputter("", false);
 	op.output(element, sw);
-	assert("Incorrect output for empty default namespace", sw.toString().equals(bufWithEmptyNS));
+	assertTrue("Incorrect output for empty default namespace", sw.toString().equals(bufWithEmptyNS));
 
 	
 	//this code tests where multiple default namespaces disallowed
@@ -1626,10 +1626,10 @@ public void test_TCU__testDefaultNamespaces() throws IOException {
 		el.addNamespaceDeclaration(Namespace.getNamespace("", "foo:bar"));
 		el.addNamespaceDeclaration(Namespace.getNamespace("", "foo2:bar"));
 		el.addNamespaceDeclaration(Namespace.NO_NAMESPACE);
-		assert("didn't catch multiple default namespaces added to an element", false);
+		assertTrue("didn't catch multiple default namespaces added to an element", false);
 
 	} catch (IllegalAddException e) {
-		assert(true);
+		assertTrue(true);
 	}
 
 
@@ -1673,7 +1673,7 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	StringWriter sw = new StringWriter();
 	XMLOutputter op= new XMLOutputter("", false);
 	op.output(elIn, sw);
-	assert("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
+	assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
 
 }
 }
