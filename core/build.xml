@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.39 2003/04/02 23:34:43 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.40 2003/04/04 00:59:49 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -201,7 +201,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the "About" code unless JDK1.1 is being used               -->
   <!-- =================================================================== -->
-  <target name="about" unless="coll.present">
+  <target name="about" unless="coll.present"
+          description="Compiles the About code unless JDK 1.1 is being used">
     <javac srcdir="${package.dir}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -213,7 +214,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples,collections">
+  <target name="samples" depends="prepare-samples,collections"
+          description="Compiles the samples directory">
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
            debug="${debug}"
@@ -225,7 +227,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="compile,about">
+  <target name="package" depends="compile,about"
+          description="Creates the class package">
     <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
     <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
 
@@ -245,7 +248,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
   <!-- =================================================================== -->
-  <target name="javadoc" depends="prepare-src,collections">
+  <target name="javadoc" depends="prepare-src,collections"
+          description="Creates the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"
              sourcepath="${build.src}"
@@ -266,7 +270,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Creates the API documentation, with links to JDK 1.4 classes        -->
   <!-- We can use linkoffline with a newer Ant and avoid this target       -->
   <!-- =================================================================== -->
-  <target name="javadoc-link" depends="prepare-src,collections">
+  <target name="javadoc-link" depends="prepare-src,collections"
+          description="Creates the API documentation with links to JDK 1.4 classes">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"
              sourcepath="${build.src}"
@@ -287,11 +292,13 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Clean targets                                                       -->
   <!-- =================================================================== -->
-  <target name="clean" depends="init">
+  <target name="clean" depends="init"
+          description="Removes build files">
     <delete dir="${build.dir}"/>
   </target>
 
-  <target name="distclean" depends="clean">
+  <target name="distclean" depends="clean"
+          description="Removes the dist files">
     <delete dir="${dist.root}"/>
     <delete file="${Name}-${version}.tar.gz"/>
     <delete file="${Name}-${version}.tar"/>
