@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.78 2002/04/10 09:54:31 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.79 2002/04/11 03:04:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.78 $, $Date: 2002/04/10 09:54:31 $
+ * @version $Revision: 1.79 $, $Date: 2002/04/11 03:04:55 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.78 $ $Date: 2002/04/10 09:54:31 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.79 $ $Date: 2002/04/11 03:04:55 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1658,7 +1658,7 @@ public class XMLOutputter implements Cloneable {
                 index++;
             }
         }
-        return size;
+        return index;
     }
 
     // Return the index + 1 of the last non-all-whitespace CDATA or
