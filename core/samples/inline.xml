@@ -1,6 +1,7 @@
 <?xml version='1.0'?>
 
-<!DOCTYPE mydtd [
+<!DOCTYPE DOCUMENT [
+  <!ELEMENT DOCUMENT (#PCDATA)>
   <!ENTITY nbsp '&#160;'>
   <!ENTITY aring '&#229;'>
   <!ENTITY auml '&#228;'>
