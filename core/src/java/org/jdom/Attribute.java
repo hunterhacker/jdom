@@ -578,7 +578,6 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>char</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
      */
     public char getCharValue(char defaultValue) {
         try {
@@ -604,44 +603,6 @@ public class Attribute implements Serializable, Cloneable {
             return value.charAt(0);
         } catch (Exception e) {
             throw new DataConversionException(name, "char");
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>byte</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>byte</code> default.
-     * @return <code>byte</code> value of attribute.
-     */
-    public byte getByteValue(byte defaultValue) {
-        try {
-            return Byte.parseByte(value);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>byte</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
-     *
-     * @return <code>byte</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
-     */
-    public byte getByteValue() throws DataConversionException {
-        try {
-            return Byte.parseByte(value);
-        } catch (NumberFormatException e) {
-            throw new DataConversionException(name, "byte");
         }
     }
 

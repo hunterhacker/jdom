@@ -27,8 +27,20 @@ Ant is a little but very handy tool that uses a build file written in XML
 (this file) as building instructions. For more information refer to
 "http://jakarta.apache.org/ant/".
 
-The only thing that you have to make sure, is the "JAVA_HOME" environment
-property should be set to match the JVM you want to use. That's it.
+The only thing that you have to make sure of is that the "JAVA_HOME" environment
+property is set to match the top level directory containing the JVM you want
+to use. For example:
+
+C:\> set JAVA_HOME=C:\jdk1.2.2
+
+or on Unix:
+
+% setenv JAVA_HOME /usr/local/java
+  (csh)
+> JAVA_HOME=/usr/java; export JAVA_HOME
+  (ksh, bash)
+
+That's it!
 
 Building instructions
 =====================
