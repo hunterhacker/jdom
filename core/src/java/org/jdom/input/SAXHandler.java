@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.36 2002/02/23 11:19:01 jhunter Exp $
+ $Id: SAXHandler.java,v 1.37 2002/03/02 13:31:53 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.36 $, $Date: 2002/02/23 11:19:01 $
+ * @version $Revision: 1.37 $, $Date: 2002/03/02 13:31:53 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.36 $ $Date: 2002/02/23 11:19:01 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.37 $ $Date: 2002/03/02 13:31:53 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -569,7 +569,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             String prefix = "";
 
             // Determine any prefix on the Element
-            if (localName != qName) {
+            if (!qName.equals(localName)) {
                 int split = qName.indexOf(":");
                 prefix = qName.substring(0, split);
             }
@@ -615,8 +615,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                 continue;
             }
 
-            // XXX This is probably an unsafe != unless we set up interning
-            if (attLocalName != attQName) {
+            if (!attQName.equals(attLocalName)) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
                                               attType, getNamespace(attPrefix));
