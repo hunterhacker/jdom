@@ -2,6 +2,37 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Fix JDK 1.1 build issues introduced with the Manifest work. (Jools?)
+
+* Modify doc/elt setMixedContent() to keep the original list data in event of 
+  an IllegalAddException.
+
+* Straighten up the Entity API.  Current thinking, created over a discussion
+  at SD West with Elliotte:  Have a builder flag on whether or not to expand
+  entities.  Have a default of expansion.  That produces a doc without regard
+  for entity sources.  If expansion is off, then populate the doc with 
+  EntityRef nodes which hold the information about the entity but don't 
+  contain its contents.  XMLOutputter will in the non-expanded case be able 
+  to retain the original entity names and locations.  The reason not to do a 
+  hybrid of keeping entities and expanding is that then what do you do if you 
+  change the content within the "entity"?  You can't do anything because on 
+  output you aren't writing the file that holds that content.  So either it's 
+  this doc's content now, or it's held only as a ref.
+  Previous notes on the topic: Make DOMBuilder and SAXBuilder work
+  equivalently.  Like have DOCTYPE support entity defs.  
+  It should probably have methods to get the public and system IDs too, per
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/002838.html.
+  May also want to read:
+  http://lists.denveronline.net/lists/jdom-interest/2000-September/002844.html.
+
+* Figure out if we by default do:
+    public void ignorableWhitespace(char[] ch, int start, int length)
+                             throws SAXException {
+        characters(ch, start, length);
+    }
+  With a setIgnoringElementContentWhitespace(boolean) and 
+  setIgnoringAllWhitespace(boolean) pair of methods.
+
 * Add setName() and setNamespace().  Deprecate getCopy().
 
 * Figure out if elt.getAdditionalNamespaces() should return a mutable list.
@@ -96,6 +127,10 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
+  Probably setStandalone(boolean) and getStandalone().  Maybe we need
+  setVersion(String) and getVersion() too.  Perhaps "encoding" should be moved
+  into the Document too?  Joe wants it possible to output ignoring the
+  standalone flag.
 
 * Perhaps have builder flags to indicate if surrounding whitespace (not just
   ignorable whitespace) should be trimmed, if entity refs should be expanded,
@@ -131,15 +166,6 @@ Items that need to be done:
     31 Aug 2000.  Also a follow-on by "Peter V. Gadjokov" <pvg@c-c-s.com> 
     27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
     27 Sep 2000.
-
-* Straighten up the Entity API, bringing its API in line with Element and
-  supporting EntityReferences.  Make DOMBuilder and SAXBuilder work
-  equivalently.  Like have DOCTYPE support entity defs.  Make sure Entity
-  addChild() becomes addContent().  Make sure addContent(Comment) is added.
-  It should probably have methods to get the public and system IDs too, per
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/002838.html.
-  May also want to read:
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/002844.html.
 
 * Look to keep around an embedded DTD, per
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003540.html
@@ -184,6 +210,10 @@ Items that need to be done:
 * Investigate the capabilities of David Megginson's XMLWriter at 
   http://www.megginson.com/Software/ as a way to output a document.
   More info: http://xmlhack.com/read.php?item=777
+
+* Consider an XMLOutputter flag or feature to convert characters with well
+  known named character entities to their named char entity form instead of
+  numeric.
 
 --- FOR JDOM 1.0 ---
 
@@ -411,4 +441,7 @@ Items that need to be done:
 * Look at event-based parsing as per the following thread:
   http://lists.denveronline.net/lists/jdom-interest/2000-November/003613.html
   and replies.
+
+* Considering that local vars are considerably faster that instance vars, test
+  if using local vars can speed building.
 
