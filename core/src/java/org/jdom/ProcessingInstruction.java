@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.25 2002/02/19 06:46:03 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.26 2002/03/12 07:57:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,13 +57,7 @@
 package org.jdom;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * <p>
@@ -77,13 +71,13 @@ import java.util.StringTokenizer;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.25 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.26 $, $Date: 2002/03/12 07:57:06 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.25 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.26 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;

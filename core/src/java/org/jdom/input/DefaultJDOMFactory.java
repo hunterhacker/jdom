@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.5 2002/01/08 09:17:10 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.6 2002/03/12 07:57:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,7 +57,7 @@
 package org.jdom.input;
 
 import org.jdom.*;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p><code>DefaultJDOMFactory</code> creates the standard
@@ -68,12 +68,12 @@ import java.util.Map;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.6 $, $Date: 2002/03/12 07:57:06 $
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.5 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.6 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.7 2002/01/08 09:17:10 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.8 2002/03/12 07:57:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -55,7 +55,7 @@
  */
 package org.jdom.output;
 
-import java.util.Stack;
+import java.util.*;
 
 import org.jdom.Namespace;
 
@@ -69,12 +69,12 @@ import org.jdom.Namespace;
  * @author Elliotte Rusty Harolde
  * @author Fred Trimble
  * @author Brett McLaughlin
- * @version $Revision: 1.7 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.8 $, $Date: 2002/03/12 07:57:06 $
  */
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.7 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.8 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.31 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Namespace.java,v 1.32 2002/03/12 07:57:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,9 +56,7 @@
 
 package org.jdom;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p><code>Namespace</code> defines both a factory for
@@ -78,7 +76,7 @@ import java.util.List;
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.31 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.32 $, $Date: 2002/03/12 07:57:06 $
  */
 public final class Namespace {
 
@@ -86,7 +84,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.31 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.32 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

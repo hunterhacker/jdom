@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.5 2002/03/12 06:53:57 jhunter Exp $
+ $Id: AttributeList.java,v 1.6 2002/03/12 07:57:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,11 +56,7 @@
 
 package org.jdom;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.jdom.filter.Filter;
 
@@ -74,7 +70,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2002/03/12 06:53:57 $
+ * @version $Revision: 1.6 $, $Date: 2002/03/12 07:57:06 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -86,7 +82,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.5 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.6 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 
