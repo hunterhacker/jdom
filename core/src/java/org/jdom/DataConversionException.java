@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.11 2003/04/30 09:55:11 jhunter Exp $
+ $Id: DataConversionException.java,v 1.12 2003/05/05 07:04:10 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,27 +57,24 @@
 package org.jdom;
 
 /**
- * Thrown when a requested XML value is requested to be converted, and
- * conversion fails.
+ * Thrown when a data conversion from a string to value type fails, such as
+ * can happen with the {@link Attribute} convenience getter functions.
  *
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:11 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/05 07:04:10 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class DataConversionException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
+      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.12 $ $Date: 2003/05/05 07:04:10 $ $Name:  $";
 
     /**
-     * This will create an <code>Exception</code> indicating
-     * that the specified attribute does not exist for the
-     * current element.
+     * Constructs an exception where the named construct couldn't be converted
+     * to the named data type.
      *
-     * @param name <code>String</code> name of XML
-     *             attribute being searched for.
-     * @param dataType <code>String</code> name of data type
-     *                 being converted to.
+     * @param name name of the construct whose value failed conversion
+     * @param dataType type the conversion was attempting to create
      */
     public DataConversionException(String name, String dataType) {
         super(new StringBuffer()
