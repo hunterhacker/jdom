@@ -18,13 +18,8 @@ public class XSLTransform {
     SAXBuilder builder = new SAXBuilder();
     Document doc = builder.build(docname);
 
-    Transformer transformer = TransformerFactory.newInstance()
-      .newTransformer(new StreamSource(sheetname));
-  
-    JDOMSource source = new JDOMSource(doc);
-    JDOMResult result = new JDOMResult();
-    transformer.transform(source, result);
-    Document doc2 = result.getDocument();
+    JDOMTransformer transformer = new JDOMTransformer(sheetname);
+    Document doc2 = transformer.transform(doc);
 
     XMLOutputter outp = new XMLOutputter();
     outp.setTextNormalize(true);

@@ -15,8 +15,6 @@ Items that need to be done:
 * Strategy pattern for XMLOutputter and others.
     If need for override, make others final and leave the protected.
 
-* Make transforming easier, with a one-line method.
-
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
 
