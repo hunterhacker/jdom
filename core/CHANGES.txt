@@ -175,6 +175,13 @@ Removed canAdd() and canRemove() from Filter.  matches() is sufficient.
 Removed the methods deprecated in beta7.
 
 
+SPECIAL NOTE
+------------
+
+Beginning with this release JDK 1.1 is no longer supported.  You'll need JDK
+1.2 or later.
+
+
 * * * * * * Beta8 (tag: jdom_1_0_b8) from Beta7 (tag: jdom_1_0_b7) * * * * * *
 
 NEW CLASSES
@@ -596,7 +603,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.10 2003/04/04 04:08:41 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.11 2003/04/04 04:29:23 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
