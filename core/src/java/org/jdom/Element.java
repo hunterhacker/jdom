@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.92 2001/06/25 04:41:50 jhunter Exp $
+ $Id: Element.java,v 1.93 2001/06/27 18:36:46 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.92 $ $Date: 2001/06/25 04:41:50 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.93 $ $Date: 2001/06/27 18:36:46 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -90,7 +90,7 @@ public class Element implements Serializable, Cloneable {
 
     /** Additional <code>{@link Namespace}</code> declarations on this 
         element */
-    protected transient ArrayList additionalNamespaces;
+    protected transient List additionalNamespaces;
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
     // for a possible memory optimization here (using a RootElement subclass)
@@ -102,7 +102,7 @@ public class Element implements Serializable, Cloneable {
     protected List attributes;
     
     /** The mixed content of the <code>Element</code> */
-    protected ArrayList content;
+    protected List content;
     
     /**
      * <p>
@@ -854,7 +854,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Save list with original content and create a new list
-        ArrayList oldContent = content;
+        List oldContent = content;
         content = new ArrayList(INITIAL_ARRAY_SIZE);
 
         RuntimeException ex = null;
@@ -1869,8 +1869,9 @@ public class Element implements Serializable, Cloneable {
 
         // Handle additional namespaces
         if (additionalNamespaces != null) {
-            element.additionalNamespaces =
-                (ArrayList) additionalNamespaces.clone();
+            // Avoid additionalNamespaces.clone() because List isn't Cloneable
+            element.additionalNamespaces = new ArrayList();
+            element.additionalNamespaces.addAll(additionalNamespaces);
         }
 
         return element;
