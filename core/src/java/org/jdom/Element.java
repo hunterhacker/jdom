@@ -81,7 +81,8 @@ public class Element implements Serializable, Cloneable {
     /** The <code>{@link Namespace}</code> of the <code>Element</code> */
     protected transient Namespace namespace;
 
-    /** Additional <code>{@link Namespace}</code> declarations on this element */
+    /** Additional <code>{@link Namespace}</code> declarations on this 
+        element */
     protected transient List additionalNamespaces;
 
     /** The parent of this <code>Element</code> */
@@ -98,12 +99,6 @@ public class Element implements Serializable, Cloneable {
     /** The mixed content of the <code>Element</code> */
     protected LinkedList content;
     
-    /*
-     * XXX: We may want to build in a "cache" with the child elements -
-     *  They are accessed so frequently we could improve out
-     *  performance big time with this. (brett)
-     */
-
     /**
      * <p>
      * This protected constructor is provided in order to support an Element 
@@ -247,7 +242,8 @@ public class Element implements Serializable, Cloneable {
      *    <code>{@link Namespace}</code>.
      * </p>
      *
-     * @return <code>Namespace</code> - Namespace object for this <code>Element</code>
+     * @return <code>Namespace</code> - Namespace object for this 
+     *         <code>Element</code>
      */
     public Namespace getNamespace() {
         return namespace;
@@ -274,7 +270,8 @@ public class Element implements Serializable, Cloneable {
      *   mapping is found, an empty <code>String</code> is returned.
      * </p>
      *
-     * @return <code>String</code> - namespace URI for this <code>Element</code>.
+     * @return <code>String</code> - namespace URI for this 
+     * <code>Element</code>.
      */
     public String getNamespaceURI() {
         return namespace.getURI();
@@ -439,7 +436,9 @@ public class Element implements Serializable, Cloneable {
      * @return text content for this element, or null if none
      */
     public String getText() {
-        if ((content == null) || (content.size() < 1) || (content.get(0) == null)) {
+        if ((content == null) || 
+             (content.size() < 1) || 
+             (content.get(0) == null)) {
             return "";
         }
 
@@ -583,6 +582,8 @@ public class Element implements Serializable, Cloneable {
      * All existing text content and non-text context is removed.
      * If this element should have both textual content and nested 
      * elements, use <code>{@link #setMixedContent}</code> instead.
+     * Setting a null text value is equivalent to setting an empty string
+     * value.
      * </p>
      *
      * @param text new content for the element
@@ -594,7 +595,10 @@ public class Element implements Serializable, Cloneable {
         } else {
             content = new LinkedList();
         }
-        content.add(text);
+
+        if (text != null) {
+            content.add(text);
+        }
 
         return this;
     }
@@ -666,7 +670,8 @@ public class Element implements Serializable, Cloneable {
      * This sets the content of the element.  The passed in List should
      * contain only objects of type <code>String</code>, <code>Element</code>,
      * <code>Comment</code>, <code>ProcessingInstruction</code>, and
-     * <code>Entity</code>.
+     * <code>Entity</code>.  Passing a null List simply clears the 
+     * existing content.
      * </p>
      *
      * @return this element modified
@@ -678,7 +683,9 @@ public class Element implements Serializable, Cloneable {
             content = new LinkedList();
         }
 
-        content.addAll(mixedContent);
+        if (mixedContent != null) {
+            content.addAll(mixedContent);
+        }
         return this;
     }
 
