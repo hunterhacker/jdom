@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.83 2002/05/15 07:27:09 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.84 2002/06/18 12:11:20 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.output.*;
  * changed with the various <code>set*()</code> methods.
  *
  * <p>
- * There are <code>output(...)</code> methods to print any of the
+ * There are <code>output(&#133;)<code> methods to print any of the
  * standard JDOM classes, including <code>Document</code> and
  * <code>Element</code>, to either a <code>Writer</code> or an
  * <code>OutputStream</code>. <b>Warning</b>: When outputting to a
@@ -85,9 +85,9 @@ import org.jdom.output.*;
  * </p>
  *
  * <p>
- * The methods <code>outputString(...)</code> are for convenience
+ * The methods <code>outputString(&#133;)</code> are for convenience
  * only; for top performance you should call one of the
- * <code>output(...)</code> and pass in your own <code>Writer</code> or
+ * <code>output(&#133;)</code> and pass in your own <code>Writer</code> or
  * <code>OutputStream</code> if possible.
  * </p>
  *
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.83 $, $Date: 2002/05/15 07:27:09 $
+ * @version $Revision: 1.84 $, $Date: 2002/06/18 12:11:20 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.83 $ $Date: 2002/05/15 07:27:09 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.84 $ $Date: 2002/06/18 12:11:20 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -391,7 +391,8 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * This will set whether the XML declaration
-     * (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
+     * (<code>&lt;&#063;xml version="1&#046;0"
+     * encoding="UTF-8"&#063;&gt;</code>)
      * includes the encoding of the document. It is common to omit
      * this in uses such as WML and other wireless device protocols.
      *
@@ -404,7 +405,7 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * This will set whether the XML declaration
-     * (<code>&lt;?xml version="1.0"?&gt;</code>)
+     * (<code>&lt;&#063;xml version="1&#046;0"&#063;gt;</code>)
      * will be omitted or not. It is common to omit this in uses such
      * as SOAP and XML-RPC calls.
      *
@@ -1753,7 +1754,7 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * Parse command-line arguments of the form <code>-omitEncoding
-     * -indentSize 3 ...</code>.
+     * -indentSize 3 &#133;</code>.
      *
      * @return int index of first parameter that we didn't understand
      */
