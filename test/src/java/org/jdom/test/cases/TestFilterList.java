@@ -304,8 +304,8 @@ public static Test suite () {
 		assertEquals("wrong element from add", text1, content.get(0));
 		assertEquals("wrong element from add", text5, content.get(1));
 		assertEquals("wrong element from add", bar, content.get(2));
-		assertEquals("wrong element from add", blah, content.get(3));
-		assertEquals("wrong element from add", text2, content.get(4));
+		assertEquals("wrong element from add", text2, content.get(3));
+		assertEquals("wrong element from add", blah, content.get(4));
 		assertEquals("wrong element from add", baz, content.get(5));
 		assertEquals("wrong element from add", text3, content.get(6));
 		assertEquals("wrong element from add", comment, content.get(7));

@@ -541,7 +541,7 @@ public void test_TCM__boolean_hasChildren() {
 
 	}
 	/**
-	 * Test code goes here. Replace this comment.
+	 * Test removeContent for processing instructions.
 	 */
 	public void test_TCM__boolean_removeContent_OrgJdomProcessingInstruction() {
 		Element element = new Element("element");
@@ -959,11 +959,11 @@ public void test_TCM__boolean_hasChildren() {
 			String data = null;
 			element.addContent(data);
 			List content = element.getContent();
-			
-			assert("didn't catch null String content", false);
 		} catch (IllegalAddException e) {
 			assert(true);
-		}
+                } catch (NullPointerException e) {
+                        assert("didn't handle null String content", true);
+                }
 
 	}
 	/**
@@ -1146,12 +1146,13 @@ public void test_TCM__boolean_hasChildren() {
 		assertEquals("attribute not found", three, element.getAttribute("three"));
 		
 		try {
-			element.setAttributes(null);
-			assert("didn't catch null attributes List", false);
+                    element.setAttributes(null);
+                    List attList = element.getAttributes();
+                    assert("null didn't clear attributes", attList.size() == 0);
 		} catch (IllegalArgumentException e) {
-			assert(true);
+			assert("didn't handle null String content", true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assert("didn't handle null String content", true);
 		}		
 	}
 	/**

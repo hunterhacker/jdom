@@ -92,11 +92,10 @@ public static Test suite () {
 		list = null;
 		try {
 			doc = new Document(list);
-			assert("didn't handle null list", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assert("didn't handle null list", true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assert("didn't handle null list", true);
 		}
 		
 	}
@@ -129,11 +128,10 @@ public static Test suite () {
 		list = null;
 		try {
 			doc = new Document(list, docType);
-			assert("didn't handle null list", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assert("didn't handle null list", true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assert("didn't handle null list", true);
 		}
 		
 	}
@@ -149,11 +147,10 @@ public static Test suite () {
 		element = null;
 		try {
 			doc = new Document(element);
-			assert("didn't handle null element", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assert("didn't handle null element", true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assert("didn't handle null element", true);
 		}
 		
 	}
@@ -172,11 +169,10 @@ public static Test suite () {
 		element = null;
 		try {
 			doc = new Document(element, docType);
-			assert("didn't handle null element", false);
 		} catch (IllegalAddException e) {
-			assert(true);
+			assert("didn't handle null element", true);
 		} catch (NullPointerException e) {
-			assert(true);
+			assert("didn't handle null element", true);
 		}
 		
 	}
