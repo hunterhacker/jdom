@@ -733,6 +733,7 @@ public class Element implements Serializable, Cloneable {
      * This will return the child <code>{@link Element}</code>s for the
      *   specified element name on this <code>Element</code>.  If
      *   multiple elements exist for the specified name, only the first is
+     *   returned.  If no elements exist for the specified name, null is
      *   returned.
      * </p><p>
      * The local name of the <code>Element</code> should be used - the
@@ -747,12 +748,10 @@ public class Element implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchChildException</code> - when the requested
-     *         XML element does not exist within this <code>Element</code>.
+     * @return <code>Element</code> - the first matching child element, or
+     *   null if not found.
      */
-    public Element getChild(String name, String uri)
-        throws NoSuchChildException {
+    public Element getChild(String name, String uri) {
 
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -767,7 +766,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         // If we got here, none found
-        throw new NoSuchChildException(name);
+        return null;
     }
 
     /**
@@ -775,6 +774,7 @@ public class Element implements Serializable, Cloneable {
      * This will return the child <code>{@link Element}</code>s for the
      *   specified element name on this <code>Element</code>.  If
      *   multiple elements exist for the specified name, only the first is
+     *   returned.  If no elements exist for the specified name, null is
      *   returned.
      * </p><p>
      * The local name of the <code>Element</code> should be used - the
@@ -789,11 +789,10 @@ public class Element implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchChildException</code> - when the requested
-     *         XML element does not exist within this <code>Element</code>.
+     * @return <code>Element</code> - the first matching child element,
+     *     or null if no child is found.
      */
-    public Element getChild(String name, Namespace ns) throws NoSuchChildException {
+    public Element getChild(String name, Namespace ns) {
         return getChild(name, ns.getURI());
     }
 
@@ -802,6 +801,7 @@ public class Element implements Serializable, Cloneable {
      * This will return the child <code>{@link Element}</code>s for the
      *   specified element name on this <code>Element</code>.  If
      *   multiple elements exist for the specified name, only the first is
+     *   returned.  If no elements exist for the specified name, null is
      *   returned.
      * </p><p>
      * The local name of the <code>Element</code> should be used - this
@@ -816,11 +816,10 @@ public class Element implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchChildException</code> - when the requested
-     *         XML element does not exist within this <code>Element</code>.
+     * @return <code>Element</code> - the first matching child element,
+     *    of null if no such child is found.
      */
-    public Element getChild(String name) throws NoSuchChildException {
+    public Element getChild(String name) {
         return getChild(name, "");
     }
 
@@ -1143,17 +1142,16 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This will return the <code>{@link Attribute}</code> for the
      *   specified attribute name on this <code>Element</code>, within
-     *   the <code>{@link Namespace}</code> defined by the supplied URI.
+     *   the <code>{@link Namespace}</code> defined by the supplied URI,
+     *   or null if no such attribute exists.
      * </p>
      *
      * @param name <code>String</code> name of child attribute to return.
      * @param uri <code>String</code> namespace URI of attribute to find.
-     * @return <code>Attribute</code> - the requested attribute.
-     * @throws <code>NoSuchAttributeException</code> - when the requested
-     *         XML attribute does not exist for this <code>Element</code>.
+     * @return <code>Attribute</code> - the requested attribute, or null
+     *    if the requested attribute does not exist.
      */
-    public Attribute getAttribute(String name, String uri)
-        throws NoSuchAttributeException {
+    public Attribute getAttribute(String name, String uri) {
 
         Iterator i = attributes.iterator();
         while (i.hasNext()) {
@@ -1165,45 +1163,41 @@ public class Element implements Serializable, Cloneable {
         }
 
         // If we got here, nothing found
-        throw new NoSuchAttributeException(name);
+        return null;
     }
 
     /**
      * <p>
      * This will return the <code>{@link Attribute}</code> for the
-     *   specified attribute name on this <code>Element</code>.
+     *   specified attribute name on this <code>Element</code>
+     *   or null if no such attribute exists.
      *   It searches for <code>{@link Attribute}</code>s not in
      *   any <code>{@link Namespace}</code>.
      * </p>
      *
      * @param name <code>String</code> name of attribute to return.
-     * @return <code>Attribute</code> - the requested attribute.
-     * @throws <code>NoSuchAttributeException</code> - when the requested
-     *         XML attribute does not exist for this <code>Element</code>.
+     * @return <code>Attribute</code> - the requested attribute, or null
+     *    if the requested attribute does not exist.
      */
-    public Attribute getAttribute(String name)
-        throws NoSuchAttributeException {
-
+    public Attribute getAttribute(String name) {
         return getAttribute(name, "");
     }
 
     /**
      * <p>
      * This will return the <code>{@link Attribute}</code> for the
-     *   specified attribute name on this <code>Element</code>.
+     *   specified attribute name on this <code>Element</code>, or null
+     *   if the requested attribute does not exist.
      *   It searches for <code>{@link Attribute}</code>s in
      *   the supplied <code>{@link Namespace}</code>.
      * </p>
      *
      * @param name <code>String</code> name of attribute to return.
      * @param ns <code>Namespace</code> to search within.
-     * @return <code>Attribute</code> - the requested attribute.
-     * @throws <code>NoSuchAttributeException</code> - when the requested
-     *         XML attribute does not exist for this <code>Element</code>.
+     * @return <code>Attribute</code> - the requested attribute, or null
+     *    if the requested attribute does not exist.
      */
-    public Attribute getAttribute(String name, Namespace ns)
-        throws NoSuchAttributeException {
-
+    public Attribute getAttribute(String name, Namespace ns) {
         return getAttribute(name, ns.getURI());
     }
 
@@ -1217,7 +1211,6 @@ public class Element implements Serializable, Cloneable {
      */
     public Element setAttributes(List attributes) {
         this.attributes = attributes;
-
         return this;
     }
 
@@ -1232,7 +1225,6 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addAttribute(Attribute attribute) {
         attributes.add(attribute);
-
         return this;
     }
 
@@ -1249,7 +1241,6 @@ public class Element implements Serializable, Cloneable {
     public Element addAttribute(String name, String value) {
         Attribute attribute = new Attribute(name, value);
         attributes.add(attribute);
-
         return this;
     }
 

@@ -125,19 +125,14 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return the root <code>Element</code>
-     *   for this <code>Document</code>, or throw a 
-     *   <code>{@link NoSuchChildException}</code>
-     *   if it hasn't been properly set.
+     *   for this <code>Document</code>, or return null in the case the
+     *   root element hasn't been yet set.
      * </p>
      *
-     * @return <code>Element</code> - the document's root element
-     * @throws <code>NoSuchChildException</code> - when no root
-     *                                      element exists.
+     * @return <code>Element</code> - the document's root element, or
+     *    null if none has been yet set
      */
-    public Element getRootElement() throws NoSuchChildException {
-        if (rootElement == null)  {
-            throw new NoSuchChildException("No root element exists.");
-        }
+    public Element getRootElement() {
         return rootElement;
     }
 
@@ -247,15 +242,15 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the first processing instruction for this
-     *   <code>Document</code> for the supplied target.
+     *   <code>Document</code> for the supplied target, or null if
+     *   no such processing instruction exists.
      * </p>
      *
      * @param target <code>String</code> target of PI to return.
      * @return <code>ProcessingInstruction</code> - the first PI
-     *         with the specified target.
+     *         with the specified target, or null if no such PI exists.
      */
-    public ProcessingInstruction getProcessingInstruction(String target)
-        throws NoSuchProcessingInstructionException {
+    public ProcessingInstruction getProcessingInstruction(String target) {
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
@@ -267,7 +262,7 @@ public class Document implements Serializable, Cloneable {
         }
 
         // If we got here, none found
-        throw new NoSuchProcessingInstructionException(target);
+        return null;
     }
 
     /**
@@ -357,11 +352,12 @@ public class Document implements Serializable, Cloneable {
      * @return <code>boolean</code> - whether the requested PI was removed.
      */
     public boolean removeProcessingInstruction(String target) {
-
-        try {
-            return content.remove(getProcessingInstruction(target));
-        } catch (NoSuchProcessingInstructionException e) {
+        ProcessingInstruction pi = getProcessingInstruction(target);
+        if (pi == null) {
             return false;
+        }
+        else {
+            return content.remove(pi);
         }
     }
 

@@ -59,7 +59,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Entity;
 import org.jdom.Namespace;
-import org.jdom.NoSuchChildException;
 import org.jdom.ProcessingInstruction;
 
 /**
@@ -218,21 +217,17 @@ public class XMLOutputter {
         // Print out root element, as well as any root level
         // comments and processing instructions, 
         // starting with no indentation
-        try {
-            Iterator i = doc.getMixedContent().iterator();
-            while (i.hasNext()) {
-                Object obj = i.next();
-                if (obj instanceof Element) {
-                    // 0 is indentation
-                    printElement(doc.getRootElement(), writer, 0);
-                } else if (obj instanceof Comment) {
-                    printComment((Comment) obj, writer, 0);
-                } else if (obj instanceof ProcessingInstruction) {
-                    printProcessingInstruction((ProcessingInstruction) obj, writer, 0);
-                }
+        Iterator i = doc.getMixedContent().iterator();
+        while (i.hasNext()) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                // 0 is indentation
+                printElement(doc.getRootElement(), writer, 0);
+            } else if (obj instanceof Comment) {
+                printComment((Comment) obj, writer, 0);
+            } else if (obj instanceof ProcessingInstruction) {
+                printProcessingInstruction((ProcessingInstruction) obj, writer, 0);
             }
-        } catch (NoSuchChildException e) {
-            // No elements to print
         }
 
         // Flush the output
