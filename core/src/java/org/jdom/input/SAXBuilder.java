@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.54 2001/07/13 19:11:53 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.55 2001/08/02 00:01:19 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,7 +84,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.54 $ $Date: 2001/07/13 19:11:53 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.55 $ $Date: 2001/08/02 00:01:19 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -281,6 +281,21 @@ public class SAXBuilder {
 
             // Create and configure the parser.
             XMLReader parser = createParser();
+
+            // Install optional filter
+            if (saxXMLFilter != null) {
+                // Connect filter chain to parser
+                XMLFilter root = saxXMLFilter;
+                while (root.getParent() instanceof XMLFilter) {
+                    root = (XMLFilter)root.getParent();
+                }
+                root.setParent(parser);
+
+                // Read from filter
+                parser = saxXMLFilter;
+            }
+
+            // Configure parser
             configureParser(parser, contentHandler);
 
             // Parse the document.
@@ -413,19 +428,6 @@ public class SAXBuilder {
             saxDriverClass = parser.getClass().getName();
         }
 
-        // Install optional filter
-        if (saxXMLFilter != null) {
-            // Connect filter chain to parser
-            XMLFilter root = saxXMLFilter;
-            while (root.getParent() instanceof XMLFilter) {
-                root = (XMLFilter)root.getParent();
-            }
-            root.setParent(parser);
-
-            // Read from filter
-            parser = saxXMLFilter;
-        }
-
         return parser;
     }
 
@@ -434,12 +436,12 @@ public class SAXBuilder {
      * This configures the XMLReader to be used for reading the XML document.
      * </p>
      * <p>
-     * The default implementation will set various options on the returned XMLReader,
-     * and that those options may change in future releases. It will set the
-     * validation flag, the XMLFilter, the DTD resolver, and the entity handler
-     * according to the options that were set (e.g. via setEntityResolver),
-     * and it will set various SAX properties and features that it needs set
-     * in order to work correctly. Change this behavior at your own risk.
+     * The default implementation sets various options on the given XMLReader,
+     *  such as validation, DTD resolution, entity handlers, etc., according
+     *  to the options that were set (e.g. via <code>setEntityResolver</code>)
+     *  and set various SAX properties and features that are required for JDOM
+     *  internals. These features may change in future releases, so change this
+     *  behavior at your own risk.
      * </p>
      */
     protected void configureParser(XMLReader parser, SAXHandler contentHandler)
