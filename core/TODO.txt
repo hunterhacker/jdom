@@ -1,9 +1,8 @@
 Items that need to be done:
 
-* Implement whitespace preservation for the xml:space attribute on elements
-  in SAXBuilder and DOMBuilder
+* Figure out how to manage whitespace preservation
 
-* Implement DOMOutputter
+* Implement DOMOutputter (Kevin Regan <kevinr@valicert.com> is working on it)
 
 * Implement inline entities:
         <?xml version='1.0' ?>
@@ -30,4 +29,4 @@ Items that need to be done:
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
-* Add SQLBuilder to contrib/ directory (from Jon Baer)
+* Add ResultSetBuilder (from Jason, based on SQLBuilder from Jon Baer)
