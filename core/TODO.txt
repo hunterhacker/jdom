@@ -5,10 +5,6 @@ Items that need to be done:
 * Look at Brad's experimental tree for good ideas to integrate.
   ftp://a.cs.okstate.edu/pub/hip/jdom-x.zip
 
-* Add DocType to the content list returned by Document so it can have a
-  location.  Fix the outputters and builders to respect it.  Keep the easy get
-  method however.
-
 * Look at interfaces for the core classes, Element with ConcreteElement being
   our code.  Base on the factory model.  Allow no access between objects
   except using the public API, to avoid the import node problem.  Do the big

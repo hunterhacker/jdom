@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.22 2003/04/30 09:55:11 jhunter Exp $
+ $Id: ContentList.java,v 1.23 2003/05/01 01:45:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.22 $, $Date: 2003/04/30 09:55:11 $
+ * @version $Revision: 1.23 $, $Date: 2003/05/01 01:45:25 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.22 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.23 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -148,6 +148,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
         else if (obj instanceof EntityRef) {
             add(index, (EntityRef) obj);
+        }
+        else if (obj instanceof DocType) {
+            add(index, (DocType) obj);
         }
         else {
             if (obj == null) {
@@ -217,6 +220,53 @@ class ContentList extends AbstractList implements java.io.Serializable {
         } else {
             System.arraycopy(elementData, index, elementData, index + 1, size - index);
             elementData[index] = element;
+            size++;
+        }
+        modCount++;
+    }
+
+    /**
+     * Check and add the <code>Element</code> to this list at
+     * the given index.
+     *
+     * @param index index where to add <code>Element</code>
+     * @param doctype <code>DocType</code> to add
+     */
+    protected void add(int index, DocType doctype) {
+        if (doctype == null) {
+            throw new IllegalAddException("Cannot add null object");
+        }
+
+        if (doctype.getDocument() != null) {
+            throw new IllegalAddException(doctype.getDocument(), doctype,
+                                          "The doctype already has an existing parent");
+        }
+
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index +
+                                                " Size: " + size());
+        }
+
+        if (parent instanceof Element) {
+            throw new IllegalAddException(
+                    "A DocType is not allowed except at the document level");
+        }
+
+        if (parent instanceof Document) {
+            if (indexOfDocType() >= 0) {
+                throw new IllegalAddException(
+                        "Cannot add a second doctype, only one is allowed");
+            }
+            doctype.setDocument((Document) parent);
+        }
+
+        ensureCapacity(size + 1);
+        if (index == size) {
+            elementData[size++] = doctype;
+        }
+        else {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = doctype;
             size++;
         }
         modCount++;
@@ -603,6 +653,24 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
+     * Return the index of the DocType element in the list. If the list contains
+     * no DocType, it returns -1.
+     *
+     * @return                     index of the DocType, or -1 if it doesn't
+     *                             exist
+     */
+    protected int indexOfDocType() {
+        if (elementData != null) {
+            for (int i = 0; i < size; i++) {
+                if (elementData[i] instanceof DocType) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Remove the object at the specified offset.
      *
      * @param index The offset of the object.
@@ -646,6 +714,10 @@ class ContentList extends AbstractList implements java.io.Serializable {
             EntityRef entity = (EntityRef) obj;
             entity.setParent(null);
         }
+        else if (obj instanceof DocType) {
+            DocType dt = (DocType) obj;
+            dt.setDocument(null);
+        }
         else {
             // Should never happen.
             throw new IllegalArgumentException("Object '" + obj + "' unknown");
@@ -671,6 +743,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
             if ((root >= 0) && (root != index)) {
                 throw new IllegalAddException(
                   "Cannot add a second root element, only one is allowed");
+            }
+        }
+
+        if ((obj instanceof DocType) && (parent instanceof Document)) {
+            int docTypeIndex = indexOfDocType();
+            if ((docTypeIndex >= 0) && (docTypeIndex != index)) {
+                throw new IllegalAddException(
+                        "Cannot add a second doctype, only one is allowed");
             }
         }
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.64 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Document.java,v 1.65 2003/05/01 01:45:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.64 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.65 $, $Date: 2003/05/01 01:45:25 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -74,7 +74,7 @@ import org.jdom.filter.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.64 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.65 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -83,9 +83,6 @@ public class Document implements Serializable, Cloneable {
      * the root <code>{@link Element}</code>.
      */
     protected ContentList content = new ContentList(this);
-
-    /** The <code>{@link DocType}</code> declaration. */
-    protected DocType docType;
 
     /**
      * Creates a new empty document.  A document must have a root element,
@@ -110,7 +107,8 @@ public class Document implements Serializable, Cloneable {
     public Document(Element rootElement, DocType docType) {
         if (rootElement != null)
             setRootElement(rootElement);
-        setDocType(docType);
+        if (docType != null)
+            setDocType(docType);
     }
 
     /**
@@ -129,24 +127,9 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * This will create a new <code>Document</code>,
-     * with the supplied list of content, and the supplied
-     * <code>{@link DocType}</code> declaration.
-     *
-     * @param newContent <code>List</code> of starter content
-     * @param docType <code>DocType</code> declaration.
-     * @throws IllegalAddException if (1) the List contains more than
-     *         one Element or objects of illegal types, or (2) if the
-     *         given docType object is already attached to a document.
-     */
-    public Document(List newContent, DocType docType) {
-        setContent(newContent);
-        setDocType(docType);
-    }
-
-    /**
-     * This will create a new <code>Document</code>,
-     * with the supplied list of content, and no
-     * <code>{@link DocType}</code> declaration.
+     * with the supplied list of content, and a
+     * <code>{@link DocType}</code> declaration only if the content
+     * contains a DocType instance.
      *
      * @param content <code>List</code> of starter content
      * @throws IllegalAddException if the List contains more than
@@ -229,7 +212,13 @@ public class Document implements Serializable, Cloneable {
      * @return <code>DocType</code> - the DOCTYPE declaration.
      */
     public DocType getDocType() {
-        return docType;
+        int index = content.indexOfDocType();
+        if (index < 0) {
+            return null;
+        }
+        else {
+            return (DocType) content.get(index);
+        }
     }
 
     /**
@@ -245,19 +234,27 @@ public class Document implements Serializable, Cloneable {
      *   already attached to a Document.
      */
     public Document setDocType(DocType docType) {
-        if (docType != null) {
-            if (docType.getDocument() != null) {
-                throw new IllegalAddException(this, docType,
-                          "The docType already is attached to a document");
-            }
-            docType.setDocument(this);
+        if (docType == null) {
+            // Remove any existing doctype
+            int docTypeIndex = content.indexOfDocType();
+            if (docTypeIndex >= 0) content.remove(docTypeIndex);
+            return this;
         }
 
-        if (this.docType != null) {
-            this.docType.setDocument(null);
+        if (docType.getDocument() != null) {
+            throw new IllegalAddException(this, docType,
+                                          "The docType already is attached to a document");
         }
 
-        this.docType = docType;
+        // Add DocType to head if new, replace old otherwise
+        int docTypeIndex = content.indexOfDocType();
+        if (docTypeIndex < 0) {
+            content.add(0, docType);
+        }
+        else {
+            content.set(docTypeIndex, docType);
+        }
+
         return this;
     }
 
@@ -284,6 +281,19 @@ public class Document implements Serializable, Cloneable {
      */
     public Document addContent(Comment comment) {
         content.add(comment);
+        return this;
+    }
+
+    /**
+     * This will add a doctype to the <code>Document</code>.
+     *
+     * @param doctype <code>DocType</code> to add.
+     * @return <code>Document</code> - this object modified.
+     * @throws IllegalAddException if the given doctype already has a
+     *         parent.
+     */
+    public Document addContent(DocType doctype) {
+        content.add(doctype);
         return this;
     }
 
@@ -403,6 +413,7 @@ public class Document implements Serializable, Cloneable {
         StringBuffer stringForm = new StringBuffer()
             .append("[Document: ");
 
+        DocType docType = getDocType();
         if (docType != null) {
             stringForm.append(docType.toString())
                       .append(", ");
@@ -458,11 +469,6 @@ public class Document implements Serializable, Cloneable {
             // Can't happen
         }
 
-        if (docType != null) {
-            doc.docType = (DocType)docType.clone();
-            doc.docType.setDocument(doc);
-        }
-
         // The clone has a reference to this object's content list, so
         // owerwrite with a empty list
         doc.content = new ContentList(doc);
@@ -484,8 +490,31 @@ public class Document implements Serializable, Cloneable {
                            ((ProcessingInstruction)obj).clone();
                 doc.content.add(pi);
             }
+            else if (obj instanceof DocType) {
+                DocType dt = (DocType) ((DocType)obj).clone();
+                doc.content.add(dt);
+            }
         }
 
         return doc;
+    }
+
+
+    /**
+     * This will create a new <code>Document</code>, with the supplied list of
+     * content, and the supplied <code>{@link DocType}</code> declaration.
+     *
+     * @param      newContent          <code>List</code> of starter content
+     * @param      docType             <code>DocType</code> declaration.
+     * @throws     IllegalAddException if (1) the List contains more than one
+     *                                 Element or objects of illegal types, or
+     *                                 (2) if the given docType object is
+     *                                 already attached to a document.
+     * @deprecated Deprecated in beta10 because the DocType
+     *                                 is now part of the content list itself
+     */
+    public Document(List newContent, DocType docType) {
+        setContent(newContent);
+        setDocType(docType);
     }
 }

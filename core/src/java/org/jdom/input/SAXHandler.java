@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.52 2003/04/30 09:55:13 jhunter Exp $
+ $Id: SAXHandler.java,v 1.53 2003/05/01 01:45:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.52 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.53 $, $Date: 2003/05/01 01:45:25 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.52 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.53 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -670,8 +670,7 @@ if (!inDTD) {
 
         flushCharacters(); //XXX Is this needed here?
 
-        document.setDocType(
-            factory.docType(name, publicID, systemID));
+        document.addContent(factory.docType(name, publicID, systemID));
         inDTD = true;
         inInternalSubset = true;
     }

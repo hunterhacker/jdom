@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.92 2003/04/30 09:55:13 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.93 2003/05/01 01:45:25 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -170,7 +170,7 @@ import org.jdom.*;
  * xml:space with the value "default" formatting is turned back on for the child
  * element and then off for the remainder of the parent element.
  *
- * @version $Revision: 1.92 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.93 $, $Date: 2003/05/01 01:45:25 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -185,7 +185,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.92 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.93 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -652,21 +652,14 @@ public class XMLOutputter implements Cloneable {
 
         printDeclaration(doc, out, encoding);
 
-        if (doc.getDocType() != null) {
-            printDocType(doc.getDocType(), out);
-
-            // Always print line separator after declaration, helps the
-            // output look better and is semantically inconsequential
-            out.write(currentFormat.lineSeparator);
-        }
-
         // Print out root element, as well as any root level
         // comments and processing instructions,
         // starting with no indentation
         List content = doc.getContent();
         int size = content.size();
         for( int i = 0; i < size; i++) {
-            Object obj = content.get( i);
+            Object obj = content.get(i);
+
             if (obj instanceof Element) {
                 printElement(doc.getRootElement(), out, 0,
                              createNamespaceStack());
@@ -676,6 +669,12 @@ public class XMLOutputter implements Cloneable {
             }
             else if (obj instanceof ProcessingInstruction) {
                 printProcessingInstruction((ProcessingInstruction) obj, out);
+            }
+            else if (obj instanceof DocType) {
+                printDocType(doc.getDocType(), out);
+                // Always print line separator after declaration, helps the
+                // output look better and is semantically inconsequential
+                out.write(currentFormat.lineSeparator);
             }
             else {
                 // XXX if we get here then we have a illegal content, for
