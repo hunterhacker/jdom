@@ -9,14 +9,13 @@ Short summary:
 
 JDK 1.4 includes XML parser and transformation classes, so if you're using JDK
 1.4+ you don't really need to worry about most of the JARs in this directory.
-However, you might want to add xerces.jar to your classpath so JDOM will use
-Xerces 2.4.0 instead of the Crimson 1.1 which comes with the JDK.  You can
-also add xalan.jar to your classpath to use Xalan 2.5_D1 instead of the older
-Xalan that comes with the JDK.
+However, you might want to add xerces.jar and xml-apis.jar to your classpath
+so JDOM will use Xerces 2.4.0 instead of the default JDK parser Crimson 1.1.
+You can also add xalan.jar to your classpath to use Xalan 2.5_D1 instead of
+the older Xalan that comes with the JDK.
 
-For JDK 1.3 and earlier users, just add xerces.jar, xml-apis.jar, and
-xalan.jar to your classpath, or any other JAXP-compliant parser along with the
-JAXP library.
+For JDK 1.3 and earlier users, you'll want to add xerces.jar, xml-apis.jar,
+and xalan.jar to your classpath.  Or you can use any third party parser too.
 
 All users should add jaxen-core.jar, jaxen-jdom.jar, and saxpath.jar to their
 classpath to use the XPath features in JDOM.
@@ -33,12 +32,9 @@ collections.jar
   put this in your classpath if you're using J2SE 1.2 or later.
 
 xerces.jar
-  An XML parser you can use with JDOM.  It's very popular and supports JAXP.
-  Place this JAR at the head of your classpath and it'll be used.
-
 xml-apis.jar
-  A support JAR for Xerces holding the DOM and SAX classes.  It's included
-  with J2SE 1.4+.  Include this JAR if using Xerces on older J2SE versions.
+  The popular Xerces XML parser.  Place these two JARs at the head of your 
+  classpath and Xerces will be used as your parser.
 
 xalan.jar
   An XSLT processor.  Included in J2SE 1.4+.  Put this in your classpath if 
