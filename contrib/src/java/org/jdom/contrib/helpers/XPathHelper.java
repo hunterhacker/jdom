@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPathHelper.java,v 1.4 2004/09/03 06:15:23 jhunter Exp $
+ $Id: XPathHelper.java,v 1.5 2004/09/03 06:37:29 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -210,7 +210,7 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            Element parent = getParentElement(to);
+            Element parent = to.getParentElement();
             List siblings = null;
             int nodeType = ContentFilter.TEXT;
             StringBuffer path = getElementPath(from, parent, false);
@@ -269,7 +269,7 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            Element parent = getParentElement(to);
+            Element parent = to.getParentElement();
             List siblings = null;
             int nodeType = ContentFilter.COMMENT;
             StringBuffer path = getElementPath(from, parent, false);
@@ -331,7 +331,7 @@ public class XPathHelper {
             return "node()";
         }
         else {
-            Element parent = getParentElement(to);
+            Element parent = to.getParentElement();
             List siblings = null;
             int nodeType = ContentFilter.PI;
             StringBuffer path = getElementPath(from, parent, false);
@@ -477,7 +477,7 @@ public class XPathHelper {
             boolean isRoot = false;
             List siblings = null;
 
-            Element parent = getParentElement(to);
+            Element parent = to.getParentElement();
             if (parent == null) {
                 // Oops! No more parent but I haven't yet reached the from node.
                 if (parent != from) {
@@ -563,11 +563,6 @@ public class XPathHelper {
             buffer.append('[').append(position).append(']');
         }
         return buffer;
-    }
-
-    private static Element getParentElement(Content c) {
-        Parent parent = c.getParent();
-        return (Element)((parent instanceof Element)? parent: null);
     }
 }
 
