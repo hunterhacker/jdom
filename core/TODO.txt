@@ -1,5 +1,8 @@
 Items that need to be done:
 
+* Finish making July 25th changes to Document.java, done with Element.java
+  (jhunter)
+
 * Implement preservation of whitespace, making it available using
   getContent(true) and getMixedContent(true).
 
@@ -16,8 +19,6 @@ Items that need to be done:
 
 * Fix namespaces to handle disparate prefixes to same URI
   (Make them unique by prefix/URI)
-
-* Make Namespace serializable (requires custom hooks)
 
 * Consider changing XMLOutputter to have more set methods like Enhydra's
   DOMFormatter.  Possible good ones:
@@ -55,6 +56,10 @@ Items that need to be done:
   mean for == behavior.
 
 * Add Document.getMixedContent(boolean preserveWhitespace)
+
+* Add Document.setMixedContent().  Do we ensure it contains only one Element?
+
+* Ensure that element.addAttribute(attr) doesn't permit duplicates
 
 ----- Items above this line are wanted for beta5 -----
 
@@ -108,4 +113,21 @@ Items that need to be done:
 * Write a guide for contributors
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
     longer than 80 characters
+
+* Look at putting XML files in the jdom.jar META-INF directory for things like
+  version, credits, description, etc, then access/print the info using JDOM
+  classes executed by a "java -jar jdom.jar" command.  
+  See http://java.sun.com/docs/books/tutorial/jar/
+
+* Investigate a way to do in-memory validation.  First step is probably 
+  to get an in-memory representation of a DTD as per
+  http://xmlhack.com/read.php?item=626
+
+* Figure out XPath interface, current best is this:
+    List    XPath.getList(Element e, String xpath)  // or Document param
+    Comment XPath.getComment(Element e, String xpath)
+    Element XPath.getElement(Element e, String xpath)
+    ProcIns XPath.getProcIns(Element e, String xpath)
+    Entity  XPath.getEntity(Element e, String xpath)
+    String  XPath.getText(Element e, String xpath)
 
