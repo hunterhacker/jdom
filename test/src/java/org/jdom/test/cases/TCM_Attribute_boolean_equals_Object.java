@@ -52,43 +52,46 @@
  
  */
 
+
 package org.jdom.test.cases;
 
 /**
- * Please put a description of your test here.
+ * Test that the object equals test succeeds for an Attribute
  * 
- * @author unascribed
+ * @author Philip Nelson
  * @version 0.1
  */
+import org.jdom.Attribute;
+
 public final class TCM_Attribute_boolean_equals_Object
 extends junit.framework.TestCase
 {
-    /**
-     *  Construct a new instance. 
-     */
-    public TCM_Attribute_boolean_equals_Object() {
-        super("public final boolean org.jdom.Attribute.equals(java.lang.Object)");
-    }
+	/**
+	 *  Construct a new instance. 
+	 */
+	public TCM_Attribute_boolean_equals_Object(String name) {
+		super(name);
+	}
+	/**
+	 * This method is called before a test is executed.
+	 */
+	public void setUp() {
+		// your code goes here.
+	}
+	/**
+	 * This method is called after a test is executed.
+	 */
+	public void tearDown() {
+		// your code goes here.
+	}
+	/**
+	 * 
+	 */
+	public void test() {
+	    Attribute attr = new Attribute("test", "value");
 
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
+	    Object ob = (Object)attr;
 
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test() {
-        fail("implement me !");
-    }
-
+	    assert("object not equal to attribute", attr.equals(ob));
+	}
 }
