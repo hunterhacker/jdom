@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.10 2001/04/18 07:04:17 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.11 2001/04/18 16:13:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -261,6 +261,26 @@ public class IllegalAddException extends IllegalArgumentException {
               .append("\" could not be added as content to \"")
               .append(base.getQualifiedName())
               .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link DocType}</code>
+     *   to the supplied document is not allowed.
+     * </p>
+     *
+     * @param base document that the entity couldn't be added to
+     * @param added doctype that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Document base, DocType added, String reason) {
+        super(new StringBuffer()
+              .append("The DOCTYPE ")
+              .append(added.getSerializedForm())
+              .append(" could not be added to the document: ")
               .append(reason)
               .toString());
     }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.35 2001/04/13 03:45:17 jhunter Exp $
+ $Id: Document.java,v 1.36 2001/04/18 16:13:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -244,8 +244,16 @@ public class Document implements Serializable, Cloneable {
      * @param docType <code>DocType</code> declaration.
      */
     public Document setDocType(DocType docType) {
-        this.docType = docType;
+        if (docType != null && (docType.getDocument() != null)) {
+            throw new IllegalAddException(this, docType,
+                "The docType already is attached to a document");
+        }
 
+        if (docType != null) {
+            docType.setDocument(this);
+        }
+
+        this.docType = docType;
         return this;
     }
 
@@ -255,8 +263,8 @@ public class Document implements Serializable, Cloneable {
      *   <code>{@link ProcessingInstruction}</code>s
      *   for this <code>Document</code> located at the document level 
      *   (outside the root element).
-     * The returned list is "live" and changes to it affect the
-     * document's actual content.
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
      * </p>
      *
      * @return <code>List</code> - PIs for document.
@@ -279,8 +287,8 @@ public class Document implements Serializable, Cloneable {
      * This returns the processing instructions for this
      *   <code>Document</code> located at the document level
      *   (outside the root element) which have the supplied target.
-     * The returned list is "live" and changes to it affect the
-     * document's actual content.
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
      * </p>
      *
      * @param target <code>String</code> target of PI to return.
@@ -445,8 +453,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return all content for the <code>Document</code>.
-     * The returned list is "live" and changes to it affect the
-     * document's actual content.
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
      * </p>
      *
      * @return <code>List</code> - all Document content

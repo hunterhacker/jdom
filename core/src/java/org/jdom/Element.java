@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.68 2001/04/18 07:04:17 jhunter Exp $
+ $Id: Element.java,v 1.69 2001/04/18 16:13:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -768,9 +768,9 @@ public class Element implements Serializable, Cloneable {
      * <code>CDATA</code>, and <code>Entity</code>.  
      * When there is technically no mixed content and
      * all contents are of the same type, then all objects returned in the
-     * List will be of the same type.  The List returned is "live" and 
-     * modifications to it affect the element's actual contents.  Whitespace
-     * content is returned in its entirety.
+     * List will be of the same type.  The List returned is "live" in 
+     * document order and modifications to it affect the element's actual 
+     * contents.  Whitespace content is returned in its entirety.
      * </p>
      *
      * @return a <code>List</code> containing the mixed content of the
@@ -919,7 +919,8 @@ public class Element implements Serializable, Cloneable {
      * nested directly (one level deep) within this element, as 
      * <code>Element</code> objects.  If this target element has no nested 
      * elements, an empty List is returned.  The returned list is "live"
-     * and changes to it affect the element's actual contents.
+     * in document order and changes to it affect the element's actual 
+     * contents.
      * </p>
      * <p>
      * This performs no recursion, so elements nested two levels
@@ -978,7 +979,7 @@ public class Element implements Serializable, Cloneable {
      * local name and belonging to no namespace, returned as 
      * <code>Element</code> objects.  If this target element has no nested 
      * elements with the given name outside a namespace, an empty List 
-     * is returned.  The returned list is "live"
+     * is returned.  The returned list is "live" in document order
      * and changes to it affect the element's actual contents.
      * </p>
      * <p>
@@ -1000,7 +1001,7 @@ public class Element implements Serializable, Cloneable {
      * local name and belonging to the given Namespace, returned as 
      * <code>Element</code> objects.  If this target element has no nested 
      * elements with the given name in the given Namespace, an empty List 
-     * is returned.  The returned list is "live"
+     * is returned.  The returned list is "live" in document order
      * and changes to it affect the element's actual contents.
      * </p>
      * <p>
@@ -1487,24 +1488,16 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This sets an attribute value for this element.  Any existing attribute 
-     * with the same name and namespace URI is removed.  (TODO: Code the
-     * replacement logic.)
+     * with the same name and namespace URI is removed.
      * </p>
      *
      * @param attribute <code>Attribute</code> to add
      * @return this element modified
-     * @throws IllegalAddException if an attribute by the same name/namespace
-     *   already exists, if the attribute being added already has a parent, 
-     *   or if the attribute namespace prefix collides with another namespace 
-     *   prefix on the element
+     * @throws IllegalAddException if the attribute being added already has a 
+     *   parent or if the attribute namespace prefix collides with another 
+     *   namespace prefix on the element
      */
     public Element setAttribute(Attribute attribute) {
-        if (getAttribute(attribute.getName(), attribute.getNamespace())
-                 != null) {
-            throw new IllegalAddException(
-                this, attribute, "Duplicate attributes are not allowed");
-        }
-
         if (attribute.getParent() != null) {
             throw new IllegalAddException(this, attribute,
                 "The attribute already has an existing parent \"" +
@@ -1555,6 +1548,10 @@ public class Element implements Serializable, Cloneable {
   
         if (attributes == null) {
             attributes = new LinkedList();
+        }
+        else {
+            // Remove any pre-existing attribute
+            removeAttribute(attribute.getName(), attribute.getNamespace());
         }
 
         attributes.add(attribute);

@@ -72,13 +72,8 @@ Items that need to be done:
         <!ENTITY Ouml '&#214;'>]>
   (Harry Evans <hevans@elite.com> is also working on this.)
 
-* Add parentage to DocType.
-
-* Make DocType.equals() check for equivalency and not reference equality.
-
-* Add notes that element content returned by List is ordered.
-
-* Integrate element factories in SAXBuilder.  (Ken Helland)
+* Integrate element factories in SAXBuilder.  (Ken Helland patch, John Gaunt
+  perhaps giving it a whirl)
 
 * Make Namespace.equals() check based on URI.  The issue's been brought up
   again.  Historic info is in

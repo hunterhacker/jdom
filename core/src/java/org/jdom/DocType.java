@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.11 2001/04/18 07:35:06 jhunter Exp $
+ $Id: DocType.java,v 1.12 2001/04/18 16:13:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,6 +77,9 @@ public class DocType implements Serializable, Cloneable {
 
     /** The system ID of the DOCTYPE */
     protected String systemID;
+
+    /** The document having this DOCTYPE */
+    protected Document document;
 
     /**
      * <p>
@@ -210,6 +213,32 @@ public class DocType implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this DocType, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this DocType, or null.
+     */
+    public Document getDocument() {
+        return this.document;
+    }
+
+    /**
+     * <p>
+     * This sets the <code>{@link Document}</code> holding this doctype.
+     * </p>
+     *
+     * @param document <code>Document</code> holding this doctype
+     * @return <code>Document</code> this <code>DocType</code> modified
+     */
+    protected DocType setDocument(Document document) {
+        this.document = document;
+        return this;
+    }
+
+    /**
+     * <p>
      *  This returns a <code>String</code> representation of the
      *    <code>DocType</code>, suitable for debugging. If the XML
      *    representation of the <code>DocType</code> is desired,
@@ -283,6 +312,7 @@ public class DocType implements Serializable, Cloneable {
         return false;
     }
 
+    // Utility function to help with equals()
     private boolean stringEquals(String s1, String s2) {
         if (s1 == null && s2 == null) {
             return true;
@@ -323,7 +353,9 @@ public class DocType implements Serializable, Cloneable {
             // Can't happen
         }
 
-        // elementName, publicID and systemID are all immutable 
+        docType.document = null;
+
+        // elementName, publicID, and systemID are all immutable 
         // (Strings) and references are copied by Object.clone()
         return docType;
     }
