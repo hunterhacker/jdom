@@ -450,6 +450,7 @@ public class Document implements Serializable, Cloneable {
      * This will set all content for the <code>Document</code>.
      * The List may contain only objects of type Element, Comment, and
      * ProcessingInstruction; and only one Element that becomes the root.
+     * In event of an exception the content may be partially added.
      * </p>
      *
      * @param content the new mixed content
@@ -481,7 +482,8 @@ public class Document implements Serializable, Cloneable {
             else {
                 throw new IllegalAddException(
                     "A Document may directly contain only objects of type " +
-                    "Element, Comment, and ProcessingInstruction");
+                    "Element, Comment, and ProcessingInstruction: " +
+                    obj.getClass().getName() + " not allowed");
             }
         }
 

@@ -755,24 +755,54 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This sets the content of the element.  The passed in List should
      * contain only objects of type <code>String</code>, <code>Element</code>,
-     * <code>Comment</code>, <code>ProcessingInstruction</code>, and
-     * <code>Entity</code>.  Passing a null List simply clears the 
-     * existing content.
+     * <code>Comment</code>, <code>ProcessingInstruction</code>, 
+     * <code>CDATA</code>, and <code>Entity</code>.  Passing a null or
+     * empty List clears the existing content.  In event of an exception 
+     * the content may be partially added.
      * </p>
      *
      * @return this element modified
      */
     public Element setMixedContent(List mixedContent) {
-        // XXX Sanity check content per Document.setMixedContent()
         if (content != null) {
             content.clear();
         } else {
             content = new LinkedList();
         }
 
-        if (mixedContent != null) {
-            content.addAll(mixedContent);
+        if (mixedContent == null) {
+            return this;
         }
+
+        for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                addContent((Element)obj);
+            }
+            else if (obj instanceof String) {
+                addContent((String)obj);
+            }
+            else if (obj instanceof Comment) {
+                addContent((Comment)obj);
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                addContent((ProcessingInstruction)obj);
+            }
+            else if (obj instanceof CDATA) {
+                addContent((CDATA)obj);
+            }
+            else if (obj instanceof Entity) {
+                addContent((Entity)obj);
+            }
+            else {
+                throw new IllegalAddException(
+                    "An Element may directly contain only objects of type " +
+                    "String, Element, Comment, CDATA, Entity, and " + 
+                    "ProcessingInstruction: " + obj.getClass().getName() +
+                    " is not allowed");
+            }
+        }
+
         return this;
     }
 
@@ -840,6 +870,7 @@ public class Element implements Serializable, Cloneable {
      * This sets the content of the element to be the List of 
      * <code>Element</code> objects within the supplied <code>List</code>.
      * All existing element and non-element content of the element is removed.
+     * In event of an exception the children may be partially added.
      * </p>
      *
      * @param children <code>List</code> of <code>Element</code> objects to add
