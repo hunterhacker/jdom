@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.18 2002/02/05 08:03:18 jhunter Exp $
+ $Id: DocType.java,v 1.19 2002/04/28 03:14:08 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,12 +65,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.18 $, $Date: 2002/02/05 08:03:18 $
+ * @version $Revision: 1.19 $, $Date: 2002/04/28 03:14:08 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.18 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.19 $ $Date: 2002/04/28 03:14:08 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -326,21 +326,17 @@ public class DocType implements Serializable, Cloneable {
     /**
      * <p>
      *  This tests for equality of this <code>DocType</code> to the supplied
-     *    <code>Object</code>.
+     *    <code>Object</code>.  DocTypes are considered equal only if they
+     *    are referentially equal (i.e. the same object).  User code may 
+     *    choose to compare DocType objects based on element name, public ID,
+     *    system ID, and/or internal DTD subset.
      * </p>
      *
      * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>DocType</code> is
-     *         equal to the supplied <code>Object</code>.
+     * @return whether the elements are equal
      */
     public final boolean equals(Object ob) {
-        if (ob instanceof DocType) {
-            DocType dt = (DocType) ob;
-            return (stringEquals(dt.elementName, elementName) &&
-                    stringEquals(dt.publicID, publicID) &&
-                    stringEquals(dt.systemID, systemID));
-        }
-        return false;
+        return (this == ob);
     }
 
     // Utility function to help with equals()
