@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.3 2001/12/06 01:44:47 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.4 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -67,11 +67,13 @@ import java.util.Map;
  *
  * @author Ken Rune Holland
  * @author Phil Nelson
+ * @author Bradley S. Huffman
+ * @version 1.0
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.3 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.4 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 
@@ -96,6 +98,10 @@ public class DefaultJDOMFactory implements JDOMFactory {
 
     public CDATA cdata(String text) {
         return new CDATA(text);
+    }
+
+    public Text text(String text) {
+        return new Text(text);
     }
 
     public Comment comment(String text) {

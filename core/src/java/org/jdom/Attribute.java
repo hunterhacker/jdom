@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.34 2001/12/06 01:44:47 jhunter Exp $
+ $Id: Attribute.java,v 1.35 2001/12/11 07:32:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,7 @@ import java.io.IOException;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.34 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.35 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
 
     /**
      * <p>
@@ -747,47 +747,4 @@ public class Attribute implements Serializable, Cloneable {
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
     }
-
-    /**
-     * <p>
-     * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and place it in
-     *   the specified namespace (with prefix).
-     * </p>
-     *
-     * @param name <code>String</code> name of <code>Attribute</code>.
-     * @param prefix <code>String</code> prefix for <code>Attribute</code>.
-     * @param uri <code>String</code> URI for namespace this
-     *        <code>Attribute</code> is in.
-     * @param value <code>String</code> value for new attribute.
-     *
-     * @deprecated Deprecated in beta7, use 
-     *     Attribute(String name, String value, Namespace namespace) instead
-     */
-    public Attribute(String name, String prefix, String uri, String value) {
-        this(name, value, Namespace.getNamespace(prefix, uri));
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>Attribute</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Attribute</code>.
-     *
-     * @deprecated Deprecated in Beta7, use
-     * XMLOutputter.outputString(Attribute) instead
-     */
-    public final String getSerializedForm() {
-        // This should really escape the strings
-        return new StringBuffer()
-            .append(getQualifiedName())
-            .append("=\"")
-            .append(value)
-            .append("\"")
-            .toString();
-    }
-
 }

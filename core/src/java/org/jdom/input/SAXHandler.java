@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: SAXHandler.java,v 1.27 2001/12/06 01:44:47 jhunter Exp $
+ $Id: SAXHandler.java,v 1.28 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.input;
@@ -75,13 +75,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
+ * @author Bradley S. Huffman
+ * @version 1.0
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
-                                                          DeclHandler, 
+                                                          DeclHandler,
                                                           DTDHandler {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.27 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.28 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -90,7 +92,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     private Document document;
 
     // Note: keeping a "current element" variable to avoid the constant
-    // peek() calls to the top of the stack has shown to cause no noticeable 
+    // peek() calls to the top of the stack has shown to cause no noticeable
     // performance improvement.
 
     /** Element stack */
@@ -111,7 +113,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** Indicator of whether we should expand entities */
     private boolean expand = true;
 
-    /** Indicator of whether we are actively suppressing (non-expanding) a 
+    /** Indicator of whether we are actively suppressing (non-expanding) a
         current entity */
     protected boolean suppress = false;
 
@@ -325,7 +327,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * This is called when the parser encounters an external entity 
+     * This is called when the parser encounters an external entity
      * declaration.
      * </p>
      *
@@ -334,11 +336,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param systemId system id
      * @throws SAXException when things go wrong
      */
-    public void externalEntityDecl(String name, 
+    public void externalEntityDecl(String name,
                                    String publicId, String systemId)
                                    throws SAXException {
         // Store the public and system ids for the name
-        externalEntities.put(name, new String[]{publicId, systemId}); 
+        externalEntities.put(name, new String[]{publicId, systemId});
 
         if (!inInternalSubset) return;
 
@@ -369,8 +371,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param value <code>String</code> value of attribute
      */
     public void attributeDecl(String eName, String aName, String type,
-                              String valueDefault, String value) 
-        throws SAXException { 
+                              String valueDefault, String value)
+        throws SAXException {
 
         if (!inInternalSubset) return;
 
@@ -404,7 +406,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param name <code>String</code> name of element
      * @param model <code>String</code> model of the element in DTD syntax
      */
-    public void elementDecl(String name, String model) throws SAXException { 
+    public void elementDecl(String name, String model) throws SAXException {
         buffer.append("  <!ELEMENT ")
               .append(name)
               .append(" ")
@@ -420,8 +422,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param name <code>String</code> name of entity
      * @param value <code>String</code> value of the entity
      */
-    public void internalEntityDecl(String name, String value) 
-        throws SAXException { 	
+    public void internalEntityDecl(String name, String value)
+        throws SAXException { 
+
         //skip entities that come from the dtd
         if (!inInternalSubset) return;
 
@@ -574,7 +577,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
             String attLocalName = atts.getLocalName(i);
             String attQName = atts.getQName(i);
-            int    attType  = getAttributeType(atts.getType(i));
+            int attType = getAttributeType(atts.getType(i));
 
             // Bypass any xmlns attributes which might appear, as we got
             // them already in startPrefixMapping().
@@ -668,9 +671,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
  * the inline DTDs that Xerces seems to have.
 if (!inDTD) {
   if (inEntity) {
-    getCurrentElement().setContent(data);
+    getCurrentElement().setContent(factory.text(data));
   } else {
-    getCurrentElement().addContent(data);
+    getCurrentElement().addContent(factory.text(data));
 }
 */
 
@@ -678,7 +681,7 @@ if (!inDTD) {
             getCurrentElement().addContent(factory.cdata(data));
         }
         else {
-            getCurrentElement().addContent(data);
+            getCurrentElement().addContent(factory.text(data));
         }
     }
 
@@ -694,13 +697,14 @@ if (!inDTD) {
      * @param length <code>int</code> - length of whitespace after start
      * @throws SAXException when things go wrong
      */
-    public void ignorableWhitespace(char[] ch, int start, int length) 
+    public void ignorableWhitespace(char[] ch, int start, int length)
                                                      throws SAXException {
         if (suppress) return;
         if (ignoringWhite) return;
         if (length == 0) return;
 
-        getCurrentElement().addContent(new String(ch, start, length));
+        String data = new String(ch, start, length);
+        getCurrentElement().addContent(factory.text(data));
 
     }
 
@@ -788,6 +792,7 @@ if (!inDTD) {
             inInternalSubset = false;
             return;
         }
+
         // Ignore DTD references, and translate the standard 5
         if ((!inDTD) &&
             (!name.equals("amp")) &&
@@ -807,14 +812,14 @@ if (!inDTD) {
                 /**
                  * if stack is empty, this entity belongs to an attribute
                  * in these cases, it is an error on the part of the parser
-                 * to call startEntity but this will help in some cases.  
+                 * to call startEntity but this will help in some cases.
                  * See org/xml/sax/ext/LexicalHandler.html#startEntity(java.lang.String)
-                 * for more information 
+                 * for more information
                  */
                 if (!(atRoot || stack.isEmpty())) {
                     EntityRef entity = factory.entityRef(name, pub, sys);
 
-                    //no way to tell if the entity was from an attribute or element so just assume element
+                    // no way to tell if the entity was from an attribute or element so just assume element
                     getCurrentElement().addContent(entity);
                 }
                 suppress = true;
@@ -874,7 +879,6 @@ if (!inDTD) {
 
         String commentText = new String(ch, start, length);
         if (inDTD && inInternalSubset && (expand == false)) {
-            // String comment = new String(ch, start, length);
             buffer.append("  <!--")
                   .append(commentText)
                   .append("-->\n");
@@ -900,7 +904,7 @@ if (!inDTD) {
      * @param publicID the public ID of the notation
      * @param systemID the system ID of the notation
      */
-    public void notationDecl(String name, String publicID, String systemID) 
+    public void notationDecl(String name, String publicID, String systemID)
         throws SAXException {
 
         if (!inInternalSubset) return;
@@ -924,7 +928,7 @@ if (!inDTD) {
      */
     public void unparsedEntityDecl(String name, String publicId,
                                    String systemId, String notationName)
-        throws SAXException { 
+        throws SAXException {
 
         if (!inInternalSubset) return;
 
@@ -1024,4 +1028,3 @@ if (!inDTD) {
         return locator;
     }
 }
-

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.21 2001/08/16 00:22:41 bmclaugh Exp $
+ $Id: ProcessingInstruction.java,v 1.22 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import java.util.StringTokenizer;
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.21 $ $Date: 2001/08/16 00:22:41 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.22 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -599,35 +599,4 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         return pi;
     }
 
-    /**
-     * <p>
-     *  This will return the <code>ProcessingInstruction</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>ProcessingInstruction</code>.
-     *
-     * @deprecated Deprecated in Beta7, use
-     * XMLOutputter.outputString(ProcessingInstruction) instead
-     */
-    public final String getSerializedForm() {
-        // Return <?target data?> or if no data then just <?target?>
-        if (!"".equals(rawData)) {
-            return new StringBuffer()
-                .append("<?")
-                .append(target)
-                .append(" ")
-                .append(rawData)
-                .append("?>")
-                .toString();
-        }
-        else {
-            return new StringBuffer()
-                .append("<?")
-                .append(target)
-                .append("?>")
-                .toString();
-        }
-    }
 }

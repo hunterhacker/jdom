@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.28 2001/05/30 20:57:39 jhunter Exp $
+ $Id: Namespace.java,v 1.29 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.28 $ $Date: 2001/05/30 20:57:39 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.29 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.15 2001/09/03 14:15:28 bmclaugh Exp $
+ $Id: DocType.java,v 1.16 2001/12/11 07:32:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import java.io.Serializable;
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.15 $ $Date: 2001/09/03 14:15:28 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.16 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -345,45 +345,6 @@ public class DocType implements Serializable, Cloneable {
         // elementName, publicID, and systemID are all immutable 
         // (Strings) and references are copied by Object.clone()
         return docType;
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>DocType</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>DocType</code>.
-     *
-     * @deprecated Deprecated in Beta7, use XMLOutputter.outputString(DocType)
-     * instead
-     */
-    public final String getSerializedForm() {
-        boolean hasPublic = false;
-
-        StringBuffer serForm = new StringBuffer()
-            .append("<!DOCTYPE ")
-            .append(elementName);
-
-        if ((publicID != null) && (!publicID.equals(""))) {
-            serForm.append(" PUBLIC \"")
-                   .append(publicID)
-                   .append("\"");
-            hasPublic = true;
-        }
-
-        if ((systemID != null) && (!systemID.equals(""))) {
-            if (!hasPublic) {
-                serForm.append(" SYSTEM");
-            }
-            serForm.append(" \"")
-                   .append(systemID)
-                   .append("\"");
-        }
-        serForm.append(">");
-
-        return serForm.toString();
     }
 
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.11 2001/04/28 01:09:45 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.12 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.

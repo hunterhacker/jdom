@@ -1,34 +1,36 @@
-/*-- 
+/*--
+
+ $Id: Text.java,v 1.8 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -44,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -59,17 +61,21 @@ import java.io.Serializable;
 /**
  * <p><code><b>Text</b></code> represents character-based content within an
  *   XML document represented by JDOM. It is intended to provide a modular,
- *   perantable method of representing that text. Additionally,
+ *   parentable method of representing that text. Additionally,
  *   <code>Text</code> makes no guarantees about the underlying textual
  *   representation of character data, but does expose that data as a Java
  *   <code>String</code>.</p>
  *
  * @author Brett McLaughlin
+ * @author Bradley S. Huffman
  * @version 1.0
  */
 public class Text implements Serializable, Cloneable {
 
-    /** The actual character content */ 
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.8 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+
+    /** The actual character content */
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8776
     // from Alex Rosen for a reason why String might be better
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612
@@ -80,7 +86,7 @@ public class Text implements Serializable, Cloneable {
     /** This <code>Text</code> node's parent. */
     protected Element parent;
 
-    /** 
+    /**
      * <p>This is the protected, no-args constructor standard in all JDOM
      *  classes. It allows subclassers to get a raw instance with no
      *  initialization.</p>
@@ -89,12 +95,12 @@ public class Text implements Serializable, Cloneable {
 
     /**
      * <p>This constructor creates a new <code>Text</code> node, with the
-     *   supplied value as it's character content.</p>
+     *   supplied string value as it's character content.</p>
      *
-     * @param stringValue the node's character content.
+     * @param str the node's character content.
      */
-    public Text(String stringValue) {
-        value = new StringBuffer(stringValue);
+    public Text(String str) {
+        setText(str);
     }
 
     /**
@@ -103,35 +109,117 @@ public class Text implements Serializable, Cloneable {
      *
      * @return <code>String</code> - character content of this node.
      */
-    public String getValue() {
+    public String getText() {
         return value.toString();
     }
 
     /**
-     * <p>This will set the value of this <code>Text</code> node.
+     * <p>
+     * This returns the textual content with all surrounding whitespace
+     * removed.  If only whitespace exists, the empty string is returned.
+     * </p>
      *
-     * @param stringValue value for node's content.
+     * @return trimmed text content or empty string
      */
-    public void setValue(String stringValue) {
-        value.setLength(0);
-        if (stringValue == null) {
-            value.append("");
-        } else {
-            value.append(stringValue);
+    public String getTextTrim() {
+        return getText().trim();
+    }
+
+    /**
+     * <p>
+     * This returns the textual content with all surrounding whitespace
+     * removed and internal whitespace normalized to a single space.  If
+     * only whitespace exists, the empty string is returned.
+     * </p>
+     *
+     * @return normalized text content or empty string
+     */
+    public String getTextNormalize() {
+        return normalizeString(getText());
+    }
+
+    /**
+     * <p>
+     * This returns a new string with all surrounding whitespace
+     * removed and internal whitespace normalized to a single space.  If
+     * only whitespace exists, the empty string is returned.
+     * </p>
+     * <p>
+     * Per XML 1.0 Production 3 whitespace includes: #x20, #x9, #xD, #xA
+     * </p>
+     *
+     * @param str string to be normalized.
+     * @return normalized string or empty string
+     */
+    public static String normalizeString(String str) {
+        if (str == null)
+            return null; /* XXX or should it return "" */
+
+        char[] c = str.toCharArray();
+        char[] n = new char[c.length];
+        boolean white = true;
+        int pos = 0;
+        for (int i = 0; i < c.length; i++) {
+            if (" \t\n\r".indexOf(c[i]) != -1) {
+                if (!white) {
+                    n[pos++] = ' ';
+                    white = true;
+                }
+            }
+            else {
+                n[pos++] = c[i];
+                white = false;
+            }
         }
+        if (white && pos > 0) {
+            pos--;
+        }
+        return new String(n, 0, pos);
+    }
+
+    /**
+     * <p>This will set the value of this <code>Text</code> node.</p>
+     *
+     * @param str value for node's content.
+     */
+    public Text setText(String str) {
+        value = new StringBuffer();          /* Clear old text */
+        if (str == null)
+            return this;
+        append(str);        /* so we get the Verifier check */
+        return this;
     }
 
     /**
      * <p>This will append character content to whatever content already
      *   exists within this <code>Text</code> node.</p>
      *
-     * @param stringValue character content to append.
+     * @param str character content to append.
      */
-    public void append(String stringValue) {
-        if (stringValue == null) {
+    public void append(String str) {
+        String reason;
+
+        if (str == null) {
             return;
         }
-        value.append(stringValue);
+        if ((reason = Verifier.checkCharacterData(str)) != null) {
+            throw new IllegalDataException(str, "character content", reason);
+        }
+
+        value.append(str);
+    }
+
+    /**
+     * <p>This will append the content of another <code>Text</code> node
+     *   to this node.</p>
+     *
+     * @param text Text node to append.
+     */
+    public void append(Text text) {
+        if (text == null) {
+            return;
+        }
+        value.append(text.getText());
     }
 
     /**
@@ -146,12 +234,12 @@ public class Text implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This retrieves the owning <code>{@link Document}</code> for
-     *   this Text, or null if not a currently a member of a
-     *   <code>{@link Document}</code>.
+     *   This retrieves the owning <code>{@link Document}</code> for
+     *   this <code>Text</code>, or null if not a currently a member
+     *   of a <code>{@link Document}</code>.
      * </p>
      *
-     * @return <code>Document</code> owning this Text, or null.
+     * @return <code>Document</code> owning this <code>Text</code>, or null.
      */
     public Document getDocument() {
         if (parent != null) {
@@ -165,11 +253,12 @@ public class Text implements Serializable, Cloneable {
      *   <code>{@link Element}</code>. This method is intentionally left as
      *   <code>protected</code> so that only JDOM internals use it.</p>
      * <p>If you need an instance of this <code>Text</code> node with a new
-     *   parent, you should get a copy of this node with 
+     *   parent, you should get a copy of this node with
      *   <code>{@link #clone}</code> and set it on the desired (new) parent
      *   <code>Element</code>.</p>
      *
      * @param parent parent for this node.
+     */
     protected Text setParent(Element parent) {
         this.parent = parent;
         return this;
@@ -177,13 +266,12 @@ public class Text implements Serializable, Cloneable {
 
     /**
      * <p>
-     * Detaches the text from its parent, or does nothing if the
-     * text has no parent.
+     * Detaches the <code>Text</code> from its parent, or does nothing
+     *  if the <code>Text</code> has no parent.
      * </p>
      *
      * @return <code>Text</code> - this <code>Text</code> modified.
      */
-/* Commented out til the parent knows about text, won't compile as is.
     public Text detach() {
         if (parent != null) {
             parent.removeContent(this);
@@ -191,22 +279,22 @@ public class Text implements Serializable, Cloneable {
         parent = null;
         return this;
     }
-*/
 
     /**
-     * <p>This returns a <code>String</code> representation of the 
+     * <p>This returns a <code>String</code> representation of the
      *   <code>Text</code> node, suitable for debugging. If the XML
-     *   representation of the <code>Text</code> node is desired, 
-     *   either <code>{@link #getValue}</code> or
-     *   {@link org.jdom.output.XMLOutputter#output(Text, Writer)}</code>
+     *   representation of the <code>Text</code> node is desired,
+     *   either <code>{@link #getText}</code> or
+     *   {@link org.jdom.output.XMLOutputter#outputString(Text)}</code>
      *   should be used.</p>
      *
      * @return <code>String</code> - information about this node.
      */
     public String toString() {
         return new StringBuffer(64)
-            .append("Text: ")
-            .append(getValue())
+            .append("[Text: ")
+            .append(getText())
+            .append("]")
             .toString();
     }
 
@@ -232,7 +320,7 @@ public class Text implements Serializable, Cloneable {
             text = (Text)super.clone();
         } catch (CloneNotSupportedException ce) {
             // Can't happen
-        } 
+        }
 
         text.parent = null;
         text.value = new StringBuffer(value.toString());

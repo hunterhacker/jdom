@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.16 2001/12/06 01:44:47 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.17 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -100,12 +100,13 @@ import org.jdom.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Fred Trimble
+ * @author Bradley S. Huffman
  * @version 1.0
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.16 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.17 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -966,7 +967,7 @@ public class SAXOutputter {
         boolean stringOnly =
             !empty &&
             eltContent.size() == 1 &&
-            eltContent.get(0) instanceof String;
+            eltContent.get(0) instanceof Text;
           
         if (stringOnly) {
             // contentHandler.characters()
@@ -979,9 +980,9 @@ public class SAXOutputter {
                 if (content instanceof Element) {
                     element((Element) content, namespaces);
                 }
-                else if (content instanceof String) {
+                else if (content instanceof Text) {
                     // contentHandler.characters()
-                    characters((String) content);
+                    characters(((Text) content).getText());
                 }
                 else if (content instanceof CDATA) {
                     // contentHandler.characters()

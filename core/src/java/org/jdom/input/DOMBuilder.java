@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.37 2001/07/25 21:32:19 bmclaugh Exp $
+ $Id: DOMBuilder.java,v 1.38 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,12 +86,13 @@ import org.xml.sax.*;
  * @author Kevin Regan
  * @author Yusuf Goolamabbas
  * @author Dan Schaffer
+ * @author Bradley S. Huffman
  * @version 1.0
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.37 $ $Date: 2001/07/25 21:32:19 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.38 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -472,8 +473,8 @@ public class DOMBuilder {
                 break;
 
             case Node.TEXT_NODE:
-                String text = node.getNodeValue();
-                current.addContent(text);
+                String data = node.getNodeValue();
+                current.addContent(factory.text(data));
                 break;
 
             case Node.CDATA_SECTION_NODE:

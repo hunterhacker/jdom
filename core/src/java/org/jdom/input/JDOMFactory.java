@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.3 2001/12/06 01:44:47 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.4 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,6 +69,8 @@ import java.util.Map;
  *
  * @author Ken Rune Holland
  * @author Phil Nelson
+ * @author Bradley S. Huffman
+ * @version 1.0
  */
 public interface JDOMFactory {
 
@@ -142,9 +144,21 @@ public interface JDOMFactory {
      *   text.
      * </p>
      *
-     * @param text <code>String</code> content of CDATA.
+     * @param str <code>String</code> content of CDATA.
      */
-    public CDATA cdata(String text);
+    public CDATA cdata(String str);
+
+    // **** constructing Text ****
+
+    /**
+     * <p>
+     * This creates the Text with the supplied
+     *   text.
+     * </p>
+     *
+     * @param data <code>String</code> content of Text.
+     */
+    public Text text(String str);
 
     // **** constructing Comment ****
 

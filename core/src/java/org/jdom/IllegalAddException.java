@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.13 2001/05/09 05:52:20 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.14 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,7 @@ package org.jdom;
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.13 $ $Date: 2001/05/09 05:52:20 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.14 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /**
      * <p>
@@ -201,6 +201,52 @@ public class IllegalAddException extends IllegalArgumentException {
               .toString());
     }
 
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link CDATA}</code>
+     *   supplied as content to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the comment couldn't be added to
+     * @param added CDATA that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, CDATA added, String reason) {
+        super(new StringBuffer()
+              .append("The CDATA \"")
+              .append(added.getText())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Text}</code>
+     *   supplied as content to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the comment couldn't be added to
+     * @param added Text that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, Text added, String reason) {
+        super(new StringBuffer()
+              .append("The Text \"")
+              .append(added.getText())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
     /**
      * <p>
      * This will create an <code>Exception</code> indicating
@@ -282,7 +328,7 @@ public class IllegalAddException extends IllegalArgumentException {
     public IllegalAddException(Document base, DocType added, String reason) {
         super(new StringBuffer()
               .append("The DOCTYPE ")
-              .append(added.getSerializedForm())
+              .append(added.toString())
               .append(" could not be added to the document: ")
               .append(reason)
               .toString());

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.66 2001/11/26 14:53:28 bmclaugh Exp $
+ $Id: XMLOutputter.java,v 1.67 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -107,12 +107,13 @@ import org.jdom.*;
  * @author David &amp; Will (from Post Tool Design)
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
+ * @author Bradley S. Huffman
  * @version 1.0 
  */
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.66 $ $Date: 2001/11/26 14:53:28 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.67 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -358,21 +359,6 @@ public class XMLOutputter implements Cloneable {
      **/
     public void setTextNormalize(boolean textNormalize) {
         this.textNormalize = textNormalize;
-    }
-
-    /**
-     * <p> This will set whether the text is output verbatim (false)
-     *  or with whitespace stripped.<p>
-     *
-     * <p>Default: false </p>
-     *
-     * @param trimText <code>boolean</code> true=>trim the whitespace, 
-     * false=>use text verbatim
-     *
-     * @deprecated Deprecated in beta7, use setTextNormalize() instead
-     **/
-    public void setTrimText(boolean textTrim) {
-        this.textNormalize = textTrim;
     }
 
     /**
@@ -721,7 +707,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      **/
     public void output(Text text, Writer out) throws IOException {
-        printString(text.getValue(), out);
+        printString(text.getText(), out);
         out.flush();
     }
 
@@ -1072,6 +1058,20 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
+     * This will handle printing out an <code>{@link Text}</code>,
+     *   and its value.
+     * </p>
+     *
+     * @param text <code>Text</code> to output.
+     * @param out <code>Writer</code> to write to.
+     */
+    protected void printText(Text text, Writer out)
+                                       throws IOException {
+        printString(text.getText(),out);
+    }
+
+    /**
+     * <p>
      * This will handle printing out an <code>{@link Element}</code>,
      *   its <code>{@link Attribute}</code>s, and its value.
      * </p>
@@ -1112,7 +1112,7 @@ public class XMLOutputter implements Cloneable {
         Iterator itr = eltContent.iterator();
         while (itr.hasNext()) {
             Object o = itr.next();
-            if (!(o instanceof String) && !(o instanceof CDATA)) {
+            if (!(o instanceof Text) && !(o instanceof CDATA)) {
                 stringOnly = false;
                 break;
             }
@@ -1186,8 +1186,8 @@ public class XMLOutputter implements Cloneable {
             Iterator itr = eltContent.iterator();
             while (itr.hasNext()) {
                 Object content = itr.next();
-                if (content instanceof String) {
-                    String scontent = (String) content;
+                if (content instanceof Text) {
+                    String scontent = ((Text) content).getText();
                     if ((justOutput == CDATA.class) && 
                         (textNormalize) &&
                         (startsWithWhite(scontent))) {
@@ -1223,8 +1223,8 @@ public class XMLOutputter implements Cloneable {
                     }
                     printComment((Comment) content, out);
                     justOutput = Comment.class;
-                } else if (content instanceof String) {
-                    String scontent = (String) content;
+                } else if (content instanceof Text) {
+                    String scontent = ((Text) content).getText();
 
      // bugfix: don't print lines for whitespace that's
      // only sticking between close tags
@@ -1649,7 +1649,7 @@ public class XMLOutputter implements Cloneable {
         Iterator itr = eltContent.iterator();
         while (itr.hasNext()) {
             Object o = itr.next();
-            if (!(o instanceof String) && !(o instanceof CDATA)) {
+            if (!(o instanceof Text) && !(o instanceof CDATA)) {
                 return false;
             }
         }
@@ -1714,37 +1714,4 @@ public class XMLOutputter implements Cloneable {
        extends org.jdom.output.NamespaceStack
     {
     }
-
-    /**
-     * <p> Ensure that text immediately preceded by or followed by an
-     * element will be "padded" with a single space.  </p>
-     * 
-     * @deprecated Deprecated in beta7, because this is no longer necessary
-     */
-    public void setPadText(boolean padText) { }
-
-    /**
-     * Set the initial indentation level.  
-     *
-     * @deprecated Deprecated in beta7, because this is better done with a
-     *             stacked FilterOutputStream
-     */
-    public void setIndentLevel(int indentLevel) { }
-
-    /**
-     * <p>
-     *  This will set whether the XML declaration 
-     *  (<code>&lt;?xml version="1.0"?&gt;</code>)
-     *  will be suppressed or not. It is common to suppress this in uses such
-     *  as SOAP and XML-RPC calls.
-     * </p>
-     *
-     * @param suppressDeclaration <code>boolean</code> indicating whether or not
-     *        the XML declaration should be suppressed.
-     * @deprecated Deprecated in beta7, use setOmitDeclaration() instead
-     */
-    public void setSuppressDeclaration(boolean suppressDeclaration) {
-        this.omitDeclaration = suppressDeclaration;
-    }
-
 }

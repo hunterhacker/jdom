@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: BuilderErrorHandler.java,v 1.5 2001/04/27 18:21:21 jhunter Exp $
+ $Id: BuilderErrorHandler.java,v 1.6 2001/12/11 07:32:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -61,7 +61,7 @@ import org.xml.sax.*;
 public class BuilderErrorHandler implements ErrorHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.5 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.6 $ $Date: 2001/12/11 07:32:05 $ $Name:  $";
 
     /**
      * <p>

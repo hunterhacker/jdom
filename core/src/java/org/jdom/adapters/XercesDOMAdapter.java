@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XercesDOMAdapter.java,v 1.8 2001/04/27 18:21:20 jhunter Exp $
+ $Id: XercesDOMAdapter.java,v 1.9 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,7 +84,7 @@ import org.jdom.input.BuilderErrorHandler;
 public class XercesDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.8 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.9 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /**
      * <p>

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.3 2001/06/26 03:55:08 jhunter Exp $
+ $Id: EntityRef.java,v 1.4 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,7 @@ import java.io.Serializable;
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.3 $ $Date: 2001/06/26 03:55:08 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.4 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;

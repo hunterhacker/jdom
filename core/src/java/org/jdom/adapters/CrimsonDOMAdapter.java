@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CrimsonDOMAdapter.java,v 1.6 2001/04/27 18:21:20 jhunter Exp $
+ $Id: CrimsonDOMAdapter.java,v 1.7 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.SAXParseException;
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.6 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.7 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /**
      * <p>

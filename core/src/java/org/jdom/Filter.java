@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalTargetException.java,v 1.7 2001/12/11 07:32:04 jhunter Exp $
+ $Id: Filter.java,v 1.1 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -36,8 +36,8 @@
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
- CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
  USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -56,56 +56,64 @@
 
 package org.jdom;
 
+import java.util.List;
+
 /**
- * <p><code>IllegalTargetException</code>
- *   is thrown when a target is supplied in construction, etc.,
- *   of a JDOM <code>{@link ProcessingInstruction}</code>, and that name breaks
- *   XML naming conventions.
+ * <p>
+ * Classes which wish to modify the behaviour of the FilterList
+ * can implement the list filter interface in order to reduce
+ * the visibility of certain items in the list, or to restrict
+ * the mutability of the list.
  * </p>
  *
- * @author Brett McLaughlin
- * @version 1.0
+ * @author Jools Enticknap
+ * @version 0.01
  */
-public class IllegalTargetException extends IllegalArgumentException {
-
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.7 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+public interface Filter {
+    /**
+     * <p>
+     * Check to see if the object matches a predefined set of rules.
+     * </p>
+     *
+     * @param obj The object to verify.
+     * @return <code>true</code> if the object matches a predfined 
+     *           set of rules.
+     */
+    public boolean matches(Object obj);
 
     /**
      * <p>
-     * This will create an <code>Exception</code> indicating
-     *   that the specified target is illegal for the
-     *   <code>{@link ProcessingInstruction}</code> it was supplied to.
+     * Returns true if matches() will always return true.
      * </p>
      *
-     * @param target <code>String</code> target that breaks rules.
-     * @param reason <code>String</code> message or reason target is illegal.
+     * @return <code>true</code> if this filter matches all objects.
      */
-    public IllegalTargetException(String target, String reason) {
-        super(new StringBuffer()
-              .append("The target \"")
-              .append(target)
-              .append("\" is not legal for JDOM/XML Processing Instructions: ")
-              .append(reason)
-              .append(".")
-              .toString());
-    }
+    public boolean matchesAll();
 
     /**
      * <p>
-     * This will create an <code>Exception</code> indicating
-     *   that the specified target is illegal for the
-     *   <code>{@link ProcessingInstruction}</code> it was supplied to.
+     * Check to see if the object can be added to the list.
      * </p>
      *
-     * @param target <code>String</code> target that breaks rules.
+     * @param obj The object to verify.
+     * @return <code>true</code> if the object can be added.
      */
-    public IllegalTargetException(String target) {
-        super(new StringBuffer()
-              .append("The name \"")
-              .append(target)
-              .append("\" is not legal for JDOM/XML Processing Instructions.")
-              .toString());
-    }
+    public boolean canAdd(Object obj);
 
+    /**
+     * <p>
+     * Check to see if the object can be removed from the list.
+     * </p>
+     *
+     * @param obj The object to verify.
+     * @return <code>true</code> if the object can be removed.
+     */
+    public boolean canRemove(Object obj);
+
+    /**
+     * <p>
+     * Create the backing list for this filter. Called by the FilterList
+     * if the backing list is null, and a modification method has been called.
+     */
+    public List getBackingList(boolean create);
 }

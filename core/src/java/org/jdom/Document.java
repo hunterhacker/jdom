@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.47 2001/12/06 02:24:14 jhunter Exp $
+ $Id: Document.java,v 1.48 2001/12/11 07:32:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,12 +68,13 @@ import java.util.*;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Jools Enticknap
  * @version 1.0
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.47 $ $Date: 2001/12/06 02:24:14 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.48 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -337,7 +338,10 @@ public class Document implements Serializable, Cloneable {
      * @return <code>List</code> - all Document content
      */
     public List getContent() {
-        // XXX This should be a PartialList/FilterList
+        return new FilterList(new DocumentContentFilter(this));
+    }
+
+    List getContentBackingList() {
         return content;
     }
 
@@ -604,225 +608,5 @@ public class Document implements Serializable, Cloneable {
         } else {
             return false;
         }
-    }
-
-
-    // Deprecated below here
-
-    /**
-     * <p>
-     *  This will return the <code>Document</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Document</code>.
-     * @throws RuntimeException always! This method is not yet
-     *         implemented. It is also deprecated as of beta 7.
-     *
-     * @deprecated Deprecated in beta7, use
-     * XMLOutputter.outputString(Document) instead
-     */
-    public final String getSerializedForm() {
-        throw new RuntimeException(
-          "Document.getSerializedForm() is not yet implemented");
-    }
-
-    /**
-     * <p>
-     * This will return the list of
-     *   <code>{@link ProcessingInstruction}</code>s
-     *   for this <code>Document</code> located at the document level 
-     *   (outside the root element).
-     * The returned list is "live" in document order and changes to it 
-     * affect the document's actual content.
-     * </p>
-     *
-     * @return <code>List</code> - PIs for document.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and examine for
-     * PIs manually
-     */
-    public List getProcessingInstructions() {
-        PartialList pis = new PartialList(content);
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                pis.addPartial(obj);
-            }
-        }
-
-        return pis;
-    }
-
-    /**
-     * <p>
-     * This returns the processing instructions for this
-     *   <code>Document</code> located at the document level
-     *   (outside the root element) which have the supplied target.
-     * The returned list is "live" in document order and changes to it 
-     * affect the document's actual content.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to return.
-     * @return <code>List</code> - all PIs with the specified
-     *         target.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and examine for
-     * PIs manually
-     */
-    public List getProcessingInstructions(String target) {
-        PartialList pis = new PartialList(content);
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
-                    pis.addPartial(obj);
-                }
-            }
-        }
-
-        return pis;
-    }
-
-    /**
-     * <p>
-     * This returns the first processing instruction for this
-     *   <code>Document</code> located at the document level 
-     *   (outside the root element) for the supplied target, or null if
-     *   no such processing instruction exists.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to return.
-     * @return <code>ProcessingInstruction</code> - the first PI
-     *         with the specified target, or null if no such PI exists.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and examine for
-     * PIs manually
-     */
-    public ProcessingInstruction getProcessingInstruction(String target) {
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
-                    return (ProcessingInstruction)obj;
-                }
-            }
-        }
-
-        // If we got here, none found
-        return null;
-    }
-
-    /**
-     * <p>
-     * This will remove the first PI with the specified target.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to remove.
-     * @return <code>boolean</code> - whether the requested PI was removed.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and remove
-     * PIs manually
-     */
-    public boolean removeProcessingInstruction(String target) {
-        ProcessingInstruction pi = getProcessingInstruction(target);
-        if (pi == null) {
-            return false;
-        }
-        else {
-            return removeContent(pi);
-        }
-    }
-
-    /**
-     * <p>
-     * This will remove all PIs with the specified target.
-     * </p>
-     *
-     * @param target <code>String</code> target of PI to remove.
-     * @return <code>boolean</code> - whether the requested PIs were removed.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and remove
-     * PIs manually
-     */
-    public boolean removeProcessingInstructions(String target) {
-        boolean deletedSome = false;
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof ProcessingInstruction) {
-                ProcessingInstruction pi = (ProcessingInstruction)obj;
-                if (pi.getTarget().equals(target)) {
-                    deletedSome = true;
-                    i.remove();
-                    pi.setDocument(null);
-                }
-            }
-        }
-        return deletedSome;
-    }
-
-    /**
-     * <p>
-     * This sets the PIs for this <code>Document</code> to those in the
-     *   <code>List</code supplied (removing all other PIs).
-     * </p>
-     *
-     * @param pis <code>List</code> of PIs to use.
-     * @return <code>Document</code> - this Document modified.
-     *
-     * @deprecated Deprecated in beta7, use getContent() and add
-     * PIs manually
-     */
-    public Document setProcessingInstructions(List pis) {
-        // XXX Sanity check List contains only parentless and documentless PIs
-
-        List current = getProcessingInstructions();
-        for (Iterator i = current.iterator(); i.hasNext(); ) {
-            i.remove();
-        }
-
-        content.addAll(pis);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * This will return all content for the <code>Document</code>.
-     * The returned list is "live" in document order and changes to it 
-     * affect the document's actual content.
-     * </p>
-     *
-     * @return <code>List</code> - all Document content
-     *
-     * @deprecated Deprecated in beta7, use getContent() instead
-     */
-    public List getMixedContent() {
-        return getContent();
-    }
-
-    /**
-     * <p>
-     * This will set all content for the <code>Document</code>.
-     * The List may contain only objects of type Element, Comment, and
-     * ProcessingInstruction; and only one Element that becomes the root.
-     * In event of an exception the original content will be unchanged
-     * and the items in the added content will be unaltered.
-     * </p>
-     *
-     * @param content the new mixed content
-     * @return the modified Document
-     * @throws IllegalAddException if the List contains more than
-     *         one Element or objects of illegal types.
-     *
-     * @deprecated Deprecated in beta7, use setContent(List) instead
-     */
-    public Document setMixedContent(List mixedContent) {
-        return setContent(mixedContent);
     }
 }

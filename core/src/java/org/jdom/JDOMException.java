@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.9 2001/08/02 00:07:11 bmclaugh Exp $
+ $Id: JDOMException.java,v 1.10 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.SAXException;
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.9 $ $Date: 2001/08/02 00:07:11 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.10 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;
@@ -290,21 +290,6 @@ public class JDOMException extends Exception {
      * @return <code>Throwable</code> - the wrapped <code>Throwable</code>.
      */
     public Throwable getCause()  {
-        return cause;             
-    }
-
-    /**
-     * <p>
-     * This will return the root cause <code>Throwable</code>, or null
-     *   if one does not exist.
-     * </p>
-     * 
-     * @return <code>Throwable</code> - the wrapped <code>Throwable</code>.
-     *
-     * @deprecated Deprecated in beta7, use getCause() instead which follows
-     * the JDK 1.4 naming convention
-     */
-    public Throwable getRootCause()  {
         return cause;             
     }
 

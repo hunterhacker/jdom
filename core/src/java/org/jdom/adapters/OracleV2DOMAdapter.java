@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: OracleV2DOMAdapter.java,v 1.7 2001/04/27 18:21:20 jhunter Exp $
+ $Id: OracleV2DOMAdapter.java,v 1.8 2001/12/11 07:32:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,7 +80,7 @@ import org.xml.sax.SAXParseException;
 public class OracleV2DOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.7 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.8 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
 
     /**
      * <p>

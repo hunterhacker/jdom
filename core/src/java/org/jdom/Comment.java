@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.17 2001/05/08 22:23:55 jhunter Exp $
+ $Id: Comment.java,v 1.18 2001/12/11 07:32:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,7 +72,7 @@ import java.io.Serializable;
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.17 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.18 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
@@ -290,25 +290,4 @@ public class Comment implements Serializable, Cloneable {
         comment.document = null;
         return comment;
     }
-
-    /**
-     * <p>
-     *  This will return the <code>Comment</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Comment</code>.
-     *
-     * @deprecated Deprecated in beta7, use XMLOutputter.outputString(Comment)
-     * instead
-     */
-    public final String getSerializedForm() {
-        return new StringBuffer()
-            .append("<!--")
-            .append(text)
-            .append("-->")
-            .toString();
-    }
-
 }
