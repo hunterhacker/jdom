@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.11 2002/01/08 09:17:10 jhunter Exp $
+ $Id: JDOMException.java,v 1.12 2002/04/08 09:17:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.xml.sax.SAXException;
  * <p>
  * This <code>Exception</code> subclass is the top level
  *   <code>Exception</code> that JDOM classes
- *   can throw.  It's subclasses add specificity to the 
+ *   can throw.  Its subclasses add specificity to the 
  *   problems that can occur using JDOM, but this single
  *   <code>Exception</code> can be caught to handle all
  *   JDOM specific problems.
@@ -78,12 +78,12 @@ import org.xml.sax.SAXException;
  * 
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.11 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.12 $, $Date: 2002/04/08 09:17:58 $
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.11 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.12 $ $Date: 2002/04/08 09:17:58 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;
