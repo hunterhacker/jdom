@@ -707,7 +707,7 @@ public class Element implements Serializable, Cloneable {
      * and changes to it affect the element's actual contents.
      * </p>
      * <p>
-     * This performs no recursion, so an elements nested two levels
+     * This performs no recursion, so elements nested two levels
      *   deep would have to be obtained with:
      * <pre>
      * <code>
