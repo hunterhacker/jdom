@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.13 2002/02/14 09:16:38 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.14 2002/04/09 06:38:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,6 +56,7 @@
 
 package org.jdom.adapters;
 
+import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -66,6 +67,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.DOMImplementation;
 
 import org.jdom.*;
+import org.jdom.JDOMException;
 
 /**
  * <b><code>AbstractDOMAdapter</code></b>
@@ -76,12 +78,12 @@ import org.jdom.*;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2002/02/14 09:16:38 $
+ * @version $Revision: 1.14 $, $Date: 2002/04/09 06:38:42 $
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.13 $ $Date: 2002/02/14 09:16:38 $ $Name:  $";
+      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.14 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
 
     /**
      * <p>
@@ -93,10 +95,11 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param filename file to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws Exception when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document getDocument(File filename, boolean validate)
-        throws Exception {
+        throws IOException, JDOMException {
 
         return getDocument(new FileInputStream(filename), validate);
     }
@@ -111,10 +114,11 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws Exception when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public abstract Document getDocument(InputStream in, boolean validate)
-        throws Exception;
+        throws IOException, JDOMException;
 
     /**
      * <p>
@@ -123,9 +127,9 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws Exception when errors occur.
+     * @throws JDOMException when errors occur.
      */
-    public abstract Document createDocument() throws Exception;
+    public abstract Document createDocument() throws JDOMException;
 
     /**
      * <p>
@@ -137,9 +141,9 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      *
      * @param doctype Initial <code>DocType</code> of the document.
      * @return <code>Document</code> - created DOM Document.
-     * @throws Exception when errors occur.
+     * @throws JDOMException when errors occur.
      */
-    public Document createDocument(DocType doctype) throws Exception {
+    public Document createDocument(DocType doctype) throws JDOMException {
         if (doctype == null) {
             return createDocument();
         }

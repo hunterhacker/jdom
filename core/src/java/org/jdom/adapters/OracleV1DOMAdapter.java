@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: OracleV1DOMAdapter.java,v 1.11 2002/01/08 09:17:10 jhunter Exp $
+ $Id: OracleV1DOMAdapter.java,v 1.12 2002/04/09 06:38:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -66,6 +66,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
+import org.jdom.JDOMException;
+
 /**
  * <b><code>OracleV1DOMAdapter</code></b>
  * <p>
@@ -75,12 +77,12 @@ import org.xml.sax.SAXParseException;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.11 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.12 $, $Date: 2002/04/09 06:38:42 $
  */
 public class OracleV1DOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV1DOMAdapter.java,v $ $Revision: 1.11 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: OracleV1DOMAdapter.java,v $ $Revision: 1.12 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
 
     /**
      * <p>
@@ -92,10 +94,11 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document getDocument(InputStream in, boolean validate)
-        throws IOException  {
+        throws IOException, JDOMException  {
 
         try {
             // Load the parser class
@@ -120,15 +123,18 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
             if (targetException instanceof org.xml.sax.SAXParseException) {
-                SAXParseException parseException = (SAXParseException)targetException;
-                throw new IOException("Error on line " + parseException.getLineNumber() +
-                                      " of XML document: " + parseException.getMessage());
+                SAXParseException parseException = (SAXParseException) targetException;
+                throw new JDOMException("Error on line " + parseException.getLineNumber() +
+                                      " of XML document: " + parseException.getMessage(), parseException);
+            } else if (targetException instanceof IOException) {
+                IOException ioException = (IOException) targetException;
+                throw ioException;
             } else {
-                throw new IOException(targetException.getMessage());
+                throw new JDOMException(targetException.getMessage(), targetException);
             }
         } catch (Exception e) {
-            throw new IOException(e.getClass().getName() + ": " +
-                                  e.getMessage());
+            throw new JDOMException(e.getClass().getName() + ": " +
+                                  e.getMessage(), e);
         }
     }
 
@@ -139,9 +145,9 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws IOException when errors occur.
+     * @throws JDOMException when errors occur.
      */
-    public Document createDocument() throws IOException {
+    public Document createDocument() throws JDOMException {
         try {
             return
                 (Document)Class.forName(
@@ -149,8 +155,8 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
                     .newInstance();
 
         } catch (Exception e) {
-            throw new IOException(e.getClass().getName() + ": " +
-                                  e.getMessage());
+            throw new JDOMException(e.getClass().getName() + ": " +
+                                  e.getMessage() + " when creating document", e);
         }
     }
 }

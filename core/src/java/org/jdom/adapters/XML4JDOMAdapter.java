@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XML4JDOMAdapter.java,v 1.9 2002/01/08 09:17:10 jhunter Exp $
+ $Id: XML4JDOMAdapter.java,v 1.10 2002/04/09 06:38:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,6 +69,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import org.jdom.input.BuilderErrorHandler;
+import org.jdom.JDOMException;
 
 /**
  * <b><code>XML4JDOMAdapter</code></b>
@@ -79,12 +80,12 @@ import org.jdom.input.BuilderErrorHandler;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/09 06:38:42 $
  */
 public class XML4JDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.9 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.10 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
 
     /**
      * <p>
@@ -166,7 +167,7 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws IOException when errors occur.
      */
-    public Document createDocument() throws IOException {
+    public Document createDocument() throws JDOMException {
         try {
             return
                 (Document)Class.forName(
@@ -174,8 +175,8 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
                     .newInstance();
 
         } catch (Exception e) {
-            throw new IOException(e.getClass().getName() + ": " +
-                                  e.getMessage());
+            throw new JDOMException(e.getClass().getName() + ": " +
+                                    e.getMessage());
         }
     }
 }

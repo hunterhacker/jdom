@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.13 2002/01/08 09:17:10 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.14 2002/04/09 06:38:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,6 +56,7 @@
 
 package org.jdom.adapters;
 
+import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -63,6 +64,7 @@ import java.io.InputStream;
 import org.w3c.dom.Document;
 
 import org.jdom.DocType;
+import org.jdom.JDOMException;
 
 /**
  * <b><code>DOMAdapter</code></b>
@@ -73,7 +75,7 @@ import org.jdom.DocType;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revison$, $Date: 2002/01/08 09:17:10 $
+ * @version $Revison$, $Date: 2002/04/09 06:38:42 $
  */
 public interface DOMAdapter {
 
@@ -87,10 +89,11 @@ public interface DOMAdapter {
      * @param validate <code>boolean</code> to indicate if validation 
      * should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws Exception when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document getDocument(File filename, boolean validate)
-        throws Exception;
+        throws IOException, JDOMException;
 
     /**
      * <p>
@@ -103,10 +106,11 @@ public interface DOMAdapter {
      * @param validate <code>boolean</code> to indicate if validation 
      * should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws Exception when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document getDocument(InputStream in, boolean validate)
-        throws Exception;
+        throws IOException, JDOMException;
 
     /**
      * <p>
@@ -117,7 +121,7 @@ public interface DOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws Exception when errors occur.
      */
-    public Document createDocument() throws Exception;
+    public Document createDocument() throws JDOMException;
 
     /**
      * <p>
@@ -129,5 +133,5 @@ public interface DOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws Exception when errors occur.
      */
-    public Document createDocument(DocType doctype) throws Exception;
+    public Document createDocument(DocType doctype) throws JDOMException;
 }

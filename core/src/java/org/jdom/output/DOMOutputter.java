@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.28 2002/02/12 06:15:21 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.29 2002/04/09 06:38:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import org.w3c.dom.DOMImplementation;
  * @author Dan Schaffer
  * @author Yusuf Goolamabbas
  * @author Bradley S. Huffman
- * @version $Revision: 1.28 $, $Date: 2002/02/12 06:15:21 $
+ * @version $Revision: 1.29 $, $Date: 2002/04/09 06:38:42 $
  */
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.28 $ $Date: 2002/02/12 06:15:21 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.29 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -206,12 +206,12 @@ public class DOMOutputter {
     }
 
     private org.w3c.dom.Document createDOMDocument()
-                                       throws Throwable {
+                                       throws JDOMException {
         return createDOMDocument(null);
     }
 
     private org.w3c.dom.Document createDOMDocument(DocType dt)
-                                       throws Throwable {
+                                       throws JDOMException {
         if (adapterClass != null) {
             // The user knows that they want to use a particular impl
             try {
@@ -221,6 +221,12 @@ public class DOMOutputter {
                 return adapter.createDocument(dt);
             }
             catch (ClassNotFoundException e) {
+                // e.printStackTrace();
+            }
+            catch (IllegalAccessException e) {
+                // e.printStackTrace();
+            }
+            catch (InstantiationException e) {
                 // e.printStackTrace();
             }
         }
@@ -236,14 +242,11 @@ public class DOMOutputter {
             catch (ClassNotFoundException e) {
                 // e.printStackTrace();
             }
-            catch (NoSuchMethodException e) {
-                // e.printStackTrace();
-            }
             catch (IllegalAccessException e) {
                 // e.printStackTrace();
             }
-            catch (InvocationTargetException ite) {
-                throw ite.getTargetException(); // throw the root cause
+            catch (InstantiationException e) {
+                // e.printStackTrace();
             }
         }
 
@@ -258,8 +261,15 @@ public class DOMOutputter {
         catch (ClassNotFoundException e) {
             // e.printStackTrace();
         }
+        catch (IllegalAccessException e) {
+            // e.printStackTrace();
+        }
+        catch (InstantiationException e) {
+            // e.printStackTrace();
+        }
 
-        throw new Exception("No JAXP or default parser available");
+        throw new JDOMException("No JAXP or default parser available");
+        
     }
 
     protected org.w3c.dom.Element output(Element element,
