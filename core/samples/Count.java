@@ -89,17 +89,6 @@ public class Count {
                 org.w3c.dom.Document domDocument = domOutputter.output(doc);
                  */
 
-                /*
-                 * Test getting DOM Element from JDOM Element
-                 */
-                org.w3c.dom.Element domElement = domOutputter.output(jdomDocument.getRootElement());
-
-                /*
-                 * Test getting JDOM Element from DOM Element
-                 */
-                org.jdom.Element jdomElement = domBuilder.build(domElement);
-                count(jdomElement);
-
             } catch (JDOMException e) { // indicates a well-formedness or other error
                 System.out.println(args[i] + " is not a well formed XML document.");
                 System.out.println(e.getMessage());

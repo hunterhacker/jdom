@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.94 2003/05/02 00:52:58 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.95 2003/05/02 01:08:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -171,7 +171,7 @@ import org.jdom.*;
  * xml:space with the value "default" formatting is turned back on for the child
  * element and then off for the remainder of the parent element.
  *
- * @version $Revision: 1.94 $, $Date: 2003/05/02 00:52:58 $
+ * @version $Revision: 1.95 $, $Date: 2003/05/02 01:08:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -186,7 +186,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.94 $ $Date: 2003/05/02 00:52:58 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.95 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1872,98 +1872,6 @@ public class XMLOutputter implements Cloneable {
     }
 
     // * * * * * * * * * * Deprecated methods * * * * * * * * * *
-    // * * * * * * * * * * Deprecated methods * * * * * * * * * *
-
-    /**
-     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
-     *
-     * @param string <code>String</code> to output.
-     * @param out <code>OutputStream</code> to use.
-     * @deprecated Deprecated in beta8, see {@link #output(Text,OutputStream)}
-     */
-    public void output(String string, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(string, writer);  // output() flushes
-    }
-
-    /**
-     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.
-     *
-     * @param string <code>String</code> to output.
-     * @param out <code>Writer</code> to use.
-     * @deprecated Deprecated in beta8, see {@link #output(Text,Writer)}
-     */
-    public void output(String string, Writer out) throws IOException {
-        printString(string, out);
-        out.flush();
-    }
-
-    /**
-     * Set the indent on or off, newlines must be set to <code>true</code>
-     * for indentation to actually occur.  If setting on, will use the
-     * value of STANDARD_INDENT, which is usually two spaces.
-     *
-     * @param doIndent if true, set indenting on; if false, set indenting off
-     * @deprecated Deprecated in beta9, use setIndent(String) instead
-     */
-    public void setIndent(boolean doIndent) {
-        if (doIndent) {
-            defaultFormat.indent = STANDARD_INDENT;
-        }
-        else {
-            defaultFormat.indent = null;
-        }
-    }
-
-    /**
-     * This will set the indent <code>String</code>'s size; a size
-     * of 4 would result in the indentation being equivalent to the
-     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
-     *
-     * @param size <code>int</code> number of spaces in indentation.
-     * @deprecated Deprecated in beta9, use setIndent(String) instead
-     */
-    public void setIndent(int size) {
-        setIndentSize(size);
-    }
-
-    /**
-     * This will set the indent <code>String</code>'s size; an indentSize
-     * of 4 would result in the indentation being equivalent to the
-     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
-     *
-     * @param indentSize <code>int</code> number of spaces in indentation.
-     * @deprecated Deprecated in beta9, use setIndent(String) instead
-     */
-    public void setIndentSize(int indentSize) {
-        StringBuffer indentBuffer = new StringBuffer();
-        for (int i=0; i<indentSize; i++) {
-            indentBuffer.append(" ");
-        }
-        defaultFormat.indent = indentBuffer.toString();
-    }
-
-    /**
-     * Return a string representing (with trimming, normalization, and
-     * escaping possibly applied) a <code>String</code>. Warning: a
-     * String is Unicode, which may not match the outputter's specified
-     * encoding.
-     *
-     * @param str <code>String</code> to format.
-     * @deprecated Deprecated in beta9, use {@link #outputString(Text)} instead
-     */
-    public String outputString(String str) {
-        StringWriter out = new StringWriter();
-        try {
-            output(str, out);  // output() flushes
-        }
-        catch (IOException e) {
-        }
-        return out.toString();
-    }
-
 
     /**
      * Handle common charsets quickly and easily.  Use reflection

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.51 2003/04/30 09:55:13 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.52 2003/05/02 01:08:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.xml.sax.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.51 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.52 $, $Date: 2003/05/02 01:08:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -83,16 +83,13 @@ import org.xml.sax.*;
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.51 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.52 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
       */
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";
-
-    /** Whether validation should occur */
-    private boolean validate;
 
     /** Adapter class to use */
     private String adapterClass;
@@ -106,23 +103,6 @@ public class DOMBuilder {
      * The underlying parser will not validate.
      */
     public DOMBuilder() {
-        this(false);
-    }
-
-    /**
-     * This creates a new DOMBuilder which will attempt to first locate
-     * a parser via JAXP, then will try to use a set of default parsers.
-     * The underlying parser will validate or not according to the given
-     * parameter.
-     *
-     * @param validate <code>boolean</code> indicating if
-     *                 validation should occur.
-     * @deprecated Deprecated in Beta 9, DOMBuilder shouldn't be used for
-     *             building from files and that's the only time validation
-     *             matters
-     */
-    public DOMBuilder(boolean validate) {
-        setValidation(validate);
     }
 
     /**
@@ -134,26 +114,7 @@ public class DOMBuilder {
      *                     to use for DOM building.
      */
     public DOMBuilder(String adapterClass) {
-        this(adapterClass, false);
-    }
-
-    /**
-     * This creates a new DOMBuilder using the specified DOMAdapter
-     * implementation as a way to choose the underlying parser.
-     * The underlying parser will validate or not according to the given
-     * parameter.
-     *
-     * @param adapterClass <code>String</code> name of class
-     *                     to use for DOM building.
-     * @param validate <code>boolean</code> indicating if
-     *                 validation should occur.
-     * @deprecated Deprecated in Beta 9, DOMBuilder shouldn't be used for
-     *             building from files and that's the only time validation
-     *             matters
-     */
-    public DOMBuilder(String adapterClass, boolean validate) {
         this.adapterClass = adapterClass;
-        setValidation(validate);
     }
 
     /*
@@ -164,151 +125,6 @@ public class DOMBuilder {
      */
     public void setFactory(JDOMFactory factory) {
         this.factory = factory;
-    }
-
-    /**
-     * This sets validation for the builder.
-     *
-     * @param validate <code>boolean</code> indicating whether validation
-     * should occur.
-     * @deprecated Deprecated in Beta 9, DOMBuilder shouldn't be used for
-     *             building from files and that's the only time validation
-     *             matters
-     */
-    public void setValidation(boolean validate) {
-        this.validate = validate;
-    }
-
-    /**
-     * This builds a document from the supplied
-     * input stream by constructing a DOM tree and reading information from
-     * the DOM to create a JDOM document, a slower approach than SAXBuilder 
-     * but useful for debugging.
-     *
-     * @param in <code>InputStream</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
-     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
-     *             should be used for building from any input other than a
-     *             DOM tree
-     */
-    public Document build(InputStream in) throws JDOMException {
-        Document doc = factory.document((Element)null);
-        org.w3c.dom.Document domDoc = null;
-
-        try {
-            if (adapterClass != null) {
-                // The user knows that they want to use a particular impl
-                try {
-                    DOMAdapter adapter =
-                        (DOMAdapter)Class.forName(adapterClass).newInstance();
-                    domDoc = adapter.getDocument(in, validate);
-                    // System.out.println("using specific " + adapterClass);
-                }
-                catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                }
-            }
-            else {
-                // Try using JAXP...
-                // Ignore any exceptions that result from JAXP not existing
-                try {
-                    DOMAdapter adapter =
-                        (DOMAdapter)Class.forName(
-                        "org.jdom.adapters.JAXPDOMAdapter").newInstance();
-                    // System.out.println("using JAXP");
-                    domDoc = adapter.getDocument(in, validate);
-                }
-                catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    // e.printStackTrace();
-                }
-            }
-
-            // If we don't have a domDoc yet and there's no adapter, try
-            // the hard coded default parser
-            if (domDoc == null && adapterClass == null) {
-                try {
-                    DOMAdapter adapter = (DOMAdapter)
-                        Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
-                    domDoc = adapter.getDocument(in, validate);
-                    // System.out.println("Using default " +
-                    //   DEFAULT_ADAPTER_CLASS);
-                }
-                catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                }
-            }
-
-            // Start out at root level
-            buildTree(domDoc, doc, null, true);
-        }
-        catch (Throwable e) {
-           if (e instanceof SAXParseException) {
-                SAXParseException p = (SAXParseException)e;
-                String systemId = p.getSystemId();
-                if (systemId != null) {
-                    throw new JDOMException("Error on line " +
-                              p.getLineNumber() + " of document "
-                              + systemId, e);
-                }
-                else {
-                    throw new JDOMException("Error on line " +
-                              p.getLineNumber(), e);
-                }
-            }
-            else {
-                throw new JDOMException("Error in building from stream", e);
-            }
-        }
-        return doc;
-    }
-
-    /**
-     * This builds a document from the supplied
-     * filename by constructing a DOM tree and reading information from the
-     * DOM to create a JDOM document, a slower approach than SAXBuilder but 
-     * useful for debugging.
-     *
-     * @param file <code>File</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
-     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
-     *             should be used for building from any input other than a
-     *             DOM tree
-     */
-    public Document build(File file) throws JDOMException {
-        try {
-            FileInputStream in = new FileInputStream(file);
-            return build(in);
-        }
-        catch (FileNotFoundException e) {
-            throw new JDOMException("Error in building from " + file, e);
-        }
-    }
-
-    /**
-     * This builds a document from the supplied
-     * URL by constructing a DOM tree and reading information from the
-     * DOM to create a JDOM document, a slower approach than SAXBuilder but 
-     * useful for debugging.
-     *
-     * @param url <code>URL</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
-     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
-     *             should be used for building from any input other than a
-     *             DOM tree
-     */
-    public Document build(URL url) throws JDOMException {
-        try {
-            return build(url.openStream());
-        }
-        catch (IOException e) {
-            throw new JDOMException("Error in building from " + url, e);
-        }
     }
 
     /**

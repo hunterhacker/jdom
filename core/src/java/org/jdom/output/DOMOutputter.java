@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.34 2003/04/30 09:55:13 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.35 2003/05/02 01:08:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.34 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.35 $, $Date: 2003/05/02 01:08:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.34 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.35 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -173,26 +173,6 @@ public class DOMOutputter {
         }
 
         return domDoc;
-    }
-
-    /** 
-     * This converts the JDOM <code>Element</code> parameter to a 
-     * DOM Element, returning the DOM version.
-     *
-     * @param element <code>Element</code> to output.
-     * @return an <code>org.w3c.dom.Element</code> version
-     * @deprecated Deprecated in Beta 9, since a DOM Element should not be
-     *             isolated from its Document; use output(Document) instead
-     */
-    public org.w3c.dom.Element output(Element element) throws JDOMException {
-        try {
-            org.w3c.dom.Document domDoc = createDOMDocument();
-            return output(element, domDoc, new NamespaceStack());
-        }
-        catch (Throwable e) {
-            throw new JDOMException("Exception outputting Element " +
-                                    element.getQualifiedName(), e);
-        }
     }
 
     private org.w3c.dom.Document createDOMDocument()
@@ -404,26 +384,6 @@ public class DOMOutputter {
         catch (Exception e) {
             throw new JDOMException("Exception outputting Element " +
                                     element.getQualifiedName(), e);
-        }
-    }
-
-    /**
-     * This converts the JDOM <code>Attribute</code> parameter to a
-     * DOM <code>Attr</code>, returning the DOM version.
-     *
-     * @param attribute <code>Attribute</code> to output.
-     * @return an <code>org.w3c.dom.Attr</code> version
-     * @deprecated Deprecated in Beta 9, since a DOM Attr should not be
-     *             isolated from its Document; use output(Document) instead
-     */
-    public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
-        try {
-            org.w3c.dom.Document domDoc = createDOMDocument();
-            return output(attribute, domDoc);
-        }
-        catch (Throwable e) {
-            throw new JDOMException("Exception outputting Attribute " +
-                                    attribute.getQualifiedName(), e);
         }
     }
 

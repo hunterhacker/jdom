@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.133 2003/04/30 22:00:12 jhunter Exp $
+ $Id: Element.java,v 1.134 2003/05/02 01:08:27 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.133 $, $Date: 2003/04/30 22:00:12 $
+ * @version $Revision: 1.134 $, $Date: 2003/05/02 01:08:27 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.133 $ $Date: 2003/04/30 22:00:12 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.134 $ $Date: 2003/05/02 01:08:27 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1543,79 +1543,4 @@ public class Element implements Serializable, Cloneable {
             }
         }
     }
-
-    /**
-     * <p>
-     * This removes all child elements.  Returns true if any were removed.
-     * </p>
-     * @deprecated Deprecated in Beta 9, instead of this method you can call
-     * <code>clear()</code> on the list returned by <code>getChildren()</code> or by
-     * <code>getContent()</code>
-     *
-     * @return whether deletion occurred
-     */
-    public boolean removeChildren() {
-        boolean deletedSome = false;
-
-        List old = content.getView(new ElementFilter());
-        Iterator i = old.iterator();
-        while (i.hasNext()) {
-            i.next();
-            i.remove();
-            deletedSome = true;
-        }
-
-        return deletedSome;
-    }
-
-    /**
-     * Test whether this element has a child element.
-     * This method can be used before a call to {@link #getContent},
-     * which always creates a "live" list, to improve performance.
-     *
-     * @deprecated Deprecated in Beta 9, instead of this method you can check
-     * the size of a getChildren() call
-     *
-     * @return <code>true</code> if this element has at least
-     *         one child element
-     */
-    public boolean hasChildren() {
-        for (int i = 0; i < content.size(); i++) {
-            if (content.get(i) instanceof Element) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * This sets the content of the element the same as {@link #setContent},
-     * except only <code>Element</code> objects are allowed in the supplied
-     * list.
-     *
-     * @deprecated Deprecated in Beta 9, use setContent(List) instead
-     *
-     * @param children <code>List</code> of <code>Element</code> objects to add
-     * @return this element modified
-     */
-    public Element setChildren(List children) {
-        List list = content.getView(new ElementFilter());
-        // Save initial size
-        int size = list.size();
-        try {
-            // Try adding the list
-            list.addAll(children);
-        }
-        catch(RuntimeException exception) {
-            // Restore to original state by removing
-            // items that where appended
-            removeRange(list, size, list.size());
-            throw exception;
-        }
-
-        // Add was sucessful, remove old children
-        removeRange(list, 0, size);
-        return this;
-    }
-
 }
