@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: PartialList.java,v 1.9 2001/04/27 18:21:20 jhunter Exp $
+ $Id: PartialList.java,v 1.10 2001/06/01 22:06:01 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,6 +65,9 @@ import java.util.List;
  * <p><code>PartialList</code> defines a <code>List</code>
  *   that contains only part of a larger <code>List</code>,
  *   yet is still completely backed by that <code>List</code>.
+ *   Note this implementation has several serious problems and
+ *   is being entirely replaced with a more efficient approach
+ *   based on filters.
  * </p>
  *
  * @author Brett McLaughlin
@@ -74,7 +77,7 @@ import java.util.List;
 class PartialList extends LinkedList {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.9 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.10 $ $Date: 2001/06/01 22:06:01 $ $Name:  $";
 
     /** The actual backing <code>List</code> */
     protected List backingList;
