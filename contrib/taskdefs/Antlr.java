@@ -31,7 +31,10 @@ public class Antlr extends Java
 
         setDir(grammarDir.toString());
         setArgs(grammar);
-        setJvmargs("-Duser.dir=" + grammarDir);
+
+        String userDir = System.getProperty("user.dir");
+
+        setJvmargs("-Duser.dir=" + userDir);
 
         String classpath = System.getProperty("java.class.path");
         setClasspath(classpath);
