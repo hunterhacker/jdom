@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.108 2002/02/06 02:51:59 jhunter Exp $
+ $Id: Element.java,v 1.109 2002/02/14 05:33:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.108 $, $Date: 2002/02/06 02:51:59 $
+ * @version $Revision: 1.109 $, $Date: 2002/02/14 05:33:17 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.108 $ $Date: 2002/02/06 02:51:59 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.109 $ $Date: 2002/02/14 05:33:17 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1236,7 +1236,7 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the attribute for this element with the given name
-     * and within no namespace.
+     * and within no namespace, or null if no such attribute exists.
      * </p>
      *
      * @param name name of the attribute to return
@@ -1249,7 +1249,7 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the attribute for this element with the given name
-     * and within the given Namespace.
+     * and within the given Namespace, or null if no such attribute exists.
      * </p>
      *
      * @param name name of the attribute to return
