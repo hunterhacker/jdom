@@ -468,7 +468,7 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("couldn't remove child content", element.removeChildren());
-        assertTrue("child not removed", element.getChild("child", ns) == null);
+        assertTrue("child not removed", element.getContent("child", ns) == null);
     }
 */
 
@@ -487,9 +487,9 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("incorrect return on bogus child", !element.removeChildren("test"));
-        assertTrue("child incorrectly removed", element.getChild("child") != null);
+        assertTrue("child incorrectly removed", element.getContent("child") != null);
         assertTrue("couldn't remove child content", element.removeChildren("child"));
-        assertTrue("children not removed", element.getChild("child") == null);
+        assertTrue("children not removed", element.getContent("child") == null);
     }
 */
 
@@ -509,9 +509,9 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("incorrect return on bogus child", !element.removeChildren("child"));
-        assertTrue("child incorrectly removed", element.getChild("child", ns) != null);
+        assertTrue("child incorrectly removed", element.getContent("child", ns) != null);
         assertTrue("couldn't remove child content", element.removeChildren("child", ns));
-        assertTrue("children not removed", element.getChild("child", ns) == null);
+        assertTrue("children not removed", element.getContent("child", ns) == null);
     }
 */
 
@@ -1005,7 +1005,7 @@ public final class TestElement
     }
 
     /**
-     * Test getChild by child name.
+     * Test getContent by child name.
      */
     public void test_TCM__OrgJdomElement_getChild_String() {
         Element element = new Element("element");
@@ -1016,7 +1016,7 @@ public final class TestElement
     }
 
     /**
-     * Test getChild by child name and namespace.
+     * Test getContent by child name and namespace.
      */
     public void test_TCM__OrgJdomElement_getChild_String_OrgJdomNamespace() {
         Element element = new Element("element");
@@ -1330,7 +1330,7 @@ public final class TestElement
 
 
         //nulls should reset the list
-        element.setContent(null);
+        element.removeContent();
         assertTrue("didn't reset mixed content List", element.getContent().isEmpty());
     }
 
