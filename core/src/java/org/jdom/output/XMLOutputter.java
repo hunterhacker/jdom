@@ -68,7 +68,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.StringTokenizer;
    
 import org.jdom.Attribute;
@@ -1328,41 +1327,3 @@ public class XMLOutputter implements Cloneable {
     } // parseArgs
     
 }
-
-class NamespaceStack {
- 
-    private Stack prefixes = new Stack();
-    private Stack uris = new Stack();        
-  
-    public void push(Namespace ns) {
-        prefixes.push(ns.getPrefix());
-        uris.push(ns.getURI());
-    }      
-    
-    public void pop() {      
-        String s = (String) prefixes.pop();
-        uris.pop();
-    }
-    
-    public int size() {
-        return prefixes.size();     
-    }    
-  
-    // find the URI matching the nearest prefix
-    public String getURI(String prefix) {
-       int index = prefixes.lastIndexOf(prefix);
-       if (index == -1) return null;
-       String s = (String) uris.elementAt(index);
-       return s;       
-    }
-    
-    /* For debugging...
-    public void printStack() {
-        System.out.println("Stack: " + prefixes.size());
-        for (int i = 0; i < prefixes.size(); i++) {
-            System.out.println(prefixes.elementAt(i) + "&" + uris.elementAt(i));
-        }        
-    }  
-    */
-}
-
