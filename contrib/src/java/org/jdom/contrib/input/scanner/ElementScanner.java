@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.5 2003/04/23 02:59:54 jhunter Exp $
+ $Id: ElementScanner.java,v 1.6 2003/05/19 20:31:46 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -570,17 +570,20 @@ public class ElementScanner extends XMLFilterImpl {
     */
    public void endElement(String nsUri, String localName, String qName)
                                                         throws SAXException {
-      // Get element path.
-      String eltPath = this.currentPath.substring(0);
+      // Grab the being-built element.
+      Element elt = this.elementBuilder.getCurrentElement();
+
+      // Complete element building before making use of it.
+      // (This sets the current element to the parent of elt.)
+      if (this.activeRules.size() != 0) {
+         this.elementBuilder.endElement(nsUri, localName, qName);
+      }
 
       // Get the matching rules for this element (if any).
+      String eltPath = this.currentPath.substring(0);
       Collection matchingRules = (Collection)(this.activeRules.remove(eltPath));
       if (matchingRules != null) {
-         // Matching rules exist.
-         // => Get the last built element
-         Element elt = this.elementBuilder.getCurrentElement();
-
-         // And notify all matching listeners
+         // Matching rules exist. => Notify all matching listeners.
          try {
             for (Iterator i=matchingRules.iterator(); i.hasNext(); ) {
                XPathMatcher matcher = (XPathMatcher)(i.next());
@@ -599,11 +602,7 @@ public class ElementScanner extends XMLFilterImpl {
       // Remove notified element from the current path.
       this.currentPath.setLength(
                         this.currentPath.length() - (localName.length() + 1));
-
       // Propagate event.
-      if (this.activeRules.size() != 0) {
-         this.elementBuilder.endElement(nsUri, localName, qName);
-      }
       super.endElement(nsUri, localName, qName);
    }
 
