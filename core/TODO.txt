@@ -3,6 +3,9 @@ Items that need to be done:
 * Implement preservation of whitespace, making it available using
   getContent(true) and getMixedContent(true).
 
+* Fix it so check-ins post messages to jdom-interest.  (jools@jools.org)  Use
+  archive to create an accurate CHANGELOG.txt for what changed between betas.
+
 * Set up build to automatically handle JDK 1.1 + Collections using an Ant task
   to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
 
@@ -37,6 +40,10 @@ Items that need to be done:
 
 * Add methods/logic to Verifier for all XML spec. constraints
 
+* Consider changing the Verifier method signatures to throw the
+  IllegalXXXException directly instead of returning null on error,
+  and let the caller pass the exception through
+
 * Fix namespaces to handle disparate prefixes to same URI
   (Make them unique by prefix/URI)
 
@@ -56,4 +63,32 @@ Items that need to be done:
 
 * Add XPath support (not necessary for JDOM 1.0)
   Much work being done by Michael Hinchey <michael.hinchey@inference.com>
+
+* Writing a "Getting started" guide for newbies 
+  (Tom Clements <clements@eng.sun.com>)
+
+* Consider changing XMLOutputter to have more set methods like Enhydra's
+  DOMFormatter.  Possible good ones:
+   void setIndenting(boolean enable) 
+                       Enable or disable indentation.
+   void setIndentSize(int size) 
+                       Set indentation size.
+   void setJavaEncoding(java.lang.String newJavaEncoding) 
+                       Set the encoding using the Java encoding name.
+   void setLineWidth(int width) 
+                       Set the width at while long lines are split 
+                       when indentation is enabled.
+   void setOmitEncoding(boolean omit) 
+                       Set flag indicating if encoding should be 
+                       omitted from the XML header.  Helps some WAP clients.
+   void setPreserveSpace(boolean preserve) 
+                       Set the default space-preservation flag.
+   void setXmlEncoding(java.lang.String newXmlEncoding) 
+                       Set the encoding using the XML encoding name.
+   void setXmlEncoding(java.lang.String newJavaEncoding,
+                       java.lang.String newXmlEncoding) 
+                       Set both the XML and Java encodings.
+
+* Finalize the license text we'll use for release.  Update all source files to
+  match most current license in jdom/LICENSE.txt.
 
