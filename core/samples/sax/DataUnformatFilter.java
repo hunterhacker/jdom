@@ -63,6 +63,10 @@ import org.xml.sax.XMLReader;
 /**
  * Filter for removing formatting from data- or field-oriented XML. 
  *
+ * <i>Code and comments adapted from DataWriter-0.2, written
+ * by David Megginson and released into the public domain,
+ * without warranty.</i>
+ *
  * <p>This filter removes leading and trailing whitespace from
  * field-oriented XML without mixed content. Note that this class will
  * likely not yield appropriate results for document-oriented XML like

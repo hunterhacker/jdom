@@ -71,6 +71,10 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Filter to write an XML document from a SAX event stream.
  *
+ * <i>Code and comments adapted from DataWriter-0.2, written
+ * by David Megginson and released into the public domain,
+ * without warranty.</i>
+ *
  * <p>This class can be used by itself or as part of a SAX event
  * stream: it takes as input a series of SAX2 ContentHandler
  * events and uses the information in those events to write
@@ -125,7 +129,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  *
  * <p>You need to invoke one of the <var>characters</var> methods
  * explicitly to add newlines or indentation.  Alternatively, you
- * can use {@link jozart.sax.DataFormatFilter DataFormatFilter}
+ * can use {@link examples.sax.DataFormatFilter DataFormatFilter}
  * add linebreaks and indentation (but does not support mixed content
  * properly).</p>
  *

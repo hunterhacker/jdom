@@ -63,6 +63,10 @@ import org.xml.sax.XMLReader;
 /**
  * Filter for data- or field-oriented XML.
  *
+ * <i>Code and comments adapted from DataWriter-0.2, written
+ * by David Megginson and released into the public domain,
+ * without warranty.</i>
+ *
  * <p>This filter adds indentation and newlines to field-oriented
  * XML without mixed content.  All added indentation and newlines
  * will be passed on down the filter chain.</p>
