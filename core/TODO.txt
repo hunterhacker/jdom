@@ -4,9 +4,6 @@ Items that need to be done:
 
 * Start shipping a more recent Xerces (maybe even 2.0 if possible).
 
-* Fix a tiny bug in XMLOutputter regarding xml:space default within a preserve
-  block when trim all white is turned on.
-
 * Fix JDOM->DOM->JDOM bug as reported by "Xuemin Guan" <xuemin@appresso.com>.
    http://www.servlets.com/archive/servlet/SearchList?listName=jdom-interest&
    searchText=%22JDom+2+Dom%2C+then+Dom+2+JDom%22&defaultField=subject&
@@ -26,13 +23,6 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
-
-* Look into having a flag to turn off DTD loading, since parsers often load
-  the DTD even if validation is off.
-  Xerces has a custom option: http://xml.apache.org/xerces-j/features.html
-  Crimson doesn't, nor probably do others.  That makes it tricky.
-  I think we can have a setIgnoreDTD() flag and implement it standardly
-  using an EntityResolver.
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
