@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.76 2002/03/15 05:36:48 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.77 2002/04/07 15:21:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.76 $, $Date: 2002/03/15 05:36:48 $
+ * @version $Revision: 1.77 $, $Date: 2002/04/07 15:21:10 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.76 $ $Date: 2002/03/15 05:36:48 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.77 $ $Date: 2002/04/07 15:21:10 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -682,7 +682,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param string <code>String</code> to output.
      * @param out <code>OutputStream</code> to use.
-     * @deprecated see output(<code>Text</code>,<code>OutputStream</code>)
+     * @deprecated see {@link #output(Text,OutputStream)}
      */
     public void output(String string, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -792,7 +792,8 @@ public class XMLOutputter implements Cloneable {
         // comments and processing instructions,
         // starting with no indentation
         List content = doc.getContent();
-        for( int i = 0; i < content.size(); i++) {
+        int size = content.size();
+        for( int i = 0; i < size; i++) {
             Object obj = content.get( i);
             if (obj instanceof Element) {
                 printElement(doc.getRootElement(), out, 0,
@@ -864,7 +865,9 @@ public class XMLOutputter implements Cloneable {
      */
     public void outputElementContent(Element element, Writer out)
                     throws IOException {
-        printContent(element.getContent(), out, 0, createNamespaceStack());
+        List content = element.getContent();
+        printContentRange(content, 0, content.size(), out,
+                          0, createNamespaceStack());
         out.flush();
     }
 
@@ -881,7 +884,8 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(List list, Writer out)
                     throws IOException {
-        printContent(list, out, 0, createNamespaceStack());
+        printContentRange(list, 0, list.size(), out,
+                          0, createNamespaceStack());
         out.flush();
     }
 
@@ -920,7 +924,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param string <code>String</code> to output.
      * @param out <code>Writer</code> to use.
-     * @deprecated see output(<code>Text</code>,<code>Writer</code>)
+     * @deprecated see {@link #output(Text,Writer)}
      */
     public void output(String string, Writer out) throws IOException {
         printString(string, out);
@@ -1315,10 +1319,12 @@ public class XMLOutputter implements Cloneable {
      * trims interior whitespace, etc. if necessary.
      */
     protected void printString(String str, Writer out) throws IOException {
-        if (currentFormat.textNormalize)
-             str = Text.normalizeString( str);
-        else if (currentFormat.textTrim)
-                 str = str.trim();
+        if (currentFormat.textNormalize) {
+            str = Text.normalizeString( str);
+        }
+        else if (currentFormat.textTrim) {
+            str = str.trim();
+        }
         out.write( escapeElementEntities( str));
     }
 
@@ -1350,10 +1356,12 @@ public class XMLOutputter implements Cloneable {
 
         Format previousFormat = currentFormat;
 
-        if ("default".equals( space))
+        if ("default".equals( space)) {
             currentFormat = defaultFormat;
-        else if ("preserve".equals( space))
-                 currentFormat = noFormatting;
+        }
+        else if ("preserve".equals( space)) {
+            currentFormat = noFormatting;
+        }
 
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
@@ -1379,7 +1387,8 @@ public class XMLOutputter implements Cloneable {
         // in based on the current settings.
 
         int start = skipLeadingWhite( content, 0);
-        if (start >= content.size()) {
+        int size = content.size();
+        if (start >= size) {
             // Case content is empty or all insignificant whitespace
             if (currentFormat.expandEmptyElements) {
                 out.write("></");
@@ -1397,17 +1406,17 @@ public class XMLOutputter implements Cloneable {
             // or Text we don't want to indent after the start or
             // before the end tag.
 
-            if (nextNonText( content, start) < content.size()) {
+            if (nextNonText( content, start) < size) {
                 // Case Mixed Content - normal indentation
                 newline(out);
-                printContentRange(content, start, content.size(), out,
+                printContentRange(content, start, size, out,
                                   level + 1, namespaces);
                 newline(out);
                 indent(out, level);
             }
             else {
                 // Case all CDATA or Text - no indentation
-                printTextRange(content, start, content.size(), out);
+                printTextRange(content, start, size, out);
             }
             out.write("</");
             out.write(element.getQualifiedName());
@@ -1421,44 +1430,6 @@ public class XMLOutputter implements Cloneable {
 
         // Restore our format settings
         currentFormat = previousFormat;
-    }
-
-    /**
-     * <p>
-     * This will handle printing of a <code>{@link
-     * Element}</code>'s content only, not including it's tag,
-     * attributes, or namespace info.
-     * </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to use.
-     * @param level <code>int</code> level of indentation.
-     * @param namespaces <code>List</code> stack of Namespaces in scope.
-     */
-    protected void printElementContent(Element element, Writer out,
-                                       int level,
-                                       NamespaceStack namespaces)
-                       throws IOException {
-        printContent( element.getContent(), out, level, namespaces);
-    }
-
-    /**
-     * <p>
-     * This will handle printing of a <code>{@link
-     * Element}</code>'s content only, not including it's tag,
-     * attributes, or namespace info.
-     * </p>
-     *
-     * @param content <code>List</code> of content to output.
-     * @param out <code>Writer</code> to use.
-     * @param level <code>int</code> level of indentation.
-     * @param namespaces <code>List</code> stack of Namespaces in scope.
-     */
-    protected void printContent(List content, Writer out,
-                                int level, NamespaceStack namespaces)
-                       throws IOException {
-        printContentRange(content, 0, content.size(), out,
-                          level, namespaces);
     }
 
     /**
@@ -1511,8 +1482,10 @@ public class XMLOutputter implements Cloneable {
             //
             // Handle other nodes
             //
-            if (!firstNode)
+            if (!firstNode) {
                 newline(out);
+            }
+
             indent(out, level);
 
             if (next instanceof Comment) {
@@ -1560,7 +1533,8 @@ public class XMLOutputter implements Cloneable {
         // Remove leading whitespace-only nodes
         start = skipLeadingWhite( content, start);
 
-        if (start < content.size()) {
+        int size = content.size();
+        if (start < size) {
             // And remove trialing whitespace-only nodes
             end = skipTrialingWhite( content, end);
 
@@ -1569,13 +1543,17 @@ public class XMLOutputter implements Cloneable {
 
                 // Get the unmangled version of the text
                 // we are about to print
-                if (node instanceof CDATA)
-                     next = ((CDATA) node).getText();
-                else next = ((Text) node).getText();
+                if (node instanceof CDATA) {
+                    next = ((CDATA) node).getText();
+                }
+                else {
+                    next = ((Text) node).getText();
+                }
 
                 // This may save a little time
-                if (next == null || "".equals( next))
+                if (next == null || "".equals( next)) {
                     continue;
+                }
 
                 // Determine if we need to pad the output (padding is
                 // only need in trim or normalizing mode)
@@ -1590,9 +1568,12 @@ public class XMLOutputter implements Cloneable {
                 }
 
                 // Print the node
-                if (node instanceof CDATA)
-                     printCDATA( (CDATA) node, out);
-                else printString( next, out);
+                if (node instanceof CDATA) {
+                    printCDATA( (CDATA) node, out);
+                }
+                else {
+                    printString( next, out);
+                }
 
                 previous = next;
             }
@@ -1615,8 +1596,9 @@ public class XMLOutputter implements Cloneable {
         String uri = ns.getURI();
 
         // Already printed namespace decl?
-        if (uri.equals( namespaces.getURI(prefix)))
+        if (uri.equals( namespaces.getURI(prefix))) {
             return;
+        }
 
         out.write(" xmlns");
         if (!prefix.equals("")) {
@@ -1672,8 +1654,9 @@ public class XMLOutputter implements Cloneable {
         // (we do output xmlns="" if the "" prefix was already used and we
         // need to reclaim it for the NO_NAMESPACE)
         Namespace ns = element.getNamespace();
-        if (ns == Namespace.XML_NAMESPACE)
+        if (ns == Namespace.XML_NAMESPACE) {
             return;
+        }
         if ( !((ns == Namespace.NO_NAMESPACE) &&
                (namespaces.getURI("") == null))) {
             printNamespace(ns, out, namespaces);
@@ -1704,23 +1687,9 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use
      */
     protected void newline(Writer out) throws IOException {
-        if (currentFormat.newlines)
+        if (currentFormat.newlines) {
             out.write(currentFormat.lineSeparator);
-    }
-
-    /**
-     * <p>
-     * This will print indents (only if the newlines flag was
-     * set to <code>true</code>, and indent is non-null).
-     * </p>
-     *
-     * @param out <code>Writer</code> to use
-     * @param level current indent level (number of tabs)
-     * @deprecated since it's never used in XMLOutputter, used
-     * in XMLOutputter indent( out, 0) instead
-     */
-    protected void indent(Writer out) throws IOException  {
-        indent(out, 0);
+        }
     }
 
     /**
@@ -1735,8 +1704,9 @@ public class XMLOutputter implements Cloneable {
     protected void indent(Writer out, int level) throws IOException {
         if (currentFormat.newlines) {
             if (currentFormat.indent == null ||
-                currentFormat.indent.equals(""))
+                currentFormat.indent.equals("")) {
                     return;
+            }
 
             for (int i = 0; i < level; i++) {
                 out.write(currentFormat.indent);
@@ -1749,21 +1719,24 @@ public class XMLOutputter implements Cloneable {
     // all whitespace.
     // @param start index to begin search (inclusive)
     private int skipLeadingWhite( List content, int start) {
-        if (start < 0)
-             start = 0;
+        if (start < 0) {
+            start = 0;
+        }
 
         int index = start;
+        int size = content.size();
         if (currentFormat.trimAllWhite
                 || currentFormat.textNormalize
                 || currentFormat.textTrim
                 || currentFormat.newlines) {
-            while( index < content.size()) {
-                if ( !isAllWhitespace( content.get(index)))
-                    break;
+            while( index < size) {
+                if ( !isAllWhitespace( content.get(index))) {
+                    return index;
+                }
                 index++;
             }
         }
-        return index;
+        return size;
     }
 
     // Return the index + 1 of the last non-all-whitespace CDATA or
@@ -1771,8 +1744,10 @@ public class XMLOutputter implements Cloneable {
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
     private int skipTrialingWhite( List content, int start) {
-        if (start > content.size())
-            start = content.size();
+        int size = content.size();
+        if (start > size) {
+            start = size;
+        }
 
         int index = start;
         if (currentFormat.trimAllWhite
@@ -1792,17 +1767,20 @@ public class XMLOutputter implements Cloneable {
     // is returned if there is no more non-CDATA or non-Text nodes
     // @param start index to begin search (inclusive)
     private int nextNonText( List content, int start) {
-        if (start < 0)
+        if (start < 0) {
             start = 0;
+        }
 
         int index = start;
-        while( index < content.size()) {
+        int size = content.size();
+        while( index < size) {
             if ( !((content.get( index) instanceof CDATA) ||
-                   (content.get( index) instanceof Text)))
-                break;
+                   (content.get( index) instanceof Text))) {
+                return index;
+            }
             index++;
         }
-        return index;
+        return size;
     }
 
     // Determine if a Object is all whitespace
