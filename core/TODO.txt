@@ -32,15 +32,9 @@ Items that need to be done:
   this was laid out in the thread "How to "crash" JDOM, part 1" by David 
   Smiley.  (Work being done by trebor.a.rude@lmco.com)
 
-* Add Element.getDocument() method (work by bob@accurev.com)
-
 * Probably add an Attribute.getParent() method (to help XPath)
 
 * Add better handling of bogus undeclared prefixes like <bogus:foo/>
-
-* Writer XMLOutputter.serialize(doc/elem/comment/doctype/entity/pi/attrib)
-  Have these methods replace getSerializedForm().  Going this way allows
-  tweaks to the XMLOutputter behavior before serialization.
 
 * Add CrimsonDOMAdapter
 
@@ -61,11 +55,6 @@ Items that need to be done:
   opposite way and disallow creating docs without roots, thus enforcing the
   rule that JDOM only creates well-formed docs and docs are well-formed from
   the beginning.  That makes severaly ugly code though.
-
-* Figure out how to deal with setText("") and setText(null) and determine what
-  getText(), getTextTrim(), and getMixedContent() should return for 
-  <empty/>, <empty></empty>, and <notempty><a></a></notempty>.
-  Changing behavior involves changing XMLOutputter, btw.
 
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
