@@ -41,7 +41,10 @@
  */
 package org.jdom;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -68,7 +71,7 @@ public class Element implements Serializable, Cloneable {
     protected String name;
 
     /** The <code>{@link Namespace}</code> of the <code>Element</code> */
-    protected Namespace namespace;
+    protected transient Namespace namespace;
 
     /** The parent of this <code>Element</code> */
     protected Element parent;
@@ -1396,4 +1399,18 @@ public class Element implements Serializable, Cloneable {
 	textualContent = null;
     }
 
+    // Support a custom Namespace serialization so no two namespace
+    // object instances may exist for the same prefix/uri pair
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        // We use writeObject() and not writeUTF() to minimize space
+        // This allows for writing pointers to already written strings
+        out.writeObject(namespace.getPrefix());
+        out.writeObject(namespace.getURI());
+    }
+
+    private void readObject(ObjectInputStream in)
+                     throws IOException, ClassNotFoundException {
+        namespace = Namespace.getNamespace(
+                      (String)in.readObject(), (String)in.readObject());
+    }
 }

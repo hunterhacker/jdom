@@ -46,7 +46,16 @@ import java.util.HashMap;
 /**
  * <p><code>Namespace</code> defines both a factory for
  *   creating XML namespaces, and a namespace itself. This class
- *   represents an XML namespace in Java.
+ *   represents an XML namespace in Java.  
+ * </p>
+ * <p>
+ *   Elements and Attributes containing Namespaces <b>can</b> be serialized; 
+ *   however the Namespace class itself does not implement 
+ *   <code>java.io.Serializable</code>.  This works because the Element and
+ *   Attribute classes handle serialization of their Namespaces manually.
+ *   The classes use the getNamespace() method on deserialization to ensure 
+ *   there may be only one unique Namespace object for any unique 
+ *   prefix/uri pair, something needed for efficiency reasons.
  * </p>
  *
  * @author Brett McLaughlin
@@ -90,18 +99,22 @@ public final class Namespace {
 
     /**
      * <p>
-     *  This will retrieve (if in existence) or create (if not) a <code>Namespace</code>
-     *    for the supplied prefix and URI.
+     *  This will retrieve (if in existence) or create (if not) a 
+     *  <code>Namespace</code> for the supplied prefix and URI.
      * </p><p>
-     *  <b>Note</b>: Because the prefix of an XML namespace is both non-normative and not
-     *    an intrinsic part of the <code>Namespace</code>, it is possible that the
-     *    supplied <code>uri</code> is already attached to a <code>Namespace</code>,
-     *    and a different prefix is used by it. In this case, the existing <code>Namespace</code>
-     *    is returned, <i>with the different prefix</i>, and the supplied <code>prefix</code>
+     *  <b>Note</b>: Because the prefix of an XML namespace is both 
+     *    non-normative and not an intrinsic part of the 
+     *    <code>Namespace</code>, it is possible that the
+     *    supplied <code>uri</code> is already attached to a 
+     *    <code>Namespace</code>, and a different prefix is used by it. 
+     *    In this case, the existing <code>Namespace</code>
+     *    is returned, <i>with the different prefix</i>, and the supplied 
+     *    <code>prefix</code>
      *    is ignored. This is perfectly legal XML namespace behavior.
      * </p>
      *
-     * @param prefix <code>String</code> prefix to map to <code>Namespace</code>.
+     * @param prefix <code>String</code> prefix to map to 
+     *               <code>Namespace</code>.
      * @param uri <code>String</code> URI of new <code>Namespace</code>.
      * @return <code>Namespace</code> - ready to use namespace.
      */
@@ -126,7 +139,7 @@ public final class Namespace {
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
-                                           "Namespace URIs must be non-null and non-empty Strings.");
+                "Namespace URIs must be non-null and non-empty Strings.");
         }
 
         // Return existing namespace if found
@@ -157,9 +170,9 @@ public final class Namespace {
 
     /**
      * <p>
-     *  This will retrieve (if in existence) or create (if not) a <code>Namespace</code>
-     *    for the supplied URI, and make it usable as a default namespace, as no prefix
-     *    is supplied.
+     *  This will retrieve (if in existence) or create (if not) a 
+     *  <code>Namespace</code> for the supplied URI, and make it usable 
+     *  as a default namespace, as no prefix is supplied.
      * </p>
      *
      * @param uri <code>String</code> URI of new <code>Namespace</code>.
@@ -234,14 +247,15 @@ public final class Namespace {
 
     /**
      * <p>
-     *  This returns a <code>String</code> representation of this <code>Namespace</code>,
-     *    suitable for use in debugging.
+     *  This returns a <code>String</code> representation of this 
+     *  <code>Namespace</code>, suitable for use in debugging.
      * </p>
      *
      * @return <code>String</code> - information about this instance.
      */
     public String toString() {
-        return "[Namespace: prefix " + prefix + " is mapped to URI \"" + uri + "\"]";
+        return "[Namespace: prefix " + prefix + " is mapped to URI \"" + 
+               uri + "\"]";
     }
 
     /**
@@ -252,7 +266,8 @@ public final class Namespace {
      * @return <code>int</code> - hash code for this <code>Namespace</code>.
      */
     public int hashCode() {
-        // Since neither URI nor prefix are guaranteed to be unique, use the combination
+        // Since neither URI nor prefix are guaranteed to be unique, 
+        // use the combination
         return (prefix + uri).hashCode();
     }
 

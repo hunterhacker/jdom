@@ -79,7 +79,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Element}</code>
-     *   supplied as a child of the supplied parent is not allowed..
+     *   supplied as a child of the supplied parent is not allowed.
      * </p>
      *
      * @param element <code>Element</code> that could not be added

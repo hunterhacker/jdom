@@ -42,6 +42,9 @@
 package org.jdom;
 
 import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * <p><code>Attribute</code> defines behavior for an XML
@@ -62,7 +65,7 @@ public class Attribute implements Serializable, Cloneable {
     protected String name;
 
     /** The <code>{@link Namespace}</code> of the <code>Attribute</code> */
-    protected Namespace namespace;
+    protected transient Namespace namespace;
 
     /** The value of the <code>Attribute</code> */
     protected String value;
@@ -564,14 +567,19 @@ public class Attribute implements Serializable, Cloneable {
             throw new DataConversionException(name, "boolean");
         }
     }
+
+    // Support a custom Namespace serialization so no two namespace
+    // object instances may exist for the same prefix/uri pair
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        // We use writeObject() and not writeUTF() to minimize space
+        // This allows for writing pointers to already written strings
+        out.writeObject(namespace.getPrefix());
+        out.writeObject(namespace.getURI());
+    }
+
+    private void readObject(ObjectInputStream in)
+                     throws IOException, ClassNotFoundException {
+        namespace = Namespace.getNamespace(
+                      (String)in.readObject(), (String)in.readObject());
+    }
 }
-
-
-
-
-
-
-
-
-
-
