@@ -55,30 +55,11 @@
 
 package org.jdom.output;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-
-import org.jdom.Attribute;
-import org.jdom.CDATA;
-import org.jdom.Comment;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Entity;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.ProcessingInstruction;
-import org.jdom.adapters.DOMAdapter;
-
+import org.jdom.*;
+import org.jdom.adapters.*;
 
 
 /**
@@ -97,87 +78,32 @@ public class DOMOutputter {
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";
 
+    /** Adapter to use for interfacing with the DOM implementation */
+    private String adapterClass;
+
     /**
      * <p>
-     * This creates a <code>DOMOutputter</code>.
+     * This creates a <code>DOMOutputter</code> using the default DOM
+     * adapter.
      * </p>
      */
     public DOMOutputter() {
+        this(DEFAULT_ADAPTER_CLASS);
     }
 
     /**
      * <p>
-     * This converts the JDOM <code>Document</code> parameter to a
-     * DOM Document, returning the DOM version.  The default DOM adapter class
-     * is used.
+     * This creates a <code>DOMOutputter</code> using the specified DOM
+     * adapter.
      * </p>
      *
-     * @param document <code>Document</code> to output.
-     * @return an <code>org.w3c.dom.Document</code> version
+     * @param adapterClass <code>String</code> name of class
+     *                     to use for DOM output
      */
-    public org.w3c.dom.Document output(Document document) throws JDOMException {
-        return output(document, DEFAULT_ADAPTER_CLASS);
+    public DOMOutputter(String adapterClass) {
+        this.adapterClass = adapterClass;
     }
 
-    /**
-     * <p>
-     * This converts the JDOM <code>Element</code> parameter to a
-     * DOM Element, returning the DOM version.  The default DOM adapter class
-     * is used.
-     * </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @return an <code>org.w3c.dom.Element</code> version
-     */
-    public org.w3c.dom.Element output(Element element) throws JDOMException {
-        return output(element, DEFAULT_ADAPTER_CLASS);
-    }
-
-    /**
-     * <p>
-     * This converts the JDOM <code>Attribute</code> parameter to a
-     * DOM <code>Attr</code>, returning the DOM version.  
-     * The default DOM adapter class is used.
-     * </p>
-     *
-     * @param attribute <code>Attribute</code> to output.
-     * @return an <code>org.w3c.dom.Attr</code> version
-     */
-
-    public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
-        return output(attribute, DEFAULT_ADAPTER_CLASS);
-    }
-
-    /** 
-     * <p>
-     * This converts the JDOM <code>Element</code> parameter to a 
-     * DOM Element, returning the DOM version.  The specified DOM adapter
-     * class (see org.jdom.adapters.*) is used, as a way to choose the 
-     * DOM implementation.
-     * </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param domAdapterClass DOM adapter class to use
-     * @return an <code>org.w3c.dom.Element</code> version
-     */
-    public org.w3c.dom.Element output(Element element, String domAdapterClass) 
-                                      throws JDOMException {
-         LinkedList namespaces = new LinkedList();
-         org.w3c.dom.Document domDoc = null ;
-         try {
-             DOMAdapter adapter =
-                   (DOMAdapter)Class.forName(domAdapterClass).newInstance();
-               
-             domDoc = adapter.createDocument();
-
-             buildDOMTree(element, domDoc, null, true, namespaces);
-         } catch (Exception e) {
-             throw new JDOMException("Exception outputting Element " +
-                                     element.getQualifiedName(), e);
-         }
-       
-         return domDoc.getDocumentElement();       
-    }
 
     /**
      * <p>
@@ -188,128 +114,119 @@ public class DOMOutputter {
      * </p>
      *
      * @param document <code>Document</code> to output.
-     * @param domAdapterClass DOM adapter class to use
      * @return an <code>org.w3c.dom.Document</code> version
      */
-    public org.w3c.dom.Document output(Document document,
-                                       String domAdapterClass)
+    public org.w3c.dom.Document output(Document document)
                                        throws JDOMException {
         LinkedList namespaces = new LinkedList();
         org.w3c.dom.Document domDoc = null;
         try {
             DOMAdapter adapter =
-                (DOMAdapter)Class.forName(domAdapterClass).newInstance();
-
+                (DOMAdapter)Class.forName(adapterClass).newInstance();
             domDoc = adapter.createDocument();
 
-            // XXX We could reuse some of the "walking" code
+            // Assign DOCTYPE
+            DocType dt = document.getDocType();
+            if (dt != null) {
+                // The DOM Level 2 doesn't support editing DocumentType nodes
+                // Perhaps we could do an adapter.createDocument(DocType)?
+            }
 
-            // XXX Should whitespace handling be configurable?
-
+            // Add mixed content
             Iterator itr = document.getMixedContent().iterator();
             while (itr.hasNext()) {
-                Object docObject = itr.next();
+                Object node = itr.next();
 
-                if (docObject instanceof Comment) {
+                if (node instanceof Element) {
+                    Element element = (Element) node;
+                    org.w3c.dom.Element domElement = output(element, domDoc);
+                    domDoc.appendChild(domElement);
+                }
+                else if (node instanceof Comment) {
+                    Comment comment = (Comment) node;
                     org.w3c.dom.Comment domComment =
-                        domDoc.createComment(((Comment)docObject).getText());
+                        domDoc.createComment(comment.getText());
                     domDoc.appendChild(domComment);
-                } else if (docObject instanceof ProcessingInstruction) {
+                }
+                else if (node instanceof ProcessingInstruction) {
                     ProcessingInstruction pi = 
-                        (ProcessingInstruction)docObject;
+                        (ProcessingInstruction) node;
                     org.w3c.dom.ProcessingInstruction domPI =
                          domDoc.createProcessingInstruction(
                          pi.getTarget(), pi.getData());
                     domDoc.appendChild(domPI);
-                } else if (docObject instanceof Element) {
-                    // Build the rest of the DOM tree from JDOM's root element
-                    buildDOMTree(docObject, domDoc, null, true, namespaces);
-                } else if (docObject instanceof CDATA) {
-                    CDATA cdata = (CDATA)docObject;
-                    org.w3c.dom.CDATASection domCdata =
-                        domDoc.createCDATASection(cdata.getText());
-                    domDoc.appendChild(domCdata);
+                }
+                else {
+                    throw new JDOMException(
+                        "Document contained top-level content with type:" +
+                        node.getClass().getName());
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new JDOMException("Exception outputting Document", e);
         }
 
         return domDoc;
     }
 
-    /**
+    /** 
      * <p>
-     * This converts the JDOM <code>Attribute</code> parameter to a
-     * DOM Attr, returning the DOM version. The specified DOM adapter
-     * class (see org.jdom.adapters.*) is used, as a way to choose the 
-     * DOM implementation
-     * </p>
-     * @param attribute <code>Attribute</code> to output.
-     * @param domAdapterClass DOM adapter class to use
-     * @return an <code>org.w3c.dom.Attr</code> version
-     */
- 
-    public org.w3c.dom.Attr output(Attribute attribute,
-                                   String domAdapterClass)
-                                   throws JDOMException {
-         org.w3c.dom.Document domDoc = null;
-         org.w3c.dom.Attr domAttr = null;
-         try {
-             DOMAdapter adapter =
-                 (DOMAdapter)Class.forName(domAdapterClass).newInstance();
-               
-             domDoc = adapter.createDocument();
-             domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
-                                                attribute.getQualifiedName());
-             domAttr.setValue(attribute.getValue());
-         } catch (Exception e) {
-             throw new JDOMException("Exception outputting Attribute " +
-                                     attribute.getQualifiedName(), e);
-         }
-
-         return domAttr;
-    }
-
-    /**
-     * <p>
-     * This takes a JDOM <code>Object</code> and builds up
-     *   a DOM tree, recursing until the JDOM tree is exhausted
-     *   and the DOM tree results.
+     * This converts the JDOM <code>Element</code> parameter to a 
+     * DOM Element, returning the DOM version.
      * </p>
      *
-     * @param content <code>Object</node> to examine.
-     * @param doc DOM <code>Document</code> being built.
-     * @param current <code>Element</code> that is current parent.
-     * @param atRoot <code>boolean</code> indicating whether at root level.
-     * @param namespaces <code>LinkedList</code> containing namespaces in scope
+     * @param element <code>Element</code> to output.
+     * @return an <code>org.w3c.dom.Element</code> version
      */
-    protected void buildDOMTree(Object content,
-                                org.w3c.dom.Document doc,
-                                org.w3c.dom.Element current,
-                                boolean atRoot,
-                                LinkedList namespaces) {
-        boolean printedNS = false;
-        if (content instanceof Element) {
-            Element element = (Element)content;
-            org.w3c.dom.Element domElement =
-                doc.createElement(element.getQualifiedName());
+    public org.w3c.dom.Element output(Element element) throws JDOMException {
+        try {
+            DOMAdapter adapter =
+                (DOMAdapter)Class.forName(adapterClass).newInstance();
+            org.w3c.dom.Document domDoc = adapter.createDocument();
+            return output(element, domDoc);
+        }
+        catch (Exception e) {
+            throw new JDOMException("Exception outputting Element " +
+                                    element.getQualifiedName(), e);
+        }
+    }
 
+    protected org.w3c.dom.Element output(Element element,
+                                         org.w3c.dom.Document domDoc)
+                                         throws JDOMException {
+        NamespaceStack namespaces = new NamespaceStack();
+        try {
+            org.w3c.dom.Element domElement = 
+                domDoc.createElementNS(element.getNamespaceURI(),
+                                       element.getQualifiedName());
+
+/*
             // Add namespace attributes
+            // Do this only if it's not the XML namespace and it's
+            // not the NO_NAMESPACE with the prefix "" not yet mapped
+            // (we do output xmlns="" if the "" prefix was already used 
+            // and we need to reclaim it for the NO_NAMESPACE)
             Namespace ns = element.getNamespace();
-            if ((ns != Namespace.NO_NAMESPACE) && 
-                (ns != Namespace.XML_NAMESPACE) &&
-                (!namespaces.contains(ns))) {
-                String attrName = getXmlnsTagFor(ns);
-                printedNS = true;
-                namespaces.add(ns);
-                domElement.setAttribute(attrName, ns.getURI());
+            if (ns != Namespace.XML_NAMESPACE &&
+                           !(ns == Namespace.NO_NAMESPACE && 
+                             namespaces.getURI("") == null)) {
+                String prefix = ns.getPrefix();
+                String uri = namespaces.getURI(prefix);
+                if (!ns.getURI().equals(uri)) { // output a new namespace decl
+                    namespaces.push(ns);
+                    String attrName = getXmlnsTagFor(ns);
+                    domElement.setAttribute(attrName, ns.getURI());
+                }
             }
+*/
 
             // Add attributes to the DOM element
             Iterator itr = element.getAttributes().iterator();
             while (itr.hasNext()) {
                 Attribute attribute = (Attribute) itr.next();
+                domElement.setAttributeNode(output(attribute, domDoc));
+/*
                 Namespace ns1 = attribute.getNamespace();
                 if ((ns1 != Namespace.NO_NAMESPACE) && 
                     (ns1 != Namespace.XML_NAMESPACE) &&
@@ -321,58 +238,108 @@ public class DOMOutputter {
                 }
                 domElement.setAttribute(attribute.getQualifiedName(),
                                         attribute.getValue());
+*/
             }
 
-            if (atRoot) {
-                // If at root, set as document root
-                doc.appendChild(domElement);
-            } else {
-                // Else add to parent element
-                current.appendChild(domElement);
-            }
-
-            // Recurse on child nodes
-            itr = ((Element)content).getMixedContent().iterator();
+            // Add mixed content to the DOM element
+            itr = element.getMixedContent().iterator();
             while (itr.hasNext()) {
-                buildDOMTree(itr.next(), doc, 
-                             domElement, false, namespaces);
+                Object node = itr.next();
+
+                if (node instanceof Element) {
+                    Element e = (Element) node;
+                    org.w3c.dom.Element domElt = output(e, domDoc);
+                    domElement.appendChild(domElt);
+                }
+                else if (node instanceof String) {
+                    String str = (String) node;
+                    org.w3c.dom.Text domText = domDoc.createTextNode(str);
+                    domElement.appendChild(domText);
+                }
+                else if (node instanceof CDATA) {
+                    CDATA cdata = (CDATA) node;
+                    org.w3c.dom.CDATASection domCdata =
+                        domDoc.createCDATASection(cdata.getText());
+                    domElement.appendChild(domCdata);
+                }
+                else if (node instanceof Comment) {
+                    Comment comment = (Comment) node;
+                    org.w3c.dom.Comment domComment =
+                        domDoc.createComment(comment.getText());
+                    domElement.appendChild(domComment);
+                }
+                else if (node instanceof ProcessingInstruction) {
+                    ProcessingInstruction pi = 
+                        (ProcessingInstruction) node;
+                    org.w3c.dom.ProcessingInstruction domPI =
+                         domDoc.createProcessingInstruction(
+                         pi.getTarget(), pi.getData());
+                    domElement.appendChild(domPI);
+                }
+                else if (node instanceof Entity) {
+                    Entity entity = (Entity) node;
+                    org.w3c.dom.EntityReference domEntity = 
+                        domDoc.createEntityReference(entity.getName());
+                    domElement.appendChild(domEntity);
+                }
+                else {
+                    throw new JDOMException(
+                        "Element contained content with type:" +
+                        node.getClass().getName());
+                }
             }
-        } else if (content instanceof String) {
-            org.w3c.dom.Text domText = doc.createTextNode((String)content);
-            current.appendChild(domText);
-        } else if (content instanceof ProcessingInstruction) {
-            ProcessingInstruction pi = (ProcessingInstruction) content;
-            org.w3c.dom.ProcessingInstruction domPI =
-                doc.createProcessingInstruction(pi.getTarget(), pi.getData());
-            current.appendChild(domPI);
-        } else if (content instanceof Comment) {
-            org.w3c.dom.Comment domComment = 
-                doc.createComment(((Comment)content).getText());
-            current.appendChild(domComment);
-        } else if (content instanceof Entity) {
-            org.w3c.dom.EntityReference domEntity = 
-                doc.createEntityReference(((Entity)content).getName());
-            doc.appendChild(domEntity);
-        } else if (content instanceof CDATA) {
-            org.w3c.dom.CDATASection domCdata = 
-                doc.createCDATASection(((CDATA)content).getText());        
-            current.appendChild(domCdata);
+    
+/*
+            // After recursion, remove the namespace defined on the element,
+            // if any
+            if (printedNS) {
+                namespaces.removeLast();
+            }
+*/
+            return domElement;
         }
-
-        /*
-        *
-        * XXX: DOM 1 does not allow us to set DocType (Matt)
-        *
-        } else if (content instanceof DocType) {
-            org.w3c.dom.DocumentType domDocType = 
-               doc.createEntityReference(((DocType)content).getName());
-        } */
-
-        // After recursion, remove the namespace defined on the element,
-        // if any
-        if (printedNS) {
-            namespaces.removeLast();
+        catch (Exception e) {
+            throw new JDOMException("Exception outputting Element " +
+                                    element.getQualifiedName(), e);
         }
+    }
+
+    /**
+     * <p>
+     * This converts the JDOM <code>Attribute</code> parameter to a
+     * DOM <code>Attr</code>, returning the 
+     * DOM version.
+     * </p>
+     * @param attribute <code>Attribute</code> to output.
+     * @return an <code>org.w3c.dom.Attr</code> version
+     */
+    public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
+        org.w3c.dom.Document domDoc = null;
+        try {
+            DOMAdapter adapter =
+                (DOMAdapter)Class.forName(adapterClass).newInstance();
+            domDoc = adapter.createDocument();
+            return output(attribute, domDoc);
+        }
+        catch (Exception e) {
+            throw new JDOMException("Exception outputting Attribute " +
+                                    attribute.getQualifiedName(), e);
+        }
+    }
+
+    protected org.w3c.dom.Attr output(Attribute attribute,
+                                      org.w3c.dom.Document domDoc)
+                                      throws JDOMException {
+         org.w3c.dom.Attr domAttr = null;
+         try {
+             domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
+                                                attribute.getQualifiedName());
+             domAttr.setValue(attribute.getValue());
+         } catch (Exception e) {
+             throw new JDOMException("Exception outputting Attribute " +
+                                     attribute.getQualifiedName(), e);
+         }
+         return domAttr;
     }
 
     /**
@@ -383,7 +350,7 @@ public class DOMOutputter {
      *
      * @param ns <code>Namespace</code> to add definition of
      */
-    public String getXmlnsTagFor(Namespace ns) {
+    private String getXmlnsTagFor(Namespace ns) {
         String attrName = "xmlns";
         if (!ns.getPrefix().equals("")) {
             attrName += ":";
