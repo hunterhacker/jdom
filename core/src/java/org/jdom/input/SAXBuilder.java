@@ -270,22 +270,31 @@ public class SAXBuilder {
                 try {
                     Class factoryClass = 
                         Class.forName("javax.xml.parsers.SAXParserFactory");
+
+                    // factory = SAXParserFactory.newInstance();
                     Method newParserInstance = 
                         factoryClass.getMethod("newInstance", null);
                     Object factory = newParserInstance.invoke(null, null);
+
+                    // factory.setValidating(validate);
                     Method setValidating = 
                         factoryClass.getMethod("setValidating", 
                                                new Class[]{boolean.class});
                     setValidating.invoke(factory, 
                                          new Object[]{new Boolean(validate)});
+
+                    // jaxpParser = factory.newSAXParser();
                     Method newSAXParser = 
                         factoryClass.getMethod("newSAXParser", null);
                     Object jaxpParser  = newSAXParser.invoke(factory, null);
+
+                    // parser = jaxpParser.getXMLReader();
                     Class parserClass = jaxpParser.getClass();
                     Method getXMLReader = 
                         parserClass.getMethod("getXMLReader", null);
                     parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
-                    // System.out.println("using jaxp " +
+
+                    // System.out.println("Using jaxp " +
                     //   parser.getClass().getName());
                 } catch (ClassNotFoundException e) {
                     //e.printStackTrace();
@@ -365,7 +374,7 @@ public class SAXBuilder {
                 if (saxErrorHandler != null) {
                      parser.setErrorHandler(saxErrorHandler);
                 } else {
-                     parser.setErrorHandler(contentHandler);
+                     parser.setErrorHandler(new BuilderErrorHandler());
                 }
             } catch (SAXNotSupportedException e) {
                 // No validation available
@@ -821,48 +830,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
         // Remove the namespaces that this element makes available
         availableNamespaces.remove(element.getAdditionalNamespaces());
-    }
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void error(SAXParseException exception) throws SAXException {
-        throw exception;
-    }
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void warning(SAXParseException exception) throws SAXException {
-        throw exception;
-    }
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void fatalError(SAXParseException exception) throws SAXException {
-        throw exception;
     }
 
     /**

@@ -57,6 +57,7 @@ package org.jdom.input;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import org.jdom.*;
 import org.jdom.Comment;
@@ -67,7 +68,7 @@ import org.jdom.ProcessingInstruction;
 import org.jdom.adapters.*;
 
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
+import org.xml.sax.*;
 
 /**
  * <p><code>DOMBuilder</code> builds a JDOM tree using DOM.
@@ -136,7 +137,7 @@ public class DOMBuilder {
      *                 validation should occur.
      */
     public DOMBuilder(boolean validate) {
-        this(DEFAULT_ADAPTER_CLASS, validate);
+        setValidation(validate);
     }
 
     /**
@@ -146,7 +147,7 @@ public class DOMBuilder {
      * </p>
      */
     public DOMBuilder() {
-        this(DEFAULT_ADAPTER_CLASS, false);
+        this(false);
     }
 
     /**
@@ -176,19 +177,119 @@ public class DOMBuilder {
      */
     public Document build(InputStream in) throws JDOMException {
         Document doc = new Document(null);
-        try {
-            DOMAdapter adapter =
-                (DOMAdapter)Class.forName(adapterClass).newInstance();
+        org.w3c.dom.Document domDoc = null;
 
-            org.w3c.dom.Document domDoc = adapter.getDocument(in, validate);
+        try {
+            if (adapterClass != null) {
+                // The user knows that they want to use a particular impl
+                try {
+                    DOMAdapter adapter =
+                        (DOMAdapter)Class.forName(adapterClass).newInstance();
+                    domDoc = adapter.getDocument(in, validate);
+                    // System.out.println("using specific " + adapterClass);
+                }
+                catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                }
+            }
+            else {
+                // Try using JAXP...
+                // Note we need DOM Level 2 and thus JAXP 1.1.  
+                // If JAXP 1.0 is all that's available then we skip
+                // to the hard coded default parser
+                try {
+                    // Verify this is JAXP 1.1 (or later)
+                    Class.forName("javax.xml.transform.Transformer");
+
+                    // Try JAXP 1.1 calls to build the document
+                    Class factoryClass =
+                        Class.forName("javax.xml.parsers.DocumentBuilderFactory");
+
+                    // factory = DocumentBuilderFactory.newInstance();
+                    Method newParserInstance =
+                        factoryClass.getMethod("newInstance", null);
+                    Object factory = newParserInstance.invoke(null, null);
+
+                    // factory.setValidating(validate);
+                    Method setValidating =
+                        factoryClass.getMethod("setValidating",
+                                               new Class[]{boolean.class});
+                    setValidating.invoke(factory,
+                                         new Object[]{new Boolean(validate)});
+
+                    // factory.setNamespaceAware(true);
+                    Method setNamespaceAware =
+                        factoryClass.getMethod("setNamespaceAware",
+                                               new Class[]{boolean.class});
+                    setNamespaceAware.invoke(factory,
+                                         new Object[]{Boolean.TRUE});
+
+                    // jaxpParser = factory.newDocumentBuilder();
+                    Method newDocBuilder =
+                        factoryClass.getMethod("newDocumentBuilder", null);
+                    Object jaxpParser  = newDocBuilder.invoke(factory, null);
+
+                    // jaxpParser.setErrorHandler(null);
+                    Class parserClass = jaxpParser.getClass();
+                    Method setErrorHandler =
+                        parserClass.getMethod("setErrorHandler",
+                                               new Class[]{org.xml.sax.ErrorHandler.class});
+                    setErrorHandler.invoke(jaxpParser,
+                                         new Object[]{new BuilderErrorHandler()});
+
+                    // domDoc = jaxpParser.parse(in);
+                    Method parse = parserClass.getMethod(
+                        "parse", new Class[]{InputStream.class});
+                    domDoc = (org.w3c.dom.Document)
+                        parse.invoke(jaxpParser, new Object[]{in});
+
+                    // System.out.println("Using jaxp " + 
+                    //   domDoc.getClass().getName());
+                } catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    // e.printStackTrace();
+                } catch (InvocationTargetException ite) {
+                    throw ite.getTargetException(); // throw the root cause
+                }
+            }
+
+            // Check to see if we got a domDoc yet, if not, try to use a
+            // hard coded default
+            if (domDoc == null) {
+                try {
+                    DOMAdapter adapter = (DOMAdapter)
+                        Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
+                    domDoc = adapter.getDocument(in, validate);
+                    // System.out.println("Using default " +
+                    //   DEFAULT_ADAPTER_CLASS);
+                }
+                catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                }
+            }
 
             // Start out at root level
             buildTree(domDoc, doc, null, true);
         }
-        catch (Exception e) {
-            throw new JDOMException("Error in building from stream", e);
+        catch (Throwable e) {
+           if (e instanceof SAXParseException) {
+                SAXParseException p = (SAXParseException)e;
+                String systemId = p.getSystemId();
+                if (systemId != null) {
+                    throw new JDOMException("Error on line " +
+                              p.getLineNumber() + " of document "
+                              + systemId, e);
+                }
+                else {
+                    throw new JDOMException("Error on line " +
+                              p.getLineNumber(), e);
+                }
+            }
+            else {
+                throw new JDOMException("Error in building from stream", e);
+            }
         }
-
         return doc;
     }
 

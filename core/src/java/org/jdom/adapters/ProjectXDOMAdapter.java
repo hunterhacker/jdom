@@ -125,7 +125,8 @@ public class ProjectXDOMAdapter extends AbstractDOMAdapter {
                 throw new IOException(targetException.getMessage());
             }
         } catch (Exception e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getClass().getName() + ": " +
+                                  e.getMessage());
         }
     }
 
@@ -146,7 +147,8 @@ public class ProjectXDOMAdapter extends AbstractDOMAdapter {
                     .newInstance();
 
         } catch (Exception e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getClass().getName() + ": " +
+                                  e.getMessage());
         }
     }
 }

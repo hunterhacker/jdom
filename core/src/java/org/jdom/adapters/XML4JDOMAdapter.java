@@ -66,6 +66,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import org.jdom.input.BuilderErrorHandler;
+
 /**
  * <b><code>XML4JDOMAdapter</code></b>
  * <p>
@@ -122,7 +124,7 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
                 Method setErrorHandler =
                     parserClass.getMethod("setErrorHandler",
                         new Class[] {ErrorHandler.class});
-                setErrorHandler.invoke(parser, new Object[] {new XML4JErrHandler()});
+                setErrorHandler.invoke(parser, new Object[] {new BuilderErrorHandler()});
             }
 
             // Parse the document
@@ -146,7 +148,8 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
                 throw new IOException(targetException.getMessage());
             }
         } catch (Exception e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getClass().getName() + ": " +
+                                  e.getMessage());
         }
     }
 
@@ -167,59 +170,8 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
                     .newInstance();
 
         } catch (Exception e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getClass().getName() + ": " +
+                                  e.getMessage());
         }
     }
-}
-
-class XML4JErrHandler implements ErrorHandler {
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void error(SAXParseException exception)
-        throws SAXException {
-
-        throw exception;
-    }
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void warning(SAXParseException exception)
-        throws SAXException {
-
-        throw exception;
-    }
-
-    /**
-     * <p>
-     * This will report an error that has occurred; this indicates
-     *   that a rule was broken, typically in validation, but that
-     *   parsing can reasonably continue.
-     * </p>
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws <code>SAXException</code> when things go wrong
-     */
-    public void fatalError(SAXParseException exception)
-        throws SAXException {
-
-        throw exception;
-    }
-
 }
