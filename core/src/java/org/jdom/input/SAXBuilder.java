@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.63 2002/02/08 02:49:41 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.64 2002/02/26 04:10:33 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,12 +81,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.63 $, $Date: 2002/02/08 02:49:41 $
+ * @version $Revision: 1.64 $, $Date: 2002/02/26 04:10:33 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.63 $ $Date: 2002/02/08 02:49:41 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.64 $ $Date: 2002/02/26 04:10:33 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -608,7 +608,7 @@ public class SAXBuilder {
             // No entity expansion available
             throw new JDOMException(
               "Entity expansion feature not recognized by " + 
-              saxDriverClass);
+              parser.getClass().getName());
         */
         }
         catch (SAXNotSupportedException e) {
@@ -616,7 +616,7 @@ public class SAXBuilder {
             // No entity expansion available
             throw new JDOMException(
               "Entity expansion feature not supported by " +
-              saxDriverClass);
+              parser.getClass().getName());
         */
         }
     }
@@ -633,10 +633,10 @@ public class SAXBuilder {
             parser.setFeature(feature, value);
         } catch (SAXNotSupportedException e) {
             throw new JDOMException(
-                displayName + " feature not supported for SAX driver " + saxDriverClass);
+                displayName + " feature not supported for SAX driver " + parser.getClass().getName());
         } catch (SAXNotRecognizedException e) {
             throw new JDOMException(
-                displayName + " feature not recognized for SAX driver " + saxDriverClass);
+                displayName + " feature not recognized for SAX driver " + parser.getClass().getName());
         }
     }
 
@@ -652,10 +652,10 @@ public class SAXBuilder {
             parser.setProperty(property, value);
         } catch (SAXNotSupportedException e) {
             throw new JDOMException(
-                displayName + " property not supported for SAX driver " + saxDriverClass);
+                displayName + " property not supported for SAX driver " + parser.getClass().getName());
         } catch (SAXNotRecognizedException e) {
             throw new JDOMException(
-                displayName + " property not recognized for SAX driver " + saxDriverClass);
+                displayName + " property not recognized for SAX driver " + parser.getClass().getName());
         }
     }
 
