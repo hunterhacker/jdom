@@ -172,7 +172,7 @@ public final class Namespace {
     /**
      * <p>
      *  This constructor handles creation of a <code>Namespace</code> object
-     *    with a prefix and URI; it is intentionally left <code>protected</code>
+     *    with a prefix and URI; it is intentionally left <code>private</code>
      *    so that it cannot be invoked by external programs/code.
      * </p>
      *

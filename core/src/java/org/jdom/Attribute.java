@@ -448,7 +448,8 @@ public class Attribute implements Serializable, Cloneable {
      */
     public float getFloatValue(float defaultValue) {
         try {
-            return Float.parseFloat(value);
+            // Avoid Float.parseFloat() to support JDK 1.1
+            return Float.valueOf(value).floatValue();
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -467,7 +468,8 @@ public class Attribute implements Serializable, Cloneable {
      */
     public float getFloatValue() throws DataConversionException {
         try {
-            return Float.parseFloat(value);
+            // Avoid Float.parseFloat() to support JDK 1.1
+            return Float.valueOf(value).floatValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "float");
         }
@@ -486,7 +488,8 @@ public class Attribute implements Serializable, Cloneable {
      */
     public double getDoubleValue(double defaultValue) {
         try {
-            return Double.parseDouble(value);
+            // Avoid Double.parseDouble() to support JDK 1.1
+            return Double.valueOf(value).doubleValue();
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -505,7 +508,8 @@ public class Attribute implements Serializable, Cloneable {
      */
     public double getDoubleValue() throws DataConversionException {
         try {
-            return Double.parseDouble(value);
+            // Avoid Double.parseDouble() to support JDK 1.1
+            return Double.valueOf(value).doubleValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "double");
         }

@@ -263,7 +263,7 @@ public class SAXBuilder {
      */
     public Document build(File file) throws JDOMException {
         try {
-            URL url = file.toURL();
+            URL url = fileToURL(file);
             return build(url);
         } catch (MalformedURLException e) {
             throw new JDOMException(e.getMessage(), e);
@@ -357,6 +357,29 @@ public class SAXBuilder {
         throws JDOMException {
 
         return build(new InputSource(systemId));
+    }
+
+    /**
+     * Imitation of File.toURL(), a JDK 1.2 method, reimplemented 
+     * here to work with JDK 1.1.
+     *
+     * @see java.io.File
+     *
+     * @param f the file to convert
+     * @return the file path converted to a file: URL
+     */
+    protected URL fileToURL(File f) throws MalformedURLException {
+        String path = f.getAbsolutePath();
+        if (File.separatorChar != '/') {
+            path = path.replace(File.separatorChar, '/');
+        }
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        if (!path.endsWith("/") && f.isDirectory()) {
+            path = path + "/";
+        }
+        return new URL("file", "", path);
     }
 }
 
@@ -792,5 +815,4 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
             }
         }
     }
-
 }

@@ -1476,7 +1476,8 @@ public class Element implements Serializable, Cloneable {
      */
     public float getFloatContent(float defaultValue) {
         try {
-            return Float.parseFloat(getContent());
+            // Avoid Float.parseFloat() to support JDK 1.1
+            return Float.valueOf(getContent()).floatValue();
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -1495,7 +1496,8 @@ public class Element implements Serializable, Cloneable {
      */
     public float getFloatContent() throws DataConversionException {
         try {
-            return Float.parseFloat(getContent());
+            // Avoid Float.parseFloat() to support JDK 1.1
+            return Float.valueOf(getContent()).floatValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "float");
         }
@@ -1514,7 +1516,8 @@ public class Element implements Serializable, Cloneable {
      */
     public double getDoubleContent(double defaultValue) {
         try {
-            return Double.parseDouble(getContent());
+            // Avoid Double.parseDouble() to support JDK 1.1
+            return Double.valueOf(getContent()).doubleValue();
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -1533,7 +1536,8 @@ public class Element implements Serializable, Cloneable {
      */
     public double getDoubleContent() throws DataConversionException {
         try {
-            return Double.parseDouble(getContent());
+            // Avoid Double.parseDouble() to support JDK 1.1
+            return Double.valueOf(getContent()).doubleValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "double");
         }
