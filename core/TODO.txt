@@ -5,15 +5,25 @@ Items that need to be done:
 * Should we make "Element parent" of types like EntityRef into "Object parent"
   to match types like Comment and Element?
 
+* Look into hasContent() and hasAttributes() methods to eliminate need to
+  create lists during output.
+
+* Add in Brad's ContentFilter
+  ftp://a.cs.okstate.edu/pub/hip/ContentFilter.java
+  ftp://a.cs.okstate.edu/pub/hip/TestContentFilter.java
+
+--- AFTER BETA 8 ---
+
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
-  (Brad's)
+  (Brad's done some testing, wanted this postponed til after b8)
 
---- AFTER BETA 8 ---
+* Look at making CDATA and Text either the same class or in the same class
+  hierarchy.
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
@@ -55,6 +65,8 @@ Items that need to be done:
   builders.  Then give XMLOutputter the ability to avoid outputting
   "unspecified" attributes.  Some of this may be covered by the attribute type
   support recently added.
+
+* Look into implementing an id() method now that we have attribute types.
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
