@@ -6,8 +6,6 @@ Items that need to be done:
 
 * Must "pretty" output normalize text or is trim enough?
 
-* Think about adding doc.setProperty() and getProperty().
-
 --- BUGS NOT NEEDING TO BE RESOLVED FOR 1.0.0 ---
 
 * The following code prints &exter; on its own line which it shouldn't do.

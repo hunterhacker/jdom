@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.76 2004/02/06 04:32:54 jhunter Exp $
+ $Id: Document.java,v 1.77 2004/02/06 05:05:50 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.76 $, $Date: 2004/02/06 04:32:54 $
+ * @version $Revision: 1.77 $, $Date: 2004/02/06 05:05:50 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.76 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.77 $ $Date: 2004/02/06 05:05:50 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -85,6 +85,9 @@ public class Document implements Parent {
     // See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/
     //                                     core.html#baseURIs-Considerations
     protected String baseURI = null;
+
+    // Supports the setProperty/getProperty calls
+    private HashMap propertyMap = null;
 
     /**
      * Creates a new empty document.  A document must have a root element,
@@ -721,5 +724,32 @@ public class Document implements Parent {
         if (child instanceof EntityRef) {
             throw new IllegalAddException("An EntityRef is not allowed at the document root");
         }
+    }
+
+    /**
+     * Assigns an arbitrary object to be associated with this document under
+     * the given "id" string.  Null values are permitted.
+     *
+     * @param id     the id of the stored object
+     * @param value  the object to store
+     */
+    public void setProperty(String id, Object value) {
+        if (propertyMap == null) {
+            propertyMap = new HashMap();
+        }
+        propertyMap.put(id, value);
+    }
+
+    /**
+     * Returns the object associated with this document under the given "id"
+     * string, or null if there is no binding or if the binding explicitly
+     * stored a null value.
+     *
+     * @param id   the id of the stored object to return
+     * @return     the object associated with the given id
+     */
+    public Object getProperty(String id) {
+        if (propertyMap == null) return null;
+        return propertyMap.get(id);
     }
 }
