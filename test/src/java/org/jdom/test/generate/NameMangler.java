@@ -95,6 +95,10 @@ final class NameMangler {
 
 	/**
 	 * Return a name which represents the supplied constructor.
+	 *
+	 * @param ctor   The constructor object to mangle.
+	 * @param buffer The buffer to place the result into.
+	 * @return A StringBuffer containing the mangled name.
 	 */
 	static StringBuffer getMangledName(Constructor ctor, StringBuffer buffer) {
 		// Add parameters if there are any.
@@ -107,6 +111,13 @@ final class NameMangler {
 	}
 
 
+	/**
+	 * Normalize a set of classes and put the output into a supplied buffer.
+	 *
+	 * @param classes An array of class names to normalize
+	 * @param buffer  The target for the strings.
+	 * @return A StringBuffer containg the normalized class names.
+	 */
 	static StringBuffer getNormalized(Class[] classes, StringBuffer buffer) {
 		buffer.append('_');
 
@@ -120,6 +131,14 @@ final class NameMangler {
 		return buffer;
 	}
 
+
+	/**
+	 * Normalize a class and put the output into a supplied buffer.
+	 *
+	 * @param classes An array of class names to normalize
+	 * @param buffer  The target for the strings.
+	 * @return A StringBuffer containg the normalized class names.
+	 */
 	static StringBuffer getNormalized(Class cls, StringBuffer buffer) {
 		String name = cls.getName();
 
@@ -132,7 +151,7 @@ final class NameMangler {
 		}
 
 		int offset;
-		boolean hasPackage = !((offset=name.lastIndexOf('.'))<0);
+		boolean hasPackage = !((offset=name.lastIndexOf('.')) < 0);
 		// Check package name, and normalize it.
 		if (hasPackage) {
 			String clsName = name.substring(offset+1);
