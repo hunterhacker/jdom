@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.100 2001/10/06 01:12:52 jhunter Exp $
+ $Id: Element.java,v 1.101 2001/10/07 21:25:23 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.100 $ $Date: 2001/10/06 01:12:52 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.101 $ $Date: 2001/10/07 21:25:23 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1585,8 +1585,43 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setAttributes(List attributes) {
-        // XXX Verify attributes are all parentless first
-        this.attributes = attributes;
+        // Save the old list.
+        List oldList = this.attributes;
+        this.attributes = null;
+        
+        int itemsAdded = 0;
+        RuntimeException exception = null;
+        try {
+            Iterator iter = attributes.iterator();
+            while (iter.hasNext()) {
+                setAttribute((Attribute) iter.next());
+                itemsAdded++;
+            }
+        } catch (RuntimeException re) {
+            exception = re;
+        } finally {
+            if (exception != null) {
+                // Copy back the old list (might be null)            
+                this.attributes = oldList;
+                
+                // Only reset the attributes we have copied.
+                Iterator i = attributes.iterator();
+                while (itemsAdded-- > 0) {    
+                    ((Attribute)i.next()).setParent(null);
+                }
+
+                throw exception;
+            }
+        }
+
+        // Orphan the old attributes.
+        if (oldList != null && oldList.size() > 0) {
+            Iterator iter = oldList.iterator();
+            while (iter.hasNext()) {
+                ((Attribute)iter.next()).setParent(null);
+            }
+        }
+
         return this;
     }
 
