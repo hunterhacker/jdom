@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.9 2002/04/29 13:38:16 jhunter Exp $
+ $Id: JDOMResult.java,v 1.10 2002/05/11 07:24:21 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -102,7 +102,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.10 $, $Date: 2002/05/11 07:24:21 $
  */
 public class JDOMResult extends SAXResult {
 
@@ -283,11 +283,11 @@ public class JDOMResult extends SAXResult {
      *                        builder.
      */
     public void endDocument() throws SAXException {
-      // Make the result document available.
-      setDocument(this.saxHandler.getDocument());
-
-      // And propagate event.
+      // Propagate event.
       super.endDocument();
+
+      // And make the result document available.
+      setDocument(this.saxHandler.getDocument());
     }
 
     //----------------------------------------------------------------------
