@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.75 2001/05/09 05:52:20 jhunter Exp $
+ $Id: Element.java,v 1.76 2001/05/09 17:25:38 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.75 $ $Date: 2001/05/09 05:52:20 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.76 $ $Date: 2001/05/09 17:25:38 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -1520,6 +1520,10 @@ public class Element implements Serializable, Cloneable {
                 attribute.getParent().getQualifiedName() + "\"");
         }
 
+        // Performance optimizing flag to help determine if we need to 
+        // bother removing an old attribute
+        boolean preExisting = false;
+
         // Verify the attribute's namespace prefix doesn't collide with
         // another attribute prefix or this element's prefix.
         // This is unfortunately pretty heavyweight but we don't need to do it
@@ -1549,8 +1553,14 @@ public class Element implements Serializable, Cloneable {
           if (attributes != null && attributes.size() > 0) {
               Iterator itr = attributes.iterator();
               while (itr.hasNext()) {
-                  Namespace ns = 
-                     (Namespace) ((Attribute)itr.next()).getNamespace();
+                  Attribute att = (Attribute)itr.next();
+                  Namespace ns = att.getNamespace();
+                  // Keep track if we have an existing attribute
+                  if (attribute.getName().equals(att.getName()) &&
+                        ns.getURI().equals(att.getNamespaceURI())) {
+                      preExisting = true;
+                  }
+
                   if (prefix.equals(ns.getPrefix()) && 
                         !uri.equals(ns.getURI())) {
                       throw new IllegalAddException(this, attribute,
@@ -1565,7 +1575,7 @@ public class Element implements Serializable, Cloneable {
         if (attributes == null) {
             attributes = new LinkedList();
         }
-        else {
+        else if (preExisting) {
             // Remove any pre-existing attribute
             removeAttribute(attribute.getName(), attribute.getNamespace());
         }
