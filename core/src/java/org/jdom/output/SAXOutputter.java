@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.22 2002/05/11 07:15:04 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.23 2002/05/15 04:42:47 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -103,12 +103,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.22 $, $Date: 2002/05/11 07:15:04 $
+ * @version $Revision: 1.23 $, $Date: 2002/05/15 04:42:47 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.22 $ $Date: 2002/05/11 07:15:04 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.23 $ $Date: 2002/05/15 04:42:47 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -397,20 +397,21 @@ public class SAXOutputter {
     /**
      * This will set the state of a SAX feature.
      * <p>
-     * All XMLReaders are required to support setting  to true and  to false.
+     * All XMLReaders are required to support setting to true and to false.
      * </p>
      * <p>
      * SAXOutputter currently supports the following SAX core features:
      * <dl>
      *  <dt><code>http://xml.org/sax/features/namespaces</code></dt>
-     *   <dd><strong>description:</strong> An optional extension handler for
-     *       lexical events like comments.</dd>
+     *   <dd><strong>description:</strong> <code>true</code> indicates
+     *       namespace URIs and unprefixed local names for element and
+     *       attribute names will be available</dd>
      *   <dd><strong>access:</strong> read/write, but always
      *       <code>true</code>!</dd>
      *  <dt><code>http://xml.org/sax/features/namespace-prefixes</code></dt>
-     *   <dd><strong>description:</strong> An optional extension handler
-     *       for DTD-related events other than notations and unparsed
-     *       entities.</dd>
+     *   <dd><strong>description:</strong> <code>true</code> indicates
+     *       XML 1.0 names (with prefixes) and attributes (including xmlns*
+     *       attributes) will be available</dd>
      *   <dd><strong>access:</strong> read/write</dd>
      * </dl>
      * </p>
