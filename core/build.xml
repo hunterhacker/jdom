@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.45 2003/04/30 01:12:42 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.46 2003/04/30 01:26:41 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -11,6 +11,27 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <target name="init">
     <tstamp/>
+
+    <!--
+      Give user a chance to override without editing this file
+      (and without using -D arguments each time they build).
+      The build properties a user is likely to override include:
+        - lib.dir            The directory where to look for the default JAR
+                             files.  Defaults to ./lib
+        - xml-apis.jar       The JAR containing the DOM, SAX and JAXP classes.
+                             Defaults to ${lib.dir}/xml-apis.jar
+        - parser.jar         The JAR containing the XML parser to use.
+                             Defaults to ${lib.dir}/xerces.jar
+        - jaxen-jdom.jar     The JAR containing the Jaxen adapter for JDOM.
+                             Defaults to ${lib.dir}/jaxen-jdom.jar
+        - jaxen-core.jar     The JAR containing the core Jaxen API
+                             Defaults to ${lib.dir}/jaxen-core.jar
+        - jaxen-saxpath.jar  The JAR containing the SAXPath API Jaxen relies
+                             on. Defaults to ${lib.dir}/saxpath.jar
+     -->
+    <property file="${user.home}/jdom.build.properties" />
+    <property file="${basedir}/build.properties" />
+
     <property name="Name" value="JDOM"/>
     <property name="name" value="jdom"/>
     <property name="version" value="1.0beta10-dev"/>
@@ -20,10 +41,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
-    <property name="build.compiler" value="classic"/>
-    <property name="debug" value="on"/>
-    <property name="optimize" value="on"/>
-    <property name="deprecation" value="on"/>
+    <property name="compile.debug"       value="true" />
+    <property name="compile.optimize"    value="true" />
+    <property name="compile.deprecation" value="true" />
 
     <property name="src.dir" value="./src/java"/>
     <property name="samples.dir" value="./samples"/>
@@ -148,8 +168,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
-           debug="${debug}"
-           optimize="${optimize}">
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           deprecation="${compile.deprecation}">
 
       <exclude name="**/Jaxen*" unless="jaxen.present"/>
 
@@ -160,12 +181,13 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the "About" code unless JDK1.1 is being used               -->
   <!-- =================================================================== -->
-  <target name="about" unless="coll.present"
-          description="Compiles the About code unless JDK 1.1 is being used">
+  <target name="about"
+          description="Compiles the About code">
     <javac srcdir="${package.dir}"
            destdir="${build.dest}"
-           debug="${debug}"
-           optimize="${optimize}">
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           deprecation="${compile.deprecation}">
       <classpath refid="compile.class.path"/>
     </javac>
   </target>
@@ -177,8 +199,9 @@ For instructions on how to build JDOM, please view the README.txt file.
           description="Compiles the samples directory">
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
-           debug="${debug}"
-           optimize="${optimize}">
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           deprecation="${compile.deprecation}">
       <classpath refid="run.class.path"/>
     </javac>
   </target>
@@ -218,8 +241,9 @@ For instructions on how to build JDOM, please view the README.txt file.
              use="true"
              splitindex="true"
              noindex="false"
-             windowtitle="${Name} API"
-             doctitle="${Name}"
+             windowtitle="${Name} v${version}"
+             doctitle="${Name} v${version}&lt;br&gt;API Specification"
+             header="&lt;b&gt;${Name}&lt;br&gt;&lt;font size='-1'&gt;${version}&lt;/font&gt;&lt;/b&gt;"
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
       <classpath refid="run.class.path"/>
     </javadoc>
@@ -240,11 +264,13 @@ For instructions on how to build JDOM, please view the README.txt file.
              use="true"
              splitindex="true"
              noindex="false"
-             windowtitle="${Name} API"
-             doctitle="${Name}"
-             link="http://java.sun.com/j2se/1.4/docs/api"
+             windowtitle="${Name} v${version}"
+             doctitle="${Name} v${version}&lt;br&gt;API Specification"
+             header="&lt;b&gt;${Name}&lt;br&gt;&lt;font size='-1'&gt;${version}&lt;/font&gt;&lt;/b&gt;"
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
       <classpath refid="run.class.path"/>
+
+      <link href="http://java.sun.com/j2se/1.4/docs/api"/>
     </javadoc>
   </target>
 
