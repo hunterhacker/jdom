@@ -44,6 +44,7 @@ package org.jdom.contrib.input;
 
 import java.io.*;
 import java.sql.*;
+import java.text.*;
 import java.util.*;
 
 import org.jdom.*;
@@ -211,7 +212,7 @@ public class ResultSetBuilder {
               name = lookupName(columnName[col-1]);
             }
 
-            value = rs.getString(col);
+            value = getString(rs, col, rsmd.getColumnType(col));
             if (!attribs.isEmpty() && isAttribute(name)) {
               if (!rs.wasNull()) {
                 entry.addAttribute(name, value);
@@ -233,6 +234,30 @@ public class ResultSetBuilder {
       catch (SQLException e) {
         throw new JDOMException("Database problem", e);
       }
+    }
+
+    protected String getString(ResultSet rs, int column, int columnType) 
+                                   throws SQLException {
+        if (columnType == Types.TIMESTAMP) {
+            Timestamp timeStamp = rs.getTimestamp(column);
+            if (timeStamp != null) {
+                return DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                     DateFormat.FULL).format(timeStamp);
+            }
+        }
+        if (columnType == Types.DATE) {
+            java.sql.Date date = rs.getDate(column);
+            if (date != null) {
+                return DateFormat.getDateInstance(DateFormat.FULL).format(date);
+            }
+        }
+        if (columnType == Types.TIME) {
+            java.sql.Time time = rs.getTime(column);
+            if (time != null) {
+                return DateFormat.getTimeInstance(DateFormat.FULL).format(time);
+            }
+        }
+        return rs.getString(column);
     }
 
     private String lookupName(String origName) {
