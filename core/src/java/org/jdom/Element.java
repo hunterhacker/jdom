@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.110 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Element.java,v 1.111 2002/02/20 10:41:44 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.110 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.111 $, $Date: 2002/02/20 10:41:44 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.110 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.111 $ $Date: 2002/02/20 10:41:44 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1274,6 +1274,40 @@ public class Element implements Serializable, Cloneable {
         Attribute attribute = (Attribute) attributes.get(name,
                                               Namespace.NO_NAMESPACE);
         return (attribute == null) ? null : attribute.getValue();
+    }
+
+    /**
+     * <p>
+     * This returns the attribute value for the attribute with the given name
+     * and within the given Namespace, or the passed-in default if there is no
+     * such attribute.
+     * </p>
+     *
+     * @param name name of the attribute whose valud is to be returned
+     * @param ns <code>Namespace</code> to search within
+     * @param def a default value to return if the attribute does not exist
+     * @return the named attribute's value, or the default if no such attribute
+     */
+    public String getAttributeValue(String name, Namespace ns, String def) {
+        Attribute attribute = (Attribute) attributes.get(name, ns);
+        return (attribute == null) ? def : attribute.getValue();
+    }
+
+    /**
+     * <p>
+     * This returns the attribute value for the attribute with the given name
+     * and within no namespace, or the passed-in default if there is no
+     * such attribute.
+     * </p>
+     *
+     * @param name name of the attribute whose value to be returned
+     * @param def a default value to return if the attribute does not exist
+     * @return the named attribute's value, or the default if no such attribute
+     */
+    public String getAttributeValue(String name, String def) {
+        Attribute attribute = (Attribute) attributes.get(name,
+                                              Namespace.NO_NAMESPACE);
+        return (attribute == null) ? def : attribute.getValue();
     }
 
     /**
