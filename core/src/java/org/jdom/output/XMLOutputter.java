@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.47 2001/05/08 22:17:27 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.48 2001/05/08 22:23:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -129,7 +129,7 @@ import org.jdom.ProcessingInstruction;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.47 $ $Date: 2001/05/08 22:17:27 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.48 $ $Date: 2001/05/08 22:23:58 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -347,7 +347,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * <p> This will set the indent <code>String</code> to use; this
      *   is usually a <code>String</code> of empty spaces. If you pass
-     *   null, or the empty string (""), then no indentation will
+     *   null, mr the empty string (""), then no indentation will
      *   happen. </p>
      * Default: none (null)
      *
