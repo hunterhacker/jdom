@@ -2,28 +2,32 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Determine if setMixedContent() should remain atomic on failure or not.
+
 * Fix JDK 1.1 build issues introduced with the Manifest work. (Jools?)
 
-* Modify doc/elt setMixedContent() to keep the original list data in event of 
-  an IllegalAddException.
-
-* Straighten up the Entity API.  Current thinking, created over a discussion
-  at SD West with Elliotte:  Have a builder flag on whether or not to expand
-  entities.  Have a default of expansion.  That produces a doc without regard
-  for entity sources.  If expansion is off, then populate the doc with 
+* Straighten up the Entity API.  Have a builder flag on whether or not to 
+  expand entities.  Have a default of expansion.  That produces a doc without 
+  regard for entity sources.  If expansion is off, then populate the doc with 
   EntityRef nodes which hold the information about the entity but don't 
   contain its contents.  XMLOutputter will in the non-expanded case be able 
   to retain the original entity names and locations.  The reason not to do a 
   hybrid of keeping entities and expanding is that then what do you do if you 
   change the content within the "entity"?  You can't do anything because on 
   output you aren't writing the file that holds that content.  So either it's 
-  this doc's content now, or it's held only as a ref.
-  Previous notes on the topic: Make DOMBuilder and SAXBuilder work
-  equivalently.  Like have DOCTYPE support entity defs.  
-  It should probably have methods to get the public and system IDs too, per
+  this doc's content now, or it's held only as a ref.  Make sure DOMBuilder 
+  and SAXBuilder work equivalently.  This means making an EntityRef class
+  instead of Entity.  It should probably have a name, public ID, and system 
+  ID per
   http://lists.denveronline.net/lists/jdom-interest/2000-September/002838.html.
   May also want to read:
   http://lists.denveronline.net/lists/jdom-interest/2000-September/002844.html.
+  Also see:
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003540.html
+  We may need to keep track of entity declarations coming in so that we can 
+  map the name in startEntity(String) to the public ID and system ID.
+  Give Entity a decent clone() method too.  And have its equals() be based on
+  == because it's a node in the tree.
 
 * Figure out if we by default do:
     public void ignorableWhitespace(char[] ch, int start, int length)
@@ -33,25 +37,28 @@ Items that need to be done:
   With a setIgnoringElementContentWhitespace(boolean) and 
   setIgnoringAllWhitespace(boolean) pair of methods.
 
-* Add setName() and setNamespace().  Deprecate getCopy().
-
-* Figure out if elt.getAdditionalNamespaces() should return a mutable list.
-  If so, we have to stop using EMPTY_LIST and need to sanity check additions.
+* Make it so elt.getAdditionalNamespaces() returns a mutable list.
+  This means we have to stop using EMPTY_LIST and need to sanity check 
+  additions.
 
 * Add to Javadocs @throws clauses for all runtime exceptions like 
   IllegalAddException
-
-* Look at replacing NO_NAMESPACE with null.  See below.
 
 * Fix bug where DOMOutputter creates nodes with "" as their
   node.getNamespaceURI() even if the node is not in a namespace.
   http://lists.denveronline.net/lists/jdom-interest/2001-March/005117.html
 
+* Remove hack requiring new Document(null).  The builders can create a
+  List and then at the end assign it as the doc's mixed content.
+
 * Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
   text) prints an extra whitespace line between one closing element and 
   another.
 
-* Implement the ability to output the same DOCTYPE as was input:
+* Implement the ability to output the same DOCTYPE as was input.  Store the
+  internal DTD subset as a String variable in DocType.  This means we need 
+  to reconstruct the String based on SAX events of the DTDHandler/DeclHandler.
+  Or if reading from DOM then from the DOM DocumentType.
         <?xml version='1.0' ?>
         <!DOCTYPE mydtd[
         <!ENTITY nbsp '&#160;'>
@@ -61,43 +68,22 @@ Items that need to be done:
         <!ENTITY Aring '&#197;'>
         <!ENTITY Auml '&#196;'>
         <!ENTITY Ouml '&#214;'>]>
-
-        <DOCUMENT>
-                God forts&auml;ttning p&aring; det nya millenniet!
-        </DOCUMENT>
-  Probably need an Entity class with name, value, publicid, and systemid.  The
-  value/publicid/systemid are optional.  Also a Notation class with name,
-  publicid, systemid.  The publicid/systemid are optional.  The Entity would
-  also need a possible notation name entry if it was an unparsed entity.  The 
-  DocType then holds a Map of entities and notations, retrieved from the 
-  SAX DTDHandler/DeclHandler or read from the DOM DocumentType.  It also can
-  hold a String internalSubset a la DOM.  For SAXBuilder it'll have to build
-  the string from DeclHandler.attributeDecl() and DeclHandler.elementDecl().
-  Then again, maybe we just hold the whole darn thing as a String, gleaned
-  from SAX or DOM as appropriate.  The question there is, what's the JDOM 
-  use case for Notation and Entity maps?
   (Harry Evans <hevans@elite.com> is also working on this.)
 
-* Consider making DocType immutable to avoid the opportunity of having the 
-  same DocType on two docs where a change to one accidentally changes the 
-  other.  Can it be immutable while supporting entities and notations?  
-  Perhaps, if you pass in two Maps on construction.
+* Add parentage to DocType.
+
+* Make DocType.equals() check for equivalency and not reference equality.
 
 * Add notes that element content returned by List is ordered.
 
 * Integrate element factories in SAXBuilder.  (Ken Helland)
 
-* Figure out how Namespace.equals() should work.  The issue's been brought up
+* Make Namespace.equals() check based on URI.  The issue's been brought up
   again.  Historic info is in
   http://lists.denveronline.net/lists/jdom-interest/2000-August/subject.html
   First message in the thread is
   http://lists.denveronline.net/lists/jdom-interest/2000-August/002171.html
-
-* Consider a builder.setFeature() pass-through method that allows any 
-  features to be set that aren't in the http://xml.org namespace.  Make
-  those in http://xml.org not to be touched because either we have specific
-  requirements for them to be set one way, or we have the feature exposed
-  through a Java method.
+  MAKE SURE this doesn't break the factory model.
 
 * Investigate ClassLoader.loadClass() instead of Class.forName() for those
   times when the classes aren't on the system classpath.  (Suggested by Alex
@@ -105,16 +91,11 @@ Items that need to be done:
 
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
   necessary.  Consider using LinkedHashMap from JPDA to preserve attrib order.
+  It's not open source, so a List may be fine.  You don't generally have that
+  many attributes.
 
 * Change elt.setAttribute() to check for attributes with duplicate names & 
   namespaces.
-
-* Enhance Verifier.checkNamespaceURI() to follow RFC 2396.
-
-* Consider Mike Jennings' proposal of two new methods on Element:
-  public String getAttributeValue(String name, String default)
-  public String getAttributeValue(String name, Namespace ns, String default)
-  http://lists.denveronline.net/lists/jdom-interest/2000-December/004155.html
 
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
   same prefix already existing on the element or being the element's own 
@@ -126,36 +107,17 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
 
-* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
-  Probably setStandalone(boolean) and getStandalone().  Maybe we need
-  setVersion(String) and getVersion() too.  Perhaps "encoding" should be moved
-  into the Document too?  Joe wants it possible to output ignoring the
-  standalone flag.
-
 * Perhaps have builder flags to indicate if surrounding whitespace (not just
   ignorable whitespace) should be trimmed, if entity refs should be expanded,
   if CDATA sections should be included, and if comment sections should be
   included.  All seem like reasonable customizations.  The whitespace flag
   should respect xml:space.  It might use an XMLFilter to do the job.
 
-* Consider visitor pattern (again, just to be sure)
-  Use cases: count elements, count nodes, translate comments, remove PIs
-  Would implement with option to visit depth or breadth first
-  Maybe go crazy with pre-order, in-order, and post-order too :-)
-  Methods would exist on Document and Element
-  FYI, DOM's much overweight Traversal-Range spec is at
-    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
-  Joe Bowbeer has ideas at:
-  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
+* Investigate a custom singly LinkedList to save memory.  (Jools has code.)
 
-* Make entity.clone() truly a deep copy.
-
-* Use custom singly LinkedList to save memory.  (Jools has code.)
-
-* Consider using a List of instance data so elements only use what they really
-  need (saving attrib list, namespace list)
-
-* Change PartialList to drive directly off backing list
+* Change PartialList to drive directly off backing list.  Jools is working on
+  this calling it FilterList.  See the temporary "work in progress" jdom-wip 
+  module.
   - Make sure PartialList doesn't let an elt be added as a child (or 
     grandchild, etc) of itself.  See elt.addContent() logic that walks 
     ancestry.
@@ -167,22 +129,13 @@ Items that need to be done:
     27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
     27 Sep 2000.
 
-* Look to keep around an embedded DTD, per
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003540.html
-
 * Test SinglyLinkedList vs ArrayList for speed and memory consumption.
-  (With OptimizeIt)
+  (With OptimizeIt, Joe Bowbeer may lead this)
 
 * Verify we get good error handling if someone passes null to any add/set
   method.
 
-* Deal with getSerializedForm() calls, either implement or remove
-  Note the Document and Element impls from Elliotte are at:
-  http://lists.denveronline.net/lists/jdom-interest/2000-July/001327.html
-  Also
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003142.html
-
-* Consider Element.hasAttributes() and Element.isEmpty()
+* Remove getSerializedForm() calls.  Move logic into XMLOutputter.
 
 * Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
 
@@ -215,6 +168,12 @@ Items that need to be done:
   known named character entities to their named char entity form instead of
   numeric.
 
+* See if there's a better name than getTextTrim() for a method that does
+  internal whitespace collapsing in addition to trimming
+
+* Change XMLOutputter.setTrimText(boolean) to setTextTrim(boolean) or whatever
+  name the above resolves to
+
 --- FOR JDOM 1.0 ---
 
 * Expand class-level Javadocs.
@@ -222,12 +181,6 @@ Items that need to be done:
 * Use MIF Doclet to include javadoc output into MIF/Word/Frame/PDF file.
   http://java.sun.com/j2se/1.3/docs/tooldocs/javadoc/index.html
   http://java.sun.com/j2se/javadoc/mifdoclet/index.html (mifdoclet_C.zip)
-
-* Make sure Illegal*Exception should extend IllegalArgumentException and not
-  JDOMException.
-
-* Investigate doc.getDescription() to let people add doc descriptions.  It's
-  an idea from IBM's parser suggested by andyk.
 
 * Create "build dist" for distribution
   Use fixcrlf in dist (instead of package as currently done)
@@ -248,14 +201,6 @@ Items that need to be done:
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
 
-* Figure out if there should be a public no-arg Document constructor to
-  support building docs with more than just root elts.  Currently you have to
-  use a trick of new Document(null).  Elliotte thinks we should go the 
-  opposite way and disallow creating docs without roots, thus enforcing the
-  rule that JDOM only creates well-formed docs and docs are well-formed from
-  the beginning.  That makes sense to me, actually.  The builders can create a
-  List and then at the end assign it as the doc's mixed content.
-
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
    causes a 20% performance penalty on building docs.)
@@ -273,9 +218,6 @@ Items that need to be done:
 * Consider SAXBuilder.setIgnoreingWhitespace() and similar
   Should save lots of memory.
 
-* Writing a "Getting started" guide for newbies 
-  (Tom Clements <clements@eng.sun.com>)
-
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions.  See "serialVersionUID" thread especially 
   Peter V. Gadjokov's remarks at
@@ -288,6 +230,16 @@ Items that need to be done:
 * Figure out permanent home for JDOMSource and JDOMResult currently living in
   jdom-contrib.  Most likely options are org.jdom.transform or in JAXP.next.
   If org.jdom.transform that could be the home of a transform implementation.
+
+* Consider visitor pattern (again, just to be sure)
+  Use cases: count elements, count nodes, translate comments, remove PIs
+  Would implement with option to visit depth or breadth first
+  Maybe go crazy with pre-order, in-order, and post-order too :-)
+  Methods would exist on Document and Element
+  FYI, DOM's much overweight Traversal-Range spec is at
+    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
+  Joe Bowbeer has ideas at:
+  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
 
 --- FOR JDOM 1.1 ---
 
@@ -337,26 +289,16 @@ Items that need to be done:
 * Contribute the samples from Elliotte's XML DevCon talk to the samples/
   directory.  http://metalab.unc.edu/xml/slides/xmlsig/jdom/JDOM.html
 
-* Add search for jdom.org using Google with site:www.jdom.org, imitating
+* Add a search for jdom.org using Google with site:www.jdom.org, imitating
   http://www.zope.org/SiteIndex/searchForm
 
-* Fix it so check-in messages include diffs.  (jools@jools.org)  Use
-  archive to create an accurate CHANGELOG.txt for what changed between betas.
+* Fix it so check-in messages include diffs.  (jools@jools.org)
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
 * Write a guide for contributors
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
     longer than 80 characters
-
-* Investigate including a library to convert XML data to instantiated Java
-  objects, probably with an XML config file dictating how to do the mapping.
-  See http://xmlhack.com/read.php?item=674 for something along these lines.
-
-* Investigate adding Andy's library (jhunter)
-
-* Verify JDOM is compliant with Infoset
-  http://xmlhack.com/read.php?item=966
 
 * Consider a builder for a read-only document.  It could "intern" objects to
   reduce memory consumption.  In fact, interning may be good for String
@@ -403,15 +345,6 @@ Items that need to be done:
   /** Return XPath of this node relative to given context node. */ 
   public StringBuffer getRelativeXPath(Element ancestor);
 
-* Make sure we really don't need a setName()/setNamespace() option.
-
-* Perhaps use JAXP's transform API to do JDOM transforms
-
-* How about: Entities expanded on input; on output chars converted to entities
-  only if char doesn't exist in output charset or is special character
-
-* Consider XercesErrHandler ignoring warning/error?
-
 * Consider having builders construct nodes that know the line number on which
   they're based.  It's something DOM3 does, and one user requested it.  The
   cost is a heavy price in memory bloat.
@@ -444,4 +377,29 @@ Items that need to be done:
 
 * Considering that local vars are considerably faster that instance vars, test
   if using local vars can speed building.
+
+* Consider a builder.setFeature() pass-through method that allows any 
+  features to be set that aren't in the http://xml.org namespace.  Make
+  those in http://xml.org not to be touched because either we have specific
+  requirements for them to be set one way, or we have the feature exposed
+  through a Java method.
+
+* Consider Mike Jennings' proposal of two new methods on Element:
+  public String getAttributeValue(String name, String default)
+  public String getAttributeValue(String name, Namespace ns, String default)
+  http://lists.denveronline.net/lists/jdom-interest/2000-December/004155.html
+
+* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
+  Probably setStandalone(boolean) and getStandalone().  Maybe we need
+  setVersion(String) and getVersion() too.  Perhaps "encoding" should be moved
+  into the Document too?  Joe wants it possible to output ignoring the
+  standalone flag.
+
+* Consider using a List of instance data so elements only use what they really
+  need (saving attrib list, namespace list)
+
+* Consider Element.hasAttributes() and Element.isEmpty()
+
+* Investigate doc.getDescription() to let people add doc descriptions.  It's
+  an idea from IBM's parser suggested by andyk.
 
