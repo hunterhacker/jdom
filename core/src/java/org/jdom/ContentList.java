@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.2 2002/01/27 11:10:51 jhunter Exp $
+ $Id: ContentList.java,v 1.3 2002/02/13 16:58:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.2 $, $Date: 2002/01/27 11:10:51 $
+ * @version $Revision: 1.3 $, $Date: 2002/02/13 16:58:47 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -81,18 +81,15 @@ class ContentList extends AbstractList
                          implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.2 $ $Date: 2002/01/27 11:10:51 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.3 $ $Date: 2002/02/13 16:58:47 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
     /** Our backing list */
     protected ArrayList list;
 
-    /** Document this list belongs to, or null */
-    protected Document document;
-
-    /** Element this list belongs to, or null */
-    protected Element parent;
+    /** Document or Element this list belongs to */
+    protected Object parent;
 
     /** Force either a Document or Element parent */
     private ContentList() { }
@@ -104,7 +101,7 @@ class ContentList extends AbstractList
      * </p>
      */
     protected ContentList(Document document) {
-        this.document = document;
+        this.parent = document;
         ensureCapacity(INITIAL_ARRAY_SIZE);
     }
 
@@ -117,25 +114,6 @@ class ContentList extends AbstractList
     protected ContentList(Element parent) {
         this.parent = parent;
         ensureCapacity(INITIAL_ARRAY_SIZE);
-    }
-
-    /**
-     * <p>
-     * Add the specified object to the end of this list.
-     * </p>
-     *
-     * @param obj The object to insert into the list.
-     */
-    public boolean add(Object obj) {
-        if ((document != null) && (obj instanceof Element)) {
-            int root = indexOfFirstElement();
-            if (root >= 0) {
-                set(root, obj);
-                return true;
-            }
-        }
-        add(size(), obj);
-        return true;
     }
 
     /**
@@ -194,11 +172,6 @@ class ContentList extends AbstractList
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (element.isRootElement()) {
-            throw new IllegalAddException(
-              "The element already has an existing parent (document root)");
-        }
-
         if (element.getParent() != null) {
             throw new IllegalAddException(
                           "The element already has an existing parent \"" +
@@ -210,7 +183,8 @@ class ContentList extends AbstractList
                 "The element cannot be added to itself");
         }
 
-        if ((parent != null) && (parent.isAncestor(element))) {
+        if ((parent instanceof Element) &&
+                ((Element) parent).isAncestor(element)) {
             throw new IllegalAddException(
                 "The element cannot be added as a descendent of itself");
         }
@@ -225,22 +199,15 @@ class ContentList extends AbstractList
             }
         }
 
-        if (document != null) {
-            int root = indexOfFirstElement();
-            if (root >= 0) {
+        if (parent instanceof Document) {
+            if (indexOfFirstElement() >= 0) {
                 throw new IllegalAddException(
                   "Cannot add a second root element, only one is allowed");
             }
         }
 
         list.add(index, element);
-
-        if (document == null) {
-            element.setParent(parent);
-        }
-        else {
-            element.setDocument(document);
-        }
+        element.parent = parent;
 
         modCount++;
     }
@@ -265,11 +232,6 @@ class ContentList extends AbstractList
                           comment.getParent().getQualifiedName() + "\"");
         }
 
-        if (comment.getDocument() != null) {
-            throw new IllegalAddException(
-               "The comment already has an existing parent (document root)");
-        }
-
         if (list == null) {
             if (index == 0) {
                 ensureCapacity(INITIAL_ARRAY_SIZE);
@@ -281,13 +243,7 @@ class ContentList extends AbstractList
         }
 
         list.add(index, comment);
-
-        if (document == null) {
-            comment.setParent(parent);
-        }
-        else {
-            comment.setDocument(document);
-        }
+        comment.parent = parent;
 
         modCount++;
     }
@@ -312,11 +268,6 @@ class ContentList extends AbstractList
                           pi.getParent().getQualifiedName() + "\"");
         }
 
-        if (pi.getDocument() != null) {
-            throw new IllegalAddException(
-                     "The PI already has an existing parent (document root)");
-        }
-
         if (list == null) {
             if (index == 0) {
                 ensureCapacity(INITIAL_ARRAY_SIZE);
@@ -328,13 +279,7 @@ class ContentList extends AbstractList
         }
 
         list.add(index, pi);
-
-        if (document == null) {
-            pi.setParent(parent);
-        }
-        else {
-            pi.setDocument(document);
-        }
+        pi.parent = parent;
 
         modCount++;
     }
@@ -353,7 +298,7 @@ class ContentList extends AbstractList
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (document != null) {
+        if (parent instanceof Document) {
             throw new IllegalAddException(
                           "A CDATA is not allowed at the document root");
         }
@@ -374,7 +319,7 @@ class ContentList extends AbstractList
             }
         }
         list.add(index, cdata);
-        cdata.setParent(parent);
+        cdata.parent = (Element) parent;
 
         modCount++;
     }
@@ -393,7 +338,7 @@ class ContentList extends AbstractList
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (document != null) {
+        if (parent instanceof Document) {
             throw new IllegalAddException(
                           "A Text not allowed at the document root");
         }
@@ -414,7 +359,7 @@ class ContentList extends AbstractList
             }
         }
         list.add(index, text);
-        text.setParent(parent);
+        text.parent = (Element) parent;
 
         modCount++;
     }
@@ -433,7 +378,7 @@ class ContentList extends AbstractList
             throw new IllegalAddException("Cannot add null object");
         }
 
-        if (document != null) {
+        if (parent instanceof Document) {
             throw new IllegalAddException(
                         "An EntityRef is not allowed at the document root");
         }
@@ -454,7 +399,7 @@ class ContentList extends AbstractList
             }
         }
         list.add(index, entity);
-        entity.setParent(parent);
+        entity.parent = (Element) parent;
 
         modCount++;
     }
@@ -636,30 +581,27 @@ class ContentList extends AbstractList
     private void removeParent(Object obj) {
         if (obj instanceof Element) {
             Element element = (Element) obj;
-            element.setParent(null);
-            element.setDocument(null);
+            element.parent = null;
         }
         else if (obj instanceof Comment) {
             Comment comment = (Comment) obj;
-            comment.setParent(null);
-            comment.setDocument(null);
+            comment.parent = null;
         }
         else if (obj instanceof ProcessingInstruction) {
             ProcessingInstruction pi = (ProcessingInstruction) obj;
-            pi.setParent(null);
-            pi.setDocument(null);
+            pi.parent = null;
         }
         else if (obj instanceof CDATA) {
             CDATA cdata = (CDATA) obj;
-            cdata.setParent(null);
+            cdata.parent = null;
         }
         else if (obj instanceof Text) {
             Text text = (Text) obj;
-            text.setParent(null);
+            text.parent = null;
         }
         else if (obj instanceof EntityRef) {
             EntityRef entity = (EntityRef) obj;
-            entity.setParent(null);
+            entity.parent = null;
         }
     }
 
@@ -679,7 +621,7 @@ class ContentList extends AbstractList
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
-        if ((document != null) && (obj instanceof Element)) {
+        if ((obj instanceof Element) && (parent instanceof Document)) {
             int root = indexOfFirstElement();
             if ((root >= 0) && (root != index)) {
                 throw new IllegalAddException(
@@ -744,6 +686,19 @@ class ContentList extends AbstractList
         /** The Filter */
         protected Filter filter;
 
+        /** Current number of items in this view */
+        int count = 0;
+
+        /** Expected modCount in our backing list */
+        int expected = 0;
+
+        // Implementation Note: Directly after size() is called, expected
+        //       is sync'd with ContentList.modCount and count provides
+        //       the true size of this view.  Before the first call to
+        //       size() or if the backing list is modified outside this
+        //       FilterList, both might contain bogus values and should
+        //       not be used without first calling size();
+
         /**
          * <p>
          * Create a new instance of the FilterList with the specified Filter.
@@ -768,6 +723,8 @@ class ContentList extends AbstractList
             if (filter.canAdd(obj)) {
                 int adjusted = getAdjustedIndex(index);
                 ContentList.this.add(adjusted, obj);
+                expected++;
+                count++;
             }
             else throw new IllegalAddException("Filter won't allow the " +
                                 obj.getClass().getName() + 
@@ -811,7 +768,9 @@ class ContentList extends AbstractList
             int adjusted = getAdjustedIndex(index);
             Object old = ContentList.this.get(adjusted);
             if (filter.canRemove(old)) {
-                return ContentList.this.remove(adjusted);
+                old = ContentList.this.remove(adjusted);
+                expected++;
+                count--;
             }
             else {
                 throw new IllegalAddException("Filter won't allow the " +
@@ -819,6 +778,7 @@ class ContentList extends AbstractList
                                              " '" + old + "' (index " + index +
                                              ") to be removed");
             }
+            return old;
         }
 
         /**
@@ -844,6 +804,7 @@ class ContentList extends AbstractList
                                              ") to be removed");
                 }
                 old = ContentList.this.set(adjusted, obj);
+                expected += 2;
             }
             else {
                 throw new IllegalAddException("Filter won't allow index " +
@@ -861,13 +822,25 @@ class ContentList extends AbstractList
          * @return The number of items in this list.
          */
         public int size() {
-            int count = 0;
+            // Implementation Note: Directly after size() is called, expected
+            //       is sync'd with ContentList.modCount and count provides
+            //       the true size of this view.  Before the first call to
+            //       size() or if the backing list is modified outside this
+            //       FilterList, both might contain bogus values and should
+            //       not be used without first calling size();
+
+            if (expected == ContentList.this.getModCount()) {
+                return count;
+            }
+
+            count = 0;
             for (int i = 0; i < ContentList.this.size(); i++) {
                 Object obj = ContentList.this.list.get(i);
                 if (filter.matches(obj)) {
                     count++;
                 }
             }
+            expected = ContentList.this.getModCount();
             return count;
         }
 
@@ -1056,6 +1029,7 @@ class ContentList extends AbstractList
                     count++;
                 }
             }
+            expected = ContentList.this.getModCount();
             return count;
         }
 

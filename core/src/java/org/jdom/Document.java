@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.50 2002/01/25 18:42:52 jhunter Exp $
+ $Id: Document.java,v 1.51 2002/02/13 16:58:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,12 +70,12 @@ import java.util.*;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.50 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.51 $, $Date: 2002/02/13 16:58:47 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.50 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.51 $ $Date: 2002/02/13 16:58:47 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -203,7 +203,13 @@ public class Document implements Serializable, Cloneable {
      *         a parent.
      */
     public Document setRootElement(Element rootElement) {
-        content.add(rootElement);
+        int index = content.indexOfFirstElement();
+        if (index < 0) {
+            content.add(rootElement);
+        }
+        else {
+            content.set(index, rootElement);
+        }
         return this;
     }
 
