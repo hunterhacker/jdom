@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.4 2001/04/27 18:21:21 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.5 2001/06/22 08:09:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import org.jdom.Namespace;
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.4 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.5 $ $Date: 2001/06/22 08:09:17 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;
@@ -151,10 +151,13 @@ class NamespaceStack {
      *    the "oldest," all to <code>System.out</code>.
      * </p>
      */
-    public void printStack() {
-        System.out.println("Stack: " + prefixes.size());
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        String sep = System.getProperty("line.separator");
+        buf.append("Stack: " + prefixes.size() + sep);
         for (int i = 0; i < prefixes.size(); i++) {
-            System.out.println(prefixes.elementAt(i) + "&" + uris.elementAt(i));
+            buf.append(prefixes.elementAt(i) + "&" + uris.elementAt(i) + sep);
         }        
+        return buf.toString();
     }
 }
