@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.23 2001/06/26 03:20:35 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.24 2001/10/09 13:21:43 bmclaugh Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -88,9 +88,10 @@ For instructions on how to build JDOM, please view the README.txt file.
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${src.dir}"
-             dest="${build.src}"
-             filtering="on"/>
+    <copy todir="${build.src}"
+          filtering="yes">
+      <fileset dir="${src.dir}"/>
+    </copy>
   </target>
 
   <!-- =================================================================== -->
@@ -135,9 +136,10 @@ For instructions on how to build JDOM, please view the README.txt file.
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${samples.dir}"
-             dest="${build.src}"
-             filtering="on"/>
+    <copy todir="${build.src}"
+          filtering="yes">
+      <fileset dir="${samples.dir}"/>
+    </copy>
   </target>
 
   <!-- =================================================================== -->
@@ -174,13 +176,17 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
   <target name="package" depends="compile,about">
-    <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
-    <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
-    <copydir src="${package.dir}/META-INF"
-             dest="${build.dest}/META-INF"/>
+    <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" cr="add"/>
+    <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" cr="remove"/>
+    <copy todir="${build.dest}/META-INF"
+          filtering="yes">
+      <fileset dir="${package.dir}/META-INF">
+        <exclude name="MANIFEST.MF" />
+      </fileset>
+    </copy>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
-         manifest="${build.dest}/META-INF/MANIFEST.MF"/>
+         manifest="${package.dir}/META-INF/MANIFEST.MF"/>
   </target>
 
   <!-- =================================================================== -->
@@ -227,14 +233,11 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Clean targets                                                       -->
   <!-- =================================================================== -->
   <target name="clean" depends="init">
-    <deltree dir="${build.dir}"/>
-    <delete file="${docs.dir}/changes.xml"/>
-    <delete file="${docs.dir}/todo.xml"/>
-    <delete file="${docs.dir}/book.xml"/>
+    <delete dir="${build.dir}"/>
   </target>
 
   <target name="distclean" depends="clean">
-    <deltree dir="${dist.root}"/>
+    <delete dir="${dist.root}"/>
     <delete file="${Name}-${version}.tar.gz"/>
     <delete file="${Name}-${version}.tar"/>
     <delete file="${Name}-${version}.zip"/>
