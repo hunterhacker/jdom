@@ -64,7 +64,7 @@ public class Count {
     public static void main(String[] args) {
   
         if (args.length == 0) {
-            System.out.println("Usage: java XCount URL1 URL2..."); 
+            System.out.println("Usage: java Count URL1 URL2..."); 
         } 
         
         SAXBuilder saxBuilder = new SAXBuilder();
