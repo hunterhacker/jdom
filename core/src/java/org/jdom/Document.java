@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.33 2001/04/13 03:16:30 jhunter Exp $
+ $Id: Document.java,v 1.34 2001/04/13 03:17:07 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -204,11 +204,9 @@ public class Document implements Serializable, Cloneable {
         ListIterator itr = content.listIterator();
         while (itr.hasNext()) {
             Object obj = itr.next();
-System.out.println("examining obj " + obj);
             if (obj instanceof Element) {
                 Element departingRoot = (Element) obj;
                 departingRoot.setDocument(null);
-System.out.println("removing doc on " + departingRoot);
                 itr.set(rootElement);  // replaces
                 hadRoot = true;
             }
