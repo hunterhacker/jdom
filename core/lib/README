@@ -9,7 +9,7 @@ ant.jar
 
 collections.jar
   Needed only if building JDOM on JDK 1.1.  Not needed for JDK 1.2.  Do not
-  put this in your classpath if you're using JDK 1.2.
+  put this in your classpath if you're using JDK 1.2 or later.
 
 xerces.jar
   An XML parser you can use with JDOM.  It's very popular but doesn't have 
@@ -30,3 +30,16 @@ jaxp.jar
 xalan.jar
   An XSLT processor.  Put this in your classpath if you're doing transforms.
 
+--
+
+jdom.jar
+  This JAR is created during the build process and put in the "build"
+  directory.  This contains the org.jdom.* classes, and you should add this
+  JAR to your classpath if you're using JDK 1.2 or later.
+
+jdom-jdk11.jar
+  This JAR is created during the "build11" process, for JDK 1.1 users.  This
+  contains a version of the org.jdom.* classes that uses the Collections
+  classes in collections.jar instead of expecting the JDK to provide the
+  classes.  Do *not* put this in your classpath unless you're running under
+  JDK 1.1, in which case use this instead of jdom.jar.
