@@ -4,8 +4,6 @@ Items that need to be done:
 
 * Implement DOMOutputter (Kevin Regan <kevinr@valicert.com> is working on it)
 
-* Troubleshoot SAXBuilder and related demos
-
 * Implement inline entities:
         <?xml version='1.0' ?>
         <!DOCTYPE mydtd[
