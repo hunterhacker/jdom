@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.19 2002/02/19 06:46:03 jhunter Exp $
+ $Id: CDATA.java,v 1.20 2002/03/12 07:11:39 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,12 +70,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.19 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.20 $, $Date: 2002/03/12 07:11:39 $
  */
 public class CDATA implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.19 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.20 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -86,7 +86,7 @@ public class CDATA implements Serializable, Cloneable {
     protected String value;
 
     /** This <code>CDATA</code> node's parent. */
-    protected Element parent;
+    protected Object parent;
 
     /**
      * <p>This is the protected, no-args constructor standard in all JDOM
@@ -201,7 +201,7 @@ public class CDATA implements Serializable, Cloneable {
      * @return <code>Element</code> - this node's parent.
      */
     public Element getParent() {
-        return parent;
+        return (Element) parent;
     }
 
     /**
@@ -215,7 +215,7 @@ public class CDATA implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return parent.getDocument();
+            return ((Element)parent).getDocument();
         }
         return null;
     }
@@ -246,7 +246,7 @@ public class CDATA implements Serializable, Cloneable {
      */
     public CDATA detach() {
         if (parent != null) {
-            parent.removeContent(this);
+            ((Element)parent).removeContent(this);
         }
         parent = null;
         return this;

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.10 2002/01/26 07:57:37 jhunter Exp $
+ $Id: Text.java,v 1.11 2002/03/12 07:11:39 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,12 +68,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Bradley S. Huffman
- * @version $Revision: 1.10 $, $Date: 2002/01/26 07:57:37 $
+ * @version $Revision: 1.11 $, $Date: 2002/03/12 07:11:39 $
  */
 public class Text implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.10 $ $Date: 2002/01/26 07:57:37 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.11 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -84,7 +84,7 @@ public class Text implements Serializable, Cloneable {
     protected String value;
 
     /** This <code>Text</code> node's parent. */
-    protected Element parent;
+    protected Object parent;
 
     /**
      * <p>This is the protected, no-args constructor standard in all JDOM
@@ -238,7 +238,7 @@ public class Text implements Serializable, Cloneable {
      * @return <code>Element</code> - this node's parent.
      */
     public Element getParent() {
-        return parent;
+        return (Element) parent;
     }
 
     /**
@@ -252,7 +252,7 @@ public class Text implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return parent.getDocument();
+            return ((Element)parent).getDocument();
         }
         return null;
     }
@@ -283,7 +283,7 @@ public class Text implements Serializable, Cloneable {
      */
     public Text detach() {
         if (parent != null) {
-            parent.removeContent(this);
+            ((Element) parent).removeContent(this);
         }
         parent = null;
         return this;

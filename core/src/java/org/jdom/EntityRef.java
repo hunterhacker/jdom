@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.7 2002/02/12 06:34:09 jhunter Exp $
+ $Id: EntityRef.java,v 1.8 2002/03/12 07:11:39 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,12 +64,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.7 $, $Date: 2002/02/12 06:34:09 $
+ * @version $Revision: 1.8 $, $Date: 2002/03/12 07:11:39 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.7 $ $Date: 2002/02/12 06:34:09 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.8 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -81,7 +81,7 @@ public class EntityRef implements Serializable, Cloneable {
     protected String systemID;
 
     /** Parent element or null if none */
-    protected Element parent;
+    protected Object parent;
 
     /**
      * <p>
@@ -207,7 +207,7 @@ public class EntityRef implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return parent.getDocument();
+            return ((Element)parent).getDocument();
         }
 
         return null;
@@ -234,7 +234,7 @@ public class EntityRef implements Serializable, Cloneable {
      * @return parent of this <code>EntityRef</code>
      */
     public Element getParent() {
-        return parent;
+        return (Element) parent;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.38 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Attribute.java,v 1.39 2002/03/12 07:11:39 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.38 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.39 $, $Date: 2002/03/12 07:11:39 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.38 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.39 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
 
     /**
      * <p>
@@ -201,7 +201,7 @@ public class Attribute implements Serializable, Cloneable {
     protected int type = UNDECLARED_ATTRIBUTE;
 
     /** Parent element, or null if none */
-    protected Element parent;
+    protected Object parent;
 
     /**
      * <p>
@@ -293,7 +293,7 @@ public class Attribute implements Serializable, Cloneable {
      * @return parent of this <code>Attribute</code>
      */
     public Element getParent() {
-        return parent;
+        return (Element) parent;
     }
 
     /**
@@ -307,7 +307,7 @@ public class Attribute implements Serializable, Cloneable {
      */
     public Document getDocument() {
         if (parent != null) {
-            return parent.getDocument();
+            return ((Element)parent).getDocument();
         }
         return null;
     }
