@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.22 2004/02/27 11:32:57 jhunter Exp $
+ $Id: AttributeList.java,v 1.23 2004/02/28 03:30:27 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.22 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.23 $, $Date: 2004/02/28 03:30:27 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,7 +78,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.22 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.23 $ $Date: 2004/02/28 03:30:27 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -100,6 +100,19 @@ class AttributeList extends AbstractList
      */
     AttributeList(Element parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Package internal method to support building from sources that are
+     * 100% trusted.
+     *
+     * @param a attribute to add without any checks
+     */ 
+    final void uncheckedAddAttribute(Attribute a) {
+        a.parent = parent;
+        ensureCapacity(size + 1);
+        elementData[size++] = a;
+        modCount++;
     }
 
     /**

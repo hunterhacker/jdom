@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.38 2004/02/27 11:32:57 jhunter Exp $
+ $Id: ContentList.java,v 1.39 2004/02/28 03:30:27 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.38 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.39 $, $Date: 2004/02/28 03:30:27 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.38 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.39 $ $Date: 2004/02/28 03:30:27 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -108,6 +108,19 @@ final class ContentList extends AbstractList implements java.io.Serializable {
     /** Force either a Document or Element parent */
     ContentList(Parent parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Package internal method to support building from sources that are
+     * 100% trusted.
+     *
+     * @param c content to add without any checks
+     */
+    final void uncheckedAddContent(Content c) {
+        c.parent = parent;
+        ensureCapacity(size + 1);
+        elementData[size++] = c;
+        modCount++;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.66 2004/02/27 21:27:28 jhunter Exp $
+ $Id: SAXHandler.java,v 1.67 2004/02/28 03:30:27 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.66 $, $Date: 2004/02/27 21:27:28 $
+ * @version $Revision: 1.67 $, $Date: 2004/02/28 03:30:27 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.66 $ $Date: 2004/02/27 21:27:28 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.67 $ $Date: 2004/02/28 03:30:27 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -217,11 +217,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     protected void pushElement(Element element) {
         if (atRoot) {
-            document.setRootElement(element);
+            document.setRootElement(element);  // XXX should we use a factory call?
             atRoot = false;
         }
         else {
-            currentElement.addContent(element);
+            factory.addContent(currentElement, element);
         }
         currentElement = element;
     }
@@ -430,9 +430,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         flushCharacters();
 
         if (atRoot) {
-            document.addContent(factory.processingInstruction(target, data));
+            factory.addContent(document, factory.processingInstruction(target, data));
         } else {
-            getCurrentElement().addContent(
+            factory.addContent(getCurrentElement(),
                 factory.processingInstruction(target, data));
         }
     }
@@ -453,7 +453,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         flushCharacters();
 
-        getCurrentElement().addContent(factory.entityRef(name));
+        factory.addContent(getCurrentElement(), factory.entityRef(name));
     }
 
     /**
@@ -544,16 +544,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
                                               attType);
             }
-            element.setAttribute(attribute);
+            factory.setAttribute(element, attribute);
         }
 
         flushCharacters();
 
         if (atRoot) {
-            document.setRootElement(element);
+            document.setRootElement(element);  // XXX should we use a factory call?
             atRoot = false;
         } else {
-            getCurrentElement().addContent(element);
+            factory.addContent(getCurrentElement(), element);
         }
         currentElement = element;
     }
@@ -649,10 +649,10 @@ if (!inDTD) {
 */
 
         if (previousCDATA) {
-            getCurrentElement().addContent(factory.cdata(data));
+            factory.addContent(getCurrentElement(), factory.cdata(data));
         }
         else {
-            getCurrentElement().addContent(factory.text(data));
+            factory.addContent(getCurrentElement(), factory.text(data));
         }
 
         previousCDATA = inCDATA;
@@ -708,7 +708,7 @@ if (!inDTD) {
 
         flushCharacters(); // Is this needed here?
 
-        document.addContent(factory.docType(name, publicID, systemID));
+        factory.addContent(document, factory.docType(name, publicID, systemID));
         inDTD = true;
         inInternalSubset = true;
     }
@@ -767,7 +767,7 @@ if (!inDTD) {
                     EntityRef entity = factory.entityRef(name, pub, sys);
 
                     // no way to tell if the entity was from an attribute or element so just assume element
-                    getCurrentElement().addContent(entity);
+                    factory.addContent(getCurrentElement(), entity);
                 }
                 suppress = true;
             }
@@ -834,9 +834,9 @@ if (!inDTD) {
         }
         if ((!inDTD) && (!commentText.equals(""))) {
             if (atRoot) {
-                document.addContent(factory.comment(commentText));
+                factory.addContent(document, factory.comment(commentText));
             } else {
-                getCurrentElement().addContent(factory.comment(commentText));
+                factory.addContent(getCurrentElement(), factory.comment(commentText));
             }
         }
     }

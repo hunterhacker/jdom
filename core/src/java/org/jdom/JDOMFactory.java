@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.3 2004/02/27 10:01:30 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.4 2004/02/28 03:30:27 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.3 $, $Date: 2004/02/27 10:01:30 $
+ * @version $Revision: 1.4 $, $Date: 2004/02/28 03:30:27 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -304,4 +304,14 @@ public interface JDOMFactory {
      * @param name <code>String</code> system ID of element.
      */
     public EntityRef entityRef(String name, String publicID, String systemID);
+
+    // =====================================================================
+    // List manipulation
+    // =====================================================================
+
+    public void addContent(Parent parent, Content child);
+
+    public void setAttribute(Element parent, Attribute a);
+
+    public void addNamespaceDeclaration(Element parent, Namespace additional);
 }
