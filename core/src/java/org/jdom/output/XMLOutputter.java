@@ -124,13 +124,15 @@ public class XMLOutputter implements Cloneable {
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
     
-    /** Whether or not to suppress the XML declaration - default is <code>false</code> */
+    /** Whether or not to suppress the XML declaration 
+      * - default is <code>false</code> */
     private boolean suppressDeclaration = false;
 
     /** The encoding format */
     private String encoding = "UTF8";
 
-    /** Whether or not to output the encoding in the XML declaration - default is <code>false</code> */
+    /** Whether or not to output the encoding in the XML declaration 
+      * - default is <code>false</code> */
     private boolean omitEncoding = false;
 
     /** The default indent is no spaces (as original document) */
@@ -142,10 +144,12 @@ public class XMLOutputter implements Cloneable {
     // variable, but that's OK...
     private int indentLevel = 0;
     
-    /** Whether or not to expand empty elements to &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
+    /** Whether or not to expand empty elements to 
+      * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
     private boolean expandEmptyElements = false;
 
-    /** The default new line flag, set to do new lines only as in original document */
+    /** The default new line flag, set to do new lines only as in 
+      * original document */
     private boolean newlines = false;
 
     /** New line separator */
@@ -284,9 +288,10 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     *  This will set whether the XML declaration (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
-     *    includes the encoding of the document. It is common to suppress this in uses such
-     *    as WML and other wireless device protocols.
+     *  This will set whether the XML declaration 
+     *  (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
+     *  includes the encoding of the document. It is common to suppress 
+     *  this in uses such as WML and other wireless device protocols.
      * </p>
      *
      * @param omitEncoding <code>boolean</code> indicating whether or not
@@ -298,9 +303,10 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     *  This will set whether the XML declaration (<code>&lt;?xml version="1.0"?&gt;</code>)
-     *    will be suppressed or not. It is common to suppress this in uses such
-     *    as SOAP and XML-RPC calls.
+     *  This will set whether the XML declaration 
+     *  (<code>&lt;?xml version="1.0"?&gt;</code>)
+     *  will be suppressed or not. It is common to suppress this in uses such
+     *  as SOAP and XML-RPC calls.
      * </p>
      *
      * @param suppressDeclaration <code>boolean</code> indicating whether or not
@@ -312,8 +318,9 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     *  This will set whether empty elements are expanded from <code>&lt;tagName&gt;</code> to
-     *    <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
+     *  This will set whether empty elements are expanded from 
+     *  <code>&lt;tagName&gt;</code> to
+     *  <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
      * </p>
      *
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
@@ -330,7 +337,8 @@ public class XMLOutputter implements Cloneable {
      *
      * <p>Default: false </p>
      *
-     * @param trimText <code>boolean</code> true=>trim the whitespace, false=>use text verbatim
+     * @param trimText <code>boolean</code> true=>trim the whitespace, 
+     * false=>use text verbatim
      **/
     public void setTrimText(boolean trimText) {
         this.trimText = trimText;
@@ -350,7 +358,8 @@ public class XMLOutputter implements Cloneable {
      * 
      * <p>Default: false </p>
      *
-     * @param padText <code>boolean</code> if true, pad string-element boundaries
+     * @param padText <code>boolean</code> if true, pad string-element 
+     * boundaries
      **/
     public void setPadText(boolean padText) {
         this.padText = padText;
@@ -404,8 +413,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * <p>
      *   This will set the indent <code>String</code>'s size; an indentSize
-     *    of 4 would result in the indention being equivalent to the <code>String</code>
-     *    "&nbsp;&nbsp;&nbsp;&nbsp;" (four space characters).
+     *   of 4 would result in the indention being equivalent to the 
+     *   <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four space chars).
      * </p>
      *
      * @param indentSize <code>int</code> number of spaces in indentation.
@@ -450,7 +459,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Get an OutputStreamWriter, use preferred encoding.
      */
-    protected Writer makeWriter(OutputStream out) throws java.io.UnsupportedEncodingException {
+    protected Writer makeWriter(OutputStream out)
+                         throws java.io.UnsupportedEncodingException {
         Writer writer = new OutputStreamWriter
             (new BufferedOutputStream(out), this.encoding);
         return writer;
@@ -459,7 +469,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Get an OutputStreamWriter, use specified encoding.
      */
-    protected Writer makeWriter(OutputStream out, String encoding) throws java.io.UnsupportedEncodingException {
+    protected Writer makeWriter(OutputStream out, String encoding)
+                         throws java.io.UnsupportedEncodingException {
         Writer writer = new OutputStreamWriter
             (new BufferedOutputStream(out), encoding);
         return writer;
@@ -520,11 +531,12 @@ public class XMLOutputter implements Cloneable {
         while (i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                output(doc.getRootElement(), writer);   // outputs at initial indentLevel
+                output(doc.getRootElement(), writer); // at initial indentLevel
             } else if (obj instanceof Comment) {
                 printComment((Comment) obj, writer, indentLevel);
             } else if (obj instanceof ProcessingInstruction) {
-                printProcessingInstruction((ProcessingInstruction) obj, writer, indentLevel);
+                printProcessingInstruction((ProcessingInstruction) obj,
+                                           writer, indentLevel);
             } else if (obj instanceof CDATA) {
                 printCDATASection((CDATA)obj, writer, indentLevel);
             }
@@ -543,11 +555,9 @@ public class XMLOutputter implements Cloneable {
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(Element element, Writer out)
-        throws IOException
-    {
-        // if this is the root element we could pre-initialize the namespace stack
-        // with the namespaces
+    public void output(Element element, Writer out) throws IOException {
+        // If this is the root element we could pre-initialize the 
+        // namespace stack with the namespaces
         printElement(element, out, indentLevel, new NamespaceStack());
     }
     
@@ -561,9 +571,7 @@ public class XMLOutputter implements Cloneable {
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(Element element, OutputStream out)
-        throws IOException
-    {
+    public void output(Element element, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(element, writer);
         writer.flush();         // Flush the output to the underlying stream
@@ -580,8 +588,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      * @param indent <code>int</code> level of indention.  */
     public void outputElementContent(Element element, Writer out)
-        throws IOException
-    {
+                      throws IOException {
         List mixedContent = element.getMixedContent();
         printElementContent(element, out, indentLevel,
                             new NamespaceStack(),
@@ -598,9 +605,7 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(CDATA cdata, Writer out)
-        throws IOException
-    {
+    public void output(CDATA cdata, Writer out) throws IOException {
         printCDATASection(cdata, out, indentLevel);
     }
     
@@ -612,9 +617,7 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(CDATA cdata, OutputStream out)
-        throws IOException
-    {
+    public void output(CDATA cdata, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(cdata, writer);
         writer.flush();         // Flush the output to the underlying stream
@@ -630,9 +633,7 @@ public class XMLOutputter implements Cloneable {
      * @param comment <code>Comment</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(Comment comment, Writer out)
-        throws IOException
-    {
+    public void output(Comment comment, Writer out) throws IOException {
         printComment(comment, out, indentLevel);
     }
     
@@ -644,9 +645,7 @@ public class XMLOutputter implements Cloneable {
      * @param comment <code>Comment</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(Comment comment, OutputStream out)
-        throws IOException
-    {
+    public void output(Comment comment, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(comment, writer);
         writer.flush();         // Flush the output to the underlying stream
@@ -662,9 +661,7 @@ public class XMLOutputter implements Cloneable {
      * @param string <code>String</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(String string, Writer out)
-        throws IOException
-    {
+    public void output(String string, Writer out) throws IOException {
         printString(string, out);
     }
     
@@ -677,9 +674,7 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(String string, OutputStream out)
-        throws IOException
-    {
+    public void output(String string, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         printString(string, writer);
         writer.flush();         // Flush the output to the underlying stream
@@ -694,9 +689,7 @@ public class XMLOutputter implements Cloneable {
      * @param entity <code>Entity</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(Entity entity, Writer out)
-        throws IOException
-    {
+    public void output(Entity entity, Writer out) throws IOException {
         printEntity(entity, out);
     }
     
@@ -708,9 +701,7 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(Entity entity, OutputStream out)
-        throws IOException
-    {
+    public void output(Entity entity, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         printEntity(entity, writer);
         writer.flush();         // Flush the output to the underlying stream
@@ -727,10 +718,9 @@ public class XMLOutputter implements Cloneable {
      * @param element <code>ProcessingInstruction</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(ProcessingInstruction processingInstruction, Writer out)
-        throws IOException
-    {
-        printProcessingInstruction(processingInstruction, out, indentLevel);
+    public void output(ProcessingInstruction pi, Writer out)
+                   throws IOException {
+        printProcessingInstruction(pi, out, indentLevel);
     }
     
     /**
@@ -738,14 +728,14 @@ public class XMLOutputter implements Cloneable {
      * Print out a <code>{@link ProcessingInstruction}</code>
      * </p>
      *
-     * @param processingInstruction <code>ProcessingInstruction</code> to output.
+     * @param processingInstruction <code>ProcessingInstruction</code> 
+     * to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(ProcessingInstruction processingInstruction, OutputStream out)
-        throws IOException
-    {
+    public void output(ProcessingInstruction pi, OutputStream out)
+                   throws IOException {
         Writer writer = makeWriter(out);
-        output(processingInstruction, writer);
+        output(pi, writer);
         writer.flush();         // Flush the output to the underlying stream
     }
     
@@ -793,7 +783,7 @@ public class XMLOutputter implements Cloneable {
      */
     protected void printDeclaration(Document doc,
                                     Writer out,
-                                    String encoding)  throws IOException {
+                                    String encoding) throws IOException {
 
         // Only print of declaration is not suppressed
         if (!suppressDeclaration) {
@@ -824,7 +814,8 @@ public class XMLOutputter implements Cloneable {
      * @param doc <code>Document</code> whose declaration to write.
      * @param out <code>Writer</code> to write to.
      */
-    protected void printDocType(DocType docType, Writer out)  throws IOException {
+    protected void printDocType(DocType docType, Writer out)
+                        throws IOException {
         if (docType == null) {
             return;
         }
@@ -880,7 +871,7 @@ public class XMLOutputter implements Cloneable {
      * @param indentLevel Current depth in hierarchy.
      */
     protected void printProcessingInstruction(ProcessingInstruction pi,
-                                    Writer out, int indentLevel) throws IOException {
+                        Writer out, int indentLevel) throws IOException {
                                         
         indent(out, indentLevel);
         out.write(pi.getSerializedForm());
@@ -899,7 +890,7 @@ public class XMLOutputter implements Cloneable {
      * @param indent <code>int</code> level of indention.
      */
     protected void printCDATASection(CDATA cdata,
-                              Writer out, int indentLevel) throws IOException {
+                        Writer out, int indentLevel) throws IOException {
         
         indent(out, indentLevel);
         out.write(cdata.getSerializedForm());
@@ -919,7 +910,8 @@ public class XMLOutputter implements Cloneable {
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
     protected void printElement(Element element, Writer out,
-                                int indentLevel, NamespaceStack namespaces)  throws IOException {
+                                int indentLevel, NamespaceStack namespaces)
+                                throws IOException {
 
         List mixedContent = element.getMixedContent();
 
@@ -931,9 +923,9 @@ public class XMLOutputter implements Cloneable {
 
         // Print beginning element tag
         /* maybe the doctype, xml declaration, and processing instructions 
-           should only break before and not after; then this check is unnecessary,
-           or maybe the println should only come after and never before. 
-           Then the output always ends with a newline */
+           should only break before and not after; then this check is 
+           unnecessary, or maybe the println should only come after and 
+           never before.  Then the output always ends with a newline */
            
         indent(out, indentLevel);
 
@@ -946,7 +938,7 @@ public class XMLOutputter implements Cloneable {
         if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
             String prefix = ns.getPrefix();        
             String uri = namespaces.getURI(prefix);
-            if (!ns.getURI().equals(uri)) { // output a new namespace declaration
+            if (!ns.getURI().equals(uri)) { // output a new namespace decl
                 namespaces.push(ns);
                 printNamespace(ns, out);
             }
@@ -990,11 +982,13 @@ public class XMLOutputter implements Cloneable {
 
             if (stringOnly) {
                 // if string only, print content on same line as tags
-                printElementContent(element, out, indentLevel, namespaces, mixedContent);
+                printElementContent(element, out, indentLevel,
+                                    namespaces, mixedContent);
             }
             else {
                 maybePrintln(out);
-                printElementContent(element, out, indentLevel, namespaces, mixedContent);
+                printElementContent(element, out, indentLevel,
+                                    namespaces, mixedContent);
                 indent(out, indentLevel);               
             }
 
@@ -1022,9 +1016,7 @@ public class XMLOutputter implements Cloneable {
     protected void printElementContent(Element element, Writer out,
                                        int indentLevel,
                                        NamespaceStack namespaces,
-                                       List mixedContent
-                                       )  throws IOException
-    {
+                                       List mixedContent) throws IOException {
         // get same local flags as printElement does
         // a little redundant code-wise, but not performance-wise
         boolean empty = mixedContent.size() == 0;
@@ -1054,7 +1046,7 @@ public class XMLOutputter implements Cloneable {
            Class justOutput = null;
             for (int i=0, size=mixedContent.size(); i<size; i++) {
                 content = mixedContent.get(i);
-                // See if text, an element, a processing instruction or a comment
+                // See if text, an element, a PI or a comment
                 if (content instanceof Comment) {
                     printComment((Comment) content, out, indentLevel + 1);
                    justOutput = Comment.class;
@@ -1066,13 +1058,15 @@ public class XMLOutputter implements Cloneable {
                 } else if (content instanceof Element) {
                    if (padText && (justOutput == String.class))
                        out.write(padTextString);
-                    printElement((Element) content, out, indentLevel + 1, namespaces);
+                    printElement((Element) content, out,
+                                 indentLevel + 1, namespaces);
                    justOutput = Element.class;
                 } else if (content instanceof Entity) {
                     printEntity((Entity) content, out);
                    justOutput = Entity.class;
                 } else if (content instanceof ProcessingInstruction) {
-                    printProcessingInstruction((ProcessingInstruction) content, out, indentLevel + 1);
+                    printProcessingInstruction((ProcessingInstruction) content,
+                                               out, indentLevel + 1);
                    justOutput = ProcessingInstruction.class;
                 } else if (content instanceof CDATA) {
                     printCDATASection((CDATA)content, out, indentLevel + 1);
@@ -1166,7 +1160,7 @@ public class XMLOutputter implements Cloneable {
             if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
                 String prefix = ns.getPrefix();           
                 String uri = namespaces.getURI(prefix);
-                if (!ns.getURI().equals(uri)) { // output a new namespace declaration
+                if (!ns.getURI().equals(uri)) { // output a new namespace decl
                     printNamespace(ns, out);
                     namespaces.push(ns);
                 }
@@ -1325,5 +1319,4 @@ public class XMLOutputter implements Cloneable {
         }
         return i;
     } // parseArgs
-    
 }
