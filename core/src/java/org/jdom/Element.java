@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.140 2004/02/06 03:39:03 jhunter Exp $
+ $Id: Element.java,v 1.141 2004/02/06 04:12:05 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.140 $, $Date: 2004/02/06 03:39:03 $
+ * @version $Revision: 1.141 $, $Date: 2004/02/06 04:12:05 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Child implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.140 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.141 $ $Date: 2004/02/06 04:12:05 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -97,9 +97,6 @@ public class Element extends Child implements Parent {
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
     // for a possible memory optimization here (using a RootElement subclass)
-
-    /** Parent or null if none */
-    protected Parent parent;
 
     /**
      *  The attributes of the element.  Subclassers have to
