@@ -8,26 +8,13 @@ None!
 
 * Rusty's "base uri" support for Element and the rest.
 
-* The following code prints &exter; on its own line which it shouldn't do.
-  See http://lists.denveronline.net/lists/jdom-interest/2003-August/013340.html
-  for a patch which *does not work* because the entity string gets escaped
-  so it becomes "&amp;exter;".  The right solution is tricky.
-
-  public static void main(String[] args) throws Exception {
-    String xml = "<!DOCTYPE doc [ <!ENTITY ex \"foo\">]>  <a>Text &exter;content</a>";
-    SAXBuilder builder = new SAXBuilder();
-    builder.setExpandEntities(false);
-    Document doc = builder.build(new StringReader(xml));
-    new XMLOutputter(Format.getPrettyFormat()).output(doc, System.out);
-  }
-
 * Possibly change whitespace escape rules to aid round tripping.  See:
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013224.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013226.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013227.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013261.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013262.html
-
+  NOW DONE?
 
 --- FUTURE IDEAS ---
 
