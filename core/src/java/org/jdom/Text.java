@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.20 2004/02/06 04:10:59 jhunter Exp $
+ $Id: Text.java,v 1.21 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,15 +61,15 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.20 $, $Date: 2004/02/06 04:10:59 $
+ * @version $Revision: 1.21 $, $Date: 2004/02/06 04:32:54 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
  */
-public class Text extends Child {
+public class Text extends Content {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.20 $ $Date: 2004/02/06 04:10:59 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.21 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 
@@ -91,7 +91,7 @@ public class Text extends Child {
      * supplied string value as it's character content.
      *
      * @param str the node's character content.
-     * @throws IllegalDataException if <code>str</code> contains an 
+     * @throws IllegalDataException if <code>str</code> contains an
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})
      */
@@ -171,7 +171,7 @@ public class Text extends Child {
      * This will set the value of this <code>Text</code> node.
      *
      * @param str value for node's content.
-     * @throws IllegalDataException if <code>str</code> contains an 
+     * @throws IllegalDataException if <code>str</code> contains an
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})
      */
@@ -195,7 +195,7 @@ public class Text extends Child {
      * exists within this <code>Text</code> node.
      *
      * @param str character content to append.
-     * @throws IllegalDataException if <code>str</code> contains an 
+     * @throws IllegalDataException if <code>str</code> contains an
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})
      */

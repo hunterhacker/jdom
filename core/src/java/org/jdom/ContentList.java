@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.32 2004/02/06 03:39:02 jhunter Exp $
+ $Id: ContentList.java,v 1.33 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.32 $, $Date: 2004/02/06 03:39:02 $
+ * @version $Revision: 1.33 $, $Date: 2004/02/06 04:32:54 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.32 $ $Date: 2004/02/06 03:39:02 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.33 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -99,7 +99,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 
     /** Our backing list */
 //    protected ArrayList list;
-    private Child elementData[];
+    private Content elementData[];
     private int size;
 
     /** Document or Element this list belongs to */
@@ -123,8 +123,8 @@ final class ContentList extends AbstractList implements java.io.Serializable {
         if (obj == null) {
             throw new IllegalAddException("Cannot add null object");
         }
-        if ((obj instanceof Child)) {
-            add(index, (Child) obj);
+        if ((obj instanceof Content)) {
+            add(index, (Content) obj);
         } else {
             throw new IllegalAddException("Class " +
                          obj.getClass().getName() +
@@ -139,7 +139,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Element</code>
      * @param child <code>Element</code> to add
      */
-    void add(int index, Child child) {
+    void add(int index, Content child) {
         if (child == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -149,11 +149,11 @@ final class ContentList extends AbstractList implements java.io.Serializable {
             Parent p = child.getParent();
             if (p instanceof Document) {
                 throw new IllegalAddException((Element)child,
-                   "The Child already has an existing parent document");
+                   "The Content already has an existing parent document");
             }
             else {
                 throw new IllegalAddException(
-                     "The Child already has an existing parent \"" +
+                     "The Content already has an existing parent \"" +
                      ((Element)p).getQualifiedName() + "\"");
             }
         }
@@ -262,7 +262,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      * @param collection The collection to use.
      */
     void clearAndSet(Collection collection) {
-        Child[] old = elementData;
+        Content[] old = elementData;
         int oldSize = size;
 
         elementData = null;
@@ -297,7 +297,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      */
     void ensureCapacity(int minCapacity) {
         if( elementData==null ) {
-            elementData = new Child[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
+            elementData = new Content[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
         } else {
             int oldCapacity = elementData.length;
             if (minCapacity > oldCapacity) {
@@ -305,7 +305,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                 int newCapacity = (oldCapacity * 3)/2 + 1;
                 if (newCapacity < minCapacity)
                     newCapacity = minCapacity;
-                elementData = new Child[newCapacity];
+                elementData = new Content[newCapacity];
                 System.arraycopy(oldData, 0, elementData, 0, size);
             }
         }

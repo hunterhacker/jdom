@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.7 2004/02/06 03:39:03 jhunter Exp $
+ $Id: Parent.java,v 1.8 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -62,21 +62,21 @@ import org.jdom.filter.Filter;
 
 /**
  * Superclass for JDOM objects which are allowed to contain
- * {@link Child} content.
+ * {@link Content} content.
  *
- * @see org.jdom.Child
+ * @see org.jdom.Content
  * @see org.jdom.Document
  * @see org.jdom.Element
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.7 $, $Date: 2004/02/06 03:39:03 $
+ * @version $Revision: 1.8 $, $Date: 2004/02/06 04:32:54 $
  */
 public interface Parent extends Cloneable, Serializable {
 
     /**
      * Returns the number of children in this parent's content list.
-     * Children may be any {@link Child} type.
+     * Children may be any {@link Content} type.
      *
      * @return number of children
      */
@@ -89,7 +89,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param child  child to search for
      * @return       index of child, or -1 if not found
      */
-    int indexOf(Child child);
+    int indexOf(Content child);
 
 //    /**
 //     * Starting at the given index (inclusive), returns the index of
@@ -106,7 +106,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param child   child to append to end of content list
      * @return        the parent on which the method was called
      */
-    Parent addContent(Child child);
+    Parent addContent(Content child);
 
     /**
      * Appends all children in the given collection to the end of
@@ -127,7 +127,7 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IndexOutOfBoundsException if index is negative or beyond
      *         the current number of children
      */
-    Parent addContent(int index, Child child);
+    Parent addContent(int index, Content child);
 
     /**
      * Inserts the content in a collection into the content list
@@ -159,11 +159,11 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IllegalStateException if parent is a Document
      *         and the root element is not set
      */
-    Child getContent(int index);
+    Content getContent(int index);
 
     /**
      * Returns the full content of this parent as a {@link java.util.List}
-     * which contains objects of type {@link Child}. The returned list is
+     * which contains objects of type {@link Content}. The returned list is
      * <b>"live"</b> and in document order. Any modifications
      * to it affect the element's actual contents. Modifications are checked
      * for conformance to XML 1.0 rules.
@@ -221,7 +221,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param  child  child to remove
      * @return whether the removal occurred
      */
-    boolean removeContent(Child child);
+    boolean removeContent(Content child);
 
     /**
      * Removes and returns the child at the given
@@ -232,7 +232,7 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IndexOutOfBoundsException if index is negative or beyond
      *             the current number of children
      */
-    Child removeContent(int index);
+    Content removeContent(int index);
 
     /**
      * Set this parent's content to the supplied child.
@@ -261,11 +261,11 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IllegalAddException if the supplied child is already attached
      *                             or not legal content for this parent
      */
-    Parent setContent(Child child);
+    Parent setContent(Content child);
 
     /**
      * Sets this parent's content to the supplied content list.  The supplied
-     * collection must contain only objects of type {@link Child}.
+     * collection must contain only objects of type {@link Content}.
      * <p>
      * If the supplied content is legal content for this parent and before
      * it is added, all content in the current content list will
@@ -307,7 +307,7 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IndexOutOfBoundsException if index is negative or beyond
      *         the current number of children
      */
-    Parent setContent(int index, Child child);
+    Parent setContent(int index, Content child);
 
     /**
      * Replaces the child at the given index whith the supplied
@@ -354,7 +354,7 @@ public interface Parent extends Cloneable, Serializable {
 
     /**
      * Return this parent's parent, or null if this parent is currently
-     * not attached to another parent. This is the same method as in Child but
+     * not attached to another parent. This is the same method as in Content but
      * also added to Parent to allow more easy up-the-tree walking.
      *
      * @return this parent's parent or null if none
@@ -378,5 +378,5 @@ public interface Parent extends Cloneable, Serializable {
      * @param index   the location for the potential child
      * @throws IllegalAddException  if the child add isn't allowed
      */
-    void canContain(Child child, int index) throws IllegalAddException;
+    void canContain(Content child, int index) throws IllegalAddException;
 }

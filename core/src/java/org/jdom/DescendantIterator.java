@@ -1,6 +1,6 @@
 /*--
 
- $Id: DescendantIterator.java,v 1.2 2003/05/29 02:47:39 jhunter Exp $
+ $Id: DescendantIterator.java,v 1.3 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,7 +57,7 @@
 package org.jdom;
 
 import java.util.*;
-import org.jdom.Child;
+import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Parent;
 
@@ -67,7 +67,7 @@ import org.jdom.Parent;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.2 $, $Date: 2003/05/29 02:47:39 $
+ * @version $Revision: 1.3 $, $Date: 2004/02/06 04:32:54 $
  */
 class DescendantIterator implements Iterator {
 
@@ -76,7 +76,7 @@ class DescendantIterator implements Iterator {
     private List stack = new ArrayList();
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
+            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.3 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
 
     /**
      * Iterator for the descendants of the supplied object.
@@ -89,7 +89,7 @@ class DescendantIterator implements Iterator {
     }
 
     /**
-     * Returns true> if the iteration has more {@link Child} descendants.
+     * Returns true> if the iteration has more {@link Content} descendants.
      */
     public boolean hasNext() {
         if (iterator != null && iterator.hasNext()) return true;
@@ -99,7 +99,7 @@ class DescendantIterator implements Iterator {
     }
 
     /**
-     * Returns the next {@link Child} descendant.
+     * Returns the next {@link Content} descendant.
      */
     public Object next() {
         if (!hasNext()) {
@@ -125,7 +125,7 @@ class DescendantIterator implements Iterator {
             }
         }
 
-        Child child = (Child) iterator.next();
+        Content child = (Content) iterator.next();
         if (child instanceof Element) {
             nextIterator = ((Element)child).getContent().iterator();
         }
@@ -133,7 +133,7 @@ class DescendantIterator implements Iterator {
     }
 
     /**
-     * Detaches the last {@link org.jdom.Child} returned by the last call to
+     * Detaches the last {@link org.jdom.Content} returned by the last call to
      * next from it's parent.  <b>Note</b>: this <b>does not</b> affect
      * iteration and all children, siblings, and any node following the
      * removed node (in document order) will be visited.

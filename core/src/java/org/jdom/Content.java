@@ -1,6 +1,6 @@
 /*--
 
- $Id: Child.java,v 1.4 2004/02/06 03:39:02 jhunter Exp $
+ $Id: Content.java,v 1.1 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,27 +72,27 @@ import java.io.*;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.4 $, $Date: 2004/02/06 03:39:02 $
+ * @version $Revision: 1.1 $, $Date: 2004/02/06 04:32:54 $
  */
-public abstract class Child implements Cloneable, Serializable {
-    
+public abstract class Content implements Cloneable, Serializable {
+
     protected Parent parent = null;
-    
-    protected Child() {}
-    
+
+    protected Content() {}
+
     /**
      * Detaches this child from its parent or does nothing if the child
      * has no parent.
      *
      * @return this child detached
      */
-    public Child detach() {
+    public Content detach() {
         if (parent != null) {
             parent.removeContent(this);
         }
         return this;
     }
-    
+
     /**
      * Return this child's parent, or null if this child is currently
      * not attached. The parent can be either an {@link Element}
@@ -105,13 +105,13 @@ public abstract class Child implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the parent of this Child. The caller is responsible for removing
+     * Sets the parent of this Content. The caller is responsible for removing
      * any pre-existing parentage.
      *
      * @param  parent              new parent element
      * @return                     the target element
      */
-    protected Child setParent(Parent parent) {
+    protected Content setParent(Parent parent) {
         this.parent = parent;
         return this;
     }
@@ -124,10 +124,10 @@ public abstract class Child implements Cloneable, Serializable {
      */
     public Document getDocument() {
         if (parent == null) return null;
-        return parent.getDocument(); 
+        return parent.getDocument();
     }
 
-    
+
     /**
      * Returns the XPath 1.0 string value of this child.
      *
@@ -143,7 +143,7 @@ public abstract class Child implements Cloneable, Serializable {
      */
     public Object clone() {
         try {
-            Child c = (Child)super.clone();
+            Content c = (Content)super.clone();
             c.parent = null;
             return c;
         } catch (CloneNotSupportedException e) {

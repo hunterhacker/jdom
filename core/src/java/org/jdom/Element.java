@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.141 2004/02/06 04:12:05 jhunter Exp $
+ $Id: Element.java,v 1.142 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.141 $, $Date: 2004/02/06 04:12:05 $
+ * @version $Revision: 1.142 $, $Date: 2004/02/06 04:32:54 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -78,10 +78,10 @@ import org.jdom.filter.*;
  * @author  Alex Rosen
  * @author  Bradley S. Huffman
  */
-public class Element extends Child implements Parent {
+public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.141 $ $Date: 2004/02/06 04:12:05 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.142 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -396,7 +396,7 @@ public class Element extends Child implements Parent {
 
         Iterator itr = getContent().iterator();
         while (itr.hasNext()) {
-            Child child = (Child) itr.next();
+            Content child = (Content) itr.next();
             if (child instanceof Element || child instanceof Text) {
                 buffer.append(child.getValue());
             }
@@ -419,7 +419,7 @@ public class Element extends Child implements Parent {
         return content.size();
     }
 
-    public int indexOf(Child child) {
+    public int indexOf(Content child) {
         return content.indexOf(child);
     }
 
@@ -693,7 +693,7 @@ public class Element extends Child implements Parent {
         List old = new ArrayList();
         Iterator itr = content.getView(filter).iterator();
         while (itr.hasNext()) {
-            Child child = (Child) itr.next();
+            Content child = (Content) itr.next();
             old.add(child);
             itr.remove();
         }
@@ -754,7 +754,7 @@ public class Element extends Child implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Child child) {
+    public Parent setContent(int index, Content child) {
         content.set(index, child);
         return this;
     }
@@ -795,192 +795,6 @@ public class Element extends Child implements Parent {
     }
 
     /**
-     * This returns the first child element within this element with the
-     * given local name and belonging to no namespace.
-     * If no elements exist for the specified name and namespace, null is
-     * returned.
-     *
-     * @param name local name of child element to match
-     * @return the first matching child element, or null if not found
-     */
-    public Element getChildElement(String name) {
-        return getChild(name, Namespace.NO_NAMESPACE);
-    }
-
-    /**
-     * This returns the first child element within this element with the
-     * given local name and belonging to the given namespace.
-     * If no elements exist for the specified name and namespace, null is
-     * returned.
-     *
-     * @param name local name of child element to match
-     * @param ns <code>Namespace</code> to search within
-     * @return the first matching child element, or null if not found
-     */
-    public Element getChildElement(String name, Namespace ns) {
-        List elements = content.getView(new ElementFilter(name, ns));
-        Iterator i = elements.iterator();
-        if (i.hasNext()) {
-            return (Element) i.next();
-        }
-        return null;
-    }
-
-    /**
-     * This returns a <code>List</code> of all the child elements
-     * nested directly (one level deep) within this element, as
-     * <code>Element</code> objects.  If this target element has no nested
-     * elements, an empty List is returned.  The returned list is "live"
-     * in document order and changes to it affect the element's actual
-     * contents.
-     *
-     * <p>
-     * Sequential traversal through the List is best done with a Iterator
-     * since the underlying implement of List.size() may not be the most
-     * efficient.
-     * </p>
-     *
-     * <p>
-     * No recursion is performed, so elements nested two levels deep
-     * would have to be obtained with:
-     * <pre>
-     * <code>
-     *   Iterator itr = (currentElement.getChildren()).iterator();
-     *   while(itr.hasNext()) {
-     *     Element oneLevelDeep = (Element)itr.next();
-     *     List twoLevelsDeep = oneLevelDeep.getChildren();
-     *     // Do something with these children
-     *   }
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @return list of child <code>Element</code> objects for this element
-     */
-    public List getChildElements() {
-        return content.getView(new ElementFilter());
-    }
-
-    /**
-     * This returns a <code>List</code> of all the child elements
-     * nested directly (one level deep) within this element with the given
-     * local name and belonging to no namespace, returned as
-     * <code>Element</code> objects.  If this target element has no nested
-     * elements with the given name outside a namespace, an empty List
-     * is returned.  The returned list is "live" in document order
-     * and changes to it affect the element's actual contents.
-     * <p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     * for a code example.
-     * </p>
-     *
-     * @param name local name for the children to match
-     * @return all matching child elements
-     */
-    public List getChildElements(String name) {
-        return getChildren(name, Namespace.NO_NAMESPACE);
-    }
-
-    /**
-     * This returns a <code>List</code> of all the child elements
-     * nested directly (one level deep) within this element with the given
-     * local name and belonging to the given Namespace, returned as
-     * <code>Element</code> objects.  If this target element has no nested
-     * elements with the given name in the given Namespace, an empty List
-     * is returned.  The returned list is "live" in document order
-     * and changes to it affect the element's actual contents.
-     * <p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     * for a code example.
-     * </p>
-     *
-     * @param name local name for the children to match
-     * @param ns <code>Namespace</code> to search within
-     * @return all matching child elements
-     */
-    public List getChildElements(String name, Namespace ns) {
-        return content.getView(new ElementFilter(name, ns));
-    }
-
-    /**
-     * <p>
-     * This removes the first child element (one level deep) with the
-     * given local name and belonging to no namespace.
-     * Returns true if a child was removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @return whether deletion occurred
-     */
-    public boolean removeChildElement(String name) {
-        return removeChild(name, Namespace.NO_NAMESPACE);
-    }
-
-    /**
-     * <p>
-     * This removes the first child element (one level deep) with the
-     * given local name and belonging to the given namespace.
-     * Returns true if a child was removed.
-     * </p>
-     *
-     * @param name the name of child element to remove
-     * @param ns <code>Namespace</code> to search within
-     * @return whether deletion occurred
-     */
-    public boolean removeChildElement(String name, Namespace ns) {
-        List old = content.getView(new ElementFilter(name, ns));
-        Iterator i = old.iterator();
-        if (i.hasNext()) {
-            i.next();
-            i.remove();
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * <p>
-     * This removes all child elements (one level deep) with the
-     * given local name and belonging to no namespace.
-     * Returns true if any were removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @return whether deletion occurred
-     */
-    public boolean removeChildElements(String name) {
-        return removeChildren(name, Namespace.NO_NAMESPACE);
-    }
-
-    /**
-     * <p>
-     * This removes all child elements (one level deep) with the
-     * given local name and belonging to the given namespace.
-     * Returns true if any were removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @param ns <code>Namespace</code> to search within
-     * @return whether deletion occurred
-     */
-    public boolean removeChildElements(String name, Namespace ns) {
-        boolean deletedSome = false;
-
-        List old = content.getView(new ElementFilter(name, ns));
-        Iterator i = old.iterator();
-        while (i.hasNext()) {
-            i.next();
-            i.remove();
-            deletedSome = true;
-        }
-
-        return deletedSome;
-    }
-
-
-
-    /**
      * This appends a child to this element.
      *
      * @param child child to add
@@ -988,7 +802,7 @@ public class Element extends Child implements Parent {
      * @throws IllegalAddException if the <code>Text</code> object
      *         you're attempting to add already has a parent element.
      */
-    public Parent addContent(Child child) {
+    public Parent addContent(Content child) {
         content.add(child);
         return this;
     }
@@ -998,7 +812,7 @@ public class Element extends Child implements Parent {
         return this;
     }
 
-    public Parent addContent(int index, Child child) {
+    public Parent addContent(int index, Content child) {
         content.add(index, child);
         return this;
     }
@@ -1012,30 +826,30 @@ public class Element extends Child implements Parent {
         int size = getContentSize();
         List list = new ArrayList(size);
         for (int i = 0; i < size; i++) {
-            Child child = getContent(i);
+            Content child = getContent(i);
             list.add(child.clone());
         }
         return list;
     }
 
-    public Child getContent(int index) {
-        return (Child) content.get(index);
+    public Content getContent(int index) {
+        return (Content) content.get(index);
     }
 
-//    public Child getChild(Filter filter) {
+//    public Content getChild(Filter filter) {
 //        int i = indexOf(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
 
-    public boolean removeContent(Child child) {
+    public boolean removeContent(Content child) {
         return content.remove(child);
     }
 
-    public Child removeContent(int index) {
-        return (Child) content.remove(index);
+    public Content removeContent(int index) {
+        return (Content) content.remove(index);
     }
 
-    public Parent setContent(Child child) {
+    public Parent setContent(Content child) {
         content.clear();
         content.add(child);
         return this;
@@ -1385,7 +1199,7 @@ public class Element extends Child implements Parent {
 
         // Reference to parent is copied by super.clone()
         // (Object.clone()) so we have to remove it
-        // Actually, super is a Child, which has already detached in the clone().
+        // Actually, super is a Content, which has already detached in the clone().
         // element.parent = null;
 
         // Reference to content list and attribute lists are copyed by
@@ -1547,7 +1361,6 @@ public class Element extends Child implements Parent {
      * </p>
      *
      * @return list of child <code>Element</code> objects for this element
-     * @deprecated Deprecated in Beta 10, use getChildElements() instead
      */
     public List getChildren() {
         return content.getView(new ElementFilter());
@@ -1568,7 +1381,6 @@ public class Element extends Child implements Parent {
      *
      * @param name local name for the children to match
      * @return all matching child elements
-     * @deprecated Deprecated in Beta 10, use getChildElements() instead
      */
     public List getChildren(String name) {
         return getChildren(name, Namespace.NO_NAMESPACE);
@@ -1590,7 +1402,6 @@ public class Element extends Child implements Parent {
      * @param name local name for the children to match
      * @param ns <code>Namespace</code> to search within
      * @return all matching child elements
-     * @deprecated Deprecated in Beta 10, use getChildElements() instead
      */
     public List getChildren(String name, Namespace ns) {
         return content.getView(new ElementFilter(name, ns));
@@ -1605,7 +1416,6 @@ public class Element extends Child implements Parent {
      * @param name local name of child element to match
      * @param ns <code>Namespace</code> to search within
      * @return the first matching child element, or null if not found
-     * @deprecated Deprecated in Beta 10, use getChildElement() instead
      */
     public Element getChild(String name, Namespace ns) {
         List elements = content.getView(new ElementFilter(name, ns));
@@ -1624,7 +1434,6 @@ public class Element extends Child implements Parent {
      *
      * @param name local name of child element to match
      * @return the first matching child element, or null if not found
-     * @deprecated Deprecated in Beta 10, use getChildElement() instead
      */
     public Element getChild(String name) {
         return getChild(name, Namespace.NO_NAMESPACE);
@@ -1639,7 +1448,6 @@ public class Element extends Child implements Parent {
      *
      * @param name the name of child elements to remove
      * @return whether deletion occurred
-     * @deprecated Deprecated in Beta 10, use removeChildElement() instead
      */
     public boolean removeChild(String name) {
         return removeChild(name, Namespace.NO_NAMESPACE);
@@ -1655,7 +1463,6 @@ public class Element extends Child implements Parent {
      * @param name the name of child element to remove
      * @param ns <code>Namespace</code> to search within
      * @return whether deletion occurred
-     * @deprecated Deprecated in Beta 10, use removeChildElement() instead
      */
     public boolean removeChild(String name, Namespace ns) {
         List old = content.getView(new ElementFilter(name, ns));
@@ -1678,7 +1485,6 @@ public class Element extends Child implements Parent {
      *
      * @param name the name of child elements to remove
      * @return whether deletion occurred
-     * @deprecated Deprecated in Beta 10, use removeChildElements() instead
      */
     public boolean removeChildren(String name) {
         return removeChildren(name, Namespace.NO_NAMESPACE);
@@ -1694,7 +1500,6 @@ public class Element extends Child implements Parent {
      * @param name the name of child elements to remove
      * @param ns <code>Namespace</code> to search within
      * @return whether deletion occurred
-     * @deprecated Deprecated in Beta 10, use removeChildElements() instead
      */
     public boolean removeChildren(String name, Namespace ns) {
         boolean deletedSome = false;
@@ -1709,12 +1514,12 @@ public class Element extends Child implements Parent {
 
         return deletedSome;
     }
-    
-    public void canContain(Child child, int index) throws IllegalAddException {
+
+    public void canContain(Content child, int index) throws IllegalAddException {
         if (child instanceof DocType) {
             throw new IllegalAddException(
                     "A DocType is not allowed except at the document level");
         }
     }
-    
+
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.75 2004/02/06 03:39:03 jhunter Exp $
+ $Id: Document.java,v 1.76 2004/02/06 04:32:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.75 $, $Date: 2004/02/06 03:39:03 $
+ * @version $Revision: 1.76 $, $Date: 2004/02/06 04:32:54 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.75 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.76 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -168,7 +168,7 @@ public class Document implements Parent {
         return content.size();
     }
 
-    public int indexOf(Child child) {
+    public int indexOf(Content child) {
         return content.indexOf(child);
     }
 
@@ -305,12 +305,12 @@ public class Document implements Parent {
     /**
      * Adds the specified PI to the document.
      *
-     * @param child the Child to add
+     * @param child the Content to add
      * @return <code>Document</code> this document modified.
      * @throws IllegalAddException if the given processing instruction
      *         already has a parent element.
      */
-    public Parent addContent(Child child) {
+    public Parent addContent(Content child) {
         content.add(child);
         return this;
     }
@@ -320,7 +320,7 @@ public class Document implements Parent {
         return this;
     }
 
-    public Parent addContent(int index, Child child) {
+    public Parent addContent(int index, Content child) {
         content.add(index, child);
         return this;
     }
@@ -334,17 +334,17 @@ public class Document implements Parent {
         int size = getContentSize();
         List list = new ArrayList(size);
         for (int i = 0; i < size; i++) {
-            Child child = getContent(i);
+            Content child = getContent(i);
             list.add(child.clone());
         }
         return list;
     }
 
-    public Child getContent(int index) {
-        return (Child) content.get(index);
+    public Content getContent(int index) {
+        return (Content) content.get(index);
     }
 
-//    public Child getChild(Filter filter) {
+//    public Content getChild(Filter filter) {
 //        int i = indexOf(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
@@ -408,7 +408,7 @@ public class Document implements Parent {
         List old = new ArrayList();
         Iterator itr = content.getView(filter).iterator();
         while (itr.hasNext()) {
-            Child child = (Child) itr.next();
+            Content child = (Content) itr.next();
             old.add(child);
             itr.remove();
         }
@@ -493,7 +493,7 @@ public class Document implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Child child) {
+    public Parent setContent(int index, Content child) {
         content.set(index, child);
         return this;
     }
@@ -519,15 +519,15 @@ public class Document implements Parent {
         return this;
     }
 
-    public boolean removeContent(Child child) {
+    public boolean removeContent(Content child) {
         return content.remove(child);
     }
 
-    public Child removeContent(int index) {
-        return (Child) content.remove(index);
+    public Content removeContent(int index) {
+        return (Content) content.remove(index);
     }
 
-    public Parent setContent(Child child) {
+    public Parent setContent(Content child) {
         content.clear();
         content.add(child);
         return this;
@@ -686,9 +686,9 @@ public class Document implements Parent {
     }
 
     /**
-     * @see org.jdom.ContentList#add(int, org.jdom.Child)
+     * @see org.jdom.ContentList#add(int, org.jdom.Content)
      */
-    public void canContain(Child child, int index) throws IllegalAddException {
+    public void canContain(Content child, int index) throws IllegalAddException {
         if (child instanceof Element) {
             if (child instanceof Element && content.indexOfFirstElement() >= 0) {
                 throw new IllegalAddException(
