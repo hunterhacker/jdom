@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IdElement.java,v 1.1 2002/02/07 01:27:29 jhunter Exp $
+ $Id: IdElement.java,v 1.2 2003/04/18 20:06:45 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -171,8 +171,7 @@ public class IdElement extends Element {
             IdDocument idDoc = (IdDocument)prevDoc;
 
             for (Iterator i=ids.keySet().iterator(); i.hasNext(); ) {
-               String key = i.next().toString();
-               idDoc.addId(key, (Element)(ids.get(key)));
+               idDoc.removeId(i.next().toString());
             }
          }
          // Else: Lookup by ID not supported. => Nothing to update!
@@ -184,7 +183,8 @@ public class IdElement extends Element {
             IdDocument idDoc = (IdDocument)newDoc;
 
             for (Iterator i=ids.keySet().iterator(); i.hasNext(); ) {
-               idDoc.removeId(i.next().toString());
+               String key = i.next().toString();
+               idDoc.addId(key, (Element)(ids.get(key)));
             }
          }
          // Else: Lookup by ID not supported. => Nothing to update!
