@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.80 2001/06/07 20:31:27 jools Exp $
+ $Id: Element.java,v 1.81 2001/06/07 20:53:51 jools Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.80 $ $Date: 2001/06/07 20:31:27 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.81 $ $Date: 2001/06/07 20:53:51 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -101,7 +101,7 @@ public class Element implements Serializable, Cloneable {
     protected Document document;
     
     /** The attributes of the <code>Element</code> */
-    protected List attributes;
+    protected FilterList attributes;
     
     /** The mixed content of the <code>Element</code> */
     protected FilterList content;
@@ -1045,8 +1045,6 @@ public class Element implements Serializable, Cloneable {
     public List getChildren(String name, Namespace ns) {
 		return new FilterList(content, 
 							  new ElementContentFilter(name, ns));
-
-        return children;
     }
 
     /**
@@ -1418,12 +1416,11 @@ public class Element implements Serializable, Cloneable {
      */
     public List getAttributes() {
         if (attributes == null) {
-            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
+           	attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
+								 new AttributeContentFilter());
         }
 
-        PartialList atts = new PartialList(attributes, this);
-        atts.addAllPartial(attributes);
-        return atts;
+        return attributes;
     }
 
     /**
@@ -1513,7 +1510,9 @@ public class Element implements Serializable, Cloneable {
      */
     public Element setAttributes(List attributes) {
         // XXX Verify attributes are all parentless first
-        this.attributes = attributes;
+		attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
+								    new AttributeContentFilter());	
+		this.attributes.addAll(attributes);
         return this;
     }
 
@@ -1589,7 +1588,8 @@ public class Element implements Serializable, Cloneable {
         }
   
         if (attributes == null) {
-            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
+           	attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
+								 		new AttributeContentFilter());
         }
         else if (preExisting) {
             // Remove any pre-existing attribute
@@ -1767,7 +1767,8 @@ public class Element implements Serializable, Cloneable {
 								 		   ElementMixedContentFilter.cardinal);
 
         element.attributes = (this.attributes == null) ? null :
-                                  new ArrayList(INITIAL_ARRAY_SIZE);
+							new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
+								 		   new AttributeContentFilter());
 
         // Cloning attributes
         if (attributes != null) {
@@ -1984,7 +1985,8 @@ public class Element implements Serializable, Cloneable {
         // another attribute prefix or this element's prefix
 
         if (attributes == null) {
-            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
+            attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
+								 		new AttributeContentFilter());
         }
 
         attributes.add(attribute);
