@@ -150,10 +150,10 @@ public static Test suite () {
 		List content2 = new ArrayList();
 		content2.addAll(content);
 		assertTrue("bad equals", content.equals(content2));
-    }
-
-    public void xtest_TCM__Object_clone() {
-        fail("implement me !");
+		
+		List children = foo.getChildren();
+		List children2 = foo.getChildren();
+		assertTrue("bad equals", children.equals(children2));
     }
 
     public void test_TCM__int_indexOf_Object() {
@@ -438,7 +438,6 @@ public static Test suite () {
 		assertEquals("wrong size", 7, content.size());
 
 		// Test iterator.remove().
-System.out.println("*****************************");
 		iter2 = children.iterator();
 		while(iter2.hasNext()) {
 			iter2.next();
@@ -674,33 +673,222 @@ System.out.println("*****************************");
 		assertTrue("parent is not correct", comment.getParent() == null);
     }
 
-    public void xtest_TCM__boolean_isEmpty() {
-        fail("implement me !");
+    public void test_TCM__boolean_isEmpty() {
+		List children = foo.getChildren();
+		int size = children.size();
+		for (int i = 0; i < size; i++)
+		{
+			assertTrue("bad isEmpty", children.isEmpty() == false);
+			children.remove(0);
+		}
+
+		assertTrue("bad isEmpty", children.isEmpty() == true);
     }
 
-    public void xtest_TCM__boolean_containsAll_Collection() {
-        fail("implement me !");
+    public void test_TCM__boolean_containsAll_Collection() {
+		List content = foo.getContent();
+		List contentList = new ArrayList();
+		contentList.add(quux);
+		contentList.add(baz);
+		contentList.add(text3);
+		contentList.add(text1);
+		contentList.add(text2);
+		contentList.add(comment);
+		assertTrue("bad containsAll", content.containsAll(contentList));
+		contentList.add(bar);
+		contentList.add(text4);
+		assertTrue("bad containsAll", content.containsAll(contentList));
+		contentList.add(comment2);
+		assertTrue("bad containsAll", content.containsAll(contentList) == false);
+
+		List children = foo.getChildren();
+		List childrenList = new ArrayList();
+		childrenList.add(baz);
+		assertTrue("bad containsAll", children.containsAll(childrenList));
+		childrenList.add(bar);
+		childrenList.add(quux);
+		assertTrue("bad containsAll", children.containsAll(childrenList));
+		childrenList.add(comment);
+		assertTrue("bad containsAll", children.containsAll(childrenList) == false);
     }
 
-    public void xtest_TCM__boolean_addAll_Collection() {
-        fail("implement me !");
+    public void test_TCM__boolean_addAll_Collection() {
+		List content = foo.getContent();
+		List addList = new ArrayList();
+		addList.add(comment2);
+		addList.add(comment3);
+		content.addAll(addList);
+		assertEquals("bad addAll", 10, content.size());
+		assertEquals("bad addAll", text1, content.get(0));
+		assertEquals("bad addAll", bar, content.get(1));
+		assertEquals("bad addAll", text2, content.get(2));
+		assertEquals("bad addAll", baz, content.get(3));
+		assertEquals("bad addAll", text3, content.get(4));
+		assertEquals("bad addAll", comment, content.get(5));
+		assertEquals("bad addAll", quux, content.get(6));
+		assertEquals("bad addAll", text4, content.get(7));
+		assertEquals("bad addAll", comment2, content.get(8));
+		assertEquals("bad addAll", comment3, content.get(9));
+		assertEquals("bad addAll", foo, comment2.getParent());
+		assertEquals("bad addAll", foo, comment3.getParent());
+		try {
+			content.addAll(addList);
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
+
+		List children = foo.getChildren();
+		List addList2 = new ArrayList();
+		Element newElement = new Element("newelement");
+		Element newElement2 = new Element("newelement2");
+		addList2.add(newElement);
+		addList2.add(newElement2);
+		children.addAll(addList2);
+		assertEquals("bad addAll", 5, children.size());
+		assertEquals("bad addAll", bar, children.get(0));
+		assertEquals("bad addAll", baz, children.get(1));
+		assertEquals("bad addAll", quux, children.get(2));
+		assertEquals("bad addAll", newElement, children.get(3));
+		assertEquals("bad addAll", newElement2, children.get(4));
+		assertEquals("bad addAll", foo, newElement.getParent());
+		assertEquals("bad addAll", foo, newElement2.getParent());
+		try {
+			children.addAll(addList2);
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
     }
 
-    public void xtest_TCM__boolean_addAll_int_Collection() {
-        fail("implement me !");
+    public void test_TCM__boolean_addAll_int_Collection() {
+		List content = foo.getContent();
+		List addList = new ArrayList();
+		addList.add(comment2);
+		addList.add(comment3);
+		content.addAll(2, addList);
+		assertEquals("bad addAll", 10, content.size());
+		assertEquals("bad addAll", text1, content.get(0));
+		assertEquals("bad addAll", bar, content.get(1));
+		assertEquals("bad addAll", comment2, content.get(2));
+		assertEquals("bad addAll", comment3, content.get(3));
+		assertEquals("bad addAll", text2, content.get(4));
+		assertEquals("bad addAll", baz, content.get(5));
+		assertEquals("bad addAll", text3, content.get(6));
+		assertEquals("bad addAll", comment, content.get(7));
+		assertEquals("bad addAll", quux, content.get(8));
+		assertEquals("bad addAll", text4, content.get(9));
+		assertEquals("bad addAll", foo, comment2.getParent());
+		assertEquals("bad addAll", foo, comment3.getParent());
+		try {
+			content.addAll(2, addList);
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
+
+		List children = foo.getChildren();
+		List addList2 = new ArrayList();
+		Element newElement = new Element("newelement");
+		Element newElement2 = new Element("newelement2");
+		addList2.add(newElement);
+		addList2.add(newElement2);
+		children.addAll(0, addList2);
+		assertEquals("bad addAll", 5, children.size());
+		assertEquals("bad addAll", newElement, children.get(0));
+		assertEquals("bad addAll", newElement2, children.get(1));
+		assertEquals("bad addAll", bar, children.get(2));
+		assertEquals("bad addAll", baz, children.get(3));
+		assertEquals("bad addAll", quux, children.get(4));
+		assertEquals("bad addAll", foo, newElement.getParent());
+		assertEquals("bad addAll", foo, newElement2.getParent());
+		try {
+			children.addAll(0, addList2);
+			fail("Should have thrown an IllegalArgumentException");
+		} catch(IllegalArgumentException ex) {}
     }
 
-    public void xtest_TCM__boolean_removeAll_Collection() {
-        fail("implement me !");
+    public void test_TCM__boolean_removeAll_Collection() {
+		List content = foo.getContent();
+		List removeList = new ArrayList();
+		removeList.add(text4);
+		removeList.add(comment);
+		removeList.add(bar);
+		removeList.add(new Integer(17)); // should have no effect.
+		content.removeAll(removeList);
+		assertEquals("bad removeAll", 5, content.size());
+		assertEquals("bad removeAll", text1, content.get(0));
+		assertEquals("bad removeAll", text2, content.get(1));
+		assertEquals("bad removeAll", baz, content.get(2));
+		assertEquals("bad removeAll", text3, content.get(3));
+		assertEquals("bad removeAll", quux, content.get(4));
+		assertEquals("bad removeAll", null, text4.getParent());
+		assertEquals("bad removeAll", null, comment.getParent());
+		assertEquals("bad removeAll", null, bar.getParent());
+
+		List children = foo.getChildren();
+		List removeList2 = new ArrayList();
+		removeList2.add(baz);
+		removeList2.add(quux);
+		removeList2.add(new Integer(17)); // should have no effect.
+		children.removeAll(removeList2);
+		assertEquals("bad removeAll", 0, children.size());
+		assertEquals("bad removeAll", null, baz.getParent());
+		assertEquals("bad removeAll", null, quux.getParent());
     }
 
-    public void xtest_TCM__boolean_retainAll_Collection() {
-        fail("implement me !");
+    public void test_TCM__boolean_retainAll_Collection() {
+		List content = foo.getContent();
+		List retainList = new ArrayList();
+		retainList.add(text3);
+		retainList.add(quux);
+		retainList.add(text1);
+		retainList.add(baz);
+		retainList.add(text2);
+		content.retainAll(retainList);
+		assertEquals("bad retainAll", 5, content.size());
+		assertEquals("bad retainAll", text1, content.get(0));
+		assertEquals("bad retainAll", text2, content.get(1));
+		assertEquals("bad retainAll", baz, content.get(2));
+		assertEquals("bad retainAll", text3, content.get(3));
+		assertEquals("bad retainAll", quux, content.get(4));
+		assertEquals("bad retainAll", null, text4.getParent());
+		assertEquals("bad retainAll", null, comment.getParent());
+		assertEquals("bad retainAll", null, bar.getParent());
+
+		List children = foo.getChildren();
+		List retainList2 = new ArrayList();
+		retainList2.add(baz);
+		children.retainAll(retainList2);
+		assertEquals("bad retainAll", 1, children.size());
+		assertEquals("bad retainAll", null, quux.getParent());
     }
 
-    public void xtest_TCM__List_subList_int_int() {
-        fail("implement me !");
+    public void test_TCM__List_subList_int_int() {
+		List children = foo.getChildren();
+		List content = foo.getContent();
+
+		List contentSublist = content.subList(3, 7);	// baz, text3, comment, quux
+		contentSublist.add(comment2);
+		assertEquals("bad subList", 5, contentSublist.size());
+		assertEquals("bad subList", baz, contentSublist.get(0));
+		assertEquals("bad subList", text3, contentSublist.get(1));
+		assertEquals("bad subList", comment, contentSublist.get(2));
+		assertEquals("bad subList", quux, contentSublist.get(3));
+		assertEquals("bad subList", comment2, contentSublist.get(4));
+
+		List childrenSublist = children.subList(0, 2);	// bar, baz
+		childrenSublist.remove(0);
+		assertEquals("bad subList", 1, childrenSublist.size());
+		assertEquals("bad subList", baz, childrenSublist.get(0));
+
+		assertEquals("wrong element from get", baz, children.get(0));
+		assertEquals("wrong element from get", quux, children.get(1));
+
+		assertEquals("wrong element from get", text1, content.get(0));
+		assertEquals("wrong element from get", text2, content.get(1));
+		assertEquals("wrong element from get", baz, content.get(2));
+		assertEquals("wrong element from get", text3, content.get(3));
+		assertEquals("wrong element from get", comment, content.get(4));
+		assertEquals("wrong element from get", quux, content.get(5));
+		assertEquals("wrong element from get", comment2, content.get(6));
+		assertEquals("wrong element from get", text4, content.get(7));
     }
+
 
 	// We'll assume that this is a decent test of iterator(), 
 	// listIterator(), and listIterator(int).
