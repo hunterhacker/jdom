@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.27 2003/04/04 03:48:22 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.28 2003/04/04 20:18:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -101,12 +101,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.27 $, $Date: 2003/04/04 03:48:22 $
+ * @version $Revision: 1.28 $, $Date: 2003/04/04 20:18:58 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.27 $ $Date: 2003/04/04 03:48:22 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.28 $ $Date: 2003/04/04 20:18:58 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -785,6 +785,9 @@ public class SAXOutputter {
     private void endDocument() throws JDOMException {
         try {
             contentHandler.endDocument();
+
+            // reset locator
+            locator = null;
         }
         catch (SAXException se) {
             throw new JDOMException("Exception in endDocument", se);
@@ -1314,5 +1317,29 @@ public class SAXOutputter {
         }
 
         return (parser);
+    }
+
+    /**
+     * Returns a JDOMLocator object referencing the node currently
+     * being processed by this outputter.  The returned object is a
+     * snapshot of the  location information and can thus safely be
+     * memorized for later use.
+     * <p>
+     * This method allows direct access to the location information
+     * maintained by SAXOutputter without requiring to implement
+     * <code>XMLFilter</code>. (In SAX, locators are only available
+     * though the <code>ContentHandler</code> interface).</p>
+     * <p>
+     * Note that location information is only available while
+     * SAXOutputter is outputting nodes. Hence this method should
+     * only be used by objects taking part in the output processing
+     * such as <code>ErrorHandler</code>s.
+     *
+     * @returns a JDOMLocator object referencing the node currently
+     *          being processed or <code>null</code> if no output
+     *          operation is being performed.
+     */
+    public JDOMLocator getLocator() {
+        return (locator != null)? new JDOMLocator(locator): null;
     }
 }
