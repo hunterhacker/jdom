@@ -183,7 +183,8 @@ public class SAXBuilder {
      * This sets validation for the <code>Builder</code>.
      * </p>
      *
-     * @param errorHandler <code>boolean</code> indicating whether validation should occur.
+     * @param errorHandler <code>boolean</code> indicating whether validation 
+     * should occur.
      */
     public void setValidation(boolean validate) {
         this.validate = validate;
@@ -292,8 +293,9 @@ public class SAXBuilder {
             // Some parsers use alternate propety for lexical handling (grr...)
             if (!lexicalReporting) {
                 try {
-                    parser.setProperty("http://xml.org/sax/properties/lexical-handler",
-                                       contentHandler);
+                    parser.setProperty(
+                        "http://xml.org/sax/properties/lexical-handler",
+                        contentHandler);
                     lexicalReporting = true;
                 } catch (SAXNotSupportedException e) {
                     // No lexical reporting available
@@ -304,12 +306,15 @@ public class SAXBuilder {
 
             // Set validation
             try {
-                parser.setFeature("http://xml.org/sax/features/validation", validate);
-                parser.setFeature("http://xml.org/sax/features/namespaces", true);
-                parser.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+                parser.setFeature(
+                    "http://xml.org/sax/features/validation", validate);
+                parser.setFeature(
+                    "http://xml.org/sax/features/namespaces", true);
+                parser.setFeature(
+                    "http://xml.org/sax/features/namespace-prefixes", false);
                 if (saxErrorHandler != null) {
                      parser.setErrorHandler(saxErrorHandler);
-                }else {
+                } else {
                      parser.setErrorHandler(contentHandler);
                 }
             } catch (SAXNotSupportedException e) {
@@ -323,8 +328,8 @@ public class SAXBuilder {
                 // No validation available
                 if (validate) {
                     throw new JDOMException(
-                        "Validation feature not recognized for " + saxDriverClass +
-                        " SAX Driver");
+                        "Validation feature not recognized for " + 
+                        saxDriverClass + " SAX Driver");
                 }
             }
 
@@ -515,11 +520,12 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** Indicator of whether we are in an <code>Entity</code> */
     private boolean inEntity;
 
-    /** Namespaces declared, but not available */
-    private List declaredNamespaces;
+    /** Temporary holder for namespaces that have been declared with
+      * startPrefixMapping, but are not yet available on the element */
+    private LinkedList declaredNamespaces;
 
-    /** Available namespaces */
-    private List availableNamespaces;
+    /** The namespaces in scope and actually attached to an element */
+    private LinkedList availableNamespaces;
 
     /**
      * <p>
@@ -559,7 +565,8 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         if (atRoot) {
             document.addContent(new ProcessingInstruction(target, data));
         } else {
-            ((Element)stack.peek()).addContent(new ProcessingInstruction(target, data));
+            ((Element)stack.peek()).addContent(
+                new ProcessingInstruction(target, data));
         }
     }
 
@@ -588,12 +595,22 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param prefix <code>String</code> namespace prefix.
      * @param uri <code>String</code> namespace URI.
      */
-    public void endPrefixMapping(String prefix, String uri)
+    public void endPrefixMapping(String prefix)
         throws SAXException {
 
-        // This removes the namespace for the actual element
-        Namespace ns = Namespace.getNamespace(prefix, uri);
-        availableNamespaces.remove(ns);
+        // Remove the namespace from the available list
+        // (Should find the namespace fast because recent adds
+        // are at the front of the list.  It may not be the head
+        // tho because endPrefixMapping calls on the same element
+        // can come in any order.)
+        Iterator itr = availableNamespaces.iterator();
+        while (itr.hasNext()) {
+            Namespace ns = (Namespace) itr.next();
+            if (prefix.equals(ns.getPrefix())) {
+                itr.remove();
+                return;
+            }
+        }
     }
 
     /**
@@ -616,8 +633,8 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @throws <code>SAXException</code> when things go wrong
      */
     public void startElement(String namespaceURI, String localName,
-                             String qName, Attributes atts) throws SAXException {
-
+                             String qName, Attributes atts)
+                             throws SAXException {
         Element element = null;
 
         if ((namespaceURI != null) && (!namespaceURI.equals(""))) {
@@ -628,19 +645,21 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 int split = qName.indexOf(":");
                 prefix = qName.substring(0, split);
             }
-            Namespace elementNamespace = Namespace.getNamespace(prefix, namespaceURI);
+            Namespace elementNamespace =
+                Namespace.getNamespace(prefix, namespaceURI);
             element = new Element(localName, elementNamespace);
 
-            // We want to remove this namespace from those declared, as we've handled that
+            // Remove this namespace from those in the temp declared list
             declaredNamespaces.remove(elementNamespace);
 
-            // We do need to make it available for others to use, though
-            availableNamespaces.add(elementNamespace);
+            // It's now in available scope
+            availableNamespaces.addFirst(elementNamespace);
         } else {
             element = new Element(localName);
         }
 
-        // We need to take all declared namespaces and add them to this element
+        // Take leftover declared namespaces and add them to this element's
+        // map of namespaces
         transferNamespaces(element);
 
         // Handle attributes
@@ -652,7 +671,8 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
             if (attLocalName != attQName) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
-                attribute = new Attribute(attLocalName, atts.getValue(i), getNamespace(attPrefix));
+                attribute = new Attribute(attLocalName, atts.getValue(i),
+                                          getNamespace(attPrefix));
             } else {
                 attribute = new Attribute(attLocalName, atts.getValue(i));
             }
@@ -675,19 +695,19 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         while (i.hasNext()) {
             Namespace ns = (Namespace)i.next();
             i.remove();
-            availableNamespaces.add(ns);
+            availableNamespaces.addFirst(ns);
             element.addNamespaceDeclaration(ns);
         }
     }
 
     private Namespace getNamespace(String prefix) {
-        for (int i=availableNamespaces.size(); i>0; i--) {
-            Namespace ns = (Namespace)availableNamespaces.get(i-1);
+        Iterator i = availableNamespaces.iterator();
+        while (i.hasNext()) {
+            Namespace ns = (Namespace)i.next();
             if (prefix.equals(ns.getPrefix())) {
                 return ns;
             }
         }
-
         return Namespace.NO_NAMESPACE;
     }
 
@@ -765,9 +785,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws <code>SAXException</code> when things go wrong
      */
-    public void error(SAXParseException exception)
-        throws SAXException {
-
+    public void error(SAXParseException exception) throws SAXException {
         throw exception;
     }
 
@@ -781,9 +799,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws <code>SAXException</code> when things go wrong
      */
-    public void warning(SAXParseException exception)
-        throws SAXException {
-
+    public void warning(SAXParseException exception) throws SAXException {
         throw exception;
     }
 
@@ -797,9 +813,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws <code>SAXException</code> when things go wrong
      */
-    public void fatalError(SAXParseException exception)
-        throws SAXException {
-
+    public void fatalError(SAXParseException exception) throws SAXException {
         throw exception;
     }
 
@@ -821,10 +835,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         document.setDocType(
             new DocType(name, publicId, systemId));
         inDTD = true;
-
-        /* Debug
-        System.out.println("startDTD invoked...");
-        */
     }
 
     /**
@@ -834,10 +844,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void endDTD() throws SAXException {
         inDTD = false;
-
-        /* Debug 
-        System.out.println("endDTD invoked...");
-        */
     }
 
     public void startEntity(String name)
@@ -858,9 +864,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
     }
 
-    public void endEntity(String name)
-        throws SAXException {
-
+    public void endEntity(String name) throws SAXException {
         if (inEntity) {
             stack.pop();
             inEntity = false;
