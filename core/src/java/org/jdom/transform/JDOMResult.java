@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.22 2004/08/31 04:52:24 jhunter Exp $
+ $Id: JDOMResult.java,v 1.23 2004/08/31 06:10:38 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -96,14 +96,14 @@ import org.xml.sax.helpers.*;
  *
  * @see      org.jdom.transform.JDOMSource
  *
- * @version $Revision: 1.22 $, $Date: 2004/08/31 04:52:24 $
+ * @version $Revision: 1.23 $, $Date: 2004/08/31 06:10:38 $
  * @author  Laurent Bihanic
  * @author  Jason Hunter
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.22 $ $Date: 2004/08/31 04:52:24 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.23 $ $Date: 2004/08/31 06:10:38 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -374,7 +374,13 @@ public class JDOMResult extends SAXResult {
      *         JDOM nodes (Elements, Texts, Comments, PIs...).
      */
     public List getResult() {
-      return (this.getDetachedContent(dummyRoot));
+      // Flush remaining text content in case the last text segment is
+      // outside an element.
+      try {
+        this.flushCharacters();
+      }
+      catch (SAXException e) { /* Ignore... */  }
+      return this.getDetachedContent(dummyRoot);
     }
 
     /**
