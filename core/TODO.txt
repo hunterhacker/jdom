@@ -41,9 +41,6 @@ Items that need to be done:
 
 * Make Namespace serializable (requires custom hooks)
 
-* Code up the whitespace proposal: getContent(), getContent(true),
-  getMixedContent(), getMixedContent(true)
-
 * Discuss CdataString extends String
 
 * Put www.jdom.org content under CVS
