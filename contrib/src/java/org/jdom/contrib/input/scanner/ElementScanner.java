@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.4 2003/04/02 21:15:55 jhunter Exp $
+ $Id: ElementScanner.java,v 1.5 2003/04/23 02:59:54 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,6 +65,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import org.jdom.*;
@@ -198,10 +200,6 @@ public class ElementScanner extends XMLFilterImpl {
 
    /**
     * Construct an ElementScanner, with no parent.
-    * <p>
-    * This filter will have no parent: you must assign a parent
-    * before you do any configuration with {@link #setFeature} or
-    * {@link #setProperty}.</p>
     * <p>
     * If no parent has been assigned when {@link #parse} is invoked,
     * ElementScanner will use JAXP to get an instance of the default
@@ -364,6 +362,48 @@ public class ElementScanner extends XMLFilterImpl {
    //-------------------------------------------------------------------------
    // XMLReader interface support
    //-------------------------------------------------------------------------
+
+   /**
+    * Sets the state of a feature.
+    *
+    * @param  name     the feature name, which is a fully-qualified
+    *                  URI.
+    * @param  state    the requested state of the feature.
+    *
+    * @throws SAXNotRecognizedException   when the XMLReader does not
+    *         recognize the feature name.
+    * @throws SAXNotSupportedException    when the XMLReader
+    *         recognizes the feature name but cannot set the
+    *         requested value.
+    */
+   public void setFeature(String name, boolean value)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+      if (this.getParent() != null) {
+         this.getParent().setFeature(name, value);
+      }
+      this.parserBuilder.setFeature(name, value);
+   }
+
+   /**
+    * Set the value of a property.
+    *
+    * @param  name   the property name, which is a fully-qualified
+    *                URI.
+    * @param state   the requested value for the property.
+    *
+    * @throws SAXNotRecognizedException   when the XMLReader does not
+    *         recognize the property name.
+    * @throws SAXNotSupportedException    when the XMLReader
+    *         recognizes the property name but cannot set the
+    *         requested value.
+    */
+   public void setProperty(String name, Object value)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+      if (this.getParent() != null) {
+         this.getParent().setProperty(name, value);
+      }
+      this.parserBuilder.setProperty(name, value);
+   }
 
    /**
     * Parses an XML document.
