@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.24 2001/10/09 13:21:43 bmclaugh Exp $ -->
+<!-- $Id: build.xml,v 1.25 2001/11/26 14:53:28 bmclaugh Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -176,8 +176,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
   <target name="package" depends="compile,about">
-    <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" cr="add"/>
-    <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" cr="remove"/>
+    <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
+    <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
     <copy todir="${build.dest}/META-INF"
           filtering="yes">
       <fileset dir="${package.dir}/META-INF">

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.65 2001/09/03 14:45:55 bmclaugh Exp $
+ $Id: XMLOutputter.java,v 1.66 2001/11/26 14:53:28 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.65 $ $Date: 2001/09/03 14:45:55 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.66 $ $Date: 2001/11/26 14:53:28 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -487,8 +487,9 @@ public class XMLOutputter implements Cloneable {
             enc = "UTF8";
         }
 
-        Writer writer = new OutputStreamWriter
-            (new BufferedOutputStream(out), enc);
+        Writer writer = new BufferedWriter
+            (new OutputStreamWriter
+            (new BufferedOutputStream(out), enc));
         return writer;
     }
     
@@ -1371,8 +1372,6 @@ public class XMLOutputter implements Cloneable {
         // two different URIs. For attributes on the same element
         // this is illegal; but as yet we don't throw an exception
         // if someone tries to do this
-        Set prefixes = new HashSet();
-
         Iterator itr = attributes.iterator();
         while (itr.hasNext()) {
             Attribute attribute = (Attribute)itr.next();
@@ -1447,13 +1446,13 @@ public class XMLOutputter implements Cloneable {
      * @return <code>String</code> with escaped content.
      */
     protected String escapeAttributeEntities(String st) {
-        StringBuffer buff = new StringBuffer();
-        char[] block = st.toCharArray();
+        StringBuffer buff = null;
+        int length = st.length();
         String stEntity = null;
         int i, last;
 
-        for (i=0, last=0; i < block.length; i++) {
-            switch(block[i]) {
+        for (i=0, last=0; i < length; i++) {
+            switch(st.charAt(i)) {
                 case '<' :
                     stEntity = "&lt;";
                     break;
@@ -1475,17 +1474,28 @@ public class XMLOutputter implements Cloneable {
                     /* no-op */ ;
             }
             if (stEntity != null) {
-                buff.append(block, last, i - last);
+                // An entity occurred, so we'll have to use the StringBuffer.
+                if (buff == null) {
+                    buff = new StringBuffer(length + 20); // allow room for a few more entities
+                }
+                buff.append(st.substring(last, i));
                 buff.append(stEntity);
                 stEntity = null;
                 last = i + 1;
             }
         }
-        if(last < block.length) {
-            buff.append(block, last, i - last);
-        }
 
-        return buff.toString();
+        // If there were any entities, return the escaped charactes that we 
+        // put in the StringBuffer. Otherwise, just return the unmodified 
+        // input string.
+        if (buff != null) {
+            if(last < length) {
+                buff.append(st.substring(last, i));
+            }
+            return buff.toString();
+        } else {
+            return st;
+        }
     }
 
 
@@ -1501,13 +1511,13 @@ public class XMLOutputter implements Cloneable {
      * @return <code>String</code> with escaped content.
      */
     protected String escapeElementEntities(String st) {
-        StringBuffer buff = new StringBuffer();
-        char[] block = st.toCharArray();
+        StringBuffer buff = null;
+        int length = st.length();
         String stEntity = null;
         int i, last;
 
-        for (i=0, last=0; i < block.length; i++) {
-            switch(block[i]) {
+        for (i=0, last=0; i < length; i++) {
+            switch(st.charAt(i)) {
                 case '<' :
                     stEntity = "&lt;";
                     break;
@@ -1521,17 +1531,28 @@ public class XMLOutputter implements Cloneable {
                     /* no-op */ ;
             }
             if (stEntity != null) {
-                buff.append(block, last, i - last);
+                // An entity occurred, so we'll have to use the StringBuffer.
+                if (buff == null) {
+                    buff = new StringBuffer(length + 20); // allow room for a few more entities
+                }
+                buff.append(st.substring(last, i));
                 buff.append(stEntity);
                 stEntity = null;
                 last = i + 1;
             }
         }
-        if (last < block.length) {
-            buff.append(block, last, i - last);
-        }
 
-        return buff.toString();
+        // If there were any entities, return the escaped charactes that we 
+        // put in the StringBuffer. Otherwise, just return the unmodified 
+        // input string.
+        if (buff != null) {
+            if (last < length) {
+                buff.append(st.substring(last, i));
+            }
+            return buff.toString();
+        } else {
+            return st;
+        }
     }
 
     /**
@@ -1585,9 +1606,9 @@ public class XMLOutputter implements Cloneable {
 
     // true if string is all whitespace (space, tab, cr, lf only)
     private boolean isWhitespace(String s) {
-        char[] c = s.toCharArray();
-        for (int i=0; i<c.length; ++i) {
-            if (" \t\n\r".indexOf(c[i]) == -1) {
+        int length = s.length();
+        for (int i=0; i<length; ++i) {
+            if (" \t\n\r".indexOf(s.charAt(i)) == -1) {
                 return false;
             }
         }
