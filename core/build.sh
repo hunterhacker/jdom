@@ -19,7 +19,7 @@ else
   PS=":"
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}./lib/xerces.jar${PS}./lib/ant.jar${PS}./lib/jaxp.jar${PS}$JAVA_HOME/lib/dev.jar
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}./lib/xerces.jar${PS}./lib/ant.jar${PS}./lib/jaxp.jar${PS}$JAVA_HOME/lib/dev.jar{PS}./lib/jaxen-core.jar{PS}./lib/jaxen-jdom.jar{PS}./lib/saxpath.jar
 ANT_HOME=./lib
 
 echo Building with classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH
