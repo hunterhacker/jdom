@@ -158,8 +158,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
   <target name="package" depends="compile">
-    <fixcrlf srcdir="." includes="*.bat" cr="add"/>
-    <fixcrlf srcdir="." includes="*.sh" cr="remove"/>
+    <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
+    <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
          includes="org/**"/>
