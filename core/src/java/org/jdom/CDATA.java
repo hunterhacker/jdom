@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.24 2002/04/29 13:38:15 jhunter Exp $
+ $Id: CDATA.java,v 1.25 2002/05/16 16:29:26 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,12 +68,12 @@ package org.jdom;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.24 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.25 $, $Date: 2002/05/16 16:29:26 $
  */
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.24 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.25 $ $Date: 2002/05/16 16:29:26 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -89,15 +89,23 @@ public class CDATA extends Text {
      * supplied string value as it's character content.
      *
      * @param str the node's character content.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *          by {@link org.jdom.Verifier#checkCharacterData})
+     *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
     public CDATA(String str) {
-        super(str);
+        setText(str);
     }
 
     /**
      * This will set the value of this <code>CDATA</code> node.
      *
      * @param str value for node's content.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *          by {@link org.jdom.Verifier#checkCharacterData})
+     *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
     public Text setText(String str) {
         // Overrides Text.setText() because this needs to check CDATA
@@ -123,6 +131,10 @@ public class CDATA extends Text {
      * exists within this <code>CDATA</code> node.
      *
      * @param str character content to append.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *          by {@link org.jdom.Verifier#checkCharacterData})
+     *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
     public void append(String str) {
         // Overrides Text.setText() because this needs to check CDATA
