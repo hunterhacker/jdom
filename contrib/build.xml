@@ -158,10 +158,16 @@ These are the meaningful targets for this build file:
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
     <replace dir="${build.src}" includes="org/**"
              token="java.util.ArrayList" value="${coll.import}.ArrayList"/>
+    <!-- The following replace handles the "import java.util.*" case by    -->
+    <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
+    <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.*" 
+             value="java.util.*;\u000aimport ${coll.import}.*"/>
   </target>
 
   <!-- =================================================================== -->
-  <!-- Prepares the example code                                            -->
+  <!-- Prepares the example code                                           -->
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
     <!-- create directories -->
@@ -177,15 +183,19 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="collections">
+  <target name="compile" depends="prepare-src,collections">
     <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
     <available property="spitfire.present"
      classname="com.XML_Technologies.Spitfire.Parsers.Element" />
+    <!-- Compile the JTree demo only if the Swing classes are found -->
+    <available property="swing.present"
+     classname="javax.swing.tree.DefaultMutableTreeNode" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
            optimize="${optimize}">
       <exclude name="**/Spitfire*.java" unless="spitfire.present" />
+      <exclude name="**/*JTree*.java" unless="swing.present" />
     </javac>
   </target>
 
