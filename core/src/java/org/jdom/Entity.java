@@ -440,7 +440,7 @@ public class Entity implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This will return the <code>Comment</code> in XML format,
+     *  This will return the <code>Entity</code> in XML format,
      *    usable in an XML document.
      * </p>
      *

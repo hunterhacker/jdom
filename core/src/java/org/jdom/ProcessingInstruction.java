@@ -414,7 +414,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This will return the <code>Comment</code> in XML format,
+     *  This will return the <code>ProcessingInstruction</code> in XML format,
      *    usable in an XML document.
      * </p>
      *
