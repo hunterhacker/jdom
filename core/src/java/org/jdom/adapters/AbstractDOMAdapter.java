@@ -60,6 +60,10 @@ import java.io.InputStream;
 import java.io.IOException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.DOMImplementation;
+
+import org.jdom.*;
 
 /**
  * <b><code>AbstractDOMAdapter</code></b>
@@ -119,4 +123,31 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @throws <code>IOException</code> when errors occur.
      */
     public abstract Document createDocument() throws IOException;
+
+    /**
+     * <p>
+     * This creates an empty <code>Document</code> object based
+     *   on a specific parser implementation with the given DOCTYPE.
+     *   If the doctype parameter is null, the behavior is the same as
+     *   calling <code>createDocument()</code>.
+     * </p>
+     *
+     * @param doctype Initial <code>DocType</code> of the document.
+     * @return <code>Document</code> - created DOM Document.
+     * @throws <code>IOException</code> when errors occur.
+     */
+    public Document createDocument(DocType doctype) throws IOException {
+        if (doctype == null) {
+            return createDocument();
+        }
+  
+        DOMImplementation domImpl = createDocument().getImplementation();
+        DocumentType domDocType = domImpl.createDocumentType(
+                                      doctype.getElementName(),
+                                      doctype.getPublicID(),
+                                      doctype.getSystemID());
+        return domImpl.createDocument("http://temporary",
+                                      doctype.getElementName(),
+                                      domDocType);
+    }
 }

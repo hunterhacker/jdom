@@ -62,6 +62,9 @@ import java.lang.reflect.*;
 import org.jdom.*;
 import org.jdom.adapters.*;
 
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.DOMImplementation;
+
 
 /**
  * Takes a JDOM tree and outputs to a DOM tree.
@@ -123,14 +126,9 @@ public class DOMOutputter {
 
         org.w3c.dom.Document domDoc = null;
         try {
-            domDoc = createDOMDocument();
-
-            // Assign DOCTYPE
+            // Assign DOCTYPE during construction
             DocType dt = document.getDocType();
-            if (dt != null) {
-                // The DOM Level 2 doesn't support editing DocumentType nodes
-                // Perhaps we could do an adapter.createDocument(DocType)?
-            }
+            domDoc = createDOMDocument(dt);
 
             // Add mixed content
             Iterator itr = document.getMixedContent().iterator();
@@ -201,14 +199,20 @@ public class DOMOutputter {
         }
     }
 
-    private org.w3c.dom.Document createDOMDocument() throws Throwable {
+    private org.w3c.dom.Document createDOMDocument()
+                                       throws Throwable {
+        return createDOMDocument(null);
+    }
+
+    private org.w3c.dom.Document createDOMDocument(DocType dt)
+                                       throws Throwable {
         if (adapterClass != null) {
             // The user knows that they want to use a particular impl
             try {
                 DOMAdapter adapter =
                     (DOMAdapter)Class.forName(adapterClass).newInstance();
                 // System.out.println("using specific " + adapterClass);
-                return adapter.createDocument();
+                return adapter.createDocument(dt);
             }
             catch (ClassNotFoundException e) {
                 // e.printStackTrace();
@@ -240,7 +244,24 @@ public class DOMOutputter {
                 // domDoc = jaxpParser.newDocument();
                 Class parserClass = jaxpParser.getClass();
                 Method newDoc = parserClass.getMethod("newDocument", null);
-                return (org.w3c.dom.Document) newDoc.invoke(jaxpParser, null);
+                org.w3c.dom.Document domDoc =
+                    (org.w3c.dom.Document) newDoc.invoke(jaxpParser, null);
+
+                // If there's no DOCTYPE, we can return the default
+                // Otherwise we jump through some hoops to set the DOCTYPE
+                if (dt == null) {
+                    return domDoc;
+                }
+                else {
+                    DOMImplementation domImpl = domDoc.getImplementation();
+                    DocumentType domDocType = domImpl.createDocumentType(
+                                                dt.getElementName(),
+                                                dt.getPublicID(),
+                                                dt.getSystemID());
+                    return domImpl.createDocument("http://temporary",
+                                                  dt.getElementName(),
+                                                  domDocType);
+                }
                 // System.out.println("Using jaxp " +
                 //   domDoc.getClass().getName());
             } catch (ClassNotFoundException e) {
@@ -256,7 +277,7 @@ public class DOMOutputter {
         try {
             DOMAdapter adapter = (DOMAdapter)
                 Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
-            return adapter.createDocument();
+            return adapter.createDocument(dt);
             // System.out.println("Using default " +
             //   DEFAULT_ADAPTER_CLASS);
         }
@@ -408,14 +429,11 @@ public class DOMOutputter {
      * @return an <code>org.w3c.dom.Attr</code> version
      */
     public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
-        org.w3c.dom.Document domDoc = null;
         try {
-            DOMAdapter adapter =
-                (DOMAdapter)Class.forName(adapterClass).newInstance();
-            domDoc = adapter.createDocument();
+            org.w3c.dom.Document domDoc = createDOMDocument();
             return output(attribute, domDoc);
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             throw new JDOMException("Exception outputting Attribute " +
                                     attribute.getQualifiedName(), e);
         }

@@ -61,6 +61,8 @@ import java.io.IOException;
 
 import org.w3c.dom.Document;
 
+import org.jdom.DocType;
+
 /**
  * <b><code>DOMAdapter</code></b>
  * <p>
@@ -117,4 +119,16 @@ public interface DOMAdapter {
      * @throws <code>IOException</code> when errors occur.
      */
     public Document createDocument() throws IOException;
+
+    /**
+     * <p>
+     * This creates an empty <code>Document</code> object based
+     *   on a specific parser implementation with the given DOCTYPE.
+     * </p>
+     *
+     * @param doctype Initial <code>DocType</code> of the document.
+     * @return <code>Document</code> - created DOM Document.
+     * @throws <code>IOException</code> when errors occur.
+     */
+    public Document createDocument(DocType doctype) throws IOException;
 }
