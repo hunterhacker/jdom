@@ -241,9 +241,8 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="clean" depends="init">
     <delete dir="${build.dir}"/>
-    <delete file="${docs.dir}/changes.xml"/>
-    <delete file="${docs.dir}/todo.xml"/>
-    <delete file="${docs.dir}/book.xml"/>
+    <delete dir="${test.outputDir}"/>
+    <delete dir="${test.scratchDir}"/>
   </target>
 
   <target name="distclean" depends="clean">
