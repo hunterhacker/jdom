@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.8 2002/03/15 05:36:48 jhunter Exp $
+ $Id: ContentList.java,v 1.9 2002/03/16 04:25:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.8 $, $Date: 2002/03/15 05:36:48 $
+ * @version $Revision: 1.9 $, $Date: 2002/03/16 04:25:04 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -79,11 +79,10 @@ import org.jdom.filter.Filter;
  * @see ProcessingInstruction
  * @see Text
  */
-class ContentList extends AbstractList
-                         implements List, Cloneable, java.io.Serializable {
+class ContentList extends AbstractList implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.8 $ $Date: 2002/03/15 05:36:48 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.9 $ $Date: 2002/03/16 04:25:04 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -712,7 +711,7 @@ class ContentList extends AbstractList
      * </p>
      */
 
-    class FilterList extends AbstractList {
+    class FilterList extends AbstractList implements List {
 
         /** The Filter */
         protected Filter filter;
@@ -721,7 +720,7 @@ class ContentList extends AbstractList
         int count = 0;
 
         /** Expected modCount in our backing list */
-        int expected = 0;
+        int expected = -1;
 
         // Implementation Note: Directly after size() is called, expected
         //       is sync'd with ContentList.modCount and count provides
