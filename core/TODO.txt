@@ -2,6 +2,14 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Add notes that element content returned by List is ordered.
+
+* Figure out how Namespace.equals() should work.  The issue's been brought up
+  again.  Historic info is in
+  http://lists.denveronline.net/lists/jdom-interest/2000-August/subject.html
+  First message in the thread is
+  http://lists.denveronline.net/lists/jdom-interest/2000-August/002171.html
+
 * Try clone() without the constructor call.  (Ken Helland)
 
 * Integrate element factories in SAXBuilder.  (Ken Helland)
@@ -18,16 +26,20 @@ Items that need to be done:
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
   necessary.  Consider using LinkedHashMap from JPDA to preserve attrib order.
 
+* Change elt.setAttribute() to check for attributes with duplicate names & 
+  namespaces.
+
 * Shouldn't Attribute(String name, String prefix, String uri, String value)
   be Attribute(String name, String value, String prefix, String uri)?
+  Probably best to remove the stupid thing, deprecating for one beta cycle.
 
 * Consider Mike Jennings' proposal of two new methods on Element:
   public String getAttributeValue(String name, String default)
   public String getAttributeValue(String name, Namespace ns, String default)
 
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
-  same prefix already existing on the element or being the document's prefix
-  already
+  same prefix already existing on the element or being the element's own 
+  prefix already
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
@@ -79,6 +91,8 @@ Items that need to be done:
   method.
 
 * Deal with getSerializedForm() calls, either implement or remove
+  Note the Document and Element impls from Elliotte are at:
+  http://lists.denveronline.net/lists/jdom-interest/2000-July/001327.html
 
 * Consider Element.hasAttributes() and Element.isEmpty()
 
@@ -124,6 +138,8 @@ Items that need to be done:
    causes a 20% performance penalty on building docs.)
   Probably go with sanity checking input unless it adds significant time to
   a SAX build.
+  See http://lists.denveronline.net/lists/jdom-interest/2000-August/002088.html
+  And http://lists.denveronline.net/lists/jdom-interest/2000-August/002102.html
 
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
@@ -215,14 +231,6 @@ Items that need to be done:
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
     longer than 80 characters
 
-* Look at putting XML files in the jdom.jar META-INF directory for things like
-  version, credits, description, etc, then access/print the info using JDOM
-  classes executed by a "java -jar jdom.jar" command.  
-  See http://java.sun.com/docs/books/tutorial/jar/
-
-* Add JDOM version info to the MANIFEST.MF so servlets and such can depend on
-  it using http://java.sun.com/j2se/1.3/docs/guide/extensions/versioning.html
-
 * Investigate including a library to convert XML data to instantiated Java
   objects, probably with an XML config file dictating how to do the mapping.
   See http://xmlhack.com/read.php?item=674 for something along these lines.
@@ -301,4 +309,13 @@ Items that need to be done:
 
 * Shouldn't addNamespaceDeclaration() have a name to match
   getAdditionalNamespaces().
+
+* Consider an HTMLBuilder that reads not-necessarily-well-formed HTML and
+  produces a JDOM Document.  The approach I'd suggest is to build on top of
+  JTidy first.  That gives a working implementation fast, at the cost of a 
+  157K Tidy.jar in the distribution.  After that, perhaps someone would lead 
+  an effort to change the JTidy code to build a JDOM Document directly, 
+  instead of making a DOM Document or XML stream first.  That would be a lot 
+  faster, use less memory, and make our dist smaller.  See
+  http://www3.sympatico.ca/ac.quick/ for Tidy.
 

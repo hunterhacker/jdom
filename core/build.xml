@@ -34,6 +34,8 @@ For instructions on how to build JDOM, please view the README.txt file.
     <property name="dist.root" value="./dist"/>
     <property name="dist.dir" value="${dist.root}/${name}-${version}"/>
 
+    <property name="package.dir" value="./package"/>
+
     <filter token="year" value="${year}"/>
     <filter token="version" value="${version}"/>
     <filter token="date" value="${TODAY}"/>
@@ -160,9 +162,15 @@ For instructions on how to build JDOM, please view the README.txt file.
   <target name="package" depends="compile">
     <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
     <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
+    <copydir src="${package.dir}/META-INF"
+             dest="${build.dest}/META-INF"/>
+    <javac srcdir="${package.dir}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
-         includes="org/**"/>
+         manifest="${build.dest}/META-INF/MANIFEST.MF"/>
   </target>
 
   <!-- =================================================================== -->
