@@ -78,6 +78,7 @@ import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -114,6 +115,9 @@ public class SAXBuilder {
  
      /** EntityResolver class to use */
      private EntityResolver saxEntityResolver = null;
+
+     /** DTDHandler class to use */
+     private DTDHandler saxDTDHandler = null;
  
     /**
      * <p>
@@ -169,6 +173,17 @@ public class SAXBuilder {
 
     /**
      * <p>
+     * This sets validation for the <code>Builder</code>.
+     * </p>
+     *
+     * @param errorHandler <code>boolean</code> indicating whether validation should occur.
+     */
+    public void setValidation(boolean validate) {
+        this.validate = validate;
+    }
+
+    /**
+     * <p>
      * This sets custom ErrorHandler for the <code>Builder</code>.
      * </p>
      *
@@ -187,6 +202,17 @@ public class SAXBuilder {
      */
     public void setEntityResolver(EntityResolver entityResolver) {
         saxEntityResolver = entityResolver;
+    }
+
+    /**
+     * <p>
+     * This sets custom DTDHandler for the <code>Builder</code>.
+     * </p>
+     *
+     * @param dtdHandler <code>DTDHandler</code>
+     */
+    public void setDTDHandler(DTDHandler dtdHandler) {
+        saxDTDHandler = dtdHandler;
     }
 
     /**
@@ -213,8 +239,12 @@ public class SAXBuilder {
 
             parser.setContentHandler(contentHandler);
 
-            if(saxEntityResolver != null) {
+            if (saxEntityResolver != null) {
                 parser.setEntityResolver(saxEntityResolver);
+            }
+
+            if (saxDTDHandler != null) {
+                parser.setDTDHandler(saxDTDHandler);
             }
 
             boolean lexicalReporting = false;
@@ -248,8 +278,7 @@ public class SAXBuilder {
                 parser.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
                 if (saxErrorHandler != null) {
                      parser.setErrorHandler(saxErrorHandler);
-                }
-                else {
+                }else {
                      parser.setErrorHandler(contentHandler);
                 }
             } catch (SAXNotSupportedException e) {
@@ -280,14 +309,12 @@ public class SAXBuilder {
                               new JDOMException("Error on line " + 
                               p.getLineNumber() + " of document "
                               + systemId + ": " + p.getMessage()));
-                }
-                else {
+                } else {
                     throw new JDOMException(e.getMessage(),
                               new JDOMException("Error on line " +
                               p.getLineNumber() + ": " + p.getMessage()));
                 }
-            }
-            else {
+            } else {
                 throw new JDOMException(e.getMessage(), e);
             }
         }
@@ -305,7 +332,6 @@ public class SAXBuilder {
      *                                    parsing.
      */
     public Document build(InputStream in) throws JDOMException {
-
         return build(new InputSource(in));
     }
 
@@ -377,7 +403,6 @@ public class SAXBuilder {
      *                                    parsing.
      */
     public Document build(Reader characterStream) throws JDOMException {
-
         return build(new InputSource(characterStream));
     }
 
@@ -412,7 +437,6 @@ public class SAXBuilder {
      *                                    parsing.
      */
     public Document build(String systemId) throws JDOMException {
-
         return build(new InputSource(systemId));
     }
 

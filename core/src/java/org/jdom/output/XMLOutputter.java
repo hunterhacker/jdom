@@ -95,6 +95,15 @@ import org.jdom.ProcessingInstruction;
  */
 public class XMLOutputter {
 
+    /** Whether or not to use indentation - default is <code>true</code> */
+    private boolean useIndentation = true;
+
+    /** Whether or not to suppress the XML declaration - default is <code>false</code> */
+    private boolean suppressDeclaration = false;
+
+    /** Whether or not to output the encoding in the XML declaration - default is <code>false</code> */
+    private boolean omitEncoding = false;
+
     /** The default indent is no spaces (as original document) */
     private String indent = "";
 
@@ -103,6 +112,9 @@ public class XMLOutputter {
 
     /** The encoding format */
     private String enc = "UTF8";
+
+    /** New line separator */
+    private String newline = "\r\n";
 
     /** Namespaces on the document */
     private LinkedList namespaces;
@@ -173,6 +185,89 @@ public class XMLOutputter {
 
     /**
      * <p>
+     *  This will set the new-line separator. The default is <code>\r\n</code>.
+     * </p>
+     *
+     * @param separator <code>String</code> line separator to use.
+     */
+    public void setLineSeparator(String separator) {
+        newline = separator;
+    }
+
+    /**
+     * <p>
+     *  This will set whether the XML declaration (<code>&lt;xml version="1.0"&gt;</code>)
+     *    will be suppressed or not. It is common to suppress this in uses such
+     *    as SOAP and XML-RPC calls.
+     * </p>
+     *
+     * @param suppressDeclaration <code>boolean</code> indicating whether or not
+     *        the XML declaration should be suppressed.
+     */
+    public void setSuppressDeclaration(boolean suppressDeclaration) {
+        this.suppressDeclaration = suppressDeclaration;
+    }
+
+    /**
+     * <p>
+     *  This will set whether the XML declaration (<code>&lt;xml version="1.0"&gt;</code>)
+     *    includes the encoding of the document. It is common to suppress this in uses such
+     *    as WML and other wireless device protocols.
+     * </p>
+     *
+     * @param omitEncoding <code>boolean</code> indicating whether or not
+     *        the XML declaration should indicate the document encoding.
+     */
+    public void setOmitEncoding(boolean omitEncoding) {
+        this.omitEncoding = omitEncoding;
+    }
+
+    /**
+     * <p>
+     *   This will set the indent <code>String</code> to use; this is usually
+     *    a <code>String</code> of empty spaces. Note that this will not affect the
+     *    output if no indentation is being used. This can be set through
+     *    <code>{@link #setIndenting(boolean)}</code>.
+     * </p>
+     *
+     * @param indent <code>String</code> to use for indentation.
+     */
+    public void setIndent(String indent) {
+        this.indent = indent;
+    }
+
+    /**
+     * <p>
+     *   This will set the indent <code>String</code>'s size; an indentSize
+     *    of 4 would result in the indention being equivalent to the <code>String</code>
+     *    "    ". Note that this will not affect the
+     *    output if no indentation is being used. This can be set through
+     *    <code>{@link #setIndenting(boolean)}</code>.
+     * </p>
+     *
+     * @param indentSize <code>int</code> number of spaces in indentation.
+     */
+    public void setIndentSize(int indentSize) {
+        StringBuffer indentBuffer = new StringBuffer();
+        for (int i=0; i<indentSize; i++) {
+            indentBuffer.append(" ");
+        }
+        this.indent = indentBuffer.toString();
+    }
+
+    /**
+     * <p>
+     * </p>
+     *
+     * @param useIndentation <code>boolean</code> indicating whether indentation should
+     *        be used.
+     */
+    public void setIndenting(boolean useIndentation) {
+        this.useIndentation = useIndentation;
+    }
+
+    /**
+     * <p>
      * This will print the proper indent characters for the given indent level.
      * </p>
      *
@@ -180,20 +275,12 @@ public class XMLOutputter {
      * @param level <code>int</code> indentation level
      */
     protected void indent(Writer out, int level) throws IOException {
-        for (int i = 0; i < level; i++) {
-            out.write(indent);
+        if (useIndentation) {
+            for (int i = 0; i < level; i++) {
+                out.write(indent);
+            }
         }
     }
-
-    // We could change this to the System default, 
-    // but I prefer not to make output platform dependent.
-    // A carriage return, linefeed pair is the most generally
-    // acceptable linebreak.  Another possibility is to use
-    // only a line feed, which is XML's preferred (but not required)
-    // solution. However both carriage return and linefeed are
-    // required for many network protocols, and the parser on the
-    // other end should normalize this. 
-    private static String newline = "\r\n";
 
     /**
      * <p>
@@ -315,15 +402,25 @@ public class XMLOutputter {
     protected void printDeclaration(Document doc,
                                     Writer out,
                                     String encoding)  throws IOException {
-        // Assume 1.0 version
-        if (encoding.equals("UTF8")) {
-            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        }
-        else {
-            out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
-        }
-        maybePrintln(out);
-        
+
+        // Only print of declaration is not suppressed
+        if (!suppressDeclaration) {
+            // Assume 1.0 version
+            if (encoding.equals("UTF8")) {
+                out.write("<?xml version=\"1.0\"");
+                if (!omitEncoding) {
+                    out.write(" encoding=\"UTF-8\"");
+                }
+                out.write("?>");
+            } else {
+                out.write("<?xml version=\"1.0\"");
+                if (!omitEncoding) {
+                    out.write(" encoding=\"" + encoding + "\"");
+                }
+                out.write("?>");
+            }
+            maybePrintln(out);
+        }        
     }    
 
     /**
