@@ -311,11 +311,11 @@ public class SAXBuilder {
                     throw new JDOMException(e.getMessage(),
                               new JDOMException("Error on line " + 
                               p.getLineNumber() + " of document "
-                              + systemId + ": " + p.getMessage()));
+                              + systemId + ": " + p.getMessage(), e));
                 } else {
                     throw new JDOMException(e.getMessage(),
                               new JDOMException("Error on line " +
-                              p.getLineNumber() + ": " + p.getMessage()));
+                              p.getLineNumber() + ": " + p.getMessage(), e));
                 }
             } else {
                 throw new JDOMException(e.getMessage(), e);
