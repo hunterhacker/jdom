@@ -119,6 +119,43 @@ public final class Verifier {
         // If we got here, everything is OK
         return null;
     }
+    
+    /**
+     * <p>
+     *  This will check the supplied string to see if it only contains
+     *  characters allowed by the XML 1.0 specification. The C0 controls
+     *  (e.g. null, vertical tab, formfeed, etc.) are specifically excluded
+     *  except for carirage return, linefeed, and the horizontal tab.
+     *  Surrogates are also excluded. 
+     *  </p>
+     *  <p>
+     *  This method is useful for checking element content and attribute
+     *  values. Note that characters 
+     *  like " and &lt; are allowed in attribute values and element content. 
+     *  They will simply be escaped as &quot; or &lt; 
+     *  when the value is serialized. 
+     * </p>
+     *
+     * @param name <code>String</code> value to check.
+     * @return <code>String</code> - reason name is invalid, or
+     *         <code>null</code> if name is OK.
+     */
+    public static final String checkCharacterData(String text) {
+
+        // do check
+        for (int i = 0; i < text.length(); i++) {
+            if (!isXMLCharacter(text.charAt(i))) {
+                // Likely this character can't be easily displayed
+                // because it's a control so we use it'd hexadecimal 
+                // representation in the reason.
+                return ("0x" + Integer.toHexString(text.charAt(i)) 
+                 + " is not a legal XML character");    
+            }       
+        }
+
+        // If we got here, everything is OK
+        return null;
+    }
 
     /**
      * <p>
@@ -286,24 +323,13 @@ public final class Verifier {
             return "XML names cannot be null or empty";
         }
 
+      
         // Cannot start with a number
         char first = name.charAt(0);
-        if (isXMLDigit(first)) {
-            return "XML names cannot begin with a number";
+        if (!isXMLNameStartCharacter(first)) {
+            return "XML names cannot begin with the character \"" + 
+                   first + "\"";
         }
-        // Cannot start with a $
-        if (first == '$') {
-            return "XML names cannot begin with a dollar sign ($)";
-        }
-        // Cannot start with a -
-        if (first == '-') {
-            return "XML names cannot begin with a hyphen (-)";
-        }
-        // Cannot start with a .
-        if (first == '.') {
-            return "XML names cannot begin with a period (.)";
-        }
-
         // Ensure valid content
         for (int i=0, len = name.length(); i<len; i++) {
             char c = name.charAt(i);
@@ -314,6 +340,32 @@ public final class Verifier {
 
         // We got here, so everything is OK
         return null;
+    }
+
+
+    /**
+     * <p>
+     *  This is a utility function for determining whether a specified 
+     *  character is a character according to production 2 of the 
+     *  XML 1.0 specification.
+     * </p>
+     *
+     * @param c <code>char</code> to check for XML compliance.
+     * @return <code>boolean</code> - true if it's a character, 
+     *                                false otherwise.
+     */
+    public static boolean isXMLCharacter(char c) {
+    
+        if (c >= 0x20 && c <= 0xD7FF) return true;
+        if (c >= 0xE000 && c <= 0xFFFD) return true;
+        if (c >= 0x10000 && c <= 0x10FFFF) return true;
+        
+        if (c == '\n') return true;
+        if (c == '\r') return true;
+        if (c == '\t') return true;
+        
+        return false;
+
     }
 
 
@@ -340,7 +392,9 @@ public final class Verifier {
      * <p>
      *  This is a utility function for determining whether a specified 
      *  character is a legal name start character according to production 5
-     *  of the XML 1.0 specification.
+     *  of the XML 1.0 specification. This production does allow names
+     *  to begin with colons which the Namespaces in XML Recommendation
+     *  disallows. 
      * </p>
      *
      * @param c <code>char</code> to check for XML name start compliance.
@@ -349,8 +403,7 @@ public final class Verifier {
      */
     public static boolean isXMLNameStartCharacter(char c) {
     
-      return (isXMLLetter(c) || isXMLDigit(c) || c == '_' || c == ':' 
-                             || isXMLCombiningChar(c) || isXMLExtender(c));
+      return (isXMLLetter(c) || c == '_' || c ==':');
     
     }
 
@@ -603,8 +656,7 @@ public final class Verifier {
      * </p>
      *
      * @param c <code>char</code> to check.
-     * @return <code>boolean</code> - true if it's a combining character, 
-     * false otherwise.
+     * @return <code>boolean</code> - true if it's a combining character, false otherwise.
      */
     public static boolean isXMLCombiningChar(char c) {
 
