@@ -2,11 +2,18 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Add to Javadocs @throws clauses for all runtime exceptions like 
+  IllegalAddException
+
 * Look at replacing NO_NAMESPACE with null.  See below.
 
 * Fix bug where DOMOutputter creates nodes with "" as their
   node.getNamespaceURI() even if the node is not in a namespace.
   http://lists.denveronline.net/lists/jdom-interest/2001-March/005117.html
+
+* Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
+  text) prints an extra whitespace line between one closing element and 
+  another.
 
 * Implement the ability to output the same DOCTYPE as was input:
         <?xml version='1.0' ?>
@@ -33,6 +40,7 @@ Items that need to be done:
   Then again, maybe we just hold the whole darn thing as a String, gleaned
   from SAX or DOM as appropriate.  The question there is, what's the JDOM 
   use case for Notation and Entity maps?
+  (Harry Evans <hevans@elite.com> is also working on this.)
 
 * Consider making DocType immutable to avoid the opportunity of having the 
   same DocType on two docs where a change to one accidentally changes the 
@@ -65,9 +73,7 @@ Items that need to be done:
 * Change elt.setAttribute() to check for attributes with duplicate names & 
   namespaces.
 
-* Shouldn't Attribute(String name, String prefix, String uri, String value)
-  be Attribute(String name, String value, String prefix, String uri)?
-  Probably best to remove the stupid thing, deprecating for one beta cycle.
+* Enhance Verifier.checkNamespaceURI() to follow RFC 2396.
 
 * Consider Mike Jennings' proposal of two new methods on Element:
   public String getAttributeValue(String name, String default)
@@ -243,6 +249,10 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
 
+* Figure out permanent home for JDOMSource and JDOMResult currently living in
+  jdom-contrib.  Most likely options are org.jdom.transform or in JAXP.next.
+  If org.jdom.transform that could be the home of a transform implementation.
+
 --- FOR JDOM 1.1 ---
 
 * Add XPath support
@@ -269,6 +279,9 @@ Items that need to be done:
   Then later new SchemaValidator(schema).validate(doc);
   Could instead do doc.validate(dtd/schema) but then we'd have to dynamically 
   switch between recognizing DTDs and the various schemas.
+  The method would probably either throw InvalidDocumentException or might
+  take an ErrorHandler-style interface implementation if there are non-fatal
+  errors possible.
 
 * Consider a listener interface so you could listen to doc changes.  
   (Probably after 1.1 honestly; this can be done through manual subclasses
