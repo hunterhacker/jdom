@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.32 2001/04/18 06:32:41 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.33 2001/04/27 18:21:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -89,6 +89,9 @@ import org.xml.sax.*;
  * @version 1.0
  */
 public class DOMBuilder {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.33 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 

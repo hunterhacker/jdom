@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalDataException.java,v 1.4 2001/03/15 06:07:17 jhunter Exp $
+ $Id: IllegalDataException.java,v 1.5 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -67,6 +67,9 @@ package org.jdom;
  * @version 1.0
  */
 public class IllegalDataException extends IllegalArgumentException {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.5 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * <p>

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Entity.java,v 1.13 2001/03/16 23:39:43 jhunter Exp $
+ $Id: Entity.java,v 1.14 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,6 +69,9 @@ import java.util.List;
  * @version 1.0
  */
 public class Entity implements Serializable, Cloneable {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: Entity.java,v $ $Revision: 1.14 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /** The name of the <code>Entity</code> */
     protected String name;

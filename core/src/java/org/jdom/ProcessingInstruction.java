@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.18 2001/04/20 07:30:35 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.19 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,6 +78,9 @@ import java.util.StringTokenizer;
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.19 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;

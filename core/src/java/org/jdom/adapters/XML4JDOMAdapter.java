@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XML4JDOMAdapter.java,v 1.6 2001/03/15 06:07:18 jhunter Exp $
+ $Id: XML4JDOMAdapter.java,v 1.7 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -82,6 +82,9 @@ import org.jdom.input.BuilderErrorHandler;
  * @version 1.0
  */
 public class XML4JDOMAdapter extends AbstractDOMAdapter {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.7 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * <p>

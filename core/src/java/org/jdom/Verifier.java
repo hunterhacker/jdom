@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.22 2001/04/13 04:52:10 jhunter Exp $
+ $Id: Verifier.java,v 1.23 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,6 +68,9 @@ package org.jdom;
  * @version 1.0
  */
 public final class Verifier {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.23 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * <p>

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JAXPDOMAdapter.java,v 1.2 2001/03/15 06:07:18 jhunter Exp $
+ $Id: JAXPDOMAdapter.java,v 1.3 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,6 +79,9 @@ import org.jdom.input.BuilderErrorHandler;
  * @version 1.0
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.3 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * <p>

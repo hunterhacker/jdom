@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.4 2001/03/15 06:07:17 jhunter Exp $
+ $Id: DataConversionException.java,v 1.5 2001/04/27 18:21:19 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,6 +68,9 @@ package org.jdom;
  * @version 1.0
  */
 public class DataConversionException extends JDOMException {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.5 $ $Date: 2001/04/27 18:21:19 $ $Name:  $";
 
     /**
      * <p>

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.5 2001/04/18 06:32:41 jhunter Exp $
+ $Id: SAXHandler.java,v 1.6 2001/04/27 18:21:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -103,6 +103,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Jason Hunter
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.6 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;

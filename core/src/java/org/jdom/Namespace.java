@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.23 2001/04/13 03:45:18 jhunter Exp $
+ $Id: Namespace.java,v 1.24 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,6 +84,9 @@ public final class Namespace {
 
     // XXX May want to use weak references to keep the maps from growing 
     // large with extended use
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.24 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

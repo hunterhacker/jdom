@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.21 2001/03/15 06:07:18 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.22 2001/04/27 18:21:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,6 +79,9 @@ import org.w3c.dom.DOMImplementation;
  * @version 1.0
  */
 public class DOMOutputter {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.22 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =

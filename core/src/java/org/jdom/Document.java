@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.37 2001/04/20 07:30:35 jhunter Exp $
+ $Id: Document.java,v 1.38 2001/04/27 18:21:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,6 +71,9 @@ import java.util.*;
  * @version 1.0
  */
 public class Document implements Serializable, Cloneable {
+
+    private static final String CVS_ID = 
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.38 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
