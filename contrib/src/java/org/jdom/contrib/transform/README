@@ -1,2 +1,0 @@
-Location for development of "source" and "result" classes to support JAXP
-transformations.  These classes should probably be rolled into JAXP.next.
