@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.41 2002/04/12 03:05:52 jhunter Exp $
+ $Id: SAXHandler.java,v 1.42 2002/04/12 04:19:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.41 $, $Date: 2002/04/12 03:05:52 $
+ * @version $Revision: 1.42 $, $Date: 2002/04/12 04:19:04 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.41 $ $Date: 2002/04/12 03:05:52 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.42 $ $Date: 2002/04/12 04:19:04 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -137,7 +137,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     private StringBuffer buffer = new StringBuffer();
 
     /** Temporary holder for Text and CDATA */
-    private StringBuffer textBuffer = new StringBuffer(4096);
+    private StringBuffer textBuffer = new StringBuffer();
 
     /** The external entities defined in this document */
     private Map externalEntities;
