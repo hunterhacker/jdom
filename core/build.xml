@@ -59,7 +59,7 @@ For instructions on how to build JDOM, please view the README.txt file.
     <echo message=""/>
     <echo message="   package  --> generates the jdom.jar file (default)"/>
     <echo message="   compile  --> compiles the source code"/>
-    <echo message="   javadoc  --> generates the API documentation (java 1.2 only)"/>
+    <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> cleans up the directory"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
@@ -162,7 +162,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
   <!-- =================================================================== -->
-  <target name="javadoc" depends="prepare-src">
+  <target name="javadoc" depends="prepare-src,collections">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"
              sourcepath="${build.src}"
