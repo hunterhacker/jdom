@@ -11,7 +11,7 @@ For instructions on how to build JDOM, please view the README.txt file.
     <tstamp/>
     <property name="Name" value="JDOM"/>
     <property name="name" value="jdom"/>
-    <property name="version" value="1.0beta4"/>
+    <property name="version" value="1.0beta5"/>
     <property name="year" value="2000"/>
 
     <echo message="----------- ${Name} ${version} [${year}] ------------"/>
@@ -96,22 +96,22 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- XXX changed.                                                        -->
   <!-- =================================================================== -->
   <target name="collections" if="coll.present" depends="prepare-src">
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.Collection" value="${coll.import}.Collection"/>
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.Map" value="${coll.import}.Map"/>
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.HashMap" value="${coll.import}.HashMap"/>
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.List" value="${coll.import}.List"/>
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
     <!-- The following replace handles the "import java.util.*" case by    -->
     <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
     <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
-    <replace dir="${build.src}" includes="org/**"
+    <replace dir="${build.src}" includes="**"
              token="java.util.*"
              value="java.util.*;\u000aimport ${coll.import}.*"/>
   </target>
@@ -143,7 +143,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                       -->
   <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples">
+  <target name="samples" depends="prepare-samples,collections">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
