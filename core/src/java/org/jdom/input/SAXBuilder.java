@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.50 2001/05/19 05:21:41 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.51 2001/06/01 23:27:45 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.50 $ $Date: 2001/05/19 05:21:41 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.51 $ $Date: 2001/06/01 23:27:45 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -271,6 +271,7 @@ public class SAXBuilder {
      * @throws JDOMException when errors occur in parsing.
      */
     protected Document build(InputSource in) throws JDOMException {
+        SAXHandler contentHandler = null;
 
         try {
             XMLReader parser = null;
@@ -343,7 +344,7 @@ public class SAXBuilder {
                 parser = saxXMLFilter;
             }
 
-            SAXHandler contentHandler = new SAXHandler(factory);
+            contentHandler = new SAXHandler(factory);
 
             // Pass through behavior
             contentHandler.setExpandEntities(expand);
@@ -476,6 +477,12 @@ public class SAXBuilder {
             } else {
                 throw new JDOMException("Error in building", e);
             }
+        }
+        finally {
+            // Explicitly nullify the handler to encourage GC
+            // It's a stack var so this shouldn't be necessary, but it
+            // seems to help on some JVMs
+            contentHandler = null;
         }
     }
 
