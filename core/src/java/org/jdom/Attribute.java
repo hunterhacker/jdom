@@ -110,8 +110,6 @@ public class Attribute implements Serializable, Cloneable {
             throw new IllegalNameException(name, "attribute", reason);
         }
 
-        // XXX Should also sanity check the *value*
-
         if (namespace == null) {
             namespace = Namespace.NO_NAMESPACE;
         }
