@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.25 2001/11/26 14:53:28 bmclaugh Exp $ -->
+<!-- $Id: build.xml,v 1.26 2001/12/19 04:47:20 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -117,6 +117,10 @@ For instructions on how to build JDOM, please view the README.txt file.
              token="java.util.HashSet" value="${coll.import}.HashSet"/>
     <replace dir="${build.src}" includes="**"
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
+    <replace dir="${build.src}" includes="**"
+             token="java.util.ConcurrentModificationException" value="${coll.import}.ConcurrentModificationException"/>
+    <replace dir="${build.src}" includes="**"
+             token="java.util.ArrayList" value="${coll.import}.ArrayList"/>
     <!-- The following replace handles the "import java.util.*" case by    -->
     <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
     <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
