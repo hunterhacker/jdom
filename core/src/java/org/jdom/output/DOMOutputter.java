@@ -120,75 +120,10 @@ public class DOMOutputter {
     public org.w3c.dom.Document output(Document document)
                                        throws JDOMException {
         NamespaceStack namespaces = new NamespaceStack();
+
         org.w3c.dom.Document domDoc = null;
         try {
-            if (adapterClass != null) {
-                // The user knows that they want to use a particular impl
-                try {
-                    DOMAdapter adapter =
-                        (DOMAdapter)Class.forName(adapterClass).newInstance();
-                    domDoc = adapter.createDocument();
-                    // System.out.println("using specific " + adapterClass);
-                }
-                catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                }
-            }
-            else {
-                // Try using JAXP...
-                // Note we need DOM Level 2 and thus JAXP 1.1.
-                // If JAXP 1.0 is all that's available then we skip
-                // to the hard coded default parser
-                try {
-                    // Verify this is JAXP 1.1 (or later)
-                    Class.forName("javax.xml.transform.Transformer");
-
-                    // Try JAXP 1.1 calls to build the document
-                    Class factoryClass =
-                        Class.forName("javax.xml.parsers.DocumentBuilderFactory"
-);
-
-
-                    // factory = DocumentBuilderFactory.newInstance();
-                    Method newParserInstance =
-                        factoryClass.getMethod("newInstance", null);
-                    Object factory = newParserInstance.invoke(null, null);
-
-                    // jaxpParser = factory.newDocumentBuilder();
-                    Method newDocBuilder =
-                        factoryClass.getMethod("newDocumentBuilder", null);
-                    Object jaxpParser  = newDocBuilder.invoke(factory, null);
-
-                    // domDoc = jaxpParser.newDocument();
-                    Class parserClass = jaxpParser.getClass();
-                    Method newDoc = parserClass.getMethod("newDocument", null);
-                    domDoc = (org.w3c.dom.Document)
-                        newDoc.invoke(jaxpParser, null);
-                    // System.out.println("Using jaxp " +
-                    //   domDoc.getClass().getName());
-                } catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    // e.printStackTrace();
-                } catch (InvocationTargetException ite) {
-                    throw ite.getTargetException(); // throw the root cause
-                }
-            }
-
-            // Check to see if we got a domDoc yet, if not, try to use a
-            // hard coded default
-            if (domDoc == null) {
-                try {
-                    DOMAdapter adapter = (DOMAdapter)
-                        Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
-                    domDoc = adapter.createDocument();
-                    // System.out.println("Using default " +
-                    //   DEFAULT_ADAPTER_CLASS);
-                }
-                catch (ClassNotFoundException e) {
-                    // e.printStackTrace();
-                }
-            }
+            domDoc = createDOMDocument();
 
             // Assign DOCTYPE
             DocType dt = document.getDocType();
@@ -247,15 +182,79 @@ public class DOMOutputter {
      */
     public org.w3c.dom.Element output(Element element) throws JDOMException {
         try {
-            DOMAdapter adapter =
-                (DOMAdapter)Class.forName(adapterClass).newInstance();
-            org.w3c.dom.Document domDoc = adapter.createDocument();
+            org.w3c.dom.Document domDoc = createDOMDocument();
             return output(element, domDoc, new NamespaceStack());
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             throw new JDOMException("Exception outputting Element " +
                                     element.getQualifiedName(), e);
         }
+    }
+
+    private org.w3c.dom.Document createDOMDocument() throws Throwable {
+        if (adapterClass != null) {
+            // The user knows that they want to use a particular impl
+            try {
+                DOMAdapter adapter =
+                    (DOMAdapter)Class.forName(adapterClass).newInstance();
+                // System.out.println("using specific " + adapterClass);
+                return adapter.createDocument();
+            }
+            catch (ClassNotFoundException e) {
+                // e.printStackTrace();
+            }
+        }
+        else {
+            // Try using JAXP...
+            // Note we need DOM Level 2 and thus JAXP 1.1.
+            // If JAXP 1.0 is all that's available then we skip
+            // to the hard coded default parser
+            try {
+                // Verify this is JAXP 1.1 (or later)
+                Class.forName("javax.xml.transform.Transformer");
+
+                // Try JAXP 1.1 calls to build the document
+                Class factoryClass =
+                    Class.forName("javax.xml.parsers.DocumentBuilderFactory");
+
+                // factory = DocumentBuilderFactory.newInstance();
+                Method newParserInstance =
+                    factoryClass.getMethod("newInstance", null);
+                Object factory = newParserInstance.invoke(null, null);
+
+                // jaxpParser = factory.newDocumentBuilder();
+                Method newDocBuilder =
+                    factoryClass.getMethod("newDocumentBuilder", null);
+                Object jaxpParser  = newDocBuilder.invoke(factory, null);
+
+                // domDoc = jaxpParser.newDocument();
+                Class parserClass = jaxpParser.getClass();
+                Method newDoc = parserClass.getMethod("newDocument", null);
+                return (org.w3c.dom.Document) newDoc.invoke(jaxpParser, null);
+                // System.out.println("Using jaxp " +
+                //   domDoc.getClass().getName());
+            } catch (ClassNotFoundException e) {
+                // e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                // e.printStackTrace();
+            } catch (InvocationTargetException ite) {
+                throw ite.getTargetException(); // throw the root cause
+            }
+        }
+
+        // If no DOM doc yet, try to use a hard coded default
+        try {
+            DOMAdapter adapter = (DOMAdapter)
+                Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
+            return adapter.createDocument();
+            // System.out.println("Using default " +
+            //   DEFAULT_ADAPTER_CLASS);
+        }
+        catch (ClassNotFoundException e) {
+            // e.printStackTrace();
+        }
+
+        throw new Exception("No JAXP or default parser available");
     }
 
     protected org.w3c.dom.Element output(Element element,
