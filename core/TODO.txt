@@ -2,11 +2,20 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Implement the ability to output the same DOCTYPE as was input.  Store the
-  internal DTD subset as a String variable in DocType.  This means we need 
-  to reconstruct the String based on SAX events of the DTDHandler/DeclHandler.
-  Or if reading from DOM then from the DOM DocumentType.
-  (Harry Evans <hevans@elite.com> and Phil Nelson are working on this.)
+* Consider if it's be worthwhile to configure sax not to expand entities and
+  expand them ourselves if necessary, thus being able to get the internal DTD
+  subset even if entity expansion is on.  SAX normally doesn't give you the
+  internal DTD subset if expansion is on.
+
+* Verify we have a solution for when entities are unexpanded and present in
+  attribute values.  (Phil Nelson)
+
+* Finish implementing the ability to output the same DOCTYPE as was input.  
+  Open issues:  Making SAXOutputter output the right SAX events for the
+  DOCTYPE string, making DOMBuilder and DOMOutputter support the model,
+  working around the Crimson bugs Philip found in certain parsing.
+  (Phil Nelson has been responsible for this.  Laurent is helping w/
+  SAXOutputter.)
 
 * Consider if setText() should not replace children
 
@@ -20,10 +29,9 @@ Items that need to be done:
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
-* Determine if setContent(), setAttributes(), setPIs(), setChildren(),
-  and addAll() should be atomic on failure (such as when an illegal object 
-  is added from the list).  Currently setContent() has been changed to 
-  be atomic.
+* Determine if setContent(), setAttributes(), setChildren(), and addAll() 
+  should be atomic on failure (such as when an illegal object is added from 
+  the list).  Currently all but addAll() have been changed to be atomic.
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
