@@ -2,11 +2,11 @@ Items that need to be done:
 
 --- API CONSIDERATIONS FOR 1.0 ---
 
-* Rusty's "base uri" support for Element and the rest.
-
-* Must "pretty" output normalize text or is trim enough?
+None!
 
 --- BUGS NOT NEEDING TO BE RESOLVED FOR 1.0.0 ---
+
+* Rusty's "base uri" support for Element and the rest.
 
 * The following code prints &exter; on its own line which it shouldn't do.
   See http://lists.denveronline.net/lists/jdom-interest/2003-August/013340.html
@@ -28,22 +28,17 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013261.html
   http://lists.denveronline.net/lists/jdom-interest/2003-July/013262.html
 
---- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
-* Clean up and expand Javadocs for inclusion into Frame using the MIF Doclet.
+--- FUTURE IDEAS ---
+
+* If doing the JCP, clean up and expand Javadocs for inclusion into Frame
+  using the MIF Doclet.
 
 * Note in the docs where necessary our multithreading policy.
 
 * Create a JDOM logo.
 
-* Make sure to test serialization.
-
-* Run OptimizeIt to look for bottlenecks.
-
 * Look at http://www.sosnoski.com/opensrc/xmls/format.html.
-
-
---- FUTURE IDEAS ---
 
 * Look at interfaces for the core classes, Element with ConcreteElement being
   our code.  Base on the factory model.  Allow no access between objects
@@ -52,7 +47,7 @@ Items that need to be done:
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?  Experimentation happening in jdom-javax module.
 
-* Add Laurent's <?javax.xml.transform.disable-output-escaping?> 
+* Add Laurent's <?javax.xml.transform.disable-output-escaping?>
   and <?javax.xml.transform.enable-output-escaping?> support
 
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
@@ -71,8 +66,8 @@ Items that need to be done:
 * Look into implementing an id() method now that we have attribute types.
 
 * Look into how the factory builder model could support giving the factory
-  extra knowledge about the context (line number, element stack, etc), and 
-  allow it to report errors or to return a code indicating the element should 
+  extra knowledge about the context (line number, element stack, etc), and
+  allow it to report errors or to return a code indicating the element should
   be ignored.
   (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
 
@@ -91,7 +86,7 @@ Items that need to be done:
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
-* Investigate a way to do in-memory validation.  First step is probably 
+* Investigate a way to do in-memory validation.  First step is probably
   to get an in-memory representation of a DTD as per
   http://xmlhack.com/read.php?item=626
   http://www.wutka.com/dtdparser.html
@@ -99,7 +94,7 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-February/004661.html
   Maybe new DTDValidator(dtd).validate(doc);
   Then later new SchemaValidator(schema).validate(doc);
-  Could instead do doc.validate(dtd/schema) but then we'd have to dynamically 
+  Could instead do doc.validate(dtd/schema) but then we'd have to dynamically
   switch between recognizing DTDs and the various schemas.
   The method would probably either throw InvalidDocumentException or might
   take an ErrorHandler-style interface implementation if there are non-fatal
@@ -109,7 +104,7 @@ Items that need to be done:
   http://dcb.sun.com/practices/devnotebook/xml_msv.jsp
   http://www.sun.com/software/xml/developers/multischema/
 
-* Consider a listener interface so you could listen to doc changes.  
+* Consider a listener interface so you could listen to doc changes.
   (Probably after 1.1 honestly; this can be done through manual subclasses
   already.)  Some pertinent messages on this topic:
   http://lists.denveronline.net/lists/jdom-interest/2000-July/001586.html
@@ -134,7 +129,7 @@ Items that need to be done:
     doesn't tell if attributes are standalone/implicit
     (See http://www.saxproject.org/apidoc/org/xml/sax/ext/Attributes2.html)
     (Thought: could use a bit in the type value to save memory)
-  * Can't get access to retain the internal dtd subset unless entity 
+  * Can't get access to retain the internal dtd subset unless entity
     expansion is off
   * Can't get access to whitespace outside the root element.
 
@@ -150,22 +145,22 @@ Items that need to be done:
 
 * Think about the idea of using more inheritance in JDOM to allow
   lightweight but not XML 1.0 complete implementations.  For example Element
-  could have a superclass "CommonXMLElement" that supported only what Common 
-  XML requires.  Builders could build such elements to be faster and lighter 
+  could have a superclass "CommonXMLElement" that supported only what Common
+  XML requires.  Builders could build such elements to be faster and lighter
   than full elements -- perfect for things like reading config files.  Lots
   of difficulties with this design though.
 
-* Create a Verifier lookup table as an int[256] growable to int[64K] where 
+* Create a Verifier lookup table as an int[256] growable to int[64K] where
   bits in the returned value indicate that char's ability to be used for a
   task.  So "lookup[(int)'x'] & LETTER_MASK" tells us if it's a letter
   or not.
 
 * Consider an HTMLBuilder that reads not-necessarily-well-formed HTML and
   produces a JDOM Document.  The approach I'd suggest is to build on top of
-  JTidy first.  That gives a working implementation fast, at the cost of a 
-  157K Tidy.jar in the distribution.  After that, perhaps someone would lead 
-  an effort to change the JTidy code to build a JDOM Document directly, 
-  instead of making a DOM Document or XML stream first.  That would be a lot 
+  JTidy first.  That gives a working implementation fast, at the cost of a
+  157K Tidy.jar in the distribution.  After that, perhaps someone would lead
+  an effort to change the JTidy code to build a JDOM Document directly,
+  instead of making a DOM Document or XML stream first.  That would be a lot
   faster, use less memory, and make our dist smaller.  See
   http://www.sourceforge.net/projects/jtidy for Tidy.
   See post by Jacob.Robertson@argushealth.com on 2/13/2002.
@@ -202,9 +197,9 @@ Items that need to be done:
 * Create an HTMLOutputter to handle the HTML specific aspects (closing tags,
   escaped characters like &eacute;, etc).
 
-* Change the various setAttributeValue() methods in Element and 
-  Attribute to check the attribute type and normalize the string 
-  according to the attribute type. i.e. normalize the white space if 
+* Change the various setAttributeValue() methods in Element and
+  Attribute to check the attribute type and normalize the string
+  according to the attribute type. i.e. normalize the white space if
   the attribute has any type other than CDATA or UNDECLARED.
 
 * Give attributes the "specified" flag like in DOM.  This probably isn't
@@ -213,6 +208,4 @@ Items that need to be done:
   "unspecified" attributes.
 
 * Should there be XPath support within Element, Document, etc?
-
-* Should Child have a getType() returning an int?
 
