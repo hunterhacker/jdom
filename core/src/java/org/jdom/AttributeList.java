@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.2 2002/01/27 11:10:51 jhunter Exp $
+ $Id: AttributeList.java,v 1.3 2002/02/05 10:07:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -36,8 +36,8 @@
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
  USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -72,7 +72,7 @@ import java.util.List;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.2 $, $Date: 2002/01/27 11:10:51 $
+ * @version $Revision: 1.3 $, $Date: 2002/02/05 10:07:43 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -81,10 +81,10 @@ import java.util.List;
  * @see Text
  */
 class AttributeList extends AbstractList
-                    implements List, Cloneable, java.io.Serializable {
+                    implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.2 $ $Date: 2002/01/27 11:10:51 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.3 $ $Date: 2002/02/05 10:07:43 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.3 2002/01/25 18:42:52 jhunter Exp $
+ $Id: ElementFilter.java,v 1.4 2002/02/05 10:07:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -36,8 +36,8 @@
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
  USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -64,12 +64,12 @@ package org.jdom;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.4 $, $Date: 2002/02/05 10:07:43 $
  */
 class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.3 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.4 $ $Date: 2002/02/05 10:07:43 $ $Name:  $";
 
     /** The element name */
     protected String name;
