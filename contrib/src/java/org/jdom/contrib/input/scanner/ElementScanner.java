@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementScanner.java,v 1.12 2004/08/31 20:53:02 jhunter Exp $
+ $Id: ElementScanner.java,v 1.13 2004/09/03 06:12:44 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -829,6 +829,11 @@ public class ElementScanner extends XMLFilterImpl {
          return (new EmptyDocument());
       }
 
+      public Document document(Element rootElement, DocType docType,
+                               String baseURI) {
+         return (new EmptyDocument());
+      }
+
       public Document document(Element rootElement) {
          return (new EmptyDocument());
       }
@@ -897,9 +902,17 @@ public class ElementScanner extends XMLFilterImpl {
                                  String publicID, String systemID) {
          return(this.wrapped.entityRef(name, publicID, systemID));
       }
+      public EntityRef entityRef(String name, String systemID) {
+         return(this.wrapped.entityRef(name, systemID));
+      }
 
        public void addContent(Parent parent, Content c) {
-           parent.addContent(c);
+           if (parent instanceof Element) {
+               ((Element) parent).addContent(c);
+           }
+           else {
+               ((Document) parent).addContent(c);
+           }
        }
 
        public void setAttribute(Element element, Attribute a) {
