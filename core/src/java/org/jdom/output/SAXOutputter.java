@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.9 2001/06/11 15:40:59 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.10 2001/06/11 16:17:56 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -100,531 +100,550 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.9 $ $Date: 2001/06/11 15:40:59 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.10 $ $Date: 2001/06/11 16:17:56 $ $Name:  $";
 
-   /** registered <code>ContentHandler</code> */
-   private ContentHandler contentHandler;
+    /** registered <code>ContentHandler</code> */
+    private ContentHandler contentHandler;
    
-   /** registered <code>ErrorHandler</code> */
-   private ErrorHandler errorHandler;
+    /** registered <code>ErrorHandler</code> */
+    private ErrorHandler errorHandler;
    
-   /** registered <code>DTDHandler</code> */
-   private DTDHandler dtdHandler;
+    /** registered <code>DTDHandler</code> */
+    private DTDHandler dtdHandler;
    
-   /** registered <code>EntityResolver</code> */
-   private EntityResolver entityResolver;
+    /** registered <code>EntityResolver</code> */
+    private EntityResolver entityResolver;
    
-   /**
-    * Whether to report attribute namespace declarations as xmlns attributes.
-    * Defaults to <code>false</code> as per SAX specifications.
-    *
-    * @see <a href="http://www.megginson.com/SAX/Java/namespaces.html">SAX namespace specifications</a>
-    */
-   private boolean declareNamespaces = false;
-   
-   /**
-    * <p>
-    * This will create a <code>SAXOutputter</code> with the
-    * specified <code>ContentHandler</code>.
-    * </p>
-    *
-    * @param contentHandler contains <code>ContentHandler</code> callback methods
-    */
-   public SAXOutputter(ContentHandler contentHandler) {
-      this.contentHandler = contentHandler;
-   }
-   
-   /**
-    * <p>
-    * This will create a <code>SAXOutputter</code> with the
-    * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
-    * and <code>EntityResolver</code> are supported.
-    * </p>
-    *
-    * @param contentHandler contains <code>ContentHandler</code> callback methods
-    * @param errorHandler contains <code>ErrorHandler</code> callback methods
-    * @param dtdHandler contains <code>DTDHandler</code> callback methods
-    * @param entityResolver contains <code>EntityResolver</code> callback methods
-    */
-   public SAXOutputter(ContentHandler contentHandler,
-                       ErrorHandler   errorHandler,
-                       DTDHandler     dtdHandler,
-                       EntityResolver entityResolver) {
-      this.contentHandler = contentHandler;
-      this.errorHandler = errorHandler;
-      this.dtdHandler = dtdHandler;
-      this.entityResolver = entityResolver;
-   }
-   
-   /**
-    * <p>
-    * This will set the <code>ContentHandler</code>.
-    * </p>
-    *
-    * @param contentHandler contains <code>ContentHandler</code> callback methods.
-    */
-   public void setContentHandler(ContentHandler contentHandler) {
-      this.contentHandler = contentHandler;
-   }
-   
-   /**
-    * <p>
-    * This will set the <code>ErrorHandler</code>.
-    * </p>
-    *
-    * @param errorHandler contains <code>ErrorHandler</code> callback methods.
-    */
-   public void setErrorHandler(ErrorHandler errorHandler) {
-      this.errorHandler = errorHandler;
-   }
-   
-   /**
-    * <p>
-    * This will set the <code>DTDHandler</code>.
-    * </p>
-    *
-    * @param dtdHandler contains <code>DTDHandler</code> callback methods.
-    */
-   public void setDTDHandler(DTDHandler dtdHandler) {
-      this.dtdHandler = dtdHandler;
-   }
-   
-   /**
-    * <p>
-    * This will set the <code>EntityResolver</code>.
-    * </p>
-    *
-    * @param entityResolver contains EntityResolver callback methods.
-    */
-   public void setEntityResolver(EntityResolver entityResolver) {
-      this.entityResolver = entityResolver;
-   }
-   
-   /**
-    * <p>
-    * This will define whether attribute namespace declarations shall be
-    * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
-    * and behaves as the "namespace-prefixes" SAX core feature.
-    * </p>
-    *
-    * @param reportDecl whether attribute namespace declarations shall be
-    * reported as "xmlns" attributes.
-    */
-   public void setReportNamespaceDeclarations(boolean declareNamespaces) {
-      this.declareNamespaces = declareNamespaces;
-   }
+    /**
+     * Whether to report attribute namespace declarations as xmlns attributes.
+     * Defaults to <code>false</code> as per SAX specifications.
+     *
+     * @see <a href="http://www.megginson.com/SAX/Java/namespaces.html">
+     *  SAX namespace specifications</a>
+     */
+    private boolean declareNamespaces = false;
 
-   /**
-    * <p>
-    * This will output the <code>JDOM Document</code>, firing off the
-    * SAX events that have been registered.
-    * </p>
-    *
-    * @param document <code>JDOM Document</code> to output.
-    */
-   public void output(Document document) throws JDOMException {
-      if (document == null) {
-         return;
-      }
-       
-      // contentHandler.setDocumentLocator()
-      documentLocator(document);
-       
-      // contentHandler.startDocument()
-      startDocument();
-       
-      // entityResolver.resolveEntity()
-      entityResolver(document);
-       
-      // JDOM cannot read unparsed entities and notations in DTD (yet)
-      // dtdHandler(document);
-       
-      // Handle root element, as well as any root level
-      // processing instructions and CDATA sections
-      Iterator i = document.getMixedContent().iterator();
-      while (i.hasNext()) {
-         Object obj = i.next();
-         if (obj instanceof Element) {
-            // process root element and its mixed content
-            element(document.getRootElement(), new NamespaceStack());
-         }
-         else if (obj instanceof ProcessingInstruction) {
-            // contentHandler.processingInstruction()
-            processingInstruction((ProcessingInstruction) obj);
-         }
-         else if (obj instanceof CDATA) {
-            // contentHandler.characters()
-            characters(((CDATA) obj).getText());
-         }
-      }
-       
-       // contentHandler.endDocument()
-       endDocument();
+    /**
+     * <p>
+     * This will create a <code>SAXOutputter</code> with the
+     * specified <code>ContentHandler</code>.
+     * </p>
+     *
+     * @param contentHandler contains <code>ContentHandler</code> 
+     * callback methods
+     */
+    public SAXOutputter(ContentHandler contentHandler) {
+        this.contentHandler = contentHandler;
     }
    
-   /**
-    * <p>
-    * This enables an application to resolve external entities.
-    * </p>
-    *
-    * @param document JDOM <code>Document</code>.
-    */
-   private void entityResolver(Document document) throws JDOMException {
-      if (entityResolver != null) {
-         DocType docType = document.getDocType();
-         String publicID = null;
-         String systemID = null;
-         if (docType != null) {
+    /**
+     * <p>
+     * This will create a <code>SAXOutputter</code> with the
+     * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
+     * and <code>EntityResolver</code> are supported.
+     * </p>
+     *
+     * @param contentHandler contains <code>ContentHandler</code> 
+     * callback methods
+     * @param errorHandler contains <code>ErrorHandler</code> callback methods
+     * @param dtdHandler contains <code>DTDHandler</code> callback methods
+     * @param entityResolver contains <code>EntityResolver</code> 
+     * callback methods
+     */
+    public SAXOutputter(ContentHandler contentHandler,
+                        ErrorHandler   errorHandler,
+                        DTDHandler     dtdHandler,
+                        EntityResolver entityResolver) {
+        this.contentHandler = contentHandler;
+        this.errorHandler = errorHandler;
+        this.dtdHandler = dtdHandler;
+        this.entityResolver = entityResolver;
+    }
+   
+    /**
+     * <p>
+     * This will set the <code>ContentHandler</code>.
+     * </p>
+     *
+     * @param contentHandler contains <code>ContentHandler</code> 
+     * callback methods.
+     */
+    public void setContentHandler(ContentHandler contentHandler) {
+        this.contentHandler = contentHandler;
+    }
+
+    /**
+     * <p>
+     * This will set the <code>ErrorHandler</code>.
+     * </p>
+     *
+     * @param errorHandler contains <code>ErrorHandler</code> callback methods.
+     */
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
+
+    /**
+     * <p>
+     * This will set the <code>DTDHandler</code>.
+     * </p>
+     *
+     * @param dtdHandler contains <code>DTDHandler</code> callback methods.
+     */
+    public void setDTDHandler(DTDHandler dtdHandler) {
+        this.dtdHandler = dtdHandler;
+    }
+
+    /**
+     * <p>
+     * This will set the <code>EntityResolver</code>.
+     * </p>
+     *
+     * @param entityResolver contains EntityResolver callback methods.
+     */
+    public void setEntityResolver(EntityResolver entityResolver) {
+        this.entityResolver = entityResolver;
+    }
+   
+    /**
+     * <p>
+     * This will define whether attribute namespace declarations shall be
+     * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
+     * and behaves as the "namespace-prefixes" SAX core feature.
+     * </p>
+     *
+     * @param reportDecl whether attribute namespace declarations shall be
+     * reported as "xmlns" attributes.
+     */
+    public void setReportNamespaceDeclarations(boolean declareNamespaces) {
+        this.declareNamespaces = declareNamespaces;
+    }
+
+    /**
+     * <p>
+     * This will output the <code>JDOM Document</code>, firing off the
+     * SAX events that have been registered.
+     * </p>
+     *
+     * @param document <code>JDOM Document</code> to output.
+     */
+    public void output(Document document) throws JDOMException {
+        if (document == null) {
+            return;
+        }
+
+        // contentHandler.setDocumentLocator()
+        documentLocator(document);
+
+        // contentHandler.startDocument()
+        startDocument();
+
+        // entityResolver.resolveEntity()
+        entityResolver(document);
+
+        // JDOM cannot read unparsed entities and notations in DTD (yet)
+        // dtdHandler(document);
+
+        // Handle root element, as well as any root level
+        // processing instructions and CDATA sections
+        Iterator i = document.getMixedContent().iterator();
+        while (i.hasNext()) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                // process root element and its mixed content
+                element(document.getRootElement(), new NamespaceStack());
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                // contentHandler.processingInstruction()
+                processingInstruction((ProcessingInstruction) obj);
+            }
+            else if (obj instanceof CDATA) {
+                // contentHandler.characters()
+                characters(((CDATA) obj).getText());
+            }
+        }
+       
+        // contentHandler.endDocument()
+        endDocument();
+    }
+   
+    /**
+     * <p>
+     * This enables an application to resolve external entities.
+     * </p>
+     *
+     * @param document JDOM <code>Document</code>.
+     */
+    private void entityResolver(Document document) throws JDOMException {
+        if (entityResolver != null) {
+            DocType docType = document.getDocType();
+            String publicID = null;
+            String systemID = null;
+            if (docType != null) {
+                publicID = docType.getPublicID();
+                systemID = docType.getSystemID();
+            }
+
+            if ((publicID != null) || (systemID != null)) {
+                try {
+                    entityResolver.resolveEntity(publicID, systemID);
+                }
+                catch (SAXException se) {
+                    throw new JDOMException("Exception in entityResolver", se);
+                }
+                catch (IOException ioe) {
+                    throw new JDOMException("Exception in entityResolver", ioe);
+                }
+            }
+        }
+    }
+   
+    // XXX Not implemented yet, since a JDOM Document does not
+    // have access to the unparsed entities and notations
+    // defined in a DTD (yet)
+    // private void dtdHandler(Document document) {
+    // }
+   
+    /**
+     * <p>
+     * This method tells you the line of the XML file being parsed.
+     * For an in-memory document, it's meaningless. The location
+     * is only valid for the current parsing lifecycle, but
+     * the document has already been parsed. Therefore, it returns
+     * -1 for both line and column numbers.
+     * </p>
+     *
+     * @param document JDOM <code>Document</code>.
+     */
+    private void documentLocator(Document document) {
+        LocatorImpl locator = new LocatorImpl();
+        String publicID = null;
+        String systemID = null;
+        DocType docType = document.getDocType();
+        if (docType != null) {
             publicID = docType.getPublicID();
             systemID = docType.getSystemID();
-         }
-         
-         if ((publicID != null) || (systemID != null)) {
+        }
+      
+        locator.setPublicId(publicID);
+        locator.setSystemId(systemID);
+        locator.setLineNumber(-1);
+        locator.setColumnNumber(-1);
+      
+        contentHandler.setDocumentLocator((Locator) locator);
+    }
+   
+    /**
+     * <p>
+     * This method is always the second method of all callbacks in
+     * all handlers to be invoked (setDocumentLocator is always first).
+     * </p>
+     */
+    private void startDocument() throws JDOMException {
+        try {
+            contentHandler.startDocument();
+        }
+        catch (SAXException se) {
+            throw new JDOMException("Exception in startDocument", se);
+        }
+    }
+   
+    /**
+     * <p>
+     * Always the last method of all callbacks in all handlers
+     * to be invoked.
+     * </p>
+     */
+    private void endDocument() throws JDOMException {
+        try {
+            contentHandler.endDocument();
+        }
+        catch (SAXException se) {
+            throw new JDOMException("Exception in endDocument", se);
+        }
+    }
+   
+    /**
+     * <p>
+     * This will invoke the <code>ContentHandler.processingInstruction</code>
+     * callback when a processing instruction is encountered.
+     * </p>
+     *
+     * @param pi <code>ProcessingInstruction</code> containing target and data.
+     */
+    private void processingInstruction(ProcessingInstruction pi) 
+                           throws JDOMException {
+        if (pi != null) {
+            String target = pi.getTarget();
+            String data = pi.getData();
             try {
-               entityResolver.resolveEntity(publicID, systemID);
+                contentHandler.processingInstruction(target, data);
             }
             catch (SAXException se) {
-               throw new JDOMException("SAXException", se);
+                throw new JDOMException(
+                    "Exception in processingInstruction", se);
             }
-            catch (IOException ioe) {
-               throw new JDOMException("IOException", ioe);
-            }
-         }
-      }
-   }
+        }
+    }
    
-   // Not implemented yet, since a JDOM Document does not
-   // have access to the unparsed entities and notations
-   // defined in a DTD (yet)
-   // private void dtdHandler(Document document) {
-   // }
-   
-   /**
-    * <p>
-    * This method tells you the line of the XML file being parsed.
-    * For an in-memory document, it's meaningless. The location
-    * is only valid for the current parsing lifecycle, but
-    * the document has already been parsed. Therefore, it returns
-    * -1 for both line and column numbers.
-    * </p>
-    *
-    * @param document JDOM <code>Document</code>.
-    */
-   private void documentLocator(Document document) {
-      LocatorImpl locator = new LocatorImpl();
-      String publicID = null;
-      String systemID = null;
-      DocType docType = document.getDocType();
-      if (docType != null) {
-         publicID = docType.getPublicID();
-         systemID = docType.getSystemID();
-      }
-      
-      locator.setPublicId(publicID);
-      locator.setSystemId(systemID);
-      locator.setLineNumber(-1);
-      locator.setColumnNumber(-1);
-      
-      contentHandler.setDocumentLocator((Locator) locator);
-   }
-   
-   /**
-    * <p>
-    * This method is always the second method of all callbacks in
-    * all handlers to be invoked (setDocumentLocator is always first).
-    * </p>
-    */
-   private void startDocument() throws JDOMException {
-      try {
-         contentHandler.startDocument();
-      }
-      catch (SAXException se) {
-         throw new JDOMException("SAXException", se);
-      }
-   }
-   
-   /**
-    * <p>
-    * Always the last method of all callbacks in all handlers
-    * to be invoked.
-    * </p>
-    */
-   private void endDocument() throws JDOMException {
-      try {
-         contentHandler.endDocument();
-      }
-      catch (SAXException se) {
-         throw new JDOMException("SAXException", se);
-      }
-   }
-   
-   /**
-    * <p>
-    * This will invoke the <code>ContentHandler.processingInstruction</code>
-    * callback when a processing instruction is encountered.
-    * </p>
-    *
-    * @param pi <code>ProcessingInstruction</code> containing target and data.
-    */
-   private void processingInstruction(ProcessingInstruction pi) throws JDOMException {
-      if (pi != null) {
-         String target = pi.getTarget();
-         String data = pi.getData();
-         try {
-            contentHandler.processingInstruction(target, data);
-         }
-         catch (SAXException se) {
-            throw new JDOMException("SAXException", se);
-         }
-      }
-   }
-   
-   /**
-    * <p>
-    * This will recursively invoke all of the callbacks for a particular element.
-    * </p>
-    *
-    * @param element <code>Element</code> used in callbacks.
-    * @param namespaces <code>List</code> stack of Namespaces in scope.
-    */
-   private void element(Element element, NamespaceStack namespaces) throws JDOMException {
-      // used to check endPrefixMapping
-      int previouslyDeclaredNamespaces = namespaces.size();
-      
-      // contentHandler.startPrefixMapping()
-      Attributes nsAtts = startPrefixMapping(element, namespaces);
-      
-      // contentHandler.startElement()
-      startElement(element, nsAtts);
-      
-      // handle mixed content in the element
-      elementContent(element, namespaces);
-      
-      // contentHandler.endElement()
-      endElement(element);
-      
-      // contentHandler.endPrefixMapping()
-      endPrefixMapping(namespaces, previouslyDeclaredNamespaces);
-   }
-   
-   /**
-    * <p>
-    * This will invoke the <code>ContentHandler.startPrefixMapping</code> callback
-    * when a new namespace is encountered in the <code>Document</code>.
-    * </p>
-    *
-    * @param element <code>Element</code> used in callbacks.
-    * @param namespaces <code>List</code> stack of Namespaces in scope.
-    *
-    * @return <code>Attributes</code> declaring the namespaces local to
-    * <code>element</code> or <code>null</code>.
-    */
-   private Attributes startPrefixMapping(Element element, NamespaceStack namespaces) throws JDOMException {
-      AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
+    /**
+     * <p>
+     * This will recursively invoke all of the callbacks for a particular 
+     * element.
+     * </p>
+     *
+     * @param element <code>Element</code> used in callbacks.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    private void element(Element element, NamespaceStack namespaces) 
+                           throws JDOMException {
+        // used to check endPrefixMapping
+        int previouslyDeclaredNamespaces = namespaces.size();
 
-      Namespace ns = element.getNamespace();
-      if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
-         String prefix = ns.getPrefix();
-         String uri = namespaces.getURI(prefix);
-         if (!ns.getURI().equals(uri)) {
-            namespaces.push(ns);
-            nsAtts = this.addNsAttribute(nsAtts, ns);
-            try {
-               contentHandler.startPrefixMapping(prefix, ns.getURI());
-            }
-            catch (SAXException se) {
-               throw new JDOMException("SAXException", se);
-            }
-         }
-      }
+        // contentHandler.startPrefixMapping()
+        Attributes nsAtts = startPrefixMapping(element, namespaces);
 
-      // Fire additional namespace declarations
-      List additionalNamespaces = element.getAdditionalNamespaces();
-      if (additionalNamespaces != null) {
-         Iterator itr = additionalNamespaces.iterator();
-         while (itr.hasNext()) {
-            ns = (Namespace)itr.next();
+        // contentHandler.startElement()
+        startElement(element, nsAtts);
+
+        // handle mixed content in the element
+        elementContent(element, namespaces);
+
+        // contentHandler.endElement()
+        endElement(element);
+
+        // contentHandler.endPrefixMapping()
+        endPrefixMapping(namespaces, previouslyDeclaredNamespaces);
+    }
+   
+    /**
+     * <p>
+     * This will invoke the <code>ContentHandler.startPrefixMapping</code> 
+     * callback
+     * when a new namespace is encountered in the <code>Document</code>.
+     * </p>
+     *
+     * @param element <code>Element</code> used in callbacks.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     *
+     * @return <code>Attributes</code> declaring the namespaces local to
+     * <code>element</code> or <code>null</code>.
+     */
+    private Attributes startPrefixMapping(Element element, 
+                                          NamespaceStack namespaces) 
+                                                   throws JDOMException {
+        AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
+
+        Namespace ns = element.getNamespace();
+        if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
             String prefix = ns.getPrefix();
             String uri = namespaces.getURI(prefix);
             if (!ns.getURI().equals(uri)) {
-               namespaces.push(ns);
-               nsAtts = this.addNsAttribute(nsAtts, ns);
-               try {
-                  contentHandler.startPrefixMapping(prefix, ns.getURI());
-               }
-               catch (SAXException se) {
-                  throw new JDOMException("SAXException", se);
-               }
+                namespaces.push(ns);
+                nsAtts = this.addNsAttribute(nsAtts, ns);
+                try {
+                    contentHandler.startPrefixMapping(prefix, ns.getURI());
+                }
+                catch (SAXException se) {
+                   throw new JDOMException(
+                       "Exception in startPrefixMapping", se);
+                }
             }
-         }
-      }
-      return nsAtts;
-   }
+        }
 
-   /**
-    * <p>
-    * This will invoke the <code>endPrefixMapping</code> callback in the
-    * <code>ContentHandler</code> when a namespace is goes out of scope
-    * in the <code>Document</code>.
-    * </p>
-    *
-    * @param namespaces <code>List</code> stack of Namespaces in scope.
-    * @param previouslyDeclaredNamespaces number of previously declared namespaces
-    */
-   private void endPrefixMapping(NamespaceStack namespaces, int previouslyDeclaredNamespaces) throws JDOMException {
-      while (namespaces.size() > previouslyDeclaredNamespaces) {
-         String prefix = namespaces.pop();
-         try {
-            contentHandler.endPrefixMapping(prefix);
-         }
-         catch (SAXException se) {
-            throw new JDOMException("SAXException", se);
-         }
-      }
-   }
+        // Fire additional namespace declarations
+        List additionalNamespaces = element.getAdditionalNamespaces();
+        if (additionalNamespaces != null) {
+            Iterator itr = additionalNamespaces.iterator();
+            while (itr.hasNext()) {
+                ns = (Namespace)itr.next();
+                String prefix = ns.getPrefix();
+                String uri = namespaces.getURI(prefix);
+                if (!ns.getURI().equals(uri)) {
+                    namespaces.push(ns);
+                    nsAtts = this.addNsAttribute(nsAtts, ns);
+                    try {
+                        contentHandler.startPrefixMapping(prefix, ns.getURI());
+                    }
+                    catch (SAXException se) {
+                        throw new JDOMException(
+                            "Exception in startPrefixMapping", se);
+                    }
+                }
+            }
+        }
+        return nsAtts;
+    }
+
+    /**
+     * <p>
+     * This will invoke the <code>endPrefixMapping</code> callback in the
+     * <code>ContentHandler</code> when a namespace is goes out of scope
+     * in the <code>Document</code>.
+     * </p>
+     *
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     * @param previouslyDeclaredNamespaces number of previously declared 
+     * namespaces
+     */
+    private void endPrefixMapping(NamespaceStack namespaces, 
+                                  int previouslyDeclaredNamespaces) 
+                                                throws JDOMException {
+        while (namespaces.size() > previouslyDeclaredNamespaces) {
+            String prefix = namespaces.pop();
+            try {
+                contentHandler.endPrefixMapping(prefix);
+            }
+            catch (SAXException se) {
+                throw new JDOMException("Exception in endPrefixMapping", se);
+            }
+        }
+    }
    
-   /**
-    * <p>
-    * This will invoke the <code>startElement</code> callback
-    * in the <code>ContentHandler</code>.
-    * </p>
-    *
-    * @param element <code>Element</code> used in callbacks.
-    * @param eltNamespaces <code>List</code> of namespaces to declare with
-    * the element or <code>null</code>.
-    */
-   private void startElement(Element element, Attributes nsAtts) throws JDOMException {
-      String namespaceURI = element.getNamespaceURI();
-      String localName = element.getName();
-      String rawName = element.getQualifiedName();
+    /**
+     * <p>
+     * This will invoke the <code>startElement</code> callback
+     * in the <code>ContentHandler</code>.
+     * </p>
+     *
+     * @param element <code>Element</code> used in callbacks.
+     * @param eltNamespaces <code>List</code> of namespaces to declare with
+     * the element or <code>null</code>.
+     */
+    private void startElement(Element element, Attributes nsAtts) 
+                      throws JDOMException {
+        String namespaceURI = element.getNamespaceURI();
+        String localName = element.getName();
+        String rawName = element.getQualifiedName();
 
-      // Allocate attribute list.
-      AttributesImpl atts = (nsAtts != null)?
-                            new AttributesImpl(nsAtts): new AttributesImpl();
+        // Allocate attribute list.
+        AttributesImpl atts = (nsAtts != null)?
+                              new AttributesImpl(nsAtts): new AttributesImpl();
 
-      List attributes = element.getAttributes();
-      Iterator i = attributes.iterator();
-      while (i.hasNext()) {
-         Attribute a = (Attribute) i.next();
-         atts.addAttribute(a.getNamespaceURI(),
-                           a.getName(),
-                           a.getQualifiedName(),
-                           "CDATA",
-                           a.getValue());
-      }
+        List attributes = element.getAttributes();
+        Iterator i = attributes.iterator();
+        while (i.hasNext()) {
+            Attribute a = (Attribute) i.next();
+            atts.addAttribute(a.getNamespaceURI(),
+                              a.getName(),
+                              a.getQualifiedName(),
+                              "CDATA",
+                              a.getValue());
+        }
          
-      try {
-         contentHandler.startElement(namespaceURI, localName, rawName, atts);
-      }
-      catch (SAXException se) {
-         throw new JDOMException("SAXException", se);
-      }
-   }
+        try {
+            contentHandler.startElement(namespaceURI, localName, rawName, atts);
+        }
+        catch (SAXException se) {
+            throw new JDOMException("Exception in startElement", se);
+        }
+    }
    
-   /**
-    * <p>
-    * This will invoke the <code>endElement</code> callback
-    * in the <code>ContentHandler</code>.
-    * </p>
-    *
-    * @param element <code>Element</code> used in callbacks.
-    */
-   private void endElement(Element element) throws JDOMException {
-      String namespaceURI = element.getNamespaceURI();
-      String localName = element.getName();
-      String rawName = element.getQualifiedName();
+    /**
+     * <p>
+     * This will invoke the <code>endElement</code> callback
+     * in the <code>ContentHandler</code>.
+     * </p>
+     *
+     * @param element <code>Element</code> used in callbacks.
+     */
+    private void endElement(Element element) throws JDOMException {
+        String namespaceURI = element.getNamespaceURI();
+        String localName = element.getName();
+        String rawName = element.getQualifiedName();
+        
+        try {
+            contentHandler.endElement(namespaceURI, localName, rawName);
+        }
+        catch (SAXException se) {
+            throw new JDOMException("Exception in endElement", se);
+        }
+    }
+   
+    /**
+     * <p>
+     * This will invoke the callbacks for the content of an element.
+     * </p>
+     *
+     * @param element <code>Element</code> used in callbacks.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    private void elementContent(Element element, NamespaceStack namespaces) 
+                      throws JDOMException {
+        List mixedContent = element.getMixedContent();
       
-      try {
-         contentHandler.endElement(namespaceURI, localName, rawName);
-      }
-      catch (SAXException se) {
-         throw new JDOMException("SAXException", se);
-      }
-   }
-   
-   /**
-    * <p>
-    * This will invoke the callbacks for the content of an element.
-    * </p>
-    *
-    * @param element <code>Element</code> used in callbacks.
-    * @param namespaces <code>List</code> stack of Namespaces in scope.
-    */
-   private void elementContent(Element element, NamespaceStack namespaces) throws JDOMException {
-      List mixedContent = element.getMixedContent();
-      
-      boolean empty = mixedContent.size() == 0;
-      boolean stringOnly =
-         !empty &&
-         mixedContent.size() == 1 &&
-         mixedContent.get(0) instanceof String;
-         
-      if (stringOnly) {
-         // contentHandler.characters()
-         characters(element.getText());
-      }
-      else {
-         Object content = null;
-         for (int i = 0, size = mixedContent.size(); i < size; i++) {
-            content = mixedContent.get(i);
-            if (content instanceof Element) {
-               element((Element) content, namespaces);
+        boolean empty = mixedContent.size() == 0;
+        boolean stringOnly =
+            !empty &&
+            mixedContent.size() == 1 &&
+            mixedContent.get(0) instanceof String;
+          
+        if (stringOnly) {
+            // contentHandler.characters()
+            characters(element.getText());
+        }
+        else {
+            Object content = null;
+            for (int i = 0, size = mixedContent.size(); i < size; i++) {
+                content = mixedContent.get(i);
+                if (content instanceof Element) {
+                    element((Element) content, namespaces);
+                }
+                else if (content instanceof String) {
+                    // contentHandler.characters()
+                    characters((String) content);
+                }
+                else if (content instanceof CDATA) {
+                    // contentHandler.characters()
+                    characters(((CDATA) content).getText());
+                }
+                else if (content instanceof ProcessingInstruction) {
+                    // contentHandler.processingInstruction()
+                    processingInstruction((ProcessingInstruction) content);
+                }
             }
-            else if (content instanceof String) {
-               // contentHandler.characters()
-               characters((String) content);
-            }
-            else if (content instanceof CDATA) {
-               // contentHandler.characters()
-               characters(((CDATA) content).getText());
-            }
-            else if (content instanceof ProcessingInstruction) {
-               // contentHandler.processingInstruction()
-               processingInstruction((ProcessingInstruction) content);
-            }
-         }
-      }
-   }
-   
-   /**
-    * <p>
-    * This will be called for each chunk of character data encountered.
-    * </p>
-    *
-    * @param elementText all text in an element, including whitespace.
-    */
-   private void characters(String elementText) throws JDOMException {
-      char[] c = elementText.toCharArray();
-      try {
-         contentHandler.characters(c, 0, c.length);
-      }
-      catch (SAXException se) {
-         throw new JDOMException("SAXException", se);
-      }
-   }
+        }
+    }
+    
+    /**
+     * <p>
+     * This will be called for each chunk of character data encountered.
+     * </p>
+     *
+     * @param elementText all text in an element, including whitespace.
+     */
+    private void characters(String elementText) throws JDOMException {
+        char[] c = elementText.toCharArray();
+        try {
+            contentHandler.characters(c, 0, c.length);
+        }
+        catch (SAXException se) {
+            throw new JDOMException("Exception in characters", se);
+        }
+    }
 
-   /**
-    * <p>
-    * Appends a namespace declaration in the form of a xmlns attribute to
-    * an attribute list, crerating this latter if needed.
-    * </p>
-    *
-    * @param atts <code>AttributeImpl</code> where to add the attribute.
-    * @param ns <code>Namespace</code> the namespace to declare.
-    *
-    * @return <code>AttributeImpl</code> the updated attribute list.
-    */
-   private AttributesImpl addNsAttribute(AttributesImpl atts, Namespace ns) {
-      if (this.declareNamespaces) {
-         if (atts == null) {
-            atts = new AttributesImpl();
-         }
-         atts.addAttribute("",                          // namespace
-                           "",                          // local name
-                           "xmlns:" + ns.getPrefix(),   // qualified name
-                           "CDATA",                     // type
-                           ns.getURI());                // value
-      }
-      return atts;
-   }
+    /**
+     * <p>
+     * Appends a namespace declaration in the form of a xmlns attribute to
+     * an attribute list, crerating this latter if needed.
+     * </p>
+     *
+     * @param atts <code>AttributeImpl</code> where to add the attribute.
+     * @param ns <code>Namespace</code> the namespace to declare.
+     *
+     * @return <code>AttributeImpl</code> the updated attribute list.
+     */
+    private AttributesImpl addNsAttribute(AttributesImpl atts, Namespace ns) {
+        if (this.declareNamespaces) {
+            if (atts == null) {
+                atts = new AttributesImpl();
+            }
+            atts.addAttribute("",                          // namespace
+                              "",                          // local name
+                              "xmlns:" + ns.getPrefix(),   // qualified name
+                              "CDATA",                     // type
+                              ns.getURI());                // value
+        }
+        return atts;
+    }
 }
