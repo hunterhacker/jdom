@@ -1,6 +1,6 @@
 /*-- 
 
- $Header: /home/cvspublic/jdom/src/java/org/jdom/CDATA.java,v 1.9 2001/03/15 05:55:47 jhunter Exp $
+ $Id: CDATA.java,v 1.10 2001/03/15 06:05:09 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
