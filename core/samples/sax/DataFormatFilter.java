@@ -103,7 +103,7 @@ import org.xml.sax.XMLReader;
  * <p>This code will produce the following document:</p>
  *
  * <pre>
- * &lt;?xml version="1.0" standalone="yes"?>
+ * &lt;?xml version="1.0"?>
  *
  * &lt;Person>
  *   &lt;name>Jane Smith&lt;/name>

@@ -54,20 +54,25 @@
 package samples.sax;
 
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 /**
- * Tests SAXBuilder's XMLFilter feature
+ * Tests DocumentReader
  * 
  * @author  joe.bowbeer
  */
-public class FilterTest {
+public class ReaderTest {
 
-    /** Creates new FilterTest */
-    public FilterTest() {
+    /** Creates new ReaderTest */
+    public ReaderTest() {
     }
 
     /**
@@ -75,38 +80,37 @@ public class FilterTest {
     */
     public static void main (String args[]) throws Exception {
 
-        /* XMLWriter for viewing unfiltered input. */
+        /* XMLWriter for viewing SAX events. */
         
         XMLWriter echo = new XMLWriter();
         
-        /* Add pretty formatting to unformatted xml file. */
+        /* Build document from xml file. */
         
         SAXBuilder builder = new SAXBuilder();
-        DataFormatFilter format = new DataFormatFilter(echo);
-        format.setIndentStep(4);
-        builder.setXMLFilter(format);
-        InputStream in = FilterTest.class.getResourceAsStream("test1.xml");
+        builder.setXMLFilter(echo);
+        InputStream in = FilterTest.class.getResourceAsStream("test2.xml");
 
-        System.out.println(" -- test1.xml unfiltered -- \n");
+        System.out.println(" -- SAXBuilder(test2.xml), echo by XMLWriter -- \n");
         Document doc = builder.build(in);
 
-        System.out.println(" -- test1.xml filtered by DataFormatFilter --\n");
-        XMLOutputter outputter = new XMLOutputter();
-        outputter.output(doc, System.out);
+        System.out.println(" -- DocumentReader(doc) output by XMLWriter --\n");
+        XMLReader parser = new DocumentReader(doc);
+        echo.setParent(parser);
+        StringWriter writer = new StringWriter();
+        parser = new XMLWriter(echo, writer);
+        parser.parse((InputSource)null);
 
-        System.out.println("\n");
-        
-        /* Remove pretty formatting from formatted xml file. */
+        /* Reconstitute document from regurgitated string. */
         
         builder = new SAXBuilder();
-        builder.setXMLFilter( new DataUnformatFilter(echo) );
-        in = FilterTest.class.getResourceAsStream("test2.xml");
+        builder.setXMLFilter(echo);
+        String xml = writer.toString();
 
-        System.out.println(" -- test2.xml unfiltered --\n");
-        doc = builder.build(in);
+        System.out.println(" -- xml string--\n");
+        doc = builder.build(new StringReader(xml));
 
-        System.out.println(" -- test2.xml filtered by DataUnformatFilter --\n");
-        outputter = new XMLOutputter();
+        System.out.println(" -- SAXBuilder(xml) output by XMLOutputter --\n");
+        XMLOutputter outputter = new XMLOutputter();
         outputter.output(doc, System.out);
 
         System.out.println("\n");

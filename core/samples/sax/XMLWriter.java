@@ -103,7 +103,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * <p>The resulting document will look like this:</p>
  *
  * <pre>
- * &lt;?xml version="1.0" standalone="yes"?>
+ * &lt;?xml version="1.0"?>
  *
  * &lt;greeting>Hello, world!&lt;/greeting>
  * </pre>
@@ -151,7 +151,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * <p>The resulting document will look like this:</p>
  *
  * <pre>
- * &lt;?xml version="1.0" standalone="yes"?>
+ * &lt;?xml version="1.0"?>
  *
  * &lt;_NS1:foo xmlns:_NS1="http://www.foo.com/ns/"/>
  * </pre>
@@ -183,7 +183,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * <p>The resulting document will look like this:</p>
  *
  * <pre>
- * &lt;?xml version="1.0" standalone="yes"?>
+ * &lt;?xml version="1.0"?>
  *
  * &lt;foo:foo xmlns:foo="http://www.foo.com/ns/"/>
  * </pre>
@@ -200,7 +200,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * <p>The resulting document will look like this:</p>
  *
  * <pre>
- * &lt;?xml version="1.0" standalone="yes"?>
+ * &lt;?xml version="1.0"?>
  *
  * &lt;foo xmlns="http://www.foo.com/ns/"/>
  * </pre>
@@ -211,7 +211,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * example:</p>
  *
  * <pre>
- * &lt;xml version="1.0" standalone="yes"?>
+ * &lt;xml version="1.0"?>
  *
  * &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
  *  &lt;rdf:Description about="http://www.foo.com/ids/books/12345">
@@ -238,7 +238,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  * descendants:</p>
  *
  * <pre>
- * &lt;xml version="1.0" standalone="yes"?>
+ * &lt;xml version="1.0"?>
  *
  * &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  *             xmlns:dc="http://www.purl.org/dc/">
@@ -316,7 +316,7 @@ public class XMLWriter extends XMLFilterBase
      * @param writer The output destination, or null to use standard
      *        output.
      */
-    public XMLWriter(XMLReader xmlreader,Writer writer)
+    public XMLWriter(XMLReader xmlreader, Writer writer)
     {
         super(xmlreader);
         init(writer);
@@ -372,6 +372,7 @@ public class XMLWriter extends XMLFilterBase
         elementLevel = 0;
         prefixCounter = 0;
         nsSupport.reset();
+        inDTD = false;
     }
 
 
@@ -509,7 +510,8 @@ public class XMLWriter extends XMLFilterBase
     throws SAXException
     {
         reset();
-        write("<?xml version=\"1.0\" standalone=\"yes\"?>\n\n");
+      //write("<?xml version=\"1.0\" standalone=\"yes\"?>\n\n");
+        write("<?xml version=\"1.0\"?>\n\n");
         super.startDocument();
     }
 
@@ -689,6 +691,165 @@ public class XMLWriter extends XMLFilterBase
 
 
     ////////////////////////////////////////////////////////////////////
+    // Methods from org.xml.sax.ext.LexicalHandler.
+    ////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Write start of DOCTYPE declaration.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @param name The document type name.
+     * @param publicId The declared public identifier for the
+     *        external DTD subset, or null if none was declared.
+     * @param systemId The declared system identifier for the
+     *        external DTD subset, or null if none was declared.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startDTD
+     */
+    public void startDTD(String name, String publicId, String systemId)
+    throws SAXException {
+      //closeElement();
+        inDTD = true;
+        write("<!DOCTYPE ");
+        write(name);
+        boolean hasPublic = publicId != null && !publicId.equals("");
+        if (hasPublic) {
+            write(" PUBLIC \"");
+            write(publicId);
+            write('\"');
+        }
+        if (systemId != null && !systemId.equals("")) {
+            if (!hasPublic) {
+                write(" SYSTEM");
+            }
+            write(" \"");
+            write(systemId);
+            write('\"');
+        }
+        write(">\n\n");
+        super.startDTD(name, publicId, systemId);
+    }
+
+
+    /**
+     * Write end of DOCTYPE declaration.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endDTD
+     */
+    public void endDTD()
+    throws SAXException {
+        inDTD = false;
+        super.endDTD();
+    }    
+
+
+    /*
+     * Write entity.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @param name The name of the entity.  If it is a parameter
+     *        entity, the name will begin with '%', and if it is the
+     *        external DTD subset, it will be "[dtd]".
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startEntity
+     */
+    public void startEntity(String name)
+    throws SAXException {
+        closeElement();
+        write('&');
+        write(name);
+        write(';');
+        super.startEntity(name);
+    }
+
+
+    /*
+     * Filter a end entity event.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @param name The name of the entity that is ending.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endEntity
+     */
+    public void endEntity(String name)
+    throws SAXException {
+        super.endEntity(name);
+    }
+
+
+    /*
+     * Write start of CDATA.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA
+     */
+    public void startCDATA()
+    throws SAXException {
+        closeElement();
+        write("<![CDATA[");
+        super.startCDATA();
+    }    
+
+
+    /*
+     * Write end of CDATA.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA
+     */
+    public void endCDATA()
+    throws SAXException {
+        write("]]>");
+        super.endCDATA();
+    }
+
+
+    /*
+     * Write a comment.
+     *
+     * Pass the event on down the filter chain for further processing.
+     *
+     * @param ch An array holding the characters in the comment.
+     * @param start The starting position in the array.
+     * @param length The number of characters to use from the array.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#comment
+     */
+    public void comment(char[] ch, int start, int length)
+    throws SAXException {
+        if (!inDTD) {
+            closeElement();
+            write("<!--");
+            write(ch, start, length);
+            write("-->");
+            if (elementLevel < 1) {
+                write('\n');
+            }
+        }
+        super.comment(ch, start, length);
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
     // Internal methods.
     ////////////////////////////////////////////////////////////////////
 
@@ -786,6 +947,27 @@ public class XMLWriter extends XMLFilterBase
     {
         try {
             output.write(c);
+        } catch (IOException e) {
+            throw new SAXException(e);
+        }
+    }
+
+
+    /**
+     * Write a portion of an array of characters.
+     *
+     * @param cbuf Array of characters.
+     * @param off Offset from which to start writing characters.
+     * @param len Number of characters to write.
+     * @exception org.xml.sax.SAXException If there is an error writing
+     *            the character, this method will throw an IOException
+     *            wrapped in a SAXException.
+     */
+    private void write (char[] cbuf, int off, int len)
+    throws SAXException
+    {
+        try {
+            output.write(cbuf, off, len);
         } catch (IOException e) {
             throw new SAXException(e);
         }
@@ -967,6 +1149,7 @@ public class XMLWriter extends XMLFilterBase
     private Writer output;
     private NamespaceSupport nsSupport;
     private int prefixCounter = 0;
+    private boolean inDTD = false;
 
 }
 

@@ -53,15 +53,21 @@
  */
 package samples.sax;
 
+import java.io.IOException;
+
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-
 /**
- * Adds convenience methods to base SAX2 Filter implementation.
+ * Adds convenience methods and lexical event filtering to base
+ * SAX2 Filter implementation.
  *
  * <i>Code and comments adapted from XMLWriter-0.2, written
  * by David Megginson and released into the public domain,
@@ -102,7 +108,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  * @see org.xml.sax.helpers.XMLFilterImpl
  */
-public class XMLFilterBase extends XMLFilterImpl
+public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
 {
 
 
@@ -149,9 +155,8 @@ public class XMLFilterBase extends XMLFilterImpl
      * Start a new element without a qname or attributes.
      *
      * <p>This method will provide a default empty attribute
-     * list and an empty string for the qualified name.
-     * It invokes {@link
-     * #startElement(String, String, String, Attributes)}
+     * list and an empty string for the qualified name. It invokes
+     * {@link #startElement(String, String, String, Attributes)}
      * directly.</p>
      *
      * @param uri The element's Namespace URI.
@@ -168,12 +173,34 @@ public class XMLFilterBase extends XMLFilterImpl
 
 
     /**
-     * Start a new element without a qname, attributes or a Namespace URI.
+     * Start a new element without a Namespace URI or qname.
+     *
+     * <p>This method will provide an empty string for the
+     * Namespace URI, and empty string for the qualified name.
+     * It invokes
+     * {@link #startElement(String, String, String, Attributes)}
+     * directly.</p>
+     *
+     * @param localName The element's local name.
+     * @param atts The element's attribute list.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ContentHandler#startElement
+     */
+    public void startElement (String localName, Attributes atts)
+    throws SAXException
+    {
+        startElement("", localName, "", atts);
+    }
+
+
+    /**
+     * Start a new element without a Namespace URI, qname, or attributes.
      *
      * <p>This method will provide an empty string for the
      * Namespace URI, and empty string for the qualified name,
      * and a default empty attribute list. It invokes
-     * #startElement(String, String, String, Attributes)}
+     * {@link #startElement(String, String, String, Attributes)}
      * directly.</p>
      *
      * @param localName The element's local name.
@@ -281,6 +308,28 @@ public class XMLFilterBase extends XMLFilterImpl
     
     
     /**
+     * Add an empty element without a Namespace URI or qname.
+     *
+     * <p>This method will provide an empty string for the
+     * Namespace URI, and empty string for the qualified name.
+     * It invokes
+     * {@link #emptyElement(String, String, String, Attributes)}
+     * directly.</p>
+     *
+     * @param localName The element's local name.
+     * @param atts The element's attribute list.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ContentHandler#startElement
+     */
+    public void emptyElement (String localName, Attributes atts)
+    throws SAXException
+    {
+        emptyElement("", localName, "", atts);
+    }
+
+
+    /**
      * Add an empty element without a Namespace URI, qname or attributes.
      *
      * <p>This method will supply an empty string for the qname,
@@ -337,18 +386,14 @@ public class XMLFilterBase extends XMLFilterImpl
 
 
     /**
-     * Add an element with character data content but no attributes.
+     * Add an element with character data content but no qname or attributes.
      *
      * <p>This is a convenience method to add a complete element
      * with character data content, including the start tag
      * and end tag.  This method provides an empty string
-     * for the qname and an empty attribute list.</p>
-     *
-     * <p>This method invokes
-     * {@link @see org.xml.sax.ContentHandler#startElement},
-     * followed by
-     * {@link #characters(String)}, followed by
-     * {@link @see org.xml.sax.ContentHandler#endElement}.</p>
+     * for the qname and an empty attribute list. It invokes
+     * {@link #dataElement(String, String, String, Attributes, String)}}
+     * directly.</p>
      *
      * @param uri The element's Namespace URI.
      * @param localName The element's local name.
@@ -367,19 +412,42 @@ public class XMLFilterBase extends XMLFilterImpl
 
 
     /**
-     * Add an element with character data content but no attributes or Namespace URI.
+     * Add an element with character data content but no Namespace URI or qname.
+     *
+     * <p>This is a convenience method to add a complete element
+     * with character data content, including the start tag
+     * and end tag.  The method provides an empty string for the
+     * Namespace URI, and empty string for the qualified name. It invokes
+     * {@link #dataElement(String, String, String, Attributes, String)}}
+     * directly.</p>
+     *
+     * @param localName The element's local name.
+     * @param atts The element's attributes.
+     * @param content The character data content.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ContentHandler#startElement
+     * @see #characters(String)
+     * @see org.xml.sax.ContentHandler#endElement
+     */
+    public void dataElement (String localName, Attributes atts, String content)
+    throws SAXException
+    {
+        dataElement("", localName, "", atts, content);
+    }
+
+
+    /**
+     * Add an element with character data content but no attributes
+     * or Namespace URI.
      *
      * <p>This is a convenience method to add a complete element
      * with character data content, including the start tag
      * and end tag.  The method provides an empty string for the
      * Namespace URI, and empty string for the qualified name,
-     * and an empty attribute list.</p>
-     *
-     * <p>This method invokes
-     * {@link @see org.xml.sax.ContentHandler#startElement},
-     * followed by
-     * {@link #characters(String)}, followed by
-     * {@link @see org.xml.sax.ContentHandler#endElement}.</p>
+     * and an empty attribute list. It invokes
+     * {@link #dataElement(String, String, String, Attributes, String)}}
+     * directly.</p>
      *
      * @param localName The element's local name.
      * @param content The character data content.
@@ -418,11 +486,293 @@ public class XMLFilterBase extends XMLFilterImpl
 
 
     ////////////////////////////////////////////////////////////////////
+    // Override org.xml.sax.helpers.XMLFilterImpl methods.
+    ////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Set the value of a property.
+     *
+     * <p>This will always fail if the parent is null.</p>
+     *
+     * @param name The property name.
+     * @param state The requested property value.
+     * @exception org.xml.sax.SAXNotRecognizedException When the
+     *            XMLReader does not recognize the property name.
+     * @exception org.xml.sax.SAXNotSupportedException When the
+     *            XMLReader recognizes the property name but
+     *            cannot set the requested value.
+     * @see org.xml.sax.XMLReader#setProperty
+     */
+    public void setProperty (String name, Object value)
+    throws SAXNotRecognizedException, SAXNotSupportedException
+    {
+        for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
+            if (LEXICAL_HANDLER_NAMES[i].equals(name)) {
+                setLexicalHandler((LexicalHandler) value);
+                return;
+            }
+        }
+        super.setProperty(name, value);
+    }
+    
+    
+    /**
+     * Look up the value of a property.
+     *
+     * @param name The property name.
+     * @return The current value of the property.
+     * @exception org.xml.sax.SAXNotRecognizedException When the
+     *            XMLReader does not recognize the feature name.
+     * @exception org.xml.sax.SAXNotSupportedException When the
+     *            XMLReader recognizes the property name but
+     *            cannot determine its value at this time.
+     * @see org.xml.sax.XMLReader#setFeature
+     */
+    public Object getProperty (String name)
+    throws SAXNotRecognizedException, SAXNotSupportedException
+    {
+        for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
+            if (LEXICAL_HANDLER_NAMES[i].equals(name)) {
+                return getLexicalHandler();
+            }
+        }
+        return super.getProperty(name);
+    }
+
+
+    /**
+     * Parse a document.
+     *
+     * @param input The input source for the document entity.
+     * @exception org.xml.sax.SAXException Any SAX exception, possibly
+     *            wrapping another exception.
+     * @exception java.io.IOException An IO exception from the parser,
+     *            possibly from a byte stream or character stream
+     *            supplied by the application.
+     * @see org.xml.sax.XMLReader#parse(org.xml.sax.InputSource)
+     */
+    public void parse (InputSource input)
+    throws SAXException, IOException
+    {
+        installLexicalHandler();
+        super.parse(input);
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
+    // Registration of org.xml.sax.ext.LexicalHandler.
+    ////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Set the lexical handler.
+     *
+     * @param handler The new lexical handler.
+     * @exception java.lang.NullPointerException If the handler
+     *            is null.
+     */
+    public void setLexicalHandler (LexicalHandler handler)
+    {
+        if (handler == null) {
+            throw new NullPointerException("Null lexical handler");
+        } else {
+            lexicalHandler = handler;
+        }
+    }
+    
+    
+    /**
+     * Get the current lexical handler.
+     *
+     * @return The current lexical handler, or null if none was set.
+     */
+    public LexicalHandler getLexicalHandler ()
+    {
+        return lexicalHandler;
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
+    // Implementation of org.xml.sax.ext.LexicalHandler.
+    ////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Filter a start DTD event.
+     *
+     * @param name The document type name.
+     * @param publicId The declared public identifier for the
+     *        external DTD subset, or null if none was declared.
+     * @param systemId The declared system identifier for the
+     *        external DTD subset, or null if none was declared.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startDTD
+     */
+    public void startDTD(String name, String publicId, String systemId)
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.startDTD(name, publicId, systemId);
+        }
+    }
+
+
+    /**
+     * Filter a end DTD event.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endDTD
+     */
+    public void endDTD()
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.endDTD();
+        }
+    }    
+
+
+    /*
+     * Filter a start entity event.
+     *
+     * @param name The name of the entity.  If it is a parameter
+     *        entity, the name will begin with '%', and if it is the
+     *        external DTD subset, it will be "[dtd]".
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startEntity
+     */
+    public void startEntity(String name)
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.startEntity(name);
+        }
+    }
+
+
+    /*
+     * Filter a end entity event.
+     *
+     * @param name The name of the entity that is ending.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endEntity
+     */
+    public void endEntity(String name)
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.endEntity(name);
+        }
+    }
+
+
+    /*
+     * Filter a start CDATA event.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA
+     */
+    public void startCDATA()
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.startCDATA();
+        }
+    }    
+
+
+    /*
+     * Filter a end CDATA event.
+     *
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA
+     */
+    public void endCDATA()
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.endCDATA();
+        }
+    }
+
+
+    /*
+     * Filter a comment event.
+     *
+     * @param ch An array holding the characters in the comment.
+     * @param start The starting position in the array.
+     * @param length The number of characters to use from the array.
+     * @exception org.xml.sax.SAXException If a filter
+     *            further down the chain raises an exception.
+     * @see org.xml.sax.ext.LexicalHandler#comment
+     */
+    public void comment(char[] ch, int start, int length)
+    throws SAXException {
+        if (lexicalHandler != null) {
+            lexicalHandler.comment(ch, start, length);
+        }
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
+    // Internal methods.
+    ////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Installs lexical handler before a parse.
+     *
+     * <p>Before every parse, check whether the parent is
+     * non-null, and re-register the filter for the lexical
+     * events.</p>
+     */
+    private void installLexicalHandler ()
+    {
+        XMLReader parent = getParent();
+        if (parent == null) {
+            throw new NullPointerException("No parent for filter");
+        }
+        // try to register for lexical events
+        for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
+            try {
+                parent.setProperty(LEXICAL_HANDLER_NAMES[i], this);
+                break;
+            }
+            catch (SAXNotRecognizedException ex) {
+                // ignore
+            }
+            catch (SAXNotSupportedException ex) {
+                // ignore
+            }
+        }
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
+    // Internal state.
+    ////////////////////////////////////////////////////////////////////
+
+
+    private LexicalHandler lexicalHandler = null;
+
+
+
+    ////////////////////////////////////////////////////////////////////
     // Constants.
     ////////////////////////////////////////////////////////////////////
 
+
     protected static final Attributes EMPTY_ATTS = new AttributesImpl();
 
+    protected static final String[] LEXICAL_HANDLER_NAMES = {
+        "http://xml.org/sax/properties/lexical-handler",
+        "http://xml.org/sax/handlers/LexicalHandler"
+    };
 
 
 }
