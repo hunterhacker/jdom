@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.39 2002/03/12 07:11:39 jhunter Exp $
+ $Id: Attribute.java,v 1.40 2002/03/19 04:25:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.39 $, $Date: 2002/03/12 07:11:39 $
+ * @version $Revision: 1.40 $, $Date: 2002/03/19 04:25:37 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.39 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.40 $ $Date: 2002/03/19 04:25:37 $ $Name:  $";
 
     /**
      * <p>
@@ -314,11 +314,11 @@ public class Attribute implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will set the parent of this <code>Comment</code>.
+     * This will set the parent of this <code>Attribute</code>.
      * </p>
      *
      * @param parent <code>Element</code> to be new parent.
-     * @return this <code>Comment</code> modified.
+     * @return this <code>Attribute</code> modified.
      */
     protected Attribute setParent(Element parent) {
         this.parent = parent;
