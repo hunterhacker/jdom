@@ -2,8 +2,14 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Fix bug where an element not in any namespace will still inherit the default
-  namespace from an ancestor (and do much more testing on this)
+* Fix DOMOutputter to set DOM2 namespaces, and to add xmlns attributes
+  following the same logic as XMLOutputter, on the first use and also where an
+  element has additional declares
+  (help from Yusuf Goolamabbas <yusufg@outblaze.com>?)
+
+* Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
+  same prefix already existing on the element or being the document's prefix
+  already
 
 * Shouldn't there be a removeNamespaceDeclaration(Namespace)?
 
@@ -22,8 +28,10 @@ Items that need to be done:
   Also on Comment, PI, and Entity.  Maybe on CDATA.
   But do we return Element or Document or some new Node interface?
 
-* Make sure it's OK to support DOM2 only for DOMOutputter.
-  (Yusuf Goolamabbas <yusufg@outblaze.com>)
+* Fix DOMBuilder to attach xmlns declarations on the proper nodes.
+  Change code to depend on DOM2 handling of namespaces, so we can read 
+  even on a mutated DOM2 doc; but does that eliminate the ability to do
+  validation at the same time?
 
 * Consider enhancing SAXBuilder to use filters per
   http://www.megginson.com/SAX/Java/filters.html
@@ -66,9 +74,6 @@ Items that need to be done:
   method.
 
 --- FOR JDOM 1.0 ---
-
-* Fix DOMBuilder to attach xmlns declarations on the proper nodes.
-  (But do we use DOM1 and try to handle namespaces manually or DOM2?)
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
