@@ -76,6 +76,7 @@ These are the meaningful targets for this build file:
     <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
     <property name="jdom-contrib"       value="${build.dest}"/>
     <property name="jakarta-regexp.jar" value="${lib.dir}/jakarta-regexp-1.1.jar"/>
+    <property name="isorelax.jar" value="${lib.dir}/isorelax.jar"/>
 
     <!-- Compilation class path -->
     <path id="compile.class.path">
@@ -83,6 +84,7 @@ These are the meaningful targets for this build file:
       <pathelement location="${parser.jar}"/>
       <pathelement location="${jdom-core.jar}"/>
       <pathelement location="${jakarta-regexp.jar}"/>
+      <pathelement location="${isorelax.jar}"/>
 
       <!-- We used to include the CLASSPATH environment variable in
            compilation path as it might contain the path to the JDK 1.1
