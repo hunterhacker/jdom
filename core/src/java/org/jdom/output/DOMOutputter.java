@@ -141,7 +141,17 @@ public class DOMOutputter {
                     Element element = (Element) node;
                     org.w3c.dom.Element domElement =
                         output(element, domDoc, namespaces);
-                    domDoc.appendChild(domElement);
+                        // Add the root element, first check for existing root
+                        org.w3c.dom.Element root = domDoc.getDocumentElement();
+                        if (root == null) {
+                            // Normal case
+                            domDoc.appendChild(domElement); // normal case
+                        }
+                        else {
+                            // Xerces 1.3 creates new docs with a <root />
+                            // XXX: Need to address DOCTYPE mismatch still
+                            domDoc.replaceChild(domElement, root);
+                        }
                 }
                 else if (node instanceof Comment) {
                     Comment comment = (Comment) node;
