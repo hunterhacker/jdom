@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.79 2003/06/04 17:40:53 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.80 2003/06/14 06:36:26 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.79 $, $Date: 2003/06/04 17:40:53 $
+ * @version $Revision: 1.80 $, $Date: 2003/06/14 06:36:26 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.79 $ $Date: 2003/06/04 17:40:53 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.80 $ $Date: 2003/06/14 06:36:26 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -448,7 +448,7 @@ public class SAXBuilder {
             else {
                 // Reset content handler as SAXHandler instances can not
                 // be reused
-                parser.setContentHandler(contentHandler);
+                configureParser(parser, contentHandler);
             }
 
             // Parse the document.
