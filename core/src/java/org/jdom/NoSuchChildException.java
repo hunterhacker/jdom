@@ -42,7 +42,7 @@
 package org.jdom;
 
 /**
- * <p><code>NoSuchElementException</code> is thrown when a requested
+ * <p><code>NoSuchChildException</code> is thrown when a requested
  *   XML element is searched for and does not exist.  This is
  *   in favor or a null return value which can cause program errors
  *   when used in comparisons, etc.
@@ -52,7 +52,7 @@ package org.jdom;
  * @author Jason Hunter
  * @version 1.0
  */
-public class NoSuchElementException extends JDOMException {
+public class NoSuchChildException extends JDOMException {
 
     /**
      * <p>
@@ -68,9 +68,9 @@ public class NoSuchElementException extends JDOMException {
      * @param elementName <code>String</code> name of XML
      *                    element being searched for.
      */
-    public NoSuchElementException(String elementName) {
+    public NoSuchChildException(String elementName) {
         super(new StringBuffer()
-              .append("The element ")
+              .append("The child element ")
               .append(elementName)
               .append(" does not exist within the specified element.")
               .toString());
