@@ -2,6 +2,16 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Fix SlowParse problem reported by Mark Bennett <mbennett@ideaeng.com> which
+  is triggered by content with lots of entity escapes and is caused by 
+  addContent(String) doing repeated string concatentaions.
+
+* Fix bug where newlines aren't printed always with XMLOutputter when doing
+  raw output, like with SAXBuilderDemo and:
+  <univ:tag xmlns:univ="http://someurl#" >
+     <innertag univ:id="someid"/>
+  </univ:tag>
+
 * Verify we have a solution for when entities are unexpanded and present in
   attribute values.  (Phil Nelson)
 
@@ -10,7 +20,8 @@ Items that need to be done:
   DOCTYPE string, making DOMBuilder and DOMOutputter support the model,
   working around the Crimson bugs Philip found in certain parsing.
   (Phil Nelson has been responsible for this.  Laurent is helping w/
-  SAXOutputter.)
+  SAXOutputter, planning on passing the string to Xerces for parsing and event
+  propagation.)
 
 * Take action on detach() allowing a Doc to have its root removed with an ISE
   upon later access.  This also removes the need to remove the Document(null)
@@ -19,10 +30,7 @@ Items that need to be done:
 * Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
   for the minor bug where pretty print (indented, newlines, trim text) prints 
   an extra whitespace line between one closing element and another.
-
-* Determine if setContent(), setAttributes(), setChildren(), and addAll() 
-  should be atomic on failure (such as when an illegal object is added from 
-  the list).  Currently all but addAll() have been changed to be atomic.
+  ("Bradley S. Huffman" <hip@a.cs.okstate.edu> is helping here)
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
@@ -64,6 +72,8 @@ Items that need to be done:
   the DTD even if validation is off.
   Xerces has a custom option: http://xml.apache.org/xerces-j/features.html
   Crimson doesn't, nor probably do others.  That makes it tricky.
+  I think we can have a setIgnoreDTD() flag and implement it standardly
+  using an EntityResolver.
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
@@ -93,6 +103,8 @@ Items that need to be done:
 * Expand class-level Javadocs for inclusion into Frame using the MIF Doclet.
 
 * Note in the docs where necessary our multithreading policy.
+
+* Add in attribute type support to DOM to match what's in SAX.
 
 --- FOR JDOM 1.0 ---
 
@@ -193,6 +205,8 @@ Items that need to be done:
   errors possible.
   It'd also be possible to have a programmatic verifier, that determined for
   example if an orderid="100" entry was valid against a database entry.
+  http://dcb.sun.com/practices/devnotebook/xml_msv.jsp
+  http://www.sun.com/software/xml/developers/multischema/
 
 * Consider a listener interface so you could listen to doc changes.  
   (Probably after 1.1 honestly; this can be done through manual subclasses
@@ -204,6 +218,10 @@ Items that need to be done:
 * Consider a "locator" ability for nodes to remember the line number on which
   they were declared, to help debug semantic errors.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003422.html
+
+* Ensure setContent(), setAttributes(), setChildren(), and addAll() 
+  are atomic on failure (such as when an illegal object is added from 
+  the list).  Currently all should be except addAll().
 
 --- UNTIED TO A JDOM VERSION ---
 
@@ -224,6 +242,8 @@ Items that need to be done:
   Some existing SAX limitations which hurt round-tripping:
   * Can't tell if attribute values are included from the DTD, because SAX
     doesn't tell if attributes are standalone/implicit
+    (See http://www.saxproject.org/apidoc/org/xml/sax/ext/Attributes2.html)
+    (Thought: could use a bit in the type value to save memory)
   * Can't get access to retain the internal dtd subset unless entity 
     expansion is off
 
