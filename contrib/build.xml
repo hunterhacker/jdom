@@ -84,8 +84,6 @@ These are the meaningful targets for this build file:
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
 
-    <taskdef name="antlr" classname="Antlr"/>
-
     <!-- JDK1.1 collections -->
     <property name="coll.import" value="com.sun.java.util.collections"/>
     <available classname="${coll.import}.Collection" property="coll.present"/>
@@ -133,8 +131,17 @@ These are the meaningful targets for this build file:
     <copydir src="${src.dir}"
              dest="${build.src}"
              filtering="on"/>
-    <antlr grammar="${build.src}/org/jdom/contrib/xpath/parser/xpath.g"/>
-    <antlr grammar="${build.src}/org/jdom/contrib/xpath/parser/xpath_lexer.g"/>
+
+    <java fork="yes"
+          classname="antlr.Tool"
+          jvmargs="-classpath ${java.class.path}"
+          args="-o ${xpath.parser.dir} ${xpath.parser.dir}/xpath.g"/>
+
+    <java fork="yes"
+          classname="antlr.Tool"
+          jvmargs="-classpath ${java.class.path}"
+          args="-o ${xpath.parser.dir} ${xpath.parser.dir}/xpath_lexer.g"/>
+
   </target>
 
   <!-- =================================================================== -->
