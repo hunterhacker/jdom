@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.23 2002/01/08 09:17:10 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.24 2002/02/12 06:34:09 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,13 +77,13 @@ import java.util.StringTokenizer;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.23 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.24 $, $Date: 2002/02/12 06:34:09 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.23 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.24 $ $Date: 2002/02/12 06:34:09 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -94,11 +94,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /** The data for the PI in name/value pairs */
     protected Map mapData;
 
-    /** Parent element, or null if none */
-    protected Element parent;
-
-    /** Document node if PI is outside the root element, or null if none */
-    protected Document document;
+    /** Parent element, document, or null if none */
+    protected Object parent;
 
     /**
      * <p>
@@ -162,7 +159,10 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return parent of this <code>ProcessingInstruction</code>
      */
     public Element getParent() {
-        return parent;
+        if (parent instanceof Element) {
+            return (Element) parent;
+        }
+        return null;
     }
 
     /**
@@ -188,15 +188,11 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * <code>ProcessingInstruction</code> modified.
      */
     public ProcessingInstruction detach() {
-        Element p = getParent();
-        if (p != null) {
-            p.removeContent(this);
+        if (parent instanceof Element) {
+            ((Element) parent).removeContent(this);
         }
-        else {
-            Document d = getDocument();
-            if (d != null) {
-                d.removeContent(this);
-            }
+        else if (parent instanceof Document) {
+            ((Document) parent).removeContent(this);
         }
         return this;
     }
@@ -211,15 +207,12 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>Document</code> owning this PI, or null.
      */
     public Document getDocument() {
-        if (document != null) {
-            return document;
+        if (parent instanceof Document) {
+            return (Document) parent;
         }
-
-        Element p = getParent();
-        if (p != null) {
-            return p.getDocument();
+        if (parent instanceof Element) {
+            return (Document) ((Element)parent).getDocument();
         }
-
         return null;
     }
 
@@ -232,7 +225,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return this <code>PI</code> modified
      */
     protected ProcessingInstruction setDocument(Document document) {
-        this.document = document;
+        this.parent = parent;
         return this;
     }
 
@@ -585,11 +578,9 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         // target and rawdata are immutable and references copied by
         // Object.clone()
 
-        // parent and document references copied by Object.clone(), so
+        // parent reference is copied by Object.clone(), so
         // must set to null
-
         pi.parent = null;
-        pi.document = null;
 
         // Create a new Map object for the clone (since Map isn't Cloneable)
         if (mapData != null) {

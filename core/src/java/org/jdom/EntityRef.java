@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.6 2002/02/05 08:03:18 jhunter Exp $
+ $Id: EntityRef.java,v 1.7 2002/02/12 06:34:09 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,12 +64,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.6 $, $Date: 2002/02/05 08:03:18 $
+ * @version $Revision: 1.7 $, $Date: 2002/02/12 06:34:09 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.6 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.7 $ $Date: 2002/02/12 06:34:09 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -80,11 +80,8 @@ public class EntityRef implements Serializable, Cloneable {
     /** The SystemID of the <code>EntityRef</code> */
     protected String systemID;
 
-    /** Parent element, or null if none */
+    /** Parent element or null if none */
     protected Element parent;
-
-    /** Containing document node, or null if none */
-    protected Document document;
 
     /**
      * <p>
@@ -162,10 +159,9 @@ public class EntityRef implements Serializable, Cloneable {
         // name is a reference to an immutable (String) object
         // and is copied by Object.clone()
 
-        // The parent and document references are copied by Object.clone(), so
+        // The parent reference is copied by Object.clone(), so
         // must set to null
         entity.parent = null;
-        entity.document = null;
 
         return entity;
     }
@@ -210,13 +206,8 @@ public class EntityRef implements Serializable, Cloneable {
      * @return <code>Document</code> owning this Entity, or null.
      */
     public Document getDocument() {
-        if (document != null) {
-            return document;
-        }
-
-        Element p = getParent();
-        if (p != null) {
-            return p.getDocument();
+        if (parent != null) {
+            return parent.getDocument();
         }
 
         return null;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.19 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Comment.java,v 1.20 2002/02/12 06:34:09 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -67,23 +67,18 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.19 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.20 $, $Date: 2002/02/12 06:34:09 $
  */
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.19 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.20 $ $Date: 2002/02/12 06:34:09 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
 
-    // XXX parent and document can use the same memory location
-
-    /** Parent node, or null if none */
-    protected Element parent;
-
-    /** Document node if comment is outside the root element, or null if none */
-    protected Document document;
+    /** Parent element, document, or null if none */
+    protected Object parent;
 
     /**
      * <p>
@@ -114,7 +109,10 @@ public class Comment implements Serializable, Cloneable {
      * @return parent of this <code>Comment</code>
      */
     public Element getParent() {
-        return parent;
+        if (parent instanceof Element) {
+            return (Element) parent;
+        }
+        return null;
     }
 
     /**
@@ -140,15 +138,11 @@ public class Comment implements Serializable, Cloneable {
      * <code>Comment</code> modified.
      */
     public Comment detach() {
-        Element p = getParent();
-        if (p != null) {
-            p.removeContent(this);
+        if (parent instanceof Element) {
+            ((Element) parent).removeContent(this);
         }
-        else {
-            Document d = getDocument();
-            if (d != null) {
-                d.removeContent(this);
-            }
+        else if (parent instanceof Document) {
+            ((Document) parent).removeContent(this);
         }
         return this;
     }
@@ -163,15 +157,12 @@ public class Comment implements Serializable, Cloneable {
      * @return <code>Document</code> owning this Element, or null.
      */
     public Document getDocument() {
-        if (document != null) {
-            return document;
+        if (parent instanceof Document) {
+            return (Document) parent;
         }
-
-        Element p = getParent();
-        if (p != null) {
-            return p.getDocument();
+        if (parent instanceof Element) {
+            return (Document) ((Element)parent).getDocument();
         }
-
         return null;
     }
 
@@ -184,7 +175,7 @@ public class Comment implements Serializable, Cloneable {
      * @return this <code>Comment</code> modified
      */
     protected Comment setDocument(Document document) {
-        this.document = document;
+        this.parent = parent;
         return this;
     }
 
@@ -284,10 +275,9 @@ public class Comment implements Serializable, Cloneable {
         // The text is a reference to a immutable String object
         // and is already copied by Object.clone();
 
-        // parent and document references are copied by Object.clone()
+        // parent reference is copied by Object.clone()
         // and must be set to null
         comment.parent = null;
-        comment.document = null;
         return comment;
     }
 }
