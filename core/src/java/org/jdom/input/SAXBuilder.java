@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.81 2003/06/18 19:23:56 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.82 2004/02/05 00:11:34 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.81 $, $Date: 2003/06/18 19:23:56 $
+ * @version $Revision: 1.82 $, $Date: 2004/02/05 00:11:34 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.81 $ $Date: 2003/06/18 19:23:56 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.82 $ $Date: 2004/02/05 00:11:34 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -784,7 +784,7 @@ public class SAXBuilder {
     public Document build(File file) 
         throws JDOMException, IOException {
         try {
-            URL url = file.toURL();
+            URL url = fileToURL(file);
             return build(url);
         } catch (MalformedURLException e) {
             throw new JDOMException("Error in building", e);
@@ -910,6 +910,58 @@ public class SAXBuilder {
 //        }
 //        return new URL("file", "", path);
 //    }
+
+    // Custom File.toUrl() implementation to handle special chars in file names
+    protected URL fileToURL(File file) throws MalformedURLException {
+        StringBuffer buffer = new StringBuffer();
+        String path = file.getAbsolutePath();
+
+        // Convert non-URL style file separators
+        if (File.separatorChar != '/') {
+            path = path.replace(File.separatorChar, '/');
+        }
+
+        // Make sure it starts at root
+        if (!path.startsWith("/")) {
+            buffer.append('/');
+        }
+
+        // Copy, converting URL special characters as we go
+        int len = path.length();
+        for (int i = 0; i < len; i++) {
+            char c = path.charAt(i);
+            if (c == ' ')
+                buffer.append("%20");
+            else if (c == '#')
+                buffer.append("%23");
+            else if (c == '%')
+                buffer.append("%25");
+            else if (c == '&')
+                buffer.append("%26");
+            else if (c == ';')
+                buffer.append("%3B");
+            else if (c == '<')
+                buffer.append("%3C");
+            else if (c == '=')
+                buffer.append("%3D");
+            else if (c == '>')
+                buffer.append("%3E");
+            else if (c == '?')
+                buffer.append("%3F");
+            else if (c == '~')
+                buffer.append("%7E");
+            else
+                buffer.append(c);
+        }
+
+        // Make sure directories end with slash
+        if (!path.endsWith("/") && file.isDirectory()) {
+            buffer.append('/');
+        }
+
+        // Return URL
+        return new URL("file", "", buffer.toString());
+    }
 
     /**
      * Returns whether or not entities are being expanded into normal text
