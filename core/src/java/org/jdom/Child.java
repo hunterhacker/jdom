@@ -1,6 +1,6 @@
 /*--
 
- $Id: Child.java,v 1.1 2003/05/20 21:53:59 jhunter Exp $
+ $Id: Child.java,v 1.2 2003/05/24 23:06:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -63,8 +63,6 @@ import java.util.Collection;
  * Superclass for JDOM objects which can be legal child content
  * of {@link org.jdom.Parent} nodes.
  *
- * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2003/05/20 21:53:59 $
  * @see org.jdom.Comment
  * @see org.jdom.DocType
  * @see org.jdom.Element
@@ -72,6 +70,10 @@ import java.util.Collection;
  * @see org.jdom.Parent
  * @see org.jdom.ProcessingInstruction
  * @see org.jdom.Text
+ *
+ * @author Bradley S. Huffman
+ * @author Jason Hunter
+ * @version $Revision: 1.2 $, $Date: 2003/05/24 23:06:18 $
  */
 public interface Child extends Cloneable, Serializable {
 
@@ -79,7 +81,7 @@ public interface Child extends Cloneable, Serializable {
      * Detaches this child from its parent or does nothing if the child
      * has no parent.
      *
-     * @return parent of this child.
+     * @return this child detached
      */
     Child detach();
 
@@ -87,7 +89,7 @@ public interface Child extends Cloneable, Serializable {
      * Return this child's owning document or null if the branch containing
      * this child is currently not attached to a document.
      *
-     * @return this child's owning document.
+     * @return this child's owning document or null if none
      */
     Document getDocument();
 
@@ -96,21 +98,22 @@ public interface Child extends Cloneable, Serializable {
      * not attached. The parent can be either an {@link Element}
      * or a {@link Document}.
      *
-     * @return this content's parent or <code>null</code> if it is unattached.
+     * @return this child's parent or null if none
      */
     Parent getParent();
 
     /**
      * Returns the XPath 1.0 string value of this child.
      *
-     * @return string value of this child.
+     * @return xpath string value of this child.
      */
     String getValue();
 
     /**
-     * Obtain a deep, unattached copy of this child.
+     * Returns a deep, unattached copy of this child and its descendants
+     * detached from any parent or document.
      *
-     * @return a deep copy of this child.
+     * @return a detached deep copy of this child and descendants
      */
     Object clone();
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.2 2003/05/21 09:17:45 jhunter Exp $
+ $Id: Parent.java,v 1.3 2003/05/24 23:06:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,28 +64,30 @@ import org.jdom.filter.Filter;
  * Superclass for JDOM objects which are allowed to contain
  * {@link Child} content.
  *
- * @author Bradley S. Huffman
- * @author Jason Hunter
- * @version $Revision: 1.2 $, $Date: 2003/05/21 09:17:45 $
  * @see org.jdom.Child
  * @see org.jdom.Document
  * @see org.jdom.Element
+ *
+ * @author Bradley S. Huffman
+ * @author Jason Hunter
+ * @version $Revision: 1.3 $, $Date: 2003/05/24 23:06:18 $
  */
 public interface Parent extends Cloneable, Serializable {
 
     /**
-     * Returns the number of child in this parent's current content list.
+     * Returns the number of children in this parent's content list.
+     * Children may be any {@link Child} type.
      *
-     * @return number of children.
+     * @return number of children
      */
     int getChildCount();
 
     /**
-     * Returns the index of the supplied child in the current content list,
+     * Returns the index of the supplied child in the content list,
      * or -1 if not a child of this parent.
      *
-     * @param child child to search for.
-     * @return index of child, or -1 if not found.
+     * @param child  child to search for
+     * @return       index of child, or -1 if not found
      */
     int childIndex(Child child);
 
@@ -94,66 +96,68 @@ public interface Parent extends Cloneable, Serializable {
 //     * the first child matching the supplied filter, or -1
 //     * if none is found.
 //     *
-//     * @return index of child, or -1 if none found.
+//     * @return index of child, or -1 if none found
 //     */
 //    int childIndex(int index, Filter filter);
 
     /**
-     * Appends the child to the end of the current content list.
+     * Appends the child to the end of the content list.
      *
-     * @param child - child to append to end of current content list
+     * @param child   child to append to end of content list
+     * @return        the parent on which the method was called
      */
     Parent addContent(Child child);
 
     /**
-     * Appends all children in a collection to the end of
-     * the current content list.
-     * <p>
-     * In event of an exception the original content will be unchanged and
-     * the objects in the supplied collection will be unaltered.
+     * Appends all children in the given collection to the end of
+     * the content list.  In event of an exception during add the
+     * original content will be unchanged and the objects in the supplied
+     * collection will be unaltered.
      *
-     * @param collection - collection to append to end of current content list
+     * @param collection collection to append
+     * @return           the parent on which the method was called
      */
     Parent addContent(Collection collection);
 
     /**
-     * Inserts the child into the current content list at the given index.
+     * Inserts the child into the content list at the given index.
      *
-     * @param child - child to insert into the current content list
-     * @throws IndexOutOfBoundsException if index is negative or greater
-     *         than the current number of children.
+     * @param child      child to insert
+     * @return           the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
      */
     Parent addContent(int index, Child child);
 
     /**
-     * Inserts all children in a collection into the current content list
-     * at the given index.
-     * <p>
-     * In event of an exception the original content will be unchanged and
-     * the objects in the supplied collection will be unaltered.
+     * Inserts the content in a collection into the content list
+     * at the given index.  In event of an exception the original content
+     * will be unchanged and the objects in the supplied collection will be
+     * unaltered.
      *
-     * @param collection - collection to insert into the current content list
-     * @throws IndexOutOfBoundsException if index is negative or greater
-     *         than the current number of children.
+     * @param collection  collection to insert
+     * @return            the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
      */
     Parent addContent(int index, Collection collection);
 
     /**
      * Returns a list containing detached clones of this parent's content list.
      *
-     * @return list of the cloned content.
+     * @return list of cloned child content
      */
     List cloneContent();
 
     /**
      * Returns the child at the given index.
      *
-     * @param index index of desired child
+     * @param index location of desired child
      * @return child at the given index
-     * @throws IndexOutOfBoundsException if index is negative or greater
-     *         than the current number of children.
-     * @throws IllegalStateException if parent is a <code>Document</code>
-     *         and the root element has not been set.
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
+     * @throws IllegalStateException if parent is a Document
+     *         and the root element is not set
      */
     Child getContent(int index);
 
@@ -161,68 +165,72 @@ public interface Parent extends Cloneable, Serializable {
      * Returns the full content of this parent as a {@link java.util.List}
      * which contains objects of type {@link Child}. The returned list is
      * <b>"live"</b> and in document order. Any modifications
-     * to it affect the element's actual contents.
-     *
+     * to it affect the element's actual contents. Modifications are checked
+     * for conformance to XML 1.0 rules.
      * <p>
      * Sequential traversal through the List is best done with an Iterator
-     * since the underlying implement of <code>List.size()</code> may
-     * require walking the entire list.
-     * </p>
+     * since the underlying implement of {@link java.util.List#size} may
+     * require walking the entire list and indexed lookups may require
+     * starting at the beginning each time.
      *
-     * @return a <code>List</code> containing the mixed content of the
-     *         parent.
-     * @throws IllegalStateException if parent is a <code>Document</code>
-     *         and the root element has not been set.
+     * @return a list of the content of the parent
+     * @throws IllegalStateException if parent is a Document
+     *         and the root element is not set
      */
     List getContent();
 
     /**
      * Returns as a {@link java.util.List} the content of
-     * this parent matching the supplied filter. The returned list is
+     * this parent that matches the supplied filter. The returned list is
      * <b>"live"</b> and in document order. Any modifications to it affect
-     * the element's actual contents.
+     * the element's actual contents. Modifications are checked for
+     * conformance to XML 1.0 rules.
      * <p>
      * Sequential traversal through the List is best done with an Iterator
-     * since the underlying implement of List.size() probably requires
-     * walking the entire list.
-     * </p>
+     * since the underlying implement of {@link java.util.List#size} may
+     * require walking the entire list and indexed lookups may require
+     * starting at the beginning each time.
      *
-     * @return a <code>List</code> containing the matching content of the
-     *         parent.
-     * @throws IllegalStateException if parent is a <code>Document</code>
-     *         and the root element has not been set.
+     * @param  filter filter to apply
+     * @return a list of the content of the parent matching the filter
+     * @throws IllegalStateException if parent is a Document
+     *         and the root element is not set
      */
     List getContent(Filter filter);
 
     /**
-     * Removes all child content from this parent and returns the detached
+     * Removes all content from this parent and returns the detached
      * children.
      *
-     * @return list of the old child detached from this parent.
+     * @return list of the old content detached from this parent
      */
     List removeContent();
 
     /**
-     * Removes all child content from this parent matching the supplied filter
-     * and returns the detached children.
+     * Removes from this parent all child content matching the given filter
+     * and returns a list of the detached children.
      *
-     * @return list of the old child detached from this parent.
+     * @param  filter filter to apply
+     * @return list of the detached children matching the filter
      */
     List removeContent(Filter filter);
 
     /**
-     * Removes a single child node from the current content list.
+     * Removes a single child node from the content list.
      *
+     * @param  child  child to remove
      * @return whether the removal occurred
      */
     boolean removeContent(Child child);
 
     /**
      * Removes and returns the child at the given
-     * index, or return null if there's no such child.
+     * index, or returns null if there's no such child.
      *
      * @param index index of child to remove
-     * @return detached child at given index
+     * @return detached child at given index or null if no
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *             the current number of children
      */
     Child removeContent(int index);
 
@@ -230,98 +238,91 @@ public interface Parent extends Cloneable, Serializable {
      * Set this parent's content to the supplied child.
      * <p>
      * If the supplied child is legal content for this parent and before
-     * it is added, all content in the current child list will
-     * be cleared and all current children will have there parent set to null.
-     * </p>
+     * it is added, all content in the current content list will
+     * be cleared and all current children will have their parentage set to
+     * null.
      * <p>
      * This has the effect that any active list (previously obtained with
-     * a call to one of the <code>getContent</code> methods will also change
+     * a call to one of the {@link #getContent} methods will also change
      * to reflect the new content.  In addition, all content in the supplied
      * collection will have their parentage set to this parent.  If the user
      * wants to continue working with a <b>"live"</b> list of this parent's
      * child, then a call to setContent should be followed by a call to one
-     * of the <code>getContent</code> methods to obtain a <b>"live"</b>
+     * of the {@link #getContent} methods to obtain a <b>"live"</b>
      * version of the children.
-     * </p>
      * <p>
      * Passing a null child clears the existing content.
-     * </p>
      * <p>
      * In event of an exception the original content will be unchanged and
      * the supplied child will be unaltered.
-     * </p>
      *
-     * @param child new content
+     * @param child new content to replace existing content
+     * @return           the parent on which the method was called
      * @throws IllegalAddException if the supplied child is already attached
-     *                             or not legal content for this parent.
+     *                             or not legal content for this parent
      */
     Parent setContent(Child child);
 
     /**
-     * Sets the children of this parent to the contents of the supplied
-     * collection.  The supplied collection should contain only objects
-     * of type {@link Child}.
+     * Sets this parent's content to the supplied content list.  The supplied
+     * collection must contain only objects of type {@link Child}.
      * <p>
-     * When all objects in the supplied Collection are legal and before
-     * the new content is added, all content in the current child list will
-     * be cleared and all children will have there parent set to null.
-     * </p>
+     * If the supplied content is legal content for this parent and before
+     * it is added, all content in the current content list will
+     * be cleared and all current children will have their parentage set to
+     * null.
      * <p>
      * This has the effect that any active list (previously obtained with
-     * a call to one of the <code>getContent</code> methods will also change
+     * a call to one of the {@link #getContent} methods will also change
      * to reflect the new content.  In addition, all content in the supplied
-     * collection will have their parentage set to this parent, but the
-     * collection itself is not <b>"live"</b> and further additions and removals
-     * will have no effect on this parent's content. If the user wants to
-     * continue working with a <b>"live"</b> list of this parent's child, then a
-     * call to setContent should be followed by a call to one of the
-     * <code>getContent</code> methods to obtain a <b>"live"</b> version of
-     * the children.
-     * </p>
+     * collection will have their parentage set to this parent.  If the user
+     * wants to continue working with a <b>"live"</b> list of this parent's
+     * child, then a call to setContent should be followed by a call to one
+     * of the {@link #getContent} methods to obtain a <b>"live"</b>
+     * version of the children.
      * <p>
      * Passing a null or empty Collection clears the existing content.
-     * </p>
      * <p>
      * In event of an exception the original content will be unchanged and
      * the content in the supplied collection will be unaltered.
-     * </p>
      *
-     * @param collection collection of content to set
-     * @throws IllegalAddException if the collection contains objects of
-     *         illegal types.
+     * @param collection new collection of content to replace existing content
+     * @return           the parent on which the method was called
+     * @throws IllegalAddException if any object in the supplied content is
+     *            already attached or not legal content for this parent
      */
     Parent setContent(Collection collection);
 
     /**
-     * Replace the current child the given index with the supplied child.
+     * Replaces the current child the given index with the supplied child.
      * <p>
      * In event of an exception the original content will be unchanged and
      * the supplied child will be unaltered.
-     * </p>
      *
-     * @param index - index of child to replace.
-     * @param child - child to add.
+     * @param index index of child to replace
+     * @param child new content to replace the existing content
+     * @return           the parent on which the method was called
      * @throws IllegalAddException if the supplied child is already attached
-     *                             or not legal content for this parent.
-     * @throws IndexOutOfBoundsException if index is negative or greater
-     *         than the current number of children.
+     *                             or not legal content for this parent
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
      */
     Parent setContent(int index, Child child);
 
     /**
-     * Replace the child at the given index whith the supplied
+     * Replaces the child at the given index whith the supplied
      * collection.
      * <p>
      * In event of an exception the original content will be unchanged and
      * the content in the supplied collection will be unaltered.
-     * </p>
      *
-     * @param index - index of child to replace.
-     * @param collection - collection of content to add.
-     * @throws IllegalAddException if the collection contains objects of
-     *         illegal types.
-     * @throws IndexOutOfBoundsException if index is negative or greater
-     *         than the current number of children.
+     * @param index index of child to replace
+     * @param collection collection of content to add
+     * @return           the parent on which the method was called
+     * @throws IllegalAddException if any object in the supplied content is
+     *            already attached or not legal content for this parent
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
      */
     Parent setContent(int index, Collection collection);
 
@@ -333,19 +334,21 @@ public interface Parent extends Cloneable, Serializable {
     Object clone();
 
     /**
-     * Returns an iterator that walks over all descendants in document order.
+     * Returns an {@link java.util.Iterator} that walks over all descendants
+     * in document order.
      *
      * @return an iterator to walk descendants
      */
     Iterator getDescendants();
 
     /**
-     * Returns an iterator that walks over all descendants in document order
-     * applying the Filter to return only elements that match the filter rule.
-     * With filters you can match only Elements, only Comments, Elements or
-     * Comments, only Elements with a given name and/or prefix, and so on.
+     * Returns an {@link java.util.Iterator} that walks over all descendants
+     * in document order applying the Filter to return only elements that
+     * match the filter rule.  With filters you can match only Elements,
+     * only Comments, Elements or Comments, only Elements with a given name
+     * and/or prefix, and so on.
      *
-     * @return an iterator to walk descendants within a filter
+     * @return an iterator to walk descendants that match a filter
      */
     Iterator getDescendants(Filter filter);
 }
