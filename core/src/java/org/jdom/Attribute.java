@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.33 2001/11/30 14:44:47 bmclaugh Exp $
+ $Id: Attribute.java,v 1.34 2001/12/06 01:44:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,7 @@ import java.io.IOException;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.33 $ $Date: 2001/11/30 14:44:47 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.34 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
 
     /**
      * <p>

@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.2 2001/11/30 14:44:48 bmclaugh Exp $
+ $Id: DefaultJDOMFactory.java,v 1.3 2001/12/06 01:44:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import java.util.Map;
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.2 $ $Date: 2001/11/30 14:44:48 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.3 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 

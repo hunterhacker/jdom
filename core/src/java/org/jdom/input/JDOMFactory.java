@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.2 2001/11/30 14:44:48 bmclaugh Exp $
+ $Id: JDOMFactory.java,v 1.3 2001/12/06 01:44:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.15 2001/11/30 14:44:48 bmclaugh Exp $
+ $Id: SAXOutputter.java,v 1.16 2001/12/06 01:44:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -105,7 +105,7 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.15 $ $Date: 2001/11/30 14:44:48 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.16 $ $Date: 2001/12/06 01:44:47 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
