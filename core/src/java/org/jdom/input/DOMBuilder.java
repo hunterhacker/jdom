@@ -184,7 +184,7 @@ public class DOMBuilder {
      *                                    parsing.
      */
     public Document build(InputStream in) throws JDOMException {
-        Document doc = new Document(null);
+        Document doc = new Document((Element)null);
         org.w3c.dom.Document domDoc = null;
 
         try {
@@ -317,7 +317,7 @@ public class DOMBuilder {
      * @return <code>Document</code> - JDOM document object.
      */
     public Document build(org.w3c.dom.Document domDocument) {
-        Document doc = new Document(null);
+        Document doc = new Document((Element)null);
         buildTree(domDocument, doc, null, true);
         return doc;
     }
@@ -331,7 +331,7 @@ public class DOMBuilder {
      * @return <code>Element</code> - JDOM Element object
      */
     public org.jdom.Element build(org.w3c.dom.Element domElement) {
-        Document doc = new Document(null);
+        Document doc = new Document((Element)null);
         buildTree(domElement, doc, null, true);
         return doc.getRootElement();               
     }

@@ -254,7 +254,7 @@ public class SAXBuilder {
      */
     protected Document build(InputSource in) throws JDOMException {
 
-        Document doc = new Document(null);
+        Document doc = new Document((Element)null);
 
         try {
             XMLReader parser = null;

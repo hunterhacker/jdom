@@ -138,6 +138,39 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This will create a new <code>Document</code>,
+     *   with the supplied list of content, and the supplied 
+     *   <code>{@link DocType}</code> declaration.
+     * </p>
+     *
+     * @param content <code>List</code> of starter content
+     * @param docType <code>DocType</code> declaration.
+     * @throws <code>IllegalAddException</code> if the List contains more than
+     *         one Element or objects of illegal types
+     */
+    public Document(List content, DocType docType) {
+        this.docType = docType;
+        this.content = new LinkedList();
+        setMixedContent(content);
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>Document</code>,
+     *   with the supplied list of content, and no 
+     *   <code>{@link DocType}</code> declaration.
+     * </p>
+     *
+     * @param content <code>List</code> of starter content
+     * @throws <code>IllegalAddException</code> if the List contains more than
+     *         one Element or objects of illegal types
+     */
+    public Document(List content) {
+        this(content, null);
+    }
+
+    /**
+     * <p>
      * This will return the root <code>Element</code>
      *   for this <code>Document</code>, or return null in the case the
      *   root element hasn't been yet set.
@@ -425,16 +458,19 @@ public class Document implements Serializable, Cloneable {
      *         one Element or objects of illegal types
      */
     public Document setMixedContent(List content) {
-        // XXX Should sanity check the List here for object type
-        // and complete lack of parentage
-
         this.content.clear();
         rootElement = null;
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                setRootElement((Element)obj);
+                if (getRootElement() == null) {
+                    setRootElement((Element)obj);
+                }
+                else {
+                    throw new IllegalAddException(
+                    "A Document may contain only one root element");
+                }
             }
             else if (obj instanceof Comment) {
                 addContent((Comment)obj);
@@ -444,8 +480,8 @@ public class Document implements Serializable, Cloneable {
             }
             else {
                 throw new IllegalAddException(
-                    "A Document may contain only objects of type Element, " +
-                    "Comment, and ProcessingInstruction");
+                    "A Document may directly contain only objects of type " +
+                    "Element, Comment, and ProcessingInstruction");
             }
         }
 
@@ -533,7 +569,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>Document</code>.
      */
     public Object clone() {
-        Document doc = new Document(null);
+        Document doc = new Document((Element)null);
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
