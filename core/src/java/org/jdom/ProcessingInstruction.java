@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.35 2003/04/08 04:14:49 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.36 2003/04/10 04:22:35 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,13 +70,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.35 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.36 $, $Date: 2003/04/10 04:22:35 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.35 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.36 $ $Date: 2003/04/10 04:22:35 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -256,8 +256,11 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - this PI modified.
      */
     public ProcessingInstruction setData(String data) {
-        // XXX Need to validate the data
-        // XXX Make sure the PI doesn't contain ?> internally, a la CDATA
+        String reason = Verifier.checkProcessingInstructionData(data);
+        if (reason != null) {
+            throw new IllegalDataException(data, reason);
+        }
+
         this.rawData = data;
         this.mapData = parseData(data);
         return this;
@@ -272,8 +275,14 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - modified PI.
      */
     public ProcessingInstruction setData(Map data) {
-        // XXX Need to validate the data
-        this.rawData = toString(data);
+        String temp = toString(data);
+
+        String reason = Verifier.checkProcessingInstructionData(temp);
+        if (reason != null) {
+            throw new IllegalDataException(temp, reason);
+        }
+
+        this.rawData = temp;
         this.mapData = data;
         return this;
     }
@@ -302,9 +311,18 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction setValue(String name,
                                           String value) {
-        // XXX Need to validate the data
-        mapData.put(name, value);
-        rawData = toString(mapData);
+        String reason = Verifier.checkProcessingInstructionData(name);
+        if (reason != null) {
+            throw new IllegalDataException(name, reason);
+        }
+
+        reason = Verifier.checkProcessingInstructionData(value);
+        if (reason != null) {
+            throw new IllegalDataException(value, reason);
+        }
+
+        this.mapData.put(name, value);
+        this.rawData = toString(mapData);
         return this;
     }
 

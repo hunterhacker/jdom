@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.42 2003/04/08 04:14:49 jhunter Exp $
+ $Id: Verifier.java,v 1.43 2003/04/10 04:22:35 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.42 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.43 $, $Date: 2003/04/10 04:22:35 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.42 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.43 $ $Date: 2003/04/10 04:22:35 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -441,6 +441,30 @@ final public class Verifier {
 
         // If we got here, everything is OK
         return null;
+    }
+
+   /**
+     * This will check the supplied data to see if it is legal for use as
+     * <code>{@link ProcessingInstruction}</code> data. Besides checking that
+     * all the characters are allowed in XML, this also checks
+     * that the data does not contain the PI end-string "?&gt;".
+     *
+     * @param data <code>String</code> data to check.
+     * @return <code>String</code> - reason data is illegal, or
+     *         <code>null</code> if data is OK.
+     */
+    public static String checkProcessingInstructionData(String data) {
+        // Check basic XML name rules first
+        String reason = checkCharacterData(data);
+
+        if (reason == null) {
+            if (data.indexOf("?>") >= 0) {
+                return "Processing instructions cannot contain " +
+                       "the string \"?>\"";
+            }
+        }
+
+        return reason;
     }
 
     /**
