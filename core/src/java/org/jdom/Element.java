@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.149 2004/03/01 23:58:28 jhunter Exp $
+ $Id: Element.java,v 1.150 2004/08/31 21:47:51 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.149 $, $Date: 2004/03/01 23:58:28 $
+ * @version $Revision: 1.150 $, $Date: 2004/08/31 21:47:51 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.149 $ $Date: 2004/03/01 23:58:28 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.150 $ $Date: 2004/08/31 21:47:51 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -388,8 +388,8 @@ public class Element extends Content implements Parent {
     /**
      * Returns the XPath 1.0 string value of this element, which is the
      * complete, ordered content of all text node descendants of this element
-     * (i.e. the text that’s left after all references are resolved and all
-     * other markup is stripped out.)
+     * (i&#46;e&#46; the text that's left after all references are resolved
+     * and all other markup is stripped out.)
      *
      * @return a concatentation of all text node descendants
      */
@@ -736,9 +736,9 @@ public class Element extends Content implements Parent {
      * @param newContent <code>List</code> of content to set
      * @return this element modified
      * @throws IllegalAddException if the List contains objects of
-     *         illegal types.
+     *         illegal types or with existing parentage.
      */
-    public Parent setContent(Collection newContent) {
+    public Element setContent(Collection newContent) {
         content.clearAndSet(newContent);
         return this;
     }
@@ -752,13 +752,13 @@ public class Element extends Content implements Parent {
      *
      * @param index - index of child to replace.
      * @param child - child to add.
-     * @return object on which this method was invoked
+     * @return element on which this method was invoked
      * @throws IllegalAddException if the supplied child is already attached
      *                             or not legal content for this parent.
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Content child) {
+    public Element setContent(int index, Content child) {
         content.set(index, child);
         return this;
     }
@@ -795,34 +795,67 @@ public class Element extends Content implements Parent {
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})
      */
-    public Parent addContent(String str) {
+    public Element addContent(String str) {
         return addContent(new Text(str));
     }
 
     /**
-     * This appends a child to this element.
+     * Appends the child to the end of the element's content list.
      *
-     * @param child child to add
-     * @return this element modified
-     * @throws IllegalAddException if the <code>Text</code> object
-     *         you're attempting to add already has a parent element.
-     */
-    public Parent addContent(Content child) {
+     * @param child   child to append to end of content list
+     * @return        the element on which the method was called
+     * @throws IllegalAddException if the given child already has a parent.     */
+    public Element addContent(Content child) {
         content.add(child);
         return this;
     }
 
-    public Parent addContent(Collection collection) {
+    /**
+     * Appends all children in the given collection to the end of
+     * the content list.  In event of an exception during add the
+     * original content will be unchanged and the objects in the supplied
+     * collection will be unaltered.
+     *
+     * @param collection collection to append
+     * @return           the element on which the method was called
+     * @throws IllegalAddException if any item in the collection
+     *         already has a parent or is of an inappropriate type.
+     */
+    public Element addContent(Collection collection) {
         content.addAll(collection);
         return this;
     }
 
-    public Parent addContent(int index, Content child) {
+    /**
+     * Inserts the child into the content list at the given index.
+     *
+     * @param index location for adding the collection
+     * @param child      child to insert
+     * @return           the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
+     * @throws IllegalAddException if the given child already has a parent.
+     */
+    public Element addContent(int index, Content child) {
         content.add(index, child);
         return this;
     }
 
-    public Parent addContent(int index, Collection c) {
+    /**
+     * Inserts the content in a collection into the content list
+     * at the given index.  In event of an exception the original content
+     * will be unchanged and the objects in the supplied collection will be
+     * unaltered.
+     *
+     * @param index location for adding the collection
+     * @param c  collection to insert
+     * @return            the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
+     * @throws IllegalAddException if any item in the collection
+     *         already has a parent or is of an inappropriate type.
+     */
+    public Element addContent(int index, Collection c) {
         content.addAll(index, c);
         return this;
     }
@@ -854,7 +887,34 @@ public class Element extends Content implements Parent {
         return (Content) content.remove(index);
     }
 
-    public Parent setContent(Content child) {
+    /**
+     * Set this element's content to be the supplied child.
+     * <p>
+     * If the supplied child is legal content for this parent and before
+     * it is added, all content in the current content list will
+     * be cleared and all current children will have their parentage set to
+     * null.
+     * <p>
+     * This has the effect that any active list (previously obtained with
+     * a call to one of the {@link #getContent} methods will also change
+     * to reflect the new content.  In addition, all content in the supplied
+     * collection will have their parentage set to this parent.  If the user
+     * wants to continue working with a <b>"live"</b> list of this parent's
+     * child, then a call to setContent should be followed by a call to one
+     * of the {@link #getContent} methods to obtain a <b>"live"</b>
+     * version of the children.
+     * <p>
+     * Passing a null child clears the existing content.
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the supplied child will be unaltered.
+     *
+     * @param child new content to replace existing content
+     * @return           the parent on which the method was called
+     * @throws IllegalAddException if the supplied child is already attached
+     *                             or not legal content for an Element
+     */
+    public Element setContent(Content child) {
         content.clear();
         content.add(child);
         return this;

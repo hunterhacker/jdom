@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.6 2004/08/25 08:39:54 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.7 2004/08/31 21:47:51 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.6 $, $Date: 2004/08/25 08:39:54 $
+ * @version $Revision: 1.7 $, $Date: 2004/08/31 21:47:51 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -304,6 +304,15 @@ public interface JDOMFactory {
      * @param systemID <code>String</code> system ID of element.
      */
     public EntityRef entityRef(String name, String publicID, String systemID);
+
+    /**
+     * This will create a new <code>EntityRef</code>
+     * with the supplied name and system ID.
+     *
+     * @param name <code>String</code> name of element.
+     * @param systemID <code>String</code> system ID of element.
+     */
+    public EntityRef entityRef(String name, String systemID);
 
     // =====================================================================
     // List manipulation

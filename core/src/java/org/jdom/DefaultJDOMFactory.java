@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.4 2004/02/28 03:30:27 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.5 2004/08/31 21:47:51 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * Creates the standard top-level JDOM classes (Element, Document, Comment,
  * etc). A subclass of this factory might construct custom classes.
  *
- * @version $Revision: 1.4 $, $Date: 2004/02/28 03:30:27 $
+ * @version $Revision: 1.5 $, $Date: 2004/08/31 21:47:51 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -70,7 +70,7 @@ import java.util.*;
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.4 $ $Date: 2004/02/28 03:30:27 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.5 $ $Date: 2004/08/31 21:47:51 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 
@@ -160,12 +160,21 @@ public class DefaultJDOMFactory implements JDOMFactory {
         return new EntityRef(name, publicID, systemID);
     }
 
+    public EntityRef entityRef(String name, String systemID) {
+        return new EntityRef(name, systemID);
+    }
+
     // =====================================================================
     // List manipulation
     // =====================================================================
 
     public void addContent(Parent parent, Content child) {
-        parent.addContent(child);
+        if (parent instanceof Document) {
+            ((Document) parent).addContent(child);
+        }
+        else {
+            ((Element) parent).addContent(child);
+        }
     }
 
     public void setAttribute(Element parent, Attribute a) {

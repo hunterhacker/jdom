@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.83 2004/02/27 11:32:57 jhunter Exp $
+ $Id: Document.java,v 1.84 2004/08/31 21:47:51 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.83 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.84 $, $Date: 2004/08/31 21:47:51 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.83 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.84 $ $Date: 2004/08/31 21:47:51 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -309,29 +309,63 @@ public class Document implements Parent {
     }
 
     /**
-     * Adds the specified PI to the document.
+     * Appends the child to the end of the content list.
      *
-     * @param child the Content to add
-     * @return <code>Document</code> this document modified.
-     * @throws IllegalAddException if the given processing instruction
-     *         already has a parent element.
+     * @param child   child to append to end of content list
+     * @return        the document on which the method was called
+     * @throws IllegalAddException if the given child already has a parent.
      */
-    public Parent addContent(Content child) {
+    public Document addContent(Content child) {
         content.add(child);
         return this;
     }
 
-    public Parent addContent(Collection c) {
+    /**
+     * Appends all children in the given collection to the end of
+     * the content list.  In event of an exception during add the
+     * original content will be unchanged and the objects in the supplied
+     * collection will be unaltered.
+     *
+     * @param c   collection to append
+     * @return    the document on which the method was called
+     * @throws IllegalAddException if any item in the collection
+     *         already has a parent or is of an illegal type.
+     */
+    public Document addContent(Collection c) {
         content.addAll(c);
         return this;
     }
 
-    public Parent addContent(int index, Content child) {
+    /**
+     * Inserts the child into the content list at the given index.
+     *
+     * @param index location for adding the collection
+     * @param child      child to insert
+     * @return           the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
+     * @throws IllegalAddException if the given child already has a parent.
+     */
+    public Document addContent(int index, Content child) {
         content.add(index, child);
         return this;
     }
 
-    public Parent addContent(int index, Collection c) {
+    /**
+     * Inserts the content in a collection into the content list
+     * at the given index.  In event of an exception the original content
+     * will be unchanged and the objects in the supplied collection will be
+     * unaltered.
+     *
+     * @param index location for adding the collection
+     * @param c  collection to insert
+     * @return            the parent on which the method was called
+     * @throws IndexOutOfBoundsException if index is negative or beyond
+     *         the current number of children
+     * @throws IllegalAddException if any item in the collection
+     *         already has a parent or is of an illegal type.
+     */
+    public Document addContent(int index, Collection c) {
         content.addAll(index, c);
         return this;
     }
@@ -454,9 +488,9 @@ public class Document implements Parent {
      * @param newContent <code>List</code> of content to set
      * @return this document modified
      * @throws IllegalAddException if the List contains objects of
-     *         illegal types.
+     *         illegal types or with existing parentage.
      */
-    public Parent setContent(Collection newContent) {
+    public Document setContent(Collection newContent) {
         content.clearAndSet(newContent);
         return this;
     }
@@ -500,7 +534,7 @@ public class Document implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Content child) {
+    public Document setContent(int index, Content child) {
         content.set(index, child);
         return this;
     }
@@ -521,7 +555,7 @@ public class Document implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Collection collection) {
+    public Document setContent(int index, Collection collection) {
         content.remove(index);
         content.addAll(index, collection);
         return this;
@@ -535,7 +569,34 @@ public class Document implements Parent {
         return (Content) content.remove(index);
     }
 
-    public Parent setContent(Content child) {
+    /**
+     * Set this document's content to be the supplied child.
+     * <p>
+     * If the supplied child is legal content for a Document and before
+     * it is added, all content in the current content list will
+     * be cleared and all current children will have their parentage set to
+     * null.
+     * <p>
+     * This has the effect that any active list (previously obtained with
+     * a call to one of the {@link #getContent} methods will also change
+     * to reflect the new content.  In addition, all content in the supplied
+     * collection will have their parentage set to this Document.  If the user
+     * wants to continue working with a <b>"live"</b> list of this Document's
+     * child, then a call to setContent should be followed by a call to one
+     * of the {@link #getContent} methods to obtain a <b>"live"</b>
+     * version of the children.
+     * <p>
+     * Passing a null child clears the existing content.
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the supplied child will be unaltered.
+     *
+     * @param child new content to replace existing content
+     * @return           the parent on which the method was called
+     * @throws IllegalAddException if the supplied child is already attached
+     *                             or not legal content for this parent
+     */
+    public Document setContent(Content child) {
         content.clear();
         content.add(child);
         return this;

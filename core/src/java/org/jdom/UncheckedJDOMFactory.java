@@ -142,6 +142,13 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return e;
     }
 
+    public EntityRef entityRef(String name, String systemID) {
+        EntityRef e = new EntityRef();
+        e.name = name;
+        e.systemID = systemID;
+        return e;
+    }
+
     public EntityRef entityRef(String name, String publicID, String systemID) {
         EntityRef e = new EntityRef();
         e.name = name;
