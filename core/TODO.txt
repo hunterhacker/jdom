@@ -2,6 +2,13 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Fix PI.parseData() to parse the following correctly:
+    <?pi href="http://hi/a=b"?>
+    <?pi href = 'http://hi/a=b' ?>
+  Bug found by Jerome Jacobsen, 2/2/01
+
+* Have DOMBuilder and DOMOutputter use JAXP model like SAXBuilder does
+
 * Add \n at end of XMLOutputter
 
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
@@ -27,7 +34,7 @@ Items that need to be done:
 * Shouldn't there be a removeNamespaceDeclaration(Namespace)?
 
 * Shouldn't addNamespaceDeclaration() have a name to match
-  getAdditionalNamespaces()
+  getAdditionalNamespaces().
 
 * Examine if it's worth doing an intern() on element and attribute names,
   of if it's too much to pay since SAX is likely doing it already
@@ -78,8 +85,6 @@ Items that need to be done:
   method.
 
 * Deal with getSerializedForm() calls, either implement or remove
-
-* Have DOMBuilder use JAXP model like SAXBuilder does
 
 --- FOR JDOM 1.0 ---
 
@@ -269,4 +274,10 @@ Items that need to be done:
 * Consider having builders construct nodes that know the line number on which
   they're based.  It's something DOM3 does, and one user requested it.  The
   cost is a heavy price in memory bloat.
+
+* Have implementations of the JAXP Source/Result interfaces for managing XSLT
+  transformations.  Like JDOMSource that extends SAXSource, has getDocument()
+  method also for engines that recognize JDOMSource.  Similar on JDOMResult
+  extending SAXResult with a setDocument()/getDocument() method pair or 
+  whatever.
 
