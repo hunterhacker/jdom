@@ -55,6 +55,7 @@
 package org.jdom.adapters;
 
 import java.io.FileInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 
@@ -80,12 +81,13 @@ public interface DOMAdapter {
      * </p>
      *
      * @param filename file to parse.
-     * @param validate <code>boolean</code> to indicate if validation should occur.
+     * @param validate <code>boolean</code> to indicate if validation 
+     * should occur.
      * @return <code>Document</code> - instance ready for use.
      * @throws <code>IOException</code> when errors occur in
      *                                  parsing.
      */
-    public Document getDocument(String filename, boolean validate)
+    public Document getDocument(File filename, boolean validate)
         throws IOException;
 
     /**
@@ -96,7 +98,8 @@ public interface DOMAdapter {
      * </p>
      *
      * @param in <code>InputStream</code> to parse.
-     * @param validate <code>boolean</code> to indicate if validation should occur.
+     * @param validate <code>boolean</code> to indicate if validation 
+     * should occur.
      * @return <code>Document</code> - instance ready for use.
      * @throws <code>IOException</code> when errors occur in
      *                                  parsing.

@@ -55,6 +55,7 @@
 package org.jdom.adapters;
 
 import java.io.FileInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 
@@ -86,11 +87,11 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @throws <code>IOException</code> when errors occur in
      *                                  parsing.
      */
-	public Document getDocument(String filename, boolean validate)
+    public Document getDocument(File filename, boolean validate)
         throws IOException {
 
         return getDocument(new FileInputStream(filename), validate);
-	}
+    }
 
     /**
      * <p>
