@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.112 2002/02/21 03:27:25 jhunter Exp $
+ $Id: Element.java,v 1.113 2002/02/23 11:30:13 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.112 $, $Date: 2002/02/21 03:27:25 $
+ * @version $Revision: 1.113 $, $Date: 2002/02/23 11:30:13 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.112 $ $Date: 2002/02/21 03:27:25 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.113 $ $Date: 2002/02/23 11:30:13 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1314,11 +1314,11 @@ public class Element implements Serializable, Cloneable {
      *
      * <p>
      * When all objects in the supplied List are legal and before the new
-     * attributes is added, all objects in the old attributes will have their
-     * parentage set to null (no parent) and the old attributes list will be
+     * attributes are added, all old attributes will have their
+     * parentage set to null (no parent) and the old attribute list will be
      * cleared. This has the effect that any active attribute list (previously
      * obtained with a call to {@link #getAttributes}) will also change to
-     * reflect the new attributes.  In addition, all objects in the supplied
+     * reflect the new attributes.  In addition, all attributes in the supplied
      * List will have their parentage set to this element, but the List itself
      * will not be "live" and further removals and additions will have no
      * effect on this elements attributes. If the user wants to continue
@@ -1339,7 +1339,7 @@ public class Element implements Serializable, Cloneable {
      *
      * <p>
      * In event of an exception the original attributes will be unchanged and
-     * the objects in the supplied attributes will be unaltered.
+     * the attributes in the supplied attributes will be unaltered.
      * </p>
      *
      * @param attributes <code>List</code> of attributes to set

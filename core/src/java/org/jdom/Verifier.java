@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.30 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Verifier.java,v 1.31 2002/02/23 11:30:13 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,12 +69,12 @@ import java.util.List;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.30 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.31 $, $Date: 2002/02/23 11:30:13 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.30 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.31 $ $Date: 2002/02/23 11:30:13 $ $Name:  $";
 
     /**
      * <p>
@@ -85,7 +85,7 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it legal for use as
+     *  This will check the supplied name to see if it is legal for use as
      *    a JDOM <code>{@link Element}</code> name.
      * </p>
      *
@@ -111,7 +111,7 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it legal for use as
+     *  This will check the supplied name to see if it is legal for use as
      *    a JDOM <code>{@link Attribute}</code> name.
      * </p>
      *
@@ -190,8 +190,8 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will ensure that the data for a <code>{@link CDATA}</code>
-     *    section is appropriate.
+     *  This will check the supplied data to see if it is legal for use as
+     *  JDOM <code>{@link CDATA}</code>.
      * </p>
      *
      * @param data <code>String</code> data to check.
@@ -215,7 +215,7 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it legal for use as
+     *  This will check the supplied name to see if it is legal for use as
      *    a JDOM <code>{@link Namespace}</code> prefix.
      * </p>
      *
@@ -272,7 +272,7 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it legal for use as
+     *  This will check the supplied name to see if it is legal for use as
      *    a JDOM <code>{@link Namespace}</code> URI.
      * </p>
      *
@@ -336,8 +336,8 @@ final public class Verifier {
 
     /**
      * <p>
-     * Check if Attribute's namespace collides with a 
-     * Element's namespace.
+     * Check if <code>{@link Attribute}</code>'s namespace collides with a 
+     * <code>{@link Element}</code>'s namespace.
      * </p>
      *
      * @param attribute <code>Attribute</code> to check.
@@ -358,7 +358,8 @@ final public class Verifier {
 
     /**
      * <p>
-     * Check if namespace collides with a Element's namespace.
+     * Check if a <code>{@link Namespace}</code> collides with a
+     * <code>{@link Element}</code>'s namespace.
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
@@ -390,7 +391,8 @@ final public class Verifier {
 
     /**
      * <p>
-     * Check if namespace collides with a Attribute's namespace.
+     * Check if a <code>{@link Namespace}</code> collides with a
+     *  <code>{@link Attribute}</code>'s namespace.
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
@@ -410,8 +412,8 @@ final public class Verifier {
 
     /**
      * <p>
-     * Check if namespace collides with any object's namespace from a
-     * list of objects.
+     * Check if a <code>{@link Namespace}</code> collides with any namespace
+     * from a list of objects.
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
@@ -448,13 +450,13 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it legal for use as
-     *    a JDOM processing instruction target.
+     *  This will check the supplied data to see if it is legal for use as
+     *  a JDOM <code>{@link ProcessingInstruction}</code> target.
      * </p>
      *
      * @param target <code>String</code> target to check.
      * @return <code>String</code> - reason target is illegal, or
-     *         <code>null</code> if name is OK.
+     *         <code>null</code> if target is OK.
      */
     public static final String checkProcessingInstructionTarget(String target) {
         // Check basic XML name rules first
@@ -484,8 +486,8 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will ensure that the data for a <code>{@link Comment}</code>
-     *    is appropriate.
+     *  This will check the supplied data to see if it is legal for use as
+     *  JDOM <code>{@link Comment}</code> data.
      * </p>
      *
      * @param data <code>String</code> data to check.
@@ -531,7 +533,7 @@ final public class Verifier {
     /**
      * <p>
      *  This will ensure that the data for a public identifier
-     *  is appropriate.
+     *  is legal.
      * </p>
      *
      * @param publicID <code>String</code> public ID to check.
@@ -559,7 +561,7 @@ final public class Verifier {
     /**
      * <p>
      *  This will ensure that the data for a system literal
-     *  is appropriate.
+     *  is legal.
      * </p>
      *
      * @param systemLiteral <code>String</code> system literal to check.
@@ -587,7 +589,7 @@ final public class Verifier {
     /**
      * <p>
      *  This is a utility function for sharing the base process of checking
-     *    any XML name.
+     *  any XML name.
      * </p>
      *
      * @param name <code>String</code> to check for XML name compliance.
@@ -1574,5 +1576,4 @@ final public class Verifier {
       }
 
     }
-
 }

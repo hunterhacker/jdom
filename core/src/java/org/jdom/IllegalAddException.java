@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.16 2002/02/08 05:40:56 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.17 2002/02/23 11:30:13 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,32 +57,30 @@
 package org.jdom;
 
 /**
- * <p><code>IllegalAddException</code>
- *   is thrown when an <code>{@link Element}</code> or
- *   <code>{@link Attribute}</code> is added to a JDOM
- *   construct illegally..
+ * <p>
+ * <code>IllegalAddException</code> is thrown when trying to add a
+ * illegal object to a JDOM construct.
  * </p>
  *
  * @author Brett McLaughlin
- * @version $Revision: 1.16 $, $Date: 2002/02/08 05:40:56 $
+ * @version $Revision: 1.17 $, $Date: 2002/02/23 11:30:13 $
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.16 $ $Date: 2002/02/08 05:40:56 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.17 $ $Date: 2002/02/23 11:30:13 $ $Name:  $";
 
     /**
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Attribute}</code>
-     *   supplied to the <code>{@link Element}</code> supplied
-     *   is illegal.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
      * @param base <code>Element</code> that <code>Attribute</code>
      *        couldn't be added to
      * @param added <code>Attribute</code> that could not be added
-     * @param reason cause for the problem
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, Attribute added, String reason) {
         super(new StringBuffer()
@@ -99,13 +97,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Element}</code>
-     *   supplied as a child of the supplied parent is not allowed.
+     *   to parent is illegal.
      * </p>
      *
      * @param base <code>Element</code> that the child
      *        couldn't be added to
      * @param added <code>Element</code> that could not be added
-     * @param reason cause for the problem
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, Element added, String reason) {
         super(new StringBuffer()
@@ -122,9 +120,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Element}</code>
-     *   supplied as a child of the document is not allowed.
+     *   to the <code>{@link Document}</code> is illegal.
      * </p>
      *
+     * @param base <code>Document</code> that the <code>Element</code>
+     *        couldn't be added to
+     * @param added <code>Element</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Document base, Element added, String reason) {
         super(new StringBuffer()
@@ -139,12 +141,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link ProcessingInstruction}</code>
-     *   supplied as content to the supplied element is not allowed.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
-     * @param base element that the PI couldn't be added to
-     * @param added PI that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the
+     *              <code>ProcessingInstruction</code> couldn't be added to
+     * @param added <code>ProcessingInstruction</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, ProcessingInstruction added,
                                String reason) {
@@ -162,12 +165,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link ProcessingInstruction}</code>
-     *   supplied as content to the supplied document is not allowed.
+     *   to the <code>{@link Document}</code> is illegal.
      * </p>
      *
-     * @param base document that the PI couldn't be added to
-     * @param added PI that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Document</code> that the
+     *        <code>ProcessingInstruction</code> couldn't be added to
+     * @param added <code>ProcessingInstruction</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Document base, ProcessingInstruction added,
                                String reason) {
@@ -183,12 +187,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Comment}</code>
-     *   supplied as content to the supplied element is not allowed.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
-     * @param base element that the comment couldn't be added to
-     * @param added comment that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the <code>Comment</code>
+     *             couldn't be added to
+     * @param added <code>Comment</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, Comment added, String reason) {
         super(new StringBuffer()
@@ -206,12 +211,12 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link CDATA}</code>
-     *   supplied as content to the supplied element is not allowed.
      * </p>
      *
-     * @param base element that the comment couldn't be added to
-     * @param added CDATA that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the <code>CDATA</code>
+     *             couldn't be added to
+     * @param added <code>CDATA</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, CDATA added, String reason) {
         super(new StringBuffer()
@@ -229,12 +234,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Text}</code>
-     *   supplied as content to the supplied element is not allowed.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
-     * @param base element that the comment couldn't be added to
-     * @param added Text that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the <code>Comment</code>
+     *             couldn't be added to
+     * @param added <code>Text</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, Text added, String reason) {
         super(new StringBuffer()
@@ -251,12 +257,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Comment}</code>
-     *   supplied as content to the supplied document is not allowed.
+     *   to the <code>{@link Document}</code> is illegal.
      * </p>
      *
-     * @param base document that the PI couldn't be added to
-     * @param added PI that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Document</code> that the <code>Comment</code>
+     *             couldn't be added to
+     * @param added <code>Comment</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Document base, Comment added, String reason) {
         super(new StringBuffer()
@@ -271,12 +278,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link EntityRef}</code>
-     *   supplied as content to the supplied element is not allowed.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
-     * @param base element that the entity couldn't be added to
-     * @param added entity reference that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the <code>EntityRef</code>
+     *             couldn't be added to
+     * @param added <code>EntityRef</code> reference that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, EntityRef added, String reason) {
         super(new StringBuffer()
@@ -293,12 +301,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Namespace}</code>
-     *   to the supplied element is not allowed.
+     *   to the <code>{@link Element}</code> is illegal.
      * </p>
      *
-     * @param base element that the entity couldn't be added to
-     * @param added namespace that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Element</code> that the <code>Namespace</code>
+     *             couldn't be added to
+     * @param added <code>Namespace</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Element base, Namespace added, String reason) {
         super(new StringBuffer()
@@ -319,12 +328,13 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link DocType}</code>
-     *   to the supplied document is not allowed.
+     *   to the <code>{@link Document}</code> is illegal.
      * </p>
      *
-     * @param base document that the entity couldn't be added to
-     * @param added doctype that could not be added
-     * @param reason cause for the problem
+     * @param base <code>Document</code> that the <code>DocType</code>
+     *             couldn't be added to
+     * @param added <code>DocType</code> that could not be added
+     * @param reason cause of the problem
      */
     public IllegalAddException(Document base, DocType added, String reason) {
         super(new StringBuffer()
@@ -341,6 +351,7 @@ public class IllegalAddException extends IllegalArgumentException {
      *   error message.
      * </p>
      *
+     * @param reason cause of the problem
      */
     public IllegalAddException(String reason) {
         super(reason);
