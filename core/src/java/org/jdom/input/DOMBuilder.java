@@ -111,7 +111,7 @@ public class DOMBuilder {
      */
     public DOMBuilder(String adapterClass, boolean validate) {
         this.adapterClass = adapterClass;
-        this.validate = validate;
+        setValidation(validate);
     }
 
     /**
@@ -147,6 +147,18 @@ public class DOMBuilder {
      */
     public DOMBuilder() {
         this(DEFAULT_ADAPTER_CLASS, false);
+    }
+
+    /**
+     * <p>
+     * This sets validation for the builder.
+     * </p>
+     *
+     * @param validate <code>boolean</code> indicating whether validation
+     * should occur.
+     */
+    public void setValidation(boolean validate) {
+        this.validate = validate;
     }
 
     /**

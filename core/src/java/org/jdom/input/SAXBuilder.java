@@ -187,10 +187,10 @@ public class SAXBuilder {
 
     /**
      * <p>
-     * This sets validation for the <code>Builder</code>.
+     * This sets validation for the builder.
      * </p>
      *
-     * @param errorHandler <code>boolean</code> indicating whether validation 
+     * @param validate <code>boolean</code> indicating whether validation 
      * should occur.
      */
     public void setValidation(boolean validate) {
