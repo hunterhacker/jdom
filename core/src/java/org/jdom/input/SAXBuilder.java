@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.51 2001/06/01 23:27:45 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.52 2001/06/16 01:10:01 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.51 $ $Date: 2001/06/01 23:27:45 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.52 $ $Date: 2001/06/16 01:10:01 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -270,7 +270,7 @@ public class SAXBuilder {
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
      */
-    protected Document build(InputSource in) throws JDOMException {
+    public Document build(InputSource in) throws JDOMException {
         SAXHandler contentHandler = null;
 
         try {
