@@ -151,6 +151,11 @@ public final class Namespace {
             uri = "";
         }
 
+        // Handle XML namespace
+        if (prefix.equals("xml")) {
+            return XML_NAMESPACE;
+        }
+
         // Return existing namespace if found
         if (namespaces.containsKey(uri)) {
             return (Namespace)namespaces.get(uri);
