@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.19 2001/05/15 23:22:48 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.20 2001/06/14 22:03:46 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -198,6 +198,7 @@ For instructions on how to build JDOM, please view the README.txt file.
              noindex="false"
              windowtitle="${Name} API"
              doctitle="${Name}"
+             link="http://java.sun.com/j2se/1.4/docs/api"
              bottom="Copyright &#169; ${year} Brett McLaughlin, Jason Hunter. All Rights Reserved."
     />
   </target>
