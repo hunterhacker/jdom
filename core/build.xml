@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.29 2002/01/19 10:15:17 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.30 2002/03/12 07:25:39 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -138,13 +138,12 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
     <!-- create directories -->
-    <mkdir dir="${build.src}"/>
-    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.dest}/samples"/>
 
     <!-- copy src files -->
-    <copy todir="${build.src}"
+    <copy todir="${build.dest}/samples"
           filtering="yes">
-      <fileset dir="${samples.dir}"/>
+          <fileset dir="${samples.dir}"/>
     </copy>
   </target>
 
@@ -172,7 +171,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples,collections">
-    <javac srcdir="${build.src}"
+    <javac srcdir="${build.dest}/samples"
            destdir="${build.dest}"
            debug="${debug}"
            optimize="${optimize}"/>
