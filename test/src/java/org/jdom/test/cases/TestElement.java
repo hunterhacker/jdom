@@ -514,7 +514,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(comm);
 
 		assert("couldn't remove comment content", element.removeContent(comm));
-		assert("didn't remove comment content", element.getMixedContent().equals(Collections.EMPTY_LIST));
+		assert("didn't remove comment content", element.getContent().equals(Collections.EMPTY_LIST));
 	}
 	/**
 	 * Test removeContent for an Element.
@@ -525,7 +525,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(child);
 
 		assert("couldn't remove element content", element.removeContent(child));
-		assert("didn't remove element content", element.getMixedContent().equals(Collections.EMPTY_LIST));
+		assert("didn't remove element content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -537,7 +537,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(ent);
 
 		assert("couldn't remove entity content", element.removeContent(ent));
-		assert("didn't remove entity content", element.getMixedContent().equals(Collections.EMPTY_LIST));
+		assert("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -549,7 +549,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(pi);
 
 		assert("couldn't remove entity content", element.removeContent(pi));
-		assert("didn't remove entity content", element.getMixedContent().equals(Collections.EMPTY_LIST));
+		assert("didn't remove entity content", element.getContent().equals(Collections.EMPTY_LIST));
 
 	}
 	/**
@@ -682,11 +682,11 @@ public void test_TCM__boolean_hasChildren() {
 
 	}
 	/**
-	 * Test that getMixedContent returns all the content for the element
+	 * Test that getContent returns all the content for the element
 	 */
-	public void test_TCM__List_getMixedContent() {
+	public void test_TCM__List_getContent() {
 		Element element = new Element("el");
-		assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getMixedContent());
+		assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getContent());
 		Namespace ns = Namespace.getNamespace("urn:hogwarts");
 		Element child1 = new Element("child", ns);
 		child1.setAttribute(new Attribute("name", "first"));
@@ -709,7 +709,7 @@ public void test_TCM__boolean_hasChildren() {
 		element.addContent(entity);
 		element.addContent("finally a new wand!");
 
-		List list = element.getMixedContent();
+		List list = element.getContent();
 
 		assertEquals("incorrect number of content items", 8, list.size());
 		assertEquals("wrong child element", child1, list.get(0));
@@ -771,7 +771,7 @@ public void test_TCM__boolean_hasChildren() {
 		child2 = null;
 		child1 = null;
 		
-		List list = clone.getMixedContent();
+		List list = clone.getContent();
 
 		//finally the test
 
@@ -781,23 +781,23 @@ public void test_TCM__boolean_hasChildren() {
 		
 		assertEquals("wrong nested element","firstChild", deepClone.getName());
 		//comment
-		assert("deep clone comment not a clone", deepClone.getMixedContent().get(0) != comment);
+		assert("deep clone comment not a clone", deepClone.getContent().get(0) != comment);
 		comment = null;
-		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getMixedContent().get(0)).getText());
+		assertEquals("incorrect deep clone comment", "hi", ((Comment)deepClone.getContent().get(0)).getText());
 		//CDATA
-		assert("deep clone CDATA not a clone", ((CDATA)deepClone.getMixedContent().get(1)).getText().equals(cdata.getText()));
+		assert("deep clone CDATA not a clone", ((CDATA)deepClone.getContent().get(1)).getText().equals(cdata.getText()));
 		cdata = null;
-		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getMixedContent().get(1)).getText());
+		assertEquals("incorrect deep clone CDATA", "gotcha", ((CDATA)deepClone.getContent().get(1)).getText());
 		//PI
-		assert("deep clone PI not a clone", deepClone.getMixedContent().get(2) != pi);
+		assert("deep clone PI not a clone", deepClone.getContent().get(2) != pi);
 		pi = null;
-		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getMixedContent().get(2)).getData());
+		assertEquals("incorrect deep clone PI", "do=something",((ProcessingInstruction)deepClone.getContent().get(2)).getData());
 		//entity
-		assert("deep clone Entity not a clone", deepClone.getMixedContent().get(3) != entity);
+		assert("deep clone Entity not a clone", deepClone.getContent().get(3) != entity);
 		entity = null;
-		assertEquals("incorrect deep clone EntityRef", "wizards", ((EntityRef)deepClone.getMixedContent().get(3)).getName());
+		assertEquals("incorrect deep clone EntityRef", "wizards", ((EntityRef)deepClone.getContent().get(3)).getName());
 		//text
-		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getMixedContent().get(4)));
+		assertEquals("incorrect deep clone test", "finally a new wand!", ((String)deepClone.getContent().get(4)));
 		
 			
 		
@@ -851,7 +851,7 @@ public void test_TCM__boolean_hasChildren() {
 	 * Test addContent for CDATA.
 	 */
 	public void test_TCM__OrgJdomElement_addContent_OrgJdomCDATA() {
-		//positive test is covered in test__List_getMixedContent()
+		//positive test is covered in test__List_getContent()
 
 		//test with null
 		Element element = new Element("element");
@@ -873,7 +873,7 @@ public void test_TCM__boolean_hasChildren() {
 		Comment comm = new Comment("a comment");
 		element.addContent(comm);
 
-		assertEquals("didn't add comment content", element.getMixedContent().get(0), comm);
+		assertEquals("didn't add comment content", element.getContent().get(0), comm);
 		try {
 			comm = null;
 			element.addContent(comm);
@@ -888,7 +888,7 @@ public void test_TCM__boolean_hasChildren() {
 	 * Test addContent for Element.
 	 */
 	public void test_TCM__OrgJdomElement_addContent_OrgJdomElement() {
-		//positive test is covered in test__List_getMixedContent()
+		//positive test is covered in test__List_getContent()
 
 		//test with null
 		Element element = new Element("element");
@@ -907,7 +907,7 @@ public void test_TCM__boolean_hasChildren() {
 	 * Test addContent for Entity
 	 */
 	public void test_TCM__OrgJdomElement_addContent_OrgJdomEntityRef() {
-		//positive test is covered in test__List_getMixedContent()
+		//positive test is covered in test__List_getContent()
 		
 		//try with null
 		Element element = new Element("element");
@@ -925,7 +925,7 @@ public void test_TCM__boolean_hasChildren() {
 	 * Test addContent for ProcessingInstruction.
 	 */
 	public void test_TCM__OrgJdomElement_addContent_OrgJdomProcessingInstruction() {
-		//positive test is covered in test__List_getMixedContent()
+		//positive test is covered in test__List_getContent()
 
 		//try with null data
 		Element element = new Element("element");
@@ -957,7 +957,7 @@ public void test_TCM__boolean_hasChildren() {
 		try {
 			String data = null;
 			element.addContent(data);
-			List content = element.getMixedContent();
+			List content = element.getContent();
 			
 			assert("didn't catch null String content", false);
 		} catch (IllegalAddException e) {
@@ -1039,6 +1039,11 @@ public void test_TCM__boolean_hasChildren() {
 		element.setAttribute(att);
 		assertEquals("incorrect Attribute returned", element.getAttribute("name"), att);
 
+		//update the value
+		Attribute att2 = new Attribute("name", "replacefirst");
+		element.setAttribute(att2);
+		assertEquals("incorrect Attribute value returned", "replacefirst", element.getAttribute("name").getValue());
+
 		//test with bad data
 		try {
 			element.setAttribute(null);
@@ -1057,9 +1062,14 @@ public void test_TCM__boolean_hasChildren() {
 	public void test_TCM__OrgJdomElement_setAttribute_String_String() {
 		Element element = new Element("el");
 		element.setAttribute(new Attribute("name", "first"));
-		assertEquals("incorrect Attribute returned", element.getAttribute("name").getName(), "name");
-		assertEquals("incorrect Attribute returned", element.getAttribute("name").getValue(), "first");
+		assertEquals("incorrect Attribute name returned", "name", element.getAttribute("name").getName());
+		assertEquals("incorrect Attribute value returned", "first", element.getAttribute("name").getValue());
 
+		//update the value
+		element.setAttribute("name", "replacefirst");
+		assertEquals("incorrect Attribute name returned", "name", element.getAttribute("name").getName());
+		assertEquals("incorrect Attribute value returned", "replacefirst", element.getAttribute("name").getValue());
+		
 		//try with null values
 		try {
 			element.setAttribute(new Attribute(null, "value"));
@@ -1189,16 +1199,16 @@ public void test_TCM__boolean_hasChildren() {
 
 		
 		//nulls should reset the list
-		element.setMixedContent(null);
-		assert("didn't reset children List", element.getMixedContent().isEmpty());
+		element.setContent(null);
+		assert("didn't reset children List", element.getContent().isEmpty());
 
 	}
 	/**
 	 * Test adding mixed content in a List
 	 */
-	public void test_TCM__OrgJdomElement_setMixedContent_List() {
+	public void test_TCM__OrgJdomElement_setContent_List() {
 		Element element = new Element("el");
-		assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getMixedContent());
+		assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getContent());
 		Namespace ns = Namespace.getNamespace("urn:hogwarts");
 		Element child1 = new Element("child", ns);
 		
@@ -1220,8 +1230,8 @@ public void test_TCM__boolean_hasChildren() {
 		list.add(entity);
 		list.add("finally a new wand!");
 
-		element.setMixedContent(list);
-		List contentList = element.getMixedContent();
+		element.setContent(list);
+		List contentList = element.getContent();
 
 		assertEquals("incorrect number of content items", 8, contentList.size());
 		assertEquals("wrong child element", child1, contentList.get(0));
@@ -1239,14 +1249,14 @@ public void test_TCM__boolean_hasChildren() {
 		newList.add(new Integer(7));
 
 		try {
-			element.setMixedContent(list);
+			element.setContent(list);
 			assert("didn't catch bad object type in list", false);
 		} catch (IllegalAddException e) {
 			assert(true);
 		}
 
 		//should add content up to the point of the bad object in the list
-		contentList = element.getMixedContent();
+		contentList = element.getContent();
 		assertEquals("wrong child element after failed add", child1, contentList.get(0));
 		assertEquals("wrong child element after failed add", child2, contentList.get(1));
 		assertEquals("wrong child element after failed add", child3, contentList.get(2));
@@ -1258,8 +1268,8 @@ public void test_TCM__boolean_hasChildren() {
 		
 		
 		//nulls should reset the list
-		element.setMixedContent(null);
-		assert("didn't reset mixed content List", element.getMixedContent().isEmpty());
+		element.setContent(null);
+		assert("didn't reset mixed content List", element.getContent().isEmpty());
 
 		
 
@@ -1275,11 +1285,11 @@ public void test_TCM__boolean_hasChildren() {
 
 		element.setText("it's all gone");
 		assertEquals("incorrect text returned", "it's all gone", element.getText());
-		assertEquals("incorrect number of content items found", 1, element.getMixedContent().size());
+		assertEquals("incorrect number of content items found", 1, element.getContent().size());
 
 		
 		element.setText(null);
-		assert("didn't clear content with null text", element.getMixedContent().isEmpty());
+		assert("didn't clear content with null text", element.getContent().isEmpty());
 
 		//bad string test
 		
