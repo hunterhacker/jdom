@@ -1359,10 +1359,18 @@ public class Element implements Serializable, Cloneable {
      *         <code>Element</code>
      */
     public String toString() {
-        StringBuffer stringForm = new StringBuffer()
+        StringBuffer stringForm = new StringBuffer(64)
             .append("[Element: <")
-            .append(getQualifiedName())
-            .append(" />]");
+            .append(getQualifiedName());
+
+        String nsuri = getNamespaceURI();
+        if (!nsuri.equals("")) {
+            stringForm
+            .append(" [Namespace: ")
+            .append(nsuri)
+            .append("]");
+        }
+        stringForm.append("/>]");
 
         return stringForm.toString();
     }
