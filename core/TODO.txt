@@ -12,14 +12,13 @@ Items that need to be done:
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?
 
-* Strategy pattern for XMLOutputter and others.
-    If need for override, make others final and leave the protected.
+* Try to remove the number of protected fields and methods.  Use the strategy
+  pattern instead for example.
 
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
 
-* Finalize the XPath class interface.  Possibly take calls into Element,
-  Document, etc.
+* Should there be XPath support within Element, Document, etc?
 
 * Add methods to recursively get content and get filtered content.
 
@@ -37,17 +36,6 @@ Items that need to be done:
     http://www.servlets.com/archive/servlet/ReadMsg?msgId=334184
     http://www.servlets.com/archive/servlet/ReadMsg?msgId=312047
 
-* Look at where Namespace may need to be synchronized or made no longer a
-  flyweight.  See
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
-  and follow-ups.
-
-* Look into how the factory builder model could support giving the factory
-  extra knowledge about the context (line number, element stack, etc), and 
-  allow it to report errors or to return a code indicating the element should 
-  be ignored.
-  (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
-
 * Figure out if there's a role for a Node interface.  It sounds easy but all 
   attempts so far have hit obstacles.  Amy Lewis talks about it here:
   http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
@@ -58,42 +46,38 @@ Items that need to be done:
 * Investigate serialization issue raised by Tom Preston
   http://lists.denveronline.net/lists/jdom-interest/2002-March/009857.html
 
-* Look into hasContent() and hasAttributes() methods to eliminate need to
-  create lists during output.
+* Fix the sorting problem.
+  Alex idea: http://www.servlets.com/archive/servlet/ReadMsg?msgId=211785
 
-* Start shipping Xerces 2.0+
-  Xerces 2.0.0 bugs found when using DOMBuilder:
-   * In cdata.xml we're getting entity callbacks for chars inside CDATA
-     sections (bug 6316 in Xerces' Bugzilla, fixed Feb 2002)
-   * In web.xml we're seeing the comments from the external DTD appear in our
-     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar 2002)
-
-* Performance optimize.  See following thread for test data.
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
-  One idea: Stop using synchronized Stack in SAXHandler.
-
-* Give attributes the "specified" flag like in DOM.  This probably isn't
-  receivable from SAXBuilder, but it would be from DOMBuilder and other
-  builders.  Then give XMLOutputter the ability to avoid outputting
-  "unspecified" attributes.  Some of this may be covered by the attribute type
-  support recently added.
-
-* Look into implementing an id() method now that we have attribute types.
-
---- FOR JDOM 1.0 COMMUNITY REVIEW ---
-
-* Expand class-level Javadocs for inclusion into Frame using the MIF Doclet.
-
-* Note in the docs where necessary our multithreading policy.
-
-* Add in attribute type support to DOM to match what's in SAX.
+* Should we have an elt/doc.getContentDetached() call to make moving items in
+	bulk easier?  Should adds just do detach automatically?  Why do we throw on
+  that?
 
 * Think about if XMLOutputter should have a few specific output states, like
   RAW, PRETTY, COMPRESSED.  See the thread "XMLOutputter inserts extra empty
   lines" for some discussion.
 
---- FOR JDOM 1.0 ---
+
+
+--- FOR JDOM 1.0 COMMUNITY REVIEW ---
+
+* Clean up and expand Javadocs for inclusion into Frame using the MIF Doclet.
+
+* Note in the docs where necessary our multithreading policy.
+
+
+
+--- FUTURE IDEAS ---
+
+* Add in attribute type support to DOM to match what's in SAX.
+
+* Look into implementing an id() method now that we have attribute types.
+
+* Look into how the factory builder model could support giving the factory
+  extra knowledge about the context (line number, element stack, etc), and 
+  allow it to report errors or to return a code indicating the element should 
+  be ignored.
+  (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
 
 * Write a "GNU JAXP (i.e. AElfred) DOM adapter" (elharo looking into this).
 
@@ -111,21 +95,12 @@ Items that need to be done:
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
 
-* Consider adding methods/logic to Verifier for all XML spec. constraints
-  (Consider specifically a PCDATA check.  Downside is Elliotte says it 
-   causes a 20% performance penalty on building docs.)
-  Probably go with sanity checking input unless it adds significant time to
-  a SAX build.
-  See http://lists.denveronline.net/lists/jdom-interest/2000-August/002088.html
-  And http://lists.denveronline.net/lists/jdom-interest/2000-August/002102.html
-
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
   and let the caller pass the exception through
 
-* Populate jdom-test.  Jools is leading this but Phil Nelson is currently
-  doing a lot of work.  Hong Zhang <Hong.Zhang AT Sun.COM> is helping with the
-  J2EE CTS.
+* Populate jdom-test.  Hong Zhang <Hong.Zhang AT Sun.COM> once volunteered to
+  help with the J2EE CTS.
 
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
   started by Joe Bowbeer.
@@ -137,10 +112,6 @@ Items that need to be done:
 
 * Joe summarizes his issues at
   http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
-
-* Clean up Javadocs right before final release.
-
---- FOR JDOM 1.1 ---
 
 * Consider visitor pattern
   Use cases: count elements, count nodes, translate comments, remove PIs
@@ -185,18 +156,11 @@ Items that need to be done:
   they were declared, to help debug semantic errors.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003422.html
 
---- UNTIED TO A JDOM VERSION ---
-
 * Consider an XMLOutputter flag or feature to convert characters with well
   known named character entities to their named char entity form instead of
   numeric.
 
 * Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
-
-* Perhaps have builder flags to indicate if CDATA sections should be 
-  included and if comment sections should be included.  All seem like 
-  reasonable customizations.  The whitespace flag may respect xml:space.  
-  It might use an XMLFilter to do the job.
 
 * Create a builder based on Xerces' XNI, which will be more featureful and
   probably faster than the one based on SAX.
@@ -208,16 +172,7 @@ Items that need to be done:
     (Thought: could use a bit in the type value to save memory)
   * Can't get access to retain the internal dtd subset unless entity 
     expansion is off
-
-* Contribute the samples from Elliotte's XML DevCon talk to the samples/
-  directory.  http://metalab.unc.edu/xml/slides/xmlsig/jdom/JDOM.html
-
-* Add a search for jdom.org using Google with site:www.jdom.org, imitating
-  http://www.zope.org/SiteIndex/searchForm
-
-* Fix it so check-in messages include diffs.  (jools AT jools.org)
-
-* Add ElementLocator to contrib/ directory (from Alfred Lopez)
+  * Can't get access to whitespace outside the root element.
 
 * Write a guide for contributors.  Short summary:
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
@@ -229,18 +184,12 @@ Items that need to be done:
 
 * Consider having the license be clear org.jdom is a protected namespace.
 
---- WILD IDEAS ---
-
-* Think about somewhat crazy idea of using more inheritance in JDOM to allow
+* Think about the idea of using more inheritance in JDOM to allow
   lightweight but not XML 1.0 complete implementations.  For example Element
   could have a superclass "CommonXMLElement" that supported only what Common 
   XML requires.  Builders could build such elements to be faster and lighter 
   than full elements -- perfect for things like reading config files.  Lots
   of difficulties with this design though.
-
-* Look at Xerces parser features (http://apache.org/xml/features/dom) for
-  ideas on things that may be needed.
-  http://xml.apache.org/xerces-j/features.html
 
 * Create a JDOM logo.
 
@@ -252,9 +201,6 @@ Items that need to be done:
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
   by Bob to help with XPath.)
-
-* Shouldn't addNamespaceDeclaration() have a name to match
-  getAdditionalNamespaces().
 
 * Consider an HTMLBuilder that reads not-necessarily-well-formed HTML and
   produces a JDOM Document.  The approach I'd suggest is to build on top of
@@ -279,12 +225,6 @@ Items that need to be done:
 * Considering that local vars are considerably faster that instance vars, test
   if using local vars can speed building.
 
-* Consider a builder.setFeature() pass-through method that allows any 
-  features to be set that aren't in the http://xml.org namespace.  Make
-  those in http://xml.org not to be touched because either we have specific
-  requirements for them to be set one way, or we have the feature exposed
-  through a Java method.
-
 * Consider Mike Jennings' proposal of two new methods on Element:
   public String getAttributeValue(String name, String default)
   public String getAttributeValue(String name, Namespace ns, String default)
@@ -306,10 +246,13 @@ Items that need to be done:
 * Add Laurent's <?javax.xml.transform.disable-output-escaping?> 
   and <?javax.xml.transform.enable-output-escaping?> support
 
-* Fix the sorting problem.
-  Alex idea: http://www.servlets.com/archive/servlet/ReadMsg?msgId=211785
-
 * Change the various setAttributeValue() methods in Element and 
   Attribute to check the attribute type and normalize the string 
   according to the attribute type. i.e. normalize the white space if 
   the attribute has any type other than CDATA or UNDECLARED.
+
+* Give attributes the "specified" flag like in DOM.  This probably isn't
+  receivable from SAXBuilder, but it would be from DOMBuilder and other
+  builders.  Then give XMLOutputter the ability to avoid outputting
+  "unspecified" attributes.
+
