@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.20 2001/08/17 17:16:40 jhunter Exp $
+ $Id: SAXHandler.java,v 1.21 2001/08/17 18:37:06 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.20 $ $Date: 2001/08/17 17:16:40 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.21 $ $Date: 2001/08/17 18:37:06 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -89,33 +89,33 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     // performance improvement.
 
     /** Element stack */
-    private Stack stack;
+    protected Stack stack;
 
     /** Indicator of where in the document we are */
-    private boolean atRoot;
+    protected boolean atRoot;
 
     /** Indicator of whether we are in a DTD */
-    private boolean inDTD = false;
+    protected boolean inDTD = false;
 
     /** Indicator of whether we are in a CDATA */
-    private boolean inCDATA = false;
+    protected boolean inCDATA = false;
 
     /** Indicator of whether we should expand entities */
     private boolean expand = true;
 
     /** Indicator of whether we are actively suppressing (non-expanding) a 
         current entity */
-    private boolean suppress = false;
+    protected boolean suppress = false;
 
     /** How many nested entities we're currently within */
     private int entityDepth = 0;
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
-    private LinkedList declaredNamespaces;
+    protected LinkedList declaredNamespaces;
 
     /** The namespaces in scope and actually attached to an element */
-    private LinkedList availableNamespaces;
+    protected LinkedList availableNamespaces;
 
     private Map externalEntities;
 
@@ -195,6 +195,20 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /**
      * <p>
+     * Returns the factory used for constructing objects.
+     * </p>
+     *
+     * @return <code>JDOMFactory</code> - the factory used for
+     * constructing objects.
+     *
+     * @see #SAXHandler(org.jdom.input.JDOMFactory)
+     */
+    public JDOMFactory getFactory() {
+        return factory;
+    }
+
+    /**
+     * <p>
      * This sets whether or not to expand entities during the build.
      * A true means to expand entities as normal content.  A false means to
      * leave entities unexpanded as <code>EntityRef</code> objects.  The
@@ -206,6 +220,21 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     public void setExpandEntities(boolean expand) {
         this.expand = expand;
+    }
+
+    /**
+     * <p>
+     * Returns whether or not entities will be expanded during the
+     * build.
+     * </p>
+     *
+     * @return <code>boolean</code> - whether entity expansion
+     * will occur during build.
+     *
+     * @see #setExpandEntities
+     */
+    public boolean getExpandEntities() {
+        return expand;
     }
 
     /**
@@ -223,6 +252,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
         this.ignoringWhite = ignoringWhite;
+    }
+
+    /**
+     * <p>
+     * Returns whether or not the parser will elminate whitespace in
+     * element content (sometimes known as "ignorable whitespace") when
+     * building the document.
+     * </p>
+     *
+     * @return <code>boolean</code> - whether ignorable whitespace will
+     * be ignored during build.
+     *
+     * @see #setIgnoringElementContentWhitespace
+     */
+    public boolean getIgnoringElementContentWhitespace() {
+        return ignoringWhite;
     }
 
     /**
@@ -268,7 +313,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         if (atRoot) {
             document.addContent(factory.processingInstruction(target, data));
         } else {
-            ((Element)stack.peek()).addContent(
+            getCurrentElement().addContent(
                 factory.processingInstruction(target, data));
         }
     }
@@ -411,7 +456,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             stack.push(element);
             atRoot = false;
         } else {
-            ((Element)stack.peek()).addContent(element);
+            getCurrentElement().addContent(element);
             stack.push(element);
         }
     }
@@ -478,19 +523,17 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
  * the inline DTDs that Xerces seems to have.
 if (!inDTD) {
   if (inEntity) {
-    ((Entity)stack.peek()).setContent(data);
+    getCurrentElement().setContent(data);
   } else {
-    Element e = (Element)stack.peek();
-  e.addContent(data);
+    getCurrentElement().addContent(data);
 }
 */
 
         if (inCDATA) {
-            ((Element)stack.peek()).addContent(factory.cdata(data));
+            getCurrentElement().addContent(factory.cdata(data));
         }
         else {
-            Element e = (Element)stack.peek();
-            e.addContent(data);
+            getCurrentElement().addContent(data);
         }
     }
 
@@ -512,7 +555,7 @@ if (!inDTD) {
         if (ignoringWhite) return;
         if (length == 0) return;
 
-        ((Element)stack.peek()).addContent(new String(ch, start, length));
+        getCurrentElement().addContent(new String(ch, start, length));
 
     }
 
@@ -535,16 +578,22 @@ if (!inDTD) {
 
         if (suppress) return;
 
-        Element element = (Element)stack.pop();
-        
+        try {
+            Element element = (Element)stack.pop();
+
+            // Remove the namespaces that this element makes available
+            List addl = element.getAdditionalNamespaces();
+            if (addl.size() > 0) {
+                availableNamespaces.removeAll(addl);
+            }
+        }
+        catch (EmptyStackException ex1) {
+            throw new SAXException(
+                "Ill-formed XML document (missing opening tag for " +
+                localName + ")");
+        }
         if (stack.empty()) {
             atRoot = true;
-        }
-
-        // Remove the namespaces that this element makes available
-        List addl = element.getAdditionalNamespaces();
-        if (addl.size() > 0) {
-            availableNamespaces.removeAll(addl);
         }
     }
 
@@ -604,7 +653,7 @@ if (!inDTD) {
                   sys = ids[1];  // may be null, that's OK
                 }
                 EntityRef entity = factory.entityRef(name, pub, sys);
-                ((Element)stack.peek()).addContent(entity);
+                getCurrentElement().addContent(entity);
                 suppress = true;
             }
         }
@@ -664,9 +713,26 @@ if (!inDTD) {
                 document.addContent(
                    factory.comment(commentText));
             } else {
-                ((Element)stack.peek()).addContent(
+                getCurrentElement().addContent(
                     factory.comment(commentText));
             }
+        }
+    }
+
+    /**
+     * <p>
+     * Returns the being-parsed element.
+     * </p>
+     *
+     * @return <code>Element</code> - element at the top of the stack.
+     */
+    protected Element getCurrentElement() throws SAXException {
+        try {
+            return (Element)(stack.peek());
+        }
+        catch (EmptyStackException ex1) {
+            throw new SAXException(
+                "Ill-formed XML document (multiple root elements detected)");
         }
     }
 }
