@@ -2,17 +2,6 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't run,
-  which causes needed xpath/parser/*.java files to not be created.  Cause
-  is -Duser.dir flag being ignored in JDK 1.1 so relative classpaths
-  can't be followed and antlr.Tool can't be found.  Fix is to use new Antlr
-  release that doesn't need the special "cd", coming from Terence by Aug 21 
-  per Bob.)
-
-* Make JDK 1.1 builds work for jdom-test (besides problems caused by
-  the XPath bug above, ClassGenerator uses file.createNewFile() from JDK 1.2
-  and some test cases have spurious semi-colons)
-
 * Automate build process, using ant tasks to EOL handling
   Consider .zip readable by JAR
   Consider releasing source with jdom.jar as sole distribution
@@ -44,17 +33,40 @@ Items that need to be done:
                        Set both the XML and Java encodings.
    void setLineSeparator(String lineSeparator)
 
-* Finalize the license text we'll use for release.  Update all source files to
-  match most current license in jdom/LICENSE.txt.  
-  See http://www.zope.org/Resources/ZPL point #3 for one approach to 
-  attribution.
-
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
 
 * Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
 
 --- FOR JDOM 1.0 ---
+
+* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't run,
+  which causes needed xpath/parser/*.java files to not be created.  Cause
+  is -Duser.dir flag being ignored in JDK 1.1 so relative classpaths
+  can't be followed and antlr.Tool can't be found.  Fix is to use new Antlr
+  release that doesn't need the special "cd", coming from Terence by Aug 21 
+  per Bob.)
+
+* Make JDK 1.1 builds work for jdom-test (besides problems caused by
+  the XPath bug above, ClassGenerator uses file.createNewFile() from JDK 1.2
+  and some test cases have spurious semi-colons)
+
+* Add CrimsonDOMAdapter
+
+* Since DOMOutputter is just DOM1, consider a DOM2 outputter
+  Probably support DOM2 only, in theory of tracking latest versions
+
+* Figure out if there should be a public no-arg Document constructor to
+  support building docs with more than just root elts.  Currently you have to
+  use a trick of new Document(null).  Elliotte thinks we should go the 
+  opposite way and disallow creating docs without roots, thus enforcing the
+  rule that JDOM only creates well-formed docs and docs are well-formed from
+  the beginning.  That makes severaly ugly code though.
+
+* Figure out how to deal with setText("") and setText(null) and determine what
+  getText(), getTextTrim(), and getMixedContent() should return for 
+  <empty/>, <empty></empty>, and <notempty><a></a></notempty>.
+  Changing behavior involves changing XMLOutputter, btw.
 
 * Add method org.jdom.Element DOMBuilder.build(org.w3c.dom.Element)
 
@@ -92,12 +104,21 @@ Items that need to be done:
 * Consider SAXBuilder.setIgnoreingWhitespace() and similar
   Should save lots of memory.
 
+* Consider enhancing SAXBuilder to use filters per
+  http://www.megginson.com/SAX/Java/filters.html
+
 * Writing a "Getting started" guide for newbies 
   (Tom Clements <clements@eng.sun.com>)
 
 * Add JAXP 1.1 supporting classes when it's ready.  Design them to follow the
   JAXP model so they are usable without JAXP, and can be trivially made to
   work with JAXP.
+
+* Think about somewhat crazy idea of using more inheritance in JDOM to allow
+  lightweight but not XML 1.0 complete implementations.  For example Element
+  could have a superclass "CommonXMLElement" that supported only what Common 
+  XML requires.  Builders could build such elements to be faster and lighter 
+  than full elements -- perfect for things like reading config files.
 
 --- FOR JDOM 1.1 ---
 
@@ -148,4 +169,8 @@ Items that need to be done:
 * Investigate including a library to convert XML data to instantiated Java
   objects, probably with an XML config file dictating how to do the mapping.
   See http://xmlhack.com/read.php?item=674 for something along these lines.
+
+* Investigate adding Andy's library (jhunter)
+
+* Verify JDOM is compliant with Infoset
 

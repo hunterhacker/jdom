@@ -5,7 +5,7 @@
 #
 # Description
 #
-#    Replaces the first comment ( as delimited by "/* ... */",
+#    Replaces the first comment (as delimited by "/* ... */",
 #    can be multi-line) in a series of files with the contents
 #    of a special file (usually a license).
 #
