@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.5 2002/04/29 13:38:16 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.6 2002/05/15 05:32:35 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,7 +83,7 @@ class JaxenXPath extends XPath {  // package protected
     * not be made final as it needs to be set upon object
     * deserialization.
     */
-   private transient org.jaxen.jdom.XPath xPath;
+   private transient org.jaxen.jdom.JDOMXPath xPath;
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -241,7 +241,7 @@ class JaxenXPath extends XPath {  // package protected
     */
    private void setXPath(String expr) throws JDOMException {
       try {
-         xPath = new org.jaxen.jdom.XPath(expr);
+         xPath = new org.jaxen.jdom.JDOMXPath(expr);
       }
       catch (SAXPathException ex1) {
          throw new JDOMException(
