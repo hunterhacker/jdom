@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.18 2004/08/31 04:50:48 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.19 2004/09/03 07:27:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,13 +67,13 @@ import org.jdom.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.18 $, $Date: 2004/08/31 04:50:48 $
+ * @version $Revision: 1.19 $, $Date: 2004/09/03 07:27:39 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.18 $ $Date: 2004/08/31 04:50:48 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.19 $ $Date: 2004/09/03 07:27:39 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
@@ -336,10 +336,7 @@ class JaxenXPath extends    XPath {             // package protected
                } else if (ctx instanceof Attribute) {
                   elt = ((Attribute)ctx).getParent();
                } else if (ctx instanceof Content) {
-                  Parent p = ((Content) ctx).getParent();
-                  if (p instanceof Element) {
-                     elt = (Element) p;
-                  }
+                  elt = ((Content) ctx).getParentElement();
                } else if (ctx instanceof Document) {
                   elt = ((Document)ctx).getRootElement();
                }
