@@ -373,24 +373,29 @@ public class Element implements Serializable, Cloneable {
      */
     public String getText() {
         // Use "cached" text if available
-        if (textualContent == null) {	
-            if (content == null) {
-                return null;
-            }
-
-            StringBuffer textContent = new StringBuffer();
-
-            Iterator i = content.iterator();
-            while (i.hasNext()) {
-                Object obj = i.next();
-                if (obj instanceof String) {
-                    textContent.append((String)obj);
-                }
-            }
-            textualContent = textContent.toString();
+        if (textualContent != null) {	
+            return textualContent;
         }
+
+        // If there's no content, then there's no text
+        if (content == null) {
+            return null;
+        }
+
+        StringBuffer textContent = new StringBuffer();
+        boolean hasText = false;
+
+        Iterator i = content.iterator();
+        while (i.hasNext()) {
+            Object obj = i.next();
+            if (obj instanceof String) {
+                textContent.append((String)obj);
+                hasText = true;
+            }
+        }
+        textualContent = textContent.toString();
 	
-        if (textualContent.length() == 0) {
+        if (!hasText) {
             return null;
         } else {
             return textualContent;
@@ -428,7 +433,7 @@ public class Element implements Serializable, Cloneable {
 
             trimmedContent = textContent.toString();
         }
-	
+
         return trimmedContent;
     }
 
