@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.41 2004/02/27 11:32:57 jhunter Exp $
+ $Id: Namespace.java,v 1.42 2004/12/11 00:46:02 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.41 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.42 $, $Date: 2004/12/11 00:46:02 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -84,7 +84,7 @@ public final class Namespace {
     // No one has ever reported this over the many years, so don't worry yet.
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.41 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.42 $ $Date: 2004/12/11 00:46:02 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -111,12 +111,11 @@ public final class Namespace {
      * It sets up storage and required initial values.
      */
     static {
-        namespaces = new HashMap();
+        namespaces = new HashMap(16);
 
         // Add the "empty" namespace
-        namespaces.put("&", NO_NAMESPACE);
-        namespaces.put("xml&http://www.w3.org/XML/1998/namespace",
-                       XML_NAMESPACE);
+        namespaces.put(new NamespaceKey(NO_NAMESPACE), NO_NAMESPACE);
+        namespaces.put(new NamespaceKey(XML_NAMESPACE), XML_NAMESPACE);
     }
 
     /**
@@ -133,9 +132,13 @@ public final class Namespace {
     public static Namespace getNamespace(String prefix, String uri) {
         // Sanity checking
         if ((prefix == null) || (prefix.trim().equals(""))) {
+            // Short-cut out for common case of no namespace
+            if ((uri == null) || (uri.trim().equals(""))) {
+                return NO_NAMESPACE;
+            }
             prefix = "";
         }
-        if ((uri == null) || (uri.trim().equals(""))) {
+        else if ((uri == null) || (uri.trim().equals(""))) {
             uri = "";
         }
 
@@ -143,8 +146,7 @@ public final class Namespace {
         // should all be legal. In other words, an illegal namespace won't
         // have been placed in this.  Thus we can do this test before
         // verifying the URI and prefix.
-        String lookup = new StringBuffer(64)
-            .append(prefix).append('&').append(uri).toString();
+        NamespaceKey lookup = new NamespaceKey(prefix, uri);
         Namespace preexisting = (Namespace) namespaces.get(lookup);
         if (preexisting != null) {
             return preexisting;
@@ -176,6 +178,7 @@ public final class Namespace {
              "The xml prefix can only be bound to " +
              "http://www.w3.org/XML/1998/namespace");        
         }
+
         // The erratum to Namespaces in XML 1.0 that suggests this 
         // next check is controversial. Not everyone accepts it. 
         if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
