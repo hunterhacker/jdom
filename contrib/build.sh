@@ -12,7 +12,7 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:../jdom/lib/xerces.jar:../jdom/lib/ant.jar:../jdom/build/classes:$JAVA_HOME/lib/dev.jar:./taskdefs/taskdefs.jar:./lib/antlrall.jar:./lib/jakarta-regexp-1.1.jar:./lib/jaxp.jar:./lib/jaxen-jdom.jar:./lib/jaxen-core.jar:./lib/saxpath.jar
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dev.jar:../jdom/lib/xerces.jar:../jdom/lib/xml-apis.jar:../jdom/lib/ant.jar:../jdom/build/classes:./lib/jakarta-regexp-1.1.jar:../jdom/lib/jaxen-jdom.jar:../jdom/lib/jaxen-core.jar:../jdom/lib/saxpath.jar:./build/classes
 ANT_HOME=../jdom/lib
 
 echo Building with classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH

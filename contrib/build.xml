@@ -47,6 +47,7 @@ These are the meaningful targets for this build file:
 
     <property name="src.dir" value="./src/java"/>
     <property name="samples.dir" value="./samples"/>
+    <property name="samples.dest" value="./build/samples"/>
     <property name="lib.dir" value="./lib"/>
     <property name="packages" value="org.jdom.*"/>
 
@@ -106,24 +107,12 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="prepare-src" depends="prepare">
     <!-- create directories -->
-    <mkdir dir="${build.src}"/>
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
     <copydir src="${src.dir}"
              dest="${build.src}"
              filtering="on"/>
-
-    <java fork="yes"
-          classname="antlr.Tool"
-          jvmargs="-classpath ${java.class.path}"
-          args="-o ${xpath.parser.dir} ${xpath.parser.dir}/xpath.g"/>
-
-    <java fork="yes"
-          classname="antlr.Tool"
-          jvmargs="-classpath ${java.class.path}"
-          args="-o ${xpath.parser.dir} ${xpath.parser.dir}/xpath_lexer.g"/>
-
   </target>
 
   <!-- =================================================================== -->
@@ -160,12 +149,11 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
     <!-- create directories -->
-    <mkdir dir="${build.src}"/>
-    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${samples.dest}"/>
 
     <!-- copy src files -->
     <copydir src="${samples.dir}"
-             dest="${build.src}"
+             dest="${samples.dest}"
              filtering="on"/>
   </target>
 
@@ -196,12 +184,11 @@ These are the meaningful targets for this build file:
     <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
     <available property="spitfire.present"
      classname="com.XML_Technologies.Spitfire.Parsers.Element" />
-    <javac srcdir="${build.src}"
-           destdir="${build.dest}"
+    <javac srcdir="${samples.dest}"
+           destdir="${samples.dest}"
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}">
-      <exclude name="**/Spitfire*.java" unless="spitfire.present" />
     </javac>
   </target>
 

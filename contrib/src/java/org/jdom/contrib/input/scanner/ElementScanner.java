@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.3 2002/05/11 07:22:54 jhunter Exp $
+ $Id: ElementScanner.java,v 1.4 2003/04/02 21:15:55 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -496,7 +496,7 @@ public class ElementScanner extends XMLFilterImpl {
       this.currentPath.append('/').append(localName);
 
       // Retrieve the matching rules for this element.
-      String eltPath           = this.currentPath.toString();
+      String eltPath           = this.currentPath.substring(0);
       Collection matchingRules = this.getMatchingRules(eltPath, attrs);
       if (matchingRules != null) {
          // Matching rules found.
@@ -531,7 +531,7 @@ public class ElementScanner extends XMLFilterImpl {
    public void endElement(String nsUri, String localName, String qName)
                                                         throws SAXException {
       // Get element path.
-      String eltPath = this.currentPath.toString();
+      String eltPath = this.currentPath.substring(0);
 
       // Get the matching rules for this element (if any).
       Collection matchingRules = (Collection)(this.activeRules.remove(eltPath));
@@ -757,12 +757,12 @@ public class ElementScanner extends XMLFilterImpl {
       //----------------------------------------------------------------------
 
       /**
-       * Returns the object at the top of the Element stack.
+       * Returns the Element being built.
        *
-       * @return the object at the top of the Element stack.
+       * @return the Element being built.
        */
-      public Element getCurrentElement() {
-         return ((Element)(this.stack.peek()));
+      public Element getCurrentElement() throws SAXException {
+         return this.currentElement;
       }
    }
 

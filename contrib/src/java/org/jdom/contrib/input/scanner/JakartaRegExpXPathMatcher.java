@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JakartaRegExpXPathMatcher.java,v 1.2 2002/05/11 07:22:54 jhunter Exp $
+ $Id: JakartaRegExpXPathMatcher.java,v 1.3 2003/04/02 21:15:55 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,7 +64,7 @@ import org.jdom.xpath.XPath;
 import org.xml.sax.Attributes;
 
 import org.apache.regexp.RE;
-// import org.apache.regexp.RESyntaxException;
+import org.apache.regexp.RESyntaxException;
 
 
 /* package */ class JakartaRegExpXPathMatcher extends XPathMatcher {
@@ -114,7 +114,7 @@ import org.apache.regexp.RE;
                                         " -> XPath = " + testPattern);
          }
       }
-      catch (Exception ex1) {
+      catch (RESyntaxException ex1) {
          throw (new JDOMException(
                         "Illegal XPath expression: " + expression, ex1));
       }
