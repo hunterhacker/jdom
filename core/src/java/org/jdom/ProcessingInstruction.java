@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.37 2003/04/30 09:55:12 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.38 2003/05/05 07:24:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.37 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.38 $, $Date: 2003/05/05 07:24:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -74,7 +74,7 @@ import java.util.*;
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.37 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.38 $ $Date: 2003/05/05 07:24:00 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -233,10 +233,23 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * This will return a <code>List</code> containing the names of the
      * "attribute" style pieces of name/value pairs in this PI's data.
      *
+     * @deprecated Deprecated in Beta 10, use getPseudoAttributeNames() instead.
      * @return <code>List</code> - the <code>List</code> containing the
      *         "attribute" names.
      */
     public List getNames() {
+        return getPseudoAttributeNames();
+    }
+
+
+    /**
+     * This will return a <code>List</code> containing the names of the
+     * "attribute" style pieces of name/value pairs in this PI's data.
+     *
+     * @return <code>List</code> - the <code>List</code> containing the
+     *         "attribute" names.
+     */
+    public List getPseudoAttributeNames() {
       Set mapDataSet = mapData.entrySet();
       List nameList = new ArrayList();
       for (Iterator i = mapDataSet.iterator(); i.hasNext();) {
@@ -285,6 +298,21 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         return this;
     }
 
+
+    /**
+     * This will return the value for a specific
+     * name/value pair on the PI.  If no such pair is
+     * found for this PI, null is returned.
+     *
+     * @deprecated Deprecated in Beta 10, use getPseudoAttributeValue() instead.
+     * @param name <code>String</code> name of name/value pair
+     *             to lookup value for.
+     * @return <code>String</code> - value of name/value pair.
+     */
+    public String getValue(String name) {
+        return getPseudoAttributeValue(name);
+    }
+
     /**
      * This will return the value for a specific
      * name/value pair on the PI.  If no such pair is
@@ -294,7 +322,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *             to lookup value for.
      * @return <code>String</code> - value of name/value pair.
      */
-    public String getValue(String name) {
+    public String getPseudoAttributeValue(String name) {
         return (String)mapData.get(name);
     }
 
@@ -303,12 +331,27 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * pair.  If no matching pair is found, the supplied
      * pair is added to the PI data.
      *
+     * @deprecated Deprecated in Beta 10, use addPseudoAttributeValue() instead.
      * @param name <code>String</code> name of pair.
      * @param value <code>String</code> value for pair.
      * @return <code>ProcessingInstruction</code> this PI modified.
      */
     public ProcessingInstruction setValue(String name,
                                           String value) {
+        return setPseudoAttributeValue(name, value);
+    }
+
+    /**
+     * This will set a pseudo attribute with the given name and value.
+     * If the PI data is not already in a pseudo-attribute format, this will
+     * replace the existing data.
+     *
+     * @param name <code>String</code> name of pair.
+     * @param value <code>String</code> value for pair.
+     * @return <code>ProcessingInstruction</code> this PI modified.
+     */
+    public ProcessingInstruction setPseudoAttributeValue(String name,
+                                                         String value) {
         String reason = Verifier.checkProcessingInstructionData(name);
         if (reason != null) {
             throw new IllegalDataException(name, reason);
@@ -324,13 +367,31 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         return this;
     }
 
+
     /**
      * This will remove the name/value pair with the specified name.
      *
+     * @deprecated Deprecated in Beta 10, use removePseudoAttributeValue()
+     * instead.
      * @return <code>boolean</code> - whether the requested
      *         instruction was removed.
      */
     public boolean removeValue(String name) {
+        if ((mapData.remove(name)) != null) {
+            rawData = toString(mapData);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This will remove the pseudo attribute with the specified name.
+     *
+     * @return <code>boolean</code> - whether the requested
+     *         instruction was removed.
+     */
+    public boolean removePseudoAttributeValue(String name) {
         if ((mapData.remove(name)) != null) {
             rawData = toString(mapData);
             return true;
