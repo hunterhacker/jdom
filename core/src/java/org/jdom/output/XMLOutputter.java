@@ -949,8 +949,12 @@ public class XMLOutputter implements Cloneable {
         if (additionalNamespaces != null) {
             for (int i=0; i<additionalNamespaces.size(); i++) {
                 Namespace additional = (Namespace)additionalNamespaces.get(i);
-                namespaces.push(additional);
-                printNamespace(additional, out);
+                String prefix = additional.getPrefix();        
+                String uri = namespaces.getURI(prefix);
+                if (!additional.getURI().equals(uri)) {
+                    namespaces.push(additional);
+                    printNamespace(additional, out);
+                }
             }
         }
 
