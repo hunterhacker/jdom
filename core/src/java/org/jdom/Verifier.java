@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.45 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Verifier.java,v 1.46 2003/05/23 21:59:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.45 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.46 $, $Date: 2003/05/23 21:59:28 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.45 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.46 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -83,7 +83,7 @@ final public class Verifier {
      * a JDOM <code>{@link Element}</code> name.
      *
      * @param name <code>String</code> name to check.
-     * @return <code>String</code> - reason name is illegal, or
+     * @return <code>String</code> reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static String checkElementName(String name) {
@@ -107,7 +107,7 @@ final public class Verifier {
      * a JDOM <code>{@link Attribute}</code> name.
      *
      * @param name <code>String</code> name to check.
-     * @return <code>String</code> - reason name is illegal, or
+     * @return <code>String</code> reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static String checkAttributeName(String name) {
@@ -147,7 +147,7 @@ final public class Verifier {
      * </p>
      *
      * @param text <code>String</code> value to check.
-     * @return <code>String</code> - reason name is illegal, or
+     * @return <code>String</code> reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static String checkCharacterData(String text) {
@@ -175,7 +175,7 @@ final public class Verifier {
      * JDOM <code>{@link CDATA}</code>.
      *
      * @param data <code>String</code> data to check.
-     * @return <code>String</code> - reason data is illegal, or
+     * @return <code>String</code> reason data is illegal, or
      *         <code>null</code> is name is OK.
      */
     public static String checkCDATASection(String data) {
@@ -198,7 +198,7 @@ final public class Verifier {
      * a JDOM <code>{@link Namespace}</code> prefix.
      *
      * @param prefix <code>String</code> prefix to check.
-     * @return <code>String</code> - reason name is illegal, or
+     * @return <code>String</code> reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static String checkNamespacePrefix(String prefix) {
@@ -253,7 +253,7 @@ final public class Verifier {
      * a JDOM <code>{@link Namespace}</code> URI.
      *
      * @param uri <code>String</code> URI to check.
-     * @return <code>String</code> - reason name is illegal, or
+     * @return <code>String</code> reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static String checkNamespaceURI(String uri) {
@@ -285,7 +285,7 @@ final public class Verifier {
      *
      * @param namespace <code>Namespace</code> to check.
      * @param other <code>Namespace</code> to check against.
-     * @return <code>String</code> - reason for collision, or
+     * @return <code>String</code> reason for collision, or
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
@@ -309,7 +309,7 @@ final public class Verifier {
      *
      * @param attribute <code>Attribute</code> to check.
      * @param element <code>Element</code> to check against.
-     * @return <code>String</code> - reason for collision, or
+     * @return <code>String</code> reason for collision, or
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Attribute attribute,
@@ -329,7 +329,7 @@ final public class Verifier {
      *
      * @param namespace <code>Namespace</code> to check.
      * @param element <code>Element</code> to check against.
-     * @return <code>String</code> - reason for collision, or
+     * @return <code>String</code> reason for collision, or
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
@@ -360,7 +360,7 @@ final public class Verifier {
      *
      * @param namespace <code>Namespace</code> to check.
      * @param attribute <code>Attribute</code> to check against.
-     * @return <code>String</code> - reason for collision, or
+     * @return <code>String</code> reason for collision, or
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
@@ -379,7 +379,7 @@ final public class Verifier {
      *
      * @param namespace <code>Namespace</code> to check.
      * @param list <code>List</code> to check against.
-     * @return <code>String</code> - reason for collision, or
+     * @return <code>String</code> reason for collision, or
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
@@ -414,7 +414,7 @@ final public class Verifier {
      * a JDOM <code>{@link ProcessingInstruction}</code> target.
      *
      * @param target <code>String</code> target to check.
-     * @return <code>String</code> - reason target is illegal, or
+     * @return <code>String</code> reason target is illegal, or
      *         <code>null</code> if target is OK.
      */
     public static String checkProcessingInstructionTarget(String target) {
@@ -450,7 +450,7 @@ final public class Verifier {
      * that the data does not contain the PI end-string "?&gt;".
      *
      * @param data <code>String</code> data to check.
-     * @return <code>String</code> - reason data is illegal, or
+     * @return <code>String</code> reason data is illegal, or
      *         <code>null</code> if data is OK.
      */
     public static String checkProcessingInstructionData(String data) {
@@ -472,7 +472,7 @@ final public class Verifier {
      * JDOM <code>{@link Comment}</code> data.
      *
      * @param data <code>String</code> data to check.
-     * @return <code>String</code> - reason data is illegal, or
+     * @return <code>String</code> reason data is illegal, or
      *         <code>null</code> if data is OK.
      */
     public static String checkCommentData(String data) {
@@ -522,7 +522,7 @@ final public class Verifier {
      * is legal.
      *
      * @param publicID <code>String</code> public ID to check.
-     * @return <code>String</code> - reason public ID is illegal, or
+     * @return <code>String</code> reason public ID is illegal, or
      *         <code>null</code> if public ID is OK.
      */
     public static String checkPublicID(String publicID) {
@@ -548,7 +548,7 @@ final public class Verifier {
      * is legal.
      *
      * @param systemLiteral <code>String</code> system literal to check.
-     * @return <code>String</code> - reason system literal is illegal, or
+     * @return <code>String</code> reason system literal is illegal, or
      *         <code>null</code> if system literal is OK.
      */
     public static String checkSystemLiteral(String systemLiteral) {
@@ -574,7 +574,7 @@ final public class Verifier {
      * any XML name.
      *
      * @param name <code>String</code> to check for XML name compliance.
-     * @return <code>String</code> - reason the name is illegal, or
+     * @return <code>String</code> reason the name is illegal, or
      *         <code>null</code> if OK.
      */
     public static String checkXMLName(String name) {
@@ -603,6 +603,112 @@ final public class Verifier {
         return null;
     }
 
+   /**
+     * <p>
+     * Checks a string to see if it is a legal RFC 2396 URI.
+     * Both absolute and relative URIs are supported.
+     * </p>
+     *
+     * @param uri <code>String</code> to check.
+     * @return <code>String</code> reason the URI is illegal, or
+     *         <code>null</code> if OK.
+     */
+    public static String checkURI(String uri) {
+        // URIs can be null or empty
+        if ((uri == null) || (uri.equals(""))) {
+            return null;
+        }
+
+        for (int i = 0; i < uri.length(); i++) {
+            char test = uri.charAt(i);
+            if (!isURICharacter(test)) {
+                String msgNumber = "0x" + Integer.toHexString(test);
+                if (test <= 0x09) msgNumber = "0x0" + Integer.toHexString(test);
+                return "URIs cannot contain " + msgNumber;
+            } // end if
+            if (test == '%') { // must be followed by two hexadecimal digits
+                   try {
+                       char firstDigit = uri.charAt(i+1);
+                       char secondDigit = uri.charAt(i+2);
+                       if (!isHexDigit(firstDigit) ||
+                           !isHexDigit(secondDigit)) {
+                           return "Percent signs in URIs must be followed by "
+                            + "exactly two hexadecimal digits.";
+                       }
+
+                   }
+                   catch (StringIndexOutOfBoundsException e) {
+                       return "Percent signs in URIs must be followed by "
+                        + "exactly two hexadecimal digits.";
+                   }
+            }
+        } // end for
+
+        // If we got here, everything is OK
+        return null;
+    }
+
+   /**
+     * <p>
+     * <p>
+     * This is a utility function for determining whether a specified
+     * Unicode character is a hexadecimal digit as defined in RFC 2396;
+     * that is, one of the ASCII characters 0-9, a-f, or A-F
+     * </p>
+     *
+     * @param c  to check for hex digit.
+     * @return true if it's allowed, false otherwise.
+     */
+    public static boolean isHexDigit(char c) {
+
+    // I suspect most characters passed to this method will be
+    // correct hexadecimal digits, so I test for the true cases
+    // first. If this proves to be a performance bottleneck
+    // a switch statement or lookup table
+    // might optimize this.
+        if (c >= '0' && c <= '9') return true;
+        if (c >= 'A' && c <= 'F') return true;
+        if (c >= 'a' && c <= 'f') return true;
+
+        return false;
+    }
+
+    /**
+     * <p>
+     * This is a utility function for determining whether
+     * a specified Unicode character is legal in URI references
+     * as determined by RFC 2396.
+     * </p>
+     *
+     * @param c <code>char</code> to check for URI reference compliance.
+     * @return true if it's allowed, false otherwise.
+     */
+    private static boolean isURICharacter(char c) {
+        if (c >= 'a' && c <= 'z') return true;
+        if (c >= 'A' && c <= 'Z') return true;
+        if (c >= '0' && c <= '9') return true;
+        if (c == '/') return true;
+        if (c == '-') return true;
+        if (c == '.') return true;
+        if (c == '?') return true;
+        if (c == ':') return true;
+        if (c == '@') return true;
+        if (c == '&') return true;
+        if (c == '=') return true;
+        if (c == '+') return true;
+        if (c == '$') return true;
+		if (c == ',') return true;
+		if (c == '%') return true;
+
+        if (c == '_') return true;
+        if (c == '!') return true;
+        if (c == '~') return true;
+        if (c == '*') return true;
+        if (c == '\'') return true;
+        if (c == '(') return true;
+        if (c == ')') return true;
+        return false;
+    }
 
     /**
      * This is a utility function for determining whether a specified 
@@ -610,7 +716,7 @@ final public class Verifier {
      * XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML compliance.
-     * @return <code>boolean</code> - true if it's a character, 
+     * @return <code>boolean</code> true if it's a character, 
      *                                false otherwise.
      */
     public static boolean isXMLCharacter(char c) {
@@ -633,7 +739,7 @@ final public class Verifier {
      * XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML name compliance.
-     * @return <code>boolean</code> - true if it's a name character, 
+     * @return <code>boolean</code> true if it's a name character, 
      *                                false otherwise.
      */
     public static boolean isXMLNameCharacter(char c) {
@@ -651,7 +757,7 @@ final public class Verifier {
      * disallows. 
      *
      * @param c <code>char</code> to check for XML name start compliance.
-     * @return <code>boolean</code> - true if it's a name start character, 
+     * @return <code>boolean</code> true if it's a name start character, 
      *                                false otherwise.
      */
     public static boolean isXMLNameStartCharacter(char c) {
@@ -666,7 +772,7 @@ final public class Verifier {
      * of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check.
-     * @return <code>boolean</code> - true if it's letter or digit, 
+     * @return <code>boolean</code> true if it's letter or digit, 
      *                                false otherwise.
      */
     public static boolean isXMLLetterOrDigit(char c) {
@@ -680,7 +786,7 @@ final public class Verifier {
      * is a letter according to production 84 of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML name compliance.
-     * @return <code>String</code> - true if it's a letter, false otherwise.
+     * @return <code>String</code> true if it's a letter, false otherwise.
      */
     public static boolean isXMLLetter(char c) {
         // Note that order is very important here.  The search proceeds 
@@ -904,7 +1010,7 @@ final public class Verifier {
      * of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check.
-     * @return <code>boolean</code> - true if it's a combining character,
+     * @return <code>boolean</code> true if it's a combining character,
      *         false otherwise.
      */
     public static boolean isXMLCombiningChar(char c) {
@@ -1039,7 +1145,7 @@ final public class Verifier {
      * specification.
      *
      * @param c <code>char</code> to check.
-     * @return <code>String</code> - true if it's an extender, false otherwise.
+     * @return <code>String</code> true if it's an extender, false otherwise.
      */
     public static boolean isXMLExtender(char c) {
 
@@ -1069,7 +1175,7 @@ final public class Verifier {
      * is a digit according to production 88 of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML digit compliance.
-     * @return <code>boolean</code> - true if it's a digit, false otherwise.
+     * @return <code>boolean</code> true if it's a digit, false otherwise.
      */
     public static boolean isXMLDigit(char c) {
       
@@ -1094,5 +1200,6 @@ final public class Verifier {
         if (c < 0x0F20) return false;  if (c <= 0x0F29) return true; 
       
         return false;
-    }    
+    }  
+    
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.56 2003/05/20 22:25:23 jhunter Exp $
+ $Id: SAXHandler.java,v 1.57 2003/05/23 21:59:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.56 $, $Date: 2003/05/20 22:25:23 $
+ * @version $Revision: 1.57 $, $Date: 2003/05/23 21:59:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.56 $ $Date: 2003/05/20 22:25:23 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.57 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -100,7 +100,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** Indicator of whether we are in the internal subset */
     protected boolean inInternalSubset = false;
 
-    /** Indicator of whether we previously where in a CDATA */
+    /** Indicator of whether we previously were in a CDATA */
     protected boolean previousCDATA = false;
 
     /** Indicator of whether we are in a CDATA */
@@ -284,6 +284,12 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         return ignoringWhite;
     }
 
+    public void startDocument() {
+        if (locator != null) {
+            document.setBaseURI(locator.getSystemId());
+        }
+    }    
+    
     /**
      * This is called when the parser encounters an external entity
      * declaration.

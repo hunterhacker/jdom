@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.68 2003/05/21 09:17:44 jhunter Exp $
+ $Id: Document.java,v 1.69 2003/05/23 21:59:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,14 +57,13 @@
 package org.jdom;
 
 import java.util.*;
-
 import org.jdom.filter.*;
 
 /**
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.68 $, $Date: 2003/05/21 09:17:44 $
+ * @version $Revision: 1.69 $, $Date: 2003/05/23 21:59:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -73,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.68 $ $Date: 2003/05/21 09:17:44 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.69 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -83,6 +82,10 @@ public class Document implements Parent {
      */
     protected ContentList content = new ContentList(this);
 
+    // See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/
+    //                                     core.html#baseURIs-Considerations
+    private String baseURI = null;
+
     /**
      * Creates a new empty document.  A document must have a root element,
      * so this document will not be well-formed and accessor methods will
@@ -90,6 +93,32 @@ public class Document implements Parent {
      * root element is added.  This method is most useful for build tools.
      */
     public Document() {}
+
+    /**
+     * This will create a new <code>Document</code>,
+     * with the supplied <code>{@link Element}</code>
+     * as the root element, the supplied
+     * <code>{@link DocType}</code> declaration, and the specified
+     * base URI.
+     *
+     * @param rootElement <code>Element</code> for document root.
+     * @param docType <code>DocType</code> declaration.
+     * @param baseURI the URI from which this doucment was loaded.
+     * @throws IllegalAddException if the given docType object
+     *         is already attached to a document or the given
+     *         rootElement already has a parent
+     */
+    public Document(Element rootElement, DocType docType, String baseURI) {
+        if (rootElement != null) {
+            setRootElement(rootElement);
+        }
+        if (docType != null) {
+            setDocType(docType);
+        }
+        if (baseURI != null) {
+            setBaseURI(baseURI);
+        }
+    }
 
     /**
      * This will create a new <code>Document</code>,
@@ -104,10 +133,7 @@ public class Document implements Parent {
      *         rootElement already has a parent
      */
     public Document(Element rootElement, DocType docType) {
-        if (rootElement != null)
-            setRootElement(rootElement);
-        if (docType != null)
-            setDocType(docType);
+        this(rootElement, docType, null);
     }
 
     /**
@@ -121,7 +147,7 @@ public class Document implements Parent {
      *         a parent.
      */
     public Document(Element rootElement) {
-        this(rootElement, null);
+        this(rootElement, null, null);
     }
 
     /**
@@ -135,7 +161,7 @@ public class Document implements Parent {
      *         one Element or objects of illegal types.
      */
     public Document(List content) {
-        this(content, null);
+        this(content, null);  // XXX Relies on a deprecated
     }
 
     public int getChildCount() {
@@ -429,6 +455,34 @@ public class Document implements Parent {
     }
 
     /**
+     *
+     * <p>
+     * Sets the effective URI from which this document was loaded,
+     * and against which relative URLs in this document will be resolved.
+     * </p>
+     *
+     * @param uri the base URI of this document
+     *
+     * @throws MalformedURIException if <code>URI</code> is
+     *     not a legal URI
+     */
+    public final void setBaseURI(String uri) {
+        this.baseURI = uri;  // XXX We don't check the URI
+    }
+
+    /**
+     * <p>
+     *   Returns the URI from which this document was loaded,
+     *   or null if this is not known.
+     * </p>
+     *
+     * @return the base URI of this document
+     */
+    public final String getBaseURI() {
+        return baseURI;
+    }
+
+    /*
      * Replace the current child the given index with the supplied child.
      * <p>
      * In event of an exception the original content will be unchanged and
