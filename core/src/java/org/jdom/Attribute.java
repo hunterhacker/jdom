@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.27 2001/04/13 03:41:12 jhunter Exp $
+ $Id: Attribute.java,v 1.28 2001/04/13 21:25:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -233,18 +233,16 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>String</code> - full name for this element.
      */
     public String getQualifiedName() {
-        StringBuffer qname = new StringBuffer();
-
         // Add prefix, if needed
         String prefix = namespace.getPrefix();
         if ((prefix != null) && (!prefix.equals(""))) {
-            qname.append(prefix)
-                 .append(":");
+            return new StringBuffer(prefix)
+                .append(':')
+                .append(getName())
+                .toString();
+        } else {
+            return getName();
         }
-
-        qname.append(name);
-
-        return qname.toString();
     }
 
     /**
