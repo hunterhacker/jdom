@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+<!--
+   A simple XML file from Elliotte Rusty Harold's talk at SD 2000 East
+   http://www.ibiblio.org/xml/slides/sd2000east/xslt/
+-->
+
+<catalog>
+
+  <category>
+    Small chamber ensembles - 2-4 Players by New York Women Composers
+  </category>
+
+  <cataloging_info>
+    <abstract>Compositions by the members of New York Women Composers</abstract>
+    <keyword>music publishing</keyword>
+    <keyword>scores</keyword>
+    <keyword>women composers</keyword>
+    <keyword>New York</keyword>
+  </cataloging_info>
+
+  <last_updated>July 28, 1999</last_updated>
+  <copyright>1999 New York Women Composers</copyright>
+  <maintainer email="elharo@metalab.unc.edu" 
+              url="http://www.macfaq.com/personal.html">
+    <name>
+      <first_name>Elliotte</first_name> 
+      <middle_name>Rusty</middle_name> 
+      <last_name>Harold</last_name>
+    </name>
+  </maintainer>
+
+  <composer id="c1">
+    <name>
+      <first_name>Julie</first_name> 
+      <middle_name></middle_name> 
+      <last_name>Mandel</last_name>
+    </name>
+  </composer>
+
+  <composer id="c2">
+    <name>
+      <first_name>Margaret</first_name> 
+      <middle_name>De</middle_name> 
+      <last_name>Wys</last_name>
+    </name>
+  </composer>  
+    
+  <composer id="c3">
+    <name>
+      <first_name>Beth</first_name> 
+      <middle_name></middle_name> 
+      <last_name>Anderson</last_name>
+    </name>
+  </composer>
+    
+  <composer id="c4">
+    <name>
+      <first_name>Linda</first_name> 
+      <middle_name></middle_name> 
+      <last_name>Bouchard</last_name>
+    </name>
+  </composer>
+    
+  <composition composer="c1">
+    <title>Trio for Flute, Viola and Harp</title>
+    <date><year>(1994)</year></date> 
+    <length>13'38"</length>
+    <instruments>fl, hp, vla</instruments>
+    <description>
+      <p>Premiered at Queens College in April, 1996 by Sue Ann Kahn, 
+      Christine Ims, and Susan Jolles. In 3 movements :</p>
+      <ul>
+        <li>mvt. 1: 5:01</li>
+        <li>mvt. 2: 4:11</li>
+        <li>mvt. 3: 4:26</li>
+      </ul>  
+    </description>
+    <publisher>Theodore Presser</publisher>
+  </composition>
+
+  <composition composer="c2">
+    <title>Charmonium</title>
+    <date><year>(1991)</year></date> 
+    <length>9'</length>
+    <instruments>2 vln, vla, vc</instruments>
+    <description>
+      Commissioned as quartet for the Meridian String Quartet. 
+      Sonorous, bold. Moderate difficulty. Tape available.
+    </description> 
+    <publisher></publisher>
+  </composition>
+
+  <composition composer="c1">
+    <title>Invention for Flute and Piano</title>
+    <date><year>(1994)</year></date> 
+    <length></length>
+    <instruments>fl, pn</instruments>
+    <description>3 movements</description> 
+    <publisher></publisher>
+  </composition>
+
+  <composition composer="c3">
+    <title>Little Trio</title>
+    <date><year>(1984)</year></date> 
+    <length>4'</length>
+    <instruments>fl, guit, va</instruments>
+    <description></description> 
+    <publisher>ACA</publisher>
+  </composition>
+
+  <composition composer="c3">
+    <title>Dr. Blood's Mermaid Lullaby</title>
+    <date><year>(1980)</year></date> 
+    <length>3'</length>
+    <instruments>fl or ob, or vn, or vc, pn</instruments>
+    <description></description> 
+    <publisher>ACA</publisher>
+  </composition>
+
+  <composition composer="c3">
+    <title>Trio: Dream in D</title>
+    <date><year>(1980)</year></date> 
+    <length>10'</length>
+    <instruments>fl, pn, vc, or vn, pn, vc</instruments>
+    <description>
+      Rhapsodic. Passionate. Available on CD 
+      <cite><a href="http://www.amazon.com/exec/obidos/ASIN/B000007NMH/qid%3D913265342/sr%3D1-2/">Two by Three</a></cite> 
+      from North/South Consonance (1998).
+    </description> 
+    <publisher></publisher>
+  </composition>
+
+  <composition composer="c4">
+    <title>Propos II</title>
+    <date><year>(1985)</year></date> 
+    <length>11'</length>
+    <instruments>2 tpt</instruments>
+    <description>Arrangement from Propos</description> 
+    <publisher></publisher>
+  </composition>
+
+  <composition composer="c4">
+    <title>Rictus En Mirroir</title>
+    <date><year>(1985)</year></date> 
+    <length>14'</length>
+    <instruments>fl, ob, hpschd, vc</instruments>
+    <description></description> 
+    <publisher></publisher>
+  </composition>
+
+</catalog>

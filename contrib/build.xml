@@ -182,6 +182,7 @@ These are the meaningful targets for this build file:
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
+           deprecation="${deprecation}"
            optimize="${optimize}">
       <exclude name="**/Spitfire*.java" unless="spitfire.present" />
       <exclude name="**/*JTree*.java" unless="swing.present" />
@@ -198,6 +199,7 @@ These are the meaningful targets for this build file:
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
+           deprecation="${deprecation}"
            optimize="${optimize}">
       <exclude name="**/Spitfire*.java" unless="spitfire.present" />
     </javac>
