@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.126 2003/02/27 00:03:19 jhunter Exp $
+ $Id: Element.java,v 1.127 2003/04/02 10:17:30 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.126 $, $Date: 2003/02/27 00:03:19 $
+ * @version $Revision: 1.127 $, $Date: 2003/04/02 10:17:30 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.126 $ $Date: 2003/02/27 00:03:19 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.127 $ $Date: 2003/04/02 10:17:30 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1540,39 +1540,6 @@ public class Element implements Serializable, Cloneable {
 
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
-    }
-
-    /**
-     * <p>
-     * This adds a CDATA section as content to this element.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to add
-     * @return this element modified
-     *
-     * @deprecated Deprecated in Beta 9, since addContent(Text) is
-     * equivalent.
-     */
-    public Element addContent(CDATA cdata) {
-        content.add(cdata);
-        return this;
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>CDATA</code>.
-     * If the specified <code>CDATA</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to delete
-     * @return whether deletion occurred
-     *
-     * @deprecated Deprecated in Beta 9, since addContent(Text) is
-     * equivalent.
-     */
-    public boolean removeContent(CDATA cdata) {
-        return content.remove(cdata);
     }
 
     /**
