@@ -75,19 +75,46 @@ import org.jdom.*;
  */
 public class ResultSetBuilder {
     
-    ResultSet rs;
-    ResultSetMetaData rsmd;
-    SQLException exception = null;
+    /** The ResultSet that becomes a <code>Document</code> */
+    private ResultSet rs;
 
-    Map names = new HashMap();   // Maps original names to display names
-    Map attribs = new HashMap(); // Maps original names to attrib or not
+    /** The meta data from the ResultSet */
+    private ResultSetMetaData rsmd;
 
-    Namespace ns = Namespace.NO_NAMESPACE;  // default to none
+    /** Allows for throwing an exception whenever needed if caught early on */
+    private SQLException exception;
+
+    /** Map of original column names to display names */
+    private Map names = new HashMap();
+
+    /**
+     * Maps column data to be located either as an <code>Attribute</code> of
+     * the row (if in the Map) or a child <code>Element</code> of the row
+     * (if not in the Map)
+     */
+    private Map attribs = new HashMap();
+
+    /** The <code>Namespace</code> to use for each <code>Element</code> */
+    private Namespace ns = Namespace.NO_NAMESPACE;
+
+    /** The maximum rows to return from the result set */
     int maxRows = Integer.MAX_VALUE;        // default to all
-    String rootName = "result";
-    String rowName = "entry";
+
+    /** Name for the root <code>Element</code> of the <code>Document</code> */
+    private String rootName = "result";
+
+    /** Name for the each immediate child <code>Element</code> of the root */
+    private String rowName = "entry";
 
 
+    /**
+     * <p>
+     *   This sets up a <code>java.sql.ResultSet</code> to be built
+     *   as a <code>Document</code>.
+     * </p>
+     *
+     * @param rs <code>java.sql.ResultSet</code> to build
+     */
     public ResultSetBuilder(ResultSet rs) {
       this.rs = rs;
       try {
@@ -99,6 +126,17 @@ public class ResultSetBuilder {
       }
     }
 
+    /**
+     * <p>
+     *   This builds a <code>Document</code> from the
+     *   <code>java.sql.ResultSet</code>.
+     * </p>
+     *
+     * @return <code>Document</code> - resultant Document object.
+     * @throws <code>JDOMException</code> when there is a problem
+     *                                    with the build.
+     *
+     */
     public Document build() throws JDOMException {
       if (exception != null) {
         throw new JDOMException("Database problem", exception);
@@ -178,31 +216,97 @@ public class ResultSetBuilder {
       }
     }
 
+    /**
+     * <p>
+     *   Set the name to use as the root element in
+     *   the <code>Document</code>
+     * </p>
+     *
+     * @param rootName <code>String</code> the new name.
+     *
+     */
     public void setRootName(String rootName) {
       this.rootName = rootName;
     }
 
+    /**
+     * <p>
+     *   Set the name to use as the row element in
+     *   the <code>Document</code>
+     * </p>
+     *
+     * @param rowName <code>String</code> the new name.
+     *
+     */
     public void setRowName(String rowName) {
       this.rowName = rowName;
     }
 
+    /**
+     * <p>
+     *   Set the <code>Namespace</code> to use for
+     *   each <code>Element</code> in the  <code>Document</code>.
+     * </p>
+     *
+     * @param ns <code>String</code> the namespace to use.
+     *
+     */
     public void setNamespace(Namespace ns) {
       this.ns = ns;
     }
 
+     /**
+     * <p>
+     *   Set the maximum number of rows to add to your
+     *   <code>Document</code>.
+     * </p>
+     *
+     * @param maxRows <code>int</code>
+     *
+     */
     public void setMaxRows(int maxRows) {
       this.maxRows = maxRows;
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Attribute</code> of a row using the
+     *   original column name. The attribute will appear as the original
+     *   column name.
+     * </p>
+     *
+     * @param columnName <code>String</code> the original column name
+     *
+     */
     public void setAsAttribute(String columnName) {
       attribs.put(columnName.toLowerCase(), Boolean.TRUE);
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Attribute</code> of a row using the
+     *   column name.  The attribute will appear as the new name provided.
+     * </p>
+     *
+     * @param columnName <code>String</code> original column name
+     * @param attribName <code>String</code> new name to use for the attribute
+     *
+     */
     public void setAsAttribute(String columnName, String attribName) {
       attribs.put(columnName.toLowerCase(), Boolean.TRUE);
       names.put(columnName.toLowerCase(), attribName);
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Attribute</code> of a row using the
+     *   column number. The attribute will appear as the original column
+     *   name.
+     * </p>
+     *
+     * @param columnNum <code>int</code>
+     *
+     */
     public void setAsAttribute(int columnNum) {
       try {
         String name = rsmd.getColumnName(columnNum).toLowerCase();
@@ -213,6 +317,16 @@ public class ResultSetBuilder {
       }
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Attribute</code> of a row using the
+     *   column number. The attribute will appear as new name provided.
+     * </p>
+     *
+     * @param columnNum <code>int</code>
+     * @param attribName <code>String</code> new name to use for the attribute
+     *
+     */
     public void setAsAttribute(int columnNum, String attribName) {
       try {
         String name = rsmd.getColumnName(columnNum).toLowerCase();
@@ -224,12 +338,32 @@ public class ResultSetBuilder {
       }
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Element</code> of a row using the
+     *   column name.  The element name will appear as the new name provided.
+     * </p>
+     *
+     * @param columnName <code>String</code> original column name
+     * @param elemName <code>String</code> new name to use for the element
+     *
+     */
     public void setAsElement(String columnName, String elemName) {
       String name = columnName.toLowerCase();
       attribs.put(name, Boolean.FALSE);
       names.put(name, elemName);
     }
 
+    /**
+     * <p>
+     *   Set a column as an <code>Element</code> of a row using the
+     *   column number. The element name will appear as new name provided.
+     * </p>
+     *
+     * @param columnNum <code>int</code>
+     * @param elemName <code>String</code> new name to use for the element
+     *
+     */
     public void setAsElement(int columnNum, String elemName) {
       try {
         String name = rsmd.getColumnName(columnNum).toLowerCase();
