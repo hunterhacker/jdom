@@ -1,6 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: JDOMAbout
-Class-Path: ../lib/xerces.jar xerces.jar
 
 Name: org/jdom/
 Specification-Title: JDOM Classes

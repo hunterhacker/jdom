@@ -53,18 +53,13 @@
 
 // Explicitly left in the default package
 
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
+import java.io.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom.*;
+import org.jdom.input.*;
 
 /**
  * This class is not part of the core JDOM API, but implements the main
@@ -79,7 +74,8 @@ import org.jdom.input.SAXBuilder;
  * information, a brief description of JDOM and the authors, all as
  * specified in the file META-INF/info.xml contained within the JAR.
  * If this file does not exist in the JAR, then the JAR has been
- * incorrectly built.
+ * incorrectly built.  Any exceptions will pop the call stack and end the
+ * program with a message describing the error.
  *
  * @see http://java.sun.com/docs/books/tutorial/jar/
  *
@@ -92,7 +88,7 @@ public class JDOMAbout {
      * file.
      * @param args Ignored. 
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
         JDOMAbout.Info info = new JDOMAbout().new Info();
 
         // Shortcut for info.title (because it's used so much)
@@ -191,65 +187,65 @@ public class JDOMAbout {
          * variables with values taken from the JAR information file.
          * The JAR information file should be called META-INF/info.xml
          * and be contained within the JAR file.
+         * Any exceptions are passed to the caller.
          */
-        Info() {
+        Info() throws Exception {
             final String INFO_FILENAME = "META-INF/info.xml";
 
             SAXBuilder builder = new SAXBuilder();
         
-            // If invoked using java -jar, the JAR file will be the only
-            // thing in the CLASSPATH
-            String jarFileName = System.getProperty("java.class.path");
-            //System.out.println("java.class.path = " + jarFileName);
-    
-            try {
-                // Create a JarFile representation of the JAR
-                JarFile jarFile = new JarFile(jarFileName);
+            // Find the INFO_FILENAME file in any JAR in the classpath
+            // Use a brute-force search
+            JarFile jarFile = null;
+            ZipEntry zipEntry = null;
+
+            String classpath = System.getProperty("java.class.path");
+            StringTokenizer tokenizer = new StringTokenizer(classpath, ";:");
+            while (tokenizer.hasMoreTokens() && zipEntry == null) {
+              String token = tokenizer.nextToken();
+
+              try {
+                // Try to create a JarFile representation of the JAR
+                jarFile = new JarFile(token);
             
                 // Get a reference to the info.xml entry in the JAR
-                ZipEntry zipEntry = jarFile.getEntry(INFO_FILENAME);
-                if (null == zipEntry) {
-                    // This should never happen provided the
-                    //  JAR was correctly built
-                    System.err.println("Incomplete JAR file - "
-                                        + INFO_FILENAME
-                                        + " file not found");
-                    System.exit(1);
-                }
+                zipEntry = jarFile.getEntry(INFO_FILENAME);
+              }
+              catch (Exception e) {
+              }
+            }
             
-                // Get input stream for reading info.xml file
-                InputStream in = jarFile.getInputStream(zipEntry);
+            if (zipEntry == null) {
+              throw new FileNotFoundException(INFO_FILENAME + 
+                " not found; it should be within the JDOM JAR but isn't");
+            }
+
+            // Get input stream for reading info.xml file
+            InputStream in = jarFile.getInputStream(zipEntry);
             
-                // Using JDOM, read the info.xml file
-                Document doc = builder.build(in);
-                Element root = doc.getRootElement();
+            // Using JDOM, read the info.xml file
+            Document doc = builder.build(in);
+            Element root = doc.getRootElement();
 
-                title = root.getChildTextTrim("title");
-                version = root.getChildTextTrim("version");
-                copyright = root.getChildTextTrim("copyright");
-                description = root.getChildTextTrim("description");
-                license = root.getChildTextTrim("license");
-                support = root.getChildTextTrim("support");
-                website = root.getChildTextTrim("web-site");
+            title = root.getChildTextTrim("title");
+            version = root.getChildTextTrim("version");
+            copyright = root.getChildTextTrim("copyright");
+            description = root.getChildTextTrim("description");
+            license = root.getChildTextTrim("license");
+            support = root.getChildTextTrim("support");
+            website = root.getChildTextTrim("web-site");
 
-                List authorElements = root.getChildren("author");
-                authors = new LinkedList();
-                Iterator it = authorElements.iterator();
-                while (it.hasNext()) {
-                    Element element = (Element)it.next();
+            List authorElements = root.getChildren("author");
+            authors = new LinkedList();
+            Iterator it = authorElements.iterator();
+            while (it.hasNext()) {
+                Element element = (Element)it.next();
                     
-                    Author author = new Author();
-                    author.name = element.getChildTextTrim("name");
-                    author.email = element.getChildTextTrim("e-mail");
+                Author author = new Author();
+                author.name = element.getChildTextTrim("name");
+                author.email = element.getChildTextTrim("e-mail");
 
-                    authors.add(author);
-                }
-            }
-            catch (JDOMException exJdom) {
-                System.err.println(exJdom);
-            }
-            catch (Exception ex) {
-                System.err.println(ex);
+                authors.add(author);
             }
         }
     }
