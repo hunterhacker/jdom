@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.58 2003/05/29 02:51:34 jhunter Exp $
+ $Id: SAXHandler.java,v 1.59 2003/06/17 20:49:43 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.58 $, $Date: 2003/05/29 02:51:34 $
+ * @version $Revision: 1.59 $, $Date: 2003/06/17 20:49:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.58 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.59 $ $Date: 2003/06/17 20:49:43 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -209,14 +209,21 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * Builds content under a dummy root element.  Useful for building
+     * Pushes an element onto the tree under construction.  Allows subclasses
+     * to put content under a dummy root element which is useful for building
      * content that would otherwise be a non-well formed document.
      *
-     * @param root root element under which content will be built
+     * @param element root element under which content will be built
      */
-    protected void setAlternateRoot(Element root) {
-        this.currentElement = root;
-        this.atRoot = false;
+    protected void pushElement(Element element) {
+        if (atRoot) {
+            document.setRootElement(element);
+            atRoot = false;
+        }
+        else {
+            currentElement.addContent(element);
+        }
+        currentElement = element;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.18 2003/05/29 02:52:05 jhunter Exp $
+ $Id: JDOMResult.java,v 1.19 2003/06/17 20:49:42 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -96,14 +96,14 @@ import org.xml.sax.helpers.*;
  *
  * @see      org.jdom.transform.JDOMSource
  *
- * @version $Revision: 1.18 $, $Date: 2003/05/29 02:52:05 $
+ * @version $Revision: 1.19 $, $Date: 2003/06/17 20:49:42 $
  * @author  Laurent Bihanic
  * @author  Jason Hunter
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.18 $ $Date: 2003/05/29 02:52:05 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.19 $ $Date: 2003/06/17 20:49:42 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -364,8 +364,7 @@ public class JDOMResult extends SAXResult {
       // Add a dummy root element to the being-built document as XSL
       // transformation can output node lists instead of well-formed
       // documents.
-      this.getDocument().setRootElement(dummyRoot);
-      setAlternateRoot(dummyRoot);
+      this.pushElement(dummyRoot);
     }
 
     /**
