@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.65 2003/05/01 01:45:25 jhunter Exp $
+ $Id: Document.java,v 1.66 2003/05/01 02:42:50 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.65 $, $Date: 2003/05/01 01:45:25 $
+ * @version $Revision: 1.66 $, $Date: 2003/05/01 02:42:50 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -74,7 +74,7 @@ import org.jdom.filter.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.65 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.66 $ $Date: 2003/05/01 02:42:50 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -100,8 +100,8 @@ public class Document implements Serializable, Cloneable {
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
-     * @throws IllegalAddException if the given docType object 
-     *         is already attached to a document or the given 
+     * @throws IllegalAddException if the given docType object
+     *         is already attached to a document or the given
      *         rootElement already has a parent
      */
     public Document(Element rootElement, DocType docType) {
@@ -160,7 +160,7 @@ public class Document implements Serializable, Cloneable {
     public Element getRootElement() {
         int index = content.indexOfFirstElement();
         if (index < 0) {
-            throw new IllegalStateException("Root element not set"); 
+            throw new IllegalStateException("Root element not set");
         }
         return (Element) content.get(index);
     }
@@ -243,7 +243,7 @@ public class Document implements Serializable, Cloneable {
 
         if (docType.getDocument() != null) {
             throw new IllegalAddException(this, docType,
-                                          "The docType already is attached to a document");
+                              "The DocType already is attached to a document");
         }
 
         // Add DocType to head if new, replace old otherwise
@@ -290,7 +290,7 @@ public class Document implements Serializable, Cloneable {
      * @param doctype <code>DocType</code> to add.
      * @return <code>Document</code> - this object modified.
      * @throws IllegalAddException if the given doctype already has a
-     *         parent.
+     *         parent or if the DocType is being added after the root element.
      */
     public Document addContent(DocType doctype) {
         content.add(doctype);
@@ -313,7 +313,7 @@ public class Document implements Serializable, Cloneable {
      */
     public List getContent() {
         if (!hasRootElement())
-            throw new IllegalStateException("Root element not set"); 
+            throw new IllegalStateException("Root element not set");
         return content;
     }
 
@@ -332,10 +332,10 @@ public class Document implements Serializable, Cloneable {
      */
     public List getContent(Filter filter) {
         if (!hasRootElement())
-            throw new IllegalStateException("Root element not set"); 
+            throw new IllegalStateException("Root element not set");
         return content.getView(filter);
     }
-  
+
     /**
      * This sets the content of the <code>Document</code>.  The supplied
      * List should contain only objects of type <code>Element</code>,

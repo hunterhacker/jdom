@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.23 2003/05/01 01:45:25 jhunter Exp $
+ $Id: ContentList.java,v 1.24 2003/05/01 02:42:50 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.23 $, $Date: 2003/05/01 01:45:25 $
+ * @version $Revision: 1.24 $, $Date: 2003/05/01 02:42:50 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.23 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.24 $ $Date: 2003/05/01 02:42:50 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -158,7 +158,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
             }
             else {
                 throw new IllegalAddException("Class " +
-                             obj.getClass().getName() + 
+                             obj.getClass().getName() +
                              " is of unrecognized type and cannot be added");
             }
         }
@@ -208,6 +208,10 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 throw new IllegalAddException(
                   "Cannot add a second root element, only one is allowed");
             }
+            if (indexOfDocType() > index) {
+                throw new IllegalAddException(
+                        "A root element cannot be added before the DocType");
+            }
             element.setDocument((Document) parent);
         }
         else {
@@ -250,6 +254,12 @@ class ContentList extends AbstractList implements java.io.Serializable {
         if (parent instanceof Element) {
             throw new IllegalAddException(
                     "A DocType is not allowed except at the document level");
+        }
+
+        int firstElt = indexOfFirstElement();
+        if (firstElt != -1 && firstElt < index) {
+            throw new IllegalAddException(
+                    "A DocType cannot be added after the root element");
         }
 
         if (parent instanceof Document) {
@@ -838,7 +848,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 count++;
             }
             else throw new IllegalAddException("Filter won't allow the " +
-                                obj.getClass().getName() + 
+                                obj.getClass().getName() +
                                 " '" + obj + "' to be added to the list");
         }
 
@@ -1018,7 +1028,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
                           break;
             case PREV:    cursor = last;
                           break;
-            case ADD:     
+            case ADD:
             case NEXT:    cursor = moveForward(last + 1);
                           break;
             case REMOVE:  cursor = moveForward(last);
