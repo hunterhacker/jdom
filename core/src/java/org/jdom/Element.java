@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.101 2001/10/07 21:25:23 bmclaugh Exp $
+ $Id: Element.java,v 1.102 2001/12/05 23:05:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.101 $ $Date: 2001/10/07 21:25:23 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.102 $ $Date: 2001/12/05 23:05:04 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -387,7 +387,8 @@ public class Element implements Serializable, Cloneable {
             while (itr.hasNext()) {
                 Namespace ns = 
                    (Namespace) ((Attribute)itr.next()).getNamespace();
-                if (prefix.equals(ns.getPrefix()) && 
+                if (ns != Namespace.NO_NAMESPACE &&
+                      prefix.equals(ns.getPrefix()) && 
                       !uri.equals(ns.getURI())) {
                     throw new IllegalAddException(this, additionalNamespace,
                         "The namespace prefix \"" + prefix +
