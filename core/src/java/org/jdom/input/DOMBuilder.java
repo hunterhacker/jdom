@@ -1,6 +1,6 @@
 /*--
 
- $Id: DOMBuilder.java,v 1.55 2004/02/06 09:28:31 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.56 2004/02/19 00:53:50 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.55 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.56 $, $Date: 2004/02/19 00:53:50 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ import org.w3c.dom.*;
 public class DOMBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.55 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.56 $ $Date: 2004/02/19 00:53:50 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available.
@@ -120,6 +120,14 @@ public class DOMBuilder {
      */
     public void setFactory(JDOMFactory factory) {
         this.factory = factory;
+    }
+
+    /**
+     * Returns the current {@link org.jdom.JDOMFactory} in use.
+     * @return the factory in use
+     */
+    public JDOMFactory getFactory() {
+        return factory;
     }
 
     /**
