@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Entity.java,v 1.12 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Entity.java,v 1.13 2001/03/16 23:39:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -490,8 +490,42 @@ public class Entity implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>Entity</code>.
      */
     public Object clone() {
-        Entity entity = new Entity(name);
-        entity.content = (List)((LinkedList)content).clone();
+        Entity entity = null;
+
+        try {
+            entity = (Entity) super.clone();
+        } catch (CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // name is a reference to an immutable (String) object
+        // and is copied by Object.clone()
+
+        // The parent and document references are copied by Object.clone(), so
+        // must set to null
+        entity.parent = null;
+        entity.document = null;
+
+        // Give the clone an empty list for content
+        entity.content = new LinkedList();
+
+        // Clone content
+        if (this.content != null) {
+            Iterator i = this.content.iterator();
+
+            while (i.hasNext()) {
+                Object obj = i.next();
+
+                // XXX This will need to be reworked when Entity is reworked
+                if (obj instanceof Element) {
+                    entity.addChild((Element)((Element)obj).clone());
+                } else if (obj instanceof String) {
+                    entity.addChild((String)obj);
+                    // strings are immutable (and not clonable)
+                    // so let clone get copy of reference
+                }
+            }
+        }
 
         return entity;
     }

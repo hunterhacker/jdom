@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.13 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Comment.java,v 1.14 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -284,8 +284,21 @@ public class Comment implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>Comment</code>.
      */
     public Object clone() {
-        Comment comment = new Comment(text);
+        Comment comment = null;
+
+        try {
+            comment = (Comment) super.clone();
+        } catch (CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // The text is a reference to a immutable String object
+        // and is already copied by Object.clone();
+
+        // parent and document references are copied by Object.clone()
+        // and must be set to null
+        comment.parent = null;
+        comment.document = null;
         return comment;
     }
-
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.16 2001/03/16 07:33:30 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.17 2001/03/16 23:39:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -572,7 +572,29 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * <code>ProcessingInstruction</code>.
      */
     public Object clone() {
-        return new ProcessingInstruction(target, rawData);
+        ProcessingInstruction pi = null;
+
+        try {
+             pi = (ProcessingInstruction) super.clone();
+        } catch (CloneNotSupportedException ce) {
+             // Can't happen
+        }
+
+        // target and rawdata are immutable and references copied by
+        // Object.clone()
+
+        // parent and document references copied by Object.clone(), so
+        // must set to null
+
+        pi.parent = null;
+        pi.document = null;
+
+        // Create a new Map object for the clone (since Map isn't Cloneable)
+        if (mapData != null) {
+            pi.mapData = parseData(rawData);
+        }
+
+        return pi;
     }
 }
 

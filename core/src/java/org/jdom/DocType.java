@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.9 2001/03/15 06:07:17 jhunter Exp $
+ $Id: DocType.java,v 1.10 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -296,8 +296,16 @@ public class DocType implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>DocType</code>.
      */
     public Object clone() {
-        DocType docType = new DocType(elementName, publicID, systemID);
+        DocType docType = null;
 
+        try {
+            docType = (DocType) super.clone();
+        } catch (CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // elementName, publicID and systemID are all immutable 
+        // (Strings) and references are copied by Object.clone()
         return docType;
     }
 }

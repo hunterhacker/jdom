@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.30 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Document.java,v 1.31 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -573,21 +573,34 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>Document</code>.
      */
     public Object clone() {
-        Document doc = new Document((Element)null);
+        Document doc = null;
+
+        try {
+            doc = (Document) super.clone();
+        } catch (CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // The clone has a reference to this object's content list, so
+        // owerwrite with a empty list
+        doc.content = new LinkedList();
+
+        // The clone has a reference to the original root, so set to null
+        doc.rootElement = null;
+
+        // Add the cloned content to clone
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                Element e = (Element)obj;
-                doc.setRootElement((Element)e.clone());
+                doc.setRootElement((Element)((Element)obj).clone());
             }
             else if (obj instanceof Comment) {
-                Comment c = (Comment)obj;
-                doc.addContent((Comment)c.clone());
+                doc.addContent((Comment)((Comment)obj).clone());
             }
             else if (obj instanceof ProcessingInstruction) {
-                ProcessingInstruction pi = (ProcessingInstruction)obj;
-                doc.addContent((ProcessingInstruction)pi.clone());
+                doc.addContent((ProcessingInstruction)
+                          ((ProcessingInstruction)obj).clone());
             }
         }
 

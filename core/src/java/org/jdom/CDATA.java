@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CDATA.java,v 1.10 2001/03/15 06:05:09 jhunter Exp $
+ $Id: CDATA.java,v 1.11 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -197,8 +197,17 @@ public class CDATA implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>CDATA</code>.
      */
     public Object clone() {
-	CDATA clone = new CDATA(text);
-	return clone;
+        CDATA cdata = null;
+        try {
+            cdata = (CDATA) super.clone();
+        } catch(CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // CDATA only contains a reference to an immutable (String) object
+        // so Object.clone() is all we need here
+
+        return cdata;
     }
 
 }

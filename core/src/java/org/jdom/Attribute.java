@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.25 2001/03/15 07:31:07 jhunter Exp $
+ $Id: Attribute.java,v 1.26 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -392,8 +392,19 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this <code>Attribute</code>.
      */
     public Object clone() {
-        Attribute attribute = new Attribute(name, value, namespace);
+        Attribute attribute = null;
 
+        try {
+            attribute = (Attribute) super.clone();
+        } catch(CloneNotSupportedException ce) {
+            // Won't happen
+        }
+
+        // Name, namespace, and value are references to imutable objects
+        // and are copied by super.clone() (aka Object.clone())
+
+        // super.clone() copies reference to set parent to null
+        attribute.parent = null;
         return attribute;
     }
 

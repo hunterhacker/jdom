@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.60 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Element.java,v 1.61 2001/03/16 23:39:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -1586,31 +1586,62 @@ public class Element implements Serializable, Cloneable {
      * @return the clone of this element
      */
     public Object clone() {
-        Element element = new Element(name, namespace);
+        Element element = null;
 
+        try {
+            element = (Element) super.clone();
+        } catch (CloneNotSupportedException ce) {
+            // Can't happen
+        }
+
+        // name and namespace are references to imutable objects
+        // so super.clone() handles them ok
+
+        // Reference to parent and document are copied by super.clone() 
+        // (Object.clone()) so we have to remove it
+        element.parent = null;
+        element.document = null;
+
+        // Reference to content list and attribute lists are copyed by 
+        // super.clone() so we set it new lists if the original had lists
+        element.content = (this.content == null) ? null : new LinkedList();
+        element.attributes = (this.attributes == null) ?
+                                                   null : new LinkedList();
+
+        // Cloning attributes
         if (attributes != null) {
-            List list = new LinkedList();
             for (Iterator i = attributes.iterator(); i.hasNext(); ) {
-                element.addAttribute((Attribute)((Attribute)i.next()).clone());
+                Attribute a = (Attribute)((Attribute)i.next()).clone();
+                a.setParent(element);
+                element.attributes.add(a);
             }
         }
 
+        // Cloning content
+        // No need to clone CDATA or String since they're immutable
         if (content != null) {
             for (Iterator i = content.iterator(); i.hasNext(); ) {
                 Object obj = i.next();
                 if (obj instanceof String) {
-                    element.addContent((String)obj);
+                    element.content.add(obj);
                 } else if (obj instanceof Element) {
-                    element.addContent((Element)((Element)obj).clone());
+                    Element e = (Element)((Element)obj).clone();
+                    e.setParent(element);
+                    element.content.add(e);
                 } else if (obj instanceof Comment) {
-                    element.addContent((Comment)((Comment)obj).clone());
-                } else if (obj instanceof ProcessingInstruction) {
-                    element.addContent((ProcessingInstruction)
-                                        ((ProcessingInstruction)obj).clone());
-                } else if (obj instanceof Entity) {
-                    element.addContent((Entity)((Entity)obj).clone());
+                    Comment c = (Comment)((Comment)obj).clone();
+                    c.setParent(element);
+                    element.content.add(c);
                 } else if (obj instanceof CDATA) {
-                    element.addContent((CDATA)((CDATA)obj).clone());
+                    element.content.add(obj);
+                } else if (obj instanceof ProcessingInstruction) {
+                    ProcessingInstruction p = (ProcessingInstruction)
+                        ((ProcessingInstruction)obj).clone();
+                    element.content.add(p);
+                } else if (obj instanceof Entity) {
+                    Entity e = (Entity)((Entity)obj).clone();
+                    e.setParent(element);
+                    element.content.add(e);
                 }
             }
         }
@@ -1620,9 +1651,6 @@ public class Element implements Serializable, Cloneable {
             element.additionalNamespaces =
                 (LinkedList) additionalNamespaces.clone();
         }
-
-        // Remove out the parent
-        element.setParent(null);
 
         return element;
     }
