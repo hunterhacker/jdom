@@ -91,13 +91,13 @@ public final class Main {
                 ui = true;
             } else if (args[i].equals("-source")) {
                 source = args[++i];
-                props.setProperty("source", source);
+                props.put("source", source);
             } else if (args[i].equals("-rootdir")) {
                 rootDir = args[++i];
-                props.setProperty("rootdir", rootDir);
+                props.put("rootdir", rootDir);
             } else if (args[i].equals("-author")) {
                 author = args[++i];
-                props.setProperty("author", source);
+                props.put("author", source);
             } else {
                 System.out.println( "unknown argument "+args[i]);
             }
