@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.59 2001/06/23 20:44:40 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.60 2001/06/25 15:16:14 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.59 $ $Date: 2001/06/23 20:44:40 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.60 $ $Date: 2001/06/25 15:16:14 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -668,6 +668,35 @@ public class XMLOutputter implements Cloneable {
     public void output(String string, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(string, writer);  // output() flushes
+    }
+
+
+    // * * * * * Text * * * * *
+
+    /**
+     * <p> Print out a <code>{@link Text}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.  </p>
+     *
+     * @param text <code>Text</code> to output.
+     * @param out <code>Writer</code> to write to.
+     **/
+    public void output(Text text, Writer out) throws IOException {
+        printString(text.getValue(), out);
+        out.flush();
+    }
+
+    /**
+     * <p>
+     * <p> Print out a <code>{@link Text}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.  </p>
+     * </p>
+     *
+     * @param text <code>Text</code> to output.
+     * @param out <code>OutputStream</code> to write to.
+     **/
+    public void output(Text text, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(text, writer);  // output() flushes
     }
     
     // * * * * * EntityRef * * * * *

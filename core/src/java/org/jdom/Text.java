@@ -198,7 +198,7 @@ public class Text implements Serializable, Cloneable {
      *   <code>Text</code> node, suitable for debugging. If the XML
      *   representation of the <code>Text</code> node is desired, 
      *   either <code>{@link #getValue}</code> or
-     *   {@link org.jdom.output.XMLOutputter#outputString(Text)}</code>
+     *   {@link org.jdom.output.XMLOutputter#output(Text, Writer)}</code>
      *   should be used.</p>
      *
      * @return <code>String</code> - information about this node.
