@@ -9,9 +9,6 @@ Items that need to be done:
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?
 
-* Should there be ValidityException and MalformedException subclasses of
-  JDOMException?  Elharo has a proposal.
-
 * Consider moving JDOMFactory to org.jdom.  Then we can have a FastFactory
   which skips Verification.
 
