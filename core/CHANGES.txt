@@ -27,6 +27,9 @@ docType, String baseURI) and entityRef(String elementName, String systemID).
 These match constructors that were previously overlooked.  Also added
 implementations to DefaultJDOMFactory and UnverifiedJDOMFactory.
 
+Added to Element the method getParentElement() that returns the parent element
+or null if the object is unattached or the root element.
+
 Fixed bug in FilterIterator that affected next() calls.
 
 Fixed bug in DOMOutputter regarding extraneous namespace declarations
