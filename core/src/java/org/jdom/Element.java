@@ -1490,8 +1490,10 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Handle additional namespaces
-        element.additionalNamespaces =
-            (LinkedList) additionalNamespaces.clone();
+        if (additionalNamespaces != null) {
+            element.additionalNamespaces =
+                (LinkedList) additionalNamespaces.clone();
+        }
 
         // Remove out the parent
         element.setParent(null);
