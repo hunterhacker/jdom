@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.103 2004/02/17 02:29:24 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.104 2004/02/19 05:15:06 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.103 $, $Date: 2004/02/17 02:29:24 $
+ * @version $Revision: 1.104 $, $Date: 2004/02/19 05:15:06 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.103 $ $Date: 2004/02/17 02:29:24 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.104 $ $Date: 2004/02/19 05:15:06 $ $Name:  $";
 
     // For normal output
     protected Format userFormat = Format.getRawFormat();
@@ -945,9 +945,9 @@ public class XMLOutputter implements Cloneable {
             next = content.get(index);
 
             //
-            // Handle consecutive CDATA and Text nodes all at once
+            // Handle consecutive CDATA, Text, and EntityRef nodes all at once
             //
-            if (next instanceof Text) {
+            if ((next instanceof Text) || (next instanceof EntityRef)) {
                 first = skipLeadingWhite(content, index);
                 // Set index to next node for loop
                 index = nextNonText(content, first);
@@ -976,9 +976,6 @@ public class XMLOutputter implements Cloneable {
             }
             else if (next instanceof Element) {
                 printElement(out, (Element)next, level, namespaces);
-            }
-            else if (next instanceof EntityRef) {
-                printEntityRef(out, (EntityRef)next);
             }
             else if (next instanceof ProcessingInstruction) {
                 printProcessingInstruction(out, (ProcessingInstruction)next);
@@ -1024,7 +1021,16 @@ public class XMLOutputter implements Cloneable {
 
                 // Get the unmangled version of the text
                 // we are about to print
-                next = ((Text) node).getText();
+                if (node instanceof Text) {
+                    next = ((Text) node).getText();
+                }
+                else if (node instanceof EntityRef) {
+                    next = "&" + ((EntityRef) node).getValue() + ";";
+                }
+                else {
+                    throw new IllegalStateException("Should see only " +
+                                                   "CDATA, Text, or EntityRef");
+                }
 
                 // This may save a little time
                 if (next == null || "".equals(next)) {
@@ -1046,6 +1052,9 @@ public class XMLOutputter implements Cloneable {
                 // Print the node
                 if (node instanceof CDATA) {
                     printCDATA(out, (CDATA) node);
+                }
+                else if (node instanceof EntityRef) {
+                    printEntityRef(out, (EntityRef) node);
                 }
                 else {
                     printString(out, next);
@@ -1227,8 +1236,9 @@ public class XMLOutputter implements Cloneable {
         return index;
     }
 
-    // Return the next non-CDATA or non-Text node, index = content.size()
-    // is returned if there is no more non-CDATA or non-Text nodes
+    // Return the next non-CDATA, non-Text, or non-EntityRef node,
+    // index = content.size() is returned if there is no more non-CDATA,
+    // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
     private int nextNonText(List content, int start) {
         if (start < 0) {
@@ -1238,7 +1248,8 @@ public class XMLOutputter implements Cloneable {
         int index = start;
         int size = content.size();
         while (index < size) {
-            if (!(content.get(index) instanceof Text)) {
+            Object node =  content.get(index);
+            if (!((node instanceof Text) || (node instanceof EntityRef))) {
                 return index;
             }
             index++;
@@ -1255,6 +1266,9 @@ public class XMLOutputter implements Cloneable {
         }
         else if (obj instanceof Text) {
             str = ((Text) obj).getText();
+        }
+        else if (obj instanceof EntityRef) {
+            return false;
         }
         else {
             return false;
@@ -1332,6 +1346,15 @@ public class XMLOutputter implements Cloneable {
                 case '&' :
                     entity = "&amp;";
                     break;
+                case '\r' :
+                    entity = "&#xD;";
+                    break;
+                case '\t' :
+                    entity = "&#x9;";
+                    break;
+                case '\n' :
+                    entity = "&#xA;";
+                    break;
                 default :
                     if (currentFormat.escapeStrategy.shouldEscape(ch)) {
                         entity = "&#x" + Integer.toHexString(ch) + ";";
@@ -1395,6 +1418,12 @@ public class XMLOutputter implements Cloneable {
                     break;
                 case '&' :
                     entity = "&amp;";
+                    break;
+                case '\r' :
+                    entity = "&#xD;";
+                    break;
+                case '\n' :
+                    entity = currentFormat.lineSeparator;
                     break;
                 default :
                     if (currentFormat.escapeStrategy.shouldEscape(ch)) {
