@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.153 2004/12/11 00:12:04 jhunter Exp $
+ $Id: Element.java,v 1.154 2004/12/11 00:27:38 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.153 $, $Date: 2004/12/11 00:12:04 $
+ * @version $Revision: 1.154 $, $Date: 2004/12/11 00:27:38 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.153 $ $Date: 2004/12/11 00:12:04 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.154 $ $Date: 2004/12/11 00:27:38 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1227,82 +1227,50 @@ public class Element extends Content implements Parent {
      *
      * @return the clone of this element
      */
-    public Object clone() {
+   public Object clone() {
 
-        // Ken Rune Helland <kenh@csc.no> is our local clone() guru
+       // Ken Rune Helland <kenh@csc.no> is our local clone() guru
 
-        Element element = null;
+       final Element element = (Element) super.clone();
 
-        element = (Element) super.clone();
+       // name and namespace are references to immutable objects
+       // so super.clone() handles them ok
 
-        // name and namespace are references to immutable objects
-        // so super.clone() handles them ok
+       // Reference to parent is copied by super.clone()
+       // (Object.clone()) so we have to remove it
+       // Actually, super is a Content, which has already detached in the
+       // clone().
+       // element.parent = null;
 
-        // Reference to parent is copied by super.clone()
-        // (Object.clone()) so we have to remove it
-        // Actually, super is a Content, which has already detached in the clone().
-        // element.parent = null;
+       // Reference to content list and attribute lists are copyed by
+       // super.clone() so we set it new lists if the original had lists
+       element.content = new ContentList(element);
+       element.attributes = new AttributeList(element);
 
-        // Reference to content list and attribute lists are copyed by
-        // super.clone() so we set it new lists if the original had lists
-        element.content = new ContentList(element);
-        element.attributes = new AttributeList(element);
+       // Cloning attributes
+       if (attributes != null) {
+           for(int i = 0; i < attributes.size(); i++) {
+               final Attribute attribute = (Attribute) attributes.get(i);
+               element.attributes.add(attribute.clone());
+           }
+       }
 
-        // Cloning attributes
-        if (attributes != null) {
-            for (int i = 0; i < attributes.size(); i++) {
-                Object obj = attributes.get(i);
-                Attribute attribute = (Attribute)((Attribute)obj).clone();
-                element.attributes.add(attribute);
-            }
-        }
+       // Cloning additional namespaces
+       if (additionalNamespaces != null) {
+           element.additionalNamespaces = new ArrayList(additionalNamespaces);
+       }
 
-        // Cloning additional namespaces
-        if (additionalNamespaces != null) {
-            int additionalSize = additionalNamespaces.size();
-            element.additionalNamespaces = new ArrayList(additionalSize);
-            for (int i = 0; i < additionalSize; i++) {
-                Object additional = additionalNamespaces.get(i);
-                element.additionalNamespaces.add(additional);
-            }
-        }
+       // Cloning content
+       if (content != null) {
+           for(int i = 0; i < content.size(); i++) {
+               final Content c = (Content) content.get(i);
+               element.content.add(c.clone());
+           }
+       }
 
-        // Cloning content
-        if (content != null) {
-            for (int i = 0; i < content.size(); i++) {
-                Object obj = content.get(i);
-                if (obj instanceof Element) {
-                    Element elt = (Element)((Element)obj).clone();
-                    element.content.add(elt);
-                }  else if (obj instanceof CDATA) {
-                    CDATA cdata = (CDATA)((CDATA)obj).clone();
-                    element.content.add(cdata);
-                } else if (obj instanceof Text) {
-                    Text text = (Text)((Text)obj).clone();
-                    element.content.add(text);
-                } else if (obj instanceof Comment) {
-                    Comment comment = (Comment)((Comment)obj).clone();
-                    element.content.add(comment);
-                } else if (obj instanceof ProcessingInstruction) {
-                    ProcessingInstruction pi = (ProcessingInstruction)
-                        ((ProcessingInstruction)obj).clone();
-                    element.content.add(pi);
-                } else if (obj instanceof EntityRef) {
-                    EntityRef entity = (EntityRef)((EntityRef)obj).clone();
-                    element.content.add(entity);
-                }
-            }
-        }
+       return element;
+   } 
 
-        // Handle additional namespaces
-        if (additionalNamespaces != null) {
-            // Avoid additionalNamespaces.clone() because List isn't Cloneable
-            element.additionalNamespaces = new ArrayList();
-            element.additionalNamespaces.addAll(additionalNamespaces);
-        }
-
-        return element;
-    }
 
     // Support a custom Namespace serialization so no two namespace
     // object instances may exist for the same prefix/uri pair
