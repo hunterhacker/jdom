@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.74 2003/04/08 04:57:45 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.75 2003/04/10 04:38:47 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,12 +83,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.74 $, $Date: 2003/04/08 04:57:45 $
+ * @version $Revision: 1.75 $, $Date: 2003/04/10 04:38:47 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.74 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.75 $ $Date: 2003/04/10 04:38:47 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -612,7 +612,7 @@ public class SAXBuilder {
                         true, "Namespaces");
             internalSetFeature(parser,
                         "http://xml.org/sax/features/namespace-prefixes", 
-                        false, "Namespace prefixes");
+                        true, "Namespace prefixes");
         }
 
         // Set entity expansion
