@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.54 2002/03/12 06:53:57 jhunter Exp $
+ $Id: Document.java,v 1.55 2002/03/28 11:08:12 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import org.jdom.filter.Filter;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.54 $, $Date: 2002/03/12 06:53:57 $
+ * @version $Revision: 1.55 $, $Date: 2002/03/28 11:08:12 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.54 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.55 $ $Date: 2002/03/28 11:08:12 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -318,6 +318,12 @@ public class Document implements Serializable, Cloneable {
      * affect the document's actual content.
      * </p>
      *
+     * <p>
+     * Sequential traversal through the List is best done with a Iterator
+     * since the underlying implement of List.size() may require walking the
+     * entire list.
+     * </p>
+     *
      * @return <code>List</code> - all Document content
      * @throws IllegalStateException if the root element hasn't been set
      */
@@ -330,6 +336,12 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * Return a filtered view of this <code>Document</code>'s content.
+     * </p>
+     *
+     * <p>
+     * Sequential traversal through the List is best done with a Iterator
+     * since the underlying implement of List.size() may require walking the
+     * entire list.
      * </p>
      *
      * @param filter <code>Filter</code> to apply

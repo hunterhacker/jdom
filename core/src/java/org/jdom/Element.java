@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.114 2002/03/12 06:53:57 jhunter Exp $
+ $Id: Element.java,v 1.115 2002/03/28 11:08:12 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,12 +80,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.114 $, $Date: 2002/03/12 06:53:57 $
+ * @version $Revision: 1.115 $, $Date: 2002/03/28 11:08:12 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.114 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.115 $ $Date: 2002/03/28 11:08:12 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -753,6 +753,12 @@ public class Element implements Serializable, Cloneable {
      * returned in its entirety.
      * </p>
      *
+     * <p>
+     * Sequential traversal through the List is best done with an Iterator
+     * since the underlying implement of List.size() may require walking the
+     * entire list.
+     * </p>
+     *
      * @return a <code>List</code> containing the mixed content of the
      *         element: may contain <code>Text</code>,
      *         <code>{@link Element}</code>, <code>{@link Comment}</code>,
@@ -767,6 +773,12 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * Return a filter view of this <code>Element</code>'s content.
+     * </p>
+     *
+     * <p>
+     * Sequential traversal through the List is best done with a Iterator
+     * since the underlying implement of List.size() may require walking the
+     * entire list.
      * </p>
      *
      * @param filter <code>Filter</code> to apply
@@ -848,9 +860,9 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * <p>
-     * Since getChildren always returns a "live" and modifiable list, even
-     * if the element contains no children, performance conscious users
-     * should call {@link #hasChildren} first to check for content.
+     * Sequential traversal through the List is best done with a Iterator
+     * since the underlying implement of List.size() may not be the most
+     * efficient.
      * </p>
      *
      * <p>
@@ -858,9 +870,9 @@ public class Element implements Serializable, Cloneable {
      * would have to be obtained with:
      * <pre>
      * <code>
-     *   List childern = currentElement.getChildren();
-     *   for (int i = 0; i < childern.size(); i++) {
-     *     Element oneLevelDeep = (Element)childern.get(i);
+     *   Iterator itr = (currentElement.getChildren()).iterator();
+     *   while(itr.hasNext()) {
+     *     Element oneLevelDeep = (Element)itr.next();
      *     List twoLevelsDeep = oneLevelDeep.getChildren();
      *     // Do something with these children
      *   }
