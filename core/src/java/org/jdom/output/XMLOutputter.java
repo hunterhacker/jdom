@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.77 2002/04/07 15:21:10 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.78 2002/04/10 09:54:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.77 $, $Date: 2002/04/07 15:21:10 $
+ * @version $Revision: 1.78 $, $Date: 2002/04/10 09:54:31 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.77 $ $Date: 2002/04/07 15:21:10 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.78 $ $Date: 2002/04/10 09:54:31 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -517,54 +517,6 @@ public class XMLOutputter implements Cloneable {
         defaultFormat.indent = indent;
     }
 
-    /**
-     * <p>
-     * Set the indent on or off, newlines must be set to <code>true</code>
-     * for indentation to actually occur.  If setting on, will use the
-     * value of STANDARD_INDENT, which is usually two spaces.
-     * </p>
-     *
-     * @param doIndent if true, set indenting on; if false, set indenting off
-     */
-    public void setIndent(boolean doIndent) {
-        if (doIndent) {
-            defaultFormat.indent = STANDARD_INDENT;
-        }
-        else {
-            defaultFormat.indent = null;
-        }
-    }
-
-    /**
-     * <p>
-     * This will set the indent <code>String</code>'s size; a size
-     * of 4 would result in the indentation being equivalent to the
-     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
-     * </p>
-     *
-     * @param size <code>int</code> number of spaces in indentation.
-     */
-    public void setIndent(int size) {
-        setIndentSize(size);
-    }
-
-    /**
-     * <p>
-     * This will set the indent <code>String</code>'s size; an indentSize
-     * of 4 would result in the indentation being equivalent to the
-     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
-     * </p>
-     *
-     * @param indentSize <code>int</code> number of spaces in indentation.
-     */
-    public void setIndentSize(int indentSize) {
-        StringBuffer indentBuffer = new StringBuffer();
-        for (int i=0; i<indentSize; i++) {
-            indentBuffer.append(" ");
-        }
-        defaultFormat.indent = indentBuffer.toString();
-    }
-
     // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
     // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
 
@@ -672,21 +624,6 @@ public class XMLOutputter implements Cloneable {
     public void output(Text text, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(text, writer);  // output() flushes
-    }
-
-    /**
-     * <p>
-     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
-     * </p>
-     *
-     * @param string <code>String</code> to output.
-     * @param out <code>OutputStream</code> to use.
-     * @deprecated see {@link #output(Text,OutputStream)}
-     */
-    public void output(String string, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(string, writer);  // output() flushes
     }
 
     /**
@@ -913,21 +850,6 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(Text text, Writer out) throws IOException {
         printText(text, out);
-        out.flush();
-    }
-
-    /**
-     * <p>
-     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.
-     * </p>
-     *
-     * @param string <code>String</code> to output.
-     * @param out <code>Writer</code> to use.
-     * @deprecated see {@link #output(Text,Writer)}
-     */
-    public void output(String string, Writer out) throws IOException {
-        printString(string, out);
         out.flush();
     }
 
@@ -1984,9 +1906,6 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-indent")) {
                 setIndent(args[++i]);
             }
-            else if (args[i].equals("-indentSize")) {
-                setIndentSize(Integer.parseInt(args[++i]));
-            }
             else if (args[i].startsWith("-expandEmpty")) {
                 setExpandEmptyElements(true);
             }
@@ -2106,37 +2025,83 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     * Ensure that text immediately preceded by or followed by an
-     * element will be "padded" with a single space.
+     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.  </p>
      * </p>
      *
-     * @deprecated Deprecated in beta7, because this is no longer necessary
+     * @param string <code>String</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     * @deprecated Deprecated in beta8, see {@link #output(Text,OutputStream)}
      */
-    public void setPadText(boolean padText) { }
-
-    /**
-     * <p>
-     * Set the initial indentation level.
-     * </p>
-     *
-     * @deprecated Deprecated in beta7, because this is better done with a
-     *             stacked FilterOutputStream
-     */
-    public void setIndentLevel(int level) { }
-
-    /**
-     * <p>
-     * This will set whether the XML declaration
-     * (<code>&lt;?xml version="1.0"?&gt;</code>)
-     * will be suppressed or not. It is common to suppress this in uses such
-     * as SOAP and XML-RPC calls.
-     * </p>
-     *
-     * @param suppressDeclaration <code>boolean</code> indicating whether or not
-     *        the XML declaration should be suppressed.
-     * @deprecated Deprecated in beta7, use setOmitDeclaration() instead
-     */
-    public void setSuppressDeclaration(boolean suppressDeclaration) {
-        this.omitDeclaration = suppressDeclaration;
+    public void output(String string, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(string, writer);  // output() flushes
     }
+
+    /**
+     * <p>
+     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.
+     * </p>
+     *
+     * @param string <code>String</code> to output.
+     * @param out <code>Writer</code> to use.
+     * @deprecated Deprecated in beta8, see {@link #output(Text,Writer)}
+     */
+    public void output(String string, Writer out) throws IOException {
+        printString(string, out);
+        out.flush();
+    }
+
+    /**
+     * <p>
+     * Set the indent on or off, newlines must be set to <code>true</code>
+     * for indentation to actually occur.  If setting on, will use the
+     * value of STANDARD_INDENT, which is usually two spaces.
+     * </p>
+     * @deprecated Deprecated in beta9, use setIndent(String) instead
+     *
+     * @param doIndent if true, set indenting on; if false, set indenting off
+     */
+    public void setIndent(boolean doIndent) {
+        if (doIndent) {
+            defaultFormat.indent = STANDARD_INDENT;
+        }
+        else {
+            defaultFormat.indent = null;
+        }
+    }
+
+    /**
+     * <p>
+     * This will set the indent <code>String</code>'s size; a size
+     * of 4 would result in the indentation being equivalent to the
+     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
+     * </p>
+     * @deprecated Deprecated in beta9, use setIndent(String) instead
+     *
+     * @param size <code>int</code> number of spaces in indentation.
+     */
+    public void setIndent(int size) {
+        setIndentSize(size);
+    }
+
+    /**
+     * <p>
+     * This will set the indent <code>String</code>'s size; an indentSize
+     * of 4 would result in the indentation being equivalent to the
+     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
+     * </p>
+     * @deprecated Deprecated in beta9, use setIndent(String) instead
+     *
+     * @param indentSize <code>int</code> number of spaces in indentation.
+     */
+    public void setIndentSize(int indentSize) {
+        StringBuffer indentBuffer = new StringBuffer();
+        for (int i=0; i<indentSize; i++) {
+            indentBuffer.append(" ");
+        }
+        defaultFormat.indent = indentBuffer.toString();
+    }
+
 }
