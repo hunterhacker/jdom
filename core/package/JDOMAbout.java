@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
+ Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -46,9 +46,10 @@
 
  This software consists of voluntary contributions made by many 
  individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
- JDOM Project, please see <http://www.jdom.org/>.
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
+
  */
 
 // Explicitly left in the default package
@@ -79,7 +80,7 @@ import org.jdom.input.*;
  *
  * @see http://java.sun.com/docs/books/tutorial/jar/
  *
- * @author Steven Gould <steven.gould@cgiusa.com>
+ * @author Steven Gould <steven.gouldATcgiusa.com>
  */
 public class JDOMAbout {
     /**
