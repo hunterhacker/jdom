@@ -129,6 +129,13 @@ public final class Verifier {
             return "Attribute names cannot contain colons";
         }
 
+        // Otherwise, no colons are allowed,
+        // since attributes handle this internally
+        if (name.equals("xmlns")) {
+            return "An Attribute name may not be \"xmlns\"; " +
+                   "use the Namespace class to manage namespaces";
+        }
+
         // If we got here, everything is OK
         return null;
     }
