@@ -1,6 +1,6 @@
 /*--
 
- $Id: IdElement.java,v 1.5 2004/02/06 09:57:48 jhunter Exp $
+ $Id: IdElement.java,v 1.6 2004/12/11 00:01:54 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,8 +59,10 @@ package org.jdom.contrib.ids;
 import java.util.*;
 
 import org.jdom.Attribute;
+import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Parent;
 import org.jdom.Namespace;
 
 /**
@@ -90,24 +92,7 @@ public class IdElement extends Element {
       this(name, Namespace.getNamespace(prefix, uri));
    }
 
-   protected Element setDocument(Document doc) {
-      // Save previous owning document (if any).
-      Document prevDoc = this.getDocument();
-
-      // Attach to the new owning document.
-      super.setParent(doc);
-
-      if (doc != prevDoc) {
-         // New and previous owning documents are different.
-         // => Remove all the IDs for the subtree this element is the root
-         //    of from the previous owning document's lookup table and
-         //    insert them into the new owning document's lookup table.
-         transferIds(prevDoc, doc);
-      }
-      return (this);
-   }
-
-   protected Element setParent(Element parent) {
+   protected Content setParent(Parent parent) {
       // Save previous owning document (if any).
       Document prevDoc = this.getDocument();
       Document newDoc  = (parent != null)? parent.getDocument(): null;
@@ -122,22 +107,7 @@ public class IdElement extends Element {
          //    insert them into the new owning document's lookup table.
          transferIds(prevDoc, newDoc);
       }
-      return (this);
-   }
-
-   public Element setAttribute(Attribute attribute) {
-      // Set attribute.
-      super.setAttribute(attribute);
-
-      if (attribute.getAttributeType() == Attribute.ID_TYPE) {
-         // The being-added attribute is of ID type.
-         // => Udpate the owning document's lookup table.
-         Document doc = this.getDocument();
-         if (doc instanceof IdDocument) {
-            ((IdDocument)doc).addId(attribute.getValue(), this);
-         }
-      }
-      return (this);
+      return this;
    }
 
 
@@ -214,7 +184,7 @@ public class IdElement extends Element {
             getIds((Element)o, ids);
          }
       }
-      return (ids);
+      return ids;
    }
 
    /**

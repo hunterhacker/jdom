@@ -1,6 +1,6 @@
 /*--
 
- $Id: IdFactory.java,v 1.4 2004/12/11 00:01:54 jhunter Exp $
+ $Id: IdAttribute.java,v 1.1 2004/12/11 00:01:54 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -58,86 +58,94 @@ package org.jdom.contrib.ids;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
-import org.jdom.DocType;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.DefaultJDOMFactory;
+import org.jdom.Parent;
+
 
 /**
- * The <code>IdFactory</code> extends the default JDOM factory to
- * build documents that support looking up elements using their ID
- * attribute.
- * <p>
- * Looking-up elements by ID only works if a DTD is associated to
- * the XML document as the information defining some attributes as
- * IDs is only available from the DTD and not from the XML document
- * itself.</p>
- * <p>
- * The Documents created by this factory are instances of
- * {@link IdDocument} which provides the method
- * {@link IdDocument#getElementById} to look up an element given the
- * value of its ID attribute.</p>
- * <p>
- * The following code snippet demonstrates how to use the
- * <code>IdFactory</code> with JDOM's SAXBuilder to create an
- * <code>IdDocument</code>.</p>
- * <blockquote><pre>
- *  SAXBuilder builder = new SAXBuilder();
- *  builder.setFactory(new IdFactory());
- *
- *  IdDocument doc = (IdDocument)(builder.build(xmlDocument));
- *
- *  Element elt = doc.getElementById(idValue);
- * </pre></blockquote>
+ * A sub-class of the default JDOM <code>Attribute</code> to help
+ * keeping up-to-date the element lookup table maintained by
+ * <code>IdDocument</code>.
  *
  * @author Laurent Bihanic
  */
-public class IdFactory extends DefaultJDOMFactory {
+public class IdAttribute extends Attribute {
 
-    /**
-     * Creates a new IdFactory object.
-     */
-    public IdFactory() {
-       super();
+    public IdAttribute(String name, String value, Namespace namespace) {
+        super(name, value, namespace);
     }
 
-    // Allow Javadocs to inherit from superclass
-
-    public Attribute attribute(String name, String value, Namespace namespace) {
-        return new IdAttribute(name, value, namespace);
+    public IdAttribute(String name, String value,
+                                        int type, Namespace namespace) {
+        super(name, value, type, namespace);
     }
 
-    public Attribute attribute(String name, String value,
-                                            int type, Namespace namespace) {
-        return new IdAttribute(name, value, type, namespace);
+    public IdAttribute(String name, String value) {
+        this(name, value, UNDECLARED_TYPE, Namespace.NO_NAMESPACE);
     }
 
-    public Attribute attribute(String name, String value) {
-        return new IdAttribute(name, value);
+    public IdAttribute(String name, String value, int type) {
+        this(name, value, type, Namespace.NO_NAMESPACE);
     }
 
-    public Attribute attribute(String name, String value, int type) {
-        return new IdAttribute(name, value, type);
+    protected Attribute setParent(Element parent) {
+        Parent oldParent = this.getParent();
+
+        super.setParent(parent);
+
+        if (this.getAttributeType() == Attribute.ID_TYPE) {
+            Document doc;
+
+            // Udpate the owning document's lookup table.
+            if (oldParent != null) {
+                doc = oldParent.getDocument();
+                if (doc instanceof IdDocument) {
+                    ((IdDocument)doc).removeId(this.getValue());
+                }
+            }
+            doc = this.getDocument();
+            if (doc instanceof IdDocument) {
+                ((IdDocument)doc).addId(this.getValue(), this.getParent());
+            }
+        }
+        return this;
     }
 
-    public Document document(Element rootElement, DocType docType) {
-        return new IdDocument(rootElement, docType);
-    }
-    public Document document(Element rootElement) {
-        return new IdDocument(rootElement);
+    public Attribute setValue(String value) {
+        String oldValue = this.getValue();
+
+        super.setValue(value);
+
+        if (this.getAttributeType() == Attribute.ID_TYPE) {
+            // Udpate the owning document's lookup table.
+            Document doc = this.getDocument();
+            if (doc instanceof IdDocument) {
+                ((IdDocument)doc).removeId(oldValue);
+                ((IdDocument)doc).addId(this.getValue(), this.getParent());
+            }
+        }
+        return this;
     }
 
-    public Element element(String name, Namespace namespace) {
-        return new IdElement(name, namespace);
-    }
-    public Element element(String name) {
-        return new IdElement(name);
-    }
-    public Element element(String name, String uri) {
-        return new IdElement(name, uri);
-    }
-    public Element element(String name, String prefix, String uri) {
-        return new IdElement(name, prefix, uri);
+    public Attribute setAttributeType(int type) {
+        int oldType = this.getAttributeType();
+
+        if (type != oldType) {
+            super.setAttributeType(type);
+
+            // Udpate the owning document's lookup table.
+            Document doc = this.getDocument();
+            if (doc instanceof IdDocument) {
+                if (oldType == Attribute.ID_TYPE) {
+                    ((IdDocument)doc).removeId(this.getValue());
+                }
+                if (type == Attribute.ID_TYPE) {
+                    ((IdDocument)doc).addId(this.getValue(), this.getParent());
+                }
+            }
+        }
+        return this;
     }
 }
 
