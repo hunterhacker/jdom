@@ -23,10 +23,6 @@ Items that need to be done:
   SAXOutputter, planning on passing the string to Xerces for parsing and event
   propagation.)
 
-* Take action on detach() allowing a Doc to have its root removed with an ISE
-  upon later access.  This also removes the need to remove the Document(null)
-  usage by builders.
-
 * Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
   for the minor bug where pretty print (indented, newlines, trim text) prints 
   an extra whitespace line between one closing element and another.
@@ -38,23 +34,6 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
-
-* Integrate FilterList (currently developed in the jdom-wip CVS module)
-  which replaced PartialList by more efficiently driving directly off the
-  backing list.
-  - Find a way to reuse the FilterList impls returned by getContent().
-    Possible way: store content in a FilterList but give it a pkg prot 
-    accessor method to retrieve the raw list?
-  - Make sure FilterList doesn't let an elt be added as a child (or 
-    grandchild, etc) of itself.  See elt.addContent() logic that walks 
-    ancestry.
-  - See about reducing the number of classes in org.jdom (perhaps leaving
-    Filter and FilterList in there but moving the others to be inner
-    classes)
-  - Decide what classes/methods should be final
-  - See about a way so matches() can be a fast no-op for pre-filtered lists
-    (as is the case for most calls)
-  - Fix issue where size is kept as an instance var but that's not reliable
 
 * Verify we get good error handling if someone passes null to any add/set
   method.  Consensus is throw an NPE if passing null to a setList-style
@@ -86,8 +65,6 @@ Items that need to be done:
 
 * Determine if there should be a way to output everything on one line
   (including the decl and doctype)
-
-* Add a Text class (currently stored but unused in org.jdom)
 
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
