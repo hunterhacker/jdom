@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.1 2001/05/09 05:52:20 jhunter Exp $
+ $Id: EntityRef.java,v 1.2 2001/05/09 07:11:46 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,7 @@ import java.io.Serializable;
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.1 $ $Date: 2001/05/09 05:52:20 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.2 $ $Date: 2001/05/09 07:11:46 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -105,6 +105,20 @@ public class EntityRef implements Serializable, Cloneable {
     public EntityRef(String name) {
         this.name = name;
         
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>EntityRef</code>
+     *   with the supplied name, public id, and system id.
+     * </p>
+     *
+     * @param name <code>String</code> name of element.
+     */
+    public EntityRef(String name, String publicID, String systemID) {
+        this.name = name;
+        this.publicID = publicID;
+        this.systemID = systemID;
     }
 
     /**
@@ -312,6 +326,7 @@ public class EntityRef implements Serializable, Cloneable {
             .append("&")
             .append(name)
             .append(";")
+            .append("]")
             .toString();
     }
 }

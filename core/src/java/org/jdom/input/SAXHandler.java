@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.9 2001/05/09 06:42:34 jhunter Exp $
+ $Id: SAXHandler.java,v 1.10 2001/05/09 07:11:46 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,6 +65,7 @@ import org.jdom.*;
 
 import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -74,10 +75,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Brett McLaughlin
  * @author Jason Hunter
  */
-public class SAXHandler extends DefaultHandler implements LexicalHandler {
+public class SAXHandler extends DefaultHandler implements LexicalHandler,
+                                                          DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.9 $ $Date: 2001/05/09 06:42:34 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.10 $ $Date: 2001/05/09 07:11:46 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -111,6 +113,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** The namespaces in scope and actually attached to an element */
     private LinkedList availableNamespaces;
 
+    private Map externalEntities;
+
     /**
      * <p>
      * This will set the <code>Document</code> to use.
@@ -126,6 +130,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
         declaredNamespaces = new LinkedList();
         availableNamespaces = new LinkedList();
         availableNamespaces.add(Namespace.XML_NAMESPACE);
+        externalEntities = new HashMap();
     }
 
     /**
@@ -142,6 +147,29 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void setExpandEntities(boolean expand) {
         this.expand = expand;
     }
+
+    /**
+     * This is called when the parser encounters an external entity 
+     * declaration.
+     * </p>
+     *
+     * @param name entity name
+     * @param publicId public id
+     * @param systemId system id
+     * @throws SAXException when things go wrong
+     */
+    public void externalEntityDecl(String name, 
+                                   String publicId, String systemId)
+                                   throws SAXException {
+        // Store the public and system ids for the name
+        externalEntities.put(name, new String[]{publicId, systemId}); 
+    }
+
+    // These methods from the DeclHandler interface we can ignore right now
+    public void attributeDecl(String eName, String aName, String type,
+                              String valueDefault, String value) { }
+    public void elementDecl(String name, String model) { }
+    public void internalEntityDecl(String name, String value) { }
 
     /**
      * <p>
@@ -471,8 +499,14 @@ if (!inDTD) {
             (!name.equals("quot"))) {
 
             if (!expand) {
-                // XXX Need system and public IDs also!!
-                EntityRef entity = new EntityRef(name);
+                String pub = null;
+                String sys = null;
+                String[] ids = (String[]) externalEntities.get(name);
+                if (ids != null) {
+                  pub = ids[0];  // may be null, that's OK
+                  sys = ids[1];  // may be null, that's OK
+                }
+                EntityRef entity = new EntityRef(name, pub, sys);
                 ((Element)stack.peek()).addContent(entity);
                 suppress = true;
             }
