@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.89 2001/06/22 09:12:10 jhunter Exp $
+ $Id: Element.java,v 1.90 2001/06/22 20:04:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.89 $ $Date: 2001/06/22 09:12:10 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.90 $ $Date: 2001/06/22 20:04:05 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1671,7 +1671,7 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the attribute with the given name and within no
-     * namespace.
+     * namespace. If no such attribute exists, this method does nothing.
      * </p>
      *
      * @param name name of attribute to remove
@@ -1684,7 +1684,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the attribute with the given name and within the
-     * given Namespace.
+     * given Namespace.  If no such attribute exists, this method does
+     * nothing.
      * </p>
      *
      * @param name name of attribute to remove
@@ -1869,6 +1870,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>Element</code>.
+     * If the specified <code>Element</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
      * </p>
      *
      * @param child <code>Element</code> to delete
@@ -1890,6 +1893,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>ProcessingInstruction</code>.
+     * If the specified <code>ProcessingInstruction</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
      * </p>
      *
      * @param child <code>ProcessingInstruction</code> to delete
@@ -1910,6 +1915,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>Comment</code>.
+     * If the specified <code>Comment</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
      * </p>
      *
      * @param comment <code>Comment</code> to delete
@@ -1930,6 +1937,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>CDATA</code>.
+     * If the specified <code>CDATA</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
      * </p>
      *
      * @param cdata <code>CDATA</code> to delete
@@ -1949,6 +1958,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>EntityRef</code>.
+     * If the specified <code>EntityRef</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
      * </p>
      *
      * @param child <code>EntityRef</code> to delete

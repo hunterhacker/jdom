@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.41 2001/05/24 08:57:17 jhunter Exp $
+ $Id: Document.java,v 1.42 2001/06/22 20:04:05 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.41 $ $Date: 2001/05/24 08:57:17 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.42 $ $Date: 2001/06/22 20:04:05 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -557,6 +557,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>ProcessingInstruction</code>.
+     * If the specified <code>ProcessingInstruction</code> is not a child of
+     * this <code>Document</code>, this method does nothing.
      * </p>
      *
      * @param child <code>ProcessingInstruction</code> to delete
@@ -572,6 +574,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the specified <code>Comment</code>.
+     * If the specified <code>Comment</code> is not a child of
+     * this <code>Document</code>, this method does nothing.
      * </p>
      *
      * @param comment <code>Comment</code> to delete
