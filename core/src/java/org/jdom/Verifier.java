@@ -79,7 +79,7 @@ public final class Verifier {
 
         // No colons allowed, since elements handle this internally
         if (name.indexOf(":") != -1) {
-            return "Element names cannot contain colons.";
+            return "Element names cannot contain colons";
         }
 
         // If we got here, everything is OK
@@ -112,7 +112,7 @@ public final class Verifier {
         // Otherwise, no colons are allowed,
         // since attributes handle this internally
         if (name.indexOf(":") != -1) {
-            return "Attribute names cannot contain colons.";
+            return "Attribute names cannot contain colons";
         }
 
         // If we got here, everything is OK
@@ -138,15 +138,15 @@ public final class Verifier {
         // Cannot start with a number
         char first = prefix.charAt(0);
         if (Character.isDigit(first)) {
-            return "Namespace prefixes cannot begin with a number.";
+            return "Namespace prefixes cannot begin with a number";
         }
         // Cannot start with a $
         if (first == '$') {
-            return "Namespace prefixes cannot begin with a dollar sign ($).";
+            return "Namespace prefixes cannot begin with a dollar sign ($)";
         }
         // Cannot start with a _
         if (first == '-') {
-            return "Namespace prefixes cannot begin with a hyphen (-).";
+            return "Namespace prefixes cannot begin with a hyphen (-)";
         }
 
         // Ensure valid content
@@ -156,13 +156,13 @@ public final class Verifier {
                 && (c != '-')
                 && (c != '$')
                 && (c != '_')) {
-                return c + " is not allowed in Namespace prefixes.";
+                return c + " is not allowed in Namespace prefixes";
             }
         }
 
         // No colons allowed
         if (prefix.indexOf(":") != -1) {
-            return "Namespace prefixes cannot contain colons.";
+            return "Namespace prefixes cannot contain colons";
         }
 
         // If we got here, everything is OK
@@ -188,15 +188,15 @@ public final class Verifier {
         // Cannot start with a number
         char first = uri.charAt(0);
         if (Character.isDigit(first)) {
-            return "Namespace URIs cannot begin with a number.";
+            return "Namespace URIs cannot begin with a number";
         }
         // Cannot start with a $
         if (first == '$') {
-            return "Namespace URIs cannot begin with a dollar sign ($).";
+            return "Namespace URIs cannot begin with a dollar sign ($)";
         }
         // Cannot start with a _
         if (first == '-') {
-            return "Namespace URIs cannot begin with a hyphen (-).";
+            return "Namespace URIs cannot begin with a hyphen (-)";
         }
 
         // If we got here, everything is OK
@@ -223,7 +223,7 @@ public final class Verifier {
         // Cannot begin with 'xml' in any case
         if (target.equalsIgnoreCase("xml")) {
             return "Processing Instructions cannot have a target of " +
-                   "\"xml\" any combination of case.";
+                   "\"xml\" any combination of case";
         }
 
         // If we got here, everything is OK
@@ -242,7 +242,7 @@ public final class Verifier {
      */
     public static final String checkCommentData(String data) {
         if (data.indexOf("--") != -1) {
-            return "Comments cannot contain double hyphens (--).";
+            return "Comments cannot contain double hyphens (--)";
         }
 
         // If we got here, everything is OK
@@ -268,15 +268,15 @@ public final class Verifier {
         // Cannot start with a number
         char first = name.charAt(0);
         if (Character.isDigit(first)) {
-            return "XML names cannot begin with a number.";
+            return "XML names cannot begin with a number";
         }
         // Cannot start with a $
         if (first == '$') {
-            return "XML names cannot begin with a dollar sign ($).";
+            return "XML names cannot begin with a dollar sign ($)";
         }
         // Cannot start with a _
         if (first == '-') {
-            return "XML names cannot begin with a hyphen (-).";
+            return "XML names cannot begin with a hyphen (-)";
         }
 
         // Ensure valid content
@@ -287,7 +287,7 @@ public final class Verifier {
                 && (c != '$')
 		&& (c != '.')
                 && (c != '_')) {
-                return c + " is not allowed in XML names.";
+                return c + " is not allowed in XML names";
             }
         }
 

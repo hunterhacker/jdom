@@ -222,12 +222,21 @@ public class SAXBuilder {
             return doc;
         } catch (Exception e) {
             if (e instanceof SAXParseException) {
-                SAXParseException p =
-                    (SAXParseException)e;
-                throw new JDOMException(e.getMessage(),
-                    new JDOMException("Error on line " + p.getLineNumber() +
-                                      " of XML document: " + p.getMessage()));
-            } else {
+                SAXParseException p = (SAXParseException)e;
+                String systemId = p.getSystemId();
+                if (systemId != null) {
+                    throw new JDOMException(e.getMessage(),
+                              new JDOMException("Error on line " + 
+                              p.getLineNumber() + " of document "
+                              + systemId + ": " + p.getMessage()));
+                }
+                else {
+                    throw new JDOMException(e.getMessage(),
+                              new JDOMException("Error on line " +
+                              p.getLineNumber() + ": " + p.getMessage()));
+                }
+            }
+            else {
                 throw new JDOMException(e.getMessage(), e);
             }
         }
