@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.79 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Document.java,v 1.80 2004/02/17 02:29:23 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.79 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.80 $, $Date: 2004/02/17 02:29:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.79 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.80 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -157,14 +157,15 @@ public class Document implements Parent {
      * This will create a new <code>Document</code>,
      * with the supplied list of content, and a
      * <code>{@link DocType}</code> declaration only if the content
-     * contains a DocType instance.
+     * contains a DocType instance.  A null list is treated the
+     * same as the no-arg constructor.
      *
      * @param content <code>List</code> of starter content
      * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types.
      */
     public Document(List content) {
-        this(content, null);
+        setContent(content);
     }
 
     public int getContentSize() {
@@ -662,24 +663,6 @@ public class Document implements Parent {
     }
 
 
-
-    /**
-     * This will create a new <code>Document</code>, with the supplied list of
-     * content, and the supplied <code>{@link DocType}</code> declaration.
-     *
-     * @param      newContent          <code>List</code> of starter content
-     * @param      docType             <code>DocType</code> declaration.
-     * @throws     IllegalAddException if (1) the List contains more than one
-     *                                 Element or objects of illegal types, or
-     *                                 (2) if the given docType object is
-     *                                 already attached to a document.
-     * @deprecated Deprecated in beta10 because the DocType
-     *                                 is now part of the content list itself
-     */
-    public Document(List newContent, DocType docType) {
-        setContent(newContent);
-        setDocType(docType);
-    }
 
     /**
      * @see org.jdom.Parent#getDocument()

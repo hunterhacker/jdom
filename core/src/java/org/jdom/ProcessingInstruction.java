@@ -1,6 +1,6 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.44 2004/02/11 21:12:43 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.45 2004/02/17 02:29:23 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.44 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.45 $, $Date: 2004/02/17 02:29:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -73,7 +73,7 @@ import java.util.*;
 public class ProcessingInstruction extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.44 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.45 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -169,19 +169,6 @@ public class ProcessingInstruction extends Content {
      * This will return a <code>List</code> containing the names of the
      * "attribute" style pieces of name/value pairs in this PI's data.
      *
-     * @deprecated Deprecated in Beta 10, use getPseudoAttributeNames() instead.
-     * @return <code>List</code> - the <code>List</code> containing the
-     *         "attribute" names.
-     */
-    public List getNames() {
-        return getPseudoAttributeNames();
-    }
-
-
-    /**
-     * This will return a <code>List</code> containing the names of the
-     * "attribute" style pieces of name/value pairs in this PI's data.
-     *
      * @return <code>List</code> - the <code>List</code> containing the
      *         "attribute" names.
      */
@@ -240,41 +227,12 @@ public class ProcessingInstruction extends Content {
      * name/value pair on the PI.  If no such pair is
      * found for this PI, null is returned.
      *
-     * @deprecated Deprecated in Beta 10, use getPseudoAttributeValue() instead.
-     * @param name <code>String</code> name of name/value pair
-     *             to lookup value for.
-     * @return <code>String</code> - value of name/value pair.
-     */
-    public String getValue(String name) {
-        return getPseudoAttributeValue(name);
-    }
-
-    /**
-     * This will return the value for a specific
-     * name/value pair on the PI.  If no such pair is
-     * found for this PI, null is returned.
-     *
      * @param name <code>String</code> name of name/value pair
      *             to lookup value for.
      * @return <code>String</code> - value of name/value pair.
      */
     public String getPseudoAttributeValue(String name) {
         return (String)mapData.get(name);
-    }
-
-    /**
-     * This will set the value for the specified name/value
-     * pair.  If no matching pair is found, the supplied
-     * pair is added to the PI data.
-     *
-     * @deprecated Deprecated in Beta 10, use addPseudoAttributeValue() instead.
-     * @param name <code>String</code> name of pair.
-     * @param value <code>String</code> value for pair.
-     * @return <code>ProcessingInstruction</code> this PI modified.
-     */
-    public ProcessingInstruction setValue(String name,
-                                          String value) {
-        return setPseudoAttribute(name, value);
     }
 
     /**
@@ -302,18 +260,6 @@ public class ProcessingInstruction extends Content {
         return this;
     }
 
-
-    /**
-     * This will remove the name/value pair with the specified name.
-     *
-     * @deprecated Deprecated in Beta 10, use removePseudoAttributeValue()
-     * instead.
-     * @return <code>boolean</code> - whether the requested
-     *         instruction was removed.
-     */
-    public boolean removeValue(String name) {
-        return removePseudoAttribute(name);
-    }
 
     /**
      * This will remove the pseudo attribute with the specified name.

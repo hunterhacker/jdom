@@ -1,6 +1,6 @@
 /*--
 
- $Id: Attribute.java,v 1.49 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Attribute.java,v 1.50 2004/02/17 02:29:23 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.49 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.50 $, $Date: 2004/02/17 02:29:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -71,7 +71,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.49 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.50 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -162,29 +162,6 @@ public class Attribute implements Serializable, Cloneable {
     public final static int ENUMERATED_TYPE = 10;
 
     // Keep the old constant names for one beta cycle to help migration
-
-    /** @deprecated Deprecated in Beta 10 use UNDECLARED_TYPE */
-    public final static int UNDECLARED_ATTRIBUTE = 0;
-    /** @deprecated Deprecated in Beta 10 use CDATA_TYPE */
-    public final static int CDATA_ATTRIBUTE = 1;
-    /** @deprecated Deprecated in Beta 10 use ID_TYPE */
-    public final static int ID_ATTRIBUTE = 2;
-    /** @deprecated Deprecated in Beta 10 use IDREF_TYPE */
-    public final static int IDREF_ATTRIBUTE = 3;
-    /** @deprecated Deprecated in Beta 10 use IDREFS_TYPE */
-    public final static int IDREFS_ATTRIBUTE = 4;
-    /** @deprecated Deprecated in Beta 10 use ENTITY_TYPE */
-    public final static int ENTITY_ATTRIBUTE = 5;
-    /** @deprecated Deprecated in Beta 10 use ENTITIES_TYPE */
-    public final static int ENTITIES_ATTRIBUTE = 6;
-    /** @deprecated Deprecated in Beta 10 use NMTOKEN_TYPE */
-    public final static int NMTOKEN_ATTRIBUTE = 7;
-    /** @deprecated Deprecated in Beta 10 use NMTOKENS_TYPE */
-    public final static int NMTOKENS_ATTRIBUTE = 8;
-    /** @deprecated Deprecated in Beta 10 use NOTATION_TYPE */
-    public final static int NOTATION_ATTRIBUTE = 9;
-    /** @deprecated Deprecated in Beta 10 use ENUMERATED_TYPE */
-    public final static int ENUMERATED_ATTRIBUTE = 10;
 
 
 

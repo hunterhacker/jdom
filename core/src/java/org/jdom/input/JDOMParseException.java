@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMParseException.java,v 1.6 2004/02/06 09:28:31 jhunter Exp $
+ $Id: JDOMParseException.java,v 1.7 2004/02/17 02:29:24 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,13 +63,13 @@ import org.xml.sax.*;
  * Thrown during parse errors, with information about where the parse error
  * occurred as well as access to the partially built document.
  *
- * @version $Revision: 1.6 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.7 $, $Date: 2004/02/17 02:29:24 $
  * @author  Laurent Bihanic
  */
 public class JDOMParseException extends JDOMException {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.6 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.7 $ $Date: 2004/02/17 02:29:24 $ $Name:  $";
 
     /**
      * The portion of the document that was successfully built before
@@ -108,15 +108,6 @@ public class JDOMParseException extends JDOMException {
                               Document partialDocument)  {
         super(message, cause);
         this.partialDocument = partialDocument;
-    }
-
-    /**
-     * @deprecated Use {@link JDOMParseException(String, Throwable, Document)}
-     * instead.
-     */
-    public JDOMParseException(String message, Document partialDocument,
-                              Throwable cause) {
-        this(message, cause, partialDocument);
     }
 
     /**
