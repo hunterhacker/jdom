@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.6 2003/05/19 20:31:46 jhunter Exp $
+ $Id: ElementScanner.java,v 1.7 2003/06/03 18:34:07 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -376,12 +376,12 @@ public class ElementScanner extends XMLFilterImpl {
     *         recognizes the feature name but cannot set the
     *         requested value.
     */
-   public void setFeature(String name, boolean value)
+   public void setFeature(String name, boolean state)
                 throws SAXNotRecognizedException, SAXNotSupportedException {
       if (this.getParent() != null) {
-         this.getParent().setFeature(name, value);
+         this.getParent().setFeature(name, state);
       }
-      this.parserBuilder.setFeature(name, value);
+      this.parserBuilder.setFeature(name, state);
    }
 
    /**
@@ -389,7 +389,7 @@ public class ElementScanner extends XMLFilterImpl {
     *
     * @param  name   the property name, which is a fully-qualified
     *                URI.
-    * @param state   the requested value for the property.
+    * @param value   the requested value for the property.
     *
     * @throws SAXNotRecognizedException   when the XMLReader does not
     *         recognize the property name.
@@ -513,7 +513,7 @@ public class ElementScanner extends XMLFilterImpl {
     * <i>[ContentHandler interface support]</i> Receives notification
     * of the beginning of an element.
     *
-    * @param  uri         the Namespace URI, or the empty string if
+    * @param  nsUri       the Namespace URI, or the empty string if
     *                     the element has no Namespace URI or if
     *                     Namespace processing is not being performed.
     * @param  localName   the local name (without prefix), or the
@@ -555,7 +555,7 @@ public class ElementScanner extends XMLFilterImpl {
     * <i>[ContentHandler interface support]</i> Receives notification
     * of the end of an element.
     *
-    * @param  uri         the Namespace URI, or the empty string if
+    * @param  nsUri       the Namespace URI, or the empty string if
     *                     the element has no Namespace URI or if
     *                     Namespace processing is not being performed.
     * @param  localName   the local name (without prefix), or the
@@ -708,7 +708,7 @@ public class ElementScanner extends XMLFilterImpl {
       //----------------------------------------------------------------------
 
       protected SAXHandler createContentHandler() {
-         return (new ElementBuilder(new EmptyDocumentFactory(factory)));
+         return (new ElementBuilder(new EmptyDocumentFactory(getFactory())));
       }
 
       //----------------------------------------------------------------------
@@ -789,19 +789,6 @@ public class ElementScanner extends XMLFilterImpl {
        */
       public ElementBuilder(JDOMFactory factory) {
          super(factory);
-      }
-
-      //----------------------------------------------------------------------
-      // Specific implementation
-      //----------------------------------------------------------------------
-
-      /**
-       * Returns the Element being built.
-       *
-       * @return the Element being built.
-       */
-      public Element getCurrentElement() throws SAXException {
-         return this.currentElement;
       }
    }
 
