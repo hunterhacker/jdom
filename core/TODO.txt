@@ -2,7 +2,12 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Make JDK 1.1 builds work for jdom-contrib and jdom-test
+* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't seem to run,
+  which causes needed xpath/parser/*.java files to not be created)
+
+* Make JDK 1.1 builds work for jdom-test (besides problems caused by
+  the XPath bug above, ClassGenerator uses file.createNewFile() from JDK 1.2
+  and some test cases have spurious semi-colons)
 
 * Automate build process, using ant tasks to EOL handling
   Consider .zip readable by JAR
@@ -48,6 +53,8 @@ Items that need to be done:
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
   and let the caller pass the exception through
+
+* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
 
 --- FOR JDOM 1.0 ---
 
