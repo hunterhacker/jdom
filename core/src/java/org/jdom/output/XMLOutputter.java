@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.112 2004/09/01 06:08:18 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.113 2004/12/11 01:31:50 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.112 $, $Date: 2004/09/01 06:08:18 $
+ * @version $Revision: 1.113 $, $Date: 2004/12/11 01:31:50 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -115,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.112 $ $Date: 2004/09/01 06:08:18 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.113 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1304,7 +1304,7 @@ public class XMLOutputter implements Cloneable {
         }
 
         for (int i = 0; i < str.length(); i++) {
-            if (!isWhitespace(str.charAt(i)))
+            if (!Verifier.isXMLWhitespace(str.charAt(i)))
                 return false;
         }
         return true;
@@ -1314,7 +1314,7 @@ public class XMLOutputter implements Cloneable {
     private boolean startsWithWhite(String str) {
         if ((str != null) &&
             (str.length() > 0) &&
-            isWhitespace(str.charAt(0))) {
+            Verifier.isXMLWhitespace(str.charAt(0))) {
            return true;
         }
         return false;
@@ -1324,17 +1324,8 @@ public class XMLOutputter implements Cloneable {
     private boolean endsWithWhite(String str) {
         if ((str != null) &&
             (str.length() > 0) &&
-            isWhitespace(str.charAt(str.length() - 1))) {
+            Verifier.isXMLWhitespace(str.charAt(str.length() - 1))) {
            return true;
-        }
-        return false;
-    }
-
-    // Determine if a character is a XML whitespace.
-    // XXX should this method be in Verifier
-    private static boolean isWhitespace(char c) {
-        if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
-            return true;
         }
         return false;
     }

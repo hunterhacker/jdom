@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.53 2004/12/11 00:05:45 jhunter Exp $
+ $Id: Verifier.java,v 1.54 2004/12/11 01:31:49 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.53 $, $Date: 2004/12/11 00:05:45 $
+ * @version $Revision: 1.54 $, $Date: 2004/12/11 01:31:49 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.53 $ $Date: 2004/12/11 00:05:45 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.54 $ $Date: 2004/12/11 01:31:49 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -1219,4 +1219,18 @@ final public class Verifier {
         return false;
     }  
     
+    /**
+     * This is a utility function for determining whether a specified 
+     * Unicode character is a whitespace character according to production 3
+     * of the XML 1.0 specification.
+     *
+     * @param c <code>char</code> to check for XML whitespace compliance
+     * @return <code>boolean</code> true if it's a whitespace, false otherwise
+     */
+    public static boolean isXMLWhitespace(char c) {
+        if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
+            return true;
+        }
+        return false;
+    }
 }

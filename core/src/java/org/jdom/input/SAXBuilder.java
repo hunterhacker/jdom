@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.89 2004/09/03 18:24:28 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.90 2004/12/11 01:31:50 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.89 $, $Date: 2004/09/03 18:24:28 $
+ * @version $Revision: 1.90 $, $Date: 2004/12/11 01:31:50 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.89 $ $Date: 2004/09/03 18:24:28 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.90 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -124,6 +124,9 @@ public class SAXBuilder {
 
     /** Whether to ignore ignorable whitespace */
     private boolean ignoringWhite = false;
+
+    /** Whether to ignore all whitespace content */
+    private boolean ignoringBoundaryWhite = false;
 
     /** User-specified features to be set on the SAX parser */
     private HashMap features = new HashMap(5);
@@ -332,6 +335,36 @@ public class SAXBuilder {
     }
 
     /**
+     * Returns whether or not the parser will elminate element content
+     * containing only whitespace.
+     *
+     * @return <code>boolean</code> - whether only whitespace content will
+     * be ignored during build.
+     *
+     * @see #setIgnoringBoundaryWhitespace
+     */
+    public boolean getIgnoringBoundaryWhitespace() {
+        return ignoringBoundaryWhite;
+    }
+
+    /**
+     * Specifies whether or not the parser should elminate boundary whitespace,
+     * a term that indicates whitespace-only text between element tags.  This
+     * feature is a lot like {@link #setIgnoringElementContentWhitespace(boolean)}
+     * but this feature is more aggressive and doesn't require validation be
+     * turned on.  The {@link #setIgnoringElementContentWhitespace(boolean)}
+     * call impacts the SAX parse process while this method impacts the JDOM
+     * build process, so it can be beneficial to turn both on for efficiency.
+     * The default is <code>false</code>.
+     *
+     * @param ignoringBoundaryWhite Whether to ignore whitespace-only text
+     *  noes
+     */
+    public void setIgnoringBoundaryWhitespace(boolean ignoringBoundaryWhite) {
+        this.ignoringBoundaryWhite = ignoringBoundaryWhite;
+    }
+
+    /**
      * Returns whether the contained SAX parser instance is reused across
      * multiple parses.  The default is true.
      *
@@ -503,6 +536,7 @@ public class SAXBuilder {
         // Setup pass through behavior
         contentHandler.setExpandEntities(expand);
         contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
+        contentHandler.setIgnoringBoundaryWhitespace(ignoringBoundaryWhite);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*--
 
- $Id: TextBuffer.java,v 1.8 2004/02/06 09:28:31 jhunter Exp $
+ $Id: TextBuffer.java,v 1.9 2004/12/11 01:31:50 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,6 +56,8 @@
 
 package org.jdom.input;
 
+import org.jdom.*;
+
 /**
  * A non-public utility class similar to StringBuffer but optimized for XML
  * parsing where the common case is that you get only one chunk of characters
@@ -69,14 +71,14 @@ package org.jdom.input;
  * means that no extra unused char array space will be kept around after parsing
  * is through.
  *
- * @version $Revision: 1.8 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.9 $, $Date: 2004/12/11 01:31:50 $
  * @author  Bradley S. Huffman
  * @author  Alex Rosen
  */
 class TextBuffer {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.8 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.9 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
 
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */
@@ -124,6 +126,26 @@ class TextBuffer {
     void clear() {
         arraySize = 0;
         prefixString = null;
+    }
+
+    boolean isAllWhitespace() {
+        if ((prefixString == null) || (prefixString.length() == 0)) {
+            return true;
+        }
+
+        int size = prefixString.length();
+        for(int i = 0; i < size; i++) {
+            if ( !Verifier.isXMLWhitespace(prefixString.charAt(i))) {
+                return false;
+            }
+        }
+
+        for(int i = 0; i < arraySize; i++) {
+            if ( !Verifier.isXMLWhitespace(array[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Returns the text value stored in the buffer. */
