@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.1 2001/03/22 08:41:16 jhunter Exp $
+ $Id: SAXHandler.java,v 1.2 2001/03/28 18:35:23 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -292,6 +292,14 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
     }
 
+    /**
+     * <p>
+     *  This will take the supplied <code>{@link Element}</code> and
+     *    transfer its namespaces to the global namespace storage.
+     * </p>
+     *
+     * @param element <code>Element</code> to read namespaces from.
+     */
     private void transferNamespaces(Element element) {
         Iterator i = declaredNamespaces.iterator();
         while (i.hasNext()) {
@@ -302,6 +310,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
     }
 
+    /**
+     * <p>
+     *  For a given namespace prefix, this will return the
+     *    <code>{@link Namespace}</code> object for that prefix,
+     *    within the current scope.
+     * </p>
+     *
+     * @param prefix namespace prefix.
+     * @return <code>Namespace</code> - namespace for supplied prefix.
+     */
     private Namespace getNamespace(String prefix) {
         Iterator i = availableNamespaces.iterator();
         while (i.hasNext()) {
@@ -320,13 +338,13 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      *
      * @param ch <code>char[]</code> character array with character data
      * @param start <code>int</code> index in array where data starts.
-     * @param end <code>int</code> index in array where data ends.
+     * @param length <code>int</code> length of data.
      * @throws SAXException when things go wrong
      */
-    public void characters(char[] ch, int start, int end)
+    public void characters(char[] ch, int start, int length)
         throws SAXException {
 
-        String data = new String(ch, start, end);
+        String data = new String(ch, start, length);
 
         if (inCDATA) {
             ((Element)stack.peek()).addContent(new CDATA(data));
@@ -361,11 +379,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param namespaceURI <code>String</code> URI of namespace this
      *                     element is associated with
      * @param localName <code>String</code> name of element without prefix
-     * @param rawName <code>String</code> name of element in XML 1.0 form
+     * @param qName <code>String</code> name of element in XML 1.0 form
      * @throws SAXException when things go wrong
      */
     public void endElement(String namespaceURI, String localName,
-                           String rawName) {
+                           String qName) throws SAXException {
 
         Element element = (Element)stack.pop();
         
