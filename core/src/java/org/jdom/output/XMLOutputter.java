@@ -792,7 +792,7 @@ public class XMLOutputter implements Cloneable {
      * @param docType <code>DocType</code> whose declaration to write.
      * @param out <code>Writer</code> to write to.
      */
-    public void printDeclaration(Document doc,
+    protected void printDeclaration(Document doc,
                                     Writer out,
                                     String encoding)  throws IOException {
 
@@ -825,7 +825,7 @@ public class XMLOutputter implements Cloneable {
      * @param doc <code>Document</code> whose declaration to write.
      * @param out <code>Writer</code> to write to.
      */
-    public void printDocType(DocType docType, Writer out)  throws IOException {
+    protected void printDocType(DocType docType, Writer out)  throws IOException {
         if (docType == null) {
             return;
         }
