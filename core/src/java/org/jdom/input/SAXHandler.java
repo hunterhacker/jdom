@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.21 2001/08/17 18:37:06 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.22 2001/09/03 14:45:55 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -74,12 +74,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Philip Nelson
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
-                                                          DeclHandler {
+                                                          DeclHandler, 
+                                                          DTDHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.21 $ $Date: 2001/08/17 18:37:06 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.22 $ $Date: 2001/09/03 14:45:55 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -117,6 +119,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** The namespaces in scope and actually attached to an element */
     protected LinkedList availableNamespaces;
 
+    /** Temporary holder for the internal subset */
+    private StringBuffer buffer = new StringBuffer();
+
+    /** The external entities defined in this document */
     private Map externalEntities;
 
     /** The JDOMFactory used for JDOM object creation */
@@ -285,13 +291,89 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                    throws SAXException {
         // Store the public and system ids for the name
         externalEntities.put(name, new String[]{publicId, systemId}); 
+
+        buffer.append("  <!ENTITY ")
+              .append(name);
+        if (publicId != null) {
+            buffer.append(" PUBLIC \"")
+                  .append(publicId)
+                  .append("\" ");
+        }
+        if (systemId != null) {
+            buffer.append(" SYSTEM \"")
+                  .append(systemId)
+                  .append("\" ");
+        }
+        buffer.append(">\n");
+    }
+	
+    /**
+     * <P>
+     *  This handles an attribute declaration in a DTD
+     * </P>
+     *
+     * @param eName <code>String</code> element name of attribute
+     * @param aName <code>String</code> attribute name
+     * @param type <code>String</code> attribute type
+     * @param valueDefault <code>String</code> default value of attribute
+     * @param value <code>String</code> value of attribute
+     */
+    public void attributeDecl(String eName, String aName, String type,
+                              String valueDefault, String value) { 
+
+        buffer.append("  <!ATTLIST ")
+              .append(eName)
+              .append(" ")
+              .append(aName)
+              .append(" ")
+              .append(type)
+              .append(" ");
+        if (valueDefault != null) {
+              buffer.append(valueDefault);
+        } else {
+            buffer.append("\"")
+                  .append(value)
+                  .append("\"");
+        }
+        if ((valueDefault != null) && (valueDefault.equals("#FIXED"))) {
+            buffer.append(" \"")
+                  .append(value)
+                  .append("\"");
+        }
+        buffer.append(">\n");	
     }
 
-    // These methods from the DeclHandler interface we can ignore right now
-    public void attributeDecl(String eName, String aName, String type,
-                              String valueDefault, String value) { }
-    public void elementDecl(String name, String model) { }
-    public void internalEntityDecl(String name, String value) { }
+    /**
+     * <P>
+     *  Handle an element declaration in a DTD
+     * </P>
+     *
+     * @param name <code>String</code> name of element
+     * @param model <code>String</code> model of the element in DTD syntax
+     */
+    public void elementDecl(String name, String model) { 
+        buffer.append("  <!ELEMENT ")
+              .append(name)
+              .append(" ")
+              .append(model)
+              .append(">\n");
+    }
+
+    /**
+     * <P>
+     *  Handle an internal entity declaration in a DTD.
+     * </P>
+     *
+     * @param name <code>String</code> name of entity
+     * @param value <code>String</code> value of the entity
+     */
+    public void internalEntityDecl(String name, String value) { 	
+        buffer.append("  <!ENTITY ")
+              .append(name)
+              .append(" \"")
+              .append(value)
+              .append("\">\n");
+    }
 
     /**
      * <p>
@@ -614,6 +696,7 @@ if (!inDTD) {
 
         document.setDocType(
             factory.docType(name, publicId, systemId));
+        document.getDocType().setInternalSubset(buffer.toString());
         inDTD = true;
     }
 
@@ -708,6 +791,13 @@ if (!inDTD) {
         if (suppress) return;
 
         String commentText = new String(ch, start, length);
+        if (inDTD) {
+            String comment = new String(ch, start, length);
+            buffer.append("  <!--")
+                  .append(comment)
+                  .append("-->\n");
+            return;
+        }
         if ((!inDTD) && (!commentText.equals(""))) {
             if (stack.empty()) {
                 document.addContent(
@@ -717,6 +807,55 @@ if (!inDTD) {
                     factory.comment(commentText));
             }
         }
+    }
+
+    /**
+     * <p>
+     *  Handle the declaration of a Notation in a DTD
+     * </P>
+     *
+     * @param name name of the notation
+     * @param publicID the public ID of the notation
+     * @param systemID the system ID of the notation
+     */
+    public void notationDecl(String name, String publicID, String systemID) {
+        buffer.append("  <!NOTATION ")
+              .append(name)
+              .append(" \"")
+              .append(systemID)
+              .append("\">\n");	
+    }
+
+    /**
+     * <P>
+     *  Handler for unparsed entity declarations in the DTD
+     * </P>
+     *
+     * @param name <code>String</code> of the unparsed entity decl
+     * @param publicId <code>String</code> of the unparsed entity decl
+     * @param systemId <code>String</code> of the unparsed entity decl
+     * @param notationName <code>String</code> of the unparsed entity decl
+     */
+    public void unparsedEntityDecl(String name, String publicId,
+                                   String systemId, String notationName)
+        throws SAXException { 
+
+        buffer.append("  <!ENTITY ")
+              .append(name);
+        if (publicId != null) {
+            buffer.append(" PUBLIC \"")
+                  .append(publicId)
+                  .append("\" ");
+        }
+        if (systemId != null) {
+            buffer.append(" SYSTEM \"")
+                  .append(systemId)
+                  .append("\" ");
+        }
+
+        buffer.append(" NDATA ")
+              .append(notationName);
+        buffer.append(">\n");
     }
 
     /**
