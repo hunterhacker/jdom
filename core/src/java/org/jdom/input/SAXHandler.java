@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.43 2002/04/12 14:00:34 jhunter Exp $
+ $Id: SAXHandler.java,v 1.44 2002/04/12 14:02:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.43 $, $Date: 2002/04/12 14:00:34 $
+ * @version $Revision: 1.44 $, $Date: 2002/04/12 14:02:43 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.43 $ $Date: 2002/04/12 14:00:34 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.44 $ $Date: 2002/04/12 14:02:43 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -695,11 +695,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     public void ignorableWhitespace(char[] ch, int start, int length)
                                                      throws SAXException {
-        if (suppress) return;
-        if (ignoringWhite) return;
-        if (length == 0) return;
-
-        textBuffer.append(ch, start, length);
+        if (!ignoringWhite) {
+            characters(ch, start, length);
+        }
     }
 
     /**
