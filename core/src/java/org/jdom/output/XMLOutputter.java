@@ -587,7 +587,13 @@ public class XMLOutputter {
                 out.write(element.getQualifiedName());
                 out.write(">");
             } else {
-                out.write(" />");
+                if (!expandEmptyElements) {     
+                    out.write(" />");
+                } else {
+                    out.write("></");
+                    out.write(element.getQualifiedName());
+                    out.write(">");
+                }
             }
             maybePrintln(out);
         } else {
