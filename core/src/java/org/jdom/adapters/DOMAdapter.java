@@ -75,12 +75,11 @@ public interface DOMAdapter {
 
     /**
      * <p>
-     * This creates a new <code>Document</code> from an
-     *   existing <code>InputStream</code> by letting a DOM
-     *   parser handle parsing using the supplied stream.
+     * This creates a new <code>Document</code> from a
+     *   given filename by letting a DOM parser handle parsing from the file.
      * </p>
      *
-     * @param in <code>InputStream</code> to parse.
+     * @param filename file to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
      * @throws <code>IOException</code> when errors occur in
