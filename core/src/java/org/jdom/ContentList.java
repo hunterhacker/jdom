@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.9 2002/03/16 04:25:04 jhunter Exp $
+ $Id: ContentList.java,v 1.10 2002/03/16 10:24:53 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.9 $, $Date: 2002/03/16 04:25:04 $
+ * @version $Revision: 1.10 $, $Date: 2002/03/16 10:24:53 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -79,10 +79,10 @@ import org.jdom.filter.Filter;
  * @see ProcessingInstruction
  * @see Text
  */
-class ContentList extends AbstractList implements List, java.io.Serializable {
+class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.9 $ $Date: 2002/03/16 04:25:04 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.10 $ $Date: 2002/03/16 10:24:53 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -711,7 +711,7 @@ class ContentList extends AbstractList implements List, java.io.Serializable {
      * </p>
      */
 
-    class FilterList extends AbstractList implements List {
+    class FilterList extends AbstractList {
 
         /** The Filter */
         protected Filter filter;
@@ -954,7 +954,8 @@ class ContentList extends AbstractList implements List, java.io.Serializable {
                           break;
             case HASPREV: cursor = moveForward(cursor + 1);
                           break;
-            default:      break;
+            case HASNEXT: break;
+            default:      throw new IllegalStateException("Unknown operation");
             }
 
             if (lastOperation != CREATE) {
@@ -1002,7 +1003,8 @@ class ContentList extends AbstractList implements List, java.io.Serializable {
             case ADD:
             case NEXT:    cursor = last;
                           break;
-            default:      break;
+            case HASPREV: break;
+            default:      throw new IllegalStateException("Unknown operation");
             }
 
             if (lastOperation != CREATE) {
