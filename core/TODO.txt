@@ -1,26 +1,9 @@
 Items that need to be done:
 
---- RIGHT AWAY, FOR BETA 8 ---
-
-* Should we make "Element parent" of types like EntityRef into "Object parent"
-  to match types like Comment and Element?
+--- AFTER BETA 8 ---
 
 * Look into hasContent() and hasAttributes() methods to eliminate need to
   create lists during output.
-
-* Add in Brad's ContentFilter
-  ftp://a.cs.okstate.edu/pub/hip/ContentFilter.java
-  ftp://a.cs.okstate.edu/pub/hip/TestContentFilter.java
-
---- AFTER BETA 8 ---
-
-* Examine if it's worth doing an intern() on element and attribute names,
-  or if it's too much to pay since SAX is likely doing it already
-  http://www.megginson.com/SAX/Java/features.html
-  Probably turn off SAX interning and do it ourselves?  Note commentary:
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
-  Regardless, the SAX builder should not assume there's interning!
-  (Brad's done some testing, wanted this postponed til after b8)
 
 * Look at making CDATA and Text either the same class or in the same class
   hierarchy.
@@ -35,8 +18,6 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
   Brad Huffman has a good proposal.
   (Brad's)
-
-* Make public methods like getContent(Filter).
 
 * Start shipping Xerces 2.0+
   Xerces 2.0.0 bugs found when using DOMBuilder:
@@ -59,6 +40,7 @@ Items that need to be done:
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
+  One idea: Stop using synchronized Stack in SAXHandler.
 
 * Give attributes the "specified" flag like in DOM.  This probably isn't
   receivable from SAXBuilder, but it would be from DOMBuilder and other

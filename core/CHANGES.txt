@@ -8,16 +8,21 @@ data, so strings can now have parentage.  A getText() will still return a
 String.  The Text nodes themselves can be retrieved through a getContent()
 call.
 
-Added the non-public interface Filter to support the "FilterList"
-functionality.  Currently it's not used by any of the core classes.  Later you
-can expect to see new functionality like getContent(Filter).
+Added the public interface org.jdom.filter.Filter to support the "FilterList"
+functionality.
 
-Added several non-public support classes to support the "FilterList"
-functionality: ContentList, AttributeList, and ElementFilter.
+Added org.jdom.filter.ContentFilter, a standard filter for Content.  And added
+org.jdom.filter.ElementFilter, a standard filter for Element data.
+
+Added two non-public support classes to support the "FilterList"
+functionality: ContentList and AttributeList.
 
 
 NEW METHODS
 -----------
+
+Added to Element and Document the method getContent(Filter) that takes a
+Filter instance.
 
 Added to CDATA the methods getTextTrim(), getTextNormalize(), append(String),
 append(CDATA), getParent(), getDocument(), and detach().  This brings CDATA
@@ -62,7 +67,7 @@ getProperty().
 Added to Attribute the methods getAttributeType() and setAttributeType().
 Also added various constructors that take an int type.  These methods and
 constructors support the new functionality where attributes can record their
-type information.
+type information.  Note: this is something DOM can't do!
 
 Added to Document the method detachRootElement().
 
@@ -92,10 +97,9 @@ The XMLOutputter escape*() methods are now public.
 
 The Verifier checkXMLName() method is now public.
 
-Changed the protected variables for some classes that had both a Document and
-Element parent reference so they are now like Element and have just an Object
-that can serve both duties.  This saves memory by one reference per instance.
-Classes changed are: Comment, EntityRef, and ProcessingInstruction.
+Changed the protected "Element parent" variable for classes to be "Object
+parent", with the object capable of serving double duty as either a Document
+parent or Element parent.  Saves noticeable memory.
 
 Changed the no-arg Document constructor to be public, along with Javadocs
 explaining how the method is to be used.
@@ -184,7 +188,11 @@ remove the ability to do the cool "java -jar jdom.jar".
 Added support for skipped entities in SAXHandler in the event that the parser
 is not resolving external entities. 
 
+Added well-formedness checking to ensure there are never duplicate attributes.
+
 Many, many performance optimizations throughout.
+
+Made Xerces 1.4.4 the default parser in "lib/xerces.jar".
 
 
 BUG FIXES
@@ -411,7 +419,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.7 2002/02/20 10:42:57 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.8 2002/03/12 07:35:58 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
