@@ -815,6 +815,10 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         document.setDocType(
             new DocType(name, publicId, systemId));
         inDTD = true;
+
+        /* Debug
+        System.out.println("startDTD invoked...");
+        */
     }
 
     /**
@@ -824,6 +828,10 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      */
     public void endDTD() throws SAXException {
         inDTD = false;
+
+        /* Debug 
+        System.out.println("endDTD invoked...");
+        */
     }
 
     public void startEntity(String name)

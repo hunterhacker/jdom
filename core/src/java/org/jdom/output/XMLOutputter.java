@@ -60,10 +60,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import org.jdom.Attribute;
 import org.jdom.Comment;
@@ -116,9 +119,6 @@ public class XMLOutputter {
     /** New line separator */
     private String newline = "\r\n";
 
-    /** Namespaces on the document */
-    private LinkedList namespaces;
-
     /**
      * <p>
      * This will create an <code>XMLOutputter</code> with
@@ -127,7 +127,6 @@ public class XMLOutputter {
      * </p>
      */
     public XMLOutputter() {
-        namespaces = new LinkedList();
     }
 
     /**
@@ -141,7 +140,6 @@ public class XMLOutputter {
      */
     public XMLOutputter(String indent) {
        this.indent = indent;
-       namespaces = new LinkedList();
     }
 
     /**
@@ -160,7 +158,6 @@ public class XMLOutputter {
     public XMLOutputter(String indent, boolean newlines) {
        this.indent = indent;
        this.newlines = newlines;
-       namespaces = new LinkedList();
     }
 
     /**
@@ -180,7 +177,6 @@ public class XMLOutputter {
        this.indent = indent;
        this.newlines = newlines;
        this.enc = encoding;
-       namespaces = new LinkedList();
     }
 
     /**
@@ -290,7 +286,9 @@ public class XMLOutputter {
      * @param out <code>Writer</code> to write to
      */
     protected void maybePrintln(Writer out) throws IOException  {
-        if (newlines) out.write(newline);
+        if (newlines) {
+            out.write(newline);
+        }
     }
 
     /**
@@ -472,6 +470,25 @@ public class XMLOutputter {
      */
     protected void printElement(Element element, Writer out,
                                 int indentLevel)  throws IOException {
+                                        
+        // if this is the root element we could pre-initialize the namespace stack
+        // with the namespaces                               
+        printElement(element, out, indentLevel, new NamespaceStack());
+    }
+
+    /**
+     * <p>
+     * This will handle printing out an <code>{@link Element}</code>,
+     *   its <code>{@link Attribute}</code>s, and its value.
+     * </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param out <code>Writer</code> to write to.
+     * @param indent <code>int</code> level of indention.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    protected void printElement(Element element, Writer out,
+                                int indentLevel, NamespaceStack namespaces)  throws IOException {
 
         List mixedContent = element.getMixedContent();
 
@@ -484,8 +501,8 @@ public class XMLOutputter {
         // Print beginning element tag
         /* maybe the doctype, xml declaration, and processing instructions 
            should only break before and not after; then this check is unnecessary,
-           or maybe the println should only come after and never before. Then the
-           output always ends with a newline */
+           or maybe the println should only come after and never before. 
+           Then the output always ends with a newline */
            
         indent(out, indentLevel);
 
@@ -493,17 +510,18 @@ public class XMLOutputter {
         // necessary namespace declarations
         out.write("<");
         out.write(element.getQualifiedName());
+        int previouslyDeclaredNamespaces = namespaces.size();
         Namespace ns = element.getNamespace();
-        boolean printedNS = false;
-        if ((ns != Namespace.NO_NAMESPACE) && 
-            (ns != Namespace.XML_NAMESPACE) &&
-            (!namespaces.contains(ns))) {
-            printNamespace(element.getNamespace(), out);
-            printedNS = true;
-            namespaces.add(ns);
+        if (ns != Namespace.NO_NAMESPACE) {
+            String prefix = ns.getPrefix();        
+            String uri = namespaces.getURI(prefix);
+            if (!ns.getURI().equals(uri)) { // output a new namespace declaration
+                namespaces.push(ns);
+                printNamespace(ns, out);
+            }
         }
 
-        printAttributes(element.getAttributes(), out);
+        printAttributes(element.getAttributes(), element, out, namespaces);
 
         if (empty) {
             // Simply close up
@@ -538,7 +556,7 @@ public class XMLOutputter {
                 } else if (content instanceof String) {
                     out.write(escapeElementEntities(content.toString()));
                 } else if (content instanceof Element) {
-                    printElement((Element) content, out, indentLevel + 1);
+                    printElement((Element) content, out, indentLevel + 1, namespaces);
                 } else if (content instanceof Entity) {
                     printEntity((Entity) content, out);
                 } else if (content instanceof ProcessingInstruction) {
@@ -552,11 +570,11 @@ public class XMLOutputter {
             out.write(">");
             maybePrintln(out);
 
-           // After recursion, remove the namespace defined on the element (if any)
-           if (printedNS) {
-              namespaces.removeLast();
-           }
         }
+
+        // remove declared namespaces from stack
+        while (namespaces.size() > previouslyDeclaredNamespaces) namespaces.pop();
+        
     }
     
     /**
@@ -603,15 +621,28 @@ public class XMLOutputter {
      * @param attributes <code>List</code> of Attribute objcts
      * @param out <code>Writer</code> to write to
      */
-    protected void printAttributes(List attributes, Writer out) throws IOException {
-        for (int i=0, size=attributes.size(); i<size; i++) {
+    protected void printAttributes(List attributes, Element parent, 
+                                   Writer out, NamespaceStack namespaces) 
+      throws IOException {
+
+        // I do not yet handle the case where the same prefix maps to
+        // two different URIs. For attributes on the same element
+        // this is illegal; but as yet we don;t throw an exception
+        // if someone tries to do this
+        Set prefixes = new HashSet();
+
+        for (int i=0, size=attributes.size(); i < size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
             Namespace ns = attribute.getNamespace();
-            if ((ns != Namespace.NO_NAMESPACE) && 
-                (ns != Namespace.XML_NAMESPACE) &&
-                (!namespaces.contains(ns))) {
-                printNamespace(attribute.getNamespace(), out);
+            if (ns != Namespace.NO_NAMESPACE) {
+                String prefix = ns.getPrefix();           
+                String uri = namespaces.getURI(prefix);
+                if (!ns.getURI().equals(uri)) { // output a new namespace declaration
+                    printNamespace(ns, out);
+                    namespaces.push(ns);
+                }
             }
+            
             out.write(" ");
             out.write(attribute.getQualifiedName());
             out.write("=");
@@ -620,6 +651,67 @@ public class XMLOutputter {
             out.write(escapeAttributeEntities(attribute.getValue()));
             out.write("\"");
         }
+        
+    }
+
+    /**
+     * <p>
+     * This will handle printing out an <code>{@link Attribute}</code> list.
+     * </p>
+     *
+     * @param attributes <code>List</code> of Attribute objcts
+     * @param out <code>Writer</code> to write to
+     */
+    protected void printAttributes(List attributes, Element parent, 
+                                   Writer out) throws IOException {
+
+        // I do not yet handle the case where the same prefix maps to
+        // two different URIs. For attributes on the same element
+        // this is illegal; but as yet we don;t throw an exception
+        // if someone tries to do this
+        Set prefixes = new HashSet();
+
+        for (int i=0, size=attributes.size(); i < size; i++) {
+            Attribute attribute = (Attribute)attributes.get(i);
+            Namespace ns = attribute.getNamespace();
+            if (ns != Namespace.NO_NAMESPACE) {
+                if (!prefixes.contains(ns.getPrefix())) {
+                    prefixes.add(ns.getPrefix());
+                    boolean printedNamespace = false;
+                    Element ancestor = parent;
+                    while (ancestor != null) {
+                        Namespace ancestorSpace = ancestor.getNamespace();
+                        if (ancestorSpace == Namespace.NO_NAMESPACE) continue;
+                        String uri    = ancestorSpace.getURI();
+                        String prefix = ancestorSpace.getPrefix();
+                        if (uri.equals(ns.getURI())) {
+                            if (prefix.equals(ns.getPrefix())) {
+                                printedNamespace = true;
+                                break;
+                            }
+                        }
+                        else { // different URI
+                            if (prefix.equals(ns.getPrefix())) {
+                               // Different URI, but same prefix; 
+                               // prefix has been redeclared; therefore we must
+                               // redeclare
+                               break;
+                             }
+                        }
+                        ancestor = ancestor.getParent();             
+                    }            
+                    if (!printedNamespace) printNamespace(attribute.getNamespace(), out);
+                }
+            }
+            
+            out.write(" ");
+            out.write(attribute.getQualifiedName());
+            out.write("=");
+
+            out.write("\"");
+            out.write(escapeAttributeEntities(attribute.getValue()));
+            out.write("\"");
+        }   
     }
 
     /**
@@ -718,4 +810,42 @@ public class XMLOutputter {
         return buff.toString();
     }
 
+}
+
+class NamespaceStack {
+ 
+    private Stack prefixes = new Stack();
+    private Stack uris = new Stack();        
+  
+    public void push(Namespace ns) {
+        prefixes.push(ns.getPrefix());
+        uris.push(ns.getURI());
+    }      
+    
+    public void pop() {      
+        String s = (String) prefixes.pop();
+        uris.pop();
+    }
+    
+    public int size() {
+        return prefixes.size();     
+    }    
+  
+    // find the URI matching the nearest prefix
+    public String getURI(String prefix) {
+       int index = prefixes.lastIndexOf(prefix);
+       if (index == -1) return null;
+       String s = (String) uris.elementAt(index);
+       return s;       
+    }
+    
+    /* For debugging...
+    public void printStack() {
+        System.out.println("Stack: " + prefixes.size());
+        for (int i = 0; i < prefixes.size(); i++) {
+            System.out.println(prefixes.elementAt(i) + "&" + uris.elementAt(i));
+        }        
+    }  
+    */
+        
 }

@@ -7,9 +7,6 @@ Items that need to be done:
   Consider releasing source with jdom.jar as sole distribution
   Write todos/tounix tasks (Alex Chaffee?)
 
-* Fix namespaces to handle disparate prefixes to same URI
-  (Make them unique by prefix/URI)
-
 * Consider changing XMLOutputter to have more set methods like Enhydra's
   DOMFormatter.  Possible good ones:
    void setJavaEncoding(java.lang.String newJavaEncoding) 

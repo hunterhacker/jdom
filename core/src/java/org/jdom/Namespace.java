@@ -1,60 +1,49 @@
-/*-- 
+/*--
 
- Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
- All rights reserved.
- 
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
- 
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+ Copyright 2000 Brett McLaughlin & Jason Hunter. All rights reserved.
 
- 3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
- 
- 4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
- software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
- available at http://www.jdom.org/images/logos.
+ Redistribution and use in source and binary forms, with or without modifica-
+ tion, are permitted provided that the following conditions are met:
 
- THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- SUCH DAMAGE.
+ 1. Redistributions of source code must retain the above copyright notice,
+    this list of conditions, and the following disclaimer.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
- JDOM Project, please see <http://www.jdom.org/>.
- 
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions, the disclaimer that follows these conditions,
+    and/or other materials provided with the distribution.
+
+ 3. The names "JDOM" and "Java Document Object Model" must not be used to
+    endorse or promote products derived from this software without prior
+    written permission. For written permission, please contact
+    license@jdom.org.
+
+ 4. Products derived from this software may not be called "JDOM", nor may
+    "JDOM" appear in their name, without prior written permission from the
+    JDOM Project Management (pm@jdom.org).
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS  FOR A PARTICULAR  PURPOSE ARE  DISCLAIMED.  IN NO  EVENT SHALL  THE
+ JDOM PROJECT  OR ITS CONTRIBUTORS  BE LIABLE FOR  ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL,  EXEMPLARY, OR CONSEQUENTIAL  DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT  OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ OF USE, DATA, OR  PROFITS; OR BUSINESS  INTERRUPTION)  HOWEVER CAUSED AND ON
+ ANY  THEORY OF LIABILITY,  WHETHER  IN CONTRACT,  STRICT LIABILITY,  OR TORT
+ (INCLUDING  NEGLIGENCE OR  OTHERWISE) ARISING IN  ANY WAY OUT OF THE  USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ This software  consists of voluntary contributions made  by many individuals
+ on  behalf of the Java Document Object Model Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>. For more  information on the JDOM
+ Project, please see <http://www.jdom.org/>.
+
  */
-
 package org.jdom;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p><code>Namespace</code> defines both a factory for
@@ -78,7 +67,11 @@ import java.util.HashMap;
  */
 public final class Namespace {
 
-    /** Factory list of namespaces */
+    /** 
+     * Factory list of namespaces. 
+     *  Keys are <i>prefix</i>&amp;<i>URI</i>. 
+     *  Values are Namespace objects 
+     */
     private static HashMap namespaces;
 
     /** Factory list of mappings */
@@ -87,16 +80,8 @@ public final class Namespace {
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
-    /** The implicit XML namespace */
-    public static final String XML_NAMESPACE_PREFIX = "xml";
-
-    /** The implicit XML namespace URI */
-    public static final String XML_NAMESPACE_URI =
-        "http://www.w3.org/XML/1998/namespace";
-
-    /** Define a <code>Namespace</code> for "xml" prefix */
-    public static final Namespace XML_NAMESPACE =
-        new Namespace(XML_NAMESPACE_PREFIX, XML_NAMESPACE_URI);
+    public static final Namespace XML_NAMESPACE = 
+        new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
 
     /** The prefix mapped to this namespace */
     private String prefix;
@@ -119,10 +104,8 @@ public final class Namespace {
         // Add the "empty" namespace
         namespaces.put("", NO_NAMESPACE);
         mappings.put("", "");
-
-        // Add the "xml" namespace
-        namespaces.put(XML_NAMESPACE_URI, XML_NAMESPACE);
-        mappings.put(XML_NAMESPACE_PREFIX, XML_NAMESPACE_URI);
+        mappings.put("xml", "http://www.w3.org/XML/1998/namespace");
+        namespaces.put("xml&http://www.w3.org/XML/1998/namespace", XML_NAMESPACE);
     }
 
     /**
@@ -147,19 +130,6 @@ public final class Namespace {
      * @return <code>Namespace</code> - ready to use namespace.
      */
     public static Namespace getNamespace(String prefix, String uri) {
-        // Sanity checking
-        if ((prefix == null) || (prefix.trim().equals(""))) {
-            prefix = "";
-        }
-        if ((uri == null) || (uri.trim().equals(""))) {
-            uri = "";
-        }
-
-        // Return existing namespace if found
-        if (namespaces.containsKey(uri)) {
-            return (Namespace)namespaces.get(uri);
-        }
-
         // Ensure proper naming
         String reason;
         if ((reason = Verifier.checkNamespacePrefix(prefix)) != null) {
@@ -169,30 +139,29 @@ public final class Namespace {
             throw new IllegalNameException(uri, "Namespace URI", reason);
         }
 
+        // Housekeeping
+        if ((prefix == null) || (prefix.trim().equals(""))) {
+            prefix = "";
+        }
+        if ((uri == null) || (uri.trim().equals(""))) {
+            uri = "";
+        }
+
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
-                "Namespace URIs must be non-null and non-empty Strings");
+                "Namespace URIs must be non-null and non-empty Strings.");
         }
 
-        // Ensure prefix uniqueness in non-default namespaces
-        if (!prefix.equals("")) {
-            int i = 0;
-            String newPrefix = prefix;
-
-            while (mappings.containsKey(newPrefix)) {
-                newPrefix = newPrefix + i++;
-            }
-            prefix = newPrefix;
-
-            // We really don't care to store all the default namespaces, so
-            //   storing mappings here is OK
-            mappings.put(prefix, uri);
+        // Return existing namespace if found
+        if (namespaces.containsKey(uri)) {
+            return (Namespace)namespaces.get(prefix + "&" + uri);
         }
 
         // Finally, store and return
+        mappings.put(prefix, uri);
         Namespace ns = new Namespace(prefix, uri);
-        namespaces.put(uri, ns);
+        namespaces.put(prefix + "&" + uri, ns);
         return ns;
     }
 
@@ -208,6 +177,44 @@ public final class Namespace {
      */
     public static Namespace getNamespace(String uri) {
         return getNamespace("", uri);
+    }
+
+    /**
+     * <p>
+     *  This will retrieve the  
+     *  <code>Namespace</code> for the supplied prefix
+     *  in the specified context. It returns null if the prefix
+     *  is not mapped within that element.   
+     * </p>
+     *
+     * @param prefix <code>String</code> prefix of the existing <code>Namespace</code>.
+     * @param context <code>Element</code> against which this prefix is resolved.
+     * @return <code>Namespace</code> - ready to use namespace.
+     */
+    public static Namespace getNamespace(String prefix, Element context) {
+       
+       if (context == null) {
+           return null;
+       }
+       
+       Namespace ns = context.getNamespace();
+       if (ns.getPrefix().equals(prefix)) {
+           return ns;
+       }
+       // check the Attributes for the requested prefix
+       List attributes = context.getAttributes();
+       Iterator iterator = attributes.iterator();
+       while (iterator.hasNext()) {
+           Attribute a = (Attribute) iterator.next();
+           ns = a.getNamespace();
+           if (ns.getPrefix().equals(prefix)) {
+               return ns;
+           }
+       }
+       
+       // recurse through the ancestors
+       return getNamespace(prefix, context.getParent()); 
+        
     }
 
     /**
@@ -249,9 +256,9 @@ public final class Namespace {
 
     /**
      * <p>
-     *  This tests for equality - since the prefix of a <code>Namespace</code>
-     *    does not factor into the equality of the namespace, this provides
-     *    a correct <code>equals</code> interpretation.
+     *  This tests for equality - Two <code>Namespaces</code>
+     *  are equal if and only if their URIs are byte-for-byte equals
+     *  and their prefixes are equal.
      * </p>
      *
      * @param ob <code>Object</code> to compare to this <code>Namespace</code>.
@@ -266,7 +273,7 @@ public final class Namespace {
         if (ob instanceof Namespace) {
             Namespace ns = (Namespace)ob;
             // Compare URIs
-            if (ns.getURI().equals(uri)) {
+            if (ns.getURI().equals(uri) && ns.getPrefix().equals(prefix)) {
                 return true;
             }
         }
@@ -288,7 +295,9 @@ public final class Namespace {
 
     /**
      * <p>
-     *  This returns a unique hash code for the <code>Namespace</code>.
+     *  This returns a probably unique hash code for the <code>Namespace</code>.
+     *  If two namespaces have the same URI, they are equal and have the same
+     *  hash code, even if they have different prefixes.
      * </p>
      *
      * @return <code>int</code> - hash code for this <code>Namespace</code>.
@@ -296,7 +305,7 @@ public final class Namespace {
     public int hashCode() {
         // Since neither URI nor prefix are guaranteed to be unique, 
         // use the combination
-        return (prefix + uri).hashCode();
+        return (prefix+uri).hashCode();
     }
 
 }
