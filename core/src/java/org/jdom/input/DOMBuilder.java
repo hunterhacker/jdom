@@ -1,6 +1,6 @@
 /*--
 
- $Id: DOMBuilder.java,v 1.58 2004/02/28 03:42:23 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.59 2004/09/03 06:03:41 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.58 $, $Date: 2004/02/28 03:42:23 $
+ * @version $Revision: 1.59 $, $Date: 2004/09/03 06:03:41 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,13 +78,7 @@ import org.w3c.dom.*;
 public class DOMBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.58 $ $Date: 2004/02/28 03:42:23 $ $Name:  $";
-
-    /** Default adapter class to use. This is used when no other parser
-      * is given and JAXP isn't available.
-      */
-    private static final String DEFAULT_ADAPTER_CLASS =
-        "org.jdom.adapters.XercesDOMAdapter";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.59 $ $Date: 2004/09/03 06:03:41 $ $Name:  $";
 
     /** Adapter class to use */
     private String adapterClass;
