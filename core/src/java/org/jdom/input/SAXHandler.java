@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.42 2002/04/12 04:19:04 jhunter Exp $
+ $Id: SAXHandler.java,v 1.43 2002/04/12 14:00:34 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.42 $, $Date: 2002/04/12 04:19:04 $
+ * @version $Revision: 1.43 $, $Date: 2002/04/12 14:00:34 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.42 $ $Date: 2002/04/12 04:19:04 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.43 $ $Date: 2002/04/12 14:00:34 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -134,10 +134,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     protected LinkedList availableNamespaces;
 
     /** Temporary holder for the internal subset */
-    private StringBuffer buffer = new StringBuffer();
+    private StringBuffer internalSubset = new StringBuffer();
 
     /** Temporary holder for Text and CDATA */
-    private StringBuffer textBuffer = new StringBuffer();
+    private TextBuffer textBuffer = new TextBuffer();
 
     /** The external entities defined in this document */
     private Map externalEntities;
@@ -336,10 +336,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         if (!inInternalSubset) return;
 
-        buffer.append("  <!ENTITY ")
+        internalSubset.append("  <!ENTITY ")
               .append(name);
         appendExternalId(publicID, systemID);
-        buffer.append(">\n");
+        internalSubset.append(">\n");
     }
 
     /**
@@ -359,7 +359,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         if (!inInternalSubset) return;
 
-        buffer.append("  <!ATTLIST ")
+        internalSubset.append("  <!ATTLIST ")
               .append(eName)
               .append(" ")
               .append(aName)
@@ -367,18 +367,18 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
               .append(type)
               .append(" ");
         if (valueDefault != null) {
-              buffer.append(valueDefault);
+              internalSubset.append(valueDefault);
         } else {
-            buffer.append("\"")
+            internalSubset.append("\"")
                   .append(value)
                   .append("\"");
         }
         if ((valueDefault != null) && (valueDefault.equals("#FIXED"))) {
-            buffer.append(" \"")
+            internalSubset.append(" \"")
                   .append(value)
                   .append("\"");
         }
-        buffer.append(">\n");
+        internalSubset.append(">\n");
     }
 
     /**
@@ -393,7 +393,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         // Skip elements that come from the external subset
         if (!inInternalSubset) return;
 
-        buffer.append("  <!ELEMENT ")
+        internalSubset.append("  <!ELEMENT ")
               .append(name)
               .append(" ")
               .append(model)
@@ -414,13 +414,13 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         // Skip entities that come from the external subset
         if (!inInternalSubset) return;
 
-        buffer.append("  <!ENTITY ");
+        internalSubset.append("  <!ENTITY ");
         if (name.startsWith("%")) {
-           buffer.append("% ").append(name.substring(1));
+           internalSubset.append("% ").append(name.substring(1));
         } else {
-           buffer.append(name);
+           internalSubset.append(name);
         }
-        buffer.append(" \"")
+        internalSubset.append(" \"")
               .append(value)
               .append("\">\n");
     }
@@ -678,50 +678,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             flushCharacters();
         }
 
-        textBuffer.append( ch, start, length);
-    }
-
-    /**
-     * <p>
-     * This will flush any characters from SAX character calls we've
-     * been buffering.
-     * </p>
-     *
-     * @throws SAXException when things go wrong
-     */
-    protected void flushCharacters() throws SAXException {
-
-        if (textBuffer.length() == 0) {
-            previousCDATA = inCDATA;
-            return;
-        }
-
-        /*
-         * Note: When we stop supporting JDK1.1, use substring instead
-        String data = textBuffer.substring(0);
-         */
-        String data = textBuffer.toString();
-        textBuffer.setLength(0);
-
-/**
- * This is commented out because of some problems with
- * the inline DTDs that Xerces seems to have.
-if (!inDTD) {
-  if (inEntity) {
-    getCurrentElement().setContent(factory.text(data));
-  } else {
-    getCurrentElement().addContent(factory.text(data));
-}
-*/
-
-        if (previousCDATA) {
-            getCurrentElement().addContent(factory.cdata(data));
-        }
-        else {
-            getCurrentElement().addContent(factory.text(data));
-        }
-
-        previousCDATA = inCDATA;
+        textBuffer.append(ch, start, length);
     }
 
     /**
@@ -742,7 +699,46 @@ if (!inDTD) {
         if (ignoringWhite) return;
         if (length == 0) return;
 
-        textBuffer.append( ch, start, length);
+        textBuffer.append(ch, start, length);
+    }
+
+    /**
+     * <p>
+     * This will flush any characters from SAX character calls we've
+     * been buffering.
+     * </p>
+     *
+     * @throws SAXException when things go wrong
+     */
+    protected void flushCharacters() throws SAXException {
+
+        if (textBuffer.size() == 0) {
+            previousCDATA = inCDATA;
+            return;
+        }
+
+        String data = textBuffer.toString();
+        textBuffer.clear();
+
+/**
+ * This is commented out because of some problems with
+ * the inline DTDs that Xerces seems to have.
+if (!inDTD) {
+  if (inEntity) {
+    getCurrentElement().setContent(factory.text(data));
+  } else {
+    getCurrentElement().addContent(factory.text(data));
+}
+*/
+
+        if (previousCDATA) {
+            getCurrentElement().addContent(factory.cdata(data));
+        }
+        else {
+            getCurrentElement().addContent(factory.text(data));
+        }
+
+        previousCDATA = inCDATA;
     }
 
     /**
@@ -815,7 +811,7 @@ if (!inDTD) {
      */
     public void endDTD() throws SAXException {
 
-        document.getDocType().setInternalSubset(buffer.toString());
+        document.getDocType().setInternalSubset(internalSubset.toString());
         inDTD = false;
         inInternalSubset = false;
     }
@@ -925,7 +921,7 @@ if (!inDTD) {
 
         String commentText = new String(ch, start, length);
         if (inDTD && inInternalSubset && (expand == false)) {
-            buffer.append("  <!--")
+            internalSubset.append("  <!--")
                   .append(commentText)
                   .append("-->\n");
             return;
@@ -955,10 +951,10 @@ if (!inDTD) {
 
         if (!inInternalSubset) return;
 
-        buffer.append("  <!NOTATION ")
+        internalSubset.append("  <!NOTATION ")
               .append(name);
         appendExternalId(publicID, systemID);    
-        buffer.append(">\n");
+        internalSubset.append(">\n");
     }
 
     /**
@@ -977,12 +973,12 @@ if (!inDTD) {
 
         if (!inInternalSubset) return;
 
-        buffer.append("  <!ENTITY ")
+        internalSubset.append("  <!ENTITY ")
               .append(name);
         appendExternalId(publicID, systemID);
-        buffer.append(" NDATA ")
+        internalSubset.append(" NDATA ")
               .append(notationName);
-        buffer.append(">\n");
+        internalSubset.append(">\n");
     }
 
     /**
@@ -996,18 +992,18 @@ if (!inDTD) {
      */
     protected void appendExternalId(String publicID, String systemID) {
         if (publicID != null) {
-            buffer.append(" PUBLIC \"")
+            internalSubset.append(" PUBLIC \"")
                   .append(publicID)
                   .append("\"");
         }
         if (systemID != null) {
             if (publicID == null) {
-                buffer.append(" SYSTEM ");
+                internalSubset.append(" SYSTEM ");
             }
             else {
-                buffer.append(" ");
+                internalSubset.append(" ");
             }
-            buffer.append("\"")
+            internalSubset.append("\"")
                   .append(systemID)
                   .append("\"");
         }
