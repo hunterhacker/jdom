@@ -22,20 +22,6 @@ Items that need to be done:
 
 * Add methods to recursively get content and get filtered content.
 
-* Figure out how to deal with XMLOutputter writing of special characters like
-  &#160.  Should it char escape only chars unprintable in the current
-  character set?  Should there be a fancy API for selecting what's escaped?
-  Should this be something where you can subclass?
-  http://lists.denveronline.net/lists/jdom-interest/2001-February/004521.html
-  http://lists.denveronline.net/lists/jdom-interest/2001-April/005644.html
-  http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
-  http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
-  Alex proposal:
-    http://www.servlets.com/archive/servlet/ReadMsg?msgId=334148
-  Brad proposals:
-    http://www.servlets.com/archive/servlet/ReadMsg?msgId=334184
-    http://www.servlets.com/archive/servlet/ReadMsg?msgId=312047
-
 * Figure out if there's a role for a Node interface.  It sounds easy but all 
   attempts so far have hit obstacles.  Amy Lewis talks about it here:
   http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
