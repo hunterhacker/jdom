@@ -4,14 +4,14 @@ alphabetically by last name.
 DO NOT WRITE THESE PEOPLE FOR TECH SUPPORT.  THEY WILL NOT ANSWER.
 WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
-Laurent Bihanic <laurent.bihanic@atosorigin.com>
-Alex Chaffee <guru@edamame.stinky.com>
-James Davies <J.Davies@jacobus.co.uk>
-Jools Enticknap <jools@jools.org>
-Elliotte Rusty Harold <elharo@metalab.unc.edu>
-Michael Hinchey <hincheymg@yahoo.com>
-Jason Hunter <jhunter@jdom.org>
-Brett McLaughlin <brett@jdom.org>
-Bob McWhirter <bob@werken.com>
-Wolfgang Werner <wwerner@picturesafe.de>
+Laurent Bihanic, laurent.bihanicATatosorigin.com
+Alex Chaffee, guruATedamame.stinky.com
+James Davies, J.DaviesATjacobus.co.uk
+Jools Enticknap, joolsATjools.org
+Elliotte Rusty Harold, elharoATmetalab.unc.edu
+Michael Hinchey, hincheymgATyahoo.com
+Jason Hunter, jhunterATjdom.org
+Brett McLaughlin, brettATjdom.org
+Bob McWhirter, bobATwerken.com
+Wolfgang Werner, wwernerATpicturesafe.de
 

@@ -6,12 +6,13 @@ aren't (at least yet) in the core distribution.  Contributors with write
 access to jdom-contrib can be found in COMMITTERS.txt.  Contributed code is
 placed under the org.jdom.contrib package hierarchy.  
 
-Currently we have org.jdom.contrib.{beans,helpers,ids,input,output}.  "beans"
-holds JDOMBean and can hold related bean work.  "helpers" holds certain helper
-functions.  "ids" demonstrates how to use the attribute type support provided
-by JDOM to create JDOM documents that allow looking up elements using the
-value of their ID attribute.  "input" and "output" hold builders and
-outputters.
+Currently we have org.jdom.contrib packages for beans, helpers, ids, input,
+output, schema, and xpath.  "beans" holds JDOMBean and can hold related bean
+work.  "helpers" holds certain helper functions.  "ids" demonstrates how to
+use the attribute type support provided by JDOM to create JDOM documents that
+allow looking up elements using the value of their ID attribute.  "input" and
+"output" hold builders and outputters.  "schema" has code for in-memory
+schema validation.  "xpath" has support beyond what's built in to JDOM.
 
 If you have an interesting contribution, or just ideas that someone else might
 pick up on, post to jdom-interest.
