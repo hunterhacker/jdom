@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.46 2003/04/30 09:55:11 jhunter Exp $
+ $Id: Attribute.java,v 1.47 2003/05/05 06:36:55 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.46 $, $Date: 2003/04/30 09:55:11 $
+ * @version $Revision: 1.47 $, $Date: 2003/05/05 06:36:55 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -71,7 +71,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.46 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.47 $ $Date: 2003/05/05 06:36:55 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -587,7 +587,7 @@ public class Attribute implements Serializable, Cloneable {
      */
     public int getIntValue() throws DataConversionException {
         try {
-            return Integer.parseInt(value);
+            return Integer.parseInt(value.trim());
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "int");
         }
@@ -604,7 +604,7 @@ public class Attribute implements Serializable, Cloneable {
      */
     public long getLongValue() throws DataConversionException {
         try {
-            return Long.parseLong(value);
+            return Long.parseLong(value.trim());
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "long");
         }
@@ -622,7 +622,7 @@ public class Attribute implements Serializable, Cloneable {
     public float getFloatValue() throws DataConversionException {
         try {
             // Avoid Float.parseFloat() to support JDK 1.1
-            return Float.valueOf(value).floatValue();
+            return Float.valueOf(value.trim()).floatValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "float");
         }
@@ -640,28 +640,33 @@ public class Attribute implements Serializable, Cloneable {
     public double getDoubleValue() throws DataConversionException {
         try {
             // Avoid Double.parseDouble() to support JDK 1.1
-            return Double.valueOf(value).doubleValue();
+            return Double.valueOf(value.trim()).doubleValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "double");
         }
     }
 
     /**
-     * This gets the value of the attribute, in <code>boolean</code> form,
-     * and if no conversion can occur, throws a 
-     * <code>{@link DataConversionException}</code>
+     * This gets the effective boolean value of the attribute, or throws a
+     * <code>{@link DataConversionException}</code> if a conversion can't be
+     * performed.  True values are: "true", "on", "1", and "yes".  False
+     * values are: "false", "off", "0", and "no".  Values are trimmed before
+     * comparison.  Values other than those listed here throw the exception.
      *
      * @return <code>boolean</code> value of attribute.
      * @throws DataConversionException when conversion fails.
      */
     public boolean getBooleanValue() throws DataConversionException {
-        if ((value.equalsIgnoreCase("true")) ||
-            (value.equalsIgnoreCase("on")) ||
-            (value.equalsIgnoreCase("yes"))) {
+        String valueTrim = value.trim();
+        if ((valueTrim.equalsIgnoreCase("true")) ||
+            (valueTrim.equalsIgnoreCase("on")) ||
+            (valueTrim.equalsIgnoreCase("1")) ||
+            (valueTrim.equalsIgnoreCase("yes"))) {
             return true;
-        } else if ((value.equalsIgnoreCase("false")) ||
-                   (value.equalsIgnoreCase("off")) ||
-                   (value.equalsIgnoreCase("no"))) {
+        } else if ((valueTrim.equalsIgnoreCase("false")) ||
+                   (valueTrim.equalsIgnoreCase("off")) ||
+                   (valueTrim.equalsIgnoreCase("0")) ||
+                   (valueTrim.equalsIgnoreCase("no"))) {
             return false;
         } else {
             throw new DataConversionException(name, "boolean");
