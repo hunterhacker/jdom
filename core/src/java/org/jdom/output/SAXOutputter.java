@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: SAXOutputter.java,v 1.31 2003/04/30 09:55:13 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.32 2003/05/05 06:57:57 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <pm AT jdom DOT org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <pm AT jdom DOT org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter AT jdom DOT org> and
  Brett McLaughlin <brett AT jdom DOT org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.output;
@@ -82,16 +82,16 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.31 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.32 $, $Date: 2003/05/05 06:57:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
  * @author  Bradley S. Huffman
  */
 public class SAXOutputter {
-   
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.31 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+
+    private static final String CVS_ID =
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.32 $ $Date: 2003/05/05 06:57:57 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -131,27 +131,27 @@ public class SAXOutputter {
      */
     private static final String[] attrTypeToNameMap = new String[] {
         "CDATA",        // Attribute.UNDEFINED_ATTRIBUTE, as per SAX 2.0 spec.
-        "CDATA",        // Attribute.CDATA_ATTRIBUTE
-        "ID",           // Attribute.ID_ATTRIBUTE
-        "IDREF",        // Attribute.IDREF_ATTRIBUTE
-        "IDREFS",       // Attribute.IDREFS_ATTRIBUTE
-        "ENTITY",       // Attribute.ENTITY_ATTRIBUTE
-        "ENTITIES",     // Attribute.ENTITIES_ATTRIBUTE
-        "NMTOKEN",      // Attribute.NMTOKEN_ATTRIBUTE
-        "NMTOKENS",     // Attribute.NMTOKENS_ATTRIBUTE
-        "NOTATION",     // Attribute.NOTATION_ATTRIBUTE
-        "NMTOKEN",      // Attribute.ENUMERATED_ATTRIBUTE, as per SAX 2.0 spec.
+        "CDATA",        // Attribute.CDATA_TYPE
+        "ID",           // Attribute.ID_TYPE
+        "IDREF",        // Attribute.IDREF_TYPE
+        "IDREFS",       // Attribute.IDREFS_TYPE
+        "ENTITY",       // Attribute.ENTITY_TYPE
+        "ENTITIES",     // Attribute.ENTITIES_TYPE
+        "NMTOKEN",      // Attribute.NMTOKEN_TYPE
+        "NMTOKENS",     // Attribute.NMTOKENS_TYPE
+        "NOTATION",     // Attribute.NOTATION_TYPE
+        "NMTOKEN",      // Attribute.ENUMERATED_TYPE, as per SAX 2.0 spec.
     };
 
     /** registered <code>ContentHandler</code> */
     private ContentHandler contentHandler;
-   
+
     /** registered <code>ErrorHandler</code> */
     private ErrorHandler errorHandler;
-   
+
     /** registered <code>DTDHandler</code> */
     private DTDHandler dtdHandler;
-   
+
     /** registered <code>EntityResolver</code> */
     private EntityResolver entityResolver;
 
@@ -160,7 +160,7 @@ public class SAXOutputter {
 
     /** registered <code>DeclHandler</code> */
     private DeclHandler declHandler;
-   
+
     /**
      * Whether to report attribute namespace declarations as xmlns attributes.
      * Defaults to <code>false</code> as per SAX specifications.
@@ -194,7 +194,7 @@ public class SAXOutputter {
      * This will create a <code>SAXOutputter</code> with the
      * specified <code>ContentHandler</code>.
      *
-     * @param contentHandler contains <code>ContentHandler</code> 
+     * @param contentHandler contains <code>ContentHandler</code>
      * callback methods
      */
     public SAXOutputter(ContentHandler contentHandler) {
@@ -206,11 +206,11 @@ public class SAXOutputter {
      * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
      * and <code>EntityResolver</code> are supported.
      *
-     * @param contentHandler contains <code>ContentHandler</code> 
+     * @param contentHandler contains <code>ContentHandler</code>
      * callback methods
      * @param errorHandler contains <code>ErrorHandler</code> callback methods
      * @param dtdHandler contains <code>DTDHandler</code> callback methods
-     * @param entityResolver contains <code>EntityResolver</code> 
+     * @param entityResolver contains <code>EntityResolver</code>
      * callback methods
      */
     public SAXOutputter(ContentHandler contentHandler,
@@ -219,17 +219,17 @@ public class SAXOutputter {
                         EntityResolver entityResolver) {
         this(contentHandler, errorHandler, dtdHandler, entityResolver, null);
     }
-   
+
     /**
      * This will create a <code>SAXOutputter</code> with the
      * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
      * and <code>EntityResolver</code> are supported.
      *
-     * @param contentHandler contains <code>ContentHandler</code> 
+     * @param contentHandler contains <code>ContentHandler</code>
      * callback methods
      * @param errorHandler contains <code>ErrorHandler</code> callback methods
      * @param dtdHandler contains <code>DTDHandler</code> callback methods
-     * @param entityResolver contains <code>EntityResolver</code> 
+     * @param entityResolver contains <code>EntityResolver</code>
      * callback methods
      * @param lexicalHandler contains <code>LexicalHandler</code> callbacks.
      */
@@ -244,17 +244,17 @@ public class SAXOutputter {
         this.entityResolver = entityResolver;
         this.lexicalHandler = lexicalHandler;
     }
-   
+
     /**
      * This will set the <code>ContentHandler</code>.
      *
-     * @param contentHandler contains <code>ContentHandler</code> 
+     * @param contentHandler contains <code>ContentHandler</code>
      * callback methods.
      */
     public void setContentHandler(ContentHandler contentHandler) {
         this.contentHandler = contentHandler;
     }
-   
+
     /**
      * Returns the registered <code>ContentHandler</code>.
      *
@@ -606,7 +606,7 @@ public class SAXOutputter {
             }
             else if (obj instanceof Comment) {
                 // lexicalHandler.comment()
-                comment(((Comment) obj).getText()); 
+                comment(((Comment) obj).getText());
             }
         }
 
@@ -644,7 +644,7 @@ public class SAXOutputter {
         // contentHandler.endDocument()
         endDocument();
     }
-   
+
     /**
      * This parses a DTD declaration to fire the related events towards
      * the registered handlers.
@@ -760,7 +760,7 @@ public class SAXOutputter {
             throw new JDOMException("Exception in startDocument", se);
         }
     }
-   
+
     /**
      * <p>
      * Always the last method of all callbacks in all handlers
@@ -778,7 +778,7 @@ public class SAXOutputter {
             throw new JDOMException("Exception in endDocument", se);
         }
     }
-   
+
     /**
      * <p>
      * This will invoke the <code>ContentHandler.processingInstruction</code>
@@ -787,7 +787,7 @@ public class SAXOutputter {
      *
      * @param pi <code>ProcessingInstruction</code> containing target and data.
      */
-    private void processingInstruction(ProcessingInstruction pi) 
+    private void processingInstruction(ProcessingInstruction pi)
                            throws JDOMException {
         if (pi != null) {
             String target = pi.getTarget();
@@ -801,17 +801,17 @@ public class SAXOutputter {
             }
         }
     }
-   
+
     /**
      * <p>
-     * This will recursively invoke all of the callbacks for a particular 
+     * This will recursively invoke all of the callbacks for a particular
      * element.
      * </p>
      *
      * @param element <code>Element</code> used in callbacks.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void element(Element element, NamespaceStack namespaces) 
+    private void element(Element element, NamespaceStack namespaces)
                            throws JDOMException {
         // used to check endPrefixMapping
         int previouslyDeclaredNamespaces = namespaces.size();
@@ -834,10 +834,10 @@ public class SAXOutputter {
         // contentHandler.endPrefixMapping()
         endPrefixMapping(namespaces, previouslyDeclaredNamespaces);
     }
-   
+
     /**
      * <p>
-     * This will invoke the <code>ContentHandler.startPrefixMapping</code> 
+     * This will invoke the <code>ContentHandler.startPrefixMapping</code>
      * callback
      * when a new namespace is encountered in the <code>Document</code>.
      * </p>
@@ -848,8 +848,8 @@ public class SAXOutputter {
      * @return <code>Attributes</code> declaring the namespaces local to
      * <code>element</code> or <code>null</code>.
      */
-    private Attributes startPrefixMapping(Element element, 
-                                          NamespaceStack namespaces) 
+    private Attributes startPrefixMapping(Element element,
+                                          NamespaceStack namespaces)
                                                    throws JDOMException {
         AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
 
@@ -902,11 +902,11 @@ public class SAXOutputter {
      * </p>
      *
      * @param namespaces <code>List</code> stack of Namespaces in scope.
-     * @param previouslyDeclaredNamespaces number of previously declared 
+     * @param previouslyDeclaredNamespaces number of previously declared
      * namespaces
      */
-    private void endPrefixMapping(NamespaceStack namespaces, 
-                                  int previouslyDeclaredNamespaces) 
+    private void endPrefixMapping(NamespaceStack namespaces,
+                                  int previouslyDeclaredNamespaces)
                                                 throws JDOMException {
         while (namespaces.size() > previouslyDeclaredNamespaces) {
             String prefix = namespaces.pop();
@@ -918,7 +918,7 @@ public class SAXOutputter {
             }
         }
     }
-   
+
     /**
      * <p>
      * This will invoke the <code>startElement</code> callback
@@ -929,7 +929,7 @@ public class SAXOutputter {
      * @param nsAtts <code>List</code> of namespaces to declare with
      * the element or <code>null</code>.
      */
-    private void startElement(Element element, Attributes nsAtts) 
+    private void startElement(Element element, Attributes nsAtts)
                       throws JDOMException {
         String namespaceURI = element.getNamespaceURI();
         String localName = element.getName();
@@ -949,7 +949,7 @@ public class SAXOutputter {
                               getAttributeTypeName(a.getAttributeType()),
                               a.getValue());
         }
-         
+
         try {
             contentHandler.startElement(namespaceURI, localName, rawName, atts);
         }
@@ -957,7 +957,7 @@ public class SAXOutputter {
             throw new JDOMException("Exception in startElement", se);
         }
     }
-   
+
     /**
      * <p>
      * This will invoke the <code>endElement</code> callback
@@ -970,7 +970,7 @@ public class SAXOutputter {
         String namespaceURI = element.getNamespaceURI();
         String localName = element.getName();
         String rawName = element.getQualifiedName();
-        
+
         try {
             contentHandler.endElement(namespaceURI, localName, rawName);
         }
@@ -978,7 +978,7 @@ public class SAXOutputter {
             throw new JDOMException("Exception in endElement", se);
         }
     }
-   
+
     /**
      * <p>
      * This will invoke the callbacks for the content of an element.
@@ -987,7 +987,7 @@ public class SAXOutputter {
      * @param content element content as a <code>List</code> of nodes.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void elementContent(List content, NamespaceStack namespaces) 
+    private void elementContent(List content, NamespaceStack namespaces)
                       throws JDOMException {
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -1012,7 +1012,7 @@ public class SAXOutputter {
             }
             else if (obj instanceof Comment) {
                 // lexicalHandler.comment()
-                comment(((Comment) obj).getText()); 
+                comment(((Comment) obj).getText());
             }
             else if (obj instanceof EntityRef) {
                 // contentHandler.skippedEntity()
@@ -1106,7 +1106,7 @@ public class SAXOutputter {
             }
         }
     }
-   
+
 
     /**
      * <p>
@@ -1148,7 +1148,7 @@ public class SAXOutputter {
      */
     private String getAttributeTypeName(int type) {
         if ((type < 0) || (type >= attrTypeToNameMap.length)) {
-            type = Attribute.UNDECLARED_ATTRIBUTE;
+            type = Attribute.UNDECLARED_TYPE;
         }
         return attrTypeToNameMap[type];
     }
@@ -1206,11 +1206,11 @@ public class SAXOutputter {
         // available then the getXMLReader call fails and we skip
         // to the hard coded default parser
         try {
-            Class factoryClass = 
+            Class factoryClass =
                     Class.forName("javax.xml.parsers.SAXParserFactory");
 
             // factory = SAXParserFactory.newInstance();
-            Method newParserInstance = 
+            Method newParserInstance =
                     factoryClass.getMethod("newInstance", null);
             Object factory = newParserInstance.invoke(null, null);
 
@@ -1220,7 +1220,7 @@ public class SAXOutputter {
 
             // parser = jaxpParser.getXMLReader();
             Class parserClass = jaxpParser.getClass();
-            Method getXMLReader = 
+            Method getXMLReader =
                     parserClass.getMethod("getXMLReader", null);
             parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
         } catch (ClassNotFoundException e) {

@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.53 2003/05/01 01:45:25 jhunter Exp $
+ $Id: SAXHandler.java,v 1.54 2003/05/05 06:57:57 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.53 $, $Date: 2003/05/01 01:45:25 $
+ * @version $Revision: 1.54 $, $Date: 2003/05/05 06:57:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.53 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.54 $ $Date: 2003/05/05 06:57:57 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -93,7 +93,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     protected boolean atRoot;
 
     /** Indicator of whether we are in the DocType. Note that the DTD consists
-     * of both the internal subset (inside the <!DOCTYPE> tag) and the 
+     * of both the internal subset (inside the <!DOCTYPE> tag) and the
       * external subset (in a separate .dtd file). */
     protected boolean inDTD = false;
 
@@ -156,25 +156,25 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     static {
         attrNameToTypeMap.put("CDATA",
-                              new Integer(Attribute.CDATA_ATTRIBUTE));
+                              new Integer(Attribute.CDATA_TYPE));
         attrNameToTypeMap.put("ID",
-                              new Integer(Attribute.ID_ATTRIBUTE));
+                              new Integer(Attribute.ID_TYPE));
         attrNameToTypeMap.put("IDREF",
-                              new Integer(Attribute.IDREF_ATTRIBUTE));
+                              new Integer(Attribute.IDREF_TYPE));
         attrNameToTypeMap.put("IDREFS",
-                              new Integer(Attribute.IDREFS_ATTRIBUTE));
+                              new Integer(Attribute.IDREFS_TYPE));
         attrNameToTypeMap.put("ENTITY",
-                              new Integer(Attribute.ENTITY_ATTRIBUTE));
+                              new Integer(Attribute.ENTITY_TYPE));
         attrNameToTypeMap.put("ENTITIES",
-                              new Integer(Attribute.ENTITIES_ATTRIBUTE));
+                              new Integer(Attribute.ENTITIES_TYPE));
         attrNameToTypeMap.put("NMTOKEN",
-                              new Integer(Attribute.NMTOKEN_ATTRIBUTE));
+                              new Integer(Attribute.NMTOKEN_TYPE));
         attrNameToTypeMap.put("NMTOKENS",
-                              new Integer(Attribute.NMTOKENS_ATTRIBUTE));
+                              new Integer(Attribute.NMTOKENS_TYPE));
         attrNameToTypeMap.put("NOTATION",
-                              new Integer(Attribute.NOTATION_ATTRIBUTE));
+                              new Integer(Attribute.NOTATION_TYPE));
         attrNameToTypeMap.put("ENUMERATION",
-                              new Integer(Attribute.ENUMERATED_ATTRIBUTE));
+                              new Integer(Attribute.ENUMERATED_TYPE));
     }
 
     /**
@@ -368,7 +368,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param value <code>String</code> value of the entity
      */
     public void internalEntityDecl(String name, String value)
-        throws SAXException { 
+        throws SAXException {
 
         // Skip entities that come from the external subset
         if (!inInternalSubset) return;
@@ -411,7 +411,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * This indicates that an unresolvable entity reference has been 
+     * This indicates that an unresolvable entity reference has been
      * encountered, normally because the external DTD subset has not been
      * read.
      *
@@ -422,8 +422,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         throws SAXException {
 
         // We don't handle parameter entity references.
-        if (name.startsWith("%")) return; 
-       
+        if (name.startsWith("%")) return;
+
         flushCharacters();
 
         getCurrentElement().addContent(factory.entityRef(name));
@@ -812,7 +812,7 @@ if (!inDTD) {
 
         internalSubset.append("  <!NOTATION ")
               .append(name);
-        appendExternalId(publicID, systemID);    
+        appendExternalId(publicID, systemID);
         internalSubset.append(">\n");
     }
 
@@ -897,10 +897,10 @@ if (!inDTD) {
                 // Xerces 1.4.X reports attributes of enumerated type with
                 // a type string equals to the enumeration definition, i.e.
                 // starting with a parenthesis.
-                return Attribute.ENUMERATED_ATTRIBUTE;
+                return Attribute.ENUMERATED_TYPE;
             }
             else {
-                return Attribute.UNDECLARED_ATTRIBUTE;
+                return Attribute.UNDECLARED_TYPE;
             }
         } else {
             return type.intValue();

@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: Attribute.java,v 1.47 2003/05/05 06:36:55 jhunter Exp $
+ $Id: Attribute.java,v 1.48 2003/05/05 06:57:57 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.47 $, $Date: 2003/05/05 06:36:55 $
+ * @version $Revision: 1.48 $, $Date: 2003/05/05 06:57:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -70,8 +70,8 @@ import java.io.*;
  */
 public class Attribute implements Serializable, Cloneable {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.47 $ $Date: 2003/05/05 06:36:55 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.48 $ $Date: 2003/05/05 06:57:57 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -79,21 +79,21 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @see #getAttributeType
      */
-    public final static int UNDECLARED_ATTRIBUTE = 0;
+    public final static int UNDECLARED_TYPE = 0;
 
     /**
      * Attribute type: the attribute value is a string.
      *
      * @see #getAttributeType
      */
-    public final static int CDATA_ATTRIBUTE = 1;
+    public final static int CDATA_TYPE = 1;
 
     /**
      * Attribute type: the attribute value is a unique identifier.
      *
      * @see #getAttributeType
      */
-    public final static int ID_ATTRIBUTE = 2;
+    public final static int ID_TYPE = 2;
 
     /**
      * Attribute type: the attribute value is a reference to a
@@ -101,7 +101,7 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @see #getAttributeType
      */
-    public final static int IDREF_ATTRIBUTE = 3;
+    public final static int IDREF_TYPE = 3;
 
     /**
      * Attribute type: the attribute value is a list of references to
@@ -109,14 +109,14 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @see #getAttributeType
      */
-    public final static int IDREFS_ATTRIBUTE = 4;
+    public final static int IDREFS_TYPE = 4;
 
     /**
      * Attribute type: the attribute value is the name of an entity.
      *
      * @see #getAttributeType
      */
-    public final static int ENTITY_ATTRIBUTE = 5;
+    public final static int ENTITY_TYPE = 5;
 
     /**
      * <p>
@@ -125,7 +125,7 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @see #getAttributeType
      */
-    public final static int ENTITIES_ATTRIBUTE = 6;
+    public final static int ENTITIES_TYPE = 6;
 
     /**
      * Attribute type: the attribute value is a name token.
@@ -133,25 +133,25 @@ public class Attribute implements Serializable, Cloneable {
      * According to SAX 2.0 specification, attributes of enumerated
      * types should be reported as "NMTOKEN" by SAX parsers.  But the
      * major parsers (Xerces and Crimson) provide specific values
-     * that permit to recognize them as {@link #ENUMERATED_ATTRIBUTE}.
+     * that permit to recognize them as {@link #ENUMERATED_TYPE}.
      *
      * @see #getAttributeType
      */
-    public final static int NMTOKEN_ATTRIBUTE = 7;
+    public final static int NMTOKEN_TYPE = 7;
 
     /**
      * Attribute type: the attribute value is a list of name tokens.
      *
      * @see #getAttributeType
      */
-    public final static int NMTOKENS_ATTRIBUTE = 8;
+    public final static int NMTOKENS_TYPE = 8;
 
     /**
      * Attribute type: the attribute value is the name of a notation.
      *
      * @see #getAttributeType
      */
-    public final static int NOTATION_ATTRIBUTE = 9;
+    public final static int NOTATION_TYPE = 9;
 
     /**
      * Attribute type: the attribute value is a name token from an
@@ -159,6 +159,31 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @see #getAttributeType
      */
+    public final static int ENUMERATED_TYPE = 10;
+
+    // Keep the old constant names for one beta cycle to help migration
+
+    /** @deprecated Deprecated in Beta 10 use UNDECLARED_TYPE */
+    public final static int UNDECLARED_ATTRIBUTE = 0;
+    /** @deprecated Deprecated in Beta 10 use CDATA_TYPE */
+    public final static int CDATA_ATTRIBUTE = 1;
+    /** @deprecated Deprecated in Beta 10 use ID_TYPE */
+    public final static int ID_ATTRIBUTE = 2;
+    /** @deprecated Deprecated in Beta 10 use IDREF_TYPE */
+    public final static int IDREF_ATTRIBUTE = 3;
+    /** @deprecated Deprecated in Beta 10 use IDREFS_TYPE */
+    public final static int IDREFS_ATTRIBUTE = 4;
+    /** @deprecated Deprecated in Beta 10 use ENTITY_TYPE */
+    public final static int ENTITY_ATTRIBUTE = 5;
+    /** @deprecated Deprecated in Beta 10 use ENTITIES_TYPE */
+    public final static int ENTITIES_ATTRIBUTE = 6;
+    /** @deprecated Deprecated in Beta 10 use NMTOKEN_TYPE */
+    public final static int NMTOKEN_ATTRIBUTE = 7;
+    /** @deprecated Deprecated in Beta 10 use NMTOKENS_TYPE */
+    public final static int NMTOKENS_ATTRIBUTE = 8;
+    /** @deprecated Deprecated in Beta 10 use NOTATION_TYPE */
+    public final static int NOTATION_ATTRIBUTE = 9;
+    /** @deprecated Deprecated in Beta 10 use ENUMERATED_TYPE */
     public final static int ENUMERATED_ATTRIBUTE = 10;
 
 
@@ -173,7 +198,7 @@ public class Attribute implements Serializable, Cloneable {
     protected String value;
 
     /** The type of the <code>Attribute</code> */
-    protected int type = UNDECLARED_ATTRIBUTE;
+    protected int type = UNDECLARED_TYPE;
 
     /** Parent element, or null if none */
     protected Object parent;
@@ -219,7 +244,7 @@ public class Attribute implements Serializable, Cloneable {
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
      *         {@link org.jdom.Verifier#checkCharacterData}) or
-     *         if the given attribute type is not one of the 
+     *         if the given attribute type is not one of the
      *         supported types.
      */
     public Attribute(String name, String value, int type, Namespace namespace) {
@@ -247,7 +272,7 @@ public class Attribute implements Serializable, Cloneable {
      *         {@link org.jdom.Verifier#checkCharacterData}).
      */
     public Attribute(String name, String value) {
-        this(name, value, UNDECLARED_ATTRIBUTE, Namespace.NO_NAMESPACE);
+        this(name, value, UNDECLARED_TYPE, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -267,7 +292,7 @@ public class Attribute implements Serializable, Cloneable {
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
      *         {@link org.jdom.Verifier#checkCharacterData}) or
-     *         if the given attribute type is not one of the 
+     *         if the given attribute type is not one of the
      *         supported types.
      */
     public Attribute(String name, String value, int type) {
@@ -310,7 +335,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * This detaches the <code>Attribute</code> from its parent, or does 
+     * This detaches the <code>Attribute</code> from its parent, or does
      * nothing if the <code>Attribute</code> has no parent.
      *
      * @return <code>Attribute</code> - this <code>Attribute</code> modified.
@@ -446,7 +471,7 @@ public class Attribute implements Serializable, Cloneable {
 
         // Verify the attribute isn't trying to be in a default namespace
         // Attributes can't be in a default namespace
-        if (namespace != Namespace.NO_NAMESPACE && 
+        if (namespace != Namespace.NO_NAMESPACE &&
             namespace.getPrefix().equals("")) {
             throw new IllegalNameException("", "attribute namespace",
                 "An attribute namespace without a prefix can only be the " +
@@ -503,7 +528,7 @@ public class Attribute implements Serializable, Cloneable {
      *         not one of the supported types.
      */
     public Attribute setAttributeType(int type) {
-        if ((type < UNDECLARED_ATTRIBUTE) || (type > ENUMERATED_ATTRIBUTE)) {
+        if ((type < UNDECLARED_TYPE) || (type > ENUMERATED_TYPE)) {
             throw new IllegalDataException(String.valueOf(type),
                                         "attribute", "Illegal attribute type");
         }
@@ -687,7 +712,7 @@ public class Attribute implements Serializable, Cloneable {
 
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
-        
+
         in.defaultReadObject();
 
         namespace = Namespace.getNamespace(
