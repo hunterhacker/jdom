@@ -1,6 +1,6 @@
 /*--
 
- $Id: DocType.java,v 1.29 2004/02/06 09:28:30 jhunter Exp $
+ $Id: DocType.java,v 1.30 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,12 +62,12 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.29 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.30 $, $Date: 2004/02/11 21:12:43 $
  */
 public class DocType extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.29 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.30 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -275,28 +275,4 @@ public class DocType extends Content {
             .append("]")
             .toString();
     }
-
-    /**
-     * This tests for equality of this <code>DocType</code> to the supplied
-     * <code>Object</code>.  DocTypes are considered equal only if they
-     * are referentially equal (i.e. the same object).  User code may
-     * choose to compare DocType objects based on element name, public ID,
-     * system ID, and/or internal DTD subset.
-     *
-     * @param ob <code>Object</code> to compare to.
-     * @return whether the elements are equal
-     */
-    public final boolean equals(Object ob) {
-        return (this == ob);
-    }
-
-    /**
-     * This returns the hash code for this <code>DocType</code>.
-     *
-     * @return <code>int</code> - hash code.
-     */
-    public final int hashCode() {
-        return super.hashCode();
-    }
-
 }

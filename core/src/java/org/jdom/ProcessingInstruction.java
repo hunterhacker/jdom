@@ -1,6 +1,6 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.43 2004/02/06 09:28:30 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.44 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.43 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.44 $, $Date: 2004/02/11 21:12:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -73,7 +73,7 @@ import java.util.*;
 public class ProcessingInstruction extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.43 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.44 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -503,28 +503,6 @@ public class ProcessingInstruction extends Content {
             .append(new org.jdom.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
-    }
-
-    /**
-     * This tests for equality of this <code>ProcessingInstruction</code>
-     * to the supplied <code>Object</code>.
-     *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the
-     *         <code>ProcessingInstruction</code> is equal to the supplied
-     *         <code>Object</code>.
-     */
-    public final boolean equals(Object ob) {
-        return (ob == this);
-    }
-
-    /**
-     * This returns the hash code for this <code>ProcessingInstruction</code>.
-     *
-     * @return <code>int</code> - hash code.
-     */
-    public final int hashCode() {
-        return super.hashCode();
     }
 
     /**

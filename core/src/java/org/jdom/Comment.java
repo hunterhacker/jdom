@@ -1,6 +1,6 @@
 /*--
 
- $Id: Comment.java,v 1.31 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Comment.java,v 1.32 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,14 +60,14 @@ package org.jdom;
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
  *
- * @version $Revision: 1.31 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.32 $, $Date: 2004/02/11 21:12:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class Comment extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.31 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.32 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
@@ -140,27 +140,6 @@ public class Comment extends Content {
             .append(new org.jdom.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
-    }
-
-    /**
-     * This tests for equality of this <code>Comment</code> to the supplied
-     * <code>Object</code>.
-     *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>Comment</code> is
-     *         equal to the supplied <code>Object</code>.
-     */
-    public final boolean equals(Object ob) {
-        return (ob == this);
-    }
-
-    /**
-     * This returns the hash code for this <code>Comment</code>.
-     *
-     * @return <code>int</code> - hash code.
-     */
-    public final int hashCode() {
-        return super.hashCode();
     }
 
 }

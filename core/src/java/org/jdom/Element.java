@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.144 2004/02/10 21:38:13 jhunter Exp $
+ $Id: Element.java,v 1.145 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.144 $, $Date: 2004/02/10 21:38:13 $
+ * @version $Revision: 1.145 $, $Date: 2004/02/11 21:12:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.144 $ $Date: 2004/02/10 21:38:13 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.145 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1151,30 +1151,6 @@ public class Element extends Content implements Parent {
         stringForm.append("/>]");
 
         return stringForm.toString();
-    }
-
-    /**
-     * <p>
-     *  This tests for equality of this <code>Element</code> to the supplied
-     *    <code>Object</code>, explicitly using the == operator.
-     * </p>
-     *
-     * @param ob <code>Object</code> to compare to
-     * @return whether the elements are equal
-     */
-    public final boolean equals(Object ob) {
-        return (this == ob);
-    }
-
-    /**
-     * <p>
-     *  This returns the hash code for this <code>Element</code>.
-     * </p>
-     *
-     * @return inherited hash code
-     */
-    public final int hashCode() {
-        return super.hashCode();
     }
 
     /**

@@ -1,6 +1,6 @@
 /*--
 
- $Id: EntityRef.java,v 1.19 2004/02/06 09:28:30 jhunter Exp $
+ $Id: EntityRef.java,v 1.20 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,7 +60,7 @@ package org.jdom;
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  *
- * @version $Revision: 1.19 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.20 $, $Date: 2004/02/11 21:12:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -68,7 +68,7 @@ package org.jdom;
 public class EntityRef extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.19 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.20 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -127,18 +127,6 @@ public class EntityRef extends Content {
     }
 
     /**
-     * This tests for equality of this <code>Entity</code> to the supplied
-     * <code>Object</code>.
-     *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>Entity</code> is
-     *         equal to the supplied <code>Object</code>.
-     */
-    public final boolean equals(Object ob) {
-        return (ob == this);
-    }
-
-    /**
      * This returns the name of the <code>EntityRef</code>.
      *
      * @return <code>String</code> - entity name.
@@ -174,15 +162,6 @@ public class EntityRef extends Content {
      */
     public String getSystemID() {
         return systemID;
-    }
-
-    /**
-     * This returns the hash code for this <code>Entity</code>.
-     *
-     * @return <code>int</code> - hash code.
-     */
-    public final int hashCode() {
-        return super.hashCode();
     }
 
     /**

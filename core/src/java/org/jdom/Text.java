@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.22 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Text.java,v 1.23 2004/02/11 21:12:43 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,7 +61,7 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.22 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.23 $, $Date: 2004/02/11 21:12:43 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
@@ -69,7 +69,7 @@ package org.jdom;
 public class Text extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.22 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.23 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 
@@ -256,15 +256,6 @@ public class Text extends Content {
     }
 
     /**
-     * This will generate a hash code for this node.
-     *
-     * @return <code>int</code> - hash code for this node.
-     */
-    public final int hashCode() {
-        return super.hashCode();
-    }
-
-    /**
      * This will return a clone of this <code>Text</code> node, with the
      * same character content, but no parent.
      *
@@ -276,14 +267,4 @@ public class Text extends Content {
         return text;
     }
 
-    /**
-     * This tests for equality of this <code>Text</code> to the supplied
-     * <code>Object</code>, explicitly using the == operator.
-     *
-     * @param ob <code>Object</code> to compare to
-     * @return whether the <code>Text</code> nodes are equal
-     */
-    public final boolean equals(Object ob) {
-        return (this == ob);
-    }
 }
