@@ -112,7 +112,7 @@ public class Comment implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Comment</code>, suitable for debugging. If the XML
      *    representation of the <code>Comment</code> is desired,
-     *    <code>{@link #toSerializedForm}</code> should be used.
+     *    <code>{@link #getSerializedForm}</code> should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -121,7 +121,7 @@ public class Comment implements Serializable, Cloneable {
     public final String toString() {
         return new StringBuffer()
             .append("[Comment: ")
-            .append(toSerializedForm())
+            .append(getSerializedForm())
             .append("]")
             .toString();
     }
@@ -135,7 +135,7 @@ public class Comment implements Serializable, Cloneable {
      * @return <code>String</code> - the serialized form of the
      *         <code>Comment</code>.
      */
-    public final String toSerializedForm() {
+    public final String getSerializedForm() {
         return new StringBuffer()
             .append("<!-- ")
             .append(text)

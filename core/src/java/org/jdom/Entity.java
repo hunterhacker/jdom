@@ -329,7 +329,7 @@ public class Entity implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Entity</code>, suitable for debugging. If the XML
      *    representation of the <code>Entity</code> is desired,
-     *    <code>{@link #toSerializedForm}</code> should be used.
+     *    <code>{@link #getSerializedForm}</code> should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -338,7 +338,7 @@ public class Entity implements Serializable, Cloneable {
     public final String toString() {
         return new StringBuffer()
             .append("[Entity: ")
-            .append(toSerializedForm())
+            .append(getSerializedForm())
             .append("]")
             .toString();
     }
@@ -352,7 +352,7 @@ public class Entity implements Serializable, Cloneable {
      * @return <code>String</code> - the serialized form of the
      *         <code>Comment</code>.
      */
-    public final String toSerializedForm() {
+    public final String getSerializedForm() {
         return new StringBuffer()
             .append("&")
             .append(name)

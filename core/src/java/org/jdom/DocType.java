@@ -200,7 +200,7 @@ public class DocType implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>DocType</code>, suitable for debugging. If the XML
      *    representation of the <code>DocType</code> is desired,
-     *    <code>{@link #toSerializedForm}</code> should be used.
+     *    <code>{@link #getSerializedForm}</code> should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -209,7 +209,7 @@ public class DocType implements Serializable, Cloneable {
     public final String toString() {
         return new StringBuffer()
             .append("[DocType: ")
-            .append(toSerializedForm())
+            .append(getSerializedForm())
             .append("]")
             .toString();
     }
@@ -223,7 +223,7 @@ public class DocType implements Serializable, Cloneable {
      * @return <code>String</code> - the serialized form of the
      *         <code>DocType</code>.
      */
-    public final String toSerializedForm() {
+    public final String getSerializedForm() {
         boolean hasPublic = false;
 
         StringBuffer serForm = new StringBuffer()

@@ -399,13 +399,13 @@ public class XMLOutputter {
                 } else if (content instanceof Comment) {
                     maybePrintln(out);
                     indent(out, indentLevel + 1);  // one extra
-                    out.print(((Comment)content).toSerializedForm());
+                    out.print(((Comment)content).getSerializedForm());
                 } else if (content instanceof Element) {
                     printElement((Element)content, out, indentLevel + 1);
                     //maybePrintln(out);
                 } else if (content instanceof Entity) {
                     out.print("&");
-                    out.print(((Entity)content).toSerializedForm());
+                    out.print(((Entity)content).getSerializedForm());
                     out.print(";");
                 } else if (content instanceof ProcessingInstruction) {
                     maybePrintln(out);

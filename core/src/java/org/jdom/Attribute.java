@@ -104,25 +104,7 @@ public class Attribute implements Serializable, Cloneable {
      * <p>
      * This will create a new <code>Attribute</code> with the
      *   specified (local) name and value, and place it in
-     *   the default namespace (no prefix); it also assigns the default
-     *   namespace to the specified URI</code>.
-     * </p>
-     *
-     * @param name <code>String</code> name of <code>Attribute</code>.
-     * @param uri <code>String</code> URI for namespace this
-     *        <code>Attribute</code> is in.
-     * @param value <code>String</code> value for new attribute.
-     */
-    public Attribute(String name, String uri, String value) {
-        this(name, value, Namespace.getNamespace("", uri));
-    }
-
-    /**
-     * <p>
-     * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and place it in
-     *   the default namespace (no prefix); it also assigns the default
-     *   namespace to the specified URI</code>.
+     *   the specified namespace (with prefix).
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -161,8 +143,7 @@ public class Attribute implements Serializable, Cloneable {
      *   <code>[namespacePrefix]:[attributeName]</code>,
      *   the local name of the attribute would be
      *   <code>[attributeName]</code>. When the attribute
-     *   has no namespace prefix (and is in the default
-     *   namespace), the local name is simply the attribute
+     *   has no namespace , the local name is simply the attribute
      *   name.
      * </p><p>
      * To obtain the namespace prefix for this
@@ -186,8 +167,7 @@ public class Attribute implements Serializable, Cloneable {
      *   the qualified name of the attribute would be
      *   everything (both namespace prefix and
      *   element name). When the attribute has no
-     *   namespace prefix (and is in the default
-     *   namespace), the qualified name is simply the attribute's
+     *   namespace, the qualified name is simply the attribute's
      *   local name.
      * </p><p>
      * To obtain the local name of the attribute, the
@@ -223,8 +203,7 @@ public class Attribute implements Serializable, Cloneable {
      *   <code>[namespacePrefix]:[attributeName]</code>,
      *   the namespace prefix of the attribute would be
      *   <code>[namespacePrefix]</code>. When the attribute
-     *   has no namespace prefix (and is in the default
-     *   namespace), an empty <code>String</code> is returned.
+     *   has no namespace, an empty <code>String</code> is returned.
      * </p>
      *
      * @return <code>String</code> - namespace prefix of this
@@ -237,7 +216,7 @@ public class Attribute implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the URI mapped to this <code>Attribute</code>'s
-     *   prefix (or the default namespace if no prefix). If no
+     *   prefix. If no
      *   mapping is found, an empty <code>String</code> is returned.
      * </p>
      *

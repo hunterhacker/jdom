@@ -45,6 +45,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -387,14 +389,18 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** Mappings on elements for this Document */
     private HashMap namespaceDefinitions;
 
+    /** Method to get an Attribute's full name */
+    private Method getQName;
+
     /**
      * <p>
      * This will set the <code>Document</code> to use.
      * </p>
      *
      * @param document <code>Document</code> being parsed.
+     * @throws <code>IOException</code> when errors occur.
      */
-    public SAXHandler(Document document) {
+    public SAXHandler(Document document) throws IOException {
         this.document = document;
         atRoot = true;
         stack = new Stack();
@@ -404,6 +410,18 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         inDTD = false;
         inCDATA = false;
         needsRTrim = false;
+
+        // Figure out which SAX is being used, so we use the correct method
+        //   on Attributes
+        try {
+            getQName = Attributes.class.getMethod("getQName", new Class[] {int.class});
+        } catch (NoSuchMethodException e) {
+            try {
+                getQName = Attributes.class.getMethod("getRawName", new Class[] {int.class});
+            } catch (NoSuchMethodException f) {
+                throw new IOException("Cannot locate SAX 2.0 (pre-release or final) classes.");
+            }
+        }
     }
 
     /**
@@ -463,14 +481,23 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @throws <code>SAXException</code> when things go wrong
      */
     public void startElement(String namespaceURI, String localName,
-                             String rawName, Attributes atts) {
+                             String rawName, Attributes atts) throws SAXException {
 
         // Handle attributes for namespaces first
         List elementAttributes = new LinkedList();
         List elementDefinitions = new LinkedList();
+
         for (int i=0, size=atts.getLength(); i<size; i++) {
-            if (atts.getQName(i).startsWith("xmlns")) {
-                String attName = atts.getQName(i);
+            String attName;
+            try {
+                attName = (String)getQName.invoke(atts, new Object[] {new Integer(i)});
+            } catch (InvocationTargetException e) {
+                throw new SAXException("Cannot determine Attribute's full name");
+            } catch (IllegalAccessException e) {
+                throw new SAXException("Cannot access Attribute's full name");
+            }
+
+            if (attName.startsWith("xmlns")) {
                 int attributeSplit;
                 String prefix = "";
                 String uri = atts.getValue(i);
@@ -501,19 +528,32 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
         // With namespaces set up, we can do attributes now
         for (int i=0, size=atts.getLength(); i<size; i++) {
-            if (!atts.getQName(i).startsWith("xmlns")) {
-                name = atts.getQName(i);
+            String attName;
+            try {
+                attName = (String)getQName.invoke(atts, new Object[] {new Integer(i)});
+            } catch (InvocationTargetException e) {
+                throw new SAXException("Cannot determine Attribute's full name");
+            } catch (IllegalAccessException e) {
+                throw new SAXException("Cannot access Attribute's full name");
+            }
+
+            if (!attName.startsWith("xmlns")) {
+                name = attName;
                 int attSplit;
                 prefix = "";
                 if ((attSplit = name.indexOf(":")) != -1) {
                     prefix = name.substring(0, attSplit);
                     name = name.substring(attSplit + 1);
                 }
-                element.addAttribute(
+        System.out.println("B2");
+        System.out.println(name + prefix + getNamespaceURI(prefix) + atts.getValue(i));
+                element.addAttribute(new Attribute(name, atts.getValue(i)));
+                /*
                     new Attribute(name,
                                   prefix,
                                   getNamespaceURI(prefix),
-                                  atts.getValue(i)));
+                                  atts.getValue(i)));*/
+        System.out.println("B3");
             }
         }
 
