@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.97 2003/05/05 20:36:09 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.98 2003/05/22 08:48:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.97 $, $Date: 2003/05/05 20:36:09 $
+ * @version $Revision: 1.98 $, $Date: 2003/05/22 08:48:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.97 $ $Date: 2003/05/05 20:36:09 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.98 $ $Date: 2003/05/22 08:48:00 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1535,7 +1535,7 @@ public class XMLOutputter implements Cloneable {
                     break;
                 default :
                     if (currentFormat.escapeStrategy.shouldEscape(ch)) {
-                        entity = "&#" + (int)ch + ";";
+                        entity = "&#x" + Integer.toHexString(ch) + ";";
                     }
                     else {
                         entity = null;
@@ -1599,7 +1599,7 @@ public class XMLOutputter implements Cloneable {
                     break;
                 default :
                     if (currentFormat.escapeStrategy.shouldEscape(ch)) {
-                        entity = "&#" + (int)ch + ";";
+                        entity = "&#x" + Integer.toHexString(ch) + ";";
                     }
                     else {
                         entity = null;
