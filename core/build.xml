@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.18 2001/03/15 06:07:17 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.19 2001/05/15 23:22:48 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -151,7 +151,17 @@ For instructions on how to build JDOM, please view the README.txt file.
   </target>
 
   <!-- =================================================================== -->
-  <!-- Compiles the samples directory                                       -->
+  <!-- Compiles the Easter Egg code unless JDK1.1 is being used            -->
+  <!-- =================================================================== -->
+  <target name="egg" unless="coll.present">
+    <javac srcdir="${package.dir}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples,collections">
     <javac srcdir="${build.src}"
@@ -163,15 +173,11 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="compile">
+  <target name="package" depends="compile,egg">
     <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
     <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
     <copydir src="${package.dir}/META-INF"
              dest="${build.dest}/META-INF"/>
-    <javac srcdir="${package.dir}"
-           destdir="${build.dest}"
-           debug="${debug}"
-           optimize="${optimize}"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
          manifest="${build.dest}/META-INF/MANIFEST.MF"/>
