@@ -83,14 +83,12 @@ public class ResultSetBuilderDemo {
     Connection con =
       DriverManager.getConnection("jdbc:cloudscape:rsbd;create=true");
 
-/*  
     // Create and fill commands, needed only on the first run
     Statement prep = con.createStatement();
     prep.executeUpdate(PREP);
 
     Statement fill = con.createStatement();
     fill.executeUpdate(FILL);
-*/
 
     Namespace ns = Namespace.getNamespace("xhtml", "http://w3.org/etc");
 
