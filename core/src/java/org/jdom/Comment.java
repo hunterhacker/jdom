@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.21 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Comment.java,v 1.22 2002/03/20 15:16:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -67,12 +67,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.21 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.22 $, $Date: 2002/03/20 15:16:32 $
  */
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.21 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.22 $ $Date: 2002/03/20 15:16:32 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
@@ -175,7 +175,7 @@ public class Comment implements Serializable, Cloneable {
      * @return this <code>Comment</code> modified
      */
     protected Comment setDocument(Document document) {
-        this.parent = parent;
+        this.parent = document;
         return this;
     }
 

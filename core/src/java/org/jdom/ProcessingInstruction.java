@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.26 2002/03/12 07:57:06 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.27 2002/03/20 15:16:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,13 +71,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.26 $, $Date: 2002/03/12 07:57:06 $
+ * @version $Revision: 1.27 $, $Date: 2002/03/20 15:16:32 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.26 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.27 $ $Date: 2002/03/20 15:16:32 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -219,7 +219,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return this <code>PI</code> modified
      */
     protected ProcessingInstruction setDocument(Document document) {
-        this.parent = parent;
+        this.parent = document;
         return this;
     }
 
