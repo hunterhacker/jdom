@@ -315,7 +315,7 @@ public final class Namespace {
      * @return <code>String</code> - information about this instance.
      */
     public String toString() {
-        return "[Namespace: prefix " + prefix + " is mapped to URI \"" + 
+        return "[Namespace: prefix \"" + prefix + "\" is mapped to URI \"" + 
                uri + "\"]";
     }
 

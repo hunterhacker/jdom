@@ -279,6 +279,50 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This returns the Namespace in scope on this element for the given 
+     * prefix (this involves searching up the tree, so the results depend 
+     * on the current location of the element).  It returns null if there
+     * is no Namespace in scope with the given prefix at this point in 
+     * the document.
+     * </p>
+     *
+     * @param prefix  namespace prefix to look up
+     * @return <code>Namespace</code> - namespace in scope for the given 
+     * prefix on this <code>Element</code>, or null if none.
+     */
+    public Namespace getNamespace(String prefix) {
+        if (prefix == null) {
+            return null;
+        }
+
+        // Check if the prefix is the prefix for this element
+        if (prefix.equals(getNamespacePrefix())) {
+            return getNamespace();
+        }
+
+        // Scan the additional namespaces
+        List addl = getAdditionalNamespaces();
+        if (addl.size() > 0) {
+            Iterator itr = addl.iterator();
+            while (itr.hasNext()) {
+                Namespace ns = (Namespace) itr.next();
+                if (prefix.equals(ns.getPrefix())) {
+                    return ns;
+                }
+            }
+        }
+
+        // If we still don't have a match, ask the parent
+        Element parent = getParent();
+        if (parent != null) {
+            return parent.getNamespace(prefix);
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>
      * This returns the full name of the
      *   <code>Element</code>, in the form
      *   [namespacePrefix]:[localName].  If
