@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.56 2002/03/30 08:25:32 jhunter Exp $
+ $Id: Document.java,v 1.57 2002/04/18 13:12:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import org.jdom.filter.Filter;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.56 $, $Date: 2002/03/30 08:25:32 $
+ * @version $Revision: 1.57 $, $Date: 2002/04/18 13:12:35 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.56 $ $Date: 2002/03/30 08:25:32 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.57 $ $Date: 2002/04/18 13:12:35 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -502,6 +502,7 @@ public class Document implements Serializable, Cloneable {
 
         if (docType != null) {
             doc.docType = (DocType)docType.clone();
+            doc.docType.setDocument(doc);
         }
 
         // The clone has a reference to this object's content list, so
