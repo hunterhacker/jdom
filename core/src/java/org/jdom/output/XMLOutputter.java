@@ -960,8 +960,9 @@ public class XMLOutputter implements Cloneable {
         // Print out additional namespace declarations
         List additionalNamespaces = element.getAdditionalNamespaces();
         if (additionalNamespaces != null) {
-            for (int i=0; i<additionalNamespaces.size(); i++) {
-                Namespace additional = (Namespace)additionalNamespaces.get(i);
+            Iterator itr = additionalNamespaces.iterator();
+            while (itr.hasNext()) {
+                Namespace additional = (Namespace)itr.next();
                 String prefix = additional.getPrefix();        
                 String uri = namespaces.getURI(prefix);
                 if (!additional.getURI().equals(uri)) {
@@ -1060,9 +1061,10 @@ public class XMLOutputter implements Cloneable {
              */
             // Iterate through children
             Object content = null;
-           Class justOutput = null;
-            for (int i=0, size=mixedContent.size(); i<size; i++) {
-                content = mixedContent.get(i);
+            Class justOutput = null;
+            Iterator itr = mixedContent.iterator();
+            while (itr.hasNext()) {
+                content = itr.next();
                 // See if text, an element, a PI or a comment
                 if (content instanceof Comment) {
                     printComment((Comment) content, out, indentLevel + 1);
@@ -1171,8 +1173,9 @@ public class XMLOutputter implements Cloneable {
         // if someone tries to do this
         Set prefixes = new HashSet();
 
-        for (int i=0, size=attributes.size(); i < size; i++) {
-            Attribute attribute = (Attribute)attributes.get(i);
+        Iterator itr = attributes.iterator();
+        while (itr.hasNext()) {
+            Attribute attribute = (Attribute)itr.next();
             Namespace ns = attribute.getNamespace();
             if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
                 String prefix = ns.getPrefix();           
