@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.57 2001/06/20 18:36:26 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.58 2001/06/22 07:58:51 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.57 $ $Date: 2001/06/20 18:36:26 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.58 $ $Date: 2001/06/22 07:58:51 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -494,7 +494,7 @@ public class XMLOutputter implements Cloneable {
             Object obj = i.next();
             if (obj instanceof Element) {
                 printElement(doc.getRootElement(), out, 0,
-                             new NamespaceStack());
+                             createNamespaceStack());
             }
             else if (obj instanceof Comment) {
                 printComment((Comment) obj, out);
@@ -526,7 +526,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Element element, Writer out) throws IOException {
         // If this is the root element we could pre-initialize the 
         // namespace stack with the namespaces
-        printElement(element, out, 0, new NamespaceStack());
+        printElement(element, out, 0, createNamespaceStack());
         out.flush();
     }
     
@@ -558,7 +558,7 @@ public class XMLOutputter implements Cloneable {
     public void outputElementContent(Element element, Writer out)
                       throws IOException {
         List mixedContent = element.getMixedContent();
-        printElementContent(element, out, 0, new NamespaceStack(),
+        printElementContent(element, out, 0, createNamespaceStack(),
                             mixedContent);
         out.flush();
     }
@@ -1494,6 +1494,29 @@ public class XMLOutputter implements Cloneable {
 
     private boolean endsWithWhite(String s) {
         return (s.length() > 0 && s.charAt(s.length() - 1) <= ' ');
+    }
+
+    /**
+     * Factory for making new NamespaceStack objects.  The NamespaceStack
+     * created is actually an inner class extending the package protected
+     * NamespaceStack, as a way to make NamespaceStack "friendly" toward
+     * subclassers.
+     **/
+    protected NamespaceStack createNamespaceStack() {
+       // actually returns a XMLOutputter.NamespaceStack (see below)
+       return new NamespaceStack();
+    }
+
+     /**
+     * Our own null subclass of NamespaceStack.  This plays a little
+     * trick with Java access protection.  We want subclasses of
+     * XMLOutputter to be able to override protected methods that
+     * declare a NamespaceStack parameter, but we don't want to
+     * declare the parent NamespaceStack class as public.  
+     **/
+    protected class NamespaceStack
+       extends org.jdom.output.NamespaceStack
+    {
     }
 
     /**
