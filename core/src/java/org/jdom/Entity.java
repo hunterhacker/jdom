@@ -123,7 +123,7 @@ public class Entity implements Serializable, Cloneable {
      * <p>
      * This will set the textual content of the <code>Entity</code>.
      *   If this <code>Entity</code> will have both textual content
-     *   and nexted elements, <code>{@link #setMixedContent}</code>
+     *   and nested elements, <code>{@link #setMixedContent}</code>
      *   should be used instead,
      * </p>
      *
