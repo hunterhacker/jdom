@@ -421,9 +421,16 @@ public class DOMBuilder {
                 }
 
                 // Recurse on child nodes
+                // The list should never be null nor should it ever contain
+                // null nodes, but some DOM impls are broken
                 NodeList children = node.getChildNodes();
-                for (int i=0, size=children.getLength(); i<size; i++) {
-                    buildTree(children.item(i), doc, element, false);
+                if (children != null) {
+                    for (int i=0, size=children.getLength(); i<size; i++) {
+                        Node item = children.item(i);
+                        if (item != null) {
+                            buildTree(item, doc, element, false);
+                        }
+                    }
                 }
                 break;
 
