@@ -1,10 +1,66 @@
+/*--
+ 
+Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
+    provided with the distribution.
+
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact license@jdom.org.
+
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management (pm@jdom.org).
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos
+ available at http://www.jdom.org/images/logos.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
+ JDOM Project, please see <http://www.jdom.org/>.
+
+ */
+
+
 package org.jdom.test.cases.input;
 
 /**
- * Please put a description of your test here.
+ * Tests of SAXBuilder functionality.  Since most of these methods are tested in other parts
+ * of the test suite, many tests are not filled.
  * 
- * @author unascribed
- * @version 0.1
+ * @author Philip Nelson
+ * @version 0.5
  */
 import junit.framework.*;
 import java.util.*;
@@ -62,6 +118,7 @@ extends junit.framework.TestCase
         suite.addTest(new TestSAXBuilder("test_TCU__DTDComments"));
         suite.addTest(new TestSAXBuilder("test_TCM__void_setExpandEntities_boolean"));
     	suite.addTest(new TestSAXBuilder("test_TCU__InternalAndExternalEntities"));
+    	//suite.addTest(new TestSAXBuilder("test_TCU__InternalSubset"));
         
         return suite;
     }
@@ -160,7 +217,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
-    public void test_TCM__void_setExpandEntities_boolean() throws JDOMException {
+    public void test_TCM__void_setExpandEntities_boolean() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
         SAXBuilder builder = new SAXBuilder();
@@ -235,7 +292,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
-    public void test_TCU__DTDComments() throws JDOMException {
+    public void test_TCU__DTDComments() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
         SAXBuilder builder = new SAXBuilder();
@@ -259,7 +316,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
-    public void test_TCU__InternalAndExternalEntities() throws JDOMException {
+    public void test_TCU__InternalAndExternalEntities() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
         SAXBuilder builder = new SAXBuilder();
@@ -296,5 +353,25 @@ extends junit.framework.TestCase
 		assertTrue("incorrectly got external entity declaration in internal subset", 
 			doc.getDocType().getInternalSubset().indexOf("ldquo") < 0);
     }
+    
+    public void test_TCU__InternalSubset() throws JDOMException, IOException {
+    
+        SAXBuilder builder = new SAXBuilder();
+        //test entity expansion on internal subset
+        File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
 
+        builder.setExpandEntities(true);
+        Document doc = builder.build(file);
+        String subset = doc.getDocType().getInternalSubset();
+        assertEquals("didn't get correct internal subset when expand entities was on"
+            , "  <!NOTATION n1 SYSTEM \"http://www.w3.org/\">\n  <!NOTATION n2 SYSTEM \"http://www.w3.org/\">\n  <!ENTITY anotation SYSTEM \"http://www.foo.org/image.gif\" NDATA n1>\n", 
+            subset);
+        //now do it with expansion off
+        builder.setExpandEntities(false);
+        doc = builder.build(file);
+        String subset2 = doc.getDocType().getInternalSubset();
+        assertEquals("didn't get correct internal subset when expand entities was off"
+            , "<!NOTATION n2 SYSTEM \"http://www.w3.org/\">\n  <!ENTITY anotation SYSTEM \"http://www.foo.org/image.gif\" NDATA n1>\n", subset2);    
+        	
+    }
 }
