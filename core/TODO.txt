@@ -2,20 +2,9 @@ Items that need to be done:
 
 --- RIGHT AWAY, FOR BETA 8 ---
 
-* Start shipping a more recent Xerces (maybe even 2.0 if possible).
-
-* Fix JDOM->DOM->JDOM bug as reported by "Xuemin Guan" <xuemin@appresso.com>.
-   http://www.servlets.com/archive/servlet/SearchList?listName=jdom-interest&
-   searchText=%22JDom+2+Dom%2C+then+Dom+2+JDom%22&defaultField=subject&
-   Search=Search
-
 * Finish implementing the ability to output the same DOCTYPE as was input.  
-  Open issues:  Making SAXOutputter output the right SAX events for the
-  DOCTYPE string, making DOMBuilder and DOMOutputter support the model,
-  working around the Crimson bugs Philip found in certain parsing.
-  (Phil Nelson has been responsible for this.  Laurent is helping w/
-  SAXOutputter, planning on passing the string to Xerces for parsing and event
-  propagation.)
+  Open issues:  Making DOMOutputter support the model.  If possible.
+  (Mine, asked Brett and Elharo for advice)
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
@@ -23,6 +12,7 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
+  (Brad's)
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
@@ -33,8 +23,21 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
   Brad Huffman has a good proposal.
+  (Brad's)
+
+* Make public methods like getContent(Filter).
+
+* Should we make "Element parent" of types like EntityRef into "Object parent"
+  to match types like Comment and Element?
 
 --- AFTER BETA 8 ---
+
+* Start shipping Xerces 2.0+
+  Xerces 2.0.0 bugs found when using DOMBuilder:
+   * In cdata.xml we're getting entity callbacks for chars inside CDATA
+     sections (bug 6316 in Xerces' Bugzilla)
+   * In web.xml we're seeing the comments from the external DTD appear in our
+     document (bug 6317 in Xerces' Bugzilla)
 
 * Look at where Namespace may need to be synchronized or made no longer a
   flyweight.  See
@@ -50,6 +53,12 @@ Items that need to be done:
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
+
+* Give attributes the "specified" flag like in DOM.  This probably isn't
+  receivable from SAXBuilder, but it would be from DOMBuilder and other
+  builders.  Then give XMLOutputter the ability to avoid outputting
+  "unspecified" attributes.  Some of this may be covered by the attribute type
+  support recently added.
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
