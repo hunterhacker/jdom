@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementScanner.java,v 1.1 2002/03/08 07:11:24 jhunter Exp $
+ $Id: ElementScanner.java,v 1.2 2002/04/16 07:55:32 arosen Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -668,7 +668,7 @@ public class ElementScanner extends XMLFilterImpl {
       // SAXBuilder overwritten methods
       //----------------------------------------------------------------------
 
-      protected SAXHandler createContentHandler() throws Exception {
+      protected SAXHandler createContentHandler() {
          return (new ElementBuilder(new EmptyDocumentFactory(factory)));
       }
 
@@ -750,7 +750,7 @@ public class ElementScanner extends XMLFilterImpl {
        *
        * @throws IOException  if thrown by superclass implementation.
        */
-      public ElementBuilder(JDOMFactory factory)        throws IOException {
+      public ElementBuilder(JDOMFactory factory) {
          super(factory);
       }
 

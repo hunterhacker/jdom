@@ -191,7 +191,7 @@ public class JDOMBean {
      * @param filename the file to load, relative to file root
      * @return a JDOM Document corresponding to the given filename
      **/
-    public Document getDocument(String filename) throws JDOMException {
+    public Document getDocument(String filename) throws JDOMException, IOException {
         FileInfo info = (FileInfo) files.get(filename);
         File file = getFile(filename);
         if (info == null ||
@@ -207,7 +207,7 @@ public class JDOMBean {
     /**
      * Convenience method, calls getDocument(filename).getRootElement()
      **/
-    public Element getRootElement(String file) throws JDOMException {
+    public Element getRootElement(String file) throws JDOMException, IOException {
         Document doc = getDocument(file);
         if (doc != null) return doc.getRootElement();
         return null;
