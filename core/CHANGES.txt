@@ -1,0 +1,175 @@
+
+* * * * * * * * * * Beta5 to Beta6 * * * * * * * * * *
+
+NEW CLASSES
+-----------
+
+Added new class org.jdom.input.BuilderErrorHandler as a default error handler
+for JDOM builders.  It ignores warnings but throws on errors and fatal errors.
+
+Added a Crimson adapter CrimsonDOMAdapter.java, to support the parser slated
+to come with JAXP 1.1.
+
+NEW METHODS
+-----------
+
+Added parentage for Attribute, Comment, Element, Entity, and PI!  They all now
+have getParent() methods.  All but Attribute have getDocument() methods also.
+The addContent() and addAttribute() methods now check parentage and don't
+allow an item to be added if it's already held by another.
+
+Added to Element the method Namespace getNamespace(String prefix).  It returns
+the Namespace in scope with the given prefix.  It helps with attributes whose
+values include namespaces, like <xsl:template match="sg:title">.
+
+Added DOMBuilder.setValidation(boolean) to set the validate flag after
+construction, to match SAXBuilder.
+
+Added DOMOutputter.output(Attribute) methods.  
+
+Added XMLOutputter.setExpandEmptyElements() to choose between <empty/> and
+<empty></empty>.
+
+Many new XMLOutputter methods for outputting document fragments.
+
+SAXBuilder now has a setXMLFilter() method to allow setting of XMLFilter
+objects to operate during the build.
+
+Added to Element a hasChildren() method.
+
+Added various removeContent() methods on Element.  They were deprecated and
+scheduled for removal, but they're now being kept.
+
+Added various removeContent() methods on Document.  These are brand new.
+
+NEW SIGNATURES
+--------------
+
+Made clone() methods no longer final.
+
+Made toString() methods no longer final.
+
+Changed all outputter output() signatures to throw JDOMException in case of
+problem.
+
+Changed DOMAdapter signature so getDocument(String filename, ...) is now
+getDocument(File filename, ...) to match the standard builder model.  I did
+not do a deprecation because no one should be using this internal API
+directly, and if they are, I want to hear from them.
+
+REMOVED METHODS
+---------------
+
+Removed all methods marked deprecated in beta5.
+
+DEPRECATED METHODS
+------------------
+
+Marked Namespace.getNamespace(String prefix, Element context) deprecated
+because it had been replaced by the more elegant elt.getNamespace(String
+prefix).
+
+Marked Document.addContent(Element) deprecated because there can be only one
+element and it's properly set with setMixedContent().
+
+Marked CDATA.setText() as deprecated.  This is because CDATA doesn't have
+parentage, and without parentage an object should be immutable.
+
+ENHANCEMENTS
+------------
+
+Added JAXP 1.1 support to SAXBuilder, DOMBuilder, and DOMOutputter.  The
+default parser for all these is now the JAXP parser, with a fallback of Xerces
+if JAXP isn't available.
+
+Added improved Verifier checks of well-formedness throughout all of JDOM.
+Among the most likely to be noticed:
+  - Added Verifier detection of wrongly places "xmlns" attributes.
+  - Added check in Attribute that a namespace with "" prefix must be 
+    NO_NAMESPACE.
+  - Added Verifier checks so CDATA text cannot contain ">>]"
+
+Upgraded provided parser to Xerces 1.2.
+
+Improved SAXBuilder and DOMBuilder to be *much* smarter about namespaces.
+Most likely to be noticed:
+  - DOMBuilder now keeps xmlns namespaces declaration location, and it now 
+    relies on the parser to handle namespaces (necessary for importing a 
+    document that has nodes moved around).
+
+Made SAXBuilder and DOMBuilder much more specific on error reporting.
+
+Brought DOMOutputter up to DOM Level 2 compliance.  
+  - Added logic to DOMOutputter to add xmlns attributes to the DOM tree 
+    where appropriate.
+
+Added SAXOutputter to generate SAX events.
+
+Improved documentation on clone() methods.
+
+Changed XMLOutputter.escape*Entities() to protected from private to help
+subclasses.
+
+Improved removeContent() to solve a Crimson performance problem regarding
+duplicate string entries.
+
+Added logic to prevent an element from being added as a child or descendent of
+itself.
+
+Optimized SAXBuilder list handling so retrievals and removes will most likely
+hit on their first try instead of their last try.
+
+Added Namespace output to Element.toString() to help debugging element
+namespace issues.
+
+Improved the Verifier.isXML*() methods to operate much faster.
+
+XMLOutputter now prints new lines after the declaration, even if newlines are
+turned off for the rest of the document.
+
+Made PI's getSerializedForm() smarter about spacing between target and data.
+Now if there is no data, there's no space added.
+
+Put samples in the "samples" package.
+
+BUG FIXES
+---------
+
+Fixed bug in XMLOutputter where "additional namespace" declarations would be
+output even if they were already declared by an ancestor.
+
+Fixed bug where an element not in any namespace will still inherit the default
+namespace from an ancestor.
+
+Added fix to recognize implicit "xml" namespace during
+Namespace.getNamespace() call.
+
+Added fix so XMLOutputter no longer outputs XML_NAMESPACE.
+
+Fixed Element.getDocument() behavior to work reliably.
+
+Fixed Verifier to not see "xmlnsfoo" attributes as invalid.
+
+Fixed Verifier to allow attribute names xml:lang and xml:space as special
+cases.
+
+Improved all adapters to throw exceptions on error instead of printing stack
+traces.
+
+Fixed Element.clone() to be a true deep copy.
+
+Fixed bug in SAXBuilder that would throw an EmptyStackException if a PI
+appeared after the root element.
+
+Fixed bug in doc.setMixedContent(List) so it now stores the new data
+correctly.
+
+Made removeChildren() properly set parents to null, and to return true only if
+children were actually deleted.
+
+Changed SAXBuilder's endPrefixMapping(String, String) to be
+endPrefixMapping(String) as it should have been so we now get the callback and
+can remove namespaces.
+
+Fixed PartialList.addAll() to behave as specified.
+
