@@ -1320,7 +1320,8 @@ public class Element implements Serializable, Cloneable {
      *         <code>Element</code>.
      */
     public final String getSerializedForm() {
-        throw new UnsupportedOperationException();
+        throw new RuntimeException(
+          "Element.getSerializedForm() is not yet implemented");
     }
 
     /**

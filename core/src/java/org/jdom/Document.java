@@ -454,7 +454,8 @@ public class Document implements Serializable, Cloneable {
      *         <code>Document</code>.
      */
     public final String getSerializedForm() {
-        throw new UnsupportedOperationException();
+        throw new RuntimeException(
+          "Document.getSerializedForm() is not yet implemented");
     }
 
     /**
