@@ -445,9 +445,13 @@ public class Element implements Serializable, Cloneable {
 	// Use "cached" trimmed text if available
 	if (trimmedContent == null) {	
 
-    	    StringBuffer textContent = new StringBuffer();
+            String text = getText();
+            if (text == null) {
+                return null;
+            }
 
-            StringTokenizer tokenizer = new StringTokenizer(getText());
+    	    StringBuffer textContent = new StringBuffer();
+            StringTokenizer tokenizer = new StringTokenizer(text);
 	    while (tokenizer.hasMoreTokens()) {
 		String str = tokenizer.nextToken();
                 textContent.append(str);
