@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.12 2003/05/29 02:52:15 jhunter Exp $
+ $Id: XPath.java,v 1.13 2004/02/05 20:56:09 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -71,13 +71,13 @@ import org.jdom.*;
  * can choose an implementation using either {@link #setXPathClass} or
  * the system property "org.jdom.xpath.class".
  *
- * @version $Revision: 1.12 $, $Date: 2003/05/29 02:52:15 $
+ * @version $Revision: 1.13 $, $Date: 2004/02/05 20:56:09 $
  * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:52:15 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.13 $ $Date: 2004/02/05 20:56:09 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the
@@ -193,41 +193,40 @@ public abstract class XPath implements Serializable {
       }
    }
 
-   /**
-    * Evaluates the wrapped XPath expression and returns the list
-    * of selected nodes.
-    *
-    * @param  context   the node to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the list of selected nodes, which can be instances of
-    *         the following JDOM classes: {@link org.jdom.Element},
-    *         {@link org.jdom.Attribute}, {@link org.jdom.Text}, {@link org.jdom.CDATA},
-    *         {@link org.jdom.Comment} or {@link org.jdom.ProcessingInstruction}.
-    *
-    * @throws JDOMException   if the evaluation of the XPath
-    *                         expression on the specified context
-    *                         failed.
-    */
+    /**
+     * Evaluates the wrapped XPath expression and returns the list
+     * of selected items.
+     *
+     * @param  context   the node to use as context for evaluating
+     *                   the XPath expression.
+     *
+     * @return the list of selected items, which may be of types: {@link Element},
+     *         {@link Attribute}, {@link Text}, {@link CDATA},
+     *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+     *         Double, or String.
+     *
+     * @throws JDOMException   if the evaluation of the XPath
+     *                         expression on the specified context
+     *                         failed.
+     */
    abstract public List selectNodes(Object context) throws JDOMException;
 
-   /**
-    * Evaluates the wrapped XPath expression and returns the first
-    * entry in the list of selected nodes.
-    *
-    * @param  context   the node to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the first selected nodes, which is an instance of one
-    *         of the following JDOM classes: {@link org.jdom.Element},
-    *         {@link org.jdom.Attribute}, {@link org.jdom.Text}, {@link org.jdom.CDATA},
-    *         {@link org.jdom.Comment} or {@link org.jdom.ProcessingInstruction} or
-    *         <code>null</code> if no node was selected.
-    *
-    * @throws JDOMException   if the evaluation of the XPath
-    *                         expression on the specified context
-    *                         failed.
-    */
+    /**
+     * Evaluates the wrapped XPath expression and returns the first
+     * entry in the list of selected nodes (or atomics).
+     *
+     * @param  context   the node to use as context for evaluating
+     *                   the XPath expression.
+     *
+     * @return the first selected item, which may be of types: {@link Element},
+     *         {@link Attribute}, {@link Text}, {@link CDATA},
+     *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+     *         Double, String, or <code>null</code> if no item was selected.
+     *
+     * @throws JDOMException   if the evaluation of the XPath
+     *                         expression on the specified context
+     *                         failed.
+     */
    abstract public Object selectSingleNode(Object context) throws JDOMException;
 
    /**
@@ -321,7 +320,7 @@ public abstract class XPath implements Serializable {
 
    /**
     * Evaluates an XPath expression and returns the list of selected
-    * nodes.
+    * items.
     * <p>
     * <strong>Note</strong>: This method should not be used when the
     * same XPath expression needs to be applied several times (on the
@@ -336,10 +335,10 @@ public abstract class XPath implements Serializable {
     *                   the XPath expression.
     * @param  path      the XPath expression to evaluate.
     *
-    * @return the list of selected nodes, which can be instances of
-    *         the following JDOM classes: {@link org.jdom.Element},
-    *         {@link org.jdom.Attribute}, {@link org.jdom.Text}, {@link org.jdom.CDATA},
-    *         {@link org.jdom.Comment} or {@link org.jdom.ProcessingInstruction}.
+    * @return the list of selected items, which may be of types: {@link Element},
+    *         {@link Attribute}, {@link Text}, {@link CDATA},
+    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+    *         Double, or String.
     *
     * @throws JDOMException   if the XPath expression is invalid or
     *                         its evaluation on the specified context
@@ -352,7 +351,7 @@ public abstract class XPath implements Serializable {
 
    /**
     * Evaluates the wrapped XPath expression and returns the first
-    * entry in the list of selected nodes.
+    * entry in the list of selected nodes (or atomics).
     * <p>
     * <strong>Note</strong>: This method should not be used when the
     * same XPath expression needs to be applied several times (on the
@@ -367,11 +366,10 @@ public abstract class XPath implements Serializable {
     *                   the XPath expression.
     * @param  path      the XPath expression to evaluate.
     *
-    * @return the first selected nodes, which is an instance of one
-    *         of the following JDOM classes: {@link org.jdom.Element},
-    *         {@link org.jdom.Attribute}, {@link org.jdom.Text}, {@link org.jdom.CDATA},
-    *         {@link org.jdom.Comment} or {@link org.jdom.ProcessingInstruction} or
-    *         <code>null</code> if no node was selected.
+    * @return the first selected item, which may be of types: {@link Element},
+    *         {@link Attribute}, {@link Text}, {@link CDATA},
+    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+    *         Double, String, or <code>null</code> if no item was selected.
     *
     * @throws JDOMException   if the XPath expression is invalid or
     *                         its evaluation on the specified context

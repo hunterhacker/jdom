@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.12 2003/05/20 21:54:00 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.13 2004/02/05 20:56:09 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import org.saxpath.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.12 $, $Date: 2003/05/20 21:54:00 $
+ * @version $Revision: 1.13 $, $Date: 2004/02/05 20:56:09 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.12 $ $Date: 2003/05/20 21:54:00 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.13 $ $Date: 2004/02/05 20:56:09 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
@@ -103,15 +103,15 @@ class JaxenXPath extends    XPath {             // package protected
 
    /**
     * Evaluates the wrapped XPath expression and returns the list
-    * of selected nodes.
+    * of selected items.
     *
     * @param  context   the node to use as context for evaluating
     *                   the XPath expression.
     *
-    * @return the list of selected nodes, which can be instances of
-    *         the following JDOM classes: {@link Element},
+    * @return the list of selected items, which may be of types: {@link Element},
     *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction}.
+    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+    *         Double, or String.
     *
     * @throws JDOMException   if the evaluation of the XPath
     *                         expression on the specified context
@@ -134,16 +134,15 @@ class JaxenXPath extends    XPath {             // package protected
 
    /**
     * Evaluates the wrapped XPath expression and returns the first
-    * entry in the list of selected nodes.
+    * entry in the list of selected nodes (or atomics).
     *
     * @param  context   the node to use as context for evaluating
     *                   the XPath expression.
     *
-    * @return the first selected nodes, which is an instance of one
-    *         of the following JDOM classes: {@link Element},
+    * @return the first selected item, which may be of types: {@link Element},
     *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction} or
-    *         <code>null</code> if no node was selected.
+    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+    *         Double, String, or <code>null</code> if no item was selected.
     *
     * @throws JDOMException   if the evaluation of the XPath
     *                         expression on the specified context
@@ -194,13 +193,13 @@ class JaxenXPath extends    XPath {             // package protected
    }
 
    /**
-    * Returns the number value of the first node selected by applying
+    * Returns the number value of the first item selected by applying
     * the wrapped XPath expression to the given context.
     *
     * @param  context   the element to use as context for evaluating
     *                   the XPath expression.
     *
-    * @return the number value of the first node selected by applying
+    * @return the number value of the first item selected by applying
     *         the wrapped XPath expression to the given context,
     *         <code>null</code> if no node was selected or the
     *         special value {@link java.lang.Double#NaN}
