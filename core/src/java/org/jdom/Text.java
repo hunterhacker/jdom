@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.19 2004/02/06 03:39:03 jhunter Exp $
+ $Id: Text.java,v 1.20 2004/02/06 04:10:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,7 +61,7 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.19 $, $Date: 2004/02/06 03:39:03 $
+ * @version $Revision: 1.20 $, $Date: 2004/02/06 04:10:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
@@ -69,7 +69,7 @@ package org.jdom;
 public class Text extends Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.19 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.20 $ $Date: 2004/02/06 04:10:59 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 
@@ -78,9 +78,6 @@ public class Text extends Child {
     // from elharo for a description of why Java characters may not suffice
     // long term
     protected String value;
-
-    /** This <code>Text</code> node's parent. */
-    protected Parent parent;
 
     /**
      * This is the protected, no-args constructor standard in all JDOM
@@ -238,23 +235,6 @@ public class Text extends Child {
      */
     public String getValue() {
         return value;
-    }
-
-    /**
-     * This will set the parent of the <code>Text</code> node to the supplied
-     * <code>{@link Element}</code>. This method is intentionally left as
-     * <code>protected</code> so that only JDOM internals use it.
-     * <p>
-     * If you need an instance of this <code>Text</code> node with a new
-     * parent, you should get a copy of this node with
-     * <code>{@link #clone}</code> and set it on the desired (new) parent
-     * <code>Element</code>.</p>
-     *
-     * @param parent parent for this node.
-     */
-    protected Child setParent(Parent parent) {
-        this.parent = parent;
-        return this;
     }
 
     /**
