@@ -172,6 +172,11 @@ Items that need to be done:
 * Joe summarizes his issues at
   http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
 
+* Make sure that JDOMException is compatible with JDK 1.4 nested exceptions.
+  E.g. should getNestedException find 1.4-type nested exceptions? Do both
+  1.4-type nested exceptions and JDOMException both try to print child
+  stack traces, causing them to be printed twice?
+
 --- FOR JDOM 1.1 ---
 
 * Add XPath support, most likely integrating Bob McWhirter's package.
