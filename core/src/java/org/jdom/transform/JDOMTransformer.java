@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMTransformer.java,v 1.1 2003/05/01 02:25:04 jhunter Exp $
+ $Id: JDOMTransformer.java,v 1.2 2003/05/02 03:19:51 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -74,10 +74,14 @@ import org.jdom.Document;
  * Document y2 = transformer.transform(y);  // y is a Document
  * </code></pre>
  *
- * @version $Revision: 1.1 $, $Date: 2003/05/01 02:25:04 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/02 03:19:51 $
  * @author  Jason Hunter
  */
 public class JDOMTransformer {
+
+    private static final String CVS_ID =
+            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.2 $ $Date: 2003/05/02 03:19:51 $ $Name:  $";
+
     private Transformer transformer;
 
     /**
