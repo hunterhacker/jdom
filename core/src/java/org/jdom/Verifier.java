@@ -181,6 +181,31 @@ public final class Verifier {
 
     /**
      * <p>
+     *  This will ensure that the data for a <code>{@link CDATA}</code>
+     *    section is appropriate.
+     * </p>
+     *
+     * @param data <code>String</code> data to check.
+     * @return <code>String</code> - reason data is invalid, or
+     *         <code>null</code> is name is OK.
+     */
+    public static final String checkCDATASection(String data) {
+        String reason = null;
+        if ((reason = checkCharacterData(data)) != null) {
+            return reason;
+        }
+
+        if (data.indexOf("]]>") != -1) {
+            return "CDATA cannot internally contain a CDATA ending " +
+                   "delimiter (]]>)";
+        }
+
+        // If we got here, everything is OK
+        return null;
+    }
+
+    /**
+     * <p>
      *  This will check the supplied name to see if it valid for use as
      *    a JDOM <code>{@link Namespace}</code> prefix.
      * </p>
@@ -316,8 +341,9 @@ public final class Verifier {
      *         <code>null</code> is name is OK.
      */
     public static final String checkCommentData(String data) {
-        if (data == null) {
-            return "Comments cannot be null";
+        String reason = null;
+        if ((reason = checkCharacterData(data)) != null) {
+            return reason;
         }
 
         if (data.indexOf("--") != -1) {

@@ -90,6 +90,11 @@ public class CDATA implements Serializable, Cloneable {
      * @param text <code>String</code> content of CDATA.
      */
     public CDATA(String text) {
+        String reason;
+        if ((reason = Verifier.checkCDATASection(text)) != null) {
+            throw new IllegalDataException(text, "CDATA section", reason);
+        }
+
 	this.text = text;
     }
 
@@ -115,7 +120,7 @@ public class CDATA implements Serializable, Cloneable {
 //     * @return <code>CDATA</code> - this CDATA modified.
 //     */
 //    public void setText(String text) {
-//	this.text = text;
+//	this.text = text; // need above Verifier check!
 //    }
 
     /**
