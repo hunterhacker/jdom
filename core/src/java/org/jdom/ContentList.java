@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.35 2004/02/10 21:38:13 jhunter Exp $
+ $Id: ContentList.java,v 1.36 2004/02/11 20:53:26 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.35 $, $Date: 2004/02/10 21:38:13 $
+ * @version $Revision: 1.36 $, $Date: 2004/02/11 20:53:26 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.35 $ $Date: 2004/02/10 21:38:13 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.36 $ $Date: 2004/02/11 20:53:26 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -246,7 +246,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
     public void clear() {
         if (elementData != null) {
             for (int i = 0; i < size; i++) {
-                Object obj = elementData[i];
+                Content obj = elementData[i];
                 removeParent(obj);
             }
             elementData = null;
@@ -383,7 +383,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
-        Object old = elementData[index];
+        Content old = elementData[index];
         removeParent(old);
         int numMoved = size - index - 1;
         if (numMoved > 0)
@@ -395,35 +395,8 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 
 
     /** Remove the parent of a Object */
-    private void removeParent(Object obj) {
-        if (obj instanceof Element) {
-            Element element = (Element) obj;
-            element.setParent(null);
-        }
-        else if (obj instanceof Text) {
-            Text text = (Text) obj;
-            text.setParent(null);
-        }
-        else if (obj instanceof Comment) {
-            Comment comment = (Comment) obj;
-            comment.setParent(null);
-        }
-        else if (obj instanceof ProcessingInstruction) {
-            ProcessingInstruction pi = (ProcessingInstruction) obj;
-            pi.setParent(null);
-        }
-        else if (obj instanceof EntityRef) {
-            EntityRef entity = (EntityRef) obj;
-            entity.setParent(null);
-        }
-        else if (obj instanceof DocType) {
-            DocType dt = (DocType) obj;
-            dt.setParent(null);
-        }
-        else {
-            // Should never happen.
-            throw new IllegalArgumentException("Object '" + obj + "' unknown");
-        }
+    private void removeParent(Content c) {
+        c.setParent(null);
     }
 
     /**
