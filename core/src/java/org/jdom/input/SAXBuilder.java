@@ -104,7 +104,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class SAXBuilder {
 
-    /** Default parser class to use */
+    /** 
+     * Default parser class to use. This is used when no other parser
+     * is given and JAXP isn't available.
+     */
     private static final String DEFAULT_SAX_DRIVER =
         "org.apache.xerces.parsers.SAXParser";
 
@@ -158,24 +161,28 @@ public class SAXBuilder {
 
     /**
      * <p>
-     * This sets validation for the <code>Builder</code>.
+     * Creates a new SAXBuilder which will attempt to first locate
+     * a parser via JAXP, then will try to use a set of default 
+     * SAX Drivers. The underlying parser will validate or not
+     * according to the given parameter.
      * </p>
      *
      * @param validate <code>boolean</code> indicating if
      *                 validation should occur.
      */
     public SAXBuilder(boolean validate) {
-        this(DEFAULT_SAX_DRIVER, validate);
+        this.validate = validate;
     }
 
     /**
      * <p>
-     * This creates a <code>SAXBuilder</code> with
-     *   the default SAX driver and no validation.
+     * Creates a new SAXBuilder which will attempt to first locate
+     * a parser via JAXP, then will try to use a set of default 
+     * SAX Drivers. The underlying parser will not validate.
      * </p>
      */
     public SAXBuilder() {
-        this(DEFAULT_SAX_DRIVER, false);
+        this(false);
     }
 
     /**
@@ -250,8 +257,51 @@ public class SAXBuilder {
         Document doc = new Document(null);
 
         try {
-            XMLReader parser =
-                XMLReaderFactory.createXMLReader(saxDriverClass);
+            XMLReader parser = null;
+            if (saxDriverClass != null) {
+                // The user knows that they want to use a particular class
+                parser = XMLReaderFactory.createXMLReader(saxDriverClass);
+                // System.out.println("using specific " + saxDriverClass);
+            } else {
+                // Try using JAXP...
+                // Note we need JAXP 1.1, and if JAXP 1.0 is all that's
+                // available then the getXMLReader call fails and we skip
+                // to the hard coded default parser
+                try {
+                    Class factoryClass = 
+                        Class.forName("javax.xml.parsers.SAXParserFactory");
+                    Method newParserInstance = 
+                        factoryClass.getMethod("newInstance", null);
+                    Object factory = newParserInstance.invoke(null, null);
+                    Method setValidating = 
+                        factoryClass.getMethod("setValidating", 
+                                               new Class[]{boolean.class});
+                    setValidating.invoke(factory, 
+                                         new Object[]{new Boolean(validate)});
+                    Method newSAXParser = 
+                        factoryClass.getMethod("newSAXParser", null);
+                    Object jaxpParser  = newSAXParser.invoke(factory, null);
+                    Class parserClass = jaxpParser.getClass();
+                    Method getXMLReader = 
+                        parserClass.getMethod("getXMLReader", null);
+                    parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
+                    // System.out.println("using jaxp " +
+                    //   parser.getClass().getName());
+                } catch (ClassNotFoundException e) {
+                    //e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    //e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    //e.printStackTrace();
+                }
+            }
+
+            // Check to see if we got a parser yet, if not, try to use a
+            // hard coded default
+            if (parser == null) {
+                parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
+                // System.out.println("using default " + DEFAULT_SAX_DRIVER);
+            }
 
             // Install optional filter
             if (saxXMLFilter != null) {

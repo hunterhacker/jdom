@@ -2,6 +2,14 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Add \n at end of XMLOutputter
+
+* Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
+  necessary
+
+* Add new Document(List) constructor, to help putting things before a root
+  Also new Element(List) for consistency.
+
 * Shouldn't Attribute(String name, String prefix, String uri, String value)
   be Attribute(String name, String value, String prefix, String uri)?
 
@@ -69,6 +77,10 @@ Items that need to be done:
 * Verify we get good error handling if someone passes null to any add/set
   method.
 
+* Deal with getSerializedForm() calls, either implement or remove
+
+* Have DOMBuilder use JAXP model like SAXBuilder does
+
 --- FOR JDOM 1.0 ---
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
@@ -134,10 +146,6 @@ Items that need to be done:
 
 * Writing a "Getting started" guide for newbies 
   (Tom Clements <clements@eng.sun.com>)
-
-* Add JAXP 1.1 supporting classes when it's ready.  Design them to follow the
-  JAXP model so they are usable without JAXP, and can be trivially made to
-  work with JAXP.
 
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions
@@ -248,4 +256,17 @@ Items that need to be done:
   public StringBuffer getXPath(); 
   /** Return XPath of this node relative to given context node. */ 
   public StringBuffer getRelativeXPath(Element ancestor);
+
+* Make sure we really don't need a setName()/setNamespace() option.
+
+* Perhaps use JAXP's transform API to do JDOM transforms
+
+* How about: Entities expanded on input; on output chars converted to entities
+  only if char doesn't exist in output charset or is special character
+
+* Consider XercesErrHandler ignoring warning/error?
+
+* Consider having builders construct nodes that know the line number on which
+  they're based.  It's something DOM3 does, and one user requested it.  The
+  cost is a heavy price in memory bloat.
 
