@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.21 2002/04/29 02:30:47 jhunter Exp $
+ $Id: DocType.java,v 1.22 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,18 +59,16 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <p><code>DocType</code> represents an XML
- *   DOCTYPE declaration.
- * </p>
+ * <code>DocType</code> represents an XML DOCTYPE declaration.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.21 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.22 $, $Date: 2002/04/29 13:38:15 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.21 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.22 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -88,10 +86,7 @@ public class DocType implements Serializable, Cloneable {
     protected String internalSubset;
 
     /**
-     * <p>
-     * Default, no-args constructor for implementations
-     *   to use if needed.
-     * </p>
+     * Default, no-args constructor for implementations to use if needed.
      */
     protected DocType() {}
 
@@ -101,11 +96,9 @@ public class DocType implements Serializable, Cloneable {
      */
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name and a reference to an
-     *   external DTD.
-     * </p>
+     * the specified element name and a reference to an
+     * external DTD.
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -125,11 +118,9 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name and reference to an
-     *   external DTD.
-     * </p>
+     * the specified element name and reference to an
+     * external DTD.
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -145,10 +136,8 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name
-     * </p>
+     * the specified element name
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -160,10 +149,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     * This will retrieve the element name being
-     *   constrained.
-     * </p>
+     * This will retrieve the element name being constrained.
      *
      * @return <code>String</code> - element name for DOCTYPE
      */
@@ -172,10 +158,8 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the root element name declared by this
-     *  DOCTYPE declaration.
-     * </p>
+     * DOCTYPE declaration.
      *
      * @return DocType <code>DocType</code> this DocType object
      * @param elementName <code>String</code> name of
@@ -195,11 +179,9 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will retrieve the public ID of an externally
-     *   referenced DTD, or an empty <code>String</code> if
-     *   none is referenced.
-     * </p>
+     * referenced DTD, or an empty <code>String</code> if
+     * none is referenced.
      *
      * @return <code>String</code> - public ID of referenced DTD.
      */
@@ -208,10 +190,8 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the public ID of an externally
-     *   referenced DTD.
-     * </p>
+     * referenced DTD.
      *
      * @return DocType <code>DocType</code> this DocType object
      * @throws IllegalDataException if the given public ID is not a legal
@@ -228,11 +208,9 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will retrieve the system ID of an externally
-     *   referenced DTD, or an empty <code>String</code> if
-     *   none is referenced.
-     * </p>
+     * referenced DTD, or an empty <code>String</code> if
+     * none is referenced.
      *
      * @return <code>String</code> - system ID of referenced DTD.
      */
@@ -241,10 +219,8 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the system ID of an externally
-     *   referenced DTD.
-     * </p>
+     * referenced DTD.
      *
      * @return systemID <code>String</code> system ID of
      *                  referenced DTD.
@@ -262,11 +238,9 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This retrieves the owning <code>{@link Document}</code> for
-     *   this DocType, or null if not a currently a member of a
-     *   <code>{@link Document}</code>.
-     * </p>
+     * this DocType, or null if not a currently a member of a
+     * <code>{@link Document}</code>.
      *
      * @return <code>Document</code> owning this DocType, or null.
      */
@@ -275,9 +249,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This sets the <code>{@link Document}</code> holding this doctype.
-     * </p>
      *
      * @param DocType <code>Document</code> holding this doctype
      * @return <code>Document</code> this <code>DocType</code> modified
@@ -288,7 +260,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This sets the data for the internal subset.</p>
+     * This sets the data for the internal subset.
      * 
      * @param newData data for the internal subset, as a 
      *        <code>String</code>.
@@ -298,7 +270,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This returns the data for the internal subset</p>
+     * This returns the data for the internal subset.
      * 
      * @return <code>String</code> - the internal subset
      */
@@ -307,10 +279,8 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns a <code>String</code> representation of the
-     *    <code>DocType</code>, suitable for debugging. 
-     * </p>
+     * This returns a <code>String</code> representation of the
+     * <code>DocType</code>, suitable for debugging. 
      *
      * @return <code>String</code> - information about the
      *         <code>DocType</code>
@@ -324,13 +294,11 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This tests for equality of this <code>DocType</code> to the supplied
-     *    <code>Object</code>.  DocTypes are considered equal only if they
-     *    are referentially equal (i.e. the same object).  User code may 
-     *    choose to compare DocType objects based on element name, public ID,
-     *    system ID, and/or internal DTD subset.
-     * </p>
+     * This tests for equality of this <code>DocType</code> to the supplied
+     * <code>Object</code>.  DocTypes are considered equal only if they
+     * are referentially equal (i.e. the same object).  User code may 
+     * choose to compare DocType objects based on element name, public ID,
+     * system ID, and/or internal DTD subset.
      *
      * @param ob <code>Object</code> to compare to.
      * @return whether the elements are equal
@@ -354,9 +322,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns the hash code for this <code>DocType</code>.
-     * </p>
+     * This returns the hash code for this <code>DocType</code>.
      *
      * @return <code>int</code> - hash code.
      */
@@ -365,9 +331,7 @@ public class DocType implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This will return a clone of this <code>DocType</code>.
-     * </p>
+     * This will return a clone of this <code>DocType</code>.
      *
      * @return <code>Object</code> - clone of this <code>DocType</code>.
      */
@@ -386,5 +350,4 @@ public class DocType implements Serializable, Cloneable {
         // (Strings) and references are copied by Object.clone()
         return docType;
     }
-
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.13 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Text.java,v 1.14 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -59,21 +59,21 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <p><code><b>Text</b></code> represents character-based content within an
- *   XML document represented by JDOM. It is intended to provide a modular,
- *   parentable method of representing that text. Additionally,
- *   <code>Text</code> makes no guarantees about the underlying textual
- *   representation of character data, but does expose that data as a Java
- *   <code>String</code>.</p>
+ * <code><b>Text</b></code> represents character-based content within an
+ * XML document represented by JDOM. It is intended to provide a modular,
+ * parentable method of representing that text. Additionally,
+ * <code>Text</code> makes no guarantees about the underlying textual
+ * representation of character data, but does expose that data as a Java
+ * <code>String</code>.</p>
  *
  * @author Brett McLaughlin
  * @author Bradley S. Huffman
- * @version $Revision: 1.13 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.14 $, $Date: 2002/04/29 13:38:16 $
  */
 public class Text implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.13 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.14 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -87,15 +87,15 @@ public class Text implements Serializable, Cloneable {
     protected Object parent;
 
     /**
-     * <p>This is the protected, no-args constructor standard in all JDOM
-     *  classes. It allows subclassers to get a raw instance with no
-     *  initialization.</p>
+     * This is the protected, no-args constructor standard in all JDOM
+     * classes. It allows subclassers to get a raw instance with no
+     * initialization.
      */
     protected Text() { }
 
     /**
-     * <p>This constructor creates a new <code>Text</code> node, with the
-     *   supplied string value as it's character content.</p>
+     * This constructor creates a new <code>Text</code> node, with the
+     * supplied string value as it's character content.
      *
      * @param str the node's character content.
      */
@@ -104,8 +104,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This returns the value of this <code>Text</code> node as a Java
-     *   <code>String</code>.</p>
+     * This returns the value of this <code>Text</code> node as a Java
+     * <code>String</code>.
      *
      * @return <code>String</code> - character content of this node.
      */
@@ -114,10 +114,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns the textual content with all surrounding whitespace
      * removed.  If only whitespace exists, the empty string is returned.
-     * </p>
      *
      * @return trimmed text content or empty string
      */
@@ -126,11 +124,9 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns the textual content with all surrounding whitespace
      * removed and internal whitespace normalized to a single space.  If
      * only whitespace exists, the empty string is returned.
-     * </p>
      *
      * @return normalized text content or empty string
      */
@@ -139,11 +135,9 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns a new string with all surrounding whitespace
      * removed and internal whitespace normalized to a single space.  If
      * only whitespace exists, the empty string is returned.
-     * </p>
      * <p>
      * Per XML 1.0 Production 3 whitespace includes: #x20, #x9, #xD, #xA
      * </p>
@@ -178,7 +172,7 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will set the value of this <code>Text</code> node.</p>
+     * This will set the value of this <code>Text</code> node.
      *
      * @param str value for node's content.
      */
@@ -198,8 +192,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will append character content to whatever content already
-     *   exists within this <code>Text</code> node.</p>
+     * This will append character content to whatever content already
+     * exists within this <code>Text</code> node.
      *
      * @param str character content to append.
      */
@@ -219,8 +213,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will append the content of another <code>Text</code> node
-     *   to this node.</p>
+     * This will append the content of another <code>Text</code> node
+     * to this node.
      *
      * @param text Text node to append.
      */
@@ -232,8 +226,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will return the parent of this <code>Text</code> node, which
-     *   is always a JDOM <code>{@link Element}</code>.</p>
+     * This will return the parent of this <code>Text</code> node, which
+     * is always a JDOM <code>{@link Element}</code>.
      *
      * @return <code>Element</code> - this node's parent.
      */
@@ -242,11 +236,9 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *   This retrieves the owning <code>{@link Document}</code> for
-     *   this <code>Text</code>, or null if not a currently a member
-     *   of a <code>{@link Document}</code>.
-     * </p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     * this <code>Text</code>, or null if not a currently a member
+     * of a <code>{@link Document}</code>.
      *
      * @return <code>Document</code> owning this <code>Text</code>, or null.
      */
@@ -258,13 +250,14 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will set the parent of the <code>Text</code> node to the supplied
-     *   <code>{@link Element}</code>. This method is intentionally left as
-     *   <code>protected</code> so that only JDOM internals use it.</p>
-     * <p>If you need an instance of this <code>Text</code> node with a new
-     *   parent, you should get a copy of this node with
-     *   <code>{@link #clone}</code> and set it on the desired (new) parent
-     *   <code>Element</code>.</p>
+     * This will set the parent of the <code>Text</code> node to the supplied
+     * <code>{@link Element}</code>. This method is intentionally left as
+     * <code>protected</code> so that only JDOM internals use it.
+     * <p>
+     * If you need an instance of this <code>Text</code> node with a new
+     * parent, you should get a copy of this node with
+     * <code>{@link #clone}</code> and set it on the desired (new) parent
+     * <code>Element</code>.</p>
      *
      * @param parent parent for this node.
      */
@@ -274,10 +267,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * Detaches the <code>Text</code> from its parent, or does nothing
-     *  if the <code>Text</code> has no parent.
-     * </p>
+     * if the <code>Text</code> has no parent.
      *
      * @return <code>Text</code> - this <code>Text</code> modified.
      */
@@ -290,12 +281,12 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This returns a <code>String</code> representation of the
-     *   <code>Text</code> node, suitable for debugging. If the XML
-     *   representation of the <code>Text</code> node is desired,
-     *   either <code>{@link #getText}</code> or
-     *   {@link org.jdom.output.XMLOutputter#outputString(Text)}</code>
-     *   should be used.</p>
+     * This returns a <code>String</code> representation of the
+     * <code>Text</code> node, suitable for debugging. If the XML
+     * representation of the <code>Text</code> node is desired,
+     * either <code>{@link #getText}</code> or
+     * {@link org.jdom.output.XMLOutputter#outputString(Text)}</code>
+     * should be used.
      *
      * @return <code>String</code> - information about this node.
      */
@@ -308,7 +299,7 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will generate a hash code for this node.</p>
+     * This will generate a hash code for this node.
      *
      * @return <code>int</code> - hash code for this node.
      */
@@ -317,8 +308,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>This will return a clone of this <code>Text</code> node, with the
-     *   same character content, but no parent.</p>
+     * This will return a clone of this <code>Text</code> node, with the
+     * same character content, but no parent.
      *
      * @return <code>Text</code> - cloned node.
      */
@@ -338,10 +329,8 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This tests for equality of this <code>Text</code> to the supplied
-     *    <code>Object</code>, explicitly using the == operator.
-     * </p>
+     * This tests for equality of this <code>Text</code> to the supplied
+     * <code>Object</code>, explicitly using the == operator.
      *
      * @param ob <code>Object</code> to compare to
      * @return whether the <code>Text</code> nodes are equal

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.36 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Verifier.java,v 1.37 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,34 +59,28 @@ package org.jdom;
 import java.util.*;
 
 /**
- * <p>
  * <code>Verifier</code> handles XML checks on names, data, and other
- *   verification tasks for JDOM.
- * </p>
+ * verification tasks for JDOM.
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.36 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.37 $, $Date: 2002/04/29 13:38:16 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.36 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.37 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /**
-     * <p>
-     *  Ensure instantation cannot occur.
-     * </p>
+     * Ensure instantation cannot occur.
      */
     private Verifier() { }
 
     /**
-     * <p>
-     *  This will check the supplied name to see if it is legal for use as
-     *    a JDOM <code>{@link Element}</code> name.
-     * </p>
+     * This will check the supplied name to see if it is legal for use as
+     * a JDOM <code>{@link Element}</code> name.
      *
      * @param name <code>String</code> name to check.
      * @return <code>String</code> - reason name is illegal, or
@@ -109,10 +103,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied name to see if it is legal for use as
-     *    a JDOM <code>{@link Attribute}</code> name.
-     * </p>
+     * This will check the supplied name to see if it is legal for use as
+     * a JDOM <code>{@link Attribute}</code> name.
      *
      * @param name <code>String</code> name to check.
      * @return <code>String</code> - reason name is illegal, or
@@ -148,19 +140,17 @@ final public class Verifier {
     }
     
     /**
+     * This will check the supplied string to see if it only contains
+     * characters allowed by the XML 1.0 specification. The C0 controls
+     * (e.g. null, vertical tab, formfeed, etc.) are specifically excluded
+     * except for carriage return, linefeed, and the horizontal tab.
+     * Surrogates are also excluded. 
      * <p>
-     *  This will check the supplied string to see if it only contains
-     *  characters allowed by the XML 1.0 specification. The C0 controls
-     *  (e.g. null, vertical tab, formfeed, etc.) are specifically excluded
-     *  except for carriage return, linefeed, and the horizontal tab.
-     *  Surrogates are also excluded. 
-     *  </p>
-     *  <p>
-     *  This method is useful for checking element content and attribute
-     *  values. Note that characters 
-     *  like " and &lt; are allowed in attribute values and element content. 
-     *  They will simply be escaped as &quot; or &lt; 
-     *  when the value is serialized. 
+     * This method is useful for checking element content and attribute
+     * values. Note that characters 
+     * like " and &lt; are allowed in attribute values and element content. 
+     * They will simply be escaped as &quot; or &lt; 
+     * when the value is serialized. 
      * </p>
      *
      * @param name <code>String</code> value to check.
@@ -188,10 +178,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied data to see if it is legal for use as
-     *  JDOM <code>{@link CDATA}</code>.
-     * </p>
+     * This will check the supplied data to see if it is legal for use as
+     * JDOM <code>{@link CDATA}</code>.
      *
      * @param data <code>String</code> data to check.
      * @return <code>String</code> - reason data is illegal, or
@@ -213,10 +201,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied name to see if it is legal for use as
-     *    a JDOM <code>{@link Namespace}</code> prefix.
-     * </p>
+     * This will check the supplied name to see if it is legal for use as
+     * a JDOM <code>{@link Namespace}</code> prefix.
      *
      * @param prefix <code>String</code> prefix to check.
      * @return <code>String</code> - reason name is illegal, or
@@ -270,10 +256,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied name to see if it is legal for use as
-     *    a JDOM <code>{@link Namespace}</code> URI.
-     * </p>
+     * This will check the supplied name to see if it is legal for use as
+     * a JDOM <code>{@link Namespace}</code> URI.
      *
      * @param uri <code>String</code> URI to check.
      * @return <code>String</code> - reason name is illegal, or
@@ -304,9 +288,7 @@ final public class Verifier {
     }
 
     /**
-     * <p>
      * Check if two namespaces collide.
-     * </p>
      *
      * @param namespace <code>Namespace</code> to check.
      * @param other <code>Namespace</code> to check against.
@@ -334,10 +316,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
      * Check if <code>{@link Attribute}</code>'s namespace collides with a 
      * <code>{@link Element}</code>'s namespace.
-     * </p>
      *
      * @param attribute <code>Attribute</code> to check.
      * @param element <code>Element</code> to check against.
@@ -356,10 +336,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
      * Check if a <code>{@link Namespace}</code> collides with a
      * <code>{@link Element}</code>'s namespace.
-     * </p>
      *
      * @param namespace <code>Namespace</code> to check.
      * @param element <code>Element</code> to check against.
@@ -389,10 +367,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
      * Check if a <code>{@link Namespace}</code> collides with a
-     *  <code>{@link Attribute}</code>'s namespace.
-     * </p>
+     * <code>{@link Attribute}</code>'s namespace.
      *
      * @param namespace <code>Namespace</code> to check.
      * @param attribute <code>Attribute</code> to check against.
@@ -410,10 +386,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
      * Check if a <code>{@link Namespace}</code> collides with any namespace
      * from a list of objects.
-     * </p>
      *
      * @param namespace <code>Namespace</code> to check.
      * @param list <code>List</code> to check against.
@@ -448,10 +422,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied data to see if it is legal for use as
-     *  a JDOM <code>{@link ProcessingInstruction}</code> target.
-     * </p>
+     * This will check the supplied data to see if it is legal for use as
+     * a JDOM <code>{@link ProcessingInstruction}</code> target.
      *
      * @param target <code>String</code> target to check.
      * @return <code>String</code> - reason target is illegal, or
@@ -484,10 +456,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will check the supplied data to see if it is legal for use as
-     *  JDOM <code>{@link Comment}</code> data.
-     * </p>
+     * This will check the supplied data to see if it is legal for use as
+     * JDOM <code>{@link Comment}</code> data.
      *
      * @param data <code>String</code> data to check.
      * @return <code>String</code> - reason data is illegal, or
@@ -530,10 +500,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This will ensure that the data for a public identifier
-     *  is legal.
-     * </p>
+     * This will ensure that the data for a public identifier
+     * is legal.
      *
      * @param publicID <code>String</code> public ID to check.
      * @return <code>String</code> - reason public ID is illegal, or
@@ -558,10 +526,8 @@ final public class Verifier {
 
 
     /**
-     * <p>
-     *  This will ensure that the data for a system literal
-     *  is legal.
-     * </p>
+     * This will ensure that the data for a system literal
+     * is legal.
      *
      * @param systemLiteral <code>String</code> system literal to check.
      * @return <code>String</code> - reason system literal is illegal, or
@@ -586,10 +552,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This is a utility function for sharing the base process of checking
-     *  any XML name.
-     * </p>
+     * This is a utility function for sharing the base process of checking
+     * any XML name.
      *
      * @param name <code>String</code> to check for XML name compliance.
      * @return <code>String</code> - reason the name is illegal, or
@@ -623,11 +587,9 @@ final public class Verifier {
 
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  character is a character according to production 2 of the 
-     *  XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * character is a character according to production 2 of the 
+     * XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML compliance.
      * @return <code>boolean</code> - true if it's a character, 
@@ -648,11 +610,9 @@ final public class Verifier {
 
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  character is a name character according to production 4 of the 
-     *  XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * character is a name character according to production 4 of the 
+     * XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML name compliance.
      * @return <code>boolean</code> - true if it's a name character, 
@@ -666,13 +626,11 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  character is a legal name start character according to production 5
-     *  of the XML 1.0 specification. This production does allow names
-     *  to begin with colons which the Namespaces in XML Recommendation
-     *  disallows. 
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * character is a legal name start character according to production 5
+     * of the XML 1.0 specification. This production does allow names
+     * to begin with colons which the Namespaces in XML Recommendation
+     * disallows. 
      *
      * @param c <code>char</code> to check for XML name start compliance.
      * @return <code>boolean</code> - true if it's a name start character, 
@@ -685,11 +643,9 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  character is a letter or digit according to productions 84 and 88
-     *  of the XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * character is a letter or digit according to productions 84 and 88
+     * of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check.
      * @return <code>boolean</code> - true if it's letter or digit, 
@@ -702,10 +658,8 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified character
-     *  is a letter according to production 84 of the XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified character
+     * is a letter according to production 84 of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML name compliance.
      * @return <code>String</code> - true if it's a letter, false otherwise.
@@ -927,11 +881,9 @@ final public class Verifier {
     }
 
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified character
-     *  is a combining character according to production 87
-     *  of the XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified character
+     * is a combining character according to production 87
+     * of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check.
      * @return <code>boolean</code> - true if it's a combining character,
@@ -1064,11 +1016,9 @@ final public class Verifier {
     }
     
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  character is an extender according to production 88 of the XML 1.0
-     *  specification.
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * character is an extender according to production 88 of the XML 1.0
+     * specification.
      *
      * @param c <code>char</code> to check.
      * @return <code>String</code> - true if it's an extender, false otherwise.
@@ -1096,11 +1046,9 @@ final public class Verifier {
     }
       
     /**
-     * <p>
-     *  This is a utility function for determining whether a specified 
-     *  Unicode character
-     *  is a digit according to production 88 of the XML 1.0 specification.
-     * </p>
+     * This is a utility function for determining whether a specified 
+     * Unicode character
+     * is a digit according to production 88 of the XML 1.0 specification.
      *
      * @param c <code>char</code> to check for XML digit compliance.
      * @return <code>boolean</code> - true if it's a digit, false otherwise.
@@ -1128,6 +1076,5 @@ final public class Verifier {
         if (c < 0x0F20) return false;  if (c <= 0x0F29) return true; 
       
         return false;
-      
     }    
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.14 2002/04/29 02:30:47 jhunter Exp $
+ $Id: JDOMException.java,v 1.15 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -66,41 +66,37 @@ import java.rmi.RemoteException;
 import org.xml.sax.SAXException;
 
 /**
- * <b><code>JDOMException</code></b>
+ * <b><code>JDOMException</code></b>.
  * <p>
  * This <code>Exception</code> subclass is the top level
- *   <code>Exception</code> that JDOM classes
- *   can throw.  Its subclasses add specificity to the 
- *   problems that can occur using JDOM, but this single
- *   <code>Exception</code> can be caught to handle all
- *   JDOM specific problems.
+ * <code>Exception</code> that JDOM classes
+ * can throw.  Its subclasses add specificity to the 
+ * problems that can occur using JDOM, but this single
+ * <code>Exception</code> can be caught to handle all
+ * JDOM specific problems.
  * </p>
  * 
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.14 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.15 $, $Date: 2002/04/29 13:38:15 $
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.14 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.15 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;
 
     /**
-     * <p>
      * This will create an <code>Exception</code>.
-     * </p>
      */
     public JDOMException() {
         super("Error occurred in JDOM application.");
     }
 
     /**
-     * <p>
      * This will create an <code>Exception</code> with the given message.
-     * </p>
      *
      * @param message <code>String</code> message indicating
      *                the problem that occurred.
@@ -110,11 +106,9 @@ public class JDOMException extends Exception {
     }
 
     /**
-     * <p>
      * This will create an <code>Exception</code> with the given message
-     *   and wrap another <code>Exception</code>.  This is useful when
-     *   the originating <code>Exception</code> should be held on to.
-     * </p>
+     * and wrap another <code>Exception</code>.  This is useful when
+     * the originating <code>Exception</code> should be held on to.
      *
      * @param message <code>String</code> message indicating
      *                the problem that occurred.
@@ -127,9 +121,8 @@ public class JDOMException extends Exception {
     }    
 
     /** 
-     * <p>
      * Intializes the cause of this exception to be the specified value.
-     * </p>
+     *
      * @param cause <code>Throwable</code> that caused this
      *                  to be thrown.
      */
@@ -140,11 +133,9 @@ public class JDOMException extends Exception {
     }    
 
     /**
-     * <p>
      * This returns the message for the <code>Exception</code>. If
-     *   there are one or more nested exceptions, their messages
-     *   are appended.
-     * </p>
+     * there are one or more nested exceptions, their messages
+     * are appended.
      *
      * @return <code>String</code> - message for <code>Exception</code>.
      */
@@ -195,11 +186,9 @@ public class JDOMException extends Exception {
     }
 
     /**
-     * <p>
      * This prints the stack trace of the <code>Exception</code>. If
-     *   there is a root cause, the stack trace of the root
-     *   <code>Exception</code> is printed right after.
-     * </p>
+     * there is a root cause, the stack trace of the root
+     * <code>Exception</code> is printed right after.
      */
     public void printStackTrace() {
         // Print the stack trace for this exception.
@@ -224,11 +213,9 @@ public class JDOMException extends Exception {
     }
 
     /**
-     * <p>
      * This prints the stack trace of the <code>Exception</code> to the given
-     *   PrintStream. If there is a root cause, the stack trace of the root
-     *   <code>Exception</code> is printed right after.
-     * </p>
+     * PrintStream. If there is a root cause, the stack trace of the root
+     * <code>Exception</code> is printed right after.
      */
     public void printStackTrace(PrintStream s) {
         // Print the stack trace for this exception.
@@ -253,11 +240,9 @@ public class JDOMException extends Exception {
     }
 
     /**
-     * <p>
      * This prints the stack trace of the <code>Exception</code> to the given
-     *   PrintWriter. If there is a root cause, the stack trace of the root
-     *   <code>Exception</code> is printed right after.
-     * </p>
+     * PrintWriter. If there is a root cause, the stack trace of the root
+     * <code>Exception</code> is printed right after.
      */
     public void printStackTrace(PrintWriter w) {
         // Print the stack trace for this exception.
@@ -282,10 +267,8 @@ public class JDOMException extends Exception {
     }
 
     /**
-     * <p>
      * This will return the root cause <code>Throwable</code>, or null
-     *   if one does not exist.
-     * </p>
+     * if one does not exist.
      * 
      * @return <code>Throwable</code> - the wrapped <code>Throwable</code>.
      */

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.9 2002/04/29 02:30:47 jhunter Exp $
+ $Id: DataConversionException.java,v 1.10 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -57,27 +57,24 @@
 package org.jdom;
 
 /**
- * <p><code>DataConversionException</code>
- *   is thrown when a requested XML value
- *   is requested to be converted, and conversion
- *   fails.
- * </p>
+ * <code>DataConversionException</code>
+ * is thrown when a requested XML value
+ * is requested to be converted, and conversion
+ * fails.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:15 $
  */
 public class DataConversionException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /**
-     * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the specified attribute does not exist for the
-     *   current element.
-     * </p>
+     * that the specified attribute does not exist for the
+     * current element.
      *
      * @param name <code>String</code> name of XML
      *             attribute being searched for.
@@ -92,5 +89,4 @@ public class DataConversionException extends JDOMException {
               .append(dataType)
               .toString());
     }
-
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.9 2002/04/28 08:44:29 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,21 +60,20 @@ import java.util.*;
 import org.jdom.Namespace;
 
 /**
- * <p><code>NamespaceStack</code> is a helper class used by both
- *   <code>{@link XMLOutputter}</code> and 
- *   <code>{@link SAXOutputter}</code> to manage namespaces
- *   in a JDOM Document during output.
- * </p>
+ * <code>NamespaceStack</code> is a helper class used by both
+ * <code>{@link XMLOutputter}</code> and 
+ * <code>{@link SAXOutputter}</code> to manage namespaces
+ * in a JDOM Document during output.
  *
  * @author Elliotte Rusty Harolde
  * @author Fred Trimble
  * @author Brett McLaughlin
- * @version $Revision: 1.9 $, $Date: 2002/04/28 08:44:29 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
  */
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.9 $ $Date: 2002/04/28 08:44:29 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;
@@ -83,7 +82,7 @@ class NamespaceStack {
     private Stack uris;        
 
     /**
-     * <p> This creates the needed storage. </p>
+     * This creates the needed storage.
      */
     public NamespaceStack() {
         prefixes = new Stack();
@@ -91,10 +90,8 @@ class NamespaceStack {
     }
   
     /**
-     * <p>
-     *  This will add a new <code>{@link Namespace}</code>
-     *    to those currently available.
-     * </p>
+     * This will add a new <code>{@link Namespace}</code>
+     * to those currently available.
      * 
      * @param ns <code>Namespace</code> to add.
      */
@@ -104,10 +101,8 @@ class NamespaceStack {
     }      
     
     /**
-     * <p>
-     *  This will remove the topmost (most recently added)
-     *    <code>{@link Namespace}</code>, and return its prefix.
-     * </p>
+     * This will remove the topmost (most recently added)
+     * <code>{@link Namespace}</code>, and return its prefix.
      *
      * @return <code>String</code> - the popped namespace prefix.
      */
@@ -119,7 +114,7 @@ class NamespaceStack {
     }
     
     /**
-     * <p> This returns the number of available namespaces. </p>
+     * This returns the number of available namespaces.
      *
      * @return <code>int</code> - size of the namespace stack.
      */
@@ -128,10 +123,8 @@ class NamespaceStack {
     }    
   
     /**
-     * <p>
-     *  Given a prefix, this will return the namespace URI most 
-     *    rencently (topmost) associated with that prefix.
-     * </p>
+     * Given a prefix, this will return the namespace URI most 
+     * rencently (topmost) associated with that prefix.
      *
      * @param prefix <code>String</code> namespace prefix.
      * @return <code>String</code> - the namespace URI for that prefix.
@@ -146,11 +139,9 @@ class NamespaceStack {
     }
     
     /**
-     * <p>
-     *  This will print out the size and current stack, from the
-     *    most recently added <code>{@link Namespace}</code> to
-     *    the "oldest," all to <code>System.out</code>.
-     * </p>
+     * This will print out the size and current stack, from the
+     * most recently added <code>{@link Namespace}</code> to
+     * the "oldest," all to <code>System.out</code>.
      */
     public String toString() {
         StringBuffer buf = new StringBuffer();

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.16 2002/04/29 02:30:47 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.17 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -67,23 +67,21 @@ import org.jdom.DocType;
 import org.jdom.JDOMException;
 
 /**
- * <b><code>DOMAdapter</code></b>
+ * <b><code>DOMAdapter</code></b>.
  * <p>
  * This interface defines wrapper behavior for obtaining a DOM
- *   <code>Document</code> object from a DOM parser.
+ * <code>Document</code> object from a DOM parser.
  * </p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revison$, $Date: 2002/04/29 02:30:47 $
+ * @version $Revison$, $Date: 2002/04/29 13:38:16 $
  */
 public interface DOMAdapter {
 
     /**
-     * <p>
      * This creates a new <code>Document</code> from a
-     *   given filename by letting a DOM parser handle parsing from the file.
-     * </p>
+     * given filename by letting a DOM parser handle parsing from the file.
      *
      * @param filename file to parse.
      * @param validate <code>boolean</code> to indicate if validation 
@@ -96,11 +94,9 @@ public interface DOMAdapter {
         throws IOException, JDOMException;
 
     /**
-     * <p>
      * This creates a new <code>Document</code> from an
-     *   existing <code>InputStream</code> by letting a DOM
-     *   parser handle parsing using the supplied stream.
-     * </p>
+     * existing <code>InputStream</code> by letting a DOM
+     * parser handle parsing using the supplied stream.
      *
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation 
@@ -113,10 +109,8 @@ public interface DOMAdapter {
         throws IOException, JDOMException;
 
     /**
-     * <p>
      * This creates an empty <code>Document</code> object based
-     *   on a specific parser implementation.
-     * </p>
+     * on a specific parser implementation.
      *
      * @return <code>Document</code> - created DOM Document.
      * @throws Exception when errors occur.
@@ -124,10 +118,8 @@ public interface DOMAdapter {
     public Document createDocument() throws JDOMException;
 
     /**
-     * <p>
      * This creates an empty <code>Document</code> object based
-     *   on a specific parser implementation with the given DOCTYPE.
-     * </p>
+     * on a specific parser implementation with the given DOCTYPE.
      *
      * @param doctype Initial <code>DocType</code> of the document.
      * @return <code>Document</code> - created DOM Document.

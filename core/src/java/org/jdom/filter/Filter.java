@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.3 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Filter.java,v 1.4 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,22 +59,18 @@ package org.jdom.filter;
 import org.jdom.*;
 
 /**
- * <p>
  * Classes which wish to modify the behaviour of the FilterList
  * can implement the list filter interface in order to reduce
  * the visibility of certain items in the list, or to restrict
  * the mutability of the list.
- * </p>
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.4 $, $Date: 2002/04/29 13:38:16 $
  */
 public interface Filter {
     /**
-     * <p>
      * Check to see if the object can be added to the list.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be added.
@@ -82,9 +78,7 @@ public interface Filter {
     public boolean canAdd(Object obj);
 
     /**
-     * <p>
      * Check to see if the object can be removed from the list.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be removed.
@@ -92,9 +86,7 @@ public interface Filter {
     public boolean canRemove(Object obj);
 
     /**
-     * <p>
      * Check to see if the object matches a predefined set of rules.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object matches a predfined 

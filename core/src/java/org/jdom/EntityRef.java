@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.10 2002/04/29 02:30:47 jhunter Exp $
+ $Id: EntityRef.java,v 1.11 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,17 +59,17 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <p><code>EntityRef</code> Defines an XML entity reference in Java.</p>
+ * <code>EntityRef</code> Defines an XML entity reference in Java.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.10 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.11 $, $Date: 2002/04/29 13:38:15 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.11 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -84,18 +84,12 @@ public class EntityRef implements Serializable, Cloneable {
     protected Object parent;
 
     /**
-     * <p>
-     * Default, no-args constructor for implementations
-     *   to use if needed.
-     * </p>
+     * Default, no-args constructor for implementations to use if needed.
      */
     protected EntityRef() {}
 
     /**
-     * <p>
-     * This will create a new <code>EntityRef</code>
-     *   with the supplied name.
-     * </p>
+     * This will create a new <code>EntityRef</code> with the supplied name.
      *
      * @param name <code>String</code> name of element.
      * @throws IllegalNameException if the given name is not a legal
@@ -106,10 +100,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>EntityRef</code>
-     *   with the supplied name and system id.
-     * </p>
+     * with the supplied name and system id.
      *
      * @param name <code>String</code> name of element.
      * @throws IllegalNameException if the given name is not a legal
@@ -122,10 +114,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>EntityRef</code>
-     *   with the supplied name, public id, and system id.
-     * </p>
+     * with the supplied name, public id, and system id.
      *
      * @param name <code>String</code> name of element.
      * @throws IllegalDataException if the given system ID is not a legal
@@ -141,9 +131,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This will return a clone of this <code>EntityRef</code>.
-     * </p>
+     * This will return a clone of this <code>EntityRef</code>.
      *
      * @return <code>Object</code> - clone of this <code>EntityRef</code>.
      */
@@ -167,10 +155,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This detaches the <code>Entity</code> from its parent, or does nothing 
      * if the <code>Entity</code> has no parent.
-     * </p>
      *
      * @return <code>Entity</code> - this <code>Entity</code> modified.
      */
@@ -183,10 +169,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This tests for equality of this <code>Entity</code> to the supplied
-     *    <code>Object</code>.
-     * </p>
+     * This tests for equality of this <code>Entity</code> to the supplied
+     * <code>Object</code>.
      *
      * @param ob <code>Object</code> to compare to.
      * @return <code>boolean</code> - whether the <code>Entity</code> is
@@ -197,11 +181,9 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This retrieves the owning <code>{@link Document}</code> for
-     *   this Entity, or null if not a currently a member of a
-     *   <code>{@link Document}</code>.
-     * </p>
+     * this Entity, or null if not a currently a member of a
+     * <code>{@link Document}</code>.
      *
      * @return <code>Document</code> owning this Entity, or null.
      */
@@ -214,10 +196,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     * This returns the name of the
-     *   <code>EntityRef</code>.
-     * </p>
+     * This returns the name of the <code>EntityRef</code>.
      *
      * @return <code>String</code> - entity name.
      */
@@ -226,10 +205,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the parent of this <code>EntityRef</code>.
-     *   If there is no parent, then this returns <code>null</code>.
-     * </p>
+     * If there is no parent, then this returns <code>null</code>.
      *
      * @return parent of this <code>EntityRef</code>
      */
@@ -238,10 +215,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the publid ID of this <code>EntityRef</code>.
-     *   If there is no public ID, then this returns <code>null</code>.
-     * </p>
+     * If there is no public ID, then this returns <code>null</code>.
      *
      * @return public ID of this <code>EntityRef</code>
      */
@@ -250,10 +225,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the system ID of this <code>EntityRef</code>.
-     *   If there is no system ID, then this returns <code>null</code>.
-     * </p>
+     * If there is no system ID, then this returns <code>null</code>.
      *
      * @return system ID of this <code>EntityRef</code>
      */
@@ -262,9 +235,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns the hash code for this <code>Entity</code>.
-     * </p>
+     * This returns the hash code for this <code>Entity</code>.
      *
      * @return <code>int</code> - hash code.
      */
@@ -273,9 +244,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the parent of this <code>Entity</code>.
-     * </p>
      *
      * @param parent <code>Element</code> to be new parent.
      * @return this <code>Entity</code> modified.
@@ -286,9 +255,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the name of this <code>EntityRef</code>.
-     * </p>
      *
      * @param name new name of the entity
      * @return this <code>EntityRef</code> modified.
@@ -307,9 +274,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the public ID of this <code>EntityRef</code>.
-     * </p>
      *
      * @param newPublicID new public id
      * @return this <code>EntityRef</code> modified.
@@ -326,9 +291,7 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the system ID of this <code>EntityRef</code>.
-     * </p>
      *
      * @param newSystemID new system id
      * @throws IllegalDataException if the given system ID is not a legal
@@ -345,10 +308,8 @@ public class EntityRef implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns a <code>String</code> representation of the
-     *    <code>EntityRef</code>, suitable for debugging.
-     * </p>
+     * This returns a <code>String</code> representation of the
+     * <code>EntityRef</code>, suitable for debugging.
      *
      * @return <code>String</code> - information about the
      *         <code>EntityRef</code>

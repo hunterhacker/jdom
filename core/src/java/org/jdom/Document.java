@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.59 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Document.java,v 1.60 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -62,22 +62,20 @@ import java.util.*;
 import org.jdom.filter.Filter;
 
 /**
- * <p>
  * <code>Document</code> defines behavior for an XML Document, modeled
- *   in Java.  Methods allow access to the root element as well
- *   as processing instructions and other document-level information.
- * </p>
+ * in Java.  Methods allow access to the root element as well
+ * as processing instructions and other document-level information.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.59 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.60 $, $Date: 2002/04/29 13:38:15 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.59 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.60 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -91,22 +89,18 @@ public class Document implements Serializable, Cloneable {
     protected DocType docType;
 
     /**
-     * <p>
      * Creates a new empty document.  A document must have a root element,
      * so this document will not be well-formed and accessor methods will
      * throw an IllegalStateException if this document is accessed before a
      * root element is added.  This method is most useful for build tools.
-     * </p>
      */
     public Document() {}
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
      * with the supplied <code>{@link Element}</code>
      * as the root element and the supplied
      * <code>{@link DocType}</code> declaration.
-     * </p>
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
@@ -118,12 +112,10 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
      * with the supplied <code>{@link Element}</code>
      * as the root element, and no <code>{@link DocType}</code>
      * declaration.
-     * </p>
      *
      * @param rootElement <code>Element</code> for document root
      */
@@ -132,11 +124,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
      * with the supplied list of content, and the supplied
      * <code>{@link DocType}</code> declaration.
-     * </p>
      *
      * @param content <code>List</code> of starter content
      * @param docType <code>DocType</code> declaration.
@@ -150,11 +140,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
      * with the supplied list of content, and no
      * <code>{@link DocType}</code> declaration.
-     * </p>
      *
      * @param content <code>List</code> of starter content
      * @throws IllegalAddException if the List contains more than
@@ -165,10 +153,8 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return <code>true</code> if this document has a
      * root element, <code>false</code> otherwise.
-     * </p>
      *
      * @return <code>true</code> if this document has a root element,
      *         <code>false</code> otherwise.
@@ -178,10 +164,8 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the root <code>Element</code>
      * for this <code>Document</code>
-     * </p>
      *
      * @return <code>Element</code> - the document's root element
      * @throws IllegalStateException if the root element hasn't been set
@@ -195,11 +179,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This sets the root <code>{@link Element}</code> for the
      * <code>Document</code>. If the document already has a root
      * element, it is replaced.
-     * </p>
      *
      * @param rootElement <code>Element</code> to be new root.
      * @return <code>Document</code> - modified Document.
@@ -218,9 +200,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * Detach the root <code>{@link Element}</code> from this document.
-     * </p>
      *
      * @return removed root <code>Element</code>
      */
@@ -238,11 +218,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the <code>{@link DocType}</code>
      * declaration for this <code>Document</code>, or
      * <code>null</code> if none exists.
-     * </p>
      *
      * @return <code>DocType</code> - the DOCTYPE declaration.
      */
@@ -251,14 +229,12 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the <code>{@link DocType}</code>
      * declaration for this <code>Document</code>. Note
      * that a DocType can only be attached to one Document.
      * Attempting to set the DocType to a DocType object
      * that already belongs to a Document will result in an
      * IllegalAddException being thrown.
-     * </p>
      *
      * @param docType <code>DocType</code> declaration.
      * @throws IllegalAddException if the given docType is
@@ -282,9 +258,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * Adds the specified PI to the document.
-     * </p>
      *
      * @param pi the ProcessingInstruction to add.
      * @return <code>Document</code> this document modified.
@@ -297,9 +271,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will add a comment to the <code>Document</code>.
-     * </p>
      *
      * @param comment <code>Comment</code> to add.
      * @return <code>Document</code> - this object modified.
@@ -312,11 +284,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return all content for the <code>Document</code>.
      * The returned list is "live" in document order and changes to it
      * affect the document's actual content.
-     * </p>
      *
      * <p>
      * Sequential traversal through the List is best done with a Iterator
@@ -334,9 +304,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * Return a filtered view of this <code>Document</code>'s content.
-     * </p>
      *
      * <p>
      * Sequential traversal through the List is best done with a Iterator
@@ -355,11 +323,9 @@ public class Document implements Serializable, Cloneable {
     }
   
     /**
-     * <p>
      * This sets the content of the <code>Document</code>.  The supplied
      * List should contain only objects of type <code>Element</code>,
      * <code>Comment</code>, and <code>ProcessingInstruction</code>.
-     * </p>
      *
      * <p>
      * When all objects in the supplied List are legal and before the new
@@ -396,11 +362,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This removes the specified <code>ProcessingInstruction</code>.
      * If the specified <code>ProcessingInstruction</code> is not a child of
      * this <code>Document</code>, this method does nothing.
-     * </p>
      *
      * @param child <code>ProcessingInstruction</code> to delete
      * @return whether deletion occurred
@@ -410,11 +374,9 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This removes the specified <code>Comment</code>.
      * If the specified <code>Comment</code> is not a child of
      * this <code>Document</code>, this method does nothing.
-     * </p>
      *
      * @param comment <code>Comment</code> to delete
      * @return whether deletion occurred
@@ -424,13 +386,11 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns a <code>String</code> representation of the
      * <code>Document</code>, suitable for debugging. If the XML
      * representation of the <code>Document</code> is desired,
      * {@link org.jdom.output.XMLOutputter#outputString(Document)}
      * should be used.
-     * </p>
      *
      * @return <code>String</code> - information about the
      *         <code>Document</code>
@@ -460,10 +420,8 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This tests for equality of this <code>Document</code> to the supplied
      * <code>Object</code>.
-     * </p>
      *
      * @param ob <code>Object</code> to compare to.
      * @return <code>boolean</code> - whether the <code>Document</code> is
@@ -474,9 +432,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns the hash code for this <code>Document</code>.
-     * </p>
      *
      * @return <code>int</code> - hash code.
      */
@@ -485,9 +441,7 @@ public class Document implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return a deep clone of this <code>Document</code>.
-     * </p>
      *
      * @return <code>Object</code> - clone of this <code>Document</code>.
      */

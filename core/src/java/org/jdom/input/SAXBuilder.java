@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.67 2002/04/29 02:30:47 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.68 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -69,24 +69,26 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * <p><code>SAXBuilder</code> builds a JDOM tree using SAX.
+ * <code>SAXBuilder</code> builds a JDOM tree using SAX.
  * Information about SAX can be found at 
- * <a href="http://www.megginson.com/SAX">http://www.megginson.com/SAX</a>.</p>
+ * <a href="http://www.megginson.com/SAX">http://www.megginson.com/SAX</a>.
  *
- * <p>Known issues: Relative paths for a DocType or EntityRef may be
- * converted by the SAX parser into absolute paths</p>
+ * <p>
+ * Known issues: Relative paths for a DocType or EntityRef may be
+ * converted by the SAX parser into absolute paths.
+ * </p>
  *
  * @author Jason Hunter
  * @author Brett McLaughlin
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.67 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.68 $, $Date: 2002/04/29 13:38:16 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.67 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.68 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -129,23 +131,19 @@ public class SAXBuilder {
     private HashMap properties = new HashMap(5);
 
     /**
-     * <p>
      * Creates a new SAXBuilder which will attempt to first locate
      * a parser via JAXP, then will try to use a set of default 
      * SAX Drivers. The underlying parser will not validate.
-     * </p>
      */
     public SAXBuilder() {
         this(false);
     }
 
     /**
-     * <p>
      * Creates a new SAXBuilder which will attempt to first locate
      * a parser via JAXP, then will try to use a set of default 
      * SAX Drivers. The underlying parser will validate or not
      * according to the given parameter.
-     * </p>
      *
      * @param validate <code>boolean</code> indicating if
      *                 validation should occur.
@@ -155,10 +153,8 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * Creates a new SAXBuilder using the specified SAX parser.
      * The underlying parser will not validate.
-     * </p>
      *
      * @param saxDriverClass <code>String</code> name of SAX Driver
      *                       to use for parsing.
@@ -168,11 +164,9 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * Creates a new SAXBuilder using the specified SAX parser.
      * The underlying parser will validate or not
      * according to the given parameter.
-     * </p>
      *
      * @param saxDriverClass <code>String</code> name of SAX Driver
      *                       to use for parsing.
@@ -185,10 +179,8 @@ public class SAXBuilder {
     }
 
     /*
-     * <p>
      * This sets a custom JDOMFactory for the builder.  Use this to build
      * the tree with your own subclasses of the JDOM classes.
-     * </p>
      *
      * @param factory <code>JDOMFactory</code> to use
      */
@@ -197,9 +189,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets validation for the builder.
-     * </p>
      *
      * @param validate <code>boolean</code> indicating whether validation 
      * should occur.
@@ -209,9 +199,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets custom ErrorHandler for the <code>Builder</code>.
-     * </p>
      *
      * @param errorHandler <code>ErrorHandler</code>
      */
@@ -220,9 +208,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets custom EntityResolver for the <code>Builder</code>.
-     * </p>
      *
      * @param entityResolver <code>EntityResolver</code>
      */
@@ -231,9 +217,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets custom DTDHandler for the <code>Builder</code>.
-     * </p>
      *
      * @param dtdHandler <code>DTDHandler</code>
      */
@@ -242,9 +226,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets custom XMLFilter for the <code>Builder</code>.
-     * </p>
      *
      * @param xmlFilter <code>XMLFilter</code>
      */
@@ -253,7 +235,6 @@ public class SAXBuilder {
     }
  
     /**
-     * <p>
      * Specifies whether or not the parser should elminate whitespace in 
      * element content (sometimes known as "ignorable whitespace") when
      * building the document.  Only whitespace which is contained within
@@ -261,7 +242,6 @@ public class SAXBuilder {
      * eliminated (see XML Rec 3.2.1).  For this setting to take effect 
      * requires that validation be turned on.  The default value of this
      * setting is <code>false</code>.
-     * </p>
      *
      * @param ignoringWhite Whether to ignore ignorable whitespace
      */
@@ -270,9 +250,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets a feature on the SAX parser. See the SAX documentation for
-     * more information.
      * </p>
      * <p>
      * NOTE: SAXBuilder requires that some particular features of the SAX parser be
@@ -292,10 +270,8 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This sets a property on the SAX parser. See the SAX documentation for
      * more information.
-     * </p>
      * <p>
      * NOTE: SAXBuilder requires that some particular properties of the SAX parser be
      * set up in certain ways for it to work properly. The list of such properties
@@ -314,10 +290,8 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This builds a document from the supplied
-     *   input source.
-     * </p>
+     * input source.
      *
      * @param in <code>InputSource</code> to read from.
      * @return <code>Document</code> - resultant Document object.
@@ -382,9 +356,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This creates the SAXHandler that will be used to build the Document.
-     * </p>
      *
      * @return <code>SAXHandler</code> - resultant SAXHandler object.
      */
@@ -394,9 +366,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This configures the SAXHandler that will be used to build the Document.
-     * </p>
      * <p>
      * The default implementation simply passes through some configuration
      * settings that were set on the SAXBuilder: setExpandEntities() and
@@ -410,9 +380,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This creates the XMLReader to be used for reading the XML document.
-     * </p>
      * <p>
      * The default behavior is to (1) use the saxDriverClass, if it has been
      * set, (2) try to obtain a parser from JAXP, if it is available, and 
@@ -497,9 +465,7 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * This configures the XMLReader to be used for reading the XML document.
-     * </p>
      * <p>
      * The default implementation sets various options on the given XMLReader,
      *  such as validation, DTD resolution, entity handlers, etc., according
@@ -636,10 +602,8 @@ public class SAXBuilder {
     }
 
     /**
-     * <p>
      * Tries to set a feature on the parser. If the feature cannot be set,
      * throws a JDOMException describing the problem.
-     * </p>
      */
     private void internalSetFeature(XMLReader parser, String feature, 
                     boolean value, String displayName) throws JDOMException {

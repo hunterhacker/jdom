@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: BuilderErrorHandler.java,v 1.9 2002/04/29 02:30:47 jhunter Exp $
+ $Id: BuilderErrorHandler.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -60,21 +60,19 @@ import org.xml.sax.*;
 
 /**
  * @author  Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
  */
 
 public class BuilderErrorHandler implements ErrorHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /**
-     * <p>
      * This method is called when a warning has occurred; this indicates
      * that while no XML rules were broken, something appears to be
      * incorrect or missing.
      * The implementation of this method here is a "no op".
-     * </p>
      *
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong
@@ -84,12 +82,10 @@ public class BuilderErrorHandler implements ErrorHandler {
     }
 
     /**
-     * <p>
      * This method is called in response to an error that has occurred; 
      * this indicates that a rule was broken, typically in validation, but 
      * that parsing could reasonably continue.
      * The implementation of this method here is to rethrow the exception.
-     * </p>
      *
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong
@@ -99,12 +95,10 @@ public class BuilderErrorHandler implements ErrorHandler {
     }
 
     /**
-     * <p>
      * This method is called in response to a fatal error; this indicates that
      * a rule has been broken that makes continued parsing either impossible
      * or an almost certain waste of time.
      * The implementation of this method here is to rethrow the exception.
-     * </p>
      *
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong

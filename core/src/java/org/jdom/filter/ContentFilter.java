@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ContentFilter.java,v 1.4 2002/04/29 02:30:47 jhunter Exp $
+ $Id: ContentFilter.java,v 1.5 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -59,13 +59,11 @@ package org.jdom.filter;
 import org.jdom.*;
 
 /**
- * <p>
  * <code>ContentFilter</code> is a general purpose <code>Filter</code>
  * representing all legal JDOM objects and allows the ability to set
  * and unset the visiblity of these objects.  Filtering is accomplished by
  * way of a filtering mask in which each bit represents whether a JDOM
  * object is visible or not.
- * </p>
  *
  * <p>
  * For example to view all Text and CDATA nodes in the content of element x.
@@ -91,12 +89,12 @@ import org.jdom.*;
  * </p>
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.4 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.5 $, $Date: 2002/04/29 13:38:16 $
  */
 public class ContentFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.4 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.5 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** Mask for JDOM <code>Element</code> objects */
     public static final int ELEMENT   = 1;
@@ -123,18 +121,14 @@ public class ContentFilter implements Filter {
     protected int filterMask;
 
     /**
-     * <p>
      * Default constructor that allows any legal JDOM objects.
-     * </p>
      */
     public ContentFilter() {
         setDefaultMask();
     }
 
     /**
-     * <p>
      * Set whether all JDOM objects are visible or not.
-     * </p>
      *
      * @param allVisible <code>true</code> all JDOM objects are visible,
      *                   <code>false</code> all JDOM objects are hidden.
@@ -149,9 +143,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Filter out JDOM objects according to a filtering mask.
-     * </p>
      *
      * @param mask Mask of JDOM objects to allow.
      */
@@ -160,18 +152,14 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Return current filtering mask.
-     * </p>
      */
     public int getFilterMask() {
         return filterMask;
     }
 
     /**
-     * <p>
      * Set filtering mask.
-     * </p>
      */
     public void setFilterMask(int mask) {
         setDefaultMask();
@@ -179,9 +167,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set this filter to allow all legal JDOM objects.
-     * </p>
      */
     public void setDefaultMask() {
         filterMask = ELEMENT | CDATA | TEXT | COMMENT |
@@ -189,20 +175,16 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set filter to match only JDOM objects that are legal
      * document content.
-     * </p>
      */
     public void setDocumentContent() {
         filterMask = ELEMENT | COMMENT | PI;
     }
 
     /**
-     * <p>
      * Set filter to match only JDOM objects that are legal
      * element content.
-     * </p>
      */
     public void setElementContent() {
         filterMask = ELEMENT | CDATA | TEXT |
@@ -210,9 +192,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>Element</code> objects.
-     * </p>
      *
      * @param visible whether Elements are visible, <code>true</code>
      *        if yes, <code>false</code> if not
@@ -227,9 +207,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>CDATA</code> objects.
-     * </p>
      *
      * @param visible whether CDATA nodes are visible, <code>true</code>
      *        if yes, <code>false</code> if not
@@ -244,9 +222,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>Text</code> objects.
-     * </p>
      *
      * @param visible whether Text nodes are visible, <code>true</code>
      *        if yes, <code>false</code> if not
@@ -261,9 +237,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>Comment</code> objects.
-     * </p>
      *
      * @param visible whether Comments are visible, <code>true</code>
      *        if yes, <code>false</code> if not
@@ -278,9 +252,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>ProcessingInstruction</code> objects.
-     * </p>
      *
      * @param visible whether ProcessingInstructions are visible,
      *        <code>true</code> if yes, <code>false</code> if not
@@ -295,9 +267,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Set visiblity of <code>EntityRef</code> objects.
-     * </p>
      *
      * @param visible whether EntityRefs are visible, <code>true</code>
      *        if yes, <code>false</code> if not
@@ -312,9 +282,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Check to see if the object can be added to the list.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be added.
@@ -324,9 +292,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Check to see if the object can be removed from the list.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be removed.
@@ -336,9 +302,7 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Check to see if the object matches according to the filter mask.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the objected matched a predfined 
@@ -372,10 +336,8 @@ public class ContentFilter implements Filter {
     }
 
     /**
-     * <p>
      * Returns true if object is instance of ContentFilter and has
      * the same filtering mask as this one.
-     * </p>
      *
      * @return <code>true</code> if the Filters are equal
      */

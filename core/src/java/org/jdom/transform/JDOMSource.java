@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.8 2002/04/29 02:30:47 jhunter Exp $
+ $Id: JDOMSource.java,v 1.9 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -72,11 +72,13 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  * Acts as an holder for JDOM document sources.
  * <p>
  * This class shall be used to wrap a JDOM Document to provide it
- * as input to a JAXP Transformer</p>
+ * as input to a JAXP Transformer.
+ * </p>
  * <p>
  * The following example shows how to apply an XSL Transformation
  * to a JDOM document and get the transformation result in the form
- * of another JDOM Document:</p>
+ * of another JDOM Document:
+ * </p>
  * <blockquote><pre>
  *   public static Document transform(Document in, String stylesheet)
  *                                        throws JDOMException {
@@ -98,7 +100,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.8 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.9 $, $Date: 2002/04/29 13:38:16 $
  */
 public class JDOMSource extends SAXSource {
 
@@ -110,7 +112,8 @@ public class JDOMSource extends SAXSource {
    * <strong>Note</strong>: This implementation does not override
    * the {@link SAXSource#FEATURE} value defined by its superclass
    * to be considered as a SAXSource by Transformer implementations
-   * not natively supporting JDOM.</p>
+   * not natively supporting JDOM.
+   * </p>
    */
   public final static String JDOM_FEATURE =
                       "http://org.jdom.transform.JDOMSource/feature";
@@ -176,6 +179,7 @@ public class JDOMSource extends SAXSource {
    * As this implementation only supports JDOM document as data
    * source, this method always throws an
    * {@link UnsupportedOperationException}.
+   * </p>
    *
    * @param  inputSource   a valid InputSource reference.
    *
@@ -216,7 +220,8 @@ public class JDOMSource extends SAXSource {
    * Returns the XMLReader to be used for the Source.
    * <p>
    * This implementation returns a specific XMLReader reading
-   * the XML data from the source JDOM document.</p>
+   * the XML data from the source JDOM document.
+   * </p>
    *
    * @return an XMLReader reading the XML data from the source
    *         JDOM document.
@@ -248,7 +253,8 @@ public class JDOMSource extends SAXSource {
    * Document.
    * <p>
    * This class is nested in JDOMSource as it is not intented to
-   * be used independently of its friend: DocumentReader.</p>
+   * be used independently of its friend: DocumentReader.
+   * </p>
    *
    * @see    org.jdom.Document
    */
@@ -307,7 +313,8 @@ public class JDOMSource extends SAXSource {
      * <p>
      * This implementation always throws an
      * {@link UnsupportedOperationException} as the only source
-     * stream supported is the source JDOM document.</p>
+     * stream supported is the source JDOM document.
+     * </p>
      *
      * @param  characterStream   a character stream containing
      *                           an XML document.
@@ -326,7 +333,8 @@ public class JDOMSource extends SAXSource {
      * InputSource implementation acceptable by any XML
      * parser.  As it generates an in-memory string representation
      * of the JDOM document, it is quite inefficient from both
-     * speed and memory consumption points of view.</p>
+     * speed and memory consumption points of view.
+     * </p>
      *
      * @return a Reader to a string representation of the
      *         source JDOM document.
@@ -392,7 +400,8 @@ public class JDOMSource extends SAXSource {
      * <p>
      * This implementation does not support reading XML data from
      * system identifiers, only from JDOM documents.  Hence,
-     * this method always throws a {@SAXNotSupportedException}.</p>
+     * this method always throws a {@SAXNotSupportedException}.
+     * </p>
      *
      * @param  systemId   the system identifier (URI).
      *
@@ -407,7 +416,8 @@ public class JDOMSource extends SAXSource {
      * Parses an XML document.
      * <p>
      * The methods accepts only <code>JDOMInputSource</code>s
-     * instances as input sources.</p>
+     * instances as input sources.
+     * </p>
      *
      * @param  source   the input source for the top-level of the
      *                  XML document.
@@ -434,4 +444,3 @@ public class JDOMSource extends SAXSource {
     }
   }
 }
-

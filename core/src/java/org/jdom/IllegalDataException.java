@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalDataException.java,v 1.9 2002/04/29 02:30:47 jhunter Exp $
+ $Id: IllegalDataException.java,v 1.10 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -57,26 +57,23 @@
 package org.jdom;
 
 /**
- * <p><code>IllegalDataException</code>
- *   is thrown when illegal text is supplied to a
- *   JDOM construct.
- * </p>
+ * <code>IllegalDataException</code>
+ * is thrown when illegal text is supplied to a
+ * JDOM construct.
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
- * @version $Revision: 1.9 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:15 $
  */
 public class IllegalDataException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /**
-     * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the specified data is illegal for the construct
-     *   it was supplied to.
-     * </p>
+     * that the specified data is illegal for the construct
+     * it was supplied to.
      *
      * @param data <code>String</code> data that breaks rules.
      * @param construct <code>String</code> construct that data is illegal for.
@@ -95,11 +92,9 @@ public class IllegalDataException extends IllegalArgumentException {
     }
 
     /**
-     * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the specified data is illegal for the construct
-     *   it was supplied to.
-     * </p>
+     * that the specified data is illegal for the construct
+     * it was supplied to.
      *
      * @param data <code>String</code> data that breaks rules.
      * @param construct <code>String</code> construct that data is illegal for.
@@ -113,5 +108,4 @@ public class IllegalDataException extends IllegalArgumentException {
               .append(".")
               .toString());
     }
-
 }

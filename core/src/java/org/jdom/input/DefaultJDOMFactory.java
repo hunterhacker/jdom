@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.8 2002/04/29 02:30:47 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.9 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -60,20 +60,19 @@ import org.jdom.*;
 import java.util.*;
 
 /**
- * <p><code>DefaultJDOMFactory</code> creates the standard
- *   top-level JDOM classes (Element, Document, Comment, etc).
- *   A subclass of this factory might construct custom classes.
- * </p>
+ * <code>DefaultJDOMFactory</code> creates the standard
+ * top-level JDOM classes (Element, Document, Comment, etc).
+ * A subclass of this factory might construct custom classes.
  *
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.8 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.9 $, $Date: 2002/04/29 13:38:16 $
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.8 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.31 2002/04/28 08:44:29 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.32 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -77,12 +77,12 @@ import org.w3c.dom.DOMImplementation;
  * @author Dan Schaffer
  * @author Yusuf Goolamabbas
  * @author Bradley S. Huffman
- * @version $Revision: 1.31 $, $Date: 2002/04/28 08:44:29 $
+ * @version $Revision: 1.32 $, $Date: 2002/04/29 13:38:16 $
  */
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.31 $ $Date: 2002/04/28 08:44:29 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.32 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -92,21 +92,17 @@ public class DOMOutputter {
     private String adapterClass;
 
     /**
-     * <p>
      * This creates a new DOMOutputter which will attempt to first locate
      * a DOM implementation to use via JAXP, and if JAXP does not exist or
      * there's a problem, will fall back to the default parser.
-     * </p>
      */
     public DOMOutputter() {
         // nothing
     }
 
     /**
-     * <p>
      * This creates a new DOMOutputter using the specified DOMAdapter
      * implementation as a way to choose the underlying parser.
-     * </p>
      *
      * @param adapterClass <code>String</code> name of class
      *                     to use for DOM output
@@ -117,11 +113,9 @@ public class DOMOutputter {
 
 
     /**
-     * <p>
      * This converts the JDOM <code>Document</code> parameter to a 
      * DOM Document, returning the DOM version.  The DOM implementation
      * is the one chosen in the constructor.
-     * </p>
      *
      * @param document <code>Document</code> to output.
      * @return an <code>org.w3c.dom.Document</code> version
@@ -186,10 +180,8 @@ public class DOMOutputter {
     }
 
     /** 
-     * <p>
      * This converts the JDOM <code>Element</code> parameter to a 
      * DOM Element, returning the DOM version.
-     * </p>
      *
      * @param element <code>Element</code> to output.
      * @return an <code>org.w3c.dom.Element</code> version
@@ -420,10 +412,9 @@ public class DOMOutputter {
     }
 
     /**
-     * <p>
      * This converts the JDOM <code>Attribute</code> parameter to a
      * DOM <code>Attr</code>, returning the DOM version.
-     * </p>
+     *
      * @param attribute <code>Attribute</code> to output.
      * @return an <code>org.w3c.dom.Attr</code> version
      * @deprecated Deprecated in Beta 9, since a DOM Attr should not be
@@ -462,10 +453,8 @@ public class DOMOutputter {
     }
 
     /**
-     * <p>
-     *  This will handle adding any <code>{@link Namespace}</code>
-     *    attributes to the DOM tree.
-     * </p>
+     * This will handle adding any <code>{@link Namespace}</code>
+     * attributes to the DOM tree.
      *
      * @param ns <code>Namespace</code> to add definition of
      */

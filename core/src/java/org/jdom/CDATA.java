@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.23 2002/04/29 02:30:47 jhunter Exp $
+ $Id: CDATA.java,v 1.24 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -57,36 +57,36 @@
 package org.jdom;
 
 /**
- * <p><code><b>CDATA</b></code> represents character-based content within an
- *   XML document represented by JDOM. It is intended to provide a modular,
- *   printable method of representing CDATA. Additionally,
- *   <code>CDATA</code> makes no guarantees about the underlying textual
- *   representation of character data, but does expose that data as a Java
- *   <code>String</code>.</p>
+ * <code><b>CDATA</b></code> represents character-based content within an
+ * XML document represented by JDOM. It is intended to provide a modular,
+ * printable method of representing CDATA. Additionally,
+ * <code>CDATA</code> makes no guarantees about the underlying textual
+ * representation of character data, but does expose that data as a Java
+ * <code>String</code>.</p>
  *
  * @author Dan Schaffer
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.23 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.24 $, $Date: 2002/04/29 13:38:15 $
  */
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.23 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.24 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
     /**
-     * <p>This is the protected, no-args constructor standard in all JDOM
-     *  classes. It allows subclassers to get a raw instance with no
-     *  initialization.</p>
+     * This is the protected, no-args constructor standard in all JDOM
+     * classes. It allows subclassers to get a raw instance with no
+     * initialization.
      */
     protected CDATA() { }
 
     /**
-     * <p>This constructor creates a new <code>CDATA</code> node, with the
-     *   supplied string value as it's character content.</p>
+     * This constructor creates a new <code>CDATA</code> node, with the
+     * supplied string value as it's character content.
      *
      * @param str the node's character content.
      */
@@ -95,7 +95,7 @@ public class CDATA extends Text {
     }
 
     /**
-     * <p>This will set the value of this <code>CDATA</code> node.</p>
+     * This will set the value of this <code>CDATA</code> node.
      *
      * @param str value for node's content.
      */
@@ -119,8 +119,8 @@ public class CDATA extends Text {
     }
 
     /**
-     * <p>This will append character content to whatever content already
-     *   exists within this <code>CDATA</code> node.</p>
+     * This will append character content to whatever content already
+     * exists within this <code>CDATA</code> node.
      *
      * @param str character content to append.
      */
@@ -144,12 +144,12 @@ public class CDATA extends Text {
     }
 
     /**
-     * <p>This returns a <code>String</code> representation of the
-     *   <code>CDATA</code> node, suitable for debugging. If the XML
-     *   representation of the <code>CDATA</code> node is desired,
-     *   either <code>{@link #getText}</code> or
-     *   {@link org.jdom.output.XMLOutputter#output(CDATA, Writer)}</code>
-     *   should be used.</p>
+     * This returns a <code>String</code> representation of the
+     * <code>CDATA</code> node, suitable for debugging. If the XML
+     * representation of the <code>CDATA</code> node is desired,
+     * either <code>{@link #getText}</code> or
+     * {@link org.jdom.output.XMLOutputter#output(CDATA, Writer)}</code>
+     * should be used.
      *
      * @return <code>String</code> - information about this node.
      */

@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.47 2002/04/29 02:30:47 jhunter Exp $
+ $Id: SAXHandler.java,v 1.48 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -70,21 +70,21 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * <p><code>SAXHandler</code> supports SAXBuilder</p>
+ * <code>SAXHandler</code> supports SAXBuilder.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.47 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.48 $, $Date: 2002/04/29 13:38:16 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.47 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.48 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -152,17 +152,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     private Locator locator;
 
     /**
-     * <p>
      * Class initializer: Populate a table to translate SAX attribute
      * type names into JDOM attribute type value (integer).
-     * </p>
      * <p>
      * <b>Note that all the mappings defined below are compliant with
      * the SAX 2.0 specification exception for "ENUMERATION" with is
      * specific to Crimson 1.1.X and Xerces 2.0.0-betaX which report
      * attributes of enumerated types with a type "ENUMERATION"
      * instead of the expected "NMTOKEN".
-     * </p><p>
+     * </p>
+     * <p>
      * Note also that Xerces 1.4.X is not SAX 2.0 compliant either
      * but handling its case requires
      * {@link #getAttributeType specific code}.
@@ -192,23 +191,18 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will create a new <code>SAXHandler</code> that listens to SAX
      * events and creates a JDOM Document.  The objects will be constructed
      * using the default factory.
-     * </p>
-     *
      */
     public SAXHandler() {
         this((JDOMFactory)null);
     }
 
     /**
-     * <p>
      * This will create a new <code>SAXHandler</code> that listens to SAX
      * events and creates a JDOM Document.  The objects will be constructed
      * using the provided factory.
-     * </p>
      *
      * @param factory <code>JDOMFactory</code> to be used for constructing
      * objects
@@ -231,9 +225,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Returns the document.  Should be called after parsing is complete.
-     * </p>
      *
      * @return <code>Document</code> - Document that was built
      */
@@ -242,9 +234,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Returns the factory used for constructing objects.
-     * </p>
      *
      * @return <code>JDOMFactory</code> - the factory used for
      * constructing objects.
@@ -256,12 +246,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This sets whether or not to expand entities during the build.
      * A true means to expand entities as normal content.  A false means to
      * leave entities unexpanded as <code>EntityRef</code> objects.  The
      * default is true.
-     * </p>
      *
      * @param expand <code>boolean</code> indicating whether entity expansion
      * should occur.
@@ -271,10 +259,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Returns whether or not entities will be expanded during the
      * build.
-     * </p>
      *
      * @return <code>boolean</code> - whether entity expansion
      * will occur during build.
@@ -286,7 +272,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Specifies whether or not the parser should elminate whitespace in
      * element content (sometimes known as "ignorable whitespace") when
      * building the document.  Only whitespace which is contained within
@@ -294,7 +279,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * eliminated (see XML Rec 3.2.1).  For this setting to take effect
      * requires that validation be turned on.  The default value of this
      * setting is <code>false</code>.
-     * </p>
      *
      * @param ignoringWhite Whether to ignore ignorable whitespace
      */
@@ -303,11 +287,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Returns whether or not the parser will elminate whitespace in
      * element content (sometimes known as "ignorable whitespace") when
      * building the document.
-     * </p>
      *
      * @return <code>boolean</code> - whether ignorable whitespace will
      * be ignored during build.
@@ -321,7 +303,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /**
      * This is called when the parser encounters an external entity
      * declaration.
-     * </p>
      *
      * @param name entity name
      * @param publicID public id
@@ -343,9 +324,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <P>
-     *  This handles an attribute declaration in the internal subset
-     * </P>
+     * This handles an attribute declaration in the internal subset.
      *
      * @param eName <code>String</code> element name of attribute
      * @param aName <code>String</code> attribute name
@@ -382,9 +361,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <P>
-     *  Handle an element declaration in a DTD
-     * </P>
+     * Handle an element declaration in a DTD.
      *
      * @param name <code>String</code> name of element
      * @param model <code>String</code> model of the element in DTD syntax
@@ -401,9 +378,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <P>
-     *  Handle an internal entity declaration in a DTD.
-     * </P>
+     * Handle an internal entity declaration in a DTD.
      *
      * @param name <code>String</code> name of entity
      * @param value <code>String</code> value of the entity
@@ -426,11 +401,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will indicate that a processing instruction has been encountered.
      * (The XML declaration is not a processing instruction and will not
-     *  be reported.)
-     * </p>
+     * be reported.)
      *
      * @param target <code>String</code> target of PI
      * @param data <code>String</code> containing all data sent to the PI.
@@ -454,11 +427,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This indicates that an unresolvable entity reference has been 
      * encountered, normally because the external DTD subset has not been
      * read.
-     * </p>
      *
      * @param name <code>String</code> name of entity
      * @throws SAXException when things go wrong
@@ -475,10 +446,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will add the prefix mapping to the JDOM
-     *   <code>Document</code> object.
-     * </p>
+     * <code>Document</code> object.
      *
      * @param prefix <code>String</code> namespace prefix.
      * @param uri <code>String</code> namespace URI.
@@ -493,10 +462,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will add the prefix mapping to the JDOM
-     *   <code>Document</code> object.
-     * </p>
+     * <code>Document</code> object.
      *
      * @param prefix <code>String</code> namespace prefix.
      * @param uri <code>String</code> namespace URI.
@@ -522,13 +489,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This reports the occurrence of an actual element.  It will include
-     *   the element's attributes, with the exception of XML vocabulary
-     *   specific attributes, such as
-     *   <code>xmlns:[namespace prefix]</code> and
-     *   <code>xsi:schemaLocation</code>.
-     * </p>
+     * the element's attributes, with the exception of XML vocabulary
+     * specific attributes, such as
+     * <code>xmlns:[namespace prefix]</code> and
+     * <code>xsi:schemaLocation</code>.
      *
      * @param namespaceURI <code>String</code> namespace URI this element
      *                     is associated with, or an empty
@@ -621,10 +586,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
-     *  This will take the supplied <code>{@link Element}</code> and
-     *    transfer its namespaces to the global namespace storage.
-     * </p>
+     * This will take the supplied <code>{@link Element}</code> and
+     * transfer its namespaces to the global namespace storage.
      *
      * @param element <code>Element</code> to read namespaces from.
      */
@@ -639,11 +602,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
-     *  For a given namespace prefix, this will return the
-     *    <code>{@link Namespace}</code> object for that prefix,
-     *    within the current scope.
-     * </p>
+     * For a given namespace prefix, this will return the
+     * <code>{@link Namespace}</code> object for that prefix,
+     * within the current scope.
      *
      * @param prefix namespace prefix.
      * @return <code>Namespace</code> - namespace for supplied prefix.
@@ -660,9 +621,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will report character data (within an element).
-     * </p>
      *
      * @param ch <code>char[]</code> character array with character data
      * @param start <code>int</code> index in array where data starts.
@@ -682,11 +641,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * Capture ignorable whitespace as text.  If
      * setIgnoringElementContentWhitespace(true) has been called then this
      * method does nothing.
-     * </p>
      *
      * @param ch <code>[]</code> - char array of ignorable whitespace
      * @param start <code>int</code> - starting position within array
@@ -701,10 +658,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * <p>
      * This will flush any characters from SAX character calls we've
      * been buffering.
-     * </p>
      *
      * @throws SAXException when things go wrong
      */
@@ -740,12 +695,10 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Indicates the end of an element
-     *   (<code>&lt;/[element name]&gt;</code>) is reached.  Note that
-     *   the parser does not distinguish between empty
-     *   elements and non-empty elements, so this will occur uniformly.
-     * </p>
+     * (<code>&lt;/[element name]&gt;</code>) is reached.  Note that
+     * the parser does not distinguish between empty
+     * elements and non-empty elements, so this will occur uniformly.
      *
      * @param namespaceURI <code>String</code> URI of namespace this
      *                     element is associated with
@@ -780,12 +733,10 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * This will signify that a DTD is being parsed, and can be
-     *   used to ensure that comments and other lexical structures
-     *   in the DTD are not added to the JDOM <code>Document</code>
-     *   object.
-     * </p>
+     * used to ensure that comments and other lexical structures
+     * in the DTD are not added to the JDOM <code>Document</code>
+     * object.
      *
      * @param name <code>String</code> name of element listed in DTD
      * @param publicID <code>String</code> public ID of DTD
@@ -803,9 +754,7 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * This signifies that the reading of the DTD is complete.
-     * </p>
      */
     public void endDTD() throws SAXException {
 
@@ -876,9 +825,7 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Report a CDATA section - ignored in SAXBuilder.
-     * </p>
      */
     public void startCDATA() throws SAXException {
         if (suppress) return;
@@ -887,9 +834,7 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Report a CDATA section - ignored in SAXBuilder.
-     * </p>
      */
     public void endCDATA() throws SAXException {
         if (suppress) return;
@@ -899,12 +844,10 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * This reports that a comments is parsed.  If not in the
-     *   DTD, this comment is added to the current JDOM
-     *   <code>Element</code>, or the <code>Document</code> itself
-     *   if at that level.
-     * </p>
+     * DTD, this comment is added to the current JDOM
+     * <code>Element</code>, or the <code>Document</code> itself
+     * if at that level.
      *
      * @param ch <code>ch[]</code> array of comment characters.
      * @param start <code>int</code> index to start reading from.
@@ -936,9 +879,7 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
-     *  Handle the declaration of a Notation in a DTD
-     * </P>
+     * Handle the declaration of a Notation in a DTD
      *
      * @param name name of the notation
      * @param publicID the public ID of the notation
@@ -956,9 +897,7 @@ if (!inDTD) {
     }
 
     /**
-     * <P>
-     *  Handler for unparsed entity declarations in the DTD
-     * </P>
+     * Handler for unparsed entity declarations in the DTD
      *
      * @param name <code>String</code> of the unparsed entity decl
      * @param publicID <code>String</code> of the unparsed entity decl
@@ -980,10 +919,8 @@ if (!inDTD) {
     }
 
     /**
-     * <P>
-     *  Appends an external ID to the internal subset buffer. Either publicID
-     *  or systemID may be null, but not both.
-     * </P>
+     * Appends an external ID to the internal subset buffer. Either publicID
+     * or systemID may be null, but not both.
      *
      * @param publicID the public ID
      * @param systemID the system ID
@@ -1008,9 +945,7 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Returns the being-parsed element.
-     * </p>
      *
      * @return <code>Element</code> - element at the top of the stack.
      */
@@ -1025,10 +960,8 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Returns the the JDOM Attribute type value from the SAX 2.0
      * attribute type string provided by the parser.
-     * </p>
      *
      * @param typeName <code>String</code> the SAX 2.0 attribute
      * type string.
@@ -1057,10 +990,9 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Receives an object for locating the origin of SAX document
      * events.  This method is invoked by the SAX parser.
-     * </p><p>
+     * <p>
      * {@link JDOMFactory} implementations can use the
      * {@link #getDocumentLocator} method to get access to the
      * {@link Locator} during parse.
@@ -1074,10 +1006,8 @@ if (!inDTD) {
     }
 
     /**
-     * <p>
      * Provides access to the {@link Locator} object provided by the
      * SAX parser.
-     * </p>
      *
      * @return <code>Locator</code> an object that can return
      * the location of any SAX document event.

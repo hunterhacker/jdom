@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.8 2002/04/29 02:30:47 jhunter Exp $
+ $Id: JDOMResult.java,v 1.9 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -75,7 +75,8 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  * of a JDOM Document.
  * <p>
  * This class shall be used to get the result of XSL Transformation
- * as a JDOM Document.</p>
+ * as a JDOM Document.
+ * </p>
  * <p>
  * The following example shows how to apply an XSL Transformation
  * to a JDOM document and get the transformation result in the form
@@ -95,12 +96,13 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *     }
  *   }
  * </pre></blockquote>
+ * </p>
  *
  * @see      org.jdom.transform.JDOMSource
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.8 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.9 $, $Date: 2002/04/29 13:38:16 $
  */
 public class JDOMResult extends SAXResult {
 
@@ -112,7 +114,8 @@ public class JDOMResult extends SAXResult {
    * <strong>Note</strong>: This implementation does not override
    * the {@link SAXResult#FEATURE} value defined by its superclass
    * to be considered as a SAXResult by Transformer implementations
-   * not natively supporting JDOM.</p>
+   * not natively supporting JDOM.
+   * </p>
    */
   public final static String JDOM_FEATURE =
                       "http://org.jdom.transform.JDOMResult/feature";
@@ -149,7 +152,8 @@ public class JDOMResult extends SAXResult {
    * natively support JDOM to directly set the transformation
    * result rather than considering this object as a
    * {@link SAXResult}.  Applications should <i>not</i> use this
-   * method.</p>
+   * method.
+   * </p>
    *
    * @param  document   the JDOM document result of a transformation.
    *
@@ -213,7 +217,8 @@ public class JDOMResult extends SAXResult {
    * <p>
    * This is needed to handle XML comments and the like.  If the
    * lexical handler is not set, an attempt should be made by the
-   * transformer to cast the ContentHandler to a LexicalHandler.</p>
+   * transformer to cast the ContentHandler to a LexicalHandler.
+   * </p>
    *
    * @param handler A non-null LexicalHandler for
    *                handling lexical parse events.
@@ -245,7 +250,8 @@ public class JDOMResult extends SAXResult {
      * Processes a start of document event.
      * <p>
      * This implementation creates a new JDOM document builder and
-     * marks the current document as "under construction".</p>
+     * marks the current document as "under construction".
+     * </p>
      *
      * @throws SAXException   if any error occurred while creating
      *                        the document builder.
@@ -270,7 +276,8 @@ public class JDOMResult extends SAXResult {
     /**
      * Processes an end of document event.
      * <p>
-     * This implementation makes the built document available.</p>
+     * This implementation makes the built document available.
+     * </p>
      *
      * @throws SAXException   if thrown by the actual document
      *                        builder.

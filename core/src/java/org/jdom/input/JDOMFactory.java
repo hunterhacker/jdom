@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.9 2002/04/29 02:30:47 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -60,17 +60,16 @@ import org.jdom.*;
 import java.util.*;
 
 /**
- * <p><code>JDOMFactory</code> is an interface to be used by builders
- *   in constructing JDOM objects.  The <code>DefaultJDOMFactory</code> 
- *   creates the standard top-level JDOM classes (Element, Document, 
- *   Comment, etc).  Another implementation of this factory could be used
- *   to create custom classes.
- * </p>
+ * <code>JDOMFactory</code> is an interface to be used by builders
+ * in constructing JDOM objects.  The <code>DefaultJDOMFactory</code> 
+ * creates the standard top-level JDOM classes (Element, Document, 
+ * Comment, etc).  Another implementation of this factory could be used
+ * to create custom classes.
  *
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.9 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
  */
 public interface JDOMFactory {
 
@@ -89,11 +88,9 @@ public interface JDOMFactory {
     public Attribute attribute(String name, String value, Namespace namespace);
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name, value, and type, and in the provided
-     *   <code>{@link Namespace}</code>.
-     * </p>
+     * specified (local) name, value, and type, and in the provided
+     * <code>{@link Namespace}</code>.
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -104,14 +101,13 @@ public interface JDOMFactory {
                                             int type, Namespace namespace);
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and does not place
-     *   the attribute in a <code>{@link Namespace}</code>.
-     * </p><p>
-     *  <b>Note</b>: This actually explicitly puts the
-     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
-     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * specified (local) name and value, and does not place
+     * the attribute in a <code>{@link Namespace}</code>.
+     * <p>
+     * <b>Note</b>: This actually explicitly puts the
+     * <code>Attribute</code> in the "empty" <code>Namespace</code>
+     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -120,14 +116,13 @@ public interface JDOMFactory {
     public Attribute attribute(String name, String value);
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name, value and type, and does not place
-     *   the attribute in a <code>{@link Namespace}</code>.
-     * </p><p>
-     *  <b>Note</b>: This actually explicitly puts the
-     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
-     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * specified (local) name, value and type, and does not place
+     * the attribute in a <code>{@link Namespace}</code>.
+     * <p>
+     * <b>Note</b>: This actually explicitly puts the
+     * <code>Attribute</code> in the "empty" <code>Namespace</code>
+     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -139,10 +134,7 @@ public interface JDOMFactory {
     // **** constructing CDATA ****
 
     /**
-     * <p>
-     * This creates the CDATA with the supplied
-     *   text.
-     * </p>
+     * This creates the CDATA with the supplied text.
      *
      * @param str <code>String</code> content of CDATA.
      */
@@ -151,10 +143,7 @@ public interface JDOMFactory {
     // **** constructing Text ****
 
     /**
-     * <p>
-     * This creates the Text with the supplied
-     *   text.
-     * </p>
+     * This creates the Text with the supplied text.
      *
      * @param data <code>String</code> content of Text.
      */
@@ -163,10 +152,7 @@ public interface JDOMFactory {
     // **** constructing Comment ****
 
     /**
-     * <p>
-     * This creates the comment with the supplied
-     *   text.
-     * </p>
+     * This creates the comment with the supplied text.
      *
      * @param text <code>String</code> content of comment.
      */
@@ -175,11 +161,9 @@ public interface JDOMFactory {
     // **** constructing DocType
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name and a reference to an
-     *   external DTD.
-     * </p>
+     * the specified element name and a reference to an
+     * external DTD.
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -192,11 +176,9 @@ public interface JDOMFactory {
                            String publicID, String systemID);
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name and reference to an
-     *   external DTD.
-     * </p>
+     * the specified element name and reference to an
+     * external DTD.
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -206,10 +188,8 @@ public interface JDOMFactory {
     public DocType docType(String elementName, String systemID);
 
     /**
-     * <p>
      * This will create the <code>DocType</code> with
-     *   the specified element name
-     * </p>
+     * the specified element name
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
@@ -219,12 +199,10 @@ public interface JDOMFactory {
     // **** constructing Document
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied <code>{@link Element}</code>
-     *   as the root element and the supplied
-     *   <code>{@link DocType}</code> declaration.
-     * </p>
+     * with the supplied <code>{@link Element}</code>
+     * as the root element and the supplied
+     * <code>{@link DocType}</code> declaration.
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
@@ -232,12 +210,10 @@ public interface JDOMFactory {
     public Document document(Element rootElement, DocType docType);
 
     /**
-     * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied <code>{@link Element}</code>
-     *   as the root element, and no <code>{@link DocType}</code>
-     *   declaration.
-     * </p>
+     * with the supplied <code>{@link Element}</code>
+     * as the root element, and no <code>{@link DocType}</code>
+     * declaration.
      *
      * @param rootElement <code>Element</code> for document root
      */
@@ -246,11 +222,9 @@ public interface JDOMFactory {
     // **** constructing Elements ****
 
     /**
-     * <p>
      * This will create a new <code>Element</code>
-     *   with the supplied (local) name, and define
-     *   the <code>{@link Namespace}</code> to be used.
-     * </p>
+     * with the supplied (local) name, and define
+     * the <code>{@link Namespace}</code> to be used.
      *
      * @param name <code>String</code> name of element.
      * @param namespace <code>Namespace</code> to put element in.
@@ -258,23 +232,19 @@ public interface JDOMFactory {
     public Element element(String name, Namespace namespace);
 
     /**
-     * <p>
-     *  This will create an <code>Element</code> in no
-     *    <code>{@link Namespace}</code>.
-     * </p>
+     * This will create an <code>Element</code> in no
+     * <code>{@link Namespace}</code>.
      *
      * @param name <code>String</code> name of element.
      */
     public Element element(String name);
 
     /**
-     * <p>
-     *  This will create a new <code>Element</code> with
-     *    the supplied (local) name, and specifies the URI
-     *    of the <code>{@link Namespace}</code> the <code>Element</code>
-     *    should be in, resulting it being unprefixed (in the default
-     *    namespace).
-     * </p>
+     * This will create a new <code>Element</code> with
+     * the supplied (local) name, and specifies the URI
+     * of the <code>{@link Namespace}</code> the <code>Element</code>
+     * should be in, resulting it being unprefixed (in the default
+     * namespace).
      *
      * @param name <code>String</code> name of element.
      * @param uri <code>String</code> URI for <code>Namespace</code> element
@@ -283,12 +253,10 @@ public interface JDOMFactory {
     public Element element(String name, String uri);
 
     /**
-     * <p>
-     *  This will create a new <code>Element</code> with
-     *    the supplied (local) name, and specifies the prefix and URI
-     *    of the <code>{@link Namespace}</code> the <code>Element</code>
-     *    should be in.
-     * </p>
+     * This will create a new <code>Element</code> with
+     * the supplied (local) name, and specifies the prefix and URI
+     * of the <code>{@link Namespace}</code> the <code>Element</code>
+     * should be in.
      *
      * @param name <code>String</code> name of element.
      * @param uri <code>String</code> URI for <code>Namespace</code> element
@@ -299,10 +267,8 @@ public interface JDOMFactory {
     // **** constructing ProcessingInstruction ****
 
     /**
-     * <p>
      * This will create a new <code>ProcessingInstruction</code>
-     *   with the specified target and data.
-     * </p>
+     * with the specified target and data.
      *
      * @param target <code>String</code> target of PI.
      * @param data <code>Map</code> data for PI, in
@@ -312,10 +278,8 @@ public interface JDOMFactory {
                                                        Map data);
 
     /**
-     * <p>
      * This will create a new <code>ProcessingInstruction</code>
-     *   with the specified target and data.
-     * </p>
+     * with the specified target and data.
      *
      * @param target <code>String</code> target of PI.
      * @param rawData <code>String</code> data for PI.
@@ -326,20 +290,16 @@ public interface JDOMFactory {
     // **** constructing EntityRef ****
 
     /**
-     * <p>
      * This will create a new <code>EntityRef</code>
-     *   with the supplied name.
-     * </p>
+     * with the supplied name.
      *
      * @param name <code>String</code> name of element.
      */
     public EntityRef entityRef(String name);
 
     /**
-     * <p>
      * This will create a new <code>EntityRef</code>
-     *   with the supplied name, public ID, and system ID.
-     * </p>
+     * with the supplied name, public ID, and system ID.
      *
      * @param name <code>String</code> name of element.
      * @param name <code>String</code> public ID of element.

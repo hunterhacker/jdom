@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.20 2002/04/28 08:44:29 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.21 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,10 +72,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import org.jdom.*;
 
 /**
- * <p>
  * <code>SAXOutputter</code> takes a JDOM tree and fires SAX2 events.
- * </p>
  *
+ * <p>
  * Most <code>ContentHandler</code> callbacks are supported. Both
  * <code>ignorableWhitespace</code> and <code>skippedEntity</code> have
  * not been implemented. The <code>setDocumentLocator</code> callback has
@@ -83,15 +82,18 @@ import org.jdom.*;
  * <code>getColumnNumber</code> and <code>getLineNumber</code>.
  * </p>
  *
+ * <p>
  * The <code>EntityResolver</code> callback <code>resolveEntity</code> has
  * been implemented for DTDs.
  * </p>
  *
+ * <p>
  * At this time, it is not possible to access notations and unparsed entity
  * references in a DTD from a JDOM tree. Therefore, <code>DTDHandler</code>
  * callbacks have not been implemented yet.
  * </p>
  *
+ * <p>
  * The <code>ErrorHandler</code> callbacks have not been implemented, since
  * these are supposed to be invoked when the document is parsed. However, the
  * document has already been parsed in order to create the JDOM tree.
@@ -101,12 +103,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.20 $, $Date: 2002/04/28 08:44:29 $
+ * @version $Revision: 1.21 $, $Date: 2002/04/29 13:38:16 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.20 $ $Date: 2002/04/28 08:44:29 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.21 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -182,20 +184,16 @@ public class SAXOutputter {
     private boolean declareNamespaces = false;
 
     /**
-     * <p>
      * This will create a <code>SAXOutputter</code> without any
      * registered handler.  The application is then responsible for
      * registering them using the <code>setXxxHandler()</code> methods.
-     * </p>
      */
     public SAXOutputter() {
     }
 
     /**
-     * <p>
      * This will create a <code>SAXOutputter</code> with the
      * specified <code>ContentHandler</code>.
-     * </p>
      *
      * @param contentHandler contains <code>ContentHandler</code> 
      * callback methods
@@ -205,11 +203,9 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will create a <code>SAXOutputter</code> with the
      * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
      * and <code>EntityResolver</code> are supported.
-     * </p>
      *
      * @param contentHandler contains <code>ContentHandler</code> 
      * callback methods
@@ -226,11 +222,9 @@ public class SAXOutputter {
     }
    
     /**
-     * <p>
      * This will create a <code>SAXOutputter</code> with the
      * specified SAX2 handlers. At this time, only <code>ContentHandler</code>
      * and <code>EntityResolver</code> are supported.
-     * </p>
      *
      * @param contentHandler contains <code>ContentHandler</code> 
      * callback methods
@@ -253,9 +247,7 @@ public class SAXOutputter {
     }
    
     /**
-     * <p>
      * This will set the <code>ContentHandler</code>.
-     * </p>
      *
      * @param contentHandler contains <code>ContentHandler</code> 
      * callback methods.
@@ -265,9 +257,7 @@ public class SAXOutputter {
     }
    
     /**
-     * <p>
      * Returns the registered <code>ContentHandler</code>.
-     * </p>
      *
      * @return the current <code>ContentHandler</code> or
      * <code>null</code> if none was registered.
@@ -277,9 +267,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will set the <code>ErrorHandler</code>.
-     * </p>
      *
      * @param errorHandler contains <code>ErrorHandler</code> callback methods.
      */
@@ -288,9 +276,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * Return the registered <code>ErrorHandler</code>.
-     * </p>
      *
      * @return the current <code>ErrorHandler</code> or
      * <code>null</code> if none was registered.
@@ -300,9 +286,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will set the <code>DTDHandler</code>.
-     * </p>
      *
      * @param dtdHandler contains <code>DTDHandler</code> callback methods.
      */
@@ -311,9 +295,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * Return the registered <code>DTDHandler</code>.
-     * </p>
      *
      * @return the current <code>DTDHandler</code> or
      * <code>null</code> if none was registered.
@@ -323,9 +305,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will set the <code>EntityResolver</code>.
-     * </p>
      *
      * @param entityResolver contains EntityResolver callback methods.
      */
@@ -334,9 +314,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * Return the registered <code>EntityResolver</code>.
-     * </p>
      *
      * @return the current <code>EntityResolver</code> or
      * <code>null</code> if none was registered.
@@ -346,9 +324,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
-     *  This will set the <code>LexicalHandler</code>.
-     * </p>
+     * This will set the <code>LexicalHandler</code>.
      *
      * @param lexicalHandler contains lexical callback methods.
      */
@@ -357,9 +333,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * Return the registered <code>LexicalHandler</code>.
-     * </p>
      *
      * @return the current <code>LexicalHandler</code> or
      * <code>null</code> if none was registered.
@@ -369,9 +343,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
-     *  This will set the <code>DeclHandler</code>.
-     * </p>
+     * This will set the <code>DeclHandler</code>.
      *
      * @param declHandler contains declaration callback methods.
      */
@@ -380,9 +352,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * Return the registered <code>DeclHandler</code>.
-     * </p>
      *
      * @return the current <code>DeclHandler</code> or
      * <code>null</code> if none was registered.
@@ -392,11 +362,9 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will define whether attribute namespace declarations shall be
      * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
      * and behaves as the "namespace-prefixes" SAX core feature.
-     * </p>
      *
      * @param reportDecl whether attribute namespace declarations shall be
      * reported as "xmlns" attributes.
@@ -406,9 +374,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will set the state of a SAX feature.
-     * </p>
      * <p>
      * All XMLReaders are required to support setting  to true and  to false.
      * </p>
@@ -460,9 +426,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will look up the value of a SAX feature.
-     * </p>
      *
      * @param name <code>String</code> the feature name, which is a
      *             fully-qualified URI.
@@ -493,11 +457,9 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will set the value of a SAX property.
      * This method is also the standard mechanism for setting extended
      * handlers.
-     * </p>
      * <p>
      * SAXOutputter currently supports the following SAX properties:
      * <dl>
@@ -543,9 +505,7 @@ public class SAXOutputter {
     }
 
     /**
-     * <p>
      * This will look up the value of a SAX property.
-     * </p>
      *
      * @param name <code>String</code> the property name, which is a
      *             fully-qualified URI.
@@ -575,10 +535,8 @@ public class SAXOutputter {
 
 
     /**
-     * <p>
      * This will output the <code>JDOM Document</code>, firing off the
      * SAX events that have been registered.
-     * </p>
      *
      * @param document <code>JDOM Document</code> to output.
      */
@@ -624,10 +582,8 @@ public class SAXOutputter {
     }
    
     /**
-     * <p>
      * This parses a DTD declaration to fire the related events towards
      * the registered handlers.
-     * </p>
      *
      * @param document <code>JDOM Document</code> the DocType is to
      *                 process.

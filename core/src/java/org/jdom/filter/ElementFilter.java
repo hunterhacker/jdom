@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.5 2002/04/29 02:30:47 jhunter Exp $
+ $Id: ElementFilter.java,v 1.6 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,19 +59,17 @@ package org.jdom.filter;
 import org.jdom.*;
 
 /**
- * <p>
  * The <code>ElementFilter</code> when applied to a <code>FilterList</code>
  * will only allow <code>Elements</code> to be visible.
- * </p>
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.6 $, $Date: 2002/04/29 13:38:16 $
  */
 public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.5 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.6 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** The element name */
     protected String name;
@@ -80,16 +78,12 @@ public class ElementFilter implements Filter {
     protected Namespace namespace;
     
     /**
-     * <p>
      * Filter out the Elements.
-     * </p>
      */
     public ElementFilter() {}
 
     /**
-     * <p>
      * Filter out the Elements with the supplied name in any Namespace.
-     * </p>
      *
      * @param name   The name of the Element.
      */
@@ -98,9 +92,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Filter out the Elements with the supplied Namespace.
-     * </p>
      *
      * @param namespace The namespace the Element lives in.
      */
@@ -109,9 +101,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Filter out the Elements with the supplied name and Namespace.
-     * </p>
      *
      * @param name   The name of the Element.
      * @param namespace The namespace the Element lives in.
@@ -122,9 +112,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Only allow the adding of Element objects.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be added.
@@ -135,9 +123,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Check to see if the object can be removed from the list.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the object can be removed.
@@ -150,9 +136,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Check to see if the object matches a predefined set of rules.
-     * </p>
      *
      * @param obj The object to verify.
      * @return <code>true</code> if the objected matched a predfined 
@@ -184,10 +168,8 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * <p>
      * Returns true if object is instance of ElementFilter and has
      * the same parent Element, name, and namespace as this filter.
-     * </p>
      *
      * @return <code>true</code> if the Filters are equal
      */

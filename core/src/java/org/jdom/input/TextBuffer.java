@@ -1,6 +1,6 @@
 /*--
 
- $Id: TextBuffer.java,v 1.3 2002/04/29 02:30:47 jhunter Exp $
+ $Id: TextBuffer.java,v 1.4 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -57,7 +57,6 @@
 package org.jdom.input;
 
 /**
- * <p>
  * <code>TextBuffer</code> is similar to StringBuffer, but optimized
  * for XML parsing, where the common case is that you get only one chunk
  * of characters per text section. <code>TextBuffer</code> stores the
@@ -70,11 +69,10 @@ package org.jdom.input;
  * performance in the uncommon case. Furthermore, avoiding StringBuffer
  * means that no extra unused char array space will be kept around
  * after parsing is through. 
- * </p>
  *
  * @author Bradley S. Huffman
  * @author Alex Rosen
- * @version $Revision: 1.3 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.4 $, $Date: 2002/04/29 13:38:16 $
  */
 class TextBuffer {
     /** The first part of the text value (the "prefix"). If null, the

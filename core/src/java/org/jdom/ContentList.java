@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.16 2002/04/29 02:30:47 jhunter Exp $
+ $Id: ContentList.java,v 1.17 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org).
+    from the JDOM Project Management <request_AT_jdom_DOT_org).
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -62,17 +62,15 @@ import java.util.NoSuchElementException; // mysteriously helps JDK 1.1.x builds
 import org.jdom.filter.Filter;
 
 /**
- * <p>
  * <code>ContentList</code> represents legal JDOM content, including content
  * for <code>Document</code>s or <code>Element</code>s.
  * This class is NOT PUBLIC; users should see it as a simple List
  * implementation.
- * </p>
  *
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.16 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.17 $, $Date: 2002/04/29 13:38:15 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +81,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.16 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.17 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -112,31 +110,25 @@ class ContentList extends AbstractList implements java.io.Serializable {
     private ContentList() { }
 
     /**
-     * <p>
      * Create a new instance of the ContentList representing
      * Document content
-     * </p>
      */
     protected ContentList(Document document) {
         this.parent = document;
     }
 
     /**
-     * <p>
      * Create a new instance of the ContentList representing
      * Element content
-     * </p>
      */
     protected ContentList(Element parent) {
         this.parent = parent;
     }
 
     /**
-     * <p>
      * Inserts the specified object at the specified position in this list.
      * Shifts the object currently at that position (if any) and any
      * subsequent objects to the right (adds one to their indices).
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The object to insert into the list.
@@ -171,10 +163,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>Element</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>Element</code>
      * @param element <code>Element</code> to add
@@ -229,10 +219,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>Comment</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>Comment</code>
      * @param comment <code>Comment</code> to add
@@ -272,10 +260,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>ProcessingInstruction</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>ProcessingInstruction</code>
      * @param pi <code>ProcessingInstruction</code> to add
@@ -315,10 +301,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>CDATA</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>CDATA</code>
      * @param cdata <code>CDATA</code> to add
@@ -358,10 +342,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>Text</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>Text</code>
      * @param text <code>Text</code> to add
@@ -401,10 +383,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Check and add the <code>EntityRef</code> to this list at
      * the given index.
-     * </p>
      *
      * @param index index where to add <code>Entity</code>
      * @param entity <code>Entity</code> to add
@@ -444,9 +424,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Add the specified collecton to the end of this list.
-     * </p>
      *
      * @param collection The collection to add to the list.
      * @return <code>true</code> if the list was modified as a result of
@@ -457,11 +435,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Inserts the specified collecton at the specified position in this list.
      * Shifts the object currently at that position (if any) and any
      * subsequent objects to the right (adds one to their indices).
-     * </p>
      *
      * @param index The offset to start adding the data in the collection
      * @param collection The collection to insert into the list.
@@ -499,9 +475,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Clear the current list.
-     * </p>
      */
     public void clear() {
         if (elementData != null) {
@@ -516,11 +490,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Clear the current list and set it to the contents
      * of the <code>Collection</code>.
      * object.
-     * </p>
      *
      * @param collection The collection to use.
      */
@@ -552,11 +524,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Increases the capacity of this <code>ContentList</code> instance,
      * if necessary, to ensure that it can hold at least the number of
      * items specified by the minimum capacity argument.
-     * </p>
      *
      * @param minCapacity the desired minimum capacity.
      */
@@ -577,9 +547,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Return the object at the specified offset.
-     * </p>
      *
      * @param index The offset of the object.
      * @return The Object which was returned.
@@ -593,9 +561,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Return a view of this list based on the given filter.
-     * </p>
      *
      * @param filter <code>Filter</code> for this view.
      * @return a list representing the rules of the <code>Filter</code>.
@@ -605,11 +571,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Return the index of the first Element in the list.  If the parent
      * is a <code>Document</code> then the element is the root element.
      * If the list contains no Elements, it returns -1.
-     * </p>
      *
      * @return index of first element, or -1 if one doesn't exist
      */
@@ -625,9 +589,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Remove the object at the specified offset.
-     * </p>
      *
      * @param index The offset of the object.
      * @return The Object which was removed.
@@ -677,10 +639,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Set the object at the specified location to the supplied
      * object.
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The location to set the value to.
@@ -712,9 +672,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Return the number of items in this list
-     * </p>
      *
      * @return The number of items in this list.
      */
@@ -723,9 +681,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * <p>
      * Return this list as a <code>String</code>
-     * </p>
      *
      * @return The number of items in this list.
      */
@@ -742,10 +698,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
     /* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 
     /**
-     * <p>
      * <code>FilterList</code> represents legal JDOM content, including content
      * for <code>Document</code>s or <code>Element</code>s.
-     * </p>
      */
 
     class FilterList extends AbstractList {
@@ -767,20 +721,16 @@ class ContentList extends AbstractList implements java.io.Serializable {
         //       not be used without first calling size();
 
         /**
-         * <p>
          * Create a new instance of the FilterList with the specified Filter.
-         * </p>
          */
         FilterList(Filter filter) {
             this.filter = filter;
         }
 
         /**
-         * <p>
          * Inserts the specified object at the specified position in this list.
          * Shifts the object currently at that position (if any) and any
          * subsequent objects to the right (adds one to their indices).
-         * </p>
          *
          * @param index The location to set the value to.
          * @param obj The object to insert into the list.
@@ -799,9 +749,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * <p>
          * Return the object at the specified offset.
-         * </p>
          *
          * @param index The offset of the object.
          * @return The Object which was returned.
@@ -824,9 +772,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * <p>
          * Remove the object at the specified offset.
-         * </p>
          *
          * @param index The offset of the object.
          * @return The Object which was removed.
@@ -849,10 +795,8 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * <p>
          * Set the object at the specified location to the supplied
          * object.
-         * </p>
          *
          * @param index The location to set the value to.
          * @param obj The location to set the value to.
@@ -882,9 +826,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * <p>
          * Return the number of items in this list
-         * </p>
          *
          * @return The number of items in this list.
          */
@@ -912,9 +854,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * <p>
          * Return the adjusted index
-         * </p>
          *
          * @param index Index of in this view.
          * @return True index in backing list

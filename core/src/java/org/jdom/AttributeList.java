@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.12 2002/04/29 02:30:47 jhunter Exp $
+ $Id: AttributeList.java,v 1.13 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -61,16 +61,14 @@ import java.util.*;
 import org.jdom.filter.Filter;
 
 /**
- * <p>
  * <code>AttributeList</code> represents legal JDOM <code>Attribute</code>
  * content.  This class is NOT PUBLIC; users should see it as a simple List
  * implementation.
- * </p>
  *
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.12 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.13 $, $Date: 2002/04/29 13:38:15 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -82,7 +80,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.12 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.13 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 
@@ -97,20 +95,16 @@ class AttributeList extends AbstractList
     private AttributeList() {}
 
     /**
-     * <p>
      * Create a new instance of the AttributeList representing
      * Element content
-     * </p>
      */
     public AttributeList(Element parent) {
         this.parent = parent;
     }
 
     /**
-     * <p>
      * Add a attribute to the end of the list or replace a existing
      * attribute with the same name and <code>Namespace</code>.
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The object to insert into the list.
@@ -139,11 +133,9 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Inserts the specified attribute at the specified position in this list.
      * Shifts the attribute currently at that position (if any) and any
      * subsequent attributes to the right (adds one to their indices).
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The object to insert into the list.
@@ -170,11 +162,9 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Check and add the <code>Attribute</code> to this list at
      * the given index. Note: does not check for duplicate
      * attributes.
-     * </p>
      *
      * @param index index where to add <code>Attribute</code>
      * @param attribute <code>Attribute</code> to add
@@ -210,9 +200,7 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Add all the objects in the specified collection.
-     * </p>
      *
      * @param collection The collection containing all the objects to add.
      * @return <code>true</code> if the list was modified as a result of
@@ -223,11 +211,9 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Inserts the specified collecton at the specified position in this list.
      * Shifts the attribute currently at that position (if any) and any
      * subsequent attributes to the right (adds one to their indices).
-     * </p>
      *
      * @param index The offset to start adding the data in the collection
      * @param collection The collection to insert into the list.
@@ -266,9 +252,7 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Clear the current list.
-     * </p>
      */
     public void clear() {
         if (elementData != null) {
@@ -282,11 +266,9 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Clear the current list and set it to the contents
      * of the <code>Collection</code>.
      * object.
-     * </p>
      *
      * @param collection The collection to use.
      */
@@ -319,11 +301,9 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Increases the capacity of this <code>AttributeList</code> instance,
      * if necessary, to ensure that it can hold at least the number of
      * items specified by the minimum capacity argument.
-     * </p>
      *
      * @param minCapacity the desired minimum capacity.
      */
@@ -345,9 +325,7 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Return the object at the specified offset.
-     * </p>
      *
      * @param index The offset of the object.
      * @return The Object which was returned.
@@ -362,10 +340,8 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Return the <code>Attribute</code> with the
      * given <code>Namespace</code>.
-     * </p>
      *
      * @param namespace <code>Namespace</code> to match
      * @return the <code>Attribute</code>, or null if one doesn't exist.
@@ -398,9 +374,7 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Remove the object at the specified offset.
-     * </p>
      *
      * @param index The offset of the object.
      * @return The Object which was removed.
@@ -421,10 +395,8 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Remove the <code>Attribute</code> with the
      * given name and <code>Namespace</code>.
-     * </p>
      *
      * @param namespace <code>Namespace</code> to match
      * @return the <code>true</code> if attribute was removed,
@@ -440,10 +412,8 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Set the object at the specified location to the supplied
      * object.
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The location to set the value to.
@@ -470,10 +440,8 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Set the object at the specified location to the supplied
      * object. Note: does not check for duplicate attributes.
-     * </p>
      *
      * @param index The location to set the value to.
      * @param obj The location to set the value to.
@@ -517,9 +485,7 @@ class AttributeList extends AbstractList
     }
 
     /**
-     * <p>
      * Return the number of items in this list
-     * </p>
      *
      * @return The number of items in this list.
      */
@@ -528,9 +494,7 @@ class AttributeList extends AbstractList
     }
  
     /**
-     * <p>
      * Return this list as a <code>String</code>
-     * </p>
      */
     public String toString() {
         return super.toString();

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.35 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Namespace.java,v 1.36 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -59,24 +59,23 @@ package org.jdom;
 import java.util.*;
 
 /**
- * <p><code>Namespace</code> defines both a factory for
- *   creating XML namespaces, and a namespace itself. This class
- *   represents an XML namespace in Java.  
- * </p>
+ * <code>Namespace</code> defines both a factory for
+ * creating XML namespaces, and a namespace itself. This class
+ * represents an XML namespace in Java.  
  * <p>
- *   Elements and Attributes containing Namespaces <b>can</b> be serialized; 
- *   however the Namespace class itself does not implement 
- *   <code>java.io.Serializable</code>.  This works because the Element and
- *   Attribute classes handle serialization of their Namespaces manually.
- *   The classes use the getNamespace() method on deserialization to ensure 
- *   there may be only one unique Namespace object for any unique 
- *   prefix/uri pair, something needed for efficiency reasons.
+ * Elements and Attributes containing Namespaces <b>can</b> be serialized; 
+ * however the Namespace class itself does not implement 
+ * <code>java.io.Serializable</code>.  This works because the Element and
+ * Attribute classes handle serialization of their Namespaces manually.
+ * The classes use the getNamespace() method on deserialization to ensure 
+ * there may be only one unique Namespace object for any unique 
+ * prefix/uri pair, something needed for efficiency reasons.
  * </p>
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.35 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.36 $, $Date: 2002/04/29 13:38:16 $
  */
 public final class Namespace {
 
@@ -84,12 +83,12 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.35 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.36 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
-     *  Keys are <i>prefix</i>&amp;<i>URI</i>. 
-     *  Values are Namespace objects 
+     * Keys are <i>prefix</i>&amp;<i>URI</i>. 
+     * Values are Namespace objects 
      */
     private static HashMap namespaces;
 
@@ -106,10 +105,8 @@ public final class Namespace {
     private String uri;
 
     /**
-     * <p>
-     *  This static initializer acts as a factory contructor.
-     *  It sets up storage and required initial values.
-     * </p>
+     * This static initializer acts as a factory contructor.
+     * It sets up storage and required initial values.
      */
     static {
         namespaces = new HashMap();
@@ -121,10 +118,8 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This will retrieve (if in existence) or create (if not) a 
-     *  <code>Namespace</code> for the supplied prefix and URI.
-     * </p>
+     * This will retrieve (if in existence) or create (if not) a 
+     * <code>Namespace</code> for the supplied prefix and URI.
      *
      * @param prefix <code>String</code> prefix to map to 
      *               <code>Namespace</code>.
@@ -177,11 +172,9 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This will retrieve (if in existence) or create (if not) a 
-     *  <code>Namespace</code> for the supplied URI, and make it usable 
-     *  as a default namespace, as no prefix is supplied.
-     * </p>
+     * This will retrieve (if in existence) or create (if not) a 
+     * <code>Namespace</code> for the supplied URI, and make it usable 
+     * as a default namespace, as no prefix is supplied.
      *
      * @param uri <code>String</code> URI of new <code>Namespace</code>.
      * @return <code>Namespace</code> - ready to use namespace.
@@ -191,11 +184,9 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This constructor handles creation of a <code>Namespace</code> object
-     *    with a prefix and URI; it is intentionally left <code>private</code>
-     *    so that it cannot be invoked by external programs/code.
-     * </p>
+     * This constructor handles creation of a <code>Namespace</code> object
+     * with a prefix and URI; it is intentionally left <code>private</code>
+     * so that it cannot be invoked by external programs/code.
      *
      * @param prefix <code>String</code> prefix to map to this namespace.
      * @param uri <code>String</code> URI for namespace.
@@ -206,9 +197,7 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This returns the prefix mapped to this <code>Namespace</code>.
-     * </p>
+     * This returns the prefix mapped to this <code>Namespace</code>.
      *
      * @return <code>String</code> - prefix for this <code>Namespace</code>.
      */
@@ -217,9 +206,7 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This returns the namespace URI for this <code>Namespace</code>.
-     * </p>
+     * This returns the namespace URI for this <code>Namespace</code>.
      *
      * @return <code>String</code> - URI for this <code>Namespace</code>.
      */
@@ -228,10 +215,8 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This tests for equality - Two <code>Namespaces</code>
-     *  are equal if and only if their URIs are byte-for-byte equals.
-     * </p>
+     * This tests for equality - Two <code>Namespaces</code>
+     * are equal if and only if their URIs are byte-for-byte equals.
      *
      * @param ob <code>Object</code> to compare to this <code>Namespace</code>.
      * @return <code>boolean</code> - whether the supplied object is equal to
@@ -248,10 +233,8 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This returns a <code>String</code> representation of this 
-     *  <code>Namespace</code>, suitable for use in debugging.
-     * </p>
+     * This returns a <code>String</code> representation of this 
+     * <code>Namespace</code>, suitable for use in debugging.
      *
      * @return <code>String</code> - information about this instance.
      */
@@ -261,11 +244,9 @@ public final class Namespace {
     }
 
     /**
-     * <p>
-     *  This returns a probably unique hash code for the <code>Namespace</code>.
-     *  If two namespaces have the same URI, they are equal and have the same
-     *  hash code, even if they have different prefixes.
-     * </p>
+     * This returns a probably unique hash code for the <code>Namespace</code>.
+     * If two namespaces have the same URI, they are equal and have the same
+     * hash code, even if they have different prefixes.
      *
      * @return <code>int</code> - hash code for this <code>Namespace</code>.
      */

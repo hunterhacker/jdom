@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.5 2002/04/29 02:30:48 jhunter Exp $
+ $Id: XPath.java,v 1.6 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -73,7 +73,7 @@ import org.jdom.JDOMException;
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.5 $ $Date: 2002/04/29 02:30:48 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.6 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
    private static Constructor jaxen = null;
 
@@ -127,9 +127,9 @@ public abstract class XPath implements Serializable {
     *                   the XPath expression.
     *
     * @return the list of selected nodes, which can be instances of
-    *         the following JDOM classes: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction}.
+    *         the following JDOM classes: {@link org.jdom# Element},
+    *         {@link org.jdom# Attribute}, {@link org.jdom# Text}, {@link org.jdom# CDATA},
+    *         {@link org.jdom# Comment} or {@link org.jdom# ProcessingInstruction}.
     *
     * @throws JDOMException   if the evaluation of the XPath
     *                         expression on the specified context
@@ -145,9 +145,9 @@ public abstract class XPath implements Serializable {
     *                   the XPath expression.
     *
     * @return the first selected nodes, which is an instance of one
-    *         of the following JDOM classes: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction} or
+    *         of the following JDOM classes: {@link org.jdom# Element},
+    *         {@link org.jdom# Attribute}, {@link org.jdom# Text}, {@link org.jdom# CDATA},
+    *         {@link org.jdom# Comment} or {@link org.jdom# ProcessingInstruction} or
     *         <code>null</code> if no node was selected.
     *
     * @throws JDOMException   if the evaluation of the XPath
@@ -182,7 +182,7 @@ public abstract class XPath implements Serializable {
     * @return the number value of the first node selected by applying
     *         the wrapped XPath expression to the given context,
     *         <code>null</code> if no node was selected or the
-    *         special value {@link java.lang.Double#NaN}
+    *         special value {@link org.jdom# java.lang.Double#NaN}
     *         (Not-a-Number) if the selected value can not be
     *         converted into a number value.
     *
@@ -224,18 +224,19 @@ public abstract class XPath implements Serializable {
     * same XPath expression needs to be applied several times (on the
     * same or different contexts) as it requires the expression to be
     * compiled before being evaluated.  In such cases,
-    * {@link #newInstance allocating} an XPath wrapper instance and
-    * {@link #selectNodes(java.lang.Object) evaluating} it several
-    * times is way more efficient.</p>
+    * {@link org.jdom# #newInstance allocating} an XPath wrapper instance and
+    * {@link org.jdom# #selectNodes(java.lang.Object) evaluating} it several
+    * times is way more efficient.
+    * </p>
     *
     * @param  context   the node to use as context for evaluating
     *                   the XPath expression.
     * @param  path      the XPath expression to evaluate.
     *
     * @return the list of selected nodes, which can be instances of
-    *         the following JDOM classes: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction}.
+    *         the following JDOM classes: {@link org.jdom# Element},
+    *         {@link org.jdom# Attribute}, {@link org.jdom# Text}, {@link org.jdom# CDATA},
+    *         {@link org.jdom# Comment} or {@link org.jdom# ProcessingInstruction}.
     *
     * @throws JDOMException   if the XPath expression is invalid or
     *                         its evaluation on the specified context
@@ -254,18 +255,19 @@ public abstract class XPath implements Serializable {
     * same XPath expression needs to be applied several times (on the
     * same or different contexts) as it requires the expression to be
     * compiled before being evaluated.  In such cases,
-    * {@link #newInstance allocating} an XPath wrapper instance and
-    * {@link #selectSingleNode(java.lang.Object) evaluating} it
-    * several times is way more efficient.</p>
+    * {@link org.jdom# #newInstance allocating} an XPath wrapper instance and
+    * {@link org.jdom# #selectSingleNode(java.lang.Object) evaluating} it
+    * several times is way more efficient.
+    * </p>
     *
     * @param  context   the element to use as context for evaluating
     *                   the XPath expression.
     * @param  path      the XPath expression to evaluate.
     *
     * @return the first selected nodes, which is an instance of one
-    *         of the following JDOM classes: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment} or {@link ProcessingInstruction} or
+    *         of the following JDOM classes: {@link org.jdom# Element},
+    *         {@link org.jdom# Attribute}, {@link org.jdom# Text}, {@link org.jdom# CDATA},
+    *         {@link org.jdom# Comment} or {@link org.jdom# ProcessingInstruction} or
     *         <code>null</code> if no node was selected.
     *
     * @throws JDOMException   if the XPath expression is invalid or
@@ -277,4 +279,3 @@ public abstract class XPath implements Serializable {
       return newInstance(path).selectSingleNode(context);
    }
 }
-

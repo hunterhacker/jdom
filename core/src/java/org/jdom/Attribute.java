@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.42 2002/04/29 02:30:47 jhunter Exp $
+ $Id: Attribute.java,v 1.43 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -62,75 +62,62 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 
 /**
- * <p><code>Attribute</code> defines behavior for an XML
- *   attribute, modeled in Java.  Methods allow the user
- *   to obtain the value of the attribute as well as
- *   namespace information.
- * </p>
+ * <code>Attribute</code> defines behavior for an XML
+ * attribute, modeled in Java.  Methods allow the user
+ * to obtain the value of the attribute as well as
+ * namespace information.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.42 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.43 $, $Date: 2002/04/29 13:38:15 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.42 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.43 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /**
-     * <p>
      * Attribute type: the attribute has not been declared or type
      * is unknown.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int UNDECLARED_ATTRIBUTE = 0;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a string.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int CDATA_ATTRIBUTE = 1;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a unique identifier.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int ID_ATTRIBUTE = 2;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a reference to a
      * unique identifier.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int IDREF_ATTRIBUTE = 3;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a list of references to
      * unique identifiers.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int IDREFS_ATTRIBUTE = 4;
 
     /**
-     * <p>
      * Attribute type: the attribute value is the name of an entity.
-     * </p>
      *
      * @see #getAttributeType
      */
@@ -146,9 +133,8 @@ public class Attribute implements Serializable, Cloneable {
     public final static int ENTITIES_ATTRIBUTE = 6;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a name token.
-     * </p><p>
+     * <p>
      * According to SAX 2.0 specification, attributes of enumerated
      * types should be reported as "NMTOKEN" by SAX parsers.  But the
      * major parsers (Xerces and Crimson) provide specific values
@@ -159,28 +145,22 @@ public class Attribute implements Serializable, Cloneable {
     public final static int NMTOKEN_ATTRIBUTE = 7;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a list of name tokens.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int NMTOKENS_ATTRIBUTE = 8;
 
     /**
-     * <p>
      * Attribute type: the attribute value is the name of a notation.
-     * </p>
      *
      * @see #getAttributeType
      */
     public final static int NOTATION_ATTRIBUTE = 9;
 
     /**
-     * <p>
      * Attribute type: the attribute value is a name token from an
      * enumeration.
-     * </p>
      *
      * @see #getAttributeType
      */
@@ -204,19 +184,14 @@ public class Attribute implements Serializable, Cloneable {
     protected Object parent;
 
     /**
-     * <p>
-     * Default, no-args constructor for implementations
-     *   to use if needed.
-     * </p>
+     * Default, no-args constructor for implementations to use if needed.
      */
     protected Attribute() {}
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and in the provided
-     *   <code>{@link Namespace}</code>.
-     * </p>
+     * specified (local) name and value, and in the provided
+     * <code>{@link Namespace}</code>.
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -229,11 +204,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name, value, and type, and in the provided
-     *   <code>{@link Namespace}</code>.
-     * </p>
+     * specified (local) name, value, and type, and in the provided
+     * <code>{@link Namespace}</code>.
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -248,15 +221,13 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and does not place
-     *   the attribute in a <code>{@link Namespace}</code>.
-     * </p><p>
-     *  <b>Note</b>: This actually explicitly puts the
-     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
-     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
-     * </p>
+     * specified (local) name and value, and does not place
+     * the attribute in a <code>{@link Namespace}</code>.
+     * <p>
+     * <b>Note</b>: This actually explicitly puts the
+     * <code>Attribute</code> in the "empty" <code>Namespace</code>
+     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -266,15 +237,13 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will create a new <code>Attribute</code> with the
-     *   specified (local) name, value and type, and does not place
-     *   the attribute in a <code>{@link Namespace}</code>.
-     * </p><p>
-     *  <b>Note</b>: This actually explicitly puts the
-     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
-     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
-     * </p>
+     * specified (local) name, value and type, and does not place
+     * the attribute in a <code>{@link Namespace}</code>.
+     * <p>
+     * <b>Note</b>: This actually explicitly puts the
+     * <code>Attribute</code> in the "empty" <code>Namespace</code>
+     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -285,10 +254,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the parent of this <code>Attribute</code>.
-     *   If there is no parent, then this returns <code>null</code>.
-     * </p>
+     * If there is no parent, then this returns <code>null</code>.
      *
      * @return parent of this <code>Attribute</code>
      */
@@ -297,11 +264,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This retrieves the owning <code>{@link Document}</code> for
-     *   this Attribute, or null if not a currently a member of a
-     *   <code>{@link Document}</code>.
-     * </p>
+     * this Attribute, or null if not a currently a member of a
+     * <code>{@link Document}</code>.
      *
      * @return <code>Document</code> owning this Attribute, or null.
      */
@@ -313,9 +278,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the parent of this <code>Attribute</code>.
-     * </p>
      *
      * @param parent <code>Element</code> to be new parent.
      * @return this <code>Attribute</code> modified.
@@ -326,10 +289,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This detaches the <code>Attribute</code> from its parent, or does 
      * nothing if the <code>Attribute</code> has no parent.
-     * </p>
      *
      * @return <code>Attribute</code> - this <code>Attribute</code> modified.
      */
@@ -342,21 +303,19 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will retrieve the local name of the
-     *   <code>Attribute</code>. For any XML attribute
-     *   which appears as
-     *   <code>[namespacePrefix]:[attributeName]</code>,
-     *   the local name of the attribute would be
-     *   <code>[attributeName]</code>. When the attribute
-     *   has no namespace, the local name is simply the attribute
-     *   name.
-     * </p><p>
+     * <code>Attribute</code>. For any XML attribute
+     * which appears as
+     * <code>[namespacePrefix]:[attributeName]</code>,
+     * the local name of the attribute would be
+     * <code>[attributeName]</code>. When the attribute
+     * has no namespace, the local name is simply the attribute
+     * name.
+     * <p>
      * To obtain the namespace prefix for this
-     *   attribute, the
-     *   <code>{@link #getNamespacePrefix()}</code>
-     *   method should be used.
-     * </p>
+     * attribute, the
+     * <code>{@link #getNamespacePrefix()}</code>
+     * method should be used.
      *
      * @return <code>String</code> - name of this attribute,
      *                               without any namespace prefix.
@@ -366,9 +325,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This sets the local name of the <code>Attribute</code>.
-     * </p>
      *
      * @return <code>Attribute</code> - the attribute modified.
      * @throws IllegalNameException if the given name is illegal as an
@@ -384,23 +341,21 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will retrieve the qualified name of the <code>Attribute</code>.
-     *   For any XML attribute whose name is
-     *   <code>[namespacePrefix]:[elementName]</code>,
-     *   the qualified name of the attribute would be
-     *   everything (both namespace prefix and
-     *   element name). When the attribute has no
-     *   namespace, the qualified name is simply the attribute's
-     *   local name.
-     * </p><p>
+     * For any XML attribute whose name is
+     * <code>[namespacePrefix]:[elementName]</code>,
+     * the qualified name of the attribute would be
+     * everything (both namespace prefix and
+     * element name). When the attribute has no
+     * namespace, the qualified name is simply the attribute's
+     * local name.
+     * <p>
      * To obtain the local name of the attribute, the
-     *   <code>{@link #getName()}</code> method should be used.
-     * </p><p>
+     * <code>{@link #getName()}</code> method should be used.
+     * <p>
      * To obtain the namespace prefix for this attribute,
-     *   the <code>{@link #getNamespacePrefix()}</code>
-     *   method should be used.
-     * </p>
+     * the <code>{@link #getNamespacePrefix()}</code>
+     * method should be used.
      *
      * @return <code>String</code> - full name for this element.
      */
@@ -418,15 +373,13 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will retrieve the namespace prefix of the
-     *   <code>Attribute</code>. For any XML attribute
-     *   which appears as
-     *   <code>[namespacePrefix]:[attributeName]</code>,
-     *   the namespace prefix of the attribute would be
-     *   <code>[namespacePrefix]</code>. When the attribute
-     *   has no namespace, an empty <code>String</code> is returned.
-     * </p>
+     * <code>Attribute</code>. For any XML attribute
+     * which appears as
+     * <code>[namespacePrefix]:[attributeName]</code>,
+     * the namespace prefix of the attribute would be
+     * <code>[namespacePrefix]</code>. When the attribute
+     * has no namespace, an empty <code>String</code> is returned.
      *
      * @return <code>String</code> - namespace prefix of this
      *                               attribute.
@@ -436,11 +389,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This returns the URI mapped to this <code>Attribute</code>'s
-     *   prefix. If no
-     *   mapping is found, an empty <code>String</code> is returned.
-     * </p>
+     * prefix. If no mapping is found, an empty <code>String</code> is
+     * returned.
      *
      * @return <code>String</code> - namespace URI for this <code>Attribute</code>.
      */
@@ -449,10 +400,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This will return this <code>Attribute</code>'s
-     *    <code>{@link Namespace}</code>.
-     * </p>
+     * This will return this <code>Attribute</code>'s
+     * <code>{@link Namespace}</code>.
      *
      * @return <code>Namespace</code> - Namespace object for this <code>Attribute</code>
      */
@@ -461,11 +410,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This sets this <code>Attribute</code>'s <code>{@link Namespace}</code>.
-     *  If the provided namespace is null, the attribute will have no namespace.
-     *  The namespace must have a prefix.
-     * </p>
+     * This sets this <code>Attribute</code>'s <code>{@link Namespace}</code>.
+     * If the provided namespace is null, the attribute will have no namespace.
+     * The namespace must have a prefix.
      *
      * @return <code>Element</code> - the element modified.
      * @throws IllegalNameException if the new namespace is the default
@@ -488,11 +435,9 @@ public class Attribute implements Serializable, Cloneable {
         return this;
     }
     /**
-     * <p>
      * This will return the actual textual value of this
-     *   <code>Attribute</code>.  This will include all text
-     *   within the quotation marks.
-     * </p>
+     * <code>Attribute</code>.  This will include all text
+     * within the quotation marks.
      *
      * @return <code>String</code> - value for this attribute.
      */
@@ -501,9 +446,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the value of the <code>Attribute</code>.
-     * </p>
      *
      * @param value <code>String</code> value for the attribute.
      * @return <code>Attribute</code> - this Attribute modified.
@@ -521,10 +464,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will return the actual declared type of this
-     *   <code>Attribute</code>.
-     * </p>
+     * <code>Attribute</code>.
      *
      * @return <code>int</code> - type for this attribute.
      */
@@ -533,9 +474,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This will set the type of the <code>Attribute</code>.
-     * </p>
      *
      * @param type <code>int</code> type for the attribute.
      * @return <code>Attribute</code> - this Attribute modified.
@@ -552,10 +491,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns a <code>String</code> representation of the
-     *    <code>Attribute</code>, suitable for debugging.
-     * </p>
+     * This returns a <code>String</code> representation of the
+     * <code>Attribute</code>, suitable for debugging.
      *
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
@@ -572,10 +509,8 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This tests for equality of this <code>Attribute</code> to the supplied
-     *    <code>Object</code>.
-     * </p>
+     * This tests for equality of this <code>Attribute</code> to the supplied
+     * <code>Object</code>.
      *
      * @param ob <code>Object</code> to compare to.
      * @return <code>boolean</code> - whether the <code>Attribute</code> is
@@ -586,9 +521,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This returns the hash code for this <code>Attribute</code>.
-     * </p>
+     * This returns the hash code for this <code>Attribute</code>.
      *
      * @return <code>int</code> - hash code.
      */
@@ -597,9 +530,7 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     *  This will return a clone of this <code>Attribute</code>.
-     * </p>
+     * This will return a clone of this <code>Attribute</code>.
      *
      * @return <code>Object</code> - clone of this <code>Attribute</code>.
      */
@@ -625,12 +556,10 @@ public class Attribute implements Serializable, Cloneable {
     /////////////////////////////////////////////////////////////////
 
     /**
-     * <p>
      * This gets the value of the attribute, in
-     *   <code>int</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
+     * <code>int</code> form, and if no conversion
+     * can occur, throws a
+     * <code>{@link DataConversionException}</code>
      *
      * @return <code>int</code> value of attribute.
      * @throws DataConversionException when conversion fails.
@@ -644,12 +573,10 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This gets the value of the attribute, in
-     *   <code>long</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
+     * <code>long</code> form, and if no conversion
+     * can occur, throws a
+     * <code>{@link DataConversionException}</code>
      *
      * @return <code>long</code> value of attribute.
      * @throws DataConversionException when conversion fails.
@@ -663,12 +590,10 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This gets the value of the attribute, in
-     *   <code>float</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
+     * <code>float</code> form, and if no conversion
+     * can occur, throws a
+     * <code>{@link DataConversionException}</code>
      *
      * @return <code>float</code> value of attribute.
      * @throws DataConversionException when conversion fails.
@@ -683,12 +608,10 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
      * This gets the value of the attribute, in
-     *   <code>double</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
+     * <code>double</code> form, and if no conversion
+     * can occur, throws a
+     * <code>{@link DataConversionException}</code>
      *
      * @return <code>double</code> value of attribute.
      * @throws DataConversionException when conversion fails.
@@ -703,12 +626,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>boolean</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
+     * This gets the value of the attribute, in <code>boolean</code> form,
+     * and if no conversion can occur, throws a 
+     * <code>{@link DataConversionException}</code>
      *
      * @return <code>boolean</code> value of attribute.
      * @throws DataConversionException when conversion fails.

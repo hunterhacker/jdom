@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalNameException.java,v 1.9 2002/04/29 02:30:47 jhunter Exp $
+ $Id: IllegalNameException.java,v 1.10 2002/04/29 13:38:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -65,19 +65,17 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
- * @version $Revision: 1.9 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:15 $
  */
 public class IllegalNameException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
 
     /**
-     * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the specified name is illegal for the construct
-     *   it was supplied to.
-     * </p>
+     * that the specified name is illegal for the construct
+     * it was supplied to.
      *
      * @param name <code>String</code> name that breaks rules.
      * @param construct <code>String</code> name of JDOM construct
@@ -97,11 +95,9 @@ public class IllegalNameException extends IllegalArgumentException {
     }
 
     /**
-     * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the specified name is illegal for the construct
-     *   it was supplied to.
-     * </p>
+     * that the specified name is illegal for the construct
+     * it was supplied to.
      *
      * @param name <code>String</code> name that breaks rules.
      * @param construct <code>String</code> name of JDOM construct
@@ -116,5 +112,4 @@ public class IllegalNameException extends IllegalArgumentException {
               .append("s.")
               .toString());
     }
-
 }

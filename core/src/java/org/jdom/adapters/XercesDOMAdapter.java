@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XercesDOMAdapter.java,v 1.14 2002/04/29 02:30:47 jhunter Exp $
+ $Id: XercesDOMAdapter.java,v 1.15 2002/04/29 13:38:16 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm_AT_jdom_DOT_org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm_AT_jdom_DOT_org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -72,27 +72,25 @@ import org.jdom.JDOMException;
 import org.jdom.input.BuilderErrorHandler;
 
 /**
- * <b><code>XercesDOMAdapater</code></b>
+ * <b><code>XercesDOMAdapater</code></b>.
  * <p>
  * This class defines wrapper behavior for obtaining a DOM
- *   <code>Document</code> object from a Apache Xerces DOM parser.
+ * <code>Document</code> object from a Apache Xerces DOM parser.
  * </p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.14 $, $Date: 2002/04/29 02:30:47 $
+ * @version $Revision: 1.15 $, $Date: 2002/04/29 13:38:16 $
  */
 public class XercesDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.14 $ $Date: 2002/04/29 02:30:47 $ $Name:  $";
+      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
 
     /**
-     * <p>
      * This creates a new <code>{@link Document}</code> from an
-     *   existing <code>InputStream</code> by letting a DOM
-     *   parser handle parsing using the supplied stream.
-     * </p>
+     * existing <code>InputStream</code> by letting a DOM
+     * parser handle parsing using the supplied stream.
      *
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation 
@@ -165,10 +163,8 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
     }
 
     /**
-     * <p>
      * This creates an empty <code>Document</code> object based
-     *   on a specific parser implementation.
-     * </p>
+     * on a specific parser implementation.
      *
      * @return <code>Document</code> - created DOM Document.
      * @throws JDOMException when errors occur.
