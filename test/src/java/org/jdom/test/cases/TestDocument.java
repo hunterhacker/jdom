@@ -405,6 +405,22 @@ public static Test suite () {
 		assertEquals("wrong PI", pi2, content.get(2));
     }
     /**
+     * Test that setRootElement works as expected.
+     */
+    public void test_TCM__OrgJdomDocument_setRootElement_OrgJdomElement() {
+              Element element = new Element("element");
+              
+              Document doc1 = new Document(element);
+              assertEquals("incorrect root element returned", element, doc1.getRootElement());
+              Document doc2 = new Document();
+                try {
+                    doc2.setRootElement(element);
+                    assertTrue("didn't catch element already attached to anohter document", false);
+                }
+                catch(IllegalAddException e) {
+                }
+    }
+    /**
      * Test that setDocType works as expected.
      */
     public void test_TCM__OrgJdomDocument_setDocType_OrgJdomDocType() {
