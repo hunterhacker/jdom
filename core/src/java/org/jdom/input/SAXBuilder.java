@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.61 2002/01/08 09:17:10 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.62 2002/01/30 03:51:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,12 +81,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.61 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.62 $, $Date: 2002/01/30 03:51:17 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.61 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.62 $ $Date: 2002/01/30 03:51:17 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -801,6 +801,14 @@ public class SAXBuilder {
      * A true means to expand entities as normal content.  A false means to
      * leave entities unexpanded as <code>EntityRef</code> objects.  The 
      * default is true.
+     * </p>
+     * <p>
+     * Note that Xerces (at least up to 1.4.4) has a bug where entities
+     * in attribute values will be misreported if this flag is turned off,
+     * resulting in entities to appear within element content.  When turning
+     * entity expansion off either avoid entities in attribute values, or
+     * use another parser like Crimson.
+     * http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6111
      * </p>
      *
      * @param expand <code>boolean</code> indicating whether entity expansion 
