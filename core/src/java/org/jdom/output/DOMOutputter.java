@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.29 2002/04/09 06:38:42 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.30 2002/04/16 16:25:26 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import org.w3c.dom.DOMImplementation;
  * @author Dan Schaffer
  * @author Yusuf Goolamabbas
  * @author Bradley S. Huffman
- * @version $Revision: 1.29 $, $Date: 2002/04/09 06:38:42 $
+ * @version $Revision: 1.30 $, $Date: 2002/04/16 16:25:26 $
  */
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.29 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.30 $ $Date: 2002/04/16 16:25:26 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -193,6 +193,8 @@ public class DOMOutputter {
      *
      * @param element <code>Element</code> to output.
      * @return an <code>org.w3c.dom.Element</code> version
+     * @deprecated Deprecated in Beta 9, since a DOM Element should not be
+     *             isolated from its Document; use output(Document) instead
      */
     public org.w3c.dom.Element output(Element element) throws JDOMException {
         try {
@@ -424,6 +426,8 @@ public class DOMOutputter {
      * </p>
      * @param attribute <code>Attribute</code> to output.
      * @return an <code>org.w3c.dom.Attr</code> version
+     * @deprecated Deprecated in Beta 9, since a DOM Attr should not be
+     *             isolated from its Document; use output(Document) instead
      */
     public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
         try {
