@@ -1,6 +1,6 @@
 /*--
 
- $Id: EscapeStrategy.java,v 1.1 2003/05/02 00:52:58 jhunter Exp $
+ $Id: EscapeStrategy.java,v 1.2 2003/05/02 00:54:42 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,6 +60,7 @@ package org.jdom.output;
  * Logic to determine which characters should be formatted as character
  * entities.
  *
+ * @version $Revision: 1.2 $, $Date: 2003/05/02 00:54:42 $
  * @author Alex Rosen
  * @author Bradley S. Huffman
  * @author Jason Hunter
