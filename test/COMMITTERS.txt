@@ -6,6 +6,7 @@ WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
 Jools Enticknap is code captain for this module.
 
+Alex Chaffee <alex@jguru.com>
 Jools Enticknap <jools@jools.org>
 Elliotte Rusty Harold <elharo@metalab.unc.edu>
 Michael Hinchey <hincheymg@yahoo.com>
@@ -14,3 +15,4 @@ Brett McLaughlin <brett@jdom.org>
 Bob McWhirter <bob@werken.com>
 Philip Nelson <philip.nelson@omniresources.com>
 Wolfgang Werner <wwerner@picturesafe.de>
+
