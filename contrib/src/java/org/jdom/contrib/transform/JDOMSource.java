@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.3 2001/04/13 17:20:38 jhunter Exp $
+ $Id: JDOMSource.java,v 1.4 2001/04/24 16:05:50 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -334,25 +334,25 @@ public class JDOMSource extends SAXSource {
       Reader reader = null;
 
       if (doc != null) {
-        try {
+        //try {
           // Get an in-memory string representation of the document
           // and return a reader on it.
           reader = new StringReader(new XMLOutputter().outputString(doc));
-        }
-        catch (final IOException outputterError) {
-          // Oops! Can't stringify document.
-          // => Return a dummy reader implementation that will
-          //    notify of the error on every call.
-          reader = new Reader() {
-            public int read(char cbuf[], int off, int len)
-                                throws IOException {
-              throw outputterError;
-            }
-            public void close() throws IOException {
-              return;
-            }
-          };
-        }
+        //}
+        //catch (final IOException outputterError) {
+        //  // Oops! Can't stringify document.
+        //  // => Return a dummy reader implementation that will
+        //  //    notify of the error on every call.
+        //  reader = new Reader() {
+        //    public int read(char cbuf[], int off, int len)
+        //                        throws IOException {
+        //      throw outputterError;
+        //    }
+        //    public void close() throws IOException {
+        //      return;
+        //    }
+        //  };
+       // }
       }
       // Else: No document, no reader!
 
