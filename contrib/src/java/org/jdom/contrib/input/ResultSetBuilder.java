@@ -57,13 +57,15 @@ import org.jdom.*;
  * Notes:
  *   Uses name returned by rsmd.getColumnName(), not getColumnLabel() 
  *   because that is less likely to be a valid XML element title.
- *   Null values are given empty bodies.  Be aware that databases may 
- *   change the case of column names.  setAsXXX() methods are case
+ *   Null values are given empty bodies, but you can mark them as empty with
+ *   an attribute using the setNullAttribute() method.  Be aware that databases
+ *   may change the case of column names.  setAsXXX() methods are case
  *   insensitive on input column name.  Assign each one a proper output name
  *   if you're worried.  Only build() throws JDOMException.  Any exceptions 
  *   encountered in the set methods are thrown during the build().  
  *   The setAsXXX(String columnName, ...) methods do not verify that a column 
  *   with the given name actually exists.
+ *
  *   Still needs method-by-method Javadocs.
  * <p>
  * Issues: 
@@ -72,6 +74,7 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Jon Baer
  * @author David Bartle
+ * @author Robert J. Munro
  * @version 0.5
  */
 public class ResultSetBuilder {
@@ -107,7 +110,12 @@ public class ResultSetBuilder {
     /** Name for the each immediate child <code>Element</code> of the root */
     private String rowName = "entry";
 
+    /** Name for attribute to mark that a field was null */
+    private String nullAttribName = null;
 
+    /** Value for attribute to mark that a field was null  */
+    private String nullAttribValue = null;
+    
     /**
      * <p>
      *   This sets up a <code>java.sql.ResultSet</code> to be built
@@ -222,6 +230,10 @@ public class ResultSetBuilder {
               child = new Element(name, ns);
               if (!rs.wasNull()) {
                 child.setText(value);
+              } else {
+                if (nullAttribName != null) {
+                  child.setAttribute(nullAttribName, nullAttribValue);
+                }
               }
               entry.addContent(child);
             }
@@ -437,6 +449,24 @@ public class ResultSetBuilder {
       catch (SQLException e) {
         exception = e;
       }
+    }
+
+    /**
+     * <p>
+     *   Set a specific attribute to use to mark that a value in the 
+     *   database was null, not just an empty string.  This is necessary
+     *   because &lt;foo/&gt; semantically represents both null and empty.
+     *   This method lets you have &lt;foo null="true"&gt;.
+     * </p>
+     *
+     * @param nullAttribName <code>String</code> name of attribute to add
+     * @param nullAttribValue <code>String</code> value to set it to.
+     *
+     */
+    public void setNullAttribute(String nullAttribName,
+                                 String nullAttribValue) {
+        this.nullAttribName = nullAttribName;
+        this.nullAttribValue = nullAttribValue;
     }
 
 /*
