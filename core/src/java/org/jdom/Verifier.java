@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.37 2002/04/29 13:38:16 jhunter Exp $
+ $Id: Verifier.java,v 1.38 2002/05/17 05:53:53 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,18 +60,18 @@ import java.util.*;
 
 /**
  * <code>Verifier</code> handles XML checks on names, data, and other
- * verification tasks for JDOM.
+ * verification tasks for JDOM.  The class is final and may not be subclassed.
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.37 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.38 $, $Date: 2002/05/17 05:53:53 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.37 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.38 $ $Date: 2002/05/17 05:53:53 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -86,7 +86,7 @@ final public class Verifier {
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
-    public static final String checkElementName(String name) {
+    public static String checkElementName(String name) {
         // Check basic XML name rules first
         String reason;
         if ((reason = checkXMLName(name)) != null) {
@@ -110,7 +110,7 @@ final public class Verifier {
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
-    public static final String checkAttributeName(String name) {
+    public static String checkAttributeName(String name) {
         // Check basic XML name rules first
         String reason;
         if ((reason = checkXMLName(name)) != null) {
@@ -157,7 +157,7 @@ final public class Verifier {
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
-    public static final String checkCharacterData(String text) {
+    public static String checkCharacterData(String text) {
         if (text == null) {
             return "A null is not a legal XML value";
         }
@@ -185,7 +185,7 @@ final public class Verifier {
      * @return <code>String</code> - reason data is illegal, or
      *         <code>null</code> is name is OK.
      */
-    public static final String checkCDATASection(String data) {
+    public static String checkCDATASection(String data) {
         String reason = null;
         if ((reason = checkCharacterData(data)) != null) {
             return reason;
@@ -208,7 +208,7 @@ final public class Verifier {
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
-    public static final String checkNamespacePrefix(String prefix) {
+    public static String checkNamespacePrefix(String prefix) {
         // Manually do rules, since URIs can be null or empty
         if ((prefix == null) || (prefix.equals(""))) {
             return null;
@@ -263,7 +263,7 @@ final public class Verifier {
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
-    public static final String checkNamespaceURI(String uri) {
+    public static String checkNamespaceURI(String uri) {
         // Manually do rules, since URIs can be null or empty
         if ((uri == null) || (uri.equals(""))) {
             return null;
@@ -295,7 +295,7 @@ final public class Verifier {
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
-    public static final String checkNamespaceCollision(Namespace namespace,
+    public static String checkNamespaceCollision(Namespace namespace,
                                                        Namespace other) {
         if (namespace == Namespace.NO_NAMESPACE ||
             other == Namespace.NO_NAMESPACE) {
@@ -324,7 +324,7 @@ final public class Verifier {
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
-    public static final String checkNamespaceCollision(Attribute attribute,
+    public static String checkNamespaceCollision(Attribute attribute,
                                                        Element element) {
         Namespace namespace = attribute.getNamespace();
         String prefix = namespace.getPrefix();
@@ -344,7 +344,7 @@ final public class Verifier {
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
-    public static final String checkNamespaceCollision(Namespace namespace,
+    public static String checkNamespaceCollision(Namespace namespace,
                                                        Element element) {
         String reason = checkNamespaceCollision(namespace,
                                                 element.getNamespace());
@@ -375,7 +375,7 @@ final public class Verifier {
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
-    public static final String checkNamespaceCollision(Namespace namespace,
+    public static String checkNamespaceCollision(Namespace namespace,
                                                        Attribute attribute) {
         String reason = checkNamespaceCollision(namespace,
                                                 attribute.getNamespace());
@@ -394,7 +394,7 @@ final public class Verifier {
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
-    public static final String checkNamespaceCollision(Namespace namespace,
+    public static String checkNamespaceCollision(Namespace namespace,
                                                        List list) {
         if (list == null) {
             return null;
@@ -429,7 +429,7 @@ final public class Verifier {
      * @return <code>String</code> - reason target is illegal, or
      *         <code>null</code> if target is OK.
      */
-    public static final String checkProcessingInstructionTarget(String target) {
+    public static String checkProcessingInstructionTarget(String target) {
         // Check basic XML name rules first
         String reason;
         if ((reason = checkXMLName(target)) != null) {
@@ -463,7 +463,7 @@ final public class Verifier {
      * @return <code>String</code> - reason data is illegal, or
      *         <code>null</code> if data is OK.
      */
-    public static final String checkCommentData(String data) {
+    public static String checkCommentData(String data) {
         String reason = null;
         if ((reason = checkCharacterData(data)) != null) {
             return reason;
@@ -507,7 +507,7 @@ final public class Verifier {
      * @return <code>String</code> - reason public ID is illegal, or
      *         <code>null</code> if public ID is OK.
      */
-    public static final String checkPublicID(String publicID) {
+    public static String checkPublicID(String publicID) {
         String reason = null;
 
         if (publicID == null) return null;
@@ -533,7 +533,7 @@ final public class Verifier {
      * @return <code>String</code> - reason system literal is illegal, or
      *         <code>null</code> if system literal is OK.
      */
-    public static final String checkSystemLiteral(String systemLiteral) {
+    public static String checkSystemLiteral(String systemLiteral) {
         String reason = null;
 
         if (systemLiteral == null) return null;
