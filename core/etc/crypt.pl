@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Written by Jools Enticknap (?)
+# Written by Karl Fogel
 # Available under the standard JDOM License (see LICENSE.txt)
 #
 # Description
