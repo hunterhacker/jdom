@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.6 2002/03/13 03:57:41 jhunter Exp $
+ $Id: ContentList.java,v 1.7 2002/03/15 05:29:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2002/03/13 03:57:41 $
+ * @version $Revision: 1.7 $, $Date: 2002/03/15 05:29:37 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +83,7 @@ class ContentList extends AbstractList
                          implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.6 $ $Date: 2002/03/13 03:57:41 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.7 $ $Date: 2002/03/15 05:29:37 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -133,6 +133,9 @@ class ContentList extends AbstractList
         if (obj instanceof Element) {
             add(index, (Element) obj);
         }
+        else if (obj instanceof Text) {
+            add(index, (Text) obj);
+        }
         else if (obj instanceof Comment) {
             add(index, (Comment) obj);
         }
@@ -141,9 +144,6 @@ class ContentList extends AbstractList
         }
         else if (obj instanceof CDATA) {
             add(index, (CDATA) obj);
-        }
-        else if (obj instanceof Text) {
-            add(index, (Text) obj);
         }
         else if (obj instanceof EntityRef) {
             add(index, (EntityRef) obj);
@@ -596,6 +596,10 @@ class ContentList extends AbstractList
             Element element = (Element) obj;
             element.setParent(null);
         }
+        else if (obj instanceof Text) {
+            Text text = (Text) obj;
+            text.setParent(null);
+        }
         else if (obj instanceof Comment) {
             Comment comment = (Comment) obj;
             comment.setParent(null);
@@ -608,13 +612,13 @@ class ContentList extends AbstractList
             CDATA cdata = (CDATA) obj;
             cdata.setParent(null);
         }
-        else if (obj instanceof Text) {
-            Text text = (Text) obj;
-            text.setParent(null);
-        }
         else if (obj instanceof EntityRef) {
             EntityRef entity = (EntityRef) obj;
             entity.setParent(null);
+        }
+        else {
+            // Should never happen.
+            throw new IllegalArgumentException("Object '" + obj + "' unknown");
         }
     }
 

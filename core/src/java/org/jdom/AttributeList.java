@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.6 2002/03/12 07:57:06 jhunter Exp $
+ $Id: AttributeList.java,v 1.7 2002/03/15 05:29:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2002/03/12 07:57:06 $
+ * @version $Revision: 1.7 $, $Date: 2002/03/15 05:29:37 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -82,7 +82,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.6 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.7 $ $Date: 2002/03/15 05:29:37 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 
@@ -408,15 +408,14 @@ class AttributeList extends AbstractList
         if (index < 0) {
             return false;
         }
-        return (list.remove(index) == null) ? false : true;
+        remove(index);
+        return true;
     }
 
     /** Remove the parent of a Attribute */
     private void removeParent(Object obj) {
-        if (obj instanceof Attribute) {
-            Attribute attribute = (Attribute) obj;
-            attribute.setParent(null);
-        }
+        Attribute attribute = (Attribute) obj;
+        attribute.setParent(null);
     }
 
     /**
