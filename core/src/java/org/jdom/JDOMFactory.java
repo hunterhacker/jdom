@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.4 2004/02/28 03:30:27 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.5 2004/02/28 03:47:24 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.4 $, $Date: 2004/02/28 03:30:27 $
+ * @version $Revision: 1.5 $, $Date: 2004/02/28 03:47:24 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -309,9 +309,9 @@ public interface JDOMFactory {
     // List manipulation
     // =====================================================================
 
-    public void addContent(Parent parent, Content child);
+    public void addContent(Parent parent, Content content);
 
-    public void setAttribute(Element parent, Attribute a);
+    public void setAttribute(Element element, Attribute a);
 
-    public void addNamespaceDeclaration(Element parent, Namespace additional);
+    public void addNamespaceDeclaration(Element element, Namespace additional);
 }
