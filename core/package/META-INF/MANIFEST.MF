@@ -4,32 +4,32 @@ Class-Path: ../lib/xerces.jar xerces.jar
 
 Name: org/jdom/
 Specification-Title: JDOM Classes
-Specification-Version: 0.6
+Specification-Version: 0.7
 Specification-Vendor: jdom.org
 Implementation-Title: org.jdom
-Implementation-Version: 1.0 beta6
+Implementation-Version: 1.0 beta7
 Implementation-Vendor: jdom.org
 
 Name: org/jdom/input/
 Specification-Title: JDOM Input Classes
-Specification-Version: 0.6
+Specification-Version: 0.7
 Specification-Vendor: jdom.org
 Implementation-Title: org.jdom.input
-Implementation-Version: 1.0 beta6
+Implementation-Version: 1.0 beta7
 Implementation-Vendor: jdom.org
 
 Name: org/jdom/output/
 Specification-Title: JDOM Output Classes
-Specification-Version: 0.6
+Specification-Version: 0.7
 Specification-Vendor: jdom.org
 Implementation-Title: org.jdom.output
-Implementation-Version: 1.0 beta6
+Implementation-Version: 1.0 beta7
 Implementation-Vendor: jdom.org
 
 Name: org/jdom/adapters/
 Specification-Title: JDOM Adapter Classes
-Specification-Version: 0.6
+Specification-Version: 0.7
 Specification-Vendor: jdom.org
 Implementation-Title: org.jdom.adapter
-Implementation-Version: 1.0 beta6
+Implementation-Version: 1.0 beta7
 Implementation-Vendor: jdom.org
