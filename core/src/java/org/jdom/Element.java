@@ -66,8 +66,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
- * <p><code>Attribute</code> defines behavior for an XML
- *   attribute, modeled in Java.  Methods allow the user
+ * <p><code>Element</code> defines behavior for an XML
+ *   element, modeled in Java.  Methods allow the user
  *   to obtain the value of the element's textual content,
  *   obtain its attributes, and get its children.
  * </p>
