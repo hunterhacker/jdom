@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.15 2002/01/08 09:17:10 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.16 2002/02/08 05:40:56 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,12 +64,12 @@ package org.jdom;
  * </p>
  *
  * @author Brett McLaughlin
- * @version $Revision: 1.15 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.16 $, $Date: 2002/02/08 05:40:56 $
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.15 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.16 $ $Date: 2002/02/08 05:40:56 $ $Name:  $";
 
     /**
      * <p>
@@ -303,7 +303,8 @@ public class IllegalAddException extends IllegalArgumentException {
     public IllegalAddException(Element base, Namespace added, String reason) {
         super(new StringBuffer()
               .append("The namespace xmlns")
-              .append((added.getPrefix() == null) ? "=" 
+              .append((added.getPrefix() == null ||
+                       added.getPrefix().equals("")) ? "=" 
                                    : ":" + added.getPrefix() + "=")
               .append("\"")
               .append(added.getURI())

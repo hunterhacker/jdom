@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.28 2002/02/05 08:03:18 jhunter Exp $
+ $Id: Verifier.java,v 1.29 2002/02/08 05:40:56 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,12 +69,12 @@ import java.util.List;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.28 $, $Date: 2002/02/05 08:03:18 $
+ * @version $Revision: 1.29 $, $Date: 2002/02/08 05:40:56 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.28 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.29 $ $Date: 2002/02/08 05:40:56 $ $Name:  $";
 
     /**
      * <p>
@@ -316,6 +316,11 @@ final public class Verifier {
      */
     public static final String checkNamespaceCollision(Namespace namespace,
                                                        Namespace other) {
+        if (namespace == Namespace.NO_NAMESPACE ||
+            other == Namespace.NO_NAMESPACE) {
+            return null;
+        }
+
         String p1,p2,u1,u2,reason;
 
         reason = null;
