@@ -165,8 +165,9 @@ public class Text implements Serializable, Cloneable {
      *   <code>Element</code>.</p>
      *
      * @param parent parent for this node.
-    protected void setParent(Element parent) {
+    protected Text setParent(Element parent) {
         this.parent = parent;
+        return this;
     }
 
     /**
