@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.90 2001/06/22 20:04:05 jhunter Exp $
+ $Id: Element.java,v 1.91 2001/06/25 04:36:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.90 $ $Date: 2001/06/22 20:04:05 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.91 $ $Date: 2001/06/25 04:36:31 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1545,11 +1545,40 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This sets an attribute value for this element.  Any existing attribute
+     * with the same name and namespace URI is removed.
+     * </p>
+     *
+     * @param name name of the attribute to set
+     * @param value value of the attribute to set
+     * @return this element modified
+     */
+    public Element setAttribute(String name, String value) {
+        return setAttribute(new Attribute(name, value));
+    }
+
+    /**
+     * <p>
+     * This sets an attribute value for this element.  Any existing attribute
+     * with the same name and namespace URI is removed.
+     * </p>
+     *
+     * @param name name of the attribute to set
+     * @param value value of the attribute to set
+     * @param ns namespace of the attribute to set
+     * @return this element modified
+     */
+    public Element setAttribute(String name, String value, Namespace ns) {
+        return setAttribute(new Attribute(name, value, ns));
+    }
+
+    /**
+     * <p>
      * This sets an attribute value for this element.  Any existing attribute 
      * with the same name and namespace URI is removed.
      * </p>
      *
-     * @param attribute <code>Attribute</code> to add
+     * @param attribute <code>Attribute</code> to set
      * @return this element modified
      * @throws IllegalAddException if the attribute being added already has a 
      *   parent or if the attribute namespace prefix collides with another 
