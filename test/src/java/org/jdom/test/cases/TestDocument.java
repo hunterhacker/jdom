@@ -449,7 +449,7 @@ public static Test suite () {
 		DocType docType = new DocType("element");
 		
 		Document doc = new Document(element, docType);
-		String buf = new String("[Document: [DocType: <!DOCTYPE element>\r\n], Root is [Element: <element/>]]");
+		String buf = new String("[Document: [DocType: <!DOCTYPE element>], Root is [Element: <element/>]]");
 		assertEquals("incorrect root element returned", buf, doc.toString());
 
     }
