@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.32 2002/03/12 07:57:06 jhunter Exp $
+ $Id: Verifier.java,v 1.33 2002/04/06 05:49:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,12 +68,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.32 $, $Date: 2002/03/12 07:57:06 $
+ * @version $Revision: 1.33 $, $Date: 2002/04/06 05:49:43 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.32 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.33 $ $Date: 2002/04/06 05:49:43 $ $Name:  $";
 
     /**
      * <p>
@@ -309,7 +309,7 @@ final public class Verifier {
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
-     * @param other <code>Namespace</code> to check agianst.
+     * @param other <code>Namespace</code> to check against.
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
@@ -340,7 +340,7 @@ final public class Verifier {
      * </p>
      *
      * @param attribute <code>Attribute</code> to check.
-     * @param element <code>Element</code> to check agianst.
+     * @param element <code>Element</code> to check against.
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
@@ -362,7 +362,7 @@ final public class Verifier {
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
-     * @param element <code>Element</code> to check agianst.
+     * @param element <code>Element</code> to check against.
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
@@ -395,7 +395,7 @@ final public class Verifier {
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
-     * @param attribute <code>Attribute</code> to check agianst.
+     * @param attribute <code>Attribute</code> to check against.
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
@@ -416,7 +416,7 @@ final public class Verifier {
      * </p>
      *
      * @param namespace <code>Namespace</code> to check.
-     * @param list <code>List</code> to check agianst.
+     * @param list <code>List</code> to check against.
      * @return <code>String</code> - reason for collision, or
      *         <code>null</code> if no collision.
      */
