@@ -151,7 +151,7 @@ public class Document implements Serializable, Cloneable {
     public Document setRootElement(Element rootElement) {
         // If existing root element, tell it that it's no longer root
         if (this.rootElement != null) {
-            rootElement.setIsRootElement(false);
+            this.rootElement.setIsRootElement(false);
         }
 
         this.rootElement = rootElement;
