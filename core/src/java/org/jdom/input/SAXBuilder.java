@@ -65,6 +65,8 @@ import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -94,6 +96,12 @@ public class SAXBuilder {
     /** Adapter class to use */
     private String saxDriverClass;
 
+     /** ErrorHandler class to use */
+     private ErrorHandler saxErrorHandler = null;
+ 
+     /** EntityResolver class to use */
+     private EntityResolver saxEntityResolver = null;
+ 
     /**
      * <p>
      * This allows the validation features to be turned on/off
@@ -148,6 +156,28 @@ public class SAXBuilder {
 
     /**
      * <p>
+     * This sets custom ErrorHandler for the <code>Builder</code>.
+     * </p>
+     *
+     * @param errorHandler <code>ErrorHandler</code>
+     */
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        saxErrorHandler = errorHandler;
+    }
+
+    /**
+     * <p>
+     * This sets custom EntityResolver for the <code>Builder</code>.
+     * </p>
+     *
+     * @param entityResolver <code>EntityResolver</code>
+     */
+    public void setEntityResolver(EntityResolver entityResolver) {
+        saxEntityResolver = entityResolver;
+    }
+
+    /**
+     * <p>
      * This builds a document from the supplied
      *   input source.
      * </p>
@@ -169,6 +199,10 @@ public class SAXBuilder {
                 new SAXHandler(doc);
 
             parser.setContentHandler(contentHandler);
+
+            if(saxEntityResolver != null) {
+                parser.setEntityResolver(saxEntityResolver);
+            }
 
             boolean lexicalReporting = false;
             try {
@@ -199,7 +233,12 @@ public class SAXBuilder {
                 parser.setFeature("http://xml.org/sax/features/validation", validate);
                 parser.setFeature("http://xml.org/sax/features/namespaces", false);
                 parser.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-                parser.setErrorHandler(contentHandler);
+                if (saxErrorHandler != null) {
+                     parser.setErrorHandler(saxErrorHandler);
+                }
+                else {
+                     parser.setErrorHandler(contentHandler);
+                }
             } catch (SAXNotSupportedException e) {
                 // No validation available
                 if (validate) {
