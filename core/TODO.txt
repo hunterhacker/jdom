@@ -2,6 +2,12 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Investigate ClassLoader.loadClass() instead of Class.forName() for those
+  times when the classes aren't on the system classpath.  (Suggested by Alex
+  Rosen)
+
+* Add detach() to Element, PI, Comment, Entity
+
 * Fix PI.parseData() to parse the following correctly:
     <?pi href="http://hi/a=b"?>
     <?pi href = 'http://hi/a=b' ?>
@@ -83,6 +89,8 @@ Items that need to be done:
 
 * Deal with getSerializedForm() calls, either implement or remove
 
+* Consider Element.hasAttributes() and Element.isEmpty()
+
 --- FOR JDOM 1.0 ---
 
 * Expand class-level Javadocs.
@@ -162,6 +170,8 @@ Items that need to be done:
   if CDATA sections should be included, and if comment sections should be
   included.  All seem like reasonable customizations.
 
+* Try clone() without the constructor call, for speed
+
 --- FOR JDOM 1.1 ---
 
 * Add XPath support
@@ -183,6 +193,14 @@ Items that need to be done:
   http://xmlhack.com/read.php?item=626
   http://www.wutka.com/dtdparser.html
   http://lists.denveronline.net/lists/jdom-interest/2000-July/001431.html
+  Maybe new DTDValidator(dtd).validate(doc);
+  Then later new SchemaValidator(schema).validate(doc);
+  Could instead do doc.validate(dtd/schema) but then we'd have to dynamically 
+  switch between recognizing DTDs and the various schemas.
+
+* Consider a listener interface so you could listen to doc changes.  
+  (Probably after 1.1 honestly; this can be done through manual subclasses
+  already)
 
 --- UNTIED TO A JDOM VERSION ---
 
