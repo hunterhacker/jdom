@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.12 2002/01/08 09:17:10 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.13 2002/02/14 09:16:38 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,6 +59,7 @@ package org.jdom.adapters;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -75,12 +76,12 @@ import org.jdom.*;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.12 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.13 $, $Date: 2002/02/14 09:16:38 $
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.12 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.13 $ $Date: 2002/02/14 09:16:38 $ $Name:  $";
 
     /**
      * <p>
@@ -148,8 +149,40 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
                                       doctype.getElementName(),
                                       doctype.getPublicID(),
                                       doctype.getSystemID());
+
+        // Set the internal subset if possible
+        setInternalSubset(domDocType, doctype.getInternalSubset());
+
         return domImpl.createDocument("http://temporary",
                                       doctype.getElementName(),
                                       domDocType);
+    }
+
+    /**
+     * <p>
+     * This attempts to change the DocumentType to have the given internal DTD 
+     * subset value.  This is not a standard ability in DOM, so it's only
+     * available with some parsers.  Subclasses can alter the mechanism by
+     * which the attempt is made to set the value.
+     * </p>
+     *
+     * @param dt DocumentType to be altered
+     * @param s String to use as the internal DTD subset
+     */
+    protected void setInternalSubset(DocumentType dt, String s) {
+        if (dt == null || s == null) return;
+
+        // Default behavior is to attempt a setInternalSubset() call using
+        // reflection.  This method is not part of the DOM spec, but it's
+        // available on Xerces 1.4.4+.  It's not currently in Crimson.
+        try {
+            Class dtclass = dt.getClass();
+            Method setInternalSubset = dtclass.getMethod(
+                "setInternalSubset", new Class[] {java.lang.String.class});
+            setInternalSubset.invoke(dt, new Object[] {s});
+        }
+        catch (Exception e) {
+            // ignore
+        }
     }
 }
