@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.86 2002/10/28 09:18:49 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.87 2003/02/26 23:44:43 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.86 $, $Date: 2002/10/28 09:18:49 $
+ * @version $Revision: 1.87 $, $Date: 2003/02/26 23:44:43 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.86 $ $Date: 2002/10/28 09:18:49 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.87 $ $Date: 2003/02/26 23:44:43 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -667,6 +667,10 @@ public class XMLOutputter implements Cloneable {
 
         if (doc.getDocType() != null) {
             printDocType(doc.getDocType(), out);
+
+            // Always print line separator after declaration, helps the
+            // output look better and is semantically inconsequential
+            out.write(currentFormat.lineSeparator);
         }
 
         // Print out root element, as well as any root level
@@ -1039,10 +1043,6 @@ public class XMLOutputter implements Cloneable {
             out.write("]");
         }
         out.write(">");
-
-        // Always print line separator after declaration, helps the
-        // output look better and is semantically inconsequential
-        out.write(currentFormat.lineSeparator);
     }
 
     /**
@@ -1522,8 +1522,7 @@ public class XMLOutputter implements Cloneable {
         int size = content.size();
         if (currentFormat.trimAllWhite
                 || currentFormat.textNormalize
-                || currentFormat.textTrim
-                || currentFormat.newlines) {
+                || currentFormat.textTrim) {
             while( index < size) {
                 if ( !isAllWhitespace( content.get(index))) {
                     return index;
@@ -1547,8 +1546,7 @@ public class XMLOutputter implements Cloneable {
         int index = start;
         if (currentFormat.trimAllWhite
                 || currentFormat.textNormalize
-                || currentFormat.textTrim
-                || currentFormat.newlines) {
+                || currentFormat.textTrim) {
             while( index >= 0) {
                 if ( !isAllWhitespace( content.get(index - 1)))
                     break;
