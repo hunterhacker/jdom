@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.13 2001/05/19 05:21:41 jhunter Exp $
+ $Id: SAXHandler.java,v 1.14 2001/06/01 23:15:46 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,10 +79,14 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.13 $ $Date: 2001/05/19 05:21:41 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.14 $ $Date: 2001/06/01 23:15:46 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
+
+    // Note: keeping a "current element" variable to avoid the constant
+    // peek() calls to the top of the stack has shown to cause no noticeable 
+    // performance improvement.
 
     /** Element stack */
     private Stack stack;
