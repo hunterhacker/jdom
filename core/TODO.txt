@@ -2,20 +2,44 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Either make DocType immutable, or have it keep track of its parent.  We
-  should avoid the opportunity to have the same DocType on two docs and have
-  one change accidentally change the other.
+* Look at replacing NO_NAMESPACE with null.  See below.
+
+* Fix bug where DOMOutputter creates nodes with "" as their
+  node.getNamespaceURI() even if the node is not in a namespace.
+  http://lists.denveronline.net/lists/jdom-interest/2001-March/005117.html
+
+* Implement the ability to output the same DOCTYPE as was input:
+        <?xml version='1.0' ?>
+        <!DOCTYPE mydtd[
+        <!ENTITY nbsp '&#160;'>
+        <!ENTITY aring '&#229;'>
+        <!ENTITY auml '&#228;'>
+        <!ENTITY ouml '&#246;'>
+        <!ENTITY Aring '&#197;'>
+        <!ENTITY Auml '&#196;'>
+        <!ENTITY Ouml '&#214;'>]>
+
+        <DOCUMENT>
+                God forts&auml;ttning p&aring; det nya millenniet!
+        </DOCUMENT>
+  Probably need an Entity class with name, value, publicid, and systemid.  The
+  value/publicid/systemid are optional.  Also a Notation class with name,
+  publicid, systemid.  The publicid/systemid are optional.  The Entity would
+  also need a possible notation name entry if it was an unparsed entity.  The 
+  DocType then holds a Map of entities and notations, retrieved from the 
+  SAX DTDHandler/DeclHandler or read from the DOM DocumentType.  It also can
+  hold a String internalSubset a la DOM.  For SAXBuilder it'll have to build
+  the string from DeclHandler.attributeDecl() and DeclHandler.elementDecl().
+  Then again, maybe we just hold the whole darn thing as a String, gleaned
+  from SAX or DOM as appropriate.  The question there is, what's the JDOM 
+  use case for Notation and Entity maps?
+
+* Consider making DocType immutable to avoid the opportunity of having the 
+  same DocType on two docs where a change to one accidentally changes the 
+  other.  Can it be immutable while supporting entities and notations?  
+  Perhaps, if you pass in two Maps on construction.
 
 * Add notes that element content returned by List is ordered.
-
-* Fix bug with clone() that string concatenates:
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003528.html
-  This is due to addContent() being called in the clone and addContent() 
-  will merge neighboring strings.  Probably clone should have a back-door
-  that doesn't use the addContent() calls.  Would be faster besides.  See
-  following item.
-
-* Try clone() without the constructor call.  See above item too.  (Ken Helland)
 
 * Integrate element factories in SAXBuilder.  (Ken Helland)
 
@@ -199,21 +223,6 @@ Items that need to be done:
 
 * Have Jools populate jdom-test
 
-* Implement inline entities:
-        <?xml version='1.0' ?>
-        <!DOCTYPE mydtd[
-        <!ENTITY nbsp '&#160;'>
-        <!ENTITY aring '&#229;'>
-        <!ENTITY auml '&#228;'>
-        <!ENTITY ouml '&#246;'>
-        <!ENTITY Aring '&#197;'>
-        <!ENTITY Auml '&#196;'>
-        <!ENTITY Ouml '&#214;'>]>
-
-        <DOCUMENT>
-                God forts&auml;ttning p&aring; det nya millenniet!
-        </DOCUMENT>
-
 * Consider SAXBuilder.setIgnoreingWhitespace() and similar
   Should save lots of memory.
 
@@ -284,8 +293,6 @@ Items that need to be done:
   archive to create an accurate CHANGELOG.txt for what changed between betas.
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
-
-* Put www.jdom.org content under CVS
 
 * Write a guide for contributors
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
@@ -358,14 +365,6 @@ Items that need to be done:
   they're based.  It's something DOM3 does, and one user requested it.  The
   cost is a heavy price in memory bloat.
 
-* Have implementations of the JAXP Source/Result interfaces for managing XSLT
-  transformations.  Like JDOMSource that extends SAXSource, has getDocument()
-  method also for engines that recognize JDOMSource.  Similar on JDOMResult
-  extending SAXResult with a setDocument()/getDocument() method pair or 
-  whatever.
-  See the work of Laurent Bihanic <laurent.bihanic@atosorigin.com>:
-  http://lists.denveronline.net/lists/jdom-interest/2001-March/004838.html
-
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
   by Bob to help with XPath.)
@@ -380,7 +379,7 @@ Items that need to be done:
   an effort to change the JTidy code to build a JDOM Document directly, 
   instead of making a DOM Document or XML stream first.  That would be a lot 
   faster, use less memory, and make our dist smaller.  See
-  http://www3.sympatico.ca/ac.quick/ for Tidy.
+  http://www.sourceforge.net/projects/jtidy for Tidy.
 
 * Look at a (contrib?) outputter option using SAX filters per
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003303.html
