@@ -66,7 +66,7 @@ import java.io.Serializable;
  * @author Dan Schaffer
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version 1.0
+ * @version $Revision: 1.8 $
  */
 public class CDATA implements Serializable, Cloneable {
 
