@@ -57,7 +57,7 @@ package org.jdom.contrib.helpers;
 import org.jdom.*;
 import java.util.*;
 
-/** <p>
+/**   <p>
  *    This class contains static helper methods. 
  *    </p>
  *    @author Alex Rosen
@@ -66,10 +66,9 @@ public class JDOMHelper {
     /**
      * <p>
      * Sorts the child elements, using the specified comparator.
-     * Any other intervening content (Text, Comments, etc.) are not moved.
-     * (Note that this means that the elements will now be in a different
-     * order with respect to any comments, which may cause a problem
-     * if the comments describe the elements.)
+     * @param parent   The parent Element, whose child Elements should be sorted.
+     * @param c        The Comparator to use for ordering the child Elements.
+     *                 It will only be given Element objects to compare.
      * </p>
      * <p>
      * This method overcomes two problems with the standard Collections.sort():
@@ -77,10 +76,13 @@ public class JDOMHelper {
      * <li>Collections.sort() doesn't bother to remove an item from its old
      * location before placing it in its new location, which causes JDOM to
      * complain that the item has been added twice.
-     * <li>This method will sort the child Elements without moving other
+     * <li>This method will sort the child Elements without moving any other
      * content, such as formatting text nodes (newlines, indents, etc.)
-	 * Otherwise, all the formatting whitespace would move to the beginning
-	 * or end of the content list.
+     * Otherwise, all the formatting whitespace would move to the beginning
+     * or end of the content list.
+     * (Note that this means that the elements will now be in a different
+     * order with respect to any comments, which may cause a problem
+     * if the comments describe the elements.)
      * </ul>
      * </p>
      */
