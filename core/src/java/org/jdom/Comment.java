@@ -89,12 +89,7 @@ public class Comment implements Serializable, Cloneable {
      * @param text <code>String</code> content of comment.
      */
     public Comment(String text) {
-        String reason;
-        if ((reason = Verifier.checkCommentData(text)) != null) {
-            throw new IllegalDataException(text, "comment", reason);
-        }
-
-        this.text = text;
+        setText(text);
     }
 
     /**
@@ -118,6 +113,11 @@ public class Comment implements Serializable, Cloneable {
      * @return <code>Comment</code> - this Comment modified.
      */
     public Comment setText(String text) {
+        String reason;
+        if ((reason = Verifier.checkCommentData(text)) != null) {
+            throw new IllegalDataException(text, "comment", reason);
+        }
+
         this.text = text;
         return this;
     }
