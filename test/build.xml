@@ -121,9 +121,10 @@ These are the meaningful targets for this build file:
     <mkdir dir="${build.dest}"/>
 
     <!-- copy src files -->
-    <copydir src="${src.dir}"
-             dest="${build.src}"
-             filtering="on"/>
+    <copy toDir="${build.src}" >
+		<fileset dir="${src.dir}" includes="**/*.java, **/*.properties" />
+	</copy>
+
   </target>
 
   <!-- =================================================================== -->
@@ -161,6 +162,10 @@ These are the meaningful targets for this build file:
            destdir="${build.dest}"
            debug="${debug}"
            optimize="${optimize}"/>
+	<copy toDir="${build.dest}" >
+		<fileset dir="${build.src}" includes="**/*.properties" />
+	</copy>
+		
   </target>
 
   <!-- =================================================================== -->
@@ -171,7 +176,7 @@ These are the meaningful targets for this build file:
     <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
-         includes="org/**"/>
+         includes="org/**, **/*.properties"/>
   </target>
 
   <!-- =================================================================== -->
