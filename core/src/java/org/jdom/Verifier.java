@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.51 2004/08/31 21:58:55 jhunter Exp $
+ $Id: Verifier.java,v 1.52 2004/11/03 00:49:20 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.51 $, $Date: 2004/08/31 21:58:55 $
+ * @version $Revision: 1.52 $, $Date: 2004/11/03 00:49:20 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.51 $ $Date: 2004/08/31 21:58:55 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.52 $ $Date: 2004/11/03 00:49:20 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -504,9 +504,6 @@ final public class Verifier {
 
         if (data.indexOf("--") != -1) {
             return "Comments cannot contain double hyphens (--)";
-        }
-        if (data.startsWith("-")) {
-            return "Comment data cannot start with a hyphen.";
         }
         if (data.endsWith("-")) {
             return "Comment data cannot end with a hyphen.";
