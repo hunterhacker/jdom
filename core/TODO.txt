@@ -2,17 +2,14 @@ Items that need to be done:
 
 --- API CHANGES FOR 1.0 ---
 
+* Look at Brad's experimental tree for good ideas to integrate.
+  ftp://a.cs.okstate.edu/pub/hip/jdom-x.zip
+
 * Make sure the filter classes have hashCode() methods.
 
 * Add DocType to the content list returned by Document so it can have a
   location.  Fix the outputters and builders to respect it.  Keep the easy get
   method however.
-
-* Add in serialization of Element's additional namespaces.  Right now we
-  have special support for the element's namespace, but not any additional
-  ones.  The solution is to add logic to the writeObject/readObject methods.
-  Michael Lipp explains why in http://www.servlets.com/archive/servlet/
-   ReadMsg?msgId=338149&listName=jdom-interest
 
 * Look at interfaces for the core classes, Element with ConcreteElement being
   our code.  Base on the factory model.  Allow no access between objects
@@ -29,7 +26,8 @@ Items that need to be done:
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
 
-* Finalize the XPath class interface.
+* Finalize the XPath class interface.  Possibly take calls into Element,
+  Document, etc.
 
 * Add methods to recursively get content and get filtered content.
 
@@ -64,12 +62,6 @@ Items that need to be done:
   There were many follow-on threads.
 
 * Consider moving JDOMFactory to org.jdom.
-
-* Make sure we have a story for serialization.  How much work is it to support
-  serialization across current and future JDOM versions?  
-  See "serialVersionUID" thread especially Peter V. Gadjokov's remarks at
-  http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
-  It may be OK to worry about fast short-term serialization only.
 
 * Investigate serialization issue raised by Tom Preston
   http://lists.denveronline.net/lists/jdom-interest/2002-March/009857.html

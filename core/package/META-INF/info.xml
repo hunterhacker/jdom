@@ -13,7 +13,7 @@
         complex and memory-consumptive options that current API
         offerings provide.
     </description>
-    <copyright>2000-2001, Jason Hunter and Brett McLaughlin</copyright>
+    <copyright>2000-2003, Jason Hunter and Brett McLaughlin</copyright>
     <license>BSD/Apache style, see LICENSE.txt</license>
     <support>See the jdom-interest mailing list at jdom.org</support>
     <web-site>http://www.jdom.org/</web-site>
