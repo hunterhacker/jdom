@@ -65,6 +65,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.jdom.Attribute;
 import org.jdom.CDATA;
 import org.jdom.Comment;
 import org.jdom.DocType;
@@ -353,11 +354,20 @@ public class DOMBuilder {
                 for (int i=0, size=elementAttributes.size(); i<size; i++) {
                     Node att = (Node)elementAttributes.get(i);
 
-					// don't send xmlns attributes to JDOM
-					if (!att.getNodeName().startsWith("xmlns:")) {
-						element.addAttribute(att.getNodeName(),
-											 att.getNodeValue());
-					}
+                    if ((split = att.getNodeName().indexOf(":")) == -1) {
+                        // No namespace prefix on attribute
+                        element.addAttribute(att.getNodeName(),
+                                             att.getNodeValue());
+                    } else {
+                        String qName = att.getNodeName();
+                        String prefix = qName.substring(0, split);
+                        String localName = qName.substring(split+1);
+                        element.addAttribute(
+                            new Attribute(localName, 
+                                          prefix, 
+                                          ((Namespace)prefixedNamespaces.get(prefix)).getURI(),
+                                          att.getNodeValue()));
+                    }
                 }
 
                 // Recurse on child nodes
