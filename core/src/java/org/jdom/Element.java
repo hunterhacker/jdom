@@ -497,7 +497,8 @@ public class Element implements Serializable, Cloneable {
      *   content, it returns a <code>List</code> with a single
      *   <code>String</code> (when only data is present) or a
      *   <code>List</code> with only elements (when only nested
-     *   elements are present).
+     *   elements are present).  The List returned is "live" and 
+     *   modifications to it affect the element's actual contents.
      * </p>
      *
      * @param preserveWhitespace <code>boolean</code> indicating whether
@@ -532,7 +533,8 @@ public class Element implements Serializable, Cloneable {
      *   content, it returns a <code>List</code> with a single
      *   <code>String</code> (when only data is present) or a
      *   <code>List</code> with only elements (when only nested
-     *   elements are present).
+     *   elements are present).  The List returned is "live" and 
+     *   modifications to it affect the element's actual contents.
      * </p>
      * <p>
      *  This default version trims all surrounding whitespace from
@@ -575,7 +577,8 @@ public class Element implements Serializable, Cloneable {
      *   elements nested directly (one level deep) within
      *   this <code>Element</code>, each in <code>Element</code>
      *   form.  If the <code>Element</code> has no nested elements,
-     *   an empty list will be returned.
+     *   an empty list will be returned.  The returned list is "live"
+     *   and changes to it affect the element's actual contents.
      * </p><p>
      * This performs no recursion, so an elements nested two levels
      *   deep would have to be obtained with:
@@ -631,6 +634,8 @@ public class Element implements Serializable, Cloneable {
      *   specified, each in <code>Element</code>
      *   form.  If the <code>Element</code> has no nested elements
      *   that match the requested name, an empty list will be returned.
+     *   The returned list is "live" and changes to it affect the 
+     *   element's actual contents.
      * </p><p>
      * The local name of the <code>Element</code> should be used - the
      *   supplied URI defines the <code>{@link Namespace}</code> that
@@ -672,6 +677,8 @@ public class Element implements Serializable, Cloneable {
      *   specified, each in <code>Element</code>
      *   form.  If the <code>Element</code> has no nested elements
      *   that match the requested name, an empty list will be returned.
+     *   The returned list is "live" and changes to it affect the 
+     *   element's actual contents.
      * </p><p>
      * The local name of the <code>Element</code> should be used - this
      *   assumes that the <code>Element</code> is not in
@@ -699,6 +706,8 @@ public class Element implements Serializable, Cloneable {
      *   specified, each in <code>Element</code>
      *   form.  If the <code>Element</code> has no nested elements
      *   that match the requested name, an empty list will be returned.
+     *   The returned list is "live" and changes to it affect the 
+     *   element's actual contents.
      * </p><p>
      * The local name of the <code>Element</code> should be used - the
      *   supplied <code>{@link Namespace}</code> defines the <code>Namespace</code> that
@@ -1117,6 +1126,8 @@ public class Element implements Serializable, Cloneable {
      *   <code>{@link Attribute}</code>s for
      *   this <code>Element</code>, in no
      *   particular order.
+     *   The returned list is "live" and changes to it affect the 
+     *   element's actual attributes.
      * </p>
      *
      * @return <code>List</code> - attributes for the element.

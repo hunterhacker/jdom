@@ -198,6 +198,8 @@ public class Document implements Serializable, Cloneable {
      * This will return the list of
      *   <code>{@link ProcessingInstruction}</code>s
      *   for this <code>Document</code>.
+     * The returned list is "live" and changes to it affect the
+     * document's actual content.
      * </p>
      *
      * @return <code>List</code> - PIs for document.
@@ -219,6 +221,8 @@ public class Document implements Serializable, Cloneable {
      * <p>
      * This returns the processing instructions for this
      *   <code>Document</code> which have the supplied target.
+     * The returned list is "live" and changes to it affect the
+     * document's actual content.
      * </p>
      *
      * @param target <code>String</code> target of PI to return.
@@ -401,6 +405,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return all content for the <code>Document</code>.
+     * The returned list is "live" and changes to it affect the
+     * document's actual content.
      * </p>
      *
      * @return <code>List</code> - all Document content

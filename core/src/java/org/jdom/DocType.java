@@ -42,8 +42,6 @@
 package org.jdom;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * <p><code>DocType</code> represents an XML
