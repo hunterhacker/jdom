@@ -51,7 +51,6 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package samples;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,5 +1,3 @@
-package samples;
-
 import org.jdom.*;
 import org.jdom.input.*;
 import org.jdom.output.*;
