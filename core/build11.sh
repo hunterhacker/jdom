@@ -8,8 +8,10 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-export ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip:$JAVA_HOME/lib/rt.jar:./lib/collections.jar
+ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip:$JAVA_HOME/lib/rt.jar:./lib/collections.jar
+export ADDITIONALCLASSPATH
 
 ./build.sh $*
 
-export ADDITIONALCLASSPATH=
+ADDITIONALCLASSPATH=
+export ADDITIONALCLASSPATH
