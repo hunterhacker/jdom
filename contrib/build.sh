@@ -14,6 +14,8 @@ fi
 
 if [ `uname | grep -n CYGWIN` ]; then
   PS=";"
+elif [ `uname | grep -n Windows` ]; then
+  PS=";"
 else
   PS=":"
 fi
