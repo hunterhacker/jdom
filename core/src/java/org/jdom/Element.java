@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.95 2001/06/29 00:53:49 jhunter Exp $
+ $Id: Element.java,v 1.96 2001/07/03 17:55:34 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.95 $ $Date: 2001/06/29 00:53:49 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.96 $ $Date: 2001/07/03 17:55:34 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -2121,7 +2121,7 @@ public class Element implements Serializable, Cloneable {
      *         <code>{@link CDATA}</code>, and
      *         <code>{@link EntityRef}</code> objects.
      *
-     * @deprected Deprecated in beta7, use getContent() instead
+     * @deprecated Deprecated in beta7, use getContent() instead
      */
     public List getMixedContent() {
         return getContent();
