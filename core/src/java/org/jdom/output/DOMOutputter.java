@@ -220,55 +220,23 @@ public class DOMOutputter {
         }
         else {
             // Try using JAXP...
-            // Note we need DOM Level 2 and thus JAXP 1.1.
-            // If JAXP 1.0 is all that's available then we skip
-            // to the hard coded default parser
             try {
-                // Verify this is JAXP 1.1 (or later)
-                Class.forName("javax.xml.transform.Transformer");
-
-                // Try JAXP 1.1 calls to build the document
-                Class factoryClass =
-                    Class.forName("javax.xml.parsers.DocumentBuilderFactory");
-
-                // factory = DocumentBuilderFactory.newInstance();
-                Method newParserInstance =
-                    factoryClass.getMethod("newInstance", null);
-                Object factory = newParserInstance.invoke(null, null);
-
-                // jaxpParser = factory.newDocumentBuilder();
-                Method newDocBuilder =
-                    factoryClass.getMethod("newDocumentBuilder", null);
-                Object jaxpParser  = newDocBuilder.invoke(factory, null);
-
-                // domDoc = jaxpParser.newDocument();
-                Class parserClass = jaxpParser.getClass();
-                Method newDoc = parserClass.getMethod("newDocument", null);
-                org.w3c.dom.Document domDoc =
-                    (org.w3c.dom.Document) newDoc.invoke(jaxpParser, null);
-
-                // If there's no DOCTYPE, we can return the default
-                // Otherwise we jump through some hoops to set the DOCTYPE
-                if (dt == null) {
-                    return domDoc;
-                }
-                else {
-                    DOMImplementation domImpl = domDoc.getImplementation();
-                    DocumentType domDocType = domImpl.createDocumentType(
-                                                dt.getElementName(),
-                                                dt.getPublicID(),
-                                                dt.getSystemID());
-                    return domImpl.createDocument("http://temporary",
-                                                  dt.getElementName(),
-                                                  domDocType);
-                }
-                // System.out.println("Using jaxp " +
-                //   domDoc.getClass().getName());
-            } catch (ClassNotFoundException e) {
+                DOMAdapter adapter =
+                    (DOMAdapter)Class.forName(
+                    "org.jdom.adapters.JAXPDOMAdapter").newInstance();
+                // System.out.println("using JAXP");
+                return adapter.createDocument(dt);
+            }
+            catch (ClassNotFoundException e) {
                 // e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            }
+            catch (NoSuchMethodException e) {
                 // e.printStackTrace();
-            } catch (InvocationTargetException ite) {
+            }
+            catch (IllegalAccessException e) {
+                // e.printStackTrace();
+            }
+            catch (InvocationTargetException ite) {
                 throw ite.getTargetException(); // throw the root cause
             }
         }

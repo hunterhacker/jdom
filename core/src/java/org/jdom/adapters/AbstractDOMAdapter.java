@@ -57,7 +57,6 @@ package org.jdom.adapters;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.IOException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -88,11 +87,11 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws <code>IOException</code> when errors occur in
+     * @throws <code>Exception</code> when errors occur in
      *                                  parsing.
      */
     public Document getDocument(File filename, boolean validate)
-        throws IOException {
+        throws Exception {
 
         return getDocument(new FileInputStream(filename), validate);
     }
@@ -107,11 +106,11 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws <code>IOException</code> when errors occur in
+     * @throws <code>Exception</code> when errors occur in
      *                                  parsing.
      */
     public abstract Document getDocument(InputStream in, boolean validate)
-        throws IOException;
+        throws Exception;
 
     /**
      * <p>
@@ -120,9 +119,9 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws <code>IOException</code> when errors occur.
+     * @throws <code>Exception</code> when errors occur.
      */
-    public abstract Document createDocument() throws IOException;
+    public abstract Document createDocument() throws Exception;
 
     /**
      * <p>
@@ -134,9 +133,9 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      *
      * @param doctype Initial <code>DocType</code> of the document.
      * @return <code>Document</code> - created DOM Document.
-     * @throws <code>IOException</code> when errors occur.
+     * @throws <code>Exception</code> when errors occur.
      */
-    public Document createDocument(DocType doctype) throws IOException {
+    public Document createDocument(DocType doctype) throws Exception {
         if (doctype == null) {
             return createDocument();
         }

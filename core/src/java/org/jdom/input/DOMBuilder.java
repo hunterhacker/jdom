@@ -202,62 +202,24 @@ public class DOMBuilder {
             }
             else {
                 // Try using JAXP...
-                // Note we need DOM Level 2 and thus JAXP 1.1.  
-                // If JAXP 1.0 is all that's available then we skip
-                // to the hard coded default parser
+                // Ignore any exceptions that result from JAXP not existing
                 try {
-                    // Verify this is JAXP 1.1 (or later)
-                    Class.forName("javax.xml.transform.Transformer");
-
-                    // Try JAXP 1.1 calls to build the document
-                    Class factoryClass =
-                        Class.forName("javax.xml.parsers.DocumentBuilderFactory");
-
-                    // factory = DocumentBuilderFactory.newInstance();
-                    Method newParserInstance =
-                        factoryClass.getMethod("newInstance", null);
-                    Object factory = newParserInstance.invoke(null, null);
-
-                    // factory.setValidating(validate);
-                    Method setValidating =
-                        factoryClass.getMethod("setValidating",
-                                               new Class[]{boolean.class});
-                    setValidating.invoke(factory,
-                                         new Object[]{new Boolean(validate)});
-
-                    // factory.setNamespaceAware(true);
-                    Method setNamespaceAware =
-                        factoryClass.getMethod("setNamespaceAware",
-                                               new Class[]{boolean.class});
-                    setNamespaceAware.invoke(factory,
-                                         new Object[]{Boolean.TRUE});
-
-                    // jaxpParser = factory.newDocumentBuilder();
-                    Method newDocBuilder =
-                        factoryClass.getMethod("newDocumentBuilder", null);
-                    Object jaxpParser  = newDocBuilder.invoke(factory, null);
-
-                    // jaxpParser.setErrorHandler(null);
-                    Class parserClass = jaxpParser.getClass();
-                    Method setErrorHandler =
-                        parserClass.getMethod("setErrorHandler",
-                                               new Class[]{org.xml.sax.ErrorHandler.class});
-                    setErrorHandler.invoke(jaxpParser,
-                                         new Object[]{new BuilderErrorHandler()});
-
-                    // domDoc = jaxpParser.parse(in);
-                    Method parse = parserClass.getMethod(
-                        "parse", new Class[]{InputStream.class});
-                    domDoc = (org.w3c.dom.Document)
-                        parse.invoke(jaxpParser, new Object[]{in});
-
-                    // System.out.println("Using jaxp " + 
-                    //   domDoc.getClass().getName());
-                } catch (ClassNotFoundException e) {
+                    DOMAdapter adapter =
+                        (DOMAdapter)Class.forName(
+                        "org.jdom.adapters.JAXPDOMAdapter").newInstance();
+                    // System.out.println("using JAXP");
+                    domDoc = adapter.getDocument(in, validate);
+                }
+                catch (ClassNotFoundException e) {
                     // e.printStackTrace();
-                } catch (NoSuchMethodException e) {
+                }
+                catch (NoSuchMethodException e) {
                     // e.printStackTrace();
-                } catch (InvocationTargetException ite) {
+                }
+                catch (IllegalAccessException e) {
+                    // e.printStackTrace();
+                }
+                catch (InvocationTargetException ite) {
                     throw ite.getTargetException(); // throw the root cause
                 }
             }
