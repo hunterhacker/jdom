@@ -6,6 +6,6 @@ WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
 Jason Hunter and Brett McLaughlin are joint code captains for this module.
 
-Jason Hunter <jhunter AT jdom DOT org>
-Brett McLaughlin <brett AT jdom DOT org>
+Jason Hunter <jhunter_AT_jdom_DOT_org>
+Brett McLaughlin <brett_AT_jdom_DOT_org>
 
