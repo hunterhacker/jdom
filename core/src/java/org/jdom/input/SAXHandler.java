@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.39 2002/03/15 05:36:48 jhunter Exp $
+ $Id: SAXHandler.java,v 1.40 2002/04/11 06:19:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.39 $, $Date: 2002/03/15 05:36:48 $
+ * @version $Revision: 1.40 $, $Date: 2002/04/11 06:19:10 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.39 $ $Date: 2002/03/15 05:36:48 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.40 $ $Date: 2002/04/11 06:19:10 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -197,12 +197,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * </p>
      *
      * @param document <code>Document</code> being parsed.
-     * @throws IOException when errors occur.
      *
      * @deprecated Deprecated in beta7, use SAXHandler() instead and let
      * SAXHandler create the Document, then retrieve it with getDocument()
      */
-    public SAXHandler(Document document) throws IOException {
+    public SAXHandler(Document document) {
         this(new DefaultJDOMFactory());
         this.document = document;
     }
@@ -214,9 +213,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * using the default factory.
      * </p>
      *
-     * @throws IOException when errors occur.
      */
-    public SAXHandler() throws IOException {
+    public SAXHandler() {
         this((JDOMFactory)null);
     }
 
@@ -229,9 +227,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      *
      * @param factory <code>JDOMFactory</code> to be used for constructing
      * objects
-     * @throws IOException when errors occur.
      */
-    public SAXHandler(JDOMFactory factory) throws IOException {
+    public SAXHandler(JDOMFactory factory) {
         if (factory != null) {
             this.factory = factory;
         } else {

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.5 2002/01/08 09:17:10 jhunter Exp $
+ $Id: JDOMResult.java,v 1.6 2002/04/11 06:19:10 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -100,7 +100,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.5 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.6 $, $Date: 2002/04/11 06:19:10 $
  */
 public class JDOMResult extends SAXResult {
 
@@ -253,7 +253,6 @@ public class JDOMResult extends SAXResult {
      * @see    SAXHandler
      */
     public void startDocument() throws SAXException {
-      try {
         // Reset any previously set result document.
         setDocument(null);
 
@@ -266,10 +265,6 @@ public class JDOMResult extends SAXResult {
 
         // And propagate event.
         super.startDocument();
-      }
-      catch (IOException e) {
-        throw new SAXException("SAXHandler allocation failure", e);
-      }
     }
 
     /**

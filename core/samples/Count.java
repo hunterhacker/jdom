@@ -57,6 +57,7 @@ import org.jdom.*;
 import org.jdom.input.SAXBuilder;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.*;
+import java.io.*;
 import java.util.*;
 
 
@@ -102,6 +103,9 @@ public class Count {
 
             } catch (JDOMException e) { // indicates a well-formedness or other error
                 System.out.println(args[i] + " is not a well formed XML document.");
+                System.out.println(e.getMessage());
+            } catch (IOException e) { // indicates an IO problem
+                System.out.println(args[i] + " could not be parsed");
                 System.out.println(e.getMessage());
             }      
         }
