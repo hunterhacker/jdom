@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.74 2001/05/08 22:23:55 jhunter Exp $
+ $Id: Element.java,v 1.75 2001/05/09 05:52:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.74 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.75 $ $Date: 2001/05/09 05:52:20 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -770,7 +770,7 @@ public class Element implements Serializable, Cloneable {
      * This returns the full content of the element as a List which
      * may contain objects of type <code>String</code>, <code>Element</code>,
      * <code>Comment</code>, <code>ProcessingInstruction</code>,
-     * <code>CDATA</code>, and <code>Entity</code>.  
+     * <code>CDATA</code>, and <code>EntityRef</code>.  
      * When there is technically no mixed content and
      * all contents are of the same type, then all objects returned in the
      * List will be of the same type.  The List returned is "live" in 
@@ -783,7 +783,7 @@ public class Element implements Serializable, Cloneable {
      *         <code>{@link Element}</code>, <code>{@link Comment}</code>,
      *         <code>{@link ProcessingInstruction}</code>,
      *         <code>{@link CDATA}</code>, and
-     *         <code>{@link Entity}</code> objects.
+     *         <code>{@link EntityRef}</code> objects.
      */
     public List getMixedContent() {
         if (content == null) {
@@ -800,7 +800,7 @@ public class Element implements Serializable, Cloneable {
      * This sets the content of the element.  The passed in List should
      * contain only objects of type <code>String</code>, <code>Element</code>,
      * <code>Comment</code>, <code>ProcessingInstruction</code>, 
-     * <code>CDATA</code>, and <code>Entity</code>.  Passing a null or
+     * <code>CDATA</code>, and <code>EntityRef</code>.  Passing a null or
      * empty List clears the existing content.  In event of an exception 
      * the original content will be unchanged and the items in the added
      * content will be unaltered.
@@ -841,13 +841,13 @@ public class Element implements Serializable, Cloneable {
                 else if (obj instanceof CDATA) {
                     addContent((CDATA)obj);
                 }
-                else if (obj instanceof Entity) {
-                    addContent((Entity)obj);
+                else if (obj instanceof EntityRef) {
+                    addContent((EntityRef)obj);
                 }
                 else {
                     throw new IllegalAddException(
                       "An Element may directly contain only objects of type " +
-                      "String, Element, Comment, CDATA, Entity, and " + 
+                      "String, Element, Comment, CDATA, EntityRef, and " + 
                       "ProcessingInstruction: " +
                       (obj == null ? "null" : obj.getClass().getName()) + 
                       " is not allowed");
@@ -876,8 +876,8 @@ public class Element implements Serializable, Cloneable {
                     else if (obj instanceof ProcessingInstruction) {
                         ((ProcessingInstruction)obj).setParent(null);
                     }
-                    else if (obj instanceof Entity) {
-                        ((Entity)obj).setParent(null);
+                    else if (obj instanceof EntityRef) {
+                        ((EntityRef)obj).setParent(null);
                     }
                 }
                 throw ex;
@@ -897,8 +897,8 @@ public class Element implements Serializable, Cloneable {
             else if (obj instanceof ProcessingInstruction) {
                 ((ProcessingInstruction)obj).setParent(null);
             }
-            else if (obj instanceof Entity) {
-                ((Entity)obj).setParent(null);
+            else if (obj instanceof EntityRef) {
+                ((EntityRef)obj).setParent(null);
             }
         }
 
@@ -1199,15 +1199,15 @@ public class Element implements Serializable, Cloneable {
      * This adds entity content to this element.
      * </p>
      *
-     * @param entity <code>Entity</code> to add
+     * @param entity <code>EntityRef</code> to add
      * @return this element modified
-     * @throws IllegalAddException if the given Entity already has a
+     * @throws IllegalAddException if the given EntityRef already has a
      *         parent.
      */
-    public Element addContent(Entity entity) {
+    public Element addContent(EntityRef entity) {
         if (entity.getParent() != null) {
             throw new IllegalAddException(this, entity,
-                "The entity already has an existing parent \"" +
+                "The entity reference already has an existing parent \"" +
                 entity.getParent().getQualifiedName() + "\"");
         }
 
@@ -1770,8 +1770,8 @@ public class Element implements Serializable, Cloneable {
                     ProcessingInstruction p = (ProcessingInstruction)
                         ((ProcessingInstruction)obj).clone();
                     element.content.add(p);
-                } else if (obj instanceof Entity) {
-                    Entity e = (Entity)((Entity)obj).clone();
+                } else if (obj instanceof EntityRef) {
+                    EntityRef e = (EntityRef)((EntityRef)obj).clone();
                     e.setParent(element);
                     element.content.add(e);
                 }
@@ -1851,26 +1851,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes the specified <code>Entity</code>.
-     * </p>
-     *
-     * @param child <code>Entity</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Entity entity) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(entity)) {
-            entity.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
      * This removes the specified <code>Comment</code>.
      * </p>
      *
@@ -1883,6 +1863,26 @@ public class Element implements Serializable, Cloneable {
         }
         if (content.remove(comment)) {
             comment.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>EntityRef</code>.
+     * </p>
+     *
+     * @param child <code>EntityRef</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(EntityRef entity) {
+        if (content == null) {
+            return false;
+        }
+        if (content.remove(entity)) {
+            entity.setParent(null);
             return true;
         } else {
             return false;

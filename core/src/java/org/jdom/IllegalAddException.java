@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.12 2001/04/27 18:21:20 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.13 2001/05/09 05:52:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,7 +69,7 @@ package org.jdom;
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.12 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.13 $ $Date: 2001/05/09 05:52:20 $ $Name:  $";
 
     /**
      * <p>
@@ -224,17 +224,17 @@ public class IllegalAddException extends IllegalArgumentException {
     /**
      * <p>
      * This will create an <code>Exception</code> indicating
-     *   that the addition of the <code>{@link Entity}</code>
+     *   that the addition of the <code>{@link EntityRef}</code>
      *   supplied as content to the supplied element is not allowed.
      * </p>
      *
      * @param base element that the entity couldn't be added to
-     * @param added entity that could not be added
+     * @param added entity reference that could not be added
      * @param reason cause for the problem
      */
-    public IllegalAddException(Element base, Entity added, String reason) {
+    public IllegalAddException(Element base, EntityRef added, String reason) {
         super(new StringBuffer()
-              .append("The entity \"")
+              .append("The entity reference\"")
               .append(added.getName())
               .append("\" could not be added as content to \"")
               .append(base.getQualifiedName())

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.7 2001/05/01 06:17:48 jhunter Exp $
+ $Id: SAXHandler.java,v 1.8 2001/05/09 05:52:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,7 +76,7 @@ import org.jdom.Comment;
 import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Entity;
+import org.jdom.EntityRef;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
@@ -105,7 +105,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.7 $ $Date: 2001/05/01 06:17:48 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.8 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -366,7 +366,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             }
          */
         } else if (inEntity) {
-            ((Entity)stack.peek()).setContent(data);
+            //XXX: always ignore entity content so this section should be removed
+            //((Entity)stack.peek()).setContent(data);
         } else {
             Element e = (Element)stack.peek();
             e.addContent(data);
@@ -375,18 +376,18 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     /**
      * <p>
-     * Capture ignorable whitespace as text.  There will be a flag to turn
-     * this off later.
+     * Capture ignorable whitespace as text
      * </p>
      *
-     * @param ch <code>char[]</code> - char array of ignorable whitespace
+     * @param ch <code>[]</code> - char array of ignorable whitespace
      * @param start <code>int</code> - starting position within array
      * @param length <code>int</code> - length of whitespace after start
      * @throws SAXException when things go wrong
      */
-    public void ignorableWhitespace(char[] ch, int start, int length)
-                                               throws SAXException {
+    public void ignorableWhitespace(char[] ch, int start,int length) throws SAXException {
+         
         ((Element)stack.peek()).addContent(new String(ch, start, length));
+
     }
 
     /**
@@ -450,7 +451,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     public void startEntity(String name)
         throws SAXException {
-
+        //XXX: todo, figure out how to indicate to this method
+        //that we should add the entity refs if expansion is off
         // Ignore DTD references, and translate the standard 5
         if ((!inDTD) &&
             (!name.equals("amp")) &&
@@ -459,18 +461,18 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             (!name.equals("apos")) &&
             (!name.equals("quot"))) {
 
-            Entity entity = new Entity(name);
-            ((Element)stack.peek()).addContent(entity);
-            stack.push(entity);
-            inEntity = true;
+            //EntityRef entity = new EntityRef(name);
+            //((Element)stack.peek()).addContent(entity);
+            
         }
     }
 
     public void endEntity(String name) throws SAXException {
+        /* XXX:remove me
         if (inEntity) {
             stack.pop();
             inEntity = false;
-        }
+        } */
     }
 
     /**
@@ -517,4 +519,5 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             }
         }
     }
+
 }

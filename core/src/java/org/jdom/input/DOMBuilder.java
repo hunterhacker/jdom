@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.33 2001/04/27 18:21:21 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.34 2001/05/09 05:52:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,7 +65,7 @@ import org.jdom.*;
 import org.jdom.Comment;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Entity;
+import org.jdom.EntityRef;
 import org.jdom.ProcessingInstruction;
 import org.jdom.adapters.*;
 
@@ -91,7 +91,7 @@ import org.xml.sax.*;
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.33 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.34 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -479,10 +479,11 @@ public class DOMBuilder {
                 break;
 
             case Node.ENTITY_REFERENCE_NODE:
-                Entity entity = new Entity(node.getNodeName());
+                //XXX: what to do with content here?
+                EntityRef entity = new EntityRef(node.getNodeName());
 
                 // XXX: Temp Hack (brett)
-                entity.setContent(node.getFirstChild().getNodeValue());
+                //entity.setContent(node.getFirstChild().getNodeValue());
 
                 current.addContent(entity);
                 break;

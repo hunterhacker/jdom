@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.48 2001/05/08 22:23:58 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.49 2001/05/09 05:52:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,31 +56,10 @@
 
 package org.jdom.output;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.io.StringWriter;
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
    
-import org.jdom.Attribute;
-import org.jdom.CDATA;
-import org.jdom.Comment;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Entity;
-import org.jdom.Namespace;
-import org.jdom.ProcessingInstruction;
+import org.jdom.*;
 
 /**
  * <p><code>XMLOutputter</code> takes a JDOM tree and formats it to a
@@ -129,7 +108,7 @@ import org.jdom.ProcessingInstruction;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.48 $ $Date: 2001/05/08 22:23:58 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.49 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -666,29 +645,29 @@ public class XMLOutputter implements Cloneable {
         output(string, writer);  // output() flushes
     }
     
-    // * * * * * Entity * * * * *
+    // * * * * * EntityRef * * * * *
 
     /**
-     * <p> Print out an <code>{@link Entity}</code>.  
+     * <p> Print out an <code>{@link EntityRef}</code>.  
      * </p>
      *
-     * @param entity <code>Entity</code> to output.
+     * @param entity <code>EntityRef</code> to output.
      * @param out <code>Writer</code> to write to.
      **/
-    public void output(Entity entity, Writer out) throws IOException {
-        printEntity(entity, out);
+    public void output(EntityRef entity, Writer out) throws IOException {
+        printEntityRef(entity, out);
         out.flush();
     }
     
     /**
      * <p>
-     * Print out an <code>{@link Entity}</code>. 
+     * Print out an <code>{@link EntityRef}</code>. 
      * </p>
      *
-     * @param entity <code>Entity</code> to output.
+     * @param entity <code>EntityRef</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
-    public void output(Entity entity, OutputStream out) throws IOException {
+    public void output(EntityRef entity, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(entity, writer);  // output() flushes
     }
@@ -1189,13 +1168,13 @@ public class XMLOutputter implements Cloneable {
                                  indentLevel, namespaces);
                     justOutput = Element.class;
                 }
-                else if (content instanceof Entity) {
+                else if (content instanceof EntityRef) {
                     if (!(justOutput == String.class && wasFullyWhite)) {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
-                    printEntity((Entity) content, out);
-                    justOutput = Entity.class;
+                    printEntityRef((EntityRef) content, out);
+                    justOutput = EntityRef.class;
                 }
                 else if (content instanceof ProcessingInstruction) {
                     if (!(justOutput == String.class && wasFullyWhite)) {
@@ -1253,16 +1232,21 @@ public class XMLOutputter implements Cloneable {
     
     /**
      * <p>
-     * This will handle printing out an <code>{@link Entity}</code>.
+     * This will handle printing out an <code>{@link EntityRef}</code>.
      * Only the entity reference such as <code>&amp;entity;</code>
      * will be printed. However, subclasses are free to override 
      * this method to print the contents of the entity instead.
      * </p>
      *
-     * @param entity <code>Entity</code> to output.
+     * @param entity <code>EntityRef</code> to output.
      * @param out <code>Writer</code> to write to.  */
-    protected void printEntity(Entity entity, Writer out) throws IOException {
-        out.write(entity.getSerializedForm());
+    protected void printEntityRef(EntityRef entity, Writer out) 
+                                                   throws IOException {
+        out.write(new StringBuffer()
+            .append("&")
+            .append(entity.getName())
+            .append(";")
+            .toString());
     }
 
     /**

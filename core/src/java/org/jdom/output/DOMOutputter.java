@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.22 2001/04/27 18:21:21 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.23 2001/05/09 05:52:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ import org.w3c.dom.DOMImplementation;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.22 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.23 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -367,9 +367,9 @@ public class DOMOutputter {
                          pi.getTarget(), pi.getData());
                     domElement.appendChild(domPI);
                 }
-                else if (node instanceof Entity) {
-                    Entity entity = (Entity) node;
-                    org.w3c.dom.EntityReference domEntity = 
+                else if (node instanceof EntityRef) {
+                    EntityRef entity = (EntityRef) node;
+                    org.w3c.dom.EntityReference domEntity =
                         domDoc.createEntityReference(entity.getName());
                     domElement.appendChild(domEntity);
                 }

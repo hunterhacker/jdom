@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.40 2001/04/27 18:21:21 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.41 2001/05/09 05:52:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,42 +56,14 @@
 
 package org.jdom.input;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.util.*;
 
-import org.jdom.Attribute;
-import org.jdom.CDATA;
-import org.jdom.Comment;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Entity;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.ProcessingInstruction;
+import org.jdom.*;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -102,12 +74,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Dan Schaffer
+ * @author Philip Nelson
  * @version 1.0
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.40 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.41 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -118,6 +91,9 @@ public class SAXBuilder {
 
     /** Whether validation should occur */
     private boolean validate;
+
+    /** Whether expansion of entities should occur */
+    private boolean expand = true;
 
     /** Adapter class to use */
     private String saxDriverClass;
@@ -297,6 +273,7 @@ public class SAXBuilder {
                     Method getXMLReader = 
                         parserClass.getMethod("getXMLReader", null);
                     parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
+                    saxDriverClass = parser.getClass().getName();
 
                     // System.out.println("Using jaxp " +
                     //   parser.getClass().getName());
@@ -395,11 +372,33 @@ public class SAXBuilder {
                         saxDriverClass + " SAX Driver");
                 }
             }
+            // Set entity expansion
+            try {
+                //Crimson doesn't support this feature but does report it 
+                // as true so...
+                if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
+                    parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
+                }
 
+            }
+            catch (SAXNotRecognizedException e) {
+                // No entity expansion available
+                throw new JDOMException(
+                  "Entity expansion feature not recognized for " + 
+                  saxDriverClass + " SAX Driver");
+            }
+            catch (SAXNotSupportedException e) {
+                // No entity expansion available
+                throw new JDOMException(
+                  "Entity expansion feature not supported for " +
+                  saxDriverClass + " SAX Driver");
+            }
+            
             parser.parse(in);
 
             return doc;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             if (e instanceof SAXParseException) {
                 SAXParseException p = (SAXParseException)e;
                 String systemId = p.getSystemId();
@@ -551,5 +550,22 @@ public class SAXBuilder {
             path = path + "/";
         }
         return new URL("file", "", path);
+    }
+
+    /**
+     * <p>
+     * This sets whether or not to expand entities for the builder.
+     * A true means to expand entities as normal content.  A false means to
+     * leave entities unexpanded as <code>EntityRef</code> objects.  The 
+     * default is true.
+     * </p>
+     *
+     * @param expand <code>boolean</code> indicating whether entity expansion 
+     * should occur.
+     */
+    public void setExpandEntities(boolean expand) {
+        this.expand = expand;
+        throw new RuntimeException(
+          "Feature not implemented yet: default is true");
     }
 }
