@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.131 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Element.java,v 1.132 2003/04/30 21:51:51 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,8 +65,8 @@ import org.jdom.filter.*;
  * An XML element. Methods allow the user to get and manipulate its child
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
- * 
- * @version $Revision: 1.131 $, $Date: 2003/04/30 09:55:12 $
+ *
+ * @version $Revision: 1.132 $, $Date: 2003/04/30 21:51:51 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,18 +81,18 @@ import org.jdom.filter.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.131 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.132 $ $Date: 2003/04/30 21:51:51 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
-    /** The local name of the <code>Element</code> */
+    /** The local name of the element */
     protected String name;
 
-    /** The <code>{@link Namespace}</code> of the <code>Element</code> */
+    /** The namespace of the element */
     protected transient Namespace namespace;
 
-    /** Additional <code>{@link Namespace}</code> declarations on this
-        element */
+    /** Additional namespace declarations to store on this element; useful
+     * during output */
     protected transient List additionalNamespaces;
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
@@ -101,43 +101,37 @@ public class Element implements Serializable, Cloneable {
     /** Parent element, document, or null if none */
     protected Object parent;
 
-    /** The attributes of the <code>Element</code>. */
+    /** The attributes of the element */
     protected AttributeList attributes = new AttributeList(this);
 
-    /** The mixed content of the <code>Element</code>. */
+    /** The mixed content of the element */
     protected ContentList content = new ContentList(this);
 
     /**
      * This protected constructor is provided in order to support an Element
-     * subclass that wants full control over variable initialization.  It
-     * intentionally leaves all instance variables null, allowing a
-     * lightweight subclass implementation.  The subclass is responsible for
-     * ensuring all the get and set methods on Element behave as documented.
-     *
+     * subclass that wants full control over variable initialization. It
+     * intentionally leaves all instance variables null, allowing a lightweight
+     * subclass implementation. The subclass is responsible for ensuring all the
+     * get and set methods on Element behave as documented.
      * <p>
-     * When implementing an <code>Element</code> subclass which doesn't
-     * require full control over variable initialization, be aware that
-     * simply calling super() (or letting the compiler add the implicit
-     * super() call) will not initialize the instance variables which will
-     * cause many of the methods to throw a
-     * <code>NullPointerException</code>.  Therefore, the
-     * constructor for these subclasses should call one of the public
-     * constructors so variable initialization is handled automatically.
-     * </p>
+     * When implementing an Element subclass which doesn't require full control
+     * over variable initialization, be aware that simply calling super() (or
+     * letting the compiler add the implicit super() call) will not initialize
+     * the instance variables which will cause many of the methods to throw a
+     * NullPointerException. Therefore, the constructor for these subclasses
+     * should call one of the public constructors so variable initialization is
+     * handled automatically.
      */
     protected Element() { }
 
     /**
-     * This will create a new <code>Element</code>
-     * with the supplied (local) name, and define
-     * the <code>{@link Namespace}</code> to be used.
-     * If the provided namespace is null, the element will have
-     * no namespace.
+     * Creates a new element with the supplied (local) name and namespace. If
+     * the provided namespace is null, the element will have no namespace.
      *
-     * @param name <code>String</code> name of element.
-     * @param namespace <code>Namespace</code> to put element in.
-     * @throws IllegalNameException if the given name is illegal as an
-     *         element name.
+     * @param  name                 local name of the element
+     * @param  namespace            namespace for the element
+     * @throws IllegalNameException if the given name is illegal as an element
+     *                              name
      */
     public Element(String name, Namespace namespace) {
         setName(name);
@@ -145,69 +139,63 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will create an <code>Element</code> in no
-     * <code>{@link Namespace}</code>.
+     * Create a new element with the supplied (local) name and no namespace.
      *
-     * @param name <code>String</code> name of element.
-     * @throws IllegalNameException if the given name is illegal as an
-     *         element name.
+     * @param  name                 local name of the element
+     * @throws IllegalNameException if the given name is illegal as an element
+     *                              name.
      */
     public Element(String name) {
         this(name, (Namespace) null);
     }
 
     /**
-     * This will create a new <code>Element</code> with
-     * the supplied (local) name, and specifies the URI
-     * of the <code>{@link Namespace}</code> the <code>Element</code>
-     * should be in, resulting it being unprefixed (in the default
-     * namespace).
+     * Creates a new element with the supplied (local) name and a namespace
+     * given by a URI. The element will be put into the unprefixed (default)
+     * namespace.
      *
-     * @param name <code>String</code> name of element.
-     * @param uri <code>String</code> URI for <code>Namespace</code> element
-     *        should be in.
-     * @throws IllegalNameException if the given name is illegal as an
-     *         element name or the given URI is illegal as a
-     *         namespace URI
+     * @param  name                 name of the element
+     * @param  uri                  namespace URI for the element
+     * @throws IllegalNameException if the given name is illegal as an element
+     *                              name or the given URI is illegal as a
+     *                              namespace URI
      */
     public Element(String name, String uri) {
         this(name, Namespace.getNamespace("", uri));
     }
 
     /**
-     * This will create a new <code>Element</code> with
-     * the supplied (local) name, and specifies the prefix and URI
-     * of the <code>{@link Namespace}</code> the <code>Element</code>
-     * should be in.
+     * Creates a new element with the supplied (local) name and a namespace
+     * given by the supplied prefix and URI combination.
      *
-     * @param name <code>String</code> name of element.
-     * @param uri <code>String</code> URI for <code>Namespace</code> element
-     *        should be in.
-     * @throws IllegalNameException if the given name is illegal as an
-     *         element name, the given prefix is illegal as a namespace
-     *         prefix, or the given URI is illegal as a namespace URI
+     * @param  name                 local name of the element
+     * @param  prefix               namespace prefix
+     * @param  uri                  namespace URI for the element
+     * @throws IllegalNameException if the given name is illegal as an element
+     *                              name, the given prefix is illegal as a
+     *                              namespace prefix, or the given URI is
+     *                              illegal as a namespace URI
      */
     public Element(String name, String prefix, String uri) {
         this(name, Namespace.getNamespace(prefix, uri));
     }
 
     /**
-     * This returns the (local) name of the
-     * <code>Element</code>, without any
-     * namespace prefix, if one exists.
+     * Returns the (local) name of the element (without any namespace prefix).
      *
-     * @return <code>String</code> - element name.
+     * @return                     local element name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * This sets the (local) name of the <code>Element</code>.
+     * Sets the (local) name of the element.
      *
-     * @return <code>Element</code> - the element modified.
-     * @throws IllegalNameException if the given name is illegal as an
-     *         Element name.
+     * @param  name                 the new (local) name of the element
+     * @return                      the target element
+     * @throws IllegalNameException if the given name is illegal as an Element
+     *                              name
      */
     public Element setName(String name) {
         String reason = Verifier.checkElementName(name);
@@ -219,21 +207,20 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will return this <code>Element</code>'s
-     * <code>{@link Namespace}</code>.
+     * Returns the element's {@link Namespace}.
      *
-     * @return <code>Namespace</code> - Namespace object for this
-     *         <code>Element</code>
+     * @return                     the element's namespace
      */
     public Namespace getNamespace() {
         return namespace;
     }
 
     /**
-     * This sets this <code>Element</code>'s <code>{@link Namespace}</code>.
-     * If the provided namespace is null, the element will have no namespace.
+     * Sets the element's {@link Namespace}. If the provided namespace is null,
+     * the element will have no namespace.
      *
-     * @return <code>Element</code> - the element modified.
+     * @param  namespace           the new namespace
+     * @return                     the target element
      */
     public Element setNamespace(Namespace namespace) {
         if (namespace == null) {
@@ -245,39 +232,36 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This returns the namespace prefix
-     * of the <code>Element</code>, if
-     * one exists.  Otherwise, an empty
-     * <code>String</code> is returned.
+     * Returns the namespace prefix of the element or an empty string if none
+     * exists.
      *
-     * @return <code>String</code> - namespace prefix.
+     * @return                     the namespace prefix
      */
     public String getNamespacePrefix() {
         return namespace.getPrefix();
     }
 
     /**
-     * This returns the URI mapped to this <code>Element</code>'s
-     * prefix (or the default namespace if no prefix). If no
-     * mapping is found, an empty <code>String</code> is returned.
+     * Returns the namespace URI mapped to this element's prefix (or the
+     * in-scope default namespace URI if no prefix). If no mapping is found, an
+     * empty string is returned.
      *
-     * @return <code>String</code> - namespace URI for this
-     * <code>Element</code>.
+     * @return                     the namespace URI for this element
      */
     public String getNamespaceURI() {
         return namespace.getURI();
     }
 
     /**
-     * This returns the Namespace in scope on this element for the given
-     * prefix (this involves searching up the tree, so the results depend
-     * on the current location of the element).  It returns null if there
-     * is no Namespace in scope with the given prefix at this point in
-     * the document.
+     * Returns the {@link Namespace} corresponding to the given prefix in scope
+     * for this element. This involves searching up the tree, so the results
+     * depend on the current location of the element. Returns null if there is
+     * no namespace in scope with the given prefix at this point in the
+     * document.
      *
-     * @param prefix  namespace prefix to look up
-     * @return <code>Namespace</code> - namespace in scope for the given
-     * prefix on this <code>Element</code>, or null if none.
+     * @param  prefix              namespace prefix to look up
+     * @return                     the Namespace for this prefix at this
+     *                             location, or null if none
      */
     public Namespace getNamespace(String prefix) {
         if (prefix == null) {
@@ -313,13 +297,12 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This returns the full name of the
-     * <code>Element</code>, in the form
-     * [namespacePrefix]:[localName].  If
-     * the <code>Element</code> does not have a namespace prefix,
-     * then the local name is returned.
+     * Returns the full name of the element, in the form
+     * [namespacePrefix]:[localName]. If the element does not have a namespace
+     * prefix, then the local name is returned.
      *
-     * @return <code>String</code> - full name of element.
+     * @return                     qualified name of the element (including
+     *                             namespace prefix)
      */
     public String getQualifiedName() {
         if (namespace.getPrefix().equals("")) {
@@ -333,15 +316,16 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will add a namespace declarations to this element.
-     * This should <i>not</i> be used to add the declaration for
-     * this element itself; that should be assigned in the construction
-     * of the element. Instead, this is for adding namespace
-     * declarations on the element not relating directly to itself.
+     * Adds a namespace declarations to this element. This should <i>not</i> be
+     * used to add the declaration for this element itself; that should be
+     * assigned in the construction of the element. Instead, this is for adding
+     * namespace declarations on the element not relating directly to itself.
+     * It's used during output to for stylistic reasons move namespace
+     * declarations higher in the tree than they would have to be.
      *
-     * @param additional <code>Namespace</code> to add.
-     * @throws IllegalAddException if the namespace prefix collides with
-     *   another namespace prefix on the element.
+     * @param  additional          namespace to add
+     * @throws IllegalAddException if the namespace prefix collides with another
+     *                             namespace prefix on the element
      */
     public void addNamespaceDeclaration(Namespace additional) {
 
@@ -360,14 +344,14 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will remove a namespace declarations from this element.
-     * This should <i>not</i> be used to remove the declaration for
-     * this element itself; that should be handled in the construction
-     * of the element. Instead, this is for removing namespace
-     * declarations on the element not relating directly to itself.
-     * If the declaration is not present, this method does nothing.
+     * Removes an additional namespace declarations from this element. This
+     * should <i>not</i> be used to remove the declaration for this element
+     * itself; that should be handled in the construction of the element.
+     * Instead, this is for removing namespace declarations on the element not
+     * relating directly to itself. If the declaration is not present, this
+     * method does nothing.
      *
-     * @param additionalNamespace <code>Namespace</code> to remove.
+     * @param additionalNamespace namespace to remove
      */
     public void removeNamespaceDeclaration(Namespace additionalNamespace) {
         if (additionalNamespaces == null) {
@@ -377,14 +361,14 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will return any namespace declarations on this element
-     * that exist, <i>excluding</i> the namespace of the element
-     * itself, which can be obtained through
-     * <code>{@link #getNamespace()}</code>. If there are no additional
-     * declarations, this returns an empty list.  Note, the returned
-     * list is not live, for performance reasons.
+     * Returns a list of the additional namespace declarations on this element.
+     * This includes only additional namespace, not the namespace of the element
+     * itself, which can be obtained through {@link #getNamespace()}. If there
+     * are no additional declarations, this returns an empty list. Note, the
+     * returned list is unmodifiable.
      *
-     * @return <code>List</code> - the additional namespace declarations.
+     * @return                     a List of the additional namespace
+     *                             declarations
      */
     public List getAdditionalNamespaces() {
         // Not having the returned list be live allows us to avoid creating a
@@ -397,14 +381,11 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will return the parent of this <code>Element</code>.
-     * If there is no parent, then this returns <code>null</code>.
-     * Also note that on its own, this is not 100% sufficient to
-     * see if the <code>Element</code> is not in use - this should
-     * be used in tandem with <code>{@link #isRootElement}</code>
-     * to determine this.
+     * Returns the parent of this element or null if none. If there's no element
+     * parent, the element may still be a root element. Use {@link
+     * #isRootElement} to determine this.
      *
-     * @return parent of this <code>Element</code>.
+     * @return                     parent element of this element
      */
     public Element getParent() {
         if (parent instanceof Element) {
@@ -414,11 +395,11 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This will set the parent of this <code>Element</code>.
-     * The caller is responsible for handling pre-existing parentage.
+     * Sets the parent of this element. The caller is responsible for removing
+     * any pre-existing parentage.
      *
-     * @param parent <code>Element</code> to be new parent.
-     * @return <code>Element</code> - this <code>Element</code> modified.
+     * @param  parent              new parent element
+     * @return                     the target element
      */
     protected Element setParent(Element parent) {
         this.parent = parent;
@@ -426,10 +407,10 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This detaches the element from its parent, or does nothing if the
-     * element has no parent.
+     * Detaches the element from its element parent or document, or does nothing
+     * if the element has no parent.
      *
-     * @return <code>Element</code> - this <code>Element</code> modified.
+     * @return                     the target element
      */
     public Element detach() {
         if (parent instanceof Element) {
@@ -442,27 +423,24 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This returns a <code>boolean</code> value indicating
-     * whether this <code>Element</code> is a root
-     * <code>Element</code> for a JDOM <code>{@link Document}</code>.
-     * This should be used in tandem with
-     * <code>{@link #getParent}</code> to determine
-     * if an <code>Element</code> has no "attachments" to
-     * parents.
+     * Returns whether this element is a root element. This can be used in
+     * tandem with {@link #getParent} to determine if an element has any
+     * "attachments" to a parent element or document.
      *
-     * @return <code>boolean</code> - whether this is a root element.
+     * @return                     whether this is a root element
      */
     public boolean isRootElement() {
         return parent instanceof Document;
     }
 
     /**
-     * This sets the <code>{@link Document}</code> parent of this element
-     * and makes it the root element.  The caller is responsible for
-     * ensuring the element doesn't have a pre-existing parent.
+     * Sets the {@link Document} parent of this element and makes the element
+     * its root element. The caller is responsible for ensuring the element
+     * doesn't have a pre-existing parent or document.
      *
-     * @param document <code>Document</code> parent
-     * @return <code>Document</code> this <code>Element</code> modified
+     * @param  document            the new document holding this element as its
+     *                             root
+     * @return                     the target element
      */
     protected Element setDocument(Document document) {
         this.parent = document;
@@ -470,11 +448,11 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this Element, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
+     * Returns the owning document for this element, or null if it's not a
+     * currently a member of a document.
      *
-     * @return <code>Document</code> owning this Element, or null.
+     * @return                     the document owning this element, or null if
+     *                             none
      */
     public Document getDocument() {
         if (parent instanceof Document) {
@@ -488,16 +466,15 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This returns the textual content directly held under this
-     * element.  This will include all text within
-     * this single element, including whitespace and CDATA
-     * sections if they exist.  It's essentially the concatenation of
-     * all <code>Text</code> and <code>CDATA</code> nodes returned by
-     * <code>getContent()</code>.  The call does not recurse into child elements.
-     * If no textual value exists for the
-     * element, an empty <code>String</code> ("") is returned.
+     * Returns the textual content directly held under this element as a string.
+     * This includes all text within this single element, including whitespace
+     * and CDATA sections if they exist. It's essentially the concatenation of
+     * all {@link Text} and {@link CDATA} nodes returned by {@link #getContent}.
+     * The call does not recurse into child elements. If no textual value exists
+     * for the element, an empty string is returned.
      *
-     * @return text content for this element, or empty string if none
+     * @return                     text content for this element, or empty
+     *                             string if none
      */
     public String getText() {
         if (content.size() == 0) {
@@ -535,39 +512,38 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This returns the textual content of this element with all
-     * surrounding whitespace removed.  If no textual value exists for
-     * the element, or if only whitespace exists, the empty string is
-     * returned.
+     * Returns the textual content of this element with all surrounding
+     * whitespace removed. If no textual value exists for the element, or if
+     * only whitespace exists, the empty string is returned.
      *
-     * @return trimmed text content for this element, or empty string
-     * if none
+     * @return                     trimmed text content for this element, or
+     *                             empty string if none
      */
     public String getTextTrim() {
         return getText().trim();
     }
 
     /**
-     * This returns the textual content of this element with all
-     * surrounding whitespace removed and internal whitespace normalized
-     * to a single space.  If no textual value exists for the element,
-     * or if only whitespace exists, the empty string is returned.
+     * Returns the textual content of this element with all surrounding
+     * whitespace removed and internal whitespace normalized to a single space.
+     * If no textual value exists for the element, or if only whitespace exists,
+     * the empty string is returned.
      *
-     * @return normalized text content for this element, or empty string
-     * if none
+     * @return                     normalized text content for this element, or
+     *                             empty string if none
      */
     public String getTextNormalize() {
         return Text.normalizeString(getText());
     }
 
     /**
-     * This convenience method returns the textual content of the named
-     * child element, or returns an empty <code>String</code> ("")
-     * if the child has no textual content. However, if the child does
-     * not exist, <code>null</code> is returned.
+     * Returns the textual content of the named child element, or null if
+     * there's no such child. This method is a convenience because calling
+     * <code>getChild().getText()</code> can throw a NullPointerException.
      *
-     * @param name the name of the child
-     * @return text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @return                     text content for the named child, or null if
+     *                             no such child
      */
     public String getChildText(String name) {
         Element child = getChild(name);
@@ -578,12 +554,13 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This convenience method returns the trimmed textual content of the
-     * named child element, or returns null if there's no such child.
-     * See <code>{@link #getTextTrim()}</code> for details of text trimming.
+     * Returns the trimmed textual content of the named child element, or null
+     * if there's no such child. See <code>{@link #getTextTrim()}</code> for
+     * details of text trimming.
      *
-     * @param name the name of the child
-     * @return trimmed text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @return                     trimmed text content for the named child, or
+     *                             null if no such child
      */
     public String getChildTextTrim(String name) {
         Element child = getChild(name);
@@ -594,13 +571,13 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This convenience method returns the normalized textual content of the
-     * named child element, or returns null if there's no such child.
-     * See <code>{@link #getTextNormalize()}</code> for details of text
-     * normalizing.
+     * Returns the normalized textual content of the named child element, or
+     * null if there's no such child. See <code>{@link
+     * #getTextNormalize()}</code> for details of text normalizing.
      *
-     * @param name the name of the child
-     * @return normalized text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @return                     normalized text content for the named child,
+     *                             or null if no such child
      */
     public String getChildTextNormalize(String name) {
         Element child = getChild(name);
@@ -611,12 +588,13 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This convenience method returns the textual content of the named
-     * child element, or returns null if there's no such child.
+     * Returns the textual content of the named child element, or null if
+     * there's no such child.
      *
-     * @param name the name of the child
-     * @param ns the namespace of the child
-     * @return text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @param  ns                  the namespace of the child
+     * @return                     text content for the named child, or null if
+     *                             no such child
      */
     public String getChildText(String name, Namespace ns) {
         Element child = getChild(name, ns);
@@ -627,14 +605,13 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This convenience method returns the trimmed textual content of the
-     * named child element, or returns null if there's no such child.
-     * See <code>{@link #getTextTrim()}</code> for
-     * details of text trimming.
+     * Returns the trimmed textual content of the named child element, or null
+     * if there's no such child.
      *
-     * @param name the name of the child
-     * @param ns the namespace of the child
-     * @return trimmed text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @param  ns                  the namespace of the child
+     * @return                     trimmed text content for the named child, or
+     *                             null if no such child
      */
     public String getChildTextTrim(String name, Namespace ns) {
         Element child = getChild(name, ns);
@@ -645,14 +622,13 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This convenience method returns the normalized textual content of the
-     * named child element, or returns null if there's no such child.
-     * See <code>{@link #getTextNormalize()}</code> for
-     * details of text normalizing.
+     * Returns the normalized textual content of the named child element, or
+     * null if there's no such child.
      *
-     * @param name the name of the child
-     * @param ns the namespace of the child
-     * @return normalized text content for the named child, or null if none
+     * @param  name                the name of the child
+     * @param  ns                  the namespace of the child
+     * @return                     normalized text content for the named child,
+     *                             or null if no such child
      */
     public String getChildTextNormalize(String name, Namespace ns) {
         Element child = getChild(name, ns);
@@ -663,18 +639,18 @@ public class Element implements Serializable, Cloneable {
     }
 
     /**
-     * This sets the content of the element to be the text given.
-     * All existing text content and non-text context is removed.
-     * If this element should have both textual content and nested
-     * elements, use <code>{@link #setContent}</code> instead.
-     * Setting a null text value is equivalent to setting an empty string
-     * value.
+     * Sets the content of the element to be the text given. All existing text
+     * content and non-text context is removed. If this element should have both
+     * textual content and nested elements, use <code>{@link #setContent}</code>
+     * instead. Setting a null text value is equivalent to setting an empty
+     * string value.
      *
-     * @param text new content for the element
-     * @return this element modified
-     * @throws IllegalDataException if <code>text</code> contains an 
-     *         illegal character such as a vertical tab (as determined
-     *         by {@link org.jdom.Verifier#checkCharacterData})
+     * @param  text                 new text content for the element
+     * @return                      the target element
+     * @throws IllegalDataException if the assigned text contains an illegal
+     *                              character such as a vertical tab (as
+     *                              determined by {@link
+     *                              org.jdom.Verifier#checkCharacterData})
      */
     public Element setText(String text) {
         content.clear();
@@ -722,7 +698,7 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * @param filter <code>Filter</code> to apply
-     * @return <code>List</code> - filtered Element content 
+     * @return <code>List</code> - filtered Element content
      */
     public List getContent(Filter filter) {
         return content.getView(filter);
@@ -891,7 +867,7 @@ public class Element implements Serializable, Cloneable {
      *
      * @param str <code>String</code> to add
      * @return this element modified
-     * @throws IllegalDataException if <code>str</code> contains an 
+     * @throws IllegalDataException if <code>str</code> contains an
      *         illegal character such as a vertical tab (as determined
      *         by {@link org.jdom.Verifier#checkCharacterData})
      */
@@ -905,7 +881,7 @@ public class Element implements Serializable, Cloneable {
      *
      * @param text <code>Text</code> to add
      * @return this element modified
-     * @throws IllegalAddException if the <code>Text</code> object 
+     * @throws IllegalAddException if the <code>Text</code> object
      *         you're attempting to add already has a parent element.
      */
     public Element addContent(Text text) {
@@ -1207,9 +1183,9 @@ public class Element implements Serializable, Cloneable {
      *
      * @param newAttributes <code>List</code> of attributes to set
      * @return this element modified
-     * @throws IllegalAddException if the List contains objects 
+     * @throws IllegalAddException if the List contains objects
      *         that are not instances of <code>Attribute</code>,
-     *         or if any of the <code>Attribute</code> objects have 
+     *         or if any of the <code>Attribute</code> objects have
      *         conflicting namespace prefixes.
      */
     public Element setAttributes(List newAttributes) {
@@ -1252,7 +1228,7 @@ public class Element implements Serializable, Cloneable {
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
      *         {@link org.jdom.Verifier#checkCharacterData}).
-     * @throws IllegalAddException if the attribute namespace prefix 
+     * @throws IllegalAddException if the attribute namespace prefix
      *         collides with another namespace prefix on the element.
      */
     public Element setAttribute(String name, String value, Namespace ns) {
@@ -1563,7 +1539,7 @@ public class Element implements Serializable, Cloneable {
 
         int size = in.read();
 
-        if (size != 0) { 
+        if (size != 0) {
             additionalNamespaces = new ArrayList(size);
             for (int i = 0; i < size; i++) {
                 Namespace additional = Namespace.getNamespace(
@@ -1578,7 +1554,7 @@ public class Element implements Serializable, Cloneable {
      * This removes all child elements.  Returns true if any were removed.
      * </p>
      * @deprecated Deprecated in Beta 9, instead of this method you can call
-     * <code>clear()</code> on the list returned by <code>getChildren()</code> or by 
+     * <code>clear()</code> on the list returned by <code>getChildren()</code> or by
      * <code>getContent()</code>
      *
      * @return whether deletion occurred
