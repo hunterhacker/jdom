@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.81 2001/06/07 20:53:51 jools Exp $
+ $Id: Element.java,v 1.82 2001/06/07 21:14:22 jools Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.81 $ $Date: 2001/06/07 20:53:51 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.82 $ $Date: 2001/06/07 21:14:22 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -914,6 +914,11 @@ public class Element implements Serializable, Cloneable {
                 throw ex;
             }
         }
+		
+		// There was no old content, so just return.
+		if (oldContent == null) {
+			return this;
+		}
 
         // Remove parentage on the old content
         Iterator itr = oldContent.iterator();
