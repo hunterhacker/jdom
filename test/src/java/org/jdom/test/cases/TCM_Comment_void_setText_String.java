@@ -1,3 +1,5 @@
+package org.jdom.test.cases;
+
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
@@ -8,26 +10,26 @@
  are met:
  
  1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
+	notice, this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+	notice, this list of conditions, and the disclaimer that follows 
+	these conditions in the documentation and/or other materials 
+	provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+	derived from this software without prior written permission.  For
+	written permission, please contact license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+	may "JDOM" appear in their name, without prior written permission
+	from the JDOM Project Management (pm@jdom.org).
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
+	 "This product includes software developed by the
+	  JDOM Project (http://www.jdom.org/)."
  Alternatively, the acknowledgment may be graphical using the logos 
  available at http://www.jdom.org/images/logos.
 
@@ -52,43 +54,75 @@
  
  */
 
-package org.jdom.test.cases;
-
 /**
- * Please put a description of your test here.
+ * Test the setText method of Comment.
+ * setText should replace the value of the Comment after checking for valid
+ * data.
+ *
+ * I don't understand why the constructor checks for valid data and not setText()
  * 
- * @author unascribed
+ * @author Philip Nelson
  * @version 0.1
  */
+import org.jdom.*;
+
 public final class TCM_Comment_void_setText_String
 extends junit.framework.TestCase
 {
-    /**
-     *  Construct a new instance. 
-     */
-    public TCM_Comment_void_setText_String() {
-        super("public void org.jdom.Comment.setText(java.lang.String)");
-    }
+	/**
+	 *  Construct a new instance. 
+	 */
+	public TCM_Comment_void_setText_String() {
+		super("public void org.jdom.Comment.setText(java.lang.String)");
+	}
+	/**
+	 *  Construct a new instance. 
+	 */
+	public TCM_Comment_void_setText_String(String name) {
+		super(name);
+	}
+	/**
+	 * This method is called before a test is executed.
+	 */
+	public void setUp() {
+		// your code goes here.
+	}
+	/**
+	 * This method is called after a test is executed.
+	 */
+	public void tearDown() {
+		// your code goes here.
+	}
+/**
+	 * Test setting and resetting the text value of this Comment.
+	 */
+public void test() {
+	Comment theComment = new org.jdom.Comment("this is a comment");
 
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
+	assertEquals(
+		"incorrect Comment constructed", 
+		"[Comment: <!--this is a comment-->]", 
+		theComment.toString()); 
 
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
+	//set it to the empty string
+	theComment.setText("");
 
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test() {
-        fail("implement me !");
-    }
+	assertEquals("incorrect Comment text", "", theComment.getText());
+	//set it to a new string
+	theComment.setText("12345qwerty");
 
+	assertEquals("incorrect Comment text", "12345qwerty", theComment.getText());
+	
+	/*Not sure why the constructor tests for invalid data but setText doesn't
+	
+	try {
+		theComment.setText(null);
+		fail("Comment constructor didn't catch invalid comment string");
+	} catch (IllegalDataException e) {
+	
+		assert(true);
+	}
+	*/
+
+}
 }
