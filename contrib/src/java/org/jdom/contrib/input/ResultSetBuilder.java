@@ -1,6 +1,6 @@
 /*--
 
- $Id: ResultSetBuilder.java,v 1.11 2004/02/06 09:57:48 jhunter Exp $
+ $Id: ResultSetBuilder.java,v 1.12 2004/12/11 00:06:40 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -307,10 +307,8 @@ public class ResultSetBuilder {
     }
 
     /**
-     * <p>
-     *   Set the name to use as the root element in
-     *   the <code>Document</code>
-     * </p>
+     * Set the name to use as the root element in
+     * the <code>Document</code>.
      *
      * @param rootName <code>String</code> the new name.
      *
@@ -320,10 +318,8 @@ public class ResultSetBuilder {
     }
 
     /**
-     * <p>
-     *   Set the name to use as the row element in
-     *   the <code>Document</code>
-     * </p>
+     * Set the name to use as the row element in
+     * the <code>Document</code>.
      *
      * @param rowName <code>String</code> the new name.
      *
