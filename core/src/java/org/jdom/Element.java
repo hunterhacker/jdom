@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.87 2001/06/18 15:38:10 jhunter Exp $
+ $Id: Element.java,v 1.88 2001/06/18 15:40:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.87 $ $Date: 2001/06/18 15:38:10 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.88 $ $Date: 2001/06/18 15:40:47 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1937,7 +1937,6 @@ public class Element implements Serializable, Cloneable {
             return false;
         }
         if (content.remove(cdata)) {
-            cdata.setParent(null);
             return true;
         } else {
             return false;
