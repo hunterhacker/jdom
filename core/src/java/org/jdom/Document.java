@@ -84,6 +84,7 @@ public class Document implements Serializable, Cloneable {
      *   to use if needed.
      * </p>
      */
+    // XXX Should this be public, to avoid use of Document(null)?
     protected Document() {}
 
     /**
@@ -147,16 +148,20 @@ public class Document implements Serializable, Cloneable {
      */
     public Document setRootElement(Element rootElement) {
         // If existing root element, tell it that it's no longer root
+        // and remove it from the content list
+        int rootLocation = content.size();  // default add to end
         if (this.rootElement != null) {
             this.rootElement.setIsRootElement(false);
+            rootLocation = content.indexOf(this.rootElement);
+            content.remove(rootLocation);
         }
-
-        this.rootElement = rootElement;
 
         if (rootElement != null) {
             rootElement.setIsRootElement(true);
-            content.add(rootElement);
+            content.add(rootLocation, rootElement);
         }
+
+        this.rootElement = rootElement;
 
         return this;
     }
@@ -192,7 +197,8 @@ public class Document implements Serializable, Cloneable {
      * <p>
      * This will return the list of
      *   <code>{@link ProcessingInstruction}</code>s
-     *   for this <code>Document</code>.
+     *   for this <code>Document</code> located at the document level 
+     *   (outside the root element).
      * The returned list is "live" and changes to it affect the
      * document's actual content.
      * </p>
@@ -215,7 +221,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the processing instructions for this
-     *   <code>Document</code> which have the supplied target.
+     *   <code>Document</code> located at the document level
+     *   (outside the root element) which have the supplied target.
      * The returned list is "live" and changes to it affect the
      * document's actual content.
      * </p>
@@ -242,7 +249,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the first processing instruction for this
-     *   <code>Document</code> for the supplied target, or null if
+     *   <code>Document</code> located at the document level 
+     *   (outside the root element) for the supplied target, or null if
      *   no such processing instruction exists.
      * </p>
      *
@@ -263,84 +271,6 @@ public class Document implements Serializable, Cloneable {
 
         // If we got here, none found
         return null;
-    }
-
-    /**
-     * <p>
-     * </p>
-     *
-     * @param pi the PI to add.
-     * @return <code>Document</code> this document modified.
-     */
-    public Document addProcessingInstruction(ProcessingInstruction pi) {
-        content.add(pi);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * </p>
-     *
-     * @param target target of PI to add.
-     * @param data raw data portion of PI to add.
-     * @return <code>Document</code> this document modified.
-     */
-    public Document addProcessingInstruction(String target, String data) {
-        content.add(new ProcessingInstruction(target, data));
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * </p>
-     *
-     * @param target target of PI to add.
-     * @param data map data portion of PI to add.
-     * @return <code>Document</code> this document modified.
-     */
-    public Document addProcessingInstruction(String target, Map data) {
-        content.add(new ProcessingInstruction(target, data));
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * This sets the PIs for this <code>Document</code> to those in the
-     *   <code>List</code supplied (removing all other PIs).
-     * </p>
-     *
-     * @param processingInstructions <code>List</code> of PIs to use.
-     * @return <code>Document</code> - this Document modified.
-     */
-    public Document setProcessingInstructions(
-        List processingInstructions) {
-
-        List current = getProcessingInstructions();
-        for (Iterator i = current.iterator(); i.hasNext(); ) {
-            i.remove();
-        }
-
-        content.addAll(processingInstructions);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * This will remove the specified <code>ProcessingInstruction</code>.
-     * </p>
-     *
-     * @param processingInstruction <code>ProcessingInstruction</code>
-     *                              to remove.
-     * @return <code>boolean</code> - whether the requested PI was removed.
-     */
-    public boolean removeProcessingInstruction(
-                                              ProcessingInstruction processingInstruction) {
-
-        return content.remove(processingInstruction);
     }
 
     /**
@@ -387,14 +317,69 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This sets the PIs for this <code>Document</code> to those in the
+     *   <code>List</code supplied (removing all other PIs).
+     * </p>
+     *
+     * @param pis <code>List</code> of PIs to use.
+     * @return <code>Document</code> - this Document modified.
+     */
+    public Document setProcessingInstructions(List pis) {
+
+        List current = getProcessingInstructions();
+        for (Iterator i = current.iterator(); i.hasNext(); ) {
+            i.remove();
+        }
+
+        content.addAll(pis);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Adds the specified PI to the document.
+     * </p>
+     *
+     * @param pi the PI to add.
+     * @return <code>Document</code> this document modified.
+     */
+    public Document addContent(ProcessingInstruction pi) {
+        content.add(pi);
+
+        return this;
+    }
+
+    /**
+     * <p>
      * This will add a comment to the <code>Document</code>.
      * </p>
      *
      * @param comment <code>Comment</code> to add.
      * @return <code>Document</code> - this object modified.
      */
-    public Document addComment(Comment comment) {
+    public Document addContent(Comment comment) {
         content.add(comment);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * This will add a comment to the <code>Document</code>.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to add.
+     * @return <code>Document</code> - this object modified.
+     */
+    public Document addContent(Element element) {
+        if (getRootElement() != null) {
+            throw new IllegalAddException(
+                "The element " + element.getQualifiedName() + 
+                " could not be added to the document because the" +
+                " document already has a root element");
+        }
+        setRootElement(element);
 
         return this;
     }
@@ -410,6 +395,43 @@ public class Document implements Serializable, Cloneable {
      */
     public List getMixedContent() {
         return content;
+    }
+
+    /**
+     * <p>
+     * This will set all content for the <code>Document</code>.
+     * The List may contain only objects of type Element, Comment, and
+     * ProcessingInstruction; and only one Element that becomes the root.
+     * </p>
+     *
+     * @param content the new mixed content
+     * @return the modified Document
+     * @throws <code>IllegalAddException</code> if the List contains more than
+     *         one Element or objects of illegal types
+     */
+    public Document setMixedContent(List content) {
+        content.clear();
+        rootElement = null;
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                addContent((Element)obj);
+            }
+            else if (obj instanceof Comment) {
+                addContent((Comment)obj);
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                addContent((ProcessingInstruction)obj);
+            }
+            else {
+                throw new IllegalAddException(
+                    "A Document may contain only objects of type Element, " +
+                    "Comment, and ProcessingInstruction");
+            }
+        }
+
+        return this;
     }
 
     /**
@@ -498,11 +520,16 @@ public class Document implements Serializable, Cloneable {
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                continue;
-            } else if (obj instanceof Comment) {
-                doc.addComment((Comment)((Comment)obj).clone());
-            } else if (obj instanceof ProcessingInstruction) {
-                doc.addProcessingInstruction((ProcessingInstruction)((ProcessingInstruction)obj).clone());
+                Element e = (Element)obj;
+                doc.addContent((Element)e.clone());
+            }
+            else if (obj instanceof Comment) {
+                Comment c = (Comment)obj;
+                doc.addContent((Comment)c.clone());
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                ProcessingInstruction pi = (ProcessingInstruction)obj;
+                doc.addContent((ProcessingInstruction)pi.clone());
             }
         }
 
@@ -513,6 +540,41 @@ public class Document implements Serializable, Cloneable {
         return doc;
     }
 
+    /**
+     * @deprecated use addContent(Comment) instead
+     */
+    public Document addComment(Comment c) {
+        return addContent(c);
+    }
+
+    /**
+     * @deprecated use addContent(ProcessingInstruction) instead
+     */
+    public Document addProcessingInstruction(ProcessingInstruction pi) {
+        return addContent(pi);
+    }
+
+    /**
+     * @deprecated use addContent(ProcessingInstruction) instead
+     */
+    public Document addProcessingInstruction(String target, String data) {
+        return addContent(new ProcessingInstruction(target, data));
+    }
+
+    /**
+     * @deprecated use addContent(ProcessingInstruction) instead
+     */
+    public Document addProcessingInstruction(String target, Map data) {
+        return addContent(new ProcessingInstruction(target, data));
+    }
+
+    /**
+     * @deprecated use doc.getMixedContent().remove(PI) instead
+     */
+    public boolean removeProcessingInstruction(ProcessingInstruction pi) {
+        return getMixedContent().remove(pi);
+    }
 }
+
 
 

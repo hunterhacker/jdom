@@ -503,7 +503,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         throws SAXException {
 
         if (atRoot) {
-            document.addProcessingInstruction(target, data);
+            document.addContent(new ProcessingInstruction(target, data));
         } else {
             ((Element)stack.peek()).addContent(new ProcessingInstruction(target, data));
         }
@@ -851,7 +851,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         String commentText = new String(ch, start, end);
         if ((!inDTD) && (!commentText.equals(""))) {
             if (stack.empty()) {
-                document.addComment(
+                document.addContent(
                    new Comment(commentText));
             } else {
                 ((Element)stack.peek()).addContent(

@@ -100,4 +100,15 @@ public class IllegalAddException extends IllegalArgumentException {
               .append(").")
               .toString());
     }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> with the specified
+     *   error message.
+     * </p>
+     *
+     */
+    public IllegalAddException(String msg) {
+        super(msg);
+    }
 }

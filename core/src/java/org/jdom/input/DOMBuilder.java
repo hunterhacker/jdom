@@ -350,9 +350,9 @@ public class DOMBuilder {
 
             case Node.PROCESSING_INSTRUCTION_NODE:
                 if (atRoot) {
-                    doc.addProcessingInstruction(
-                        node.getNodeName(),
-                        node.getNodeValue());
+                    doc.addContent(
+                        new ProcessingInstruction(node.getNodeName(),
+                                                  node.getNodeValue()));
                 } else {
                     current.addContent(
                         new ProcessingInstruction(node.getNodeName(),
@@ -362,7 +362,7 @@ public class DOMBuilder {
 
             case Node.COMMENT_NODE:
                 if (atRoot) {
-                    doc.addComment(new Comment(node.getNodeValue()));
+                    doc.addContent(new Comment(node.getNodeValue()));
                 } else {
                     current.addContent(new Comment(node.getNodeValue()));
                 }
