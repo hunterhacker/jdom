@@ -88,6 +88,9 @@ public class Element implements Serializable, Cloneable {
     /** The <code>{@link Namespace}</code> of the <code>Element</code> */
     protected transient Namespace namespace;
 
+    /** Additional <code>{@link Namespace}</code> declarations on this element */
+    protected transient List additionalNamespaces;
+
     /** The parent of this <code>Element</code> */
     protected Element parent;
 
@@ -305,6 +308,39 @@ public class Element implements Serializable, Cloneable {
             .append(":")
             .append(name)
             .toString();
+    }
+
+    /**
+     * <p>
+     *  This will add a namespace declarations to this element.
+     *    This should <i>not</i> be used to add the declaration for
+     *    this element itself; that should be assigned in the construction
+     *    of the element. Instead, this is for adding namespace
+     *    declarations on the element not relating directly to itself.
+     * </p>
+     *
+     * @param additionalNamespace <code>Namespace</code> to add.
+     */
+    public void addNamespaceDeclaration(Namespace additionalNamespace) {
+        if (additionalNamespaces == null) {
+            additionalNamespaces = new LinkedList();
+        }
+        additionalNamespaces.add(additionalNamespace);
+    }
+
+    /**
+     * <p>
+     *  This will return any namespace declarations on this element
+     *    that exist, <i>excluding</i> the namespace of the element
+     *    itself, which can be obtained through
+     *    <code>{@link #getNamespace()}</code>. If there are no additional
+     *    declarations, this returns <code>null</code>.
+     * </p>
+     *
+     * @return <code>List</code> - the additional namespace declarations.
+     */
+    public List getAdditionalNamespaces() {
+        return additionalNamespaces;
     }
 
     /**

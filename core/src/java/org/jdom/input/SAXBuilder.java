@@ -486,8 +486,11 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** Indicator of whether we are in an <code>Entity</code> */
     private boolean inEntity;
 
-    /** Namespaces for this Document */
-    private LinkedList namespaces;
+    /** Namespaces declared, but not available */
+    private List declaredNamespaces;
+
+    /** Available namespaces */
+    private List availableNamespaces;
 
     /**
      * <p>
@@ -501,8 +504,9 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         this.document = document;
         atRoot = true;
         stack = new Stack();
-        namespaces = new LinkedList();
-        namespaces.add(Namespace.XML_NAMESPACE);
+        declaredNamespaces = new LinkedList();
+        availableNamespaces = new LinkedList();
+        availableNamespaces.add(Namespace.XML_NAMESPACE);
         inEntity = false;
         inDTD = false;
         inCDATA = false;
@@ -543,7 +547,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         throws SAXException {
 
         Namespace ns = Namespace.getNamespace(prefix, uri);
-        namespaces.add(ns);
+        declaredNamespaces.add(ns);
     }
 
     /**
@@ -558,8 +562,9 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void endPrefixMapping(String prefix, String uri)
         throws SAXException {
 
+        // This removes the namespace for the actual element
         Namespace ns = Namespace.getNamespace(prefix, uri);
-        namespaces.remove(ns);
+        availableNamespaces.remove(ns);
     }
 
     /**
@@ -594,10 +599,20 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 int split = qName.indexOf(":");
                 prefix = qName.substring(0, split);
             }
-            element = new Element(localName, Namespace.getNamespace(prefix, namespaceURI));
+            Namespace elementNamespace = Namespace.getNamespace(prefix, namespaceURI);
+            element = new Element(localName, elementNamespace);
+
+            // We want to remove this namespace from those declared, as we've handled that
+            declaredNamespaces.remove(elementNamespace);
+
+            // We do need to make it available for others to use, though
+            availableNamespaces.add(elementNamespace);
         } else {
             element = new Element(localName);
         }
+
+        // We need to take all declared namespaces and add them to this element
+        transferNamespaces(element);
 
         // Handle attributes
         for (int i=0, len=atts.getLength(); i<len; i++) {
@@ -626,9 +641,18 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
     }
 
+    private void transferNamespaces(Element element) {
+        for (int i=0; i<declaredNamespaces.size(); i++) {
+            Namespace ns = (Namespace)declaredNamespaces.get(i);
+            declaredNamespaces.remove(ns);
+            availableNamespaces.add(ns);
+            element.addNamespaceDeclaration(ns);
+        }
+    }
+
     private Namespace getNamespace(String prefix) {
-        for (int i=namespaces.size(); i>0; i--) {
-            Namespace ns = (Namespace)namespaces.get(i-1);
+        for (int i=availableNamespaces.size(); i>0; i--) {
+            Namespace ns = (Namespace)availableNamespaces.get(i-1);
             if (prefix.equals(ns.getPrefix())) {
                 return ns;
             }
@@ -681,7 +705,11 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void endElement(String namespaceURI, String localName,
                            String rawName) {
 
-        stack.pop();
+        Element element = (Element)stack.pop();
+        
+        // Remove the namespaces that this element makes available
+        availableNamespaces.remove(element.getAdditionalNamespaces());
+        
     }
 
     /**

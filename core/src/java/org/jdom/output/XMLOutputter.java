@@ -118,7 +118,8 @@ import org.jdom.ProcessingInstruction;
  * @author David & Will (from Post Tool Design)
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
- * @version 1.0 */
+ * @version 1.0 
+ */
 public class XMLOutputter implements Cloneable {
 
     /** standard value to indent by, if we are indenting **/
@@ -904,6 +905,16 @@ public class XMLOutputter implements Cloneable {
             }
         }
 
+        // Print out additional namespace declarations
+        List additionalNamespaces = element.getAdditionalNamespaces();
+        if (additionalNamespaces != null) {
+            for (int i=0; i<additionalNamespaces.size(); i++) {
+                Namespace additional = (Namespace)additionalNamespaces.get(i);
+                namespaces.push(additional);
+                printNamespace(additional, out);
+            }
+        }
+
         printAttributes(element.getAttributes(), element, out, namespaces);
 
         // handle "" string same as empty
@@ -948,7 +959,9 @@ public class XMLOutputter implements Cloneable {
         }
 
         // remove declared namespaces from stack
-        while (namespaces.size() > previouslyDeclaredNamespaces) namespaces.pop();
+        while (namespaces.size() > previouslyDeclaredNamespaces) {
+            namespaces.pop();
+        }
     }
     
     /**
@@ -1078,10 +1091,6 @@ public class XMLOutputter implements Cloneable {
      */
     protected void printNamespace(Namespace ns, Writer out) throws IOException {
         out.write(" xmlns");
-        if (!ns.getPrefix().equals("")) {
-            out.write(":");
-            out.write(ns.getPrefix());
-        }
         out.write("=\"");
         out.write(ns.getURI());
         out.write("\"");
