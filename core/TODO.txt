@@ -1,7 +1,12 @@
 Items that need to be done:
 
+--- FOR JDOM BETA5 ---
+
 * Finish making July 25th changes to Document.java, done with Element.java
   (jhunter)
+
+* Probably remove removeContent(*) since the List API provides this
+  functionality
 
 * Implement preservation of whitespace, making it available using
   getContent(true) and getMixedContent(true).
@@ -60,10 +65,13 @@ Items that need to be done:
 
 * Ensure that element.addAttribute(attr) doesn't permit duplicates
 
------ Items above this line are wanted for beta5 -----
+* Add methods/logic to Verifier for all XML spec. constraints
 
-* Fix it so check-in messages include diffs.  (jools@jools.org)  Use
-  archive to create an accurate CHANGELOG.txt for what changed between betas.
+* Consider changing the Verifier method signatures to throw the
+  IllegalXXXException directly instead of returning null on error,
+  and let the caller pass the exception through
+
+--- FOR JDOM 1.0 ---
 
 * Have Jools populate jdom-test
 
@@ -86,28 +94,45 @@ Items that need to be done:
 
 * Finalize how regular entities are to work
 
-* Add methods/logic to Verifier for all XML spec. constraints
+* Consider SAXBuilder.setErrorHandler()
 
-* Consider changing the Verifier method signatures to throw the
-  IllegalXXXException directly instead of returning null on error,
-  and let the caller pass the exception through
+* Writing a "Getting started" guide for newbies 
+  (Tom Clements <clements@eng.sun.com>)
+
+* Add JAXP 1.1 supporting classes when it's ready.  Design them to follow the
+  JAXP model so they are usable without JAXP, and can be trivially made to
+  work with JAXP.
+
+--- FOR JDOM 1.1 ---
+
+* Add XPath support
+  Much work being done by Michael Hinchey <michael.hinchey@inference.com>
+
+* Figure out XPath interface, current best is this:
+    List    XPath.getList(Element e, String xpath)  // or Document param
+    Comment XPath.getComment(Element e, String xpath)
+    Element XPath.getElement(Element e, String xpath)
+    ProcIns XPath.getProcIns(Element e, String xpath)
+    Entity  XPath.getEntity(Element e, String xpath)
+    String  XPath.getText(Element e, String xpath)
+
+* Eliminate string hardcoding.  Use resource bundles to allow for
+  localization.
+
+* Investigate a way to do in-memory validation.  First step is probably 
+  to get an in-memory representation of a DTD as per
+  http://xmlhack.com/read.php?item=626
+
+--- UNTIED TO A JDOM VERSION ---
+
+* Fix it so check-in messages include diffs.  (jools@jools.org)  Use
+  archive to create an accurate CHANGELOG.txt for what changed between betas.
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
 * Figure out if we need to support maintaining CDATA sections
 
 * Put www.jdom.org content under CVS
-
-* Consider SAXBuilder.setErrorHandler()
-
-* Add XPath support (not necessary for JDOM 1.0)
-  Much work being done by Michael Hinchey <michael.hinchey@inference.com>
-
-* Writing a "Getting started" guide for newbies 
-  (Tom Clements <clements@eng.sun.com>)
-
-* Eliminate string hardcoding.  Use resource bundles to allow for
-  localization.
 
 * Write a guide for contributors
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
@@ -117,16 +142,4 @@ Items that need to be done:
   version, credits, description, etc, then access/print the info using JDOM
   classes executed by a "java -jar jdom.jar" command.  
   See http://java.sun.com/docs/books/tutorial/jar/
-
-* Investigate a way to do in-memory validation.  First step is probably 
-  to get an in-memory representation of a DTD as per
-  http://xmlhack.com/read.php?item=626
-
-* Figure out XPath interface, current best is this:
-    List    XPath.getList(Element e, String xpath)  // or Document param
-    Comment XPath.getComment(Element e, String xpath)
-    Element XPath.getElement(Element e, String xpath)
-    ProcIns XPath.getProcIns(Element e, String xpath)
-    Entity  XPath.getEntity(Element e, String xpath)
-    String  XPath.getText(Element e, String xpath)
 
