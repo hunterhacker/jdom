@@ -1,6 +1,6 @@
 Items that need to be done:
 
-* Implement DOMOutputter (Kevin Regan <kevinr@valicert.com> is working on it)
+* Implement DOMOutputter
 
 * Automate build process, using ant tasks to EOL handling
   Consider .zip readable by JAR
