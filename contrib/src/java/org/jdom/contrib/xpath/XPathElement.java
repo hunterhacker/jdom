@@ -212,7 +212,7 @@ public class XPathElement {
    * Return the first child comment.
    */
   public Comment getComment() {
-    List content = element.getMixedContent();
+    List content = element.getContent();
     for (Iterator iter = content.iterator(); iter.hasNext(); ) {
       Object each = iter.next();
       if (each instanceof Comment) {
@@ -223,13 +223,13 @@ public class XPathElement {
   }
 
   /**
-   * Return the subset of <code>element.getMixedContent()</code>
+   * Return the subset of <code>element.getContent()</code>
    * which are {@link Comment}s.
    * @return List of type <code>{@link Comment}</code>.
    */
   public List getComments() {
     List result = new ArrayList();
-    for (Iterator iter = element.getMixedContent().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = element.getContent().iterator(); iter.hasNext(); ) {
       Object each = iter.next();
       if (each instanceof Comment) {
         result.add(each);
@@ -239,13 +239,13 @@ public class XPathElement {
   }
 
   /**
-   * Return the subset of <code>element.getMixedContent()</code>
+   * Return the subset of <code>element.getContent()</code>
    * which are {@link String}s.
    * @return List of type <code>{@link String}</code>.
    */
   public List getTextChildren() {
     List result = new ArrayList();
-    for (Iterator iter = element.getMixedContent().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = element.getContent().iterator(); iter.hasNext(); ) {
       Object each = iter.next();
       if (each instanceof String) {
         result.add(each);
@@ -255,13 +255,13 @@ public class XPathElement {
   }
 
   /**
-   * Return the subset of <code>element.getMixedContent()</code>
+   * Return the subset of <code>element.getContent()</code>
    * which are {@link ProcessingInstruction}s.
    * @return List of type <code>{@link ProcessingInstruction}</code>.
    */
   public List getProcessingInstructions() {
     List result = new ArrayList();
-    for (Iterator iter = element.getMixedContent().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = element.getContent().iterator(); iter.hasNext(); ) {
       Object each = iter.next();
       if (each instanceof ProcessingInstruction) {
         result.add(each);
@@ -271,7 +271,7 @@ public class XPathElement {
   }
 
   /**
-   * Return the subset of <code>element.getMixedContent()</code>
+   * Return the subset of <code>element.getContent()</code>
    * which are {@link ProcessingInstruction}s and have the given <code>target</code>.
    * @return List of type <code>{@link ProcessingInstruction}</code>.
    */

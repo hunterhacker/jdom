@@ -63,7 +63,7 @@ public class JDOMLocator implements XPathHandler {
    * match the <code>xpath</code>.
    * @return Contains String, {@link Element}, {@link Attribute},
    * {@link Comment}, and {@link ProcessingInstruction} objects;
-   * much like {@link Element#getMixedContent()}.
+   * much like {@link Element#getContent()}.
    */
   public List match(String xpath) throws XPathParseException {
     DEBUG = XPathElement.DEBUG;
@@ -414,7 +414,7 @@ public class JDOMLocator implements XPathHandler {
     switch (nodetype.getCode()) {
     case Nodetype.NODE: {
       if (localName == null) {
-        stepList.addAll(element.getMixedContent());
+        stepList.addAll(element.getContent());
       } else {
         throw new XPathParseException("LocalName for nodes is meaningless.  (localName=" + localName + ")");
       }

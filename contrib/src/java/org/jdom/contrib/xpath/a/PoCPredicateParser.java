@@ -132,7 +132,7 @@ public class PoCPredicateParser implements XPathPredicateParser {
     if ((thing.charAt(0) >= '0') && (thing.charAt(0) <= '9')) {
       handler.number(thing);
     } else {
-      System.out.print("{PocParse path: " + thing + "}");
+      //System.out.print("{PocParse path: " + thing + "}");
     }
   }
 

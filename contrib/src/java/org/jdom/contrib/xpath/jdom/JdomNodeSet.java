@@ -136,7 +136,7 @@ public class JdomNodeSet extends NodeSet {
               // Should we and can we add the other nodes
               // which belong to the document?
             } else {
-              list.addAll(element.getMixedContent());
+              list.addAll(element.getContent());
             }
           } else {
             throw new XPathParseException("LocalName for nodes is meaningless.  (localName=" + step.getLocalName() + ")");
