@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.7 2001/04/27 18:21:20 jhunter Exp $
+ $Id: JDOMException.java,v 1.8 2001/06/15 20:28:54 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,10 +77,10 @@ import java.io.PrintWriter;
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.7 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.8 $ $Date: 2001/06/15 20:28:54 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
-    protected Throwable rootCause;
+    protected Throwable cause;
 
     /**
      * <p>
@@ -115,9 +115,9 @@ public class JDOMException extends Exception {
      * @param exception <code>Exception</code> that caused this
      *                  to be thrown.
      */    
-    public JDOMException(String message, Throwable rootCause)  {
+    public JDOMException(String message, Throwable cause)  {
         super(message);    
-        this.rootCause = rootCause;
+        this.cause = cause;
     }    
 
     /**
@@ -130,8 +130,8 @@ public class JDOMException extends Exception {
      * @return <code>String</code> - message for <code>Exception</code>.
      */
     public String getMessage() {
-        if (rootCause != null) {
-            return super.getMessage() + ": " + rootCause.getMessage();
+        if (cause != null) {
+            return super.getMessage() + ": " + cause.getMessage();
         } else {
             return super.getMessage();
         }
@@ -146,9 +146,9 @@ public class JDOMException extends Exception {
      */
     public void printStackTrace() {
         super.printStackTrace();
-        if (rootCause != null) {
+        if (cause != null) {
             System.err.print("Root cause: ");
-            rootCause.printStackTrace();
+            cause.printStackTrace();
         }
     }
 
@@ -161,9 +161,9 @@ public class JDOMException extends Exception {
      */
     public void printStackTrace(PrintStream s) {
         super.printStackTrace(s);
-        if (rootCause != null) {
+        if (cause != null) {
             s.print("Root cause: ");
-            rootCause.printStackTrace(s);
+            cause.printStackTrace(s);
         }
     }
 
@@ -176,9 +176,9 @@ public class JDOMException extends Exception {
      */
     public void printStackTrace(PrintWriter w) {
         super.printStackTrace(w);
-        if (rootCause != null) {
+        if (cause != null) {
             w.print("Root cause: ");
-            rootCause.printStackTrace(w);
+            cause.printStackTrace(w);
         }
     }
 
@@ -190,8 +190,23 @@ public class JDOMException extends Exception {
      * 
      * @return <code>Throwable</code> - the wrapped <code>Throwable</code>.
      */
+    public Throwable getCause()  {
+        return cause;             
+    }
+
+    /**
+     * <p>
+     * This will return the root cause <code>Throwable</code>, or null
+     *   if one does not exist.
+     * </p>
+     * 
+     * @return <code>Throwable</code> - the wrapped <code>Throwable</code>.
+     *
+     * @deprecated Deprecated in beta7, use getCause() instead which follows
+     * the JDK 1.4 naming convention
+     */
     public Throwable getRootCause()  {
-        return rootCause;             
+        return cause;             
     }
 
 }
