@@ -88,6 +88,7 @@ public static Test suite() {
 		suite.addTest(TestAttribute.suite());
 		suite.addTest(TestNamespace.suite());
 		suite.addTest(TestDocType.suite());
+		suite.addTest(TestElement.suite());
 		return suite;
 }
 }
