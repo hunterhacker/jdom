@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.8 2004/08/25 09:04:56 jhunter Exp $
+ $Id: Format.java,v 1.9 2004/08/31 04:41:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.8 $, $Date: 2004/08/25 09:04:56 $
+ * @version $Revision: 1.9 $, $Date: 2004/08/31 04:41:39 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.8 $ $Date: 2004/08/25 09:04:56 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.9 $ $Date: 2004/08/31 04:41:39 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -151,6 +151,10 @@ public class Format implements Cloneable {
     /** Whether or not to expand empty elements to
      * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
     boolean expandEmptyElements = false;
+
+    /** Whether TrAX output escaping disabling/enabling PIs are ignored
+      * or processed - default is <code>false</code> */
+    boolean ignoreTrAXEscapingPIs = false;
 
     /** text handling mode */
     TextMode mode = TextMode.PRESERVE;
@@ -294,6 +298,47 @@ public class Format implements Cloneable {
      */
     public boolean getExpandEmptyElements() {
         return expandEmptyElements;
+    }
+
+    /**
+     * This will set whether JAXP TrAX processing instructions for
+     * disabling/enabling output escaping are ignored.  Disabling
+     * output escaping allows using XML text as element content and
+     * outputing it verbatim, i.e. as element children would be.
+     * <p>
+     * When processed, these processing instructions are removed from
+     * the generated XML text and control whether the element text
+     * content is output verbatim or with escaping of the pre-defined
+     * entities in XML 1.0.  The text to be output verbatim shall be
+     * surrounded by the
+     * <code>&lt;?javax.xml.transform.disable-output-escaping ?&gt;</code>
+     * and <code>&lt;?javax.xml.transform.enable-output-escaping ?&gt;</code>
+     * PIs.</p>
+     * <p>
+     * When ignored, the processing instructions are present in the
+     * generated XML text and the pre-defined entities in XML 1.0 are
+     * escaped.
+     * <p>
+     * Default: <code>false</code>.</p>
+     *
+     * @param ignoreTrAXEscapingPIs <code>boolean</code> indicating
+     *        whether or not TrAX ouput escaping PIs are ignored.
+     *
+     * @see javax.xml.transform.Result#PI_ENABLE_OUTPUT_ESCAPING
+     * @see javax.xml.transform.Result#PI_DISABLE_OUTPUT_ESCAPING
+     */
+    public void setIgnoreTrAXEscapingPIs(boolean ignoreTrAXEscapingPIs) {
+        this.ignoreTrAXEscapingPIs = ignoreTrAXEscapingPIs;
+    }
+
+    /**
+     * Returns whether JAXP TrAX processing instructions for
+     * disabling/enabling output escaping are ignored.
+     *
+     * @return whether or not TrAX ouput escaping PIs are ignored.
+     */
+    public boolean getIgnoreTrAXEscapingPIs() {
+        return ignoreTrAXEscapingPIs;
     }
 
     /**
