@@ -2,7 +2,7 @@
 
 import org.jdom.*;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom.output.*;
 
 import org.jdom.contrib.ids.IdDocument;
 import org.jdom.contrib.ids.IdFactory;
@@ -23,7 +23,7 @@ public class TestIds {
       Element    elt = doc.getElementById(args[1]);
 
       if (elt != null) {
-         new XMLOutputter("   ", true).output(elt, System.out);
+         new XMLOutputter(Format.getPrettyFormat()).output(elt, System.out);
          System.out.println();
          System.exit(0);
       }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: TestBean.java,v 1.2 2004/02/06 09:57:48 jhunter Exp $
+ $Id: TestBean.java,v 1.3 2004/02/17 02:29:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -124,7 +124,7 @@ public class TestBean implements java.io.Serializable {
 	    alex.setFriend(amy);
 	    
 	    Document doc = mapper.toDocument(alex);
-	    XMLOutputter o = new XMLOutputter("  ", true);
+	    XMLOutputter o = new XMLOutputter(Format.getPrettyFormat());
 	    o.output(doc, System.out);
 	    System.out.println();
 
