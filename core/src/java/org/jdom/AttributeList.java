@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.1 2002/01/25 18:42:52 jhunter Exp $
+ $Id: AttributeList.java,v 1.2 2002/01/27 11:10:51 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,13 +65,14 @@ import java.util.List;
 /**
  * <p>
  * <code>AttributeList</code> represents valid JDOM <code>Attribute</code>
- * content.
+ * content.  This class is NOT PUBLIC; users should see it as a simple List
+ * implementation.
  * </p>
  *
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.2 $, $Date: 2002/01/27 11:10:51 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +84,7 @@ class AttributeList extends AbstractList
                     implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.1 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.2 $ $Date: 2002/01/27 11:10:51 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 
