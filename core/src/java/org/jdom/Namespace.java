@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.26 2001/05/19 00:07:07 jhunter Exp $
+ $Id: Namespace.java,v 1.27 2001/05/19 00:15:30 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.26 $ $Date: 2001/05/19 00:07:07 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.27 $ $Date: 2001/05/19 00:15:30 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -232,8 +232,7 @@ public final class Namespace {
     /**
      * <p>
      *  This tests for equality - Two <code>Namespaces</code>
-     *  are equal if and only if their URIs are byte-for-byte equals
-     *  and their prefixes are equal.
+     *  are equal if and only if their URIs are byte-for-byte equals.
      * </p>
      *
      * @param ob <code>Object</code> to compare to this <code>Namespace</code>.
@@ -241,14 +240,10 @@ public final class Namespace {
      *         this <code>Namespace</code>.
      */
     public boolean equals(Object ob) {
-        if (ob == null) {
-            return false;
-        }
-
-        if (ob instanceof Namespace) {
+        if (ob instanceof Namespace) {  // instanceof returns false if null
             Namespace ns = (Namespace)ob;
-            // Compare URIs
-            if (ns.getURI().equals(uri) && ns.getPrefix().equals(prefix)) {
+            // Compare URIs only
+            if (ns.getURI().equals(uri)) {
                 return true;
             }
         }
