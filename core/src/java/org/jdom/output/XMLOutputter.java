@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.99 2003/05/29 02:51:49 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.100 2003/05/30 07:15:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.99 $, $Date: 2003/05/29 02:51:49 $
+ * @version $Revision: 1.100 $, $Date: 2003/05/30 07:15:49 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.99 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.100 $ $Date: 2003/05/30 07:15:49 $ $Name:  $";
 
     // For normal output
     protected Format userFormat = Format.getRawFormat();
@@ -331,7 +331,7 @@ public class XMLOutputter implements Cloneable {
      *                 only whitespace is not print, false=>use text verbatim
      */
     public void setTrimAllWhite(boolean trimAllWhite) {
-        userFormat.setTrimAllWhite(trimAllWhite);
+        userFormat.setTextMode(Format.TextMode.TRIM_FULL_WHITE);
     }
 
     /**
@@ -345,7 +345,7 @@ public class XMLOutputter implements Cloneable {
      *                 whitespace, false=>use text verbatim
      */
     public void setTextTrim(boolean textTrim) {
-        userFormat.setTextTrim(textTrim);
+        userFormat.setTextMode(Format.TextMode.TRIM);
     }
 
     /**
@@ -360,7 +360,7 @@ public class XMLOutputter implements Cloneable {
      *        whitespace, false=>use text verbatim
      */
     public void setTextNormalize(boolean textNormalize) {
-        userFormat.setTextNormalize(textNormalize);
+        userFormat.setTextMode(Format.TextMode.NORMALIZE);
     }
 
     /**
@@ -559,7 +559,7 @@ public class XMLOutputter implements Cloneable {
         // starting with no indentation
         List content = doc.getContent();
         int size = content.size();
-        for( int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             Object obj = content.get(i);
 
             if (obj instanceof Element) {
@@ -979,12 +979,12 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     protected void printCDATA(Writer out, CDATA cdata) throws IOException {
-        String str = currentFormat.textNormalize
+        String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
                      ? cdata.getTextNormalize()
-                     : ((currentFormat.textTrim) ? cdata.getText().trim()
-                                                 : cdata.getText());
+                     : ((currentFormat.mode == Format.TextMode.TRIM) ?
+                             cdata.getText().trim() : cdata.getText());
         out.write("<![CDATA[");
-        out.write( str);
+        out.write(str);
         out.write("]]>");
     }
 
@@ -995,11 +995,11 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     protected void printText(Writer out, Text text) throws IOException {
-        String str = currentFormat.textNormalize
+        String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
                      ? text.getTextNormalize()
-                     : ((currentFormat.textTrim) ? text.getText().trim()
-                                                 : text.getText());
-        out.write( escapeElementEntities( str));
+                     : ((currentFormat.mode == Format.TextMode.TRIM) ?
+                          text.getText().trim() : text.getText());
+        out.write(escapeElementEntities(str));
     }
 
     /**
@@ -1007,13 +1007,13 @@ public class XMLOutputter implements Cloneable {
      * trims interior whitespace, etc. if necessary.
      */
     protected void printString(Writer out, String str) throws IOException {
-        if (currentFormat.textNormalize) {
-            str = Text.normalizeString( str);
+        if (currentFormat.mode == Format.TextMode.NORMALIZE) {
+            str = Text.normalizeString(str);
         }
-        else if (currentFormat.textTrim) {
+        else if (currentFormat.mode == Format.TextMode.TRIM) {
             str = str.trim();
         }
-        out.write( escapeElementEntities( str));
+        out.write(escapeElementEntities(str));
     }
 
     /**
@@ -1036,16 +1036,16 @@ public class XMLOutputter implements Cloneable {
         // Check for xml:space and adjust format settings
         String space = null;
         if (attributes != null) {
-            space = element.getAttributeValue( "space",
+            space = element.getAttributeValue("space",
                                                Namespace.XML_NAMESPACE);
         }
 
         Format previousFormat = currentFormat;
 
-        if ("default".equals( space)) {
+        if ("default".equals(space)) {
             currentFormat = userFormat;
         }
-        else if ("preserve".equals( space)) {
+        else if ("preserve".equals(space)) {
             currentFormat = preserveFormat;
         }
 
@@ -1072,7 +1072,7 @@ public class XMLOutputter implements Cloneable {
         // index of the start of the content we're interested
         // in based on the current settings.
 
-        int start = skipLeadingWhite( content, 0);
+        int start = skipLeadingWhite(content, 0);
         int size = content.size();
         if (start >= size) {
             // Case content is empty or all insignificant whitespace
@@ -1092,7 +1092,7 @@ public class XMLOutputter implements Cloneable {
             // or Text we don't want to indent after the start or
             // before the end tag.
 
-            if (nextNonText( content, start) < size) {
+            if (nextNonText(content, start) < size) {
                 // Case Mixed Content - normal indentation
                 newline(out);
                 printContentRange(out, content, start, size,
@@ -1140,17 +1140,17 @@ public class XMLOutputter implements Cloneable {
         int first, index;  // Indexes into the list of content
 
         index = start;
-        while( index < end) {
+        while (index < end) {
             firstNode = (index == start) ? true : false;
-            next = content.get( index);
+            next = content.get(index);
 
             //
             // Handle consecutive CDATA and Text nodes all at once
             //
             if (next instanceof Text) {
-                first = skipLeadingWhite( content, index);
+                first = skipLeadingWhite(content, index);
                 // Set index to next node for loop
-                index = nextNonText( content, first);
+                index = nextNonText(content, first);
 
                 // If it's not all whitespace - print it!
                 if (first < index) {
@@ -1212,30 +1212,30 @@ public class XMLOutputter implements Cloneable {
         previous = null;
 
         // Remove leading whitespace-only nodes
-        start = skipLeadingWhite( content, start);
+        start = skipLeadingWhite(content, start);
 
         int size = content.size();
         if (start < size) {
             // And remove trialing whitespace-only nodes
-            end = skipTrialingWhite( content, end);
+            end = skipTrialingWhite(content, end);
 
-            for( int i = start; i < end; i++) {
-                node = content.get( i);
+            for (int i = start; i < end; i++) {
+                node = content.get(i);
 
                 // Get the unmangled version of the text
                 // we are about to print
                 next = ((Text) node).getText();
 
                 // This may save a little time
-                if (next == null || "".equals( next)) {
+                if (next == null || "".equals(next)) {
                     continue;
                 }
 
                 // Determine if we need to pad the output (padding is
                 // only need in trim or normalizing mode)
                 if (previous != null) { // Not 1st node
-                    if (currentFormat.textNormalize ||
-                        currentFormat.textTrim) {
+                    if (currentFormat.mode == Format.TextMode.NORMALIZE ||
+                        currentFormat.mode == Format.TextMode.TRIM) {
                             if ((endsWithWhite(previous)) ||
                                 (startsWithWhite(next))) {
                                     out.write(" ");
@@ -1270,7 +1270,7 @@ public class XMLOutputter implements Cloneable {
         String uri = ns.getURI();
 
         // Already printed namespace decl?
-        if (uri.equals( namespaces.getURI(prefix))) {
+        if (uri.equals(namespaces.getURI(prefix))) {
             return;
         }
 
@@ -1300,8 +1300,8 @@ public class XMLOutputter implements Cloneable {
         // this is illegal; but as yet we don't throw an exception
         // if someone tries to do this
         // Set prefixes = new HashSet();
-        for( int i = 0; i < attributes.size(); i++) {
-            Attribute attribute = (Attribute) attributes.get( i);
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = (Attribute) attributes.get(i);
             Namespace ns = attribute.getNamespace();
             if ((ns != Namespace.NO_NAMESPACE) &&
                 (ns != Namespace.XML_NAMESPACE)) {
@@ -1340,8 +1340,8 @@ public class XMLOutputter implements Cloneable {
                                 throws IOException {
         List list = element.getAdditionalNamespaces();
         if (list != null) {
-            for( int i = 0; i < list.size(); i++) {
-                Namespace additional = (Namespace)list.get( i);
+            for (int i = 0; i < list.size(); i++) {
+                Namespace additional = (Namespace)list.get(i);
                 printNamespace(out, additional, namespaces);
             }
         }
@@ -1384,18 +1384,18 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if content contains
     // all whitespace.
     // @param start index to begin search (inclusive)
-    private int skipLeadingWhite( List content, int start) {
+    private int skipLeadingWhite(List content, int start) {
         if (start < 0) {
             start = 0;
         }
 
         int index = start;
         int size = content.size();
-        if (currentFormat.trimAllWhite
-                || currentFormat.textNormalize
-                || currentFormat.textTrim) {
-            while( index < size) {
-                if ( !isAllWhitespace( content.get(index))) {
+        if (currentFormat.mode == Format.TextMode.TRIM_FULL_WHITE
+                || currentFormat.mode == Format.TextMode.NORMALIZE
+                || currentFormat.mode == Format.TextMode.TRIM) {
+            while (index < size) {
+                if (!isAllWhitespace(content.get(index))) {
                     return index;
                 }
                 index++;
@@ -1408,18 +1408,18 @@ public class XMLOutputter implements Cloneable {
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrialingWhite( List content, int start) {
+    private int skipTrialingWhite(List content, int start) {
         int size = content.size();
         if (start > size) {
             start = size;
         }
 
         int index = start;
-        if (currentFormat.trimAllWhite
-                || currentFormat.textNormalize
-                || currentFormat.textTrim) {
-            while( index >= 0) {
-                if ( !isAllWhitespace( content.get(index - 1)))
+        if (currentFormat.mode == Format.TextMode.TRIM_FULL_WHITE
+                || currentFormat.mode == Format.TextMode.NORMALIZE
+                || currentFormat.mode == Format.TextMode.TRIM) {
+            while (index >= 0) {
+                if (!isAllWhitespace(content.get(index - 1)))
                     break;
                 --index;
             }
@@ -1430,15 +1430,15 @@ public class XMLOutputter implements Cloneable {
     // Return the next non-CDATA or non-Text node, index = content.size()
     // is returned if there is no more non-CDATA or non-Text nodes
     // @param start index to begin search (inclusive)
-    private int nextNonText( List content, int start) {
+    private int nextNonText(List content, int start) {
         if (start < 0) {
             start = 0;
         }
 
         int index = start;
         int size = content.size();
-        while( index < size) {
-            if ( !(content.get( index) instanceof Text)) {
+        while (index < size) {
+            if (!(content.get(index) instanceof Text)) {
                 return index;
             }
             index++;
@@ -1461,7 +1461,7 @@ public class XMLOutputter implements Cloneable {
         }
 
         for (int i = 0; i < str.length(); i++) {
-            if ( !isWhitespace( str.charAt( i)))
+            if (!isWhitespace(str.charAt(i)))
                 return false;
         }
         return true;
@@ -1471,7 +1471,7 @@ public class XMLOutputter implements Cloneable {
     private boolean startsWithWhite(String str) {
         if ((str != null) &&
             (str.length() > 0) &&
-            isWhitespace( str.charAt(0))) {
+            isWhitespace(str.charAt(0))) {
            return true;
         }
         return false;
@@ -1481,7 +1481,7 @@ public class XMLOutputter implements Cloneable {
     private boolean endsWithWhite(String str) {
         if ((str != null) &&
             (str.length() > 0) &&
-            isWhitespace( str.charAt(str.length() - 1))) {
+            isWhitespace(str.charAt(str.length() - 1))) {
            return true;
         }
         return false;
@@ -1662,7 +1662,7 @@ public class XMLOutputter implements Cloneable {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < userFormat.lineSeparator.length(); i++) {
-            char ch = userFormat.lineSeparator.charAt( i);
+            char ch = userFormat.lineSeparator.charAt(i);
             switch (ch) {
             case '\r': buffer.append("\\r");
                        break;
@@ -1682,9 +1682,7 @@ public class XMLOutputter implements Cloneable {
             "indent = '" + userFormat.indent + "'" + ", " +
             "expandEmptyElements = " + userFormat.expandEmptyElements + ", " +
             "lineSeparator = '" + buffer.toString() + "', " +
-            "trimAllWhite = " + userFormat.trimAllWhite +
-            "textTrim = " + userFormat.textTrim +
-            "textNormalize = " + userFormat.textNormalize + "]"
+            "textMode = " + userFormat.mode + "]"
         );
     }
 
