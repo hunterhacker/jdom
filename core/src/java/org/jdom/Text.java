@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.14 2002/04/29 13:38:16 jhunter Exp $
+ $Id: Text.java,v 1.15 2002/05/17 15:46:07 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,12 +68,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Bradley S. Huffman
- * @version $Revision: 1.14 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.15 $, $Date: 2002/05/17 15:46:07 $
  */
 public class Text implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.14 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.15 $ $Date: 2002/05/17 15:46:07 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -98,6 +98,9 @@ public class Text implements Serializable, Cloneable {
      * supplied string value as it's character content.
      *
      * @param str the node's character content.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *         by {@link org.jdom.Verifier#checkCharacterData})
      */
     public Text(String str) {
         setText(str);
@@ -175,6 +178,9 @@ public class Text implements Serializable, Cloneable {
      * This will set the value of this <code>Text</code> node.
      *
      * @param str value for node's content.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *         by {@link org.jdom.Verifier#checkCharacterData})
      */
     public Text setText(String str) {
         String reason;
@@ -196,6 +202,9 @@ public class Text implements Serializable, Cloneable {
      * exists within this <code>Text</code> node.
      *
      * @param str character content to append.
+     * @throws IllegalDataException if <code>str</code> contains an 
+     *         illegal character such as a vertical tab (as determined
+     *         by {@link org.jdom.Verifier#checkCharacterData})
      */
     public void append(String str) {
         String reason;
