@@ -20,7 +20,6 @@ These are the meaningful targets for this build file:
 
  - package [default] -> creates ./build/jdom-test.jar
  - compile -> compiles the contributed source code
- - samples -> compiles the contributed samples
  - javadoc -> generates the API documentation in ./build/javadocs
  - clean -> restores the distribution to its original and clean state
 
@@ -46,7 +45,6 @@ These are the meaningful targets for this build file:
     <property name="deprecation" value="off"/>
 
     <property name="src.dir" value="./src/java"/>
-    <property name="samples.dir" value="./samples"/>
     <property name="lib.dir" value="./lib"/>
     <property name="packages" value="org.jdom.test.*"/>
 
@@ -83,7 +81,6 @@ These are the meaningful targets for this build file:
     <echo message=""/>
     <echo message="   package  --> generates the jdom-test.jar file (default)"/>
     <echo message="   compile  --> compiles the contributed source code"/>
-    <echo message="   samples  --> compiles the contributed samples"/>
     <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> restores the distribution to its clean state"/>
     <echo message=""/>
@@ -142,33 +139,9 @@ These are the meaningful targets for this build file:
   </target>
 
   <!-- =================================================================== -->
-  <!-- Prepares the example code                                            -->
-  <!-- =================================================================== -->
-  <target name="prepare-samples" depends="prepare">
-    <!-- create directories -->
-    <mkdir dir="${build.src}"/>
-    <mkdir dir="${build.dest}"/>
-
-    <!-- copy src files -->
-    <copydir src="${samples.dir}"
-             dest="${build.src}"
-             filtering="on"/>
-  </target>
-
-  <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
   <target name="compile" depends="prepare-src,collections">
-    <javac srcdir="${build.src}"
-           destdir="${build.dest}"
-           debug="${debug}"
-           optimize="${optimize}"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Compiles the samples directory                                       -->
-  <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
