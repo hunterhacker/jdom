@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.13 2003/04/08 04:57:45 jhunter Exp $
+ $Id: JDOMSource.java,v 1.14 2003/04/21 06:40:31 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -96,12 +96,12 @@ import org.xml.sax.*;
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2003/04/08 04:57:45 $
+ * @version $Revision: 1.14 $, $Date: 2003/04/21 06:40:31 $
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.13 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.14 $ $Date: 2003/04/21 06:40:31 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -440,7 +440,7 @@ public class JDOMSource extends SAXSource {
      * <p>
      * This implementation does not support reading XML data from
      * system identifiers, only from JDOM documents.  Hence,
-     * this method always throws a {#SAXNotSupportedException}.
+     * this method always throws a {@link SAXNotSupportedException}.
      * </p>
      *
      * @param  systemId   the system identifier (URI).
