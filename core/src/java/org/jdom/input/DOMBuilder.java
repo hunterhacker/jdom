@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.30 2001/03/15 06:07:18 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.31 2001/04/16 03:58:19 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -367,6 +367,10 @@ public class DOMBuilder {
                 Element element = null;
                 Namespace ns = null;
                 if (uri == null) {
+                    if (localName == null) {
+                        // Sometimes localName is null, if so try the tag name
+                        localName = ((org.w3c.dom.Element)node).getTagName();
+                    }
                     element = new Element(localName);
                 }
                 else {
@@ -406,10 +410,14 @@ public class DOMBuilder {
                     else {
                         prefix = att.getPrefix();
                         uri = att.getNamespaceURI();
-                        String localname = att.getLocalName();
+                        String attLocalName = att.getLocalName();
+                        if (attLocalName == null) {
+                            // Sometimes attLocalName is null, try attname
+                            attLocalName = attname;
+                        }
                         Namespace attns = Namespace.getNamespace(prefix, uri);
                         Attribute attribute =
-                            new Attribute(localname, attvalue, attns);
+                            new Attribute(attLocalName, attvalue, attns);
                         element.addAttribute(attribute);
                     }
                 }
