@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.30 2001/04/27 18:21:19 jhunter Exp $
+ $Id: Attribute.java,v 1.31 2001/05/08 22:23:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,7 @@ import java.io.IOException;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.30 $ $Date: 2001/04/27 18:21:19 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.31 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
 
     /** The local name of the <code>Attribute</code> */
     protected String name;
@@ -204,6 +204,8 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>Attribute</code> - the attribute modified.
+     * @throws IllegalNameException if the given name is invalid as an
+     *         attribute name.
      */
     public Attribute setName(String name) {
         String reason;
@@ -299,6 +301,8 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>Element</code> - the element modified.
+     * @throws IllegalNameException if the new namespace is the default
+     *         namespace. Attributes cannot be in a default namespace.
      */
     public Attribute setNamespace(Namespace namespace) {
         if (namespace == null) {
@@ -336,6 +340,9 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @param value <code>String</code> value for the attribute.
      * @return <code>Attribute</code> - this Attribute modified.
+     * @throws IllegalDataException if the given attribute value is
+     *         illegal character data (as determined by
+     *         {@link org.jdom.Verifier#checkCharacterData}).
      */
     public Attribute setValue(String value) {
         String reason = null;
@@ -428,7 +435,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>int</code> value of attribute.
-     * @throws DataConversionException - when conversion fails.
+     * @throws DataConversionException when conversion fails.
      */
     public int getIntValue() throws DataConversionException {
         try {
@@ -447,7 +454,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>long</code> value of attribute.
-     * @throws DataConversionException - when conversion fails.
+     * @throws DataConversionException when conversion fails.
      */
     public long getLongValue() throws DataConversionException {
         try {
@@ -466,7 +473,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>float</code> value of attribute.
-     * @throws DataConversionException - when conversion fails.
+     * @throws DataConversionException when conversion fails.
      */
     public float getFloatValue() throws DataConversionException {
         try {
@@ -486,7 +493,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>double</code> value of attribute.
-     *  <code>DataConversionException</code> - when conversion fails.
+     * @throws DataConversionException when conversion fails.
      */
     public double getDoubleValue() throws DataConversionException {
         try {
@@ -506,7 +513,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>boolean</code> value of attribute.
-     *  <code>DataConversionException</code> - when conversion fails.
+     * @throws DataConversionException when conversion fails.
      */
     public boolean getBooleanValue() throws DataConversionException {
         if ((value.equalsIgnoreCase("true")) ||

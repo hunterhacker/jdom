@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.16 2001/04/27 18:21:19 jhunter Exp $
+ $Id: Comment.java,v 1.17 2001/05/08 22:23:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,7 +72,7 @@ import java.io.Serializable;
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.16 $ $Date: 2001/04/27 18:21:19 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.17 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
@@ -207,6 +207,8 @@ public class Comment implements Serializable, Cloneable {
      *
      * @param text <code>String</code> text for comment.
      * @return <code>Comment</code> - this Comment modified.
+     * @throws IllegalDataException if the given text is invalid for a
+     *         Comment.
      */
     public Comment setText(String text) {
         String reason;
@@ -223,7 +225,7 @@ public class Comment implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Comment</code>, suitable for debugging. If the XML
      *    representation of the <code>Comment</code> is desired,
-     *    <code>{@link #XMLOutputter.outputString(Comment)}</code> 
+     *    {@link org.jdom.output.XMLOutputter#outputString(Comment)} 
      *    should be used.
      * </p>
      *

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CDATA.java,v 1.14 2001/04/27 18:21:19 jhunter Exp $
+ $Id: CDATA.java,v 1.15 2001/05/08 22:23:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.io.Serializable;
 public class CDATA implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.14 $ $Date: 2001/04/27 18:21:19 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.15 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
 
     /** Text of the <code>CDATA</code> */
     protected String text;
@@ -93,6 +93,8 @@ public class CDATA implements Serializable, Cloneable {
      * </p>
      *
      * @param text <code>String</code> content of CDATA.
+     * @throws IllegalDataException if the given text string is invalid
+     *         in a CDATA section.
      */
     public CDATA(String text) {
         String reason;
@@ -120,7 +122,7 @@ public class CDATA implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>CDATA</code>, suitable for debugging. If the XML
      *    representation of the <code>CDATA</code> is desired,
-     *    <code>{@link #XMLOutputter.outputString(CDATA)}</code> 
+     *    {@link org.jdom.output.XMLOutputter#outputString(CDATA)} 
      *    should be used.
      * </p>
      *

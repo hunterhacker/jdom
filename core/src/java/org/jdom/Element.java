@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.73 2001/04/27 23:11:59 jhunter Exp $
+ $Id: Element.java,v 1.74 2001/05/08 22:23:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.73 $ $Date: 2001/04/27 23:11:59 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.74 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -208,6 +208,8 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>Element</code> - the element modified.
+     * @throws IllegalNameException if the given name is invalid as an
+     *         Element name.
      */
     public Element setName(String name) {
         String reason;
@@ -354,7 +356,7 @@ public class Element implements Serializable, Cloneable {
      *
      * @param additionalNamespace <code>Namespace</code> to add.
      * @throws IllegalAddException if the namespace prefix collides with 
-     *   another namespace prefix on the element
+     *   another namespace prefix on the element.
      */
     public void addNamespaceDeclaration(Namespace additionalNamespace) {
 
@@ -806,7 +808,7 @@ public class Element implements Serializable, Cloneable {
      *
      * @return this element modified
      * @throws IllegalAddException if the List contains objects of 
-     *         illegal types
+     *         illegal types.
      */
     public Element setMixedContent(List mixedContent) {
 
@@ -1119,6 +1121,10 @@ public class Element implements Serializable, Cloneable {
      *
      * @param element <code>Element</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the element you're attempting to
+     *         add already has a parent element, or if you're attempting
+     *         to add it as a descendent of itself (which would result in
+     *         a recursive element definition!).
      */
     public Element addContent(Element element) {
         if (element.isRootElement()) {
@@ -1165,6 +1171,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param pi <code>ProcessingInstruction</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the given processing instruction,
+     *         <code>pi</code>, already has a parent.
      */
     public Element addContent(ProcessingInstruction pi) {
         if (pi.getParent() != null) {
@@ -1193,6 +1201,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param entity <code>Entity</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the given Entity already has a
+     *         parent.
      */
     public Element addContent(Entity entity) {
         if (entity.getParent() != null) {
@@ -1234,6 +1244,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param comment <code>Comment</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the given Comment already has a
+     *         parent.
      */
     public Element addContent(Comment comment) {
         if (comment.getParent() != null) {
@@ -1499,7 +1511,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      * @throws IllegalAddException if the attribute being added already has a 
      *   parent or if the attribute namespace prefix collides with another 
-     *   namespace prefix on the element
+     *   namespace prefix on the element.
      */
     public Element setAttribute(Attribute attribute) {
         if (attribute.getParent() != null) {
@@ -1648,7 +1660,7 @@ public class Element implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Element</code>, suitable for debugging. If the XML
      *    representation of the <code>Element</code> is desired,
-     *    <code>{@link #XMLOutputter.outputString(Element)}</code> 
+     *    {@link org.jdom.output.XMLOutputter#outputString(Element)} 
      *    should be used.
      * </p>
      *
@@ -1921,6 +1933,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @param attribute <code>Attribute</code> to add
      * @return this element modified
+     * @throws IllegalAddException if the given attribute already exists
+     *         within this element.
      *
      * @deprecated Deprecated in beta7, use setAttribute(Attribute) instead
      */
@@ -1957,6 +1971,8 @@ public class Element implements Serializable, Cloneable {
      *
      * @return <code>String</code> - the serialized form of the
      *         <code>Element</code>.
+     * @throws RuntimeException always! This method is not yet
+     *         implemented. It is also deprecated as of beta 7.
      *
      * @deprecated Deprecated in beta7, use XMLOutputter.outputString(Element)
      * instead

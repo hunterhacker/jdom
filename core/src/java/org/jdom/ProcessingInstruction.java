@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.19 2001/04/27 18:21:20 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.20 2001/05/08 22:23:56 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,7 +80,7 @@ import java.util.StringTokenizer;
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.19 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.20 $ $Date: 2001/05/08 22:23:56 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -114,6 +114,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @param target <code>String</code> target of PI.
      * @param data <code>Map</code> data for PI, in
      *             name/value pairs
+     * @throws IllegalTargetException if the given target is invalid
+     *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, Map data) {
         String reason;
@@ -134,6 +136,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *
      * @param target <code>String</code> target of PI.
      * @param rawData <code>String</code> data for PI.
+     * @throws IllegalTargetException if the given target is invalid
+     *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, String data) {
         String reason;
@@ -497,7 +501,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>ProcessingInstruction</code>, suitable for debugging. If the XML
      *    representation of the <code>ProcessingInstruction</code> is desired,
-     *    <code>{@link #XMLOutputter.outputString(ProcessingInstruction}</code>
+     *    {@link org.jdom.output.XMLOutputter#outputString(ProcessingInstruction)}
      *    should be used.
      * </p>
      *

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.24 2001/04/27 18:21:20 jhunter Exp $
+ $Id: Namespace.java,v 1.25 2001/05/08 22:23:56 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.24 $ $Date: 2001/04/27 18:21:20 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.25 $ $Date: 2001/05/08 22:23:56 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -132,6 +132,8 @@ public final class Namespace {
      *               <code>Namespace</code>.
      * @param uri <code>String</code> URI of new <code>Namespace</code>.
      * @return <code>Namespace</code> - ready to use namespace.
+     * @throws IllegalNameException if the given prefix and uri make up
+     *         an invalid namespace name.
      */
     public static Namespace getNamespace(String prefix, String uri) {
         // Sanity checking

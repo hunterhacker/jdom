@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.39 2001/04/28 01:13:43 jhunter Exp $
+ $Id: Document.java,v 1.40 2001/05/08 22:23:55 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.39 $ $Date: 2001/04/28 01:13:43 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.40 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -133,8 +133,9 @@ public class Document implements Serializable, Cloneable {
      *
      * @param content <code>List</code> of starter content
      * @param docType <code>DocType</code> declaration.
-     * @throws IllegalAddException if the List contains more than
-     *         one Element or objects of illegal types
+     * @throws IllegalAddException if (1) the List contains more than
+     *         one Element or objects of illegal types, or (2) if the
+     *         given docType object is already attached to a document.
      */
     public Document(List content, DocType docType) {
         setMixedContent(content);
@@ -150,7 +151,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @param content <code>List</code> of starter content
      * @throws IllegalAddException if the List contains more than
-     *         one Element or objects of illegal types
+     *         one Element or objects of illegal types.
      */
     public Document(List content) {
         this(content, null);
@@ -184,6 +185,8 @@ public class Document implements Serializable, Cloneable {
      *
      * @param rootElement <code>Element</code> to be new root.
      * @return <code>Document</code> - modified Document.
+     * @throws IllegalAddException if the given rootElement already has
+     *         a parent.
      */
     public Document setRootElement(Element rootElement) {
         // XXX Remove this special case pronto
@@ -241,10 +244,16 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will set the <code>{@link DocType}</code>
-     *   declaration for this <code>Document</code>.
+     *   declaration for this <code>Document</code>. Note
+     *   that a DocType can only be attached to one Document.
+     *   Attempting to set the DocType to a DocType object
+     *   that already belongs to a Document will result in an
+     *   IllegalAddException being thrown.
      * </p>
      *
      * @param docType <code>DocType</code> declaration.
+     * @throws IllegalAddException if the given docType is
+     *   already attached to a Document.
      */
     public Document setDocType(DocType docType) {
         if (docType != null && (docType.getDocument() != null)) {
@@ -267,6 +276,8 @@ public class Document implements Serializable, Cloneable {
      *
      * @param pi the PI to add.
      * @return <code>Document</code> this document modified.
+     * @throws IllegalAddException if the given processing instruction
+     *         already has a parent element.
      */
     public Document addContent(ProcessingInstruction pi) {
         if (pi.getParent() != null) {
@@ -291,6 +302,8 @@ public class Document implements Serializable, Cloneable {
      *
      * @param comment <code>Comment</code> to add.
      * @return <code>Document</code> - this object modified.
+     * @throws IllegalAddException if the given comment already has a
+     *         parent element.
      */
     public Document addContent(Comment comment) {
         if (comment.getParent() != null) {
@@ -334,7 +347,7 @@ public class Document implements Serializable, Cloneable {
      * @param content the new mixed content
      * @return the modified Document
      * @throws IllegalAddException if the List contains more than
-     *         one Element or objects of illegal types
+     *         one Element or objects of illegal types.
      */
     public Document setMixedContent(List mixedContent) {
 
@@ -440,7 +453,7 @@ public class Document implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Document</code>, suitable for debugging. If the XML
      *    representation of the <code>Document</code> is desired,
-     *    <code>{@link #XMLOutputter.outputString(Document)}</code> 
+     *    {@link org.jdom.output.XMLOutputter#outputString(Document)} 
      *    should be used.
      * </p>
      *
@@ -585,6 +598,8 @@ public class Document implements Serializable, Cloneable {
      *
      * @return <code>String</code> - the serialized form of the
      *         <code>Document</code>.
+     * @throws RuntimeException always! This method is not yet
+     *         implemented. It is also deprecated as of beta 7.
      *
      * @deprecated Deprecated in beta7, use
      * XMLOutputter.outputString(Document) instead
