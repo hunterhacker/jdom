@@ -469,8 +469,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         atRoot = true;
         stack = new Stack();
         namespaces = new LinkedList();
-        namespaces.add(Namespace.getNamespace(
-                       "xml", "http://www.w3.org/XML/1998/namespace"));
+        namespaces.add(Namespace.XML_NAMESPACE);
         namespaceDefinitions = new HashMap();
         inEntity = false;
         inDTD = false;

@@ -74,9 +74,16 @@ public final class Namespace {
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
+    /** The implicit XML namespace */
+    public static final String XML_NAMESPACE_PREFIX = "xml";
+
+    /** The implicit XML namespace URI */
+    public static final String XML_NAMESPACE_URI =
+        "http://www.w3.org/XML/1998/namespace";
+
     /** Define a <code>Namespace</code> for "xml" prefix */
     public static final Namespace XML_NAMESPACE =
-        new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
+        new Namespace(XML_NAMESPACE_PREFIX, XML_NAMESPACE_URI);
 
     /** The prefix mapped to this namespace */
     private String prefix;
@@ -101,9 +108,8 @@ public final class Namespace {
         mappings.put("", "");
 
         // Add the "xml" namespace
-        namespaces.put("http://www.w3.org/XML/1998/namespace",
-                        XML_NAMESPACE);
-        mappings.put("xml", "http://www.w3.org/XML/1998/namespace");
+        namespaces.put(XML_NAMESPACE_URI, XML_NAMESPACE);
+        mappings.put(XML_NAMESPACE_PREFIX, XML_NAMESPACE_URI);
     }
 
     /**

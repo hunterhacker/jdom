@@ -190,7 +190,9 @@ public class DOMOutputter {
 
             // Add namespace attributes
             Namespace ns = element.getNamespace();
-            if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
+            if ((ns != Namespace.NO_NAMESPACE) && 
+                (ns != Namespace.XML_NAMESPACE) &&
+                (!namespaces.contains(ns))) {
                 String attrName = getXmlnsTagFor(ns);
                 printedNS = true;
                 namespaces.add(ns);
@@ -203,6 +205,7 @@ public class DOMOutputter {
                 Attribute attribute = (Attribute)attributes.get(i);
                 Namespace ns1 = attribute.getNamespace();
                 if ((ns1 != Namespace.NO_NAMESPACE) && 
+                    (ns1 != Namespace.XML_NAMESPACE) &&
                                  (!namespaces.contains(ns1))) {
                     String attrName = getXmlnsTagFor(ns1);
                     printedNS = true;
