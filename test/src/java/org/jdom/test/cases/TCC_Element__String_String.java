@@ -54,41 +54,61 @@
 
 package org.jdom.test.cases;
 
+import org.jdom.Element;
+import org.jdom.Namespace;
+
 /**
- * Please put a description of your test here.
+ * <p>
+ * This test ensures that a URI supplied in the argument to the constructor
+ * of an Element remains after the Element has been constructed.
+ * </p>
  * 
- * @author unascribed
+ * @author Jools Enticknap
  * @version 0.1
  */
-public final class TCC_Element__String_String
-extends junit.framework.TestCase
-{
+public final class TCC_Element__String_String extends junit.framework.TestCase {
     /**
      *  Construct a new instance. 
      */
-    public TCC_Element__String_String() {
-        super("public org.jdom.Element(java.lang.String,java.lang.String)");
+    public TCC_Element__String_String(String s) {
+        super(s);
     }
 
     /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * Test code goes here. Replace this comment.
+     * Ensure that the the URI remains after construction.
      */
     public void test() {
-        fail("implement me !");
-    }
+		String uri    = "test-uri";
+		String name = "test-element";
+		Element e = new Element(name, uri);
 
+		// Check that the name supplied in the argument to the constructor
+		// is the same as the one returned from getName().
+		if (!e.getName().equals(name)) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("using the the name(")
+							  .append(name)
+							  .append(") but the following value was ")
+							  .append("returned from getName() (")
+							  .append(e.getName())
+							  .append(")");
+	
+        	fail(sb.toString());
+		}
+
+		// Check that the namespace has the URI as the one we supplied to
+		// the constructor.
+		Namespace ns = e.getNamespace();
+		if (!ns.getURI().equals(uri)) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("with a URI, however ")
+							  .append("getNamespace().getURI() returns a ")
+							  .append("different URI to the URI supplied in the ")
+							  .append("constructor, we have(") 
+							  .append(ns.getURI())
+							  .append(") instead.");
+
+        	fail(sb.toString());
+		} 
+    }
 }
