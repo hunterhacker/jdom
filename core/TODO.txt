@@ -2,15 +2,17 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Fix JDOM->DOM->JDOM bug as reported by "Xuemin Guan" <xuemin@appresso.com>.
+   http://www.servlets.com/archive/servlet/SearchList?listName=jdom-interest&
+   searchText=%22JDom+2+Dom%2C+then+Dom+2+JDom%22&defaultField=subject&
+   Search=Search
+
 * Fix SlowParse problem reported by Mark Bennett <mbennett@ideaeng.com> which
   is triggered by content with lots of entity escapes and is caused by 
-  addContent(String) doing repeated string concatentaions.
+  addContent(String) doing repeated string concatentaions.  (phil@trilog and
+  Brad Huffman may help)
 
-* Fix bug where newlines aren't printed always with XMLOutputter when doing
-  raw output, like with SAXBuilderDemo and:
-  <univ:tag xmlns:univ="http://someurl#" >
-     <innertag univ:id="someid"/>
-  </univ:tag>
+* Run extensive tests on new XMLOutputter implementation.
 
 * Verify we have a solution for when entities are unexpanded and present in
   attribute values.  (Phil Nelson)
@@ -23,21 +25,12 @@ Items that need to be done:
   SAXOutputter, planning on passing the string to Xerces for parsing and event
   propagation.)
 
-* Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
-  for the minor bug where pretty print (indented, newlines, trim text) prints 
-  an extra whitespace line between one closing element and another.
-  ("Bradley S. Huffman" <hip@a.cs.okstate.edu> is helping here)
-
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
-
-* Verify we get good error handling if someone passes null to any add/set
-  method.  Consensus is throw an NPE if passing null to a setList-style
-  method.
 
 * Look again at if XMLOutputter output methods taking a Writer should 
   auto-flush.  Currently they do, but is that overstepping the contract?
@@ -74,6 +67,7 @@ Items that need to be done:
   extra knowledge about the context (line number, element stack, etc), and 
   allow it to report errors or to return a code indicating the element should 
   be ignored.
+  (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
 
@@ -82,6 +76,10 @@ Items that need to be done:
 * Note in the docs where necessary our multithreading policy.
 
 * Add in attribute type support to DOM to match what's in SAX.
+
+* Think about if XMLOutputter should have a few specific output states, like
+  RAW, PRETTY, COMPRESSED.  See the thread "XMLOutputter inserts extra empty
+  lines" for some discussion.
 
 --- FOR JDOM 1.0 ---
 
@@ -151,6 +149,7 @@ Items that need to be done:
   Joe Bowbeer has ideas at:
   http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
   We may be able to just have doc.iterator() methods
+  Also see posts with the subject "How to ease traversal of JDOM tree"
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
@@ -195,10 +194,6 @@ Items that need to be done:
 * Consider a "locator" ability for nodes to remember the line number on which
   they were declared, to help debug semantic errors.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003422.html
-
-* Ensure setContent(), setAttributes(), setChildren(), and addAll() 
-  are atomic on failure (such as when an illegal object is added from 
-  the list).  Currently all should be except addAll().
 
 --- UNTIED TO A JDOM VERSION ---
 
@@ -296,6 +291,7 @@ Items that need to be done:
 * Look at event-based parsing as per the following thread:
   http://lists.denveronline.net/lists/jdom-interest/2000-November/003613.html
   and replies.
+  Also see posts with the subject "streamdom".
 
 * Considering that local vars are considerably faster that instance vars, test
   if using local vars can speed building.
@@ -313,8 +309,6 @@ Items that need to be done:
 
 * Consider using a List of instance data so elements only use what they really
   need (saving attrib list, namespace list)
-
-* Consider Element.hasAttributes() and Element.isEmpty()
 
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
