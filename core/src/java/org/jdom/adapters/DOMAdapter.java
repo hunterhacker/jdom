@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.17 2002/04/29 13:38:16 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.18 2002/05/17 05:49:14 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -75,7 +75,7 @@ import org.jdom.JDOMException;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revison$, $Date: 2002/04/29 13:38:16 $
+ * @version $Revison$, $Date: 2002/05/17 05:49:14 $
  */
 public interface DOMAdapter {
 
@@ -113,7 +113,7 @@ public interface DOMAdapter {
      * on a specific parser implementation.
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws Exception when errors occur.
+     * @throws JDOMException when errors occur.
      */
     public Document createDocument() throws JDOMException;
 
@@ -123,7 +123,7 @@ public interface DOMAdapter {
      *
      * @param doctype Initial <code>DocType</code> of the document.
      * @return <code>Document</code> - created DOM Document.
-     * @throws Exception when errors occur.
+     * @throws JDOMException when errors occur.
      */
     public Document createDocument(DocType doctype) throws JDOMException;
 }
