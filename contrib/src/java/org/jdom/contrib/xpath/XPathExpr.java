@@ -9,4 +9,10 @@ public interface XPathExpr
       param context The context to walk>
   */
   Object apply(Context context);
+
+  /**
+   * Apply self to given nodeset, to which modifications may apply.
+   */
+  void apply(NodeSet nodeset) throws XPathParseException;
+
 }

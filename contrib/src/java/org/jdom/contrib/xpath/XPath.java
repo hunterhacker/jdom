@@ -14,41 +14,46 @@ public class XPath
   private String _xpath = "";
   private XPathExpr _expr = null;
 
-  public XPath(String xpath)
-  {
+  public XPath(String xpath) {
     _xpath = xpath;
     parse();
   }
 
-  private void parse()
-  {
+  /**
+   * For debugging.
+   */
+  public String toString() {
+    return "[XPath: " + _xpath + " " + _expr + "]";
+  }
+
+
+  private void parse() {
     StringReader reader = new StringReader(_xpath);
     InputBuffer buf = new CharBuffer(reader);
 
     XPathLexer lexer = new XPathLexer(buf);
     XPathRecognizer recog = new XPathRecognizer(lexer);
 
-    try
-    {
-      XPathExpr expr = recog.xpath();
-      _expr = expr;
-    }
-    catch (RecognitionException re)
-    {
-      re.printStackTrace();
-    }
-    catch (TokenStreamException tse)
-    {
-      tse.printStackTrace();
+    try {
+      _expr = recog.xpath();
+    } catch (RecognitionException e) {
+      e.printStackTrace();
+    } catch (TokenStreamException e) {
+      e.printStackTrace();
     }
   }
 
-  public Object applyTo(Context context)
-  {
-    Object result = null;
+  public Object applyTo(Context context) {
+    Object result = _expr.apply(context);
 
-    result = _expr.apply(context);
-      
     return result;
   }
+
+  /**
+   * Apply self to given nodeset, to which modifications may apply.
+   */
+  public void apply(NodeSet nodeset) throws XPathParseException {
+    _expr.apply(nodeset);
+  }
+
 }
