@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.72 2003/06/17 21:02:44 jhunter Exp $
+ $Id: Document.java,v 1.73 2003/06/18 02:59:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.72 $, $Date: 2003/06/17 21:02:44 $
+ * @version $Revision: 1.73 $, $Date: 2003/06/18 02:59:44 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.72 $ $Date: 2003/06/17 21:02:44 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.73 $ $Date: 2003/06/18 02:59:44 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -168,7 +168,7 @@ public class Document implements Parent {
         return content.size();
     }
 
-    public int getContent(Child child) {
+    public int indexOf(Child child) {
         return content.indexOf(child);
     }
 
@@ -179,7 +179,7 @@ public class Document implements Parent {
 //     *
 //     * @return index of child, or -1 if none found.
 //     */
-//    private int getContent(int start, Filter filter) {
+//    private int indexOf(int start, Filter filter) {
 //        int size = getContentSize();
 //        for (int i = start; i < size; i++) {
 //            if (filter.matches(getContent(i))) {
@@ -345,7 +345,7 @@ public class Document implements Parent {
     }
 
 //    public Child getChild(Filter filter) {
-//        int i = getContent(0, filter);
+//        int i = indexOf(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.138 2003/06/17 21:02:44 jhunter Exp $
+ $Id: Element.java,v 1.139 2003/06/18 02:59:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.138 $, $Date: 2003/06/17 21:02:44 $
+ * @version $Revision: 1.139 $, $Date: 2003/06/18 02:59:44 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Parent, Child {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.138 $ $Date: 2003/06/17 21:02:44 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.139 $ $Date: 2003/06/18 02:59:44 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -460,11 +460,11 @@ public class Element implements Parent, Child {
         return content.size();
     }
 
-    public int getContent(Child child) {
+    public int indexOf(Child child) {
         return content.indexOf(child);
     }
 
-//    private int getContent(int start, Filter filter) {
+//    private int indexOf(int start, Filter filter) {
 //        int size = getContentSize();
 //        for (int i = start; i < size; i++) {
 //            if (filter.matches(getContent(i))) {
@@ -1081,7 +1081,7 @@ public class Element implements Parent, Child {
     }
 
 //    public Child getChild(Filter filter) {
-//        int i = getContent(0, filter);
+//        int i = indexOf(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.4 2003/06/17 21:02:44 jhunter Exp $
+ $Id: Parent.java,v 1.5 2003/06/18 02:59:44 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.4 $, $Date: 2003/06/17 21:02:44 $
+ * @version $Revision: 1.5 $, $Date: 2003/06/18 02:59:44 $
  */
 public interface Parent extends Cloneable, Serializable {
 
@@ -89,7 +89,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param child  child to search for
      * @return       index of child, or -1 if not found
      */
-    int getContent(Child child);
+    int indexOf(Child child);
 
 //    /**
 //     * Starting at the given index (inclusive), returns the index of
@@ -98,7 +98,7 @@ public interface Parent extends Cloneable, Serializable {
 //     *
 //     * @return index of child, or -1 if none found
 //     */
-//    int getContent(int index, Filter filter);
+//    int indexOf(int index, Filter filter);
 
     /**
      * Appends the child to the end of the content list.
