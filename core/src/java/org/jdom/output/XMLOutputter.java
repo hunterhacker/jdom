@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.39 2001/03/15 06:07:19 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.40 2001/03/22 06:34:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,18 +84,23 @@ import org.jdom.ProcessingInstruction;
 
 /**
  * <p><code>XMLOutputter</code> takes a JDOM tree and formats it to a
- * stream as XML.  This formatter performs typical document
- * formatting.  The XML declaration and processing instructions are
- * always on their own lines.  Empty elements are printed as
- * &lt;empty/&gt; and text-only contents are printed as
- * &lt;tag&gt;content&lt;/tag&gt; on a single line.  Constructor
- * parameters control the indent amount and whether new lines are
- * printed between elements.  The other parameters are configurable
- * through the <code>set*</code> methods.  </p>
+ * stream as XML.  The outputter can manage many styles of document
+ * formatting, from untouched to pretty printed.  The default constructor
+ * creates an outputter to output the document exactly as created.  
+ * Constructor parameters control the indent amount and whether new lines 
+ * are printed between elements.  The other parameters are configurable
+ * through the <code>set*</code> methods.
+ * The XML declaration is always printed on its own line.  Empty elements 
+ * are by default printed as &lt;empty/&gt but that can be configured.
+ * Text-only contents are printed as &lt;tag&gt;content&lt;/tag&gt; on a 
+ * single line.</p>
  *
- * <p> For compact machine-readable output create a default
+ * <p>For compact machine-readable output create a default
  * XMLOutputter and call setTrimText(true) to strip any whitespace
- * that was preserved from the source.  </p>
+ * that was preserved from the source.</p>
+ *
+ * <p>For pretty output, set the indent to "  ", set the new lines feature 
+ * to true, and set text trimming to true.</p>
  *
  * <p> There are <code>output(...)</code> methods to print any of the
  * standard JDOM classes, including <code>Document</code> and
@@ -140,12 +145,6 @@ public class XMLOutputter implements Cloneable {
     /** The default indent is no spaces (as original document) */
     private String indent = null;
 
-    /** The initial number of indentations (so you can print a whole
-        document indented, if you like) **/
-    // kind of dangerous having same name for instance and local
-    // variable, but that's OK...
-    private int indentLevel = 0;
-    
     /** Whether or not to expand empty elements to 
       * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
     private boolean expandEmptyElements = false;
@@ -159,11 +158,6 @@ public class XMLOutputter implements Cloneable {
 
     /** should we preserve whitespace or not in text nodes? */
     private boolean trimText = false;
-
-    /** pad string-element boundaries with whitespace **/
-    private boolean padText = false;
-
-    protected String padTextString = " ";
 
     /**
      * <p>
@@ -237,13 +231,11 @@ public class XMLOutputter implements Cloneable {
         this.suppressDeclaration = that.suppressDeclaration;
         this.omitEncoding = that.omitEncoding;
         this.indent = that.indent;
-        this.indentLevel = that.indentLevel;
         this.expandEmptyElements = that.expandEmptyElements;
         this.newlines = that.newlines;
         this.encoding = that.encoding;
         this.lineSeparator = that.lineSeparator;
         this.trimText = that.trimText;
-        this.padText = that.padText;
     }
     
     /**
@@ -347,27 +339,6 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
-     * <p> Ensure that text immediately preceded by or followed by an
-     * element will be "padded" with a single space.  This is used to
-     * allow make browser-friendly HTML, avoiding trimText's
-     * transformation of, e.g., 
-     * <code>The quick &lt;b&gt;brown&lt;/b&gt; fox</code> into
-     * <code>The quick&lt;b&gt;brown&lt;/b&gt;fox</code> (the latter
-     * will run the three separate words together into a single word).
-     *
-     * This setting is not too useful if you haven't also called
-     * {@link #setTrimText(boolean)}.</p>
-     * 
-     * <p>Default: false </p>
-     *
-     * @param padText <code>boolean</code> if true, pad string-element 
-     * boundaries
-     **/
-    public void setPadText(boolean padText) {
-        this.padText = padText;
-    }
-
-    /**
      * <p> This will set the indent <code>String</code> to use; this
      *   is usually a <code>String</code> of empty spaces. If you pass
      *   null, or the empty string (""), then no indentation will
@@ -400,18 +371,6 @@ public class XMLOutputter implements Cloneable {
         }
     }
 
-    /**
-     * Set the initial indentation level.  This can be used to output
-     * a document (or, more likely, an element) starting at a given
-     * indent level, so it's not always flush against the left margin.
-     * Default: 0
-     *
-     * @param indentLevel the number of indents to start with
-     **/
-    public void setIndentLevel(int indentLevel) {
-        this.indentLevel = indentLevel;
-    }
-    
     /**
      * <p>
      *   This will set the indent <code>String</code>'s size; an indentSize
@@ -513,17 +472,18 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      * @throws IOException - if there's any problem writing.
      **/
-    public void output(Document doc, Writer writer)
-                                           throws IOException {
-        // Print out XML declaration
-        if (indentLevel>0)
-            indent(writer, indentLevel);        
+    public void output(Document doc, Writer writer) throws IOException {
+
         printDeclaration(doc, writer, encoding);
 
+        // Print new line after decl always, even if no other new lines
+        // Helps the output look better and is semantically
+        // inconsequential
+        writer.write(lineSeparator);
+
         if (doc.getDocType() != null) {
-            if (indentLevel>0)
-                indent(writer, indentLevel);
             printDocType(doc.getDocType(), writer);
+            maybePrintln(writer);
         }
         
         // Print out root element, as well as any root level
@@ -533,22 +493,24 @@ public class XMLOutputter implements Cloneable {
         while (i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                output(doc.getRootElement(), writer); // at initial indentLevel
-            } else if (obj instanceof Comment) {
-                printComment((Comment) obj, writer, indentLevel);
-            } else if (obj instanceof ProcessingInstruction) {
-                printProcessingInstruction((ProcessingInstruction) obj,
-                                           writer, indentLevel);
-            } else if (obj instanceof CDATA) {
-                printCDATASection((CDATA)obj, writer, indentLevel);
+                printElement(doc.getRootElement(), writer, 0,
+                             new NamespaceStack());
             }
+            else if (obj instanceof Comment) {
+                printComment((Comment) obj, writer);
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                printProcessingInstruction((ProcessingInstruction) obj,
+                                           writer);
+            }
+            maybePrintln(writer);
         }
 
         // Output final line separator
         writer.write(lineSeparator);
     }
 
-    // output element
+    // * * * * * Element * * * * *
     
     /**
      * <p>
@@ -563,7 +525,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Element element, Writer out) throws IOException {
         // If this is the root element we could pre-initialize the 
         // namespace stack with the namespaces
-        printElement(element, out, indentLevel, new NamespaceStack());
+        printElement(element, out, 0, new NamespaceStack());
     }
     
     /**
@@ -579,7 +541,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Element element, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(element, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
 
     /**
@@ -595,12 +557,11 @@ public class XMLOutputter implements Cloneable {
     public void outputElementContent(Element element, Writer out)
                       throws IOException {
         List mixedContent = element.getMixedContent();
-        printElementContent(element, out, indentLevel,
-                            new NamespaceStack(),
+        printElementContent(element, out, 0, new NamespaceStack(),
                             mixedContent);
     }
     
-    // output cdata
+    // * * * * * CDATA * * * * *
 
     /**
      * <p>
@@ -611,7 +572,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      **/
     public void output(CDATA cdata, Writer out) throws IOException {
-        printCDATASection(cdata, out, indentLevel);
+        printCDATASection(cdata, out);
     }
     
     /**
@@ -625,10 +586,10 @@ public class XMLOutputter implements Cloneable {
     public void output(CDATA cdata, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(cdata, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
 
-    // output comment
+    // * * * * * Comment * * * * *
 
     /**
      * <p>
@@ -639,7 +600,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      **/
     public void output(Comment comment, Writer out) throws IOException {
-        printComment(comment, out, indentLevel);
+        printComment(comment, out);
     }
     
     /**
@@ -653,11 +614,11 @@ public class XMLOutputter implements Cloneable {
     public void output(Comment comment, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         output(comment, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
     
 
-    // output String
+    // * * * * * String * * * * *
 
     /**
      * <p> Print out a <code>{@link java.lang.String}</code>.  Perfoms
@@ -682,10 +643,10 @@ public class XMLOutputter implements Cloneable {
     public void output(String string, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         printString(string, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
     
-    // output Entity
+    // * * * * * Entity * * * * *
 
     /**
      * <p> Print out an <code>{@link Entity}</code>.  
@@ -709,11 +670,11 @@ public class XMLOutputter implements Cloneable {
     public void output(Entity entity, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
         printEntity(entity, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
     
 
-    // output processingInstruction
+    // * * * * * ProcessingInstruction * * * * *
 
     /**
      * <p>
@@ -724,8 +685,8 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      **/
     public void output(ProcessingInstruction pi, Writer out)
-                   throws IOException {
-        printProcessingInstruction(pi, out, indentLevel);
+                                 throws IOException {
+        printProcessingInstruction(pi, out);
     }
     
     /**
@@ -738,14 +699,14 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>OutputStream</code> to write to.
      **/
     public void output(ProcessingInstruction pi, OutputStream out)
-                   throws IOException {
+                                 throws IOException {
         Writer writer = makeWriter(out);
         output(pi, writer);
-        writer.flush();         // Flush the output to the underlying stream
+        writer.flush();         // flush the output to the underlying stream
     }
     
 
-    // output as string
+    // * * * * * String * * * * *
     
     /**
      * Return a string representing a document.  Uses an internal
@@ -775,7 +736,7 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
-    // internal printing methods
+    // * * * * * Internal printing methods * * * * *
     
     /**
      * <p>
@@ -799,18 +760,14 @@ public class XMLOutputter implements Cloneable {
                     out.write(" encoding=\"UTF-8\"");
                 }
                 out.write("?>");
-            } else {
+            }
+            else {
                 out.write("<?xml version=\"1.0\"");
                 if (!omitEncoding) {
                     out.write(" encoding=\"" + encoding + "\"");
                 }
                 out.write("?>");
             }
-
-            // Print new line after decl always, even if no other new lines
-            // Helps the output look better and is semantically
-            // inconsequential
-            out.write(lineSeparator);
         }        
     }    
 
@@ -849,7 +806,6 @@ public class XMLOutputter implements Cloneable {
             out.write("\"");
         }
         out.write(">");
-        maybePrintln(out);
     }
 
     /**
@@ -859,14 +815,10 @@ public class XMLOutputter implements Cloneable {
      *
      * @param comment <code>Comment</code> to write.
      * @param out <code>Writer</code> to write to.
-     * @param indentLevel Current depth in hierarchy.
      */
-    protected void printComment(Comment comment,
-                             Writer out, int indentLevel) throws IOException
-    {
-        indent(out, indentLevel);
-        out.write(comment.getSerializedForm());  //XXX
-        maybePrintln(out);
+    protected void printComment(Comment comment, Writer out)
+                                  throws IOException {
+        out.write(comment.getSerializedForm());
     }
       
     /**
@@ -876,15 +828,10 @@ public class XMLOutputter implements Cloneable {
      *
      * @param comment <code>ProcessingInstruction</code> to write.
      * @param out <code>Writer</code> to write to.
-     * @param indentLevel Current depth in hierarchy.
      */
     protected void printProcessingInstruction(ProcessingInstruction pi,
-                        Writer out, int indentLevel) throws IOException {
-                                        
-        indent(out, indentLevel);
+                                              Writer out) throws IOException {
         out.write(pi.getSerializedForm());
-        maybePrintln(out);
-
     }
     
     /**
@@ -895,15 +842,10 @@ public class XMLOutputter implements Cloneable {
      *
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>Writer</code> to write to.
-     * @param indent <code>int</code> level of indention.
      */
-    protected void printCDATASection(CDATA cdata,
-                        Writer out, int indentLevel) throws IOException {
-        
-        indent(out, indentLevel);
+    protected void printCDATASection(CDATA cdata, Writer out)
+                                       throws IOException {
         out.write(cdata.getSerializedForm());
-        maybePrintln(out);
-
     }
 
     /**
@@ -921,34 +863,24 @@ public class XMLOutputter implements Cloneable {
                                 int indentLevel, NamespaceStack namespaces)
                                 throws IOException {
 
+        // This method prints from the beginning < to the trailing >.
+        // (no leading or trailing whitespace!)
+
         List mixedContent = element.getMixedContent();
-
-        boolean empty = mixedContent.size() == 0;
-        boolean stringOnly =
-            !empty &&
-            mixedContent.size() == 1 &&
-            mixedContent.get(0) instanceof String;
-
-        // Print beginning element tag
-        /* maybe the doctype, xml declaration, and processing instructions 
-           should only break before and not after; then this check is 
-           unnecessary, or maybe the println should only come after and 
-           never before.  Then the output always ends with a newline */
-           
-        indent(out, indentLevel);
 
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
         out.write("<");
         out.write(element.getQualifiedName());
-        int previouslyDeclaredNamespaces = namespaces.size();
 
-        Namespace ns = element.getNamespace();
+        // Mark our namespace starting point
+        int previouslyDeclaredNamespaces = namespaces.size();
 
         // Add namespace decl only if it's not the XML namespace and it's 
         // not the NO_NAMESPACE with the prefix "" not yet mapped
         // (we do output xmlns="" if the "" prefix was already used and we
         // need to reclaim it for the NO_NAMESPACE)
+        Namespace ns = element.getNamespace();
         if (ns != Namespace.XML_NAMESPACE &&
             !(ns == Namespace.NO_NAMESPACE && namespaces.getURI("") == null)) {
             String prefix = ns.getPrefix();        
@@ -976,47 +908,49 @@ public class XMLOutputter implements Cloneable {
 
         printAttributes(element.getAttributes(), element, out, namespaces);
 
-        // handle "" string same as empty
+        // Calculate if the contents are String/CDATA only
+        // This helps later with the "empty" check
+        boolean stringOnly = true;
+        Iterator itr = mixedContent.iterator();
+        while (itr.hasNext()) {
+            Object o = itr.next();
+            if (!(o instanceof String) && !(o instanceof CDATA)) {
+                stringOnly = false;
+                break;
+            }
+        }
+
+        // Calculate if the content is empty
+        // We can handle "" string same as empty (CDATA has no effect here)
+        boolean empty = false;
         if (stringOnly) {
             String elementText =
                 trimText ? element.getTextTrim() : element.getText();
-            if (elementText == null ||
-                elementText.equals("")) {
+            if (elementText == null || elementText.equals("")) {
                 empty = true;
             }
         }
-        
+
+        // If empty, print closing; if not empty, print content
         if (empty) {
             // Simply close up
             if (!expandEmptyElements) {
                 out.write(" />");
-            } else {
+            }
+            else {
                 out.write("></");
                 out.write(element.getQualifiedName());
                 out.write(">");
             }
-            maybePrintln(out);
-        } else {
-            // we know it's not null or empty from above
+        }
+        else {
+            // We know it's not null or empty from above
             out.write(">");
-
-            if (stringOnly) {
-                // if string only, print content on same line as tags
-                printElementContent(element, out, indentLevel,
-                                    namespaces, mixedContent);
-            }
-            else {
-                maybePrintln(out);
-                printElementContent(element, out, indentLevel,
-                                    namespaces, mixedContent);
-                indent(out, indentLevel);               
-            }
-
+            printElementContent(element, out, indentLevel + 1,
+                                namespaces, mixedContent);
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");
-
-            maybePrintln(out);
         }
 
         // remove declared namespaces from stack
@@ -1040,61 +974,128 @@ public class XMLOutputter implements Cloneable {
         // get same local flags as printElement does
         // a little redundant code-wise, but not performance-wise
         boolean empty = mixedContent.size() == 0;
-        boolean stringOnly =
-            !empty &&
-            (mixedContent.size() == 1) &&
-            mixedContent.get(0) instanceof String;
+
+        // Calculate if the content is String/CDATA only
+        boolean stringOnly = true;
+        if (!empty) {
+            Iterator itr = mixedContent.iterator();
+            while (itr.hasNext()) {
+                Object o = itr.next();
+                if (!(o instanceof String) && !(o instanceof CDATA)) {
+                    stringOnly = false;
+                    break;
+                }
+            }
+        }
 
         if (stringOnly) {
-            // Print the tag  with String on same line
-            // Example: <tag name="value">content</tag>
-            String elementText =
-                trimText ? element.getTextTrim() : element.getText();
-            
-            out.write(escapeElementEntities(elementText));
-            
-        } else {
-            /**
-             * Print with children on future lines
-             * Rather than check for mixed content or not, just print
-             * Example: <tag name="value">
-             *             <child/>
-             *          </tag>
-             */
+            Class justOutput = null;
+            boolean endedWithWhite = false;
+            Iterator itr = mixedContent.iterator();
+            while (itr.hasNext()) {
+                Object content = itr.next();
+                if (content instanceof String) {
+                    String scontent = (String) content;
+                    if (justOutput == CDATA.class && 
+                          trimText &&
+                          startsWithWhite(scontent)) {
+                        out.write(" ");
+                    }
+                    printString(scontent, out);
+                    endedWithWhite = endsWithWhite(scontent);
+                    justOutput = String.class;
+                }
+                else {
+                    // We're in a CDATA section
+                    if (justOutput == String.class &&
+                          trimText &&
+                          endedWithWhite) {
+                        out.write(" ");  // padding
+                    }
+                    printCDATASection((CDATA)content, out);
+                    justOutput = CDATA.class;
+                }
+            }
+        }
+        else {
             // Iterate through children
             Object content = null;
             Class justOutput = null;
+            boolean endedWithWhite = false;
+            boolean wasFullyWhite = false;
             Iterator itr = mixedContent.iterator();
             while (itr.hasNext()) {
                 content = itr.next();
                 // See if text, an element, a PI or a comment
                 if (content instanceof Comment) {
-                    printComment((Comment) content, out, indentLevel + 1);
-                   justOutput = Comment.class;
-                } else if (content instanceof String) {
-                   if (padText && (justOutput == Element.class))
-                       out.write(padTextString);
-                   printString((String)content, out);
-                   justOutput = String.class;
-                } else if (content instanceof Element) {
-                   if (padText && (justOutput == String.class))
-                       out.write(padTextString);
-                    printElement((Element) content, out,
-                                 indentLevel + 1, namespaces);
-                   justOutput = Element.class;
-                } else if (content instanceof Entity) {
-                    printEntity((Entity) content, out);
-                   justOutput = Entity.class;
-                } else if (content instanceof ProcessingInstruction) {
-                    printProcessingInstruction((ProcessingInstruction) content,
-                                               out, indentLevel + 1);
-                   justOutput = ProcessingInstruction.class;
-                } else if (content instanceof CDATA) {
-                    printCDATASection((CDATA)content, out, indentLevel + 1);
-                   justOutput = CDATA.class;
+                    if (!(justOutput == String.class && wasFullyWhite)) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printComment((Comment) content, out);
+                    justOutput = Comment.class;
                 }
-                // Unsupported types are *not* printed
+                else if (content instanceof String) {
+                    String scontent = (String) content;
+                    if (justOutput == CDATA.class && 
+                          trimText &&
+                          startsWithWhite(scontent)) {
+                        out.write(" ");
+                    }
+                    else if (justOutput != CDATA.class && 
+                             justOutput != String.class) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printString(scontent, out);
+                    endedWithWhite = endsWithWhite(scontent);
+                    justOutput = String.class;
+                    wasFullyWhite = (scontent.trim().length() == 0);
+                }
+                else if (content instanceof Element) {
+                    if (!(justOutput == String.class && wasFullyWhite)) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printElement((Element) content, out,
+                                 indentLevel, namespaces);
+                    justOutput = Element.class;
+                }
+                else if (content instanceof Entity) {
+                    if (!(justOutput == String.class && wasFullyWhite)) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printEntity((Entity) content, out);
+                    justOutput = Entity.class;
+                }
+                else if (content instanceof ProcessingInstruction) {
+                    if (!(justOutput == String.class && wasFullyWhite)) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printProcessingInstruction((ProcessingInstruction) content,
+                                               out);
+                    justOutput = ProcessingInstruction.class;
+                }
+                else if (content instanceof CDATA) {
+                    if (justOutput == String.class &&
+                          trimText &&
+                          endedWithWhite) {
+                        out.write(" ");  // padding
+                    }
+                    else if (justOutput != String.class &&
+                             justOutput != CDATA.class) {
+                        maybePrintln(out);
+                        indent(out, indentLevel);
+                    }
+                    printCDATASection((CDATA)content, out);
+                    justOutput = CDATA.class;
+                }
+                // Unsupported types are *not* printed, nor should they exist
             }
+            maybePrintln(out);
+            indent(out, indentLevel - 1);
         }
     }  // printElementContent
 
@@ -1116,7 +1117,8 @@ public class XMLOutputter implements Cloneable {
                     out.write(" ");
                 }
             }
-        } else {                    
+        }
+        else {                    
             out.write(s);
         }
     }
@@ -1288,7 +1290,7 @@ public class XMLOutputter implements Cloneable {
                 last = i + 1;
             }
         }
-        if(last < block.length) {
+        if (last < block.length) {
             buff.append(block, last, i - last);
         }
 
@@ -1314,9 +1316,6 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-indentSize")) {
                 setIndentSize(Integer.parseInt(args[++i]));
             }
-            else if (args[i].equals("-indentLevel")) {
-                setIndentLevel(Integer.parseInt(args[++i]));
-            }
             else if (args[i].startsWith("-expandEmpty")) {
                 setExpandEmptyElements(true);
             }
@@ -1332,13 +1331,35 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-trimText")) {
                 setTrimText(true);
             }
-            else if (args[i].equals("-padText")) {
-                setPadText(true);
-            }
             else {
                 return i;
             }
         }
         return i;
     } // parseArgs
+
+    private boolean startsWithWhite(String s) {
+        return (s.length() > 0 && s.charAt(0) <= ' ');
+    }
+
+    private boolean endsWithWhite(String s) {
+        return (s.length() > 0 && s.charAt(s.length() - 1) <= ' ');
+    }
+
+    /**
+     * <p> Ensure that text immediately preceded by or followed by an
+     * element will be "padded" with a single space.  </p>
+     * 
+     * @deprecated Deprecated in beta7, because this is no longer necessary
+     */
+    public void setPadText(boolean padText) { }
+
+    /**
+     * Set the initial indentation level.  
+     *
+     * @deprecated Deprecated in beta7, because this is better done with a
+     *             stacked FilterOutputStream
+     */
+     *
+    public void setIndentLevel(int indentLevel) { }
 }
