@@ -337,15 +337,7 @@ public class DOMBuilder {
 
             case Node.TEXT_NODE:
                 String text = node.getNodeValue();
-                if (!text.trim().equals("")) {
-                    if (node.getPreviousSibling() == null) {
-                        text = ltrim(text);
-                    }
-                    if (node.getNextSibling() == null) {
-                        text = rtrim(text);
-                    }
-                    current.addContent(text);
-                }
+                current.addContent(text);
                 break;
 
             case Node.CDATA_SECTION_NODE:
@@ -406,45 +398,4 @@ public class DOMBuilder {
                 break;
         }
     }
-
-    /**
-     * <p>
-     *  Trim the right spacing off of a <code>String</code>.
-     * </p>
-     *
-     * @param orig <code>String</code> to rtrim.
-     * @return <code>String</code> - orig with no right spaces
-     */
-    private String rtrim(String orig) {
-        int len = orig.length();
-        int st = 0;
-        int off = 0;
-        char[] val = orig.toCharArray();
-
-        while ((st < len) && (val[off + len - 1] <= ' ')) {
-            len--;
-        }
-        return ((st > 0) || (len < orig.length())) ? orig.substring(st, len) : orig;
-    }
-
-    /**
-     * <p>
-     *  Trim the left spacing off of a <code>String</code>.
-     * </p>
-     *
-     * @param orig <code>String</code> to rtrim.
-     * @return <code>String</code> - orig with no left spaces
-     */
-    private String ltrim(String orig) {
-        int len = orig.length();
-        int st = 0;
-        int off = 0;
-        char[] val = orig.toCharArray();
-
-        while ((st < len) && (val[off + st] <= ' ')) {
-            st++;
-        }
-        return ((st > 0) || (len < orig.length())) ? orig.substring(st, len) : orig;
-    }
-
 }
