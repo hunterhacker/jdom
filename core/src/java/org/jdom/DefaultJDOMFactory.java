@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.1 2004/02/06 04:51:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.input;
+package org.jdom;
 
 import java.util.*;
 
@@ -64,7 +64,7 @@ import org.jdom.*;
  * Creates the standard top-level JDOM classes (Element, Document, Comment,
  * etc). A subclass of this factory might construct custom classes.
  * 
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.1 $, $Date: 2004/02/06 04:51:12 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -72,7 +72,7 @@ import org.jdom.*;
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.1 $ $Date: 2004/02/06 04:51:12 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 
@@ -107,7 +107,7 @@ public class DefaultJDOMFactory implements JDOMFactory {
         return new Comment(text);
     }
 
-    public DocType docType(String elementName, 
+    public DocType docType(String elementName,
                            String publicID, String systemID) {
         return new DocType(elementName, publicID, systemID);
     }
@@ -144,12 +144,12 @@ public class DefaultJDOMFactory implements JDOMFactory {
         return new Element(name, prefix, uri);
     }
 
-    public ProcessingInstruction processingInstruction(String target, 
+    public ProcessingInstruction processingInstruction(String target,
                                                        Map data) {
         return new ProcessingInstruction(target, data);
     }
 
-    public ProcessingInstruction processingInstruction(String target, 
+    public ProcessingInstruction processingInstruction(String target,
                                                        String data) {
         return new ProcessingInstruction(target, data);
     }

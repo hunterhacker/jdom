@@ -2,9 +2,6 @@ Items that need to be done:
 
 --- API CONSIDERATIONS FOR 1.0 ---
 
-* Consider moving JDOMFactory to org.jdom.  Then we can have a FastFactory
-  which skips Verification.
-
 * Rusty's "base uri" support for Element and the rest.
 
 * Must "pretty" output normalize text or is trim enough?

@@ -89,6 +89,9 @@ and TRIM_FULL_WHITE.  Removed the methods setTextTrim(), setTextNormalize(),
 and setTrimAllWhite().  Replaced them with setTextMode(Format.TextMode) and
 getTextMode().
 
+Moved org.jdom.input.JDOMFactory and org.jdom.input.DefaultJDOMFactory into
+the org.jdom package.
+
 
 NEW METHODS
 -----------
@@ -823,7 +826,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.15 2004/02/06 04:35:25 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS Id variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.

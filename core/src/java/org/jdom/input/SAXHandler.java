@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.61 2004/02/06 03:20:19 jhunter Exp $
+ $Id: SAXHandler.java,v 1.62 2004/02/06 04:51:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.61 $, $Date: 2004/02/06 03:20:19 $
+ * @version $Revision: 1.62 $, $Date: 2004/02/06 04:51:12 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.61 $ $Date: 2004/02/06 03:20:19 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.62 $ $Date: 2004/02/06 04:51:12 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -241,7 +241,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @return <code>JDOMFactory</code> - the factory used for
      * constructing objects.
      *
-     * @see #SAXHandler(org.jdom.input.JDOMFactory)
+     * @see #SAXHandler(org.jdom.JDOMFactory)
      */
     public JDOMFactory getFactory() {
         return factory;
@@ -306,8 +306,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         if (locator != null) {
             document.setBaseURI(locator.getSystemId());
         }
-    }    
-    
+    }
+
     /**
      * This is called when the parser encounters an external entity
      * declaration.
@@ -943,7 +943,7 @@ if (!inDTD) {
      * Receives an object for locating the origin of SAX document
      * events.  This method is invoked by the SAX parser.
      * <p>
-     * {@link JDOMFactory} implementations can use the
+     * {@link org.jdom.JDOMFactory} implementations can use the
      * {@link #getDocumentLocator} method to get access to the
      * {@link Locator} during parse.
      * </p>

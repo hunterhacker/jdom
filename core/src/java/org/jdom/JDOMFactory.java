@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.15 2003/05/02 07:40:04 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.1 2004/02/06 04:51:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.input;
+package org.jdom;
 
 import java.util.*;
 
@@ -66,7 +66,7 @@ import org.jdom.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.15 $, $Date: 2003/05/02 07:40:04 $
+ * @version $Revision: 1.1 $, $Date: 2004/02/06 04:51:12 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -79,7 +79,7 @@ public interface JDOMFactory {
      * <p>
      * This will create a new <code>Attribute</code> with the
      *   specified (local) name and value, and in the provided
-     *   <code>{@link Namespace}</code>.
+     *   <code>{@link org.jdom.Namespace}</code>.
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -90,7 +90,7 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Attribute</code> with the
      * specified (local) name, value, and type, and in the provided
-     * <code>{@link Namespace}</code>.
+     * <code>{@link org.jdom.Namespace}</code>.
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
@@ -103,11 +103,11 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Attribute</code> with the
      * specified (local) name and value, and does not place
-     * the attribute in a <code>{@link Namespace}</code>.
+     * the attribute in a <code>{@link org.jdom.Namespace}</code>.
      * <p>
      * <b>Note</b>: This actually explicitly puts the
      * <code>Attribute</code> in the "empty" <code>Namespace</code>
-     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * (<code>{@link org.jdom.Namespace#NO_NAMESPACE}</code>).
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -118,11 +118,11 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Attribute</code> with the
      * specified (local) name, value and type, and does not place
-     * the attribute in a <code>{@link Namespace}</code>.
+     * the attribute in a <code>{@link org.jdom.Namespace}</code>.
      * <p>
      * <b>Note</b>: This actually explicitly puts the
      * <code>Attribute</code> in the "empty" <code>Namespace</code>
-     * (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * (<code>{@link org.jdom.Namespace#NO_NAMESPACE}</code>).
      * </p>
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
@@ -172,7 +172,7 @@ public interface JDOMFactory {
      * @param systemID <code>String</code> system ID of
      *        referenced DTD
      */
-    public DocType docType(String elementName, 
+    public DocType docType(String elementName,
                            String publicID, String systemID);
 
     /**
@@ -200,9 +200,9 @@ public interface JDOMFactory {
 
     /**
      * This will create a new <code>Document</code>,
-     * with the supplied <code>{@link Element}</code>
+     * with the supplied <code>{@link org.jdom.Element}</code>
      * as the root element and the supplied
-     * <code>{@link DocType}</code> declaration.
+     * <code>{@link org.jdom.DocType}</code> declaration.
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
@@ -211,8 +211,8 @@ public interface JDOMFactory {
 
     /**
      * This will create a new <code>Document</code>,
-     * with the supplied <code>{@link Element}</code>
-     * as the root element, and no <code>{@link DocType}</code>
+     * with the supplied <code>{@link org.jdom.Element}</code>
+     * as the root element, and no <code>{@link org.jdom.DocType}</code>
      * declaration.
      *
      * @param rootElement <code>Element</code> for document root
@@ -224,7 +224,7 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Element</code>
      * with the supplied (local) name, and define
-     * the <code>{@link Namespace}</code> to be used.
+     * the <code>{@link org.jdom.Namespace}</code> to be used.
      *
      * @param name <code>String</code> name of element.
      * @param namespace <code>Namespace</code> to put element in.
@@ -233,7 +233,7 @@ public interface JDOMFactory {
 
     /**
      * This will create an <code>Element</code> in no
-     * <code>{@link Namespace}</code>.
+     * <code>{@link org.jdom.Namespace}</code>.
      *
      * @param name <code>String</code> name of element.
      */
@@ -242,7 +242,7 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Element</code> with
      * the supplied (local) name, and specifies the URI
-     * of the <code>{@link Namespace}</code> the <code>Element</code>
+     * of the <code>{@link org.jdom.Namespace}</code> the <code>Element</code>
      * should be in, resulting it being unprefixed (in the default
      * namespace).
      *
@@ -255,7 +255,7 @@ public interface JDOMFactory {
     /**
      * This will create a new <code>Element</code> with
      * the supplied (local) name, and specifies the prefix and URI
-     * of the <code>{@link Namespace}</code> the <code>Element</code>
+     * of the <code>{@link org.jdom.Namespace}</code> the <code>Element</code>
      * should be in.
      *
      * @param name <code>String</code> name of element.
@@ -274,7 +274,7 @@ public interface JDOMFactory {
      * @param data <code>Map</code> data for PI, in
      *             name/value pairs
      */
-    public ProcessingInstruction processingInstruction(String target, 
+    public ProcessingInstruction processingInstruction(String target,
                                                        Map data);
 
     /**
@@ -284,7 +284,7 @@ public interface JDOMFactory {
      * @param target <code>String</code> target of PI.
      * @param data <code>String</code> data for PI.
      */
-    public ProcessingInstruction processingInstruction(String target, 
+    public ProcessingInstruction processingInstruction(String target,
                                                        String data);
 
     // **** constructing EntityRef ****

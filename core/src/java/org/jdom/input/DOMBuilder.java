@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: DOMBuilder.java,v 1.53 2003/06/04 17:40:53 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.54 2004/02/06 04:51:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.input;
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.53 $, $Date: 2003/06/04 17:40:53 $
+ * @version $Revision: 1.54 $, $Date: 2004/02/06 04:51:12 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -77,11 +77,11 @@ import org.w3c.dom.*;
  */
 public class DOMBuilder {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.53 $ $Date: 2003/06/04 17:40:53 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.54 $ $Date: 2004/02/06 04:51:12 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
-      * is given and JAXP isn't available. 
+      * is given and JAXP isn't available.
       */
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";
@@ -113,7 +113,7 @@ public class DOMBuilder {
     }
 
     /*
-     * This sets a custom JDOMFactory for the builder.  Use this to build 
+     * This sets a custom JDOMFactory for the builder.  Use this to build
      * the tree with your own subclasses of the JDOM classes.
      *
      * @param factory <code>JDOMFactory</code> to use
@@ -143,7 +143,7 @@ public class DOMBuilder {
     public org.jdom.Element build(org.w3c.dom.Element domElement) {
         Document doc = factory.document((Element)null);
         buildTree(domElement, doc, null, true);
-        return doc.getRootElement();               
+        return doc.getRootElement();
     }
 
     /**
@@ -255,10 +255,10 @@ public class DOMBuilder {
                         Namespace attns = null;
                         if ("".equals(attPrefix)) {
                             attns = Namespace.NO_NAMESPACE;
-                        } 
+                        }
                         else {
                             attns = element.getNamespace(attPrefix);
-                        } 
+                        }
 
                         Attribute attribute =
                             factory.attribute(attLocalName, attvalue, attns);

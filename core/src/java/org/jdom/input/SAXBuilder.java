@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: SAXBuilder.java,v 1.82 2004/02/05 00:11:34 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.83 2004/02/06 04:51:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.input;
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.82 $, $Date: 2004/02/05 00:11:34 $
+ * @version $Revision: 1.83 $, $Date: 2004/02/06 04:51:12 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -88,10 +88,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class SAXBuilder {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.82 $ $Date: 2004/02/05 00:11:34 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.83 $ $Date: 2004/02/06 04:51:12 $ $Name:  $";
 
-    /** 
+    /**
      * Default parser class to use. This is used when no other parser
      * is given and JAXP isn't available.
      */
@@ -109,7 +109,7 @@ public class SAXBuilder {
 
     /** ErrorHandler class to use */
     private ErrorHandler saxErrorHandler = null;
- 
+
     /** EntityResolver class to use */
     private EntityResolver saxEntityResolver = null;
 
@@ -142,7 +142,7 @@ public class SAXBuilder {
 
     /**
      * Creates a new SAXBuilder which will attempt to first locate
-     * a parser via JAXP, then will try to use a set of default 
+     * a parser via JAXP, then will try to use a set of default
      * SAX Drivers. The underlying parser will not validate.
      */
     public SAXBuilder() {
@@ -151,7 +151,7 @@ public class SAXBuilder {
 
     /**
      * Creates a new SAXBuilder which will attempt to first locate
-     * a parser via JAXP, then will try to use a set of default 
+     * a parser via JAXP, then will try to use a set of default
      * SAX Drivers. The underlying parser will validate or not
      * according to the given parameter.
      *
@@ -198,7 +198,7 @@ public class SAXBuilder {
     }
 
     /**
-     * Returns the current {@link JDOMFactory} in use.
+     * Returns the current {@link org.jdom.JDOMFactory} in use.
      * @return the factory in use
      */
     public JDOMFactory getFactory() {
@@ -227,7 +227,7 @@ public class SAXBuilder {
     /**
      * This sets validation for the builder.
      *
-     * @param validate <code>boolean</code> indicating whether validation 
+     * @param validate <code>boolean</code> indicating whether validation
      * should occur.
      */
     public void setValidation(boolean validate) {
@@ -317,11 +317,11 @@ public class SAXBuilder {
     }
 
     /**
-     * Specifies whether or not the parser should elminate whitespace in 
+     * Specifies whether or not the parser should elminate whitespace in
      * element content (sometimes known as "ignorable whitespace") when
      * building the document.  Only whitespace which is contained within
      * element content that has an element only content model will be
-     * eliminated (see XML Rec 3.2.1).  For this setting to take effect 
+     * eliminated (see XML Rec 3.2.1).  For this setting to take effect
      * requires that validation be turned on.  The default value of this
      * setting is <code>false</code>.
      *
@@ -351,7 +351,7 @@ public class SAXBuilder {
      * large numbers of files in sequence.
      * <p>
      * <strong>Note</strong>: As SAX parser instances are not thread safe,
-     * the parser reuse feature should not be used with SAXBuilder instances 
+     * the parser reuse feature should not be used with SAXBuilder instances
      * shared among threads.</p>
      *
      * @param reuseParser Whether to reuse the SAX parser.
@@ -368,8 +368,8 @@ public class SAXBuilder {
      * NOTE: SAXBuilder requires that some particular features of the SAX parser be
      * set up in certain ways for it to work properly. The list of such features
      * may change in the future. Therefore, the use of this method may cause
-     * parsing to break, and even if it doesn't break anything today it might 
-     * break parsing in a future JDOM version, because what JDOM parsers require 
+     * parsing to break, and even if it doesn't break anything today it might
+     * break parsing in a future JDOM version, because what JDOM parsers require
      * may change over time. Use with caution.
      * </p>
      *
@@ -388,8 +388,8 @@ public class SAXBuilder {
      * NOTE: SAXBuilder requires that some particular properties of the SAX parser be
      * set up in certain ways for it to work properly. The list of such properties
      * may change in the future. Therefore, the use of this method may cause
-     * parsing to break, and even if it doesn't break anything today it might 
-     * break parsing in a future JDOM version, because what JDOM parsers require 
+     * parsing to break, and even if it doesn't break anything today it might
+     * break parsing in a future JDOM version, because what JDOM parsers require
      * may change over time. Use with caution.
      * </p>
      *
@@ -411,7 +411,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed
      */
-    public Document build(InputSource in) 
+    public Document build(InputSource in)
      throws JDOMException, IOException {
         SAXHandler contentHandler = null;
 
@@ -459,7 +459,7 @@ public class SAXBuilder {
         catch (SAXParseException e) {
             String systemId = e.getSystemId();
             if (systemId != null) {
-                throw new JDOMParseException("Error on line " + 
+                throw new JDOMParseException("Error on line " +
                     e.getLineNumber() + " of document " + systemId,
                     e, contentHandler.getDocument());
             } else {
@@ -469,7 +469,7 @@ public class SAXBuilder {
             }
         }
         catch (SAXException e) {
-            throw new JDOMParseException("Error in building: " + 
+            throw new JDOMParseException("Error in building: " +
                 e.getMessage(), e, contentHandler.getDocument());
         }
         finally {
@@ -508,7 +508,7 @@ public class SAXBuilder {
      * This creates the XMLReader to be used for reading the XML document.
      * <p>
      * The default behavior is to (1) use the saxDriverClass, if it has been
-     * set, (2) try to obtain a parser from JAXP, if it is available, and 
+     * set, (2) try to obtain a parser from JAXP, if it is available, and
      * (3) if all else fails, use a hard-coded default parser (currently
      * the Xerces parser). Subclasses may override this method to determine
      * the parser to use in a different way.
@@ -527,7 +527,7 @@ public class SAXBuilder {
                 setFeaturesAndProperties(parser, true);
             }
             catch (SAXException e) {
-              throw new JDOMException("Could not load " + saxDriverClass, e); 
+              throw new JDOMException("Could not load " + saxDriverClass, e);
             }
         } else {
             // Try using JAXP...
@@ -536,10 +536,10 @@ public class SAXBuilder {
             // to the hard coded default parser
             try {
                 // Get factory class and method.
-                Class factoryClass = 
+                Class factoryClass =
                     Class.forName("org.jdom.input.JAXPParserFactory");
 
-                Method createParser = 
+                Method createParser =
                     factoryClass.getMethod("createParser",
                         new Class[] { boolean.class, Map.class, Map.class });
 
@@ -578,7 +578,7 @@ public class SAXBuilder {
             }
             catch (SAXException e) {
                 throw new JDOMException("Could not load default SAX parser: "
-                  + DEFAULT_SAX_DRIVER, e); 
+                  + DEFAULT_SAX_DRIVER, e);
             }
         }
 
@@ -696,7 +696,7 @@ public class SAXBuilder {
                         "http://xml.org/sax/features/namespaces",
                         true, "Namespaces");
             internalSetFeature(parser,
-                        "http://xml.org/sax/features/namespace-prefixes", 
+                        "http://xml.org/sax/features/namespace-prefixes",
                         true, "Namespace prefixes");
         }
 
@@ -708,7 +708,7 @@ public class SAXBuilder {
         // XXX It might make sense to setEntityResolver() with a resolver
         // that simply ignores external general entities
         try {
-            if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
+            if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) {
                 parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
             }
         }
@@ -720,7 +720,7 @@ public class SAXBuilder {
      * Tries to set a feature on the parser. If the feature cannot be set,
      * throws a JDOMException describing the problem.
      */
-    private void internalSetFeature(XMLReader parser, String feature, 
+    private void internalSetFeature(XMLReader parser, String feature,
                     boolean value, String displayName) throws JDOMException {
         try {
             parser.setFeature(feature, value);
@@ -739,7 +739,7 @@ public class SAXBuilder {
      * throws a JDOMException describing the problem.
      * </p>
      */
-    private void internalSetProperty(XMLReader parser, String property, 
+    private void internalSetProperty(XMLReader parser, String property,
                     Object value, String displayName) throws JDOMException {
         try {
             parser.setProperty(property, value);
@@ -764,7 +764,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed.
      */
-    public Document build(InputStream in) 
+    public Document build(InputStream in)
      throws JDOMException, IOException {
         return build(new InputSource(in));
     }
@@ -781,7 +781,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed
      */
-    public Document build(File file) 
+    public Document build(File file)
         throws JDOMException, IOException {
         try {
             URL url = fileToURL(file);
@@ -803,7 +803,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed.
      */
-    public Document build(URL url) 
+    public Document build(URL url)
         throws JDOMException, IOException {
         String systemID = url.toExternalForm();
         return build(new InputSource(systemID));
@@ -844,7 +844,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed
      */
-    public Document build(Reader characterStream) 
+    public Document build(Reader characterStream)
         throws JDOMException, IOException {
         return build(new InputSource(characterStream));
     }
@@ -883,7 +883,7 @@ public class SAXBuilder {
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed
      */
-    public Document build(String systemId) 
+    public Document build(String systemId)
         throws JDOMException, IOException {
         return build(new InputSource(systemId));
     }
@@ -977,7 +977,7 @@ public class SAXBuilder {
      * <p>
      * This sets whether or not to expand entities for the builder.
      * A true means to expand entities as normal content.  A false means to
-     * leave entities unexpanded as <code>EntityRef</code> objects.  The 
+     * leave entities unexpanded as <code>EntityRef</code> objects.  The
      * default is true.
      * </p>
      * <p>
@@ -993,7 +993,7 @@ public class SAXBuilder {
      * http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6111
      * </p>
      *
-     * @param expand <code>boolean</code> indicating whether entity expansion 
+     * @param expand <code>boolean</code> indicating whether entity expansion
      * should occur.
      */
     public void setExpandEntities(boolean expand) {
