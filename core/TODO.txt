@@ -6,8 +6,7 @@ Items that need to be done:
 * Implement preservation of whitespace, making it available using
   getContent(true) and getMixedContent(true).
 
-* Implement DOMOutputter (Matthew Merlo <matthew.j.merlo@lmco.com> has made
-  good progress, pending Brett code review)
+* Polish the DOMOutputter code
 
 * Set up build to automatically handle JDK 1.1 + Collections using an Ant task
   to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
@@ -55,7 +54,7 @@ Items that need to be done:
 * Have all equals() methods not do super.equals() but rather make it clear we
   mean for == behavior.
 
-* Add Document.getMixedContent(boolean preserveWhitespace)
+* Fix Document.getMixedContent() to preserve whitespace
 
 * Add Document.setMixedContent().  Do we ensure it contains only one Element?
 
