@@ -1,6 +1,6 @@
 @echo off
 
-echo Java and XML Build System
+echo JDOM Build System
 echo -------------------
 
 if "%JAVA_HOME%" == "" goto error

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo
-echo "Java and XML Build System"
+echo "JDOM Build System"
 echo "-------------------"
 echo
 
