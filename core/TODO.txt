@@ -29,10 +29,32 @@ Items that need to be done:
 
 --- FOR JDOM 1.0 ---
 
-* Work on a potential Cdata class, see if we like it for 1.0
-  (coding being done by Dan Schaffer, Dan.Schaffer@time0.com)
+* Figure out if adding an element as a child of itself (or grandchild or
+  great-grandchild) should be stopped.  Probably so.  The logic to implement
+  this was laid out in the thread "How to "crash" JDOM, part 1" by David 
+  Smiley.  (Work being done by trebor.a.rude@lmco.com)
+
+* Add Element.getDocument() method (work by bob@accurev.com)
+
+* Probably add an Attribute.getParent() method (to help XPath)
+
+* Add better handling of bogus undeclared prefixes like <bogus:foo/>
+
+* Check in the CDATA class (coding being done by Dan.Schaffer@time0.com)
+
+* Writer XMLOutputter.serialize(doc/elem/comment/doctype/entity/pi/attrib)
+  Have these methods replace getSerializedForm().  Going this way allows
+  tweaks to the XMLOutputter behavior before serialization.
 
 * Add CrimsonDOMAdapter
+
+* Have PartialList sanity check new object types as legal.
+
+* Consider having element.getChild("foo") use the namespace of the invoked 
+  element.  Currently is would be the default namespace.  With this new
+  approach you'd pass null to use the default.  This would be more convenient,
+  but the downside I see is that it would be inconsistent since 
+  new Element("foo") would only create elements in the default namespace.
 
 * Since DOMOutputter is just DOM1, consider a DOM2 outputter
   Probably support DOM2 only, in theory of tracking latest versions
@@ -104,6 +126,14 @@ Items that need to be done:
 
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions
+
+* Look at standard parser features (http://apache.org/xml/features/dom) for
+  ideas on things that may be needed.
+
+* Look at the issue that PartialList.listIterator() may return an Iterator
+  that doesn't have logic to change the backing List and sanity check the
+  change.  See post by "Chris Hamersley" <chris.hamersley@xmlglobal.com>
+  31 Aug 2000.
 
 --- FOR JDOM 1.1 ---
 
