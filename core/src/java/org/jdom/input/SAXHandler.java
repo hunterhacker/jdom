@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.70 2004/12/11 01:43:52 jhunter Exp $
+ $Id: SAXHandler.java,v 1.71 2004/12/11 02:18:55 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.70 $, $Date: 2004/12/11 01:43:52 $
+ * @version $Revision: 1.71 $, $Date: 2004/12/11 02:18:55 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.70 $ $Date: 2004/12/11 01:43:52 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.71 $ $Date: 2004/12/11 02:18:55 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -292,8 +292,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     }
 
     /**
-     * Specifies whether or not the parser should elminate element content
-     * containing only whitespace when building the document.
+     * Specifies whether or not the parser should elminate text() nodes
+     * containing only whitespace when building the document.  See
+     * {@link SAXBuilder#setIgnoringBoundaryWhitespace(boolean)}.
      *
      * @param ignoringBoundaryWhite Whether to ignore only whitespace content
      */
