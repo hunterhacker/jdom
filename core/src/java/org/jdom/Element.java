@@ -1298,6 +1298,9 @@ public class Element implements Serializable, Cloneable {
                 attribute.getParent().getQualifiedName() + "\"");
         }
 
+        // XXX Should verify attribute ns prefix doesn't collide with
+        // another attribute prefix or this element's prefix
+
         if (attributes == null) {
             attributes = new LinkedList();
         }

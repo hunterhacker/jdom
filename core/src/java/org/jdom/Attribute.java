@@ -116,6 +116,15 @@ public class Attribute implements Serializable, Cloneable {
             namespace = Namespace.NO_NAMESPACE;
         }
 
+        // Verify the attribute isn't trying to be in a default namespace
+        // Attributes can't be in a default namespace
+        if (namespace != Namespace.NO_NAMESPACE && 
+            namespace.getPrefix().equals("")) {
+            throw new IllegalNameException("", "attribute namespace",
+                "An attribute namespace without a prefix can only be the " +
+                "NO_NAMESPACE namespace");
+        }
+
         this.name = name;
         setValue(value);
         this.namespace = namespace;
