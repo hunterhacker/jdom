@@ -802,7 +802,10 @@ public class XMLOutputter implements Cloneable {
                 out.write("?>");
             }
 
-            maybePrintln(out);
+            // Print new line after decl always, even if no other new lines
+            // Helps the output look better and is semantically
+            // inconsequential
+            out.write(lineSeparator);
         }        
     }    
 
