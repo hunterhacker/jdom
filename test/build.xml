@@ -4,7 +4,7 @@
 Introduction
 ============
 
-To Be Written
+See the build targets for the tasks this ant build file supports
 
 
 Installing the build tools
@@ -23,6 +23,10 @@ These are the meaningful targets for this build file:
  - javadoc -> generates the API documentation in ./build/javadocs
  - clean -> restores the distribution to its original and clean state
  - test -> runs tests one test class at a time (all test cases starting with "Test")
+ - testui -> runs JUnit gui and starts automatically with Alltests
+ - testreport -> Calls the Ant/Junit task to build javadoc style test output
+ after you have run the test task.  These aren't automatically done because it
+ takes more time and that may not be desired when the tests normally succeed.
 
 -->
 
@@ -47,7 +51,24 @@ These are the meaningful targets for this build file:
 
     <property name="src.dir" value="./src/java"/>
     <property name="lib.dir" value="./lib"/>
-    <property name="packages" value="org.jdom.test.*"/>
+	<property name="jdom.dir" value="../jdom"/>
+	<property name="jdom.jar" value="${jdom.dir}/build/jdom.jar"/>
+	<property name="parser.jar" value="${jdom.dir}/lib/xerces.jar"/>
+	<property name="jaxp.jar" value="${jdom.dir}/lib/jaxp.jar"/>
+	<property name="packages" value="org.jdom.test.*"/>
+
+	<path id="project.class.path">
+	  <pathelement location="${jdom.jar}" />
+	  <pathelement location="${jaxp.jar}" />
+	  <!--probably need to improve on this because the java classpath
+	      will have a parser in it because ant requires it -->
+	  <pathelement location="${parser.jar}" />
+	  <pathelement location="build/jdom-test.jar" />
+      <pathelement path="${java.class.path}" />
+    </path>
+
+
+	<echo message="Running tests against ${jdom.jar} using parser ${parser.jar}"/>
 
     <property name="build.dir" value="./build"/>
     <property name="build.src" value="./build/src"/>
@@ -91,6 +112,7 @@ These are the meaningful targets for this build file:
     <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> restores the distribution to its clean state"/>
     <echo message="   test     --> runs JUnit tests for all tests in build"/>
+    <echo message="   testreport   --> build html report from test output"/>
     <echo message="   testui   --> runs JUnit tests with Swing UI"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
@@ -159,10 +181,12 @@ These are the meaningful targets for this build file:
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
   <target name="compile" depends="prepare-src,collections">
-    <javac srcdir="${build.src}"
+	  <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+		   optimize="${optimize}">
+	   <classpath refid="project.class.path" />
+   </javac>
 	<copy toDir="${build.dest}" >
 		<fileset dir="${build.src}" includes="**/*.properties" />
 	</copy>
@@ -173,8 +197,8 @@ These are the meaningful targets for this build file:
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
   <target name="package" depends="compile">
-    <fixcrlf srcdir="." includes="**/*.bat" cr="add"/>
-    <fixcrlf srcdir="." includes="**/*.sh" cr="remove"/>
+    <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
+	<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
          includes="org/**, **/*.properties"/>
@@ -203,14 +227,14 @@ These are the meaningful targets for this build file:
   <!-- Clean targets                                                       -->
   <!-- =================================================================== -->
   <target name="clean" depends="init">
-    <deltree dir="${build.dir}"/>
+	<delete dir="${build.dir}"/>
     <delete file="${docs.dir}/changes.xml"/>
     <delete file="${docs.dir}/todo.xml"/>
     <delete file="${docs.dir}/book.xml"/>
   </target>
 
   <target name="distclean" depends="clean">
-    <deltree dir="${dist.root}"/>
+    <delete dir="${dist.root}"/>
     <delete file="${Name}-${version}.tar.gz"/>
     <delete file="${Name}-${version}.tar"/>
     <delete file="${Name}-${version}.zip"/>
@@ -218,9 +242,7 @@ These are the meaningful targets for this build file:
   
   <target name="test" depends="init, prepare-tests">
     <junit printSummary="yes">
-	  <classpath>
-        <pathelement location="${test.jarFile}" />
-        <pathelement path="${java.class.path}" />
+	  <classpath refid="project.class.path">
       </classpath>
   
 	  <formatter type="${test.outputFormat}" />
@@ -231,16 +253,29 @@ These are the meaningful targets for this build file:
           <exclude name="**/generate/**" />
         </fileset>
       </batchtest>
-	</junit>
+  </junit>
   </target>
+  <target name="testreport" >
+  <!--ugh, a few oddities.  Xalan must be in the lib directory and
+      there must be an optional.jar there.  It won't use variables
+      open index.html in the testOutput directory and you do get a
+      nice report
+      -->
+
+  <junitreport todir="./testOutput">
+    <fileset dir="./testOutput">
+      <include name="TEST-*.xml"/>
+    </fileset>
+	<report format="frames" todir="./testOutput"/>
+  </junitreport>  
+  </target>
+
+
 
   <target name="testui" depends="init, prepare-tests">
     <java classname="org.jdom.test.cases.Alltests" fork="true">
 	  <arg value="-ui" />
-	  <classpath>
-        <pathelement location="${test.jarFile}" />
-        <pathelement path="${java.class.path}" />
-      </classpath>
+	  <classpath refid="project.class.path" />
 	</java>
   </target>
 </project>
