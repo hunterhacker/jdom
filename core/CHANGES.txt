@@ -160,6 +160,9 @@ anymore.  This helps simplify the most complicated class around.
 
 Deprecated element.setChildren(List) since element.setContent(List) suffices.
 
+Deprecated xmlOutputter.outputString(String) since outputString(Text) handles
+the Text nodes that now really reside within documents.
+
 
 REMOVED CLASSES
 ---------------
@@ -607,7 +610,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.12 2003/04/04 20:19:52 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.13 2003/04/08 05:02:27 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
