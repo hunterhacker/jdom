@@ -77,6 +77,7 @@ import java.util.StringTokenizer;
  * @author Jason Hunter
  * @author Lucas Gonze
  * @author Kevin Regan
+ * @author Dan Schaffer
  * @version 1.0
  */
 public class Element implements Serializable, Cloneable {
@@ -406,6 +407,9 @@ public class Element implements Serializable, Cloneable {
             Object obj = i.next();
             if (obj instanceof String) {
                 textContent.append((String)obj);
+                hasText = true;
+            } else if (obj instanceof CDATA) {
+                textContent.append(((CDATA)obj).getText());
                 hasText = true;
             }
         }
@@ -899,6 +903,23 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This adds a CDATA section as content to this element.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to add
+     * @return this element modified
+     */
+    public Element addContent(CDATA cdata) {
+        if (content == null) {
+            content = new LinkedList();
+        }
+
+        content.add(cdata);
+        return this;
+    }
+
+    /**
+     * <p>
      * This adds a comment as content to this element.
      * </p>
      *
@@ -1333,6 +1354,8 @@ public class Element implements Serializable, Cloneable {
                     element.addContent((Entity)((Entity)obj).clone());
                 } else if (obj instanceof Element) {
                     element.addContent((Element)((Element)obj).clone());
+                } else if (obj instanceof CDATA) {
+                    element.addContent((CDATA)((CDATA)obj).clone());
                 }
             }
         }

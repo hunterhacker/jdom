@@ -65,6 +65,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.jdom.CDATA;
 import org.jdom.Comment;
 import org.jdom.DocType;
 import org.jdom.Document;
@@ -89,6 +90,7 @@ import org.xml.sax.InputSource;
  * @author Philip Nelson
  * @author Kevin Regan
  * @author Yusuf Goolamabbas
+ * @author Dan Schaffer
  * @version 1.0
  */
 public class DOMBuilder {
@@ -372,9 +374,7 @@ public class DOMBuilder {
 
             case Node.CDATA_SECTION_NODE:
                 String cdata = node.getNodeValue();
-                if (!cdata.equals("")) {
-                    current.addContent(cdata);
-                }
+                current.addContent(new CDATA(cdata));
                 break;
 
 

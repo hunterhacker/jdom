@@ -68,6 +68,7 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import org.jdom.Attribute;
+import org.jdom.CDATA;
 import org.jdom.Comment;
 import org.jdom.DocType;
 import org.jdom.Document;
@@ -96,6 +97,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Dan Schaffer
  * @version 1.0
  */
 public class SAXBuilder {
@@ -710,7 +712,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         String data = new String(ch, start, end);
 
         if (inCDATA) {
-            ((Element)stack.peek()).addContent(data);
+            ((Element)stack.peek()).addContent(new CDATA(data));
         } else if (!inDTD) {
             if (inEntity) {
                 ((Entity)stack.peek()).setContent(data);

@@ -68,6 +68,7 @@ import java.util.Map;
 
 
 import org.jdom.Attribute;
+import org.jdom.CDATA;
 import org.jdom.Comment;
 import org.jdom.DocType;
 import org.jdom.Document;
@@ -86,6 +87,7 @@ import org.jdom.adapters.DOMAdapter;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Matthew Merlo
+ * @author Dan Schaffer
  * @version 1.0
  */
 public class DOMOutputter {
@@ -150,20 +152,21 @@ public class DOMOutputter {
                     org.w3c.dom.Comment domComment =
                         domDoc.createComment(((Comment)docObject).getText());
                     domDoc.appendChild(domComment);
-                }
-
-                else if (docObject instanceof ProcessingInstruction) {
+                } else if (docObject instanceof ProcessingInstruction) {
                     ProcessingInstruction pi = 
                         (ProcessingInstruction)docObject;
                     org.w3c.dom.ProcessingInstruction domPI =
                          domDoc.createProcessingInstruction(
                          pi.getTarget(), pi.getData());
                     domDoc.appendChild(domPI);
-                }
-
-                else if (docObject instanceof Element) {
+                } else if (docObject instanceof Element) {
                     // Build the rest of the DOM tree from JDOM's root element
                     buildDOMTree(docObject, domDoc, null, true, namespaces);
+                } else if (docObject instanceof CDATA) {
+                    CDATA cdata = (CDATA)docObject;
+                    org.w3c.dom.CDATASection domCdata =
+                        domDoc.createCDATASection(cdata.getText());
+                    domDoc.appendChild(domCdata);
                 }
             }
         } catch (Exception e) {
@@ -241,7 +244,6 @@ public class DOMOutputter {
                              domElement, false, namespaces);
             }
         } else if (content instanceof String) {
-            // XXX: CDATA currently handled as text (Matt)
             org.w3c.dom.Text domText = doc.createTextNode((String)content);
             current.appendChild(domText);
         } else if (content instanceof ProcessingInstruction) {
@@ -257,7 +259,12 @@ public class DOMOutputter {
             org.w3c.dom.EntityReference domEntity = 
                 doc.createEntityReference(((Entity)content).getName());
             doc.appendChild(domEntity);
+        } else if (content instanceof CDATA) {
+            org.w3c.dom.CDATASection domCdata = 
+                doc.createCDATASection(((CDATA)content).getText());        
+            current.appendChild(domCdata);
         }
+
         /*
         *
         * XXX: DOM 1 does not allow us to set DocType (Matt)

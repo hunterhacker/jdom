@@ -69,6 +69,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.jdom.Attribute;
+import org.jdom.CDATA;
 import org.jdom.Comment;
 import org.jdom.DocType;
 import org.jdom.Document;
@@ -95,6 +96,7 @@ import org.jdom.ProcessingInstruction;
  * @author Wolfgang Werner
  * @author Elliotte Rusty Harold
  * @author David & Will (from Post Tool Design)
+ * @author Dan Schaffer
  * @version 1.0
  */
 public class XMLOutputter {
@@ -329,6 +331,8 @@ public class XMLOutputter {
                 printComment((Comment) obj, writer, 0);
             } else if (obj instanceof ProcessingInstruction) {
                 printProcessingInstruction((ProcessingInstruction) obj, writer, 0);
+            } else if (obj instanceof CDATA) {
+                printCDATASection((CDATA)obj, writer, 0);
             }
         }
 
@@ -418,7 +422,9 @@ public class XMLOutputter {
                 }
                 out.write("?>");
             }
-            maybePrintln(out);
+
+            // Always print new line after declaration, to be safe
+            out.write(newline);
         }        
     }    
 
@@ -457,6 +463,25 @@ public class XMLOutputter {
         }
         out.write(">");
         maybePrintln(out);
+    }
+
+    /**
+     * <p>
+     * This will handle printing out an <code>{@link CDATA}</code>,
+     *   and its value.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to output.
+     * @param out <code>Writer</code> to write to.
+     * @param indent <code>int</code> level of indention.
+     */
+    protected void printCDATASection(CDATA cdata,
+			      Writer out, int indentLevel) throws IOException {
+	
+        indent(out, indentLevel);
+        out.write(cdata.getSerializedForm());
+        maybePrintln(out);
+
     }
 
     /**
@@ -568,6 +593,8 @@ public class XMLOutputter {
                     printEntity((Entity) content, out);
                 } else if (content instanceof ProcessingInstruction) {
                     printProcessingInstruction((ProcessingInstruction) content, out, indentLevel + 1);
+                } else if (content instanceof CDATA) {
+                    printCDATASection((CDATA)content, out, indentLevel + 1);
                 } // Unsupported types are *not* printed
             }
 
