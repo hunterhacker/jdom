@@ -1,4 +1,217 @@
-* * * * * * Beta9 (future tag: jdom_1_0_b9) from Beta8 * * * * * *
+* * * * * * Beta10 (future tag: jdom_1_0_b10) from Beta9 * * * * * *
+
+PARENT AND CONTENT
+------------------
+
+Added a new Parent interface and a new Content abstract class.  Parent is
+implemented by Document and Element.  Content is extended by Element, Comment,
+DocType, EntityRef, ProcessingInstruction, and Text (CDATA).
+
+Parent has methods (* means new):
+  Parent addContent(Content child);
+  * Parent addContent(Collection collection);
+  * Parent addContent(int index, Content child);
+  * Parent addContent(int index, Collection collection);
+  * List cloneContent();
+  * void canContain(Content, int);
+  List getContent();
+  List getContent(Filter filter);
+  * Content getContent(int index);
+  * int getContentSize();
+  * Iterator getDescendants()
+  * Iterator getDescendants(Filter)
+  * Document getDocument()
+  * Parent getParent()
+  * int indexOf(Content)
+  * List removeContent();
+  boolean removeContent(Content child);
+  * List removeContent(Filter filter);
+  * Content removeContent(int index);
+  Parent setContent(Content child);
+  Parent setContent(Collection collection);
+  * Parent setContent(int index, Content child);
+  * Parent setContent(int index, Collection collection);
+  Object clone();
+
+Content has public methods:
+  Content detach();
+  Document getDocument();
+  Parent getParent();
+  * String getValue();
+  Object clone();
+
+The new methods on Parent are pretty self explanatory. A few methods that used
+to require getting the content List now work on Parent itself for convenience
+(tired of all those FAQs).  The cloneContent() and removeContent() calls
+should be especially helpful.  The getDescendants() methods is great in
+providing a mechanism to walk the entire tree from this item down using an
+optional filter.
+
+The getValue() method in Content is defined to return the XPath 1.0 string
+value of the element.  The getText() methods in Element are left unchanged.
+
+A subtle change is that getParent() now returns a Parent type which is its
+immediate parent.  Previously an item at the document level would return null
+and you'd use getDocument() to get its Document.  Parent has getParent() as
+well to make repeated getParent() calls easier.
+
+The protected setDocument() methods have been removed in favor of just using
+setParent(). getDocument() remains as a potentially recursive lookup method.
+
+
+NEW CLASSES
+-----------
+
+Added an org.jdom.transform.XSLTransformer class to help with simple
+transformations.  It's a one-liner now, the way it should be.  Also added an
+XSLTransformException class to support the XSLTransformer.
+
+Added an org.jdom.output.Format class to control XMLOutputter behavior.
+Format has convenience methods .getRawFormat(), .getPrettyFormat(), and
+.getCompactFormat() to use in lieu of people having to remember when to trim,
+set indents, and such.  The old XMLOutputter.set*() methods are now deprecated
+and should be called on a Format instance.  The XMLOutputter constructors that
+took indents and so on are also deprecated.
+
+Added an EscapeStrategy plug-in interface for XMLOutputter to determine which
+chars to escape.  A user can set a strategy and go, no need to subclass.
+
+Created a DefaultEscapeStrategy which tries to be generally smart.  It quickly
+says no escaping is necessary for UTF-8 (our default) and UTF-16.  It escapes
+everything above 255 for ISO-8859-1/Latin1. It escapes everything above 127
+for ASCII.  For the other charsets, it tries to use the JDK 1.4 CharsetEncoder
+to determine if the char needs escaping.  Reflection is used for this so JDOM
+isn't dependent on JDK 1.4.  That means if you run on JDK 1.3 there's no
+escaping unless JDOM knows about the charset itself or you plug in your own.
+
+Added a Format.TextMode inner class with values: PRESERVE, TRIM, NORMALIZE,
+and TRIM_FULL_WHITE.  Removed the methods setTextTrim(), setTextNormalize(),
+and setTrimAllWhite().  Replaced them with setTextMode(Format.TextMode) and
+getTextMode().
+
+
+NEW METHODS
+-----------
+
+Added Document.setBaseURI(String) and getBaseURI() to record the effective URI
+from which the document was loaded (against which relative URLs in the
+document should be resolved).  The builders record the URI when possible.
+
+Added a Document(Element, DocType, String baseURI) constructor.
+
+
+ENHANCEMENTS
+------------
+
+Incorporated Jaxen 1.0 and Xerces 2.6.1.
+
+Enhanced the filter classes so they extend a new AbstractFilter class and
+inherit its and(), or(), and negate() methods.
+
+Added proper hashCode() methods to the filters.
+
+Changed the Document's DocType storage so it's part of the ContentList now and
+has a location that can be preserved.  This helps with round tripping.  The
+getDocType() and setDocType() methods remain for convenience but just operate
+based on searches through the ContentList.  Adding logic to ensure the DOCTYPE
+isn't added after the root, or vice-versa.
+
+The Attribute class now trims its value before attempted conversion to a
+double, float, or boolean values.  Also "1" and "0" are legal boolean values
+following the lead of Schema.
+
+Added better support for loading from files whose names have special
+characters like #.
+
+Added a protected SAXHandler.flushCharacters(String) method to allow
+subclassers to have more control over strings.
+
+
+BUG FIXES
+---------
+
+Fixed bug in AttributeList.clear() where the cleared list did not reset its
+size to 0, causing NullPointerException when the list was reused.
+
+Fixed bug where serializing a content list using a filter.  It wouldn't work
+because FilterList wasn't serializable.  It is now.
+
+Fixed bug in ContentList that could theoretically cause problems during
+reverse iteration.
+
+Changed JDOMException.initCause() to return "this" instead of "cause"
+since that's what Throwable says it should do.
+
+
+DEPRECATED METHODS
+------------------
+
+Deprecated the Document(List, DocType) constructor because it doesn't make
+sense if the DocType should be part of the content list rather than separate.
+
+Deprecated the XMLOutputter.set*() methods that now reside in Format.
+
+Deprecated the XMLOutputter constructors that took format parameters.  Use the
+constructor that accepts a Format now instead.
+
+Deprecated the Attribute constants:
+  Attribute.CDATA_ATTRIBUTE
+  Attribute.ID_ATTRIBUTE
+  Attribute.IDREFS_ATTRIBUTE, etc.
+Their new names are simpler:
+  Attribute.CDATA_TYPE
+  Attribute.ID_TYPE
+  Attribute.IDREFS_TYPE, etc.
+
+Renamed methods from the PI class to be more consistent and explanatory.
+Deprecating:
+  getNames()
+  getValue()
+  setValue()
+  removeValue()
+New names:
+  getPseudoAttributeNames()
+  getPseudoAttributeValue()
+  setPseudoAttribute()
+  removePseudoAttribute()
+
+Deprecated the methods setTextTrim(), setTextNormalize(), and
+setTrimAllWhite().  Replaced them with setTextMode(Format.TextMode) and
+getTextMode().
+
+Changed the protected method SAXHandler.setAlternateRoot() to pushElement().
+
+
+REMOVED CLASSES
+---------------
+
+None.
+
+
+REMOVED METHODS
+---------------
+
+Removed everything deprecated in b9.  (JDOM deprecates for one beta cycle,
+then removes.)
+
+Made the DOMOutputter output(Element, ...) and output(Attribute, ...) private.
+They used to be protected.  Skipped the deprecation step because you couldn't
+actually extend them because of the NamespaceStack visibility, and we don't
+usually deprecate protected methods.
+
+
+SPECIAL NOTE
+------------
+
+Reduced the visibility on many items from protected to private.  Anything
+protected or public must be supported in the future, and we don't want to
+promise that for anything unless it's absolutely necessary.  If your JDOM
+extension has problems with the reduced visibility that can't be overcome,
+write to jdom-interest-AT-jdom.org with your issue.  We'll crack open the
+visibility as proven necessary.
+
+
+* * * * * * Beta9 (tag: jdom_1_0_b9) from Beta8 * * * * * *
 
 NEW PACKAGES
 ------------
@@ -610,7 +823,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.14 2003/05/01 02:23:11 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.15 2004/02/06 04:35:25 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
