@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.41 2001/05/09 05:52:21 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.42 2001/05/09 06:03:12 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,7 +80,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.41 $ $Date: 2001/05/09 05:52:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.42 $ $Date: 2001/05/09 06:03:12 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -291,6 +291,7 @@ public class SAXBuilder {
             if (parser == null) {
                 parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
                 // System.out.println("using default " + DEFAULT_SAX_DRIVER);
+                saxDriverClass = parser.getClass().getName();
             }
 
             // Install optional filter
@@ -357,21 +358,23 @@ public class SAXBuilder {
                 } else {
                      parser.setErrorHandler(new BuilderErrorHandler());
                 }
-            } catch (SAXNotSupportedException e) {
+            }
+            catch (SAXNotRecognizedException e) {
                 // No validation available
                 if (validate) {
                     throw new JDOMException(
-                        "Validation not supported for " + saxDriverClass +
-                        " SAX Driver");
-                }
-            } catch (SAXNotRecognizedException e) {
-                // No validation available
-                if (validate) {
-                    throw new JDOMException(
-                        "Validation feature not recognized for " + 
-                        saxDriverClass + " SAX Driver");
+                        "Validation feature not recognized by " + 
+                        saxDriverClass);
                 }
             }
+            catch (SAXNotSupportedException e) {
+                // No validation available
+                if (validate) {
+                    throw new JDOMException(
+                        "Validation not supported by " + saxDriverClass);
+                }
+            }
+
             // Set entity expansion
             try {
                 //Crimson doesn't support this feature but does report it 
@@ -384,14 +387,14 @@ public class SAXBuilder {
             catch (SAXNotRecognizedException e) {
                 // No entity expansion available
                 throw new JDOMException(
-                  "Entity expansion feature not recognized for " + 
-                  saxDriverClass + " SAX Driver");
+                  "Entity expansion feature not recognized by " + 
+                  saxDriverClass);
             }
             catch (SAXNotSupportedException e) {
                 // No entity expansion available
                 throw new JDOMException(
-                  "Entity expansion feature not supported for " +
-                  saxDriverClass + " SAX Driver");
+                  "Entity expansion feature not supported by " +
+                  saxDriverClass);
             }
             
             parser.parse(in);
@@ -565,7 +568,5 @@ public class SAXBuilder {
      */
     public void setExpandEntities(boolean expand) {
         this.expand = expand;
-        throw new RuntimeException(
-          "Feature not implemented yet: default is true");
     }
 }
