@@ -126,17 +126,18 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return the root <code>Element</code>
-     *   for this <code>Document</code>, or throw a NoSuchElementException
+     *   for this <code>Document</code>, or throw a 
+     *   <code>{@link NoSuchChildException}</code>
      *   if it hasn't been properly set.
      * </p>
      *
      * @return <code>Element</code> - the document's root element
-     * @throws <code>NoSuchElementException</code> - when no root
+     * @throws <code>NoSuchChildException</code> - when no root
      *                                      element exists.
      */
-    public Element getRootElement() throws NoSuchElementException {
+    public Element getRootElement() throws NoSuchChildException {
         if (rootElement == null)  {
-            throw new NoSuchElementException("No root element exists.");
+            throw new NoSuchChildException("No root element exists.");
         }
         return rootElement;
     }

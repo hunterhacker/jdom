@@ -59,7 +59,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Entity;
 import org.jdom.Namespace;
-import org.jdom.NoSuchElementException;
+import org.jdom.NoSuchChildException;
 import org.jdom.ProcessingInstruction;
 
 /**
@@ -237,7 +237,7 @@ public class XMLOutputter {
                     writer.print(((Comment)obj).getSerializedForm());
                 }
             }
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchChildException e) {
             // No elements to print
         }
 

@@ -739,11 +739,11 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
      * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchElementException</code> - when the requested
+     * @throws <code>NoSuchChildException</code> - when the requested
      *         XML element does not exist within this <code>Element</code>.
      */
     public Element getChild(String name, String uri)
-        throws NoSuchElementException {
+        throws NoSuchChildException {
 
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -758,7 +758,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         // If we got here, none found
-        throw new NoSuchElementException(name);
+        throw new NoSuchChildException(name);
     }
 
     /**
@@ -781,10 +781,10 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
      * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchElementException</code> - when the requested
+     * @throws <code>NoSuchChildException</code> - when the requested
      *         XML element does not exist within this <code>Element</code>.
      */
-    public Element getChild(String name, Namespace ns) throws NoSuchElementException {
+    public Element getChild(String name, Namespace ns) throws NoSuchChildException {
         return getChild(name, ns.getURI());
     }
 
@@ -808,10 +808,10 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of child elements to return.
      * @param uri <code>String</code> namespace URI of elements to find.
      * @return <code>Element</code> - the first matching child element.
-     * @throws <code>NoSuchElementException</code> - when the requested
+     * @throws <code>NoSuchChildException</code> - when the requested
      *         XML element does not exist within this <code>Element</code>.
      */
-    public Element getChild(String name) throws NoSuchElementException {
+    public Element getChild(String name) throws NoSuchChildException {
         return getChild(name, "");
     }
 
