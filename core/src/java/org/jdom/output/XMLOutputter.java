@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.85 2002/07/22 12:22:13 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.86 2002/10/28 09:18:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.85 $, $Date: 2002/07/22 12:22:13 $
+ * @version $Revision: 1.86 $, $Date: 2002/10/28 09:18:49 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.85 $ $Date: 2002/07/22 12:22:13 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.86 $ $Date: 2002/10/28 09:18:49 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -998,7 +998,7 @@ public class XMLOutputter implements Cloneable {
             // Print new line after decl always, even if no other new lines
             // Helps the output look better and is semantically
             // inconsequential
-            out.write( currentFormat.lineSeparator);
+            out.write(currentFormat.lineSeparator);
         }
     }
 
@@ -1033,7 +1033,8 @@ public class XMLOutputter implements Cloneable {
             out.write("\"");
         }
         if ((internalSubset != null) && (!internalSubset.equals(""))) {
-            out.write(" [\n");
+            out.write(" [");
+            out.write(currentFormat.lineSeparator);
             out.write(docType.getInternalSubset());
             out.write("]");
         }
@@ -1041,7 +1042,7 @@ public class XMLOutputter implements Cloneable {
 
         // Always print line separator after declaration, helps the
         // output look better and is semantically inconsequential
-        out.write( currentFormat.lineSeparator);
+        out.write(currentFormat.lineSeparator);
     }
 
     /**
