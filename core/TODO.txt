@@ -1,6 +1,7 @@
 Items that need to be done:
 
-* Write a README to get people started.
+* Implement preservation of whitespace, making it available using
+  getContent(true) and getMixedContent(true).
 
 * Set up build to automatically handle JDK 1.1 + Collections using an Ant task
   to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
