@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.76 2001/05/09 17:25:38 jhunter Exp $
+ $Id: Element.java,v 1.77 2001/05/19 00:18:29 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.76 $ $Date: 2001/05/09 17:25:38 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.77 $ $Date: 2001/05/19 00:18:29 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -742,6 +742,9 @@ public class Element implements Serializable, Cloneable {
      *
      * @return <code>boolean</code> - indicating whether there
      *         is mixed content (both textual data and elements).
+     *
+     * @deprecated Deprecated in beta7 because hasMixedContent() is of
+     * little use and isn't really implemented as mixed content is defined
      */
     public boolean hasMixedContent() {
         if (content == null) {
