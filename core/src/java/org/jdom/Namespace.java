@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.22 2001/04/11 21:50:26 jhunter Exp $
+ $Id: Namespace.java,v 1.23 2001/04/13 03:45:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -183,46 +183,6 @@ public final class Namespace {
      */
     public static Namespace getNamespace(String uri) {
         return getNamespace("", uri);
-    }
-
-    /**
-     * <p>
-     *  This will retrieve the  
-     *  <code>Namespace</code> for the supplied prefix
-     *  in the specified context. It returns null if the prefix
-     *  is not mapped within that element.   
-     * </p>
-     *
-     * @param prefix <code>String</code> prefix of the existing <code>Namespace</code>.
-     * @param context <code>Element</code> against which this prefix is resolved.
-     * @return <code>Namespace</code> - ready to use namespace.
-     *
-     * @deprecated Deprecated in beta6, use elt.getNamespace(prefix) instead
-     */
-    public static Namespace getNamespace(String prefix, Element context) {
-       
-       if (context == null) {
-           return null;
-       }
-       
-       Namespace ns = context.getNamespace();
-       if (ns.getPrefix().equals(prefix)) {
-           return ns;
-       }
-       // check the Attributes for the requested prefix
-       List attributes = context.getAttributes();
-       Iterator iterator = attributes.iterator();
-       while (iterator.hasNext()) {
-           Attribute a = (Attribute) iterator.next();
-           ns = a.getNamespace();
-           if (ns.getPrefix().equals(prefix)) {
-               return ns;
-           }
-       }
-       
-       // recurse through the ancestors
-       return getNamespace(prefix, context.getParent()); 
-        
     }
 
     /**

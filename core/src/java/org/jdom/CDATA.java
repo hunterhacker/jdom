@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CDATA.java,v 1.11 2001/03/16 23:39:42 jhunter Exp $
+ $Id: CDATA.java,v 1.12 2001/04/13 03:45:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -110,22 +110,6 @@ public class CDATA implements Serializable, Cloneable {
      */
     public String getText() {
 	return text;
-    }
-
-
-    /**
-     * <p>
-     * This will set the value of the <code>CDATA</code>.
-     * </p>
-     *
-     * @param text <code>String</code> text for CDATA.
-     * @return <code>CDATA</code> - this CDATA modified.
-     * 
-     * @deprecated Deprecated in beta6, because CDATA has no parentage it 
-     * must be immutable
-     */
-    public void setText(String text) {
-	this.text = text; // need above Verifier check!
     }
 
     /**

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.34 2001/04/13 03:17:07 jhunter Exp $
+ $Id: Document.java,v 1.35 2001/04/13 03:45:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -720,19 +720,4 @@ public class Document implements Serializable, Cloneable {
             return false;
         }
     }
-
-
-    /**
-     * @deprecated Deprecated in beta6, use setRootElement() instead
-     */
-    public Document addContent(Element element) {
-        if (getRootElement() != null) {
-            throw new IllegalAddException(
-                this, element, "The document already has a root element");
-        }
-        setRootElement(element);
-
-        return this;
-    }
 }
-
