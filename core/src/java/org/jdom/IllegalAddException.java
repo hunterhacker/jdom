@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.9 2001/03/15 06:07:17 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.10 2001/04/18 07:04:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -233,6 +233,31 @@ public class IllegalAddException extends IllegalArgumentException {
         super(new StringBuffer()
               .append("The entity \"")
               .append(added.getName())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Namespace}</code>
+     *   to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the entity couldn't be added to
+     * @param added namespace that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, Namespace added, String reason) {
+        super(new StringBuffer()
+              .append("The namespace xmlns")
+              .append((added.getPrefix() == null) ? "=" 
+                                   : ":" + added.getPrefix() + "=")
+              .append("\"")
+              .append(added.getURI())
               .append("\" could not be added as content to \"")
               .append(base.getQualifiedName())
               .append("\": ")

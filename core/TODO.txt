@@ -91,18 +91,6 @@ Items that need to be done:
   times when the classes aren't on the system classpath.  (Suggested by Alex
   Rosen)
 
-* Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
-  necessary.  Consider using LinkedHashMap from JPDA to preserve attrib order.
-  It's not open source, so a List may be fine.  You don't generally have that
-  many attributes.
-
-* Change elt.setAttribute() to check for attributes with duplicate names & 
-  namespaces.
-
-* Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
-  same prefix already existing on the element or being the element's own 
-  prefix already
-
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html

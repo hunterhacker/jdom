@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.67 2001/04/18 06:32:40 jhunter Exp $
+ $Id: Element.java,v 1.68 2001/04/18 07:04:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -350,11 +350,53 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * @param additionalNamespace <code>Namespace</code> to add.
+     * @throws IllegalAddException if the namespace prefix collides with 
+     *   another namespace prefix on the element
      */
     public void addNamespaceDeclaration(Namespace additionalNamespace) {
+
+        // Verify the new namespace prefix doesn't collide with another 
+        // declared namespace, an attribute prefix, or this element's prefix
+        String prefix = additionalNamespace.getPrefix();
+        String uri = additionalNamespace.getURI();
+        if (prefix.equals(getNamespacePrefix()) && 
+              !uri.equals(getNamespaceURI())) {
+            throw new IllegalAddException(this, additionalNamespace,
+                "The namespace prefix \"" + prefix + "\" collides " +
+                "with the element namespace prefix");
+        }
+        if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
+            Iterator itr = additionalNamespaces.iterator();
+            while (itr.hasNext()) {
+                Namespace ns = (Namespace) itr.next();
+                if (prefix.equals(ns.getPrefix()) && 
+                      !uri.equals(ns.getURI())) {
+                    throw new IllegalAddException(this, additionalNamespace,
+                        "The namespace prefix \"" + prefix +
+                        "\" collides with an additional namespace declared " +
+                        "by the element");
+                }
+            }
+        }
+        if (attributes != null && attributes.size() > 0) {
+            Iterator itr = attributes.iterator();
+            while (itr.hasNext()) {
+                Namespace ns = 
+                   (Namespace) ((Attribute)itr.next()).getNamespace();
+                if (prefix.equals(ns.getPrefix()) && 
+                      !uri.equals(ns.getURI())) {
+                    throw new IllegalAddException(this, additionalNamespace,
+                        "The namespace prefix \"" + prefix +
+                        "\" collides with an attribute namespace on " +
+                        "the element");
+                }
+            }
+        }
+
         if (additionalNamespaces == null) {
             additionalNamespaces = new LinkedList();
         }
+
         additionalNamespaces.add(additionalNamespace);
     }
 
@@ -1470,44 +1512,47 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Verify the attribute's namespace prefix doesn't collide with
-        // another attribute prefix or this element's prefix
-        // This is unfortunately pretty heavyweight but light testing doesn't 
-        // show a huge difference in build times.
+        // another attribute prefix or this element's prefix.
+        // This is unfortunately pretty heavyweight but we don't need to do it
+        // for attributes without a namespace, and a little testing shows no
+        // real difference in build times anyway.
         String prefix = attribute.getNamespace().getPrefix();
-        String uri = attribute.getNamespace().getURI();
-        if (prefix.equals(getNamespacePrefix()) && 
-              !uri.equals(getNamespaceURI())) {
-            throw new IllegalAddException(this, attribute,
-                "The attribute namespace prefix \"" + prefix + "\" collides " +
-                "with its element namespace prefix");
-        }
-        if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
-            Iterator itr = additionalNamespaces.iterator();
-            while (itr.hasNext()) {
-                Namespace ns = (Namespace) itr.next();
-                if (prefix.equals(ns.getPrefix()) && 
-                      !uri.equals(ns.getURI())) {
-                    throw new IllegalAddException(this, attribute,
+        if (!prefix.equals("")) {
+          String uri = attribute.getNamespace().getURI();
+          if (prefix.equals(getNamespacePrefix()) && 
+                !uri.equals(getNamespaceURI())) {
+              throw new IllegalAddException(this, attribute,
+                "The attribute namespace prefix \"" + prefix + 
+                "\" collides with the element namespace prefix");
+          }
+          if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
+              Iterator itr = additionalNamespaces.iterator();
+              while (itr.hasNext()) {
+                  Namespace ns = (Namespace) itr.next();
+                  if (prefix.equals(ns.getPrefix()) && 
+                        !uri.equals(ns.getURI())) {
+                      throw new IllegalAddException(this, attribute,
                         "The attribute namespace prefix \"" + prefix +
-                        "\" collides with a namespace declared by its element");
-                }
-            }
+                        "\" collides with a namespace declared by the element");
+                  }
+              }
+          }
+          if (attributes != null && attributes.size() > 0) {
+              Iterator itr = attributes.iterator();
+              while (itr.hasNext()) {
+                  Namespace ns = 
+                     (Namespace) ((Attribute)itr.next()).getNamespace();
+                  if (prefix.equals(ns.getPrefix()) && 
+                        !uri.equals(ns.getURI())) {
+                      throw new IllegalAddException(this, attribute,
+                          "The attribute namespace prefix \"" + prefix +
+                          "\" collides with another attribute namespace on " +
+                          "the element");
+                  }
+              }
+          }
         }
-        if (attributes != null && attributes.size() > 0) {
-            Iterator itr = attributes.iterator();
-            while (itr.hasNext()) {
-                Namespace ns = 
-                   (Namespace) ((Attribute)itr.next()).getNamespace();
-                if (prefix.equals(ns.getPrefix()) && 
-                      !uri.equals(ns.getURI())) {
-                    throw new IllegalAddException(this, attribute,
-                        "The attribute namespace prefix \"" + prefix +
-                        "\" collides with another attribute namespace on " +
-                        "its element");
-                }
-            }
-        }
-
+  
         if (attributes == null) {
             attributes = new LinkedList();
         }
