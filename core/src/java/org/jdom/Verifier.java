@@ -129,8 +129,7 @@ public final class Verifier {
             return "Attribute names cannot contain colons";
         }
 
-        // Otherwise, no colons are allowed,
-        // since attributes handle this internally
+        // Attribute names may not be xmlns since we do this internally too
         if (name.equals("xmlns")) {
             return "An Attribute name may not be \"xmlns\"; " +
                    "use the Namespace class to manage namespaces";
@@ -166,7 +165,7 @@ public final class Verifier {
         }
 
         // do check
-        for (int i = 0; i < text.length(); i++) {
+        for (int i = 0, len = text.length(); i<len; i++) {
             if (!isXMLCharacter(text.charAt(i))) {
                 // Likely this character can't be easily displayed
                 // because it's a control so we use it'd hexadecimal 
@@ -248,7 +247,7 @@ public final class Verifier {
      *         <code>null</code> if name is OK.
      */
     public static final String checkNamespaceURI(String uri) {
-        // TODO: Bring this code in line with RFC 2396
+        // TODO/XXX: Bring this code in line with RFC 2396
         // ftp://ftp.isi.edu/in-notes/rfc2396.txt
 
         // Manually do rules, since URIs can be null or empty
@@ -388,7 +387,6 @@ public final class Verifier {
         if (c == '\t') return true;
         
         return false;
-
     }
 
 
@@ -408,7 +406,6 @@ public final class Verifier {
       return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
                              || c == '_' || c == ':' || isXMLCombiningChar(c) 
                              || isXMLExtender(c));
-    
     }
 
     /**
@@ -458,9 +455,6 @@ public final class Verifier {
      * @return <code>String</code> - true if it's a letter, false otherwise.
      */
     public static boolean isXMLLetter(char c) {
-        // XXX This is about 2% of total JDOM build work
-        // XXX Should sort these so common letters come first
-        // XXX or maybe use a bitmap or array for linear lookup
         if (c >= 0x0041 && c <= 0x005A) return true;
         if (c >= 0x0061 && c <= 0x007A) return true;
         if (c >= 0x00C0 && c <= 0x00D6) return true;
@@ -681,7 +675,8 @@ public final class Verifier {
      * </p>
      *
      * @param c <code>char</code> to check.
-     * @return <code>boolean</code> - true if it's a combining character, false otherwise.
+     * @return <code>boolean</code> - true if it's a combining character,
+     *         false otherwise.
      */
     public static boolean isXMLCombiningChar(char c) {
 
@@ -812,8 +807,9 @@ public final class Verifier {
     
     /**
      * <p>
-     *  This is a utility function for determining whether a specified character
-     *  is an extender according to production 88 of the XML 1.0 specification.
+     *  This is a utility function for determining whether a specified 
+     *  character *  is an extender according to production 88 of the XML 1.0
+     *  specification.
      * </p>
      *
      * @param c <code>char</code> to check.
@@ -874,5 +870,4 @@ public final class Verifier {
         return false;
       
     }    
-    
 }
