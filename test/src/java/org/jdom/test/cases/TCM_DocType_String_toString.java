@@ -1,3 +1,5 @@
+package org.jdom.test.cases;
+
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
@@ -8,26 +10,26 @@
  are met:
  
  1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
+	notice, this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+	notice, this list of conditions, and the disclaimer that follows 
+	these conditions in the documentation and/or other materials 
+	provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+	derived from this software without prior written permission.  For
+	written permission, please contact license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+	may "JDOM" appear in their name, without prior written permission
+	from the JDOM Project Management (pm@jdom.org).
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
+	 "This product includes software developed by the
+	  JDOM Project (http://www.jdom.org/)."
  Alternatively, the acknowledgment may be graphical using the logos 
  available at http://www.jdom.org/images/logos.
 
@@ -52,43 +54,49 @@
  
  */
 
-package org.jdom.test.cases;
-
 /**
- * Please put a description of your test here.
+ * Test the toString method of DocType.
  * 
- * @author unascribed
+ * @author Philip Nelson
  * @version 0.1
  */
+
+import org.jdom.*;
+
 public final class TCM_DocType_String_toString
 extends junit.framework.TestCase
 {
-    /**
-     *  Construct a new instance. 
-     */
-    public TCM_DocType_String_toString() {
-        super("public final java.lang.String org.jdom.DocType.toString()");
-    }
+	/**
+	 *  Construct a new instance. 
+	 */
+	public TCM_DocType_String_toString(String name) {
+		super(name);
+	}
+	/**
+	 * This method is called before a test is executed.
+	 */
+	public void setUp() {
+		// your code goes here.
+	}
+	/**
+	 * This method is called after a test is executed.
+	 */
+	public void tearDown() {
+		// your code goes here.
+	}
+	/**
+	 * Test toString returns the expected string.
+	 */
+	public void test() {
+		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
+		String systemID = "FILE://temp/test.dtd";
+		DocType theDocType = new DocType("anElement", publicID, systemID);
 
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
+		String result = theDocType.toString();
+		String compareTo =
+		"[DocType: <!DOCTYPE anElement PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN\"" +
+		" \"FILE://temp/test.dtd\">]";
 
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test() {
-        fail("implement me !");
-    }
-
+		assertEquals("incorrect toString form", result, compareTo);
+	}
 }

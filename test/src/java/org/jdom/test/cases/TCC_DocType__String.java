@@ -1,3 +1,5 @@
+package org.jdom.test.cases;
+
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
@@ -8,26 +10,26 @@
  are met:
  
  1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
+	notice, this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+	notice, this list of conditions, and the disclaimer that follows 
+	these conditions in the documentation and/or other materials 
+	provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+	derived from this software without prior written permission.  For
+	written permission, please contact license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+	may "JDOM" appear in their name, without prior written permission
+	from the JDOM Project Management (pm@jdom.org).
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
+	 "This product includes software developed by the
+	  JDOM Project (http://www.jdom.org/)."
  Alternatively, the acknowledgment may be graphical using the logos 
  available at http://www.jdom.org/images/logos.
 
@@ -52,43 +54,42 @@
  
  */
 
-package org.jdom.test.cases;
-
 /**
- * Please put a description of your test here.
+ * Test the element name only DocType constructor.
  * 
- * @author unascribed
+ * @author Philip Nelson
  * @version 0.1
  */
+import org.jdom.*;
+
 public final class TCC_DocType__String
 extends junit.framework.TestCase
 {
-    /**
-     *  Construct a new instance. 
-     */
-    public TCC_DocType__String() {
-        super("public org.jdom.DocType(java.lang.String)");
-    }
+	/**
+	 *  Construct a new instance. 
+	 */
+	public TCC_DocType__String(String name) {
+		super(name);
+	}
+	/**
+	 * This method is called before a test is executed.
+	 */
+	public void setUp() {
+		// your code goes here.
+	}
+	/**
+	 * This method is called after a test is executed.
+	 */
+	public void tearDown() {
+		// your code goes here.
+	}
+	/**
+	 * Test a simple DocType to element name.
+	 */
+	public void test() {
+		
+		DocType theDocType = new DocType("anElement");
 
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test() {
-        fail("implement me !");
-    }
-
+		assertEquals("incorrect element name", "anElement", theDocType.getElementName());
+	}
 }
