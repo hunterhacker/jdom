@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.24 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Attribute.java,v 1.25 2001/03/15 07:31:07 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -128,23 +128,6 @@ public class Attribute implements Serializable, Cloneable {
         this.name = name;
         setValue(value);
         this.namespace = namespace;
-    }
-
-    /**
-     * <p>
-     * This will create a new <code>Attribute</code> with the
-     *   specified (local) name and value, and place it in
-     *   the specified namespace (with prefix).
-     * </p>
-     *
-     * @param name <code>String</code> name of <code>Attribute</code>.
-     * @param prefix <code>String</code> prefix for <code>Attribute</code>.
-     * @param uri <code>String</code> URI for namespace this
-     *        <code>Attribute</code> is in.
-     * @param value <code>String</code> value for new attribute.
-     */
-    public Attribute(String name, String prefix, String uri, String value) {
-        this(name, value, Namespace.getNamespace(prefix, uri));
     }
 
     /**
@@ -541,4 +524,25 @@ public class Attribute implements Serializable, Cloneable {
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
     }
+
+    /**
+     * <p>
+     * This will create a new <code>Attribute</code> with the
+     *   specified (local) name and value, and place it in
+     *   the specified namespace (with prefix).
+     * </p>
+     *
+     * @param name <code>String</code> name of <code>Attribute</code>.
+     * @param prefix <code>String</code> prefix for <code>Attribute</code>.
+     * @param uri <code>String</code> URI for namespace this
+     *        <code>Attribute</code> is in.
+     * @param value <code>String</code> value for new attribute.
+     *
+     * @deprecated Deprecated in beta7, use 
+     *     Attribute(String name, String value, Namespace namespace) instead
+     */
+    public Attribute(String name, String prefix, String uri, String value) {
+        this(name, value, Namespace.getNamespace(prefix, uri));
+    }
+
 }
