@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.1 2001/05/19 01:30:43 jhunter Exp $
+ $Id: JDOMResult.java,v 1.2 2001/06/10 22:01:05 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -95,7 +95,7 @@ import javax.xml.transform.sax.SAXResult;
  *   }
  * </pre></blockquote>
  *
- * @see      org.jdom.contrib.transform.JDOMSource
+ * @see      org.jdom.transform.JDOMSource
  *
  * @author   Laurent Bihanic
  * @author   Jason Hunter
@@ -113,7 +113,7 @@ public class JDOMResult extends SAXResult {
    * not natively supporting JDOM.</p>
    */
   public final static String JDOM_FEATURE =
-                      "http://org.jdom.contrib.transform.JDOMResult/feature";
+                      "http://org.jdom.transform.JDOMResult/feature";
 
   /**
    * The JDOM document result of a transformation, as set by

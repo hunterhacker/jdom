@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.1 2001/05/19 01:30:43 jhunter Exp $
+ $Id: JDOMSource.java,v 1.2 2001/06/10 22:01:05 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -93,7 +93,7 @@ import javax.xml.transform.sax.SAXSource;
  *   }
  * </pre></blockquote>
  *
- * @see org.jdom.contrib.transform.JDOMResult
+ * @see org.jdom.transform.JDOMResult
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
@@ -111,7 +111,7 @@ public class JDOMSource extends SAXSource {
    * not natively supporting JDOM.</p>
    */
   public final static String JDOM_FEATURE =
-                      "http://org.jdom.contrib.transform.JDOMSource/feature";
+                      "http://org.jdom.transform.JDOMSource/feature";
 
   /**
    * An optional (chain of) SAX XMLFilter to apply to the SAX events
@@ -428,7 +428,13 @@ public class JDOMSource extends SAXSource {
     /**
      * Public default constructor.
      */
-    public DocumentReader() { }
+    public DocumentReader() {
+      // Default value for SAX core features.
+      this.features.put("http://xml.org/sax/features/namespaces",
+                        Boolean.TRUE);
+      this.features.put("http://xml.org/sax/features/namespace-prefixes",
+                        Boolean.FALSE);
+    }
 
     //----------------------------------------------------------------------
     // SAX XMLReader interface support
@@ -466,12 +472,21 @@ public class JDOMSource extends SAXSource {
     public void setFeature(String name, boolean value)
                               throws SAXNotRecognizedException,
                                      SAXNotSupportedException {
-      if ((name.equals("http://xml.org/sax/features/namespaces")) ||
-         (name.equals("http://xml.org/sax/features/namespace-prefixes"))) {
+      if (name.equals("http://xml.org/sax/features/namespace-prefixes")) {
+        // Update outputter feature support.
+        this.saxOutputter.setReportNamespaceDeclarations(value);
+        // Memorize current value.
         this.features.put(name, new Boolean(value));
       }
       else {
-        throw new SAXNotRecognizedException(name);
+        if ((name.equals("http://xml.org/sax/features/namespaces")) &&
+            (value != true)) {
+           // namespaces feature always supported.
+           throw new SAXNotSupportedException(name);
+        }
+        else {
+          throw new SAXNotRecognizedException(name);
+        }
       }
     }
 
@@ -500,13 +515,8 @@ public class JDOMSource extends SAXSource {
      */
     public boolean getFeature(String name) throws SAXNotRecognizedException,
                                                   SAXNotSupportedException {
-      if ((name.equals("http://xml.org/sax/features/namespaces")) ||
-          (name.equals("http://xml.org/sax/features/namespace-prefixes"))) {
-        Boolean value = (Boolean) this.features.get(name);
-
-        if (value == null) {
-          value = Boolean.FALSE;
-        }
+      Boolean value = (Boolean) this.features.get(name);
+      if (value != null) {
         return value.booleanValue();
       }
       else {

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.7 2001/04/27 18:21:21 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.8 2001/06/10 22:01:04 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.CDATA;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.7 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.8 $ $Date: 2001/06/10 22:01:04 $ $Name:  $";
 
    /** registered <code>ContentHandler</code> */
    private ContentHandler contentHandler;
@@ -125,6 +125,14 @@ public class SAXOutputter {
    
    /** registered <code>EntityResolver</code> */
    private EntityResolver entityResolver;
+   
+   /**
+    * Whether to report attribute namespace declarations as xmlns attributes.
+    * Defaults to <code>false</code> as per SAX specifications.
+    *
+    * @see <a href="http://www.megginson.com/SAX/Java/namespaces.html">SAX namespace specifications</a>
+    */
+   private boolean declareNamespaces = false;
    
    /**
     * <p>
@@ -204,6 +212,20 @@ public class SAXOutputter {
       this.entityResolver = entityResolver;
    }
    
+   /**
+    * <p>
+    * This will define whether attribute namespace declarations shall be
+    * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
+    * and behaves as the "namespace-prefixes" SAX core feature.
+    * </p>
+    *
+    * @param reportDecl whether attribute namespace declarations shall be
+    * reported as "xmlns" attributes.
+    */
+   public void setReportNamespaceDeclarations(boolean declareNamespaces) {
+      this.declareNamespaces = declareNamespaces;
+   }
+
    /**
     * <p>
     * This will output the <code>JDOM Document</code>, firing off the
@@ -421,8 +443,28 @@ public class SAXOutputter {
             }
          }
       }
+
+      // Fire additional namespace declarations
+      List additionalNamespaces = element.getAdditionalNamespaces();
+      if (additionalNamespaces != null) {
+         Iterator itr = additionalNamespaces.iterator();
+         while (itr.hasNext()) {
+            ns = (Namespace)itr.next();
+            String prefix = ns.getPrefix();
+            String uri = namespaces.getURI(prefix);
+            if (!ns.getURI().equals(uri)) {
+               namespaces.push(ns);
+               try {
+                  contentHandler.startPrefixMapping(prefix, ns.getURI());
+               }
+               catch (SAXException se) {
+                  throw new JDOMException("SAXException", se);
+               }
+            }
+         }
+      }
    }
-   
+
    /**
     * <p>
     * This will invoke the <code>endPrefixMapping</code> callback in the
@@ -458,6 +500,21 @@ public class SAXOutputter {
       String localName = element.getName();
       String rawName = element.getQualifiedName();
       AttributesImpl atts = new AttributesImpl();
+
+      if (this.declareNamespaces) {
+         // Report attribute namespaces as xmlns attributes
+         List namespaces = element.getAdditionalNamespaces();
+         Iterator j = namespaces.iterator();
+         while (j.hasNext()) {
+            Namespace ns = (Namespace) j.next();
+            atts.addAttribute("",                          // namespace
+                              "",                          // local name
+                              "xmlns:" + ns.getPrefix(),   // qualified name
+                              "CDATA",                     // type
+                              ns.getURI());                // value
+         }
+      }
+
       List attributes = element.getAttributes();
       Iterator i = attributes.iterator();
       while (i.hasNext()) {
@@ -467,7 +524,7 @@ public class SAXOutputter {
                            a.getQualifiedName(),
                            "CDATA",
                            a.getValue());
-         }
+      }
          
       try {
          contentHandler.startElement(namespaceURI, localName, rawName, atts);
