@@ -1369,6 +1369,8 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      *  This returns a deep clone of this element.
+     *  The new element is detached from its parent, and getParent()
+     *  on the clone will return null. 
      * </p>
      *
      * @return the clone of this element
