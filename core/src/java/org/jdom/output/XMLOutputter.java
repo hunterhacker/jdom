@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.87 2003/02/26 23:44:43 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.88 2003/04/02 00:46:42 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.87 $, $Date: 2003/02/26 23:44:43 $
+ * @version $Revision: 1.88 $, $Date: 2003/04/02 00:46:42 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.87 $ $Date: 2003/02/26 23:44:43 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.88 $ $Date: 2003/04/02 00:46:42 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -314,7 +314,7 @@ public class XMLOutputter implements Cloneable {
     public XMLOutputter(String indent, boolean newlines, String encoding) {
        setEncoding( encoding);
        setIndent( indent);
-       setNewlines( newlines);
+       setNewlines(newlines);
     }
 
     /**
@@ -368,11 +368,13 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * Sets whether newlines (<code>lineSeparator</code>) should
-     * be printed.
+     * be added during output as an attempt to beautify code without
+     * pre-existing whitespace.  Usually called in conjunction with {@link
+     * #setIndent}.
      *
      * @see #setLineSeparator(String)
      * @param newlines <code>true</code> indicates new lines should be
-     *                 printed, else new lines are ignored (compacted).
+     *                 added for beautification.
      */
     public void setNewlines(boolean newlines) {
         defaultFormat.newlines = newlines;
