@@ -680,6 +680,10 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
         if (inCDATA) {
             ((Element)stack.peek()).addContent(new CDATA(data));
+ 
+        /**
+         * This is commented out because of some problems with
+         *   the inline DTDs that Xerces seems to have.
         } else if (!inDTD) {
             if (inEntity) {
                 ((Entity)stack.peek()).setContent(data);
@@ -687,6 +691,12 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 Element e = (Element)stack.peek();
                 e.addContent(data);
             }
+         */
+        } else if (inEntity) {
+            ((Entity)stack.peek()).setContent(data);
+        } else {
+            Element e = (Element)stack.peek();
+            e.addContent(data);
         }
     }
 
