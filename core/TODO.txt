@@ -39,10 +39,6 @@ Items that need to be done:
 	bulk easier?  Should adds just do detach automatically?  Why do we throw on
   that?
 
-* Think about if XMLOutputter should have a few specific output states, like
-  RAW, PRETTY, COMPRESSED.  See the thread "XMLOutputter inserts extra empty
-  lines" for some discussion.
-
 
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
