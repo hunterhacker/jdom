@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.27 2002/03/20 15:16:32 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.28 2002/04/28 02:54:01 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,13 +71,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.27 $, $Date: 2002/03/20 15:16:32 $
+ * @version $Revision: 1.28 $, $Date: 2002/04/28 02:54:01 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.27 $ $Date: 2002/03/20 15:16:32 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.28 $ $Date: 2002/04/28 02:54:01 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -369,8 +369,10 @@ public class ProcessingInstruction implements Serializable, Cloneable {
                    .append(value)
                    .append("\" ");
         }
-        // Remove last space
-        rawData.setLength(rawData.length() - 1);
+        // Remove last space, if we did any appending
+        if (rawData.length() > 0) {
+            rawData.setLength(rawData.length() - 1);
+        }
 
         return rawData.toString();
     }
