@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.108 2004/02/27 21:40:58 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.109 2004/02/27 21:42:18 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.108 $, $Date: 2004/02/27 21:40:58 $
+ * @version $Revision: 1.109 $, $Date: 2004/02/27 21:42:18 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.108 $ $Date: 2004/02/27 21:40:58 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.109 $ $Date: 2004/02/27 21:42:18 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1406,6 +1406,7 @@ public class XMLOutputter implements Cloneable {
         StringBuffer buffer;
         char ch;
         String entity;
+        EscapeStrategy strategy = currentFormat.escapeStrategy;
 
         buffer = null;
         for (int i = 0; i < str.length(); i++) {
@@ -1427,7 +1428,7 @@ public class XMLOutputter implements Cloneable {
                     entity = currentFormat.lineSeparator;
                     break;
                 default :
-                    if (currentFormat.escapeStrategy.shouldEscape(ch)) {
+                    if (strategy.shouldEscape(ch)) {
                         entity = "&#x" + Integer.toHexString(ch) + ";";
                     }
                     else {
