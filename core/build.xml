@@ -107,6 +107,10 @@ For instructions on how to build JDOM, please view the README.txt file.
     <replace dir="${build.src}" includes="**"
              token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
     <replace dir="${build.src}" includes="**"
+             token="java.util.Set" value="${coll.import}.Set"/>
+    <replace dir="${build.src}" includes="**"
+             token="java.util.HashSet" value="${coll.import}.HashSet"/>
+    <replace dir="${build.src}" includes="**"
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
     <!-- The following replace handles the "import java.util.*" case by    -->
     <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
