@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.6 2002/04/29 13:38:16 jhunter Exp $
+ $Id: ElementFilter.java,v 1.7 2002/05/11 07:42:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,12 +64,12 @@ import org.jdom.*;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.7 $, $Date: 2002/05/11 07:42:28 $
  */
 public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.6 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.7 $ $Date: 2002/05/11 07:42:28 $ $Name:  $";
 
     /** The element name */
     protected String name;
@@ -78,12 +78,12 @@ public class ElementFilter implements Filter {
     protected Namespace namespace;
     
     /**
-     * Filter out the Elements.
+     * Select only the Elements.
      */
     public ElementFilter() {}
 
     /**
-     * Filter out the Elements with the supplied name in any Namespace.
+     * Select only the Elements with the supplied name in any Namespace.
      *
      * @param name   The name of the Element.
      */
@@ -92,7 +92,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * Filter out the Elements with the supplied Namespace.
+     * Select only the Elements with the supplied Namespace.
      *
      * @param namespace The namespace the Element lives in.
      */
@@ -101,7 +101,7 @@ public class ElementFilter implements Filter {
     }
 
     /**
-     * Filter out the Elements with the supplied name and Namespace.
+     * Select only the Elements with the supplied name and Namespace.
      *
      * @param name   The name of the Element.
      * @param namespace The namespace the Element lives in.
