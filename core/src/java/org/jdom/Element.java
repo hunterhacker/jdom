@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.137 2003/05/29 02:47:39 jhunter Exp $
+ $Id: Element.java,v 1.138 2003/06/17 21:02:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.137 $, $Date: 2003/05/29 02:47:39 $
+ * @version $Revision: 1.138 $, $Date: 2003/06/17 21:02:44 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Parent, Child {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.137 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.138 $ $Date: 2003/06/17 21:02:44 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -456,16 +456,16 @@ public class Element implements Parent, Child {
         return parent instanceof Document;
     }
 
-    public int getChildCount() {
+    public int getContentSize() {
         return content.size();
     }
 
-    public int childIndex(Child child) {
+    public int getContent(Child child) {
         return content.indexOf(child);
     }
 
-//    private int childIndex(int start, Filter filter) {
-//        int size = getChildCount();
+//    private int getContent(int start, Filter filter) {
+//        int size = getContentSize();
 //        for (int i = start; i < size; i++) {
 //            if (filter.matches(getContent(i))) {
 //                return i;
@@ -1067,7 +1067,7 @@ public class Element implements Parent, Child {
     }
 
     public List cloneContent() {
-        int size = getChildCount();
+        int size = getContentSize();
         List list = new ArrayList(size);
         for (int i = 0; i < size; i++) {
             Child child = getContent(i);
@@ -1081,7 +1081,7 @@ public class Element implements Parent, Child {
     }
 
 //    public Child getChild(Filter filter) {
-//        int i = childIndex(0, filter);
+//        int i = getContent(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
 

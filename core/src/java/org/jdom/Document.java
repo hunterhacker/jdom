@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.71 2003/05/31 06:25:54 jhunter Exp $
+ $Id: Document.java,v 1.72 2003/06/17 21:02:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.71 $, $Date: 2003/05/31 06:25:54 $
+ * @version $Revision: 1.72 $, $Date: 2003/06/17 21:02:44 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.71 $ $Date: 2003/05/31 06:25:54 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.72 $ $Date: 2003/06/17 21:02:44 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -128,7 +128,7 @@ public class Document implements Parent {
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
-     * @throws IllegalAddException if the given docType object
+     * @throws IllegalAddException if the given DocType object
      *         is already attached to a document or the given
      *         rootElement already has a parent
      */
@@ -164,11 +164,11 @@ public class Document implements Parent {
         this(content, null);  // XXX Relies on a deprecated
     }
 
-    public int getChildCount() {
+    public int getContentSize() {
         return content.size();
     }
 
-    public int childIndex(Child child) {
+    public int getContent(Child child) {
         return content.indexOf(child);
     }
 
@@ -179,8 +179,8 @@ public class Document implements Parent {
 //     *
 //     * @return index of child, or -1 if none found.
 //     */
-//    private int childIndex(int start, Filter filter) {
-//        int size = getChildCount();
+//    private int getContent(int start, Filter filter) {
+//        int size = getContentSize();
 //        for (int i = start; i < size; i++) {
 //            if (filter.matches(getContent(i))) {
 //                return i;
@@ -331,7 +331,7 @@ public class Document implements Parent {
     }
 
     public List cloneContent() {
-        int size = getChildCount();
+        int size = getContentSize();
         List list = new ArrayList(size);
         for (int i = 0; i < size; i++) {
             Child child = getContent(i);
@@ -345,7 +345,7 @@ public class Document implements Parent {
     }
 
 //    public Child getChild(Filter filter) {
-//        int i = childIndex(0, filter);
+//        int i = getContent(0, filter);
 //        return (i < 0) ? null : getContent(i);
 //    }
 
@@ -575,9 +575,9 @@ public class Document implements Parent {
      * This tests for equality of this <code>Document</code> to the supplied
      * <code>Object</code>.
      *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>Document</code> is
-     *         equal to the supplied <code>Object</code>.
+     * @param ob <code>Object</code> to compare to
+     * @return <code>boolean</code> whether the <code>Document</code> is
+     *         equal to the supplied <code>Object</code>
      */
     public final boolean equals(Object ob) {
         return (ob == this);
@@ -586,7 +586,7 @@ public class Document implements Parent {
     /**
      * This returns the hash code for this <code>Document</code>.
      *
-     * @return <code>int</code> - hash code.
+     * @return <code>int</code> hash code
      */
     public final int hashCode() {
         return super.hashCode();
@@ -595,7 +595,7 @@ public class Document implements Parent {
     /**
      * This will return a deep clone of this <code>Document</code>.
      *
-     * @return <code>Object</code> - clone of this <code>Document</code>.
+     * @return <code>Object</code> clone of this <code>Document</code>
      */
     public Object clone() {
         Document doc = null;
