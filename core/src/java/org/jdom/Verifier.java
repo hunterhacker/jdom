@@ -49,6 +49,7 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
+ * @author Jason Hunter
  * @version 1.0
  */
 public final class Verifier {
@@ -132,7 +133,7 @@ public final class Verifier {
     public static final String checkNamespacePrefix(String prefix) {
         // Manually do rules, since URIs can be null or empty
         if ((prefix == null) || (prefix.equals(""))) {
-          return null;
+            return null;
         }
 
         // Cannot start with a number
@@ -144,9 +145,18 @@ public final class Verifier {
         if (first == '$') {
             return "Namespace prefixes cannot begin with a dollar sign ($)";
         }
-        // Cannot start with a _
+        // Cannot start with a -
         if (first == '-') {
             return "Namespace prefixes cannot begin with a hyphen (-)";
+        }
+        // Cannot start with a .
+        if (first == '.') {
+            return "Namespace prefixes cannot begin with a period (.)";
+        }
+        // Cannot start with "xml" in any character case
+        if (prefix.toLowerCase().startsWith("xml")) {
+            return "Namespace prefixes cannot begin with " +
+                   "\"xml\" in any combination of case";
         }
 
         // Ensure valid content
@@ -154,9 +164,11 @@ public final class Verifier {
             char c = prefix.charAt(i);
             if ((!Character.isLetterOrDigit(c))
                 && (c != '-')
-                && (c != '$')
+                && (c != '$')  // TODO: Why is $ allowed?
+                && (c != '.')
                 && (c != '_')) {
-                return c + " is not allowed in Namespace prefixes";
+                return "Namespace prefixes cannot contain the character \"" +
+                        c + "\"";
             }
         }
 
@@ -180,6 +192,9 @@ public final class Verifier {
      *         <code>null</code> if name is OK.
      */
     public static final String checkNamespaceURI(String uri) {
+        // TODO: Bring this code in line with RFC 2396
+        // ftp://ftp.isi.edu/in-notes/rfc2396.txt
+
         // Manually do rules, since URIs can be null or empty
         if ((uri == null) || (uri.equals(""))) {
             return null;
@@ -194,7 +209,7 @@ public final class Verifier {
         if (first == '$') {
             return "Namespace URIs cannot begin with a dollar sign ($)";
         }
-        // Cannot start with a _
+        // Cannot start with a -
         if (first == '-') {
             return "Namespace URIs cannot begin with a hyphen (-)";
         }
@@ -220,10 +235,15 @@ public final class Verifier {
             return reason;
         }
 
+        // No colons allowed, per Namespace Specification Section 6
+        if (target.indexOf(":") != -1) {
+            return "Processing instruction targets cannot contain colons";
+        }
+
         // Cannot begin with 'xml' in any case
         if (target.equalsIgnoreCase("xml")) {
-            return "Processing Instructions cannot have a target of " +
-                   "\"xml\" any combination of case";
+            return "Processing instructions cannot have a target of " +
+                   "\"xml\" in any combination of case";
         }
 
         // If we got here, everything is OK
@@ -241,6 +261,10 @@ public final class Verifier {
      *         <code>null</code> is name is OK.
      */
     public static final String checkCommentData(String data) {
+        if (data == null) {
+            return "Comments cannot be null";
+        }
+
         if (data.indexOf("--") != -1) {
             return "Comments cannot contain double hyphens (--)";
         }
@@ -261,7 +285,8 @@ public final class Verifier {
      */
     private static String checkXMLName(String name) {
         // Cannot be empty or null
-        if ((name == null) || (name.length() == 0) || (name.trim().equals(""))) {
+        if ((name == null) || (name.length() == 0) 
+                           || (name.trim().equals(""))) {
             return "XML names cannot be null or empty";
         }
 
@@ -274,9 +299,13 @@ public final class Verifier {
         if (first == '$') {
             return "XML names cannot begin with a dollar sign ($)";
         }
-        // Cannot start with a _
+        // Cannot start with a -
         if (first == '-') {
             return "XML names cannot begin with a hyphen (-)";
+        }
+        // Cannot start with a .
+        if (first == '.') {
+            return "XML names cannot begin with a period (.)";
         }
 
         // Ensure valid content
@@ -284,15 +313,14 @@ public final class Verifier {
             char c = name.charAt(i);
             if ((!Character.isLetterOrDigit(c))
                 && (c != '-')
-                && (c != '$')
+                && (c != '$')   // TODO: Why is $ allowed?
 		&& (c != '.')
                 && (c != '_')) {
-                return c + " is not allowed in XML names";
+                return "XML names cannot contain the character \"" + c + "\"";
             }
         }
 
         // We got here, so everything is OK
         return null;
     }
-
 }
