@@ -78,6 +78,7 @@ import java.util.StringTokenizer;
  * @author Lucas Gonze
  * @author Kevin Regan
  * @author Dan Schaffer
+ * @author Yusuf Goolamabbas
  * @version 1.0
  */
 public class Element implements Serializable, Cloneable {
@@ -682,6 +683,22 @@ public class Element implements Serializable, Cloneable {
 
         content.addAll(mixedContent);
         return this;
+    }
+
+    public boolean hasChildren() {
+        if (content == null || content.size() == 0) {
+            return false;
+        }
+          
+        Iterator i = content.iterator();
+        while (i.hasNext()){
+            Object obj = i.next();
+            Class objclass = obj.getClass();
+            if (objclass == Element.class) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
