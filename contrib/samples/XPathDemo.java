@@ -46,6 +46,28 @@ public class XPathDemo {
       "        <description>" +
       "            The default file serving servlet" +
       "        </description>" +
+      "    <servlet>" +
+      "    </servlet>" +
+      "        <servlet-name>" +
+      "            filex" +
+      "        </servlet-name>" +
+      "        <servlet-class>" +
+      "            ViewFile" +
+      "        </servlet-class>" +
+      "        <init-param>" +
+      "            <param-name>" +
+      "                initial" +
+      "            </param-name>" +
+      "            <param-value>" +
+      "                1000" +
+      "            </param-value>" +
+      "            <description>" +
+      "                The initial value for the counter  <!-- optional -->" +
+      "            </description>" +
+      "        </init-param>" +
+      "        <description>" +
+      "            The default filex serving servlet" +
+      "        </description>" +
       "    </servlet>" +
       "</web-app>";
 

@@ -1,0 +1,30 @@
+<html>
+ <body>
+  ElementScanner is a SAX filter that uses XPath-like expressions to
+  select  element nodes to build and notifies listeners when these
+  elements becomes available during the SAX parse.
+  <p>
+  ElementScanner does not aim at providing a faster parsing of XML
+  documents.  Its primary focus is to allow the application to
+  control the parse and to consume the XML data while they are
+  being parsed.  ElementScanner can be viewed as a high-level SAX
+  parser that fires events conveying JDOM
+  {@link org.jdom.Element elements} rather that XML tags and
+  character data.</p>
+  <p>
+  ElementScanner only notifies of the parsing of element nodes and
+  does not support reporting the parsing of DOCTYPE data, processing
+  instructions or comments except for those present within the
+  selected elements.  Application needing such data shall register
+  a specific {@link org.xml.sax.ContentHandler} of this filter to
+  receive them in the form of raw SAX events.</p>
+  <p>
+  Please refer to <a href="ElementScanner.html">ElementScanner</a>
+  for details on how to use ElementScanner within an application.</p>
+  <p>
+  A sample application is also provided
+  <a href="doc-files/ElementScannerTest.java">here</a>, with an example
+  <a href="doc-files/test.xml">XML file</a>.<p>
+ </body>
+</html>
+

@@ -4,6 +4,7 @@ alphabetically by last name.
 DO NOT WRITE THESE PEOPLE FOR TECH SUPPORT.  THEY WILL NOT ANSWER.
 WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
+Laurent Bihanic <laurent.bihanic@atosorigin.com>
 Alex Chaffee <guru@edamame.stinky.com>
 James Davies <J.Davies@jacobus.co.uk>
 Jools Enticknap <jools@jools.org>
