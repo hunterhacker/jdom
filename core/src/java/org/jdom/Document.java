@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.55 2002/03/28 11:08:12 jhunter Exp $
+ $Id: Document.java,v 1.56 2002/03/30 08:25:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import org.jdom.filter.Filter;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.55 $, $Date: 2002/03/28 11:08:12 $
+ * @version $Revision: 1.56 $, $Date: 2002/03/30 08:25:32 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.55 $ $Date: 2002/03/28 11:08:12 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.56 $ $Date: 2002/03/30 08:25:32 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -385,7 +385,7 @@ public class Document implements Serializable, Cloneable {
      * the objects in the supplied content will be unaltered.
      * </p>
      *
-     * @parem newContent <code>List</code> of content to set
+     * @param newContent <code>List</code> of content to set
      * @return this document modified
      * @throws IllegalAddException if the List contains objects of
      *         illegal types.

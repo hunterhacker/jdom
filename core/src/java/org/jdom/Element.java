@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.115 2002/03/28 11:08:12 jhunter Exp $
+ $Id: Element.java,v 1.116 2002/03/30 08:25:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,12 +80,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.115 $, $Date: 2002/03/28 11:08:12 $
+ * @version $Revision: 1.116 $, $Date: 2002/03/30 08:25:32 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.115 $ $Date: 2002/03/28 11:08:12 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.116 $ $Date: 2002/03/30 08:25:32 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -143,7 +143,7 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * @param name <code>String</code> name of element.
-     * @namespace <code>Namespace</code> to put element in.
+     * @param namespace <code>Namespace</code> to put element in.
      */
     public Element(String name, Namespace namespace) {
         setName(name);

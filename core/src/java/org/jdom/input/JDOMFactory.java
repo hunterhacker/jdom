@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.6 2002/03/12 07:57:06 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.7 2002/03/30 08:25:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import java.util.*;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2002/03/12 07:57:06 $
+ * @version $Revision: 1.7 $, $Date: 2002/03/30 08:25:32 $
  */
 public interface JDOMFactory {
 
@@ -253,7 +253,7 @@ public interface JDOMFactory {
      * </p>
      *
      * @param name <code>String</code> name of element.
-     * @namespace <code>Namespace</code> to put element in.
+     * @param namespace <code>Namespace</code> to put element in.
          */
     public Element element(String name, Namespace namespace);
 
