@@ -17,9 +17,9 @@ goto end
 
 :error
 
-echo "ERROR: JAVA_HOME not found in your environment."
-echo "Please, set the JAVA_HOME variable in your environment to match the"
-echo "location of the Java Virtual Machine you want to use."
+echo ERROR: JAVA_HOME not found in your environment.
+echo Please, set the JAVA_HOME variable in your environment to match the
+echo location of the Java Virtual Machine you want to use.
 
 :end
 
