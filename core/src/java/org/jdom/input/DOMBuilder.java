@@ -151,6 +151,9 @@ public class DOMBuilder implements Builder {
      *   input stream.
      * </p>
      *
+     * @deprecated <code>DOMBuilder</code> should only be used for builfing
+     *             JDOM <code>Document</code> objects from a
+     *             <code>org.w3c.dom.Document</code> object.
      * @param in <code>InputStream</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws <code>JDOMException</code> when errors occur in
@@ -184,6 +187,9 @@ public class DOMBuilder implements Builder {
      *   filename.
      * </p>
      *
+     * @deprecated <code>DOMBuilder</code> should only be used for builfing
+     *             JDOM <code>Document</code> objects from a
+     *             <code>org.w3c.dom.Document</code> object.
      * @param file <code>File</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws <code>JDOMException</code> when errors occur in
@@ -204,6 +210,9 @@ public class DOMBuilder implements Builder {
      *   URL.
      * </p>
      *
+     * @deprecated <code>DOMBuilder</code> should only be used for builfing
+     *             JDOM <code>Document</code> objects from a
+     *             <code>org.w3c.dom.Document</code> object.
      * @param url <code>URL</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws <code>JDOMException</code> when errors occur in
