@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPathMatcher.java,v 1.2 2004/02/06 09:57:48 jhunter Exp $
+ $Id: XPathMatcher.java,v 1.3 2004/09/07 06:39:46 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.Attributes;
  * As the default implementation relies on Perl5-like regular
  * expression to match nodes, any regular expression can be used as
  * "<i>XPath expression</i>" with the restriction that any '*'
- * character be escaped (i.e. preceded with a '\' character).</p>
+ * character be escaped (i&#46;e&#46; preceded with a '\' character).</p>
  *
  * @author Laurent Bihanic
  */

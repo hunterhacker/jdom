@@ -1,6 +1,6 @@
 /*--
 
- $Id: Schema.java,v 1.3 2004/02/06 09:57:49 jhunter Exp $
+ $Id: Schema.java,v 1.4 2004/09/07 06:39:46 jhunter Exp $
 
  Copyright (C) 2003-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -112,9 +112,10 @@ import org.jdom.output.JDOMLocator;
  *    // Else: No error, document is valid.
  * </pre>
  * <p>
- * The current limitations are those of JARV, i.e. no support for validating a
- * document against multiple schemas. This can be work around for elements
- * (calling validate(Element) on another Schema) but not for attributes.</p>
+ * The current limitations are those of JARV, i&#46;e&#46; no support for
+ * validating a document against multiple schemas. This can be work around 
+ * for elements (calling validate(Element) on another Schema) but not for 
+ * attributes.</p>
  *
  * @author Laurent Bihanic
  */
