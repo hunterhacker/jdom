@@ -1,0 +1,23 @@
+
+Okay... Take 2 for design of the XPath parser stuff.
+
+Main public interface points are:
+
+	org.jdom.contrib.xpath.Context
+		// Knows how to walk a ?DOM tree for certain
+		// small atomic actions.
+
+	org.jdom.contrib.xpath.XPathExpr
+		// Knows all about small atomic actions, and
+		// requests the Context to perform them.
+
+They will work together to walk a DOM/JDOM tree and Do The Right Thing.
+
+Presumable, there will be a JDOMContext which implements Context.
+
+The org.jdom.contrib.xpath.parser.* stuff creates an XPathExpr
+from the classes in org.jdom.contrib.xpath.impl.*.
+
+Still much work to do, but we're closer to having an object-tree
+from an textual string xpath.
+

@@ -23,148 +23,126 @@ header
 {
 	package org.jdom.contrib.xpath.parser;
 	
-	import org.jdom.contrib.xpath.XPathHandler;
-	import org.jdom.contrib.xpath.XPathPredicateHandler;
-
-	import org.jdom.contrib.xpath.NoOpXPathHandler;
-	import org.jdom.contrib.xpath.NoOpXPathPredicateHandler;
-
-	import java.util.Stack;
+	import org.jdom.contrib.xpath.XPathExpr;
+	import org.jdom.contrib.xpath.impl.*;
 }
 
 class XPathRecognizer extends Parser;
-
 	options 
 	{
 		k = 2;
 		exportVocab=xpath;
 	}
 
+	// ----------------------------------------
+	// Helpful methods
+
 	{
-
-		private Stack _pathHandlers = new Stack();
-		private Stack _predicateHandlers = new Stack();
-
-		private XPathHandler currentPathHandler()
+		private XPathExpr makeBinaryExpr(BinaryExpr.Op op, XPathExpr lhs, XPathExpr rhs)
 		{
-			return (XPathHandler) _pathHandlers.peek();
-		}
+			if ( op == null ) {
+				return lhs;
+			}
 
-		private XPathPredicateHandler currentPredicateHandler()
-		{
-			return (XPathPredicateHandler) _predicateHandlers.peek();
+			return new BinaryExpr(op, lhs, rhs);
 		}
-
-		private void pushPathHandler(XPathHandler pathHandler)
-		{
-			_pathHandlers.push(pathHandler);
-		}
-
-		private void popPathHandler()
-		{
-			_pathHandlers.pop();
-		}
-
-		private void pushPredicateHandler(XPathPredicateHandler predHandler)
-		{
-			_predicateHandlers.push(predHandler);
-		}
-
-		private void popPredicateHandler()
-		{
-			_predicateHandlers.pop();
-		}
-
-		public void setHandler(XPathHandler pathHandler)
-		{
-			pushPathHandler(pathHandler);
-		}
-
 	}
 
-xpath 
+xpath returns [XPathExpr expr]
+	{
+		expr = null;
+	}
 	:
-		{
-			currentPathHandler().startParsingXPath();
-		}
-		union_expr
-		{
-			currentPathHandler().endParsingXPath();
-		}
+		expr=union_expr
 	;
 
-location_path
+location_path returns [LocationPath path]
+	{
+		path = null;
+	}
 	:
-			absolute_location_path
-		|	relative_location_path
+			path=absolute_location_path
+		|	path=relative_location_path
 	;
 
-absolute_location_path
+absolute_location_path returns [LocationPath path]
+	{
+		path = null;
+	}
 	:
-		{
-			currentPathHandler().absolute();
-		}
 		(	SLASH^
 		|	DOUBLE_SLASH^
 		)
-		( (STAR|IDENTIFIER)=> relative_location_path )?
+		(	(STAR|IDENTIFIER)=> 
+			path=relative_location_path 
+		)?
+
+		{
+			if ( path == null ) {
+				path = new LocationPath();
+			}
+
+			path.isAbsolute(true);
+		}
 	;
 
-relative_location_path
+relative_location_path returns [LocationPath path]
+	{
+		path = new LocationPath();
+
+		Step step = null;
+	}
 	:
-		step 
+		step=step 
+		{
+			path.addStep(step);
+		}
 		(	(	SLASH^
 			|	DOUBLE_SLASH^
-			) step 
+			) 	step=step 
+				{
+					path.addStep(step);
+				}
 		)*
 	;
 
-step
+step returns [Step step]
 	{
-		String axisName = null;
-		String prefix = null;
-		String localName = null;
+	    step = null;
+		String axis = null;
+		String nodeTest = null;
+		Predicate pred = null;
 	}
 	:
-		{
-			currentPathHandler().startStep();
-		}
-		(	 localName=abbr_step
+		(	nodeTest=abbr_step
+			{
+					step = new Step(nodeTest);
+			}
 		|	
-			(	(IDENTIFIER|AT)=> axisName=axis
+			(	(IDENTIFIER|AT)=> axis=axis
 			| 
-			)	
-						(	id:IDENTIFIER 
-							{
-								localName = id.getText();
-							}
-						|	STAR
-							{
-								localName = "*";
-							}
-						)	
-						(	
-							{
-								currentPathHandler().nameTest(axisName, 
-												prefix, 
-												localName);
-							}
-							predicate	
-						|	function_call 
-							{
-								// FIXME
-							}
-						|	// default simple case
-							{
-								currentPathHandler().nameTest(axisName, 
-												prefix, 
-												localName);
-							}
-						)
+			)
+			(	id:IDENTIFIER 
+				{
+					nodeTest = id.getText();
+				}
+			|	STAR
+				{
+					nodeTest = "*";
+				}
+			)
+			{
+				step = new Step(axis, nodeTest);
+			}
+			(	
+				pred=predicate	
+				{
+					step.addPredicate(pred);
+				}
+			|	function_call 
+			|	// default simple case
+			)
 		)
-		{
-			currentPathHandler().endStep();
-		}
 	;
 
 axis returns [String axisName]
@@ -188,23 +166,26 @@ axis returns [String axisName]
 
 // .... production [8] ....
 //
-predicate
+predicate returns [Predicate pred]
+	{
+		pred = null;
+	}
 	:
-		{
-			pushPredicateHandler( currentPathHandler().startPredicate() );
-		}
-		LEFT_BRACKET^ predicate_expr RIGHT_BRACKET!
-		{
-			currentPathHandler().endPredicate();
-			popPredicateHandler();
-		}
+		LEFT_BRACKET^ pred=predicate_expr RIGHT_BRACKET!
 	;
 
 // .... production [9] ....
 //
-predicate_expr
+predicate_expr returns [Predicate pred]
+	{
+		pred = null;
+		XPathExpr expr = null;
+	}
 	:
-		expr
+		expr=expr
+		{
+			pred = new Predicate(expr);
+		}
 	;
 
 // .... production [12] ....
@@ -239,17 +220,23 @@ abbr_axis_specifier
 
 // .... production [14] ....
 //
-expr
+expr returns [XPathExpr expr]
+	{
+		expr = null;
+	}
 	:
-		or_expr
+		expr=or_expr
 	;
 
 // .... production [15] ....
 //
-primary_expr 
+primary_expr returns [XPathExpr expr]
+	{
+		expr = null;
+	}
 	:
 			variable_reference
-		|	LEFT_PAREN! expr RIGHT_PAREN!
+		|	LEFT_PAREN! expr=expr RIGHT_PAREN!
 		|	literal
 		|	number
 		//|	IDENTIFIER LEFT_PAREN RIGHT_PAREN
@@ -285,15 +272,21 @@ function_call
 // .... production [16.1] ....
 //
 arg_list
+	{
+		XPathExpr expr = null;
+	}
 	:
-		argument ( COMMA argument )*
+		expr=argument ( COMMA expr=argument )*
 	;
 
 // .... production [17] ....
 //
-argument
+argument returns [XPathExpr expr]
+	{
+		expr = null;
+	}
 	:
-		expr
+		expr=expr
 	;
 
 // ----------------------------------------
@@ -303,41 +296,47 @@ argument
 
 // .... production [18] ....
 //
-union_expr
+union_expr returns [XPathExpr expr]
+	{
+		expr = null;
+
+		PathExpr lhs = null;
+		PathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		{
-			// FIXME push handlers?
-			currentPathHandler().startPath();
-		}
-		path_expr 
-		{
-			currentPathHandler().endPath();
-		}
-		( 	PIPE! 
-			{
-				currentPathHandler().startPath();
-			}
-			path_expr 
-			{
-				currentPathHandler().endPath();
-			}
+		lhs=path_expr 
+		( 	PIPE! 			{ op=BinaryExpr.Op.UNION; }
+			rhs=path_expr 
 		)*
+
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [19] ....
 //
 
-path_expr
+path_expr returns [PathExpr expr]
+	{
+		expr = null;
+		XPathExpr filt = null;
+	}
 	:
-			location_path
-		|	filter_expr ( absolute_location_path )?
+			expr=location_path
+		|	filt=filter_expr ( expr=absolute_location_path )?
 	;
 
 // .... production [20] ....
 //
-filter_expr
+filter_expr returns [ XPathExpr expr ]
+	{
+		expr = null;
+		Predicate pred = null;
+	}
 	:
-		primary_expr ( predicate )*
+		expr=primary_expr ( pred=predicate )*
 	;
 
 
@@ -348,66 +347,80 @@ filter_expr
 
 // .... production [21] ....
 //
-or_expr
+or_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		and_expr (	KW_OR^ 		
-					{	
-						currentPredicateHandler().or(); 
-					}
-					and_expr )?
+		lhs=and_expr (	KW_OR^				{ op = BinaryExpr.Op.OR; }
+						rhs=and_expr )?
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [22] ....
 //
-and_expr
+and_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		equality_expr (	KW_AND^ 
-						{
-							currentPredicateHandler().and();
-						}
-						equality_expr )?
+		lhs=equality_expr (	KW_AND^ 			{ op = BinaryExpr.Op.AND; }
+							rhs=equality_expr )?
+
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [23] ....
 //
-equality_expr
+equality_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		relational_expr (	(	EQUALS^ 
-								{
-									currentPredicateHandler().equals();
-								}
-							|	NOT_EQUALS^
-								{
-									currentPredicateHandler().notEquals();
-								}
-							) 
-							relational_expr
-						)?
+		lhs=relational_expr (	(	EQUALS^		{ op = BinaryExpr.Op.EQUAL; }
+								|	NOT_EQUALS^	{ op = BinaryExpr.Op.NOT_EQUAL; }
+								) 
+								rhs=relational_expr
+							)?
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [24] ....
 //
-relational_expr
+relational_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+
+	}
 	:
-		additive_expr	(	(	LT^
-								{
-									currentPredicateHandler().lessThan();
-								}
-							|	GT^
-								{
-									currentPredicateHandler().greaterThan();
-								}
-							|	LTE^
-								{
-									currentPredicateHandler().lessThanEquals();
-								}
-							|	GTE^
-								{
-									currentPredicateHandler().greaterThanEquals();
-								}
-							)
-							additive_expr
-						)?
+		lhs=additive_expr	(	(	LT^		{ op = BinaryExpr.Op.LT; }
+								|	GT^		{ op = BinaryExpr.Op.GT; }
+								|	LTE^	{ op = BinaryExpr.Op.LT_EQUAL; }
+								|	GTE^	{ op = BinaryExpr.Op.GT_EQUAL; }
+								)
+								rhs=additive_expr
+							)?		
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // ----------------------------------------
@@ -417,50 +430,58 @@ relational_expr
 
 // .... production [25] ....
 //
-additive_expr
+additive_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		mult_expr	(	(	PLUS^
-							{
-								currentPredicateHandler().plus();
-							}
-						|	MINUS^
-							{
-								currentPredicateHandler().minus();
-							}
-						)
-						mult_expr
-					)?
+		lhs=mult_expr	(	(	PLUS^	{ op = BinaryExpr.Op.PLUS; }
+							|	MINUS^	{ op = BinaryExpr.Op.MINUS; }
+							)
+							rhs=mult_expr
+						)?
+
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [26] ....
 //
-mult_expr
+mult_expr returns [XPathExpr expr]
+	{
+		expr = null;
+		XPathExpr lhs = null;
+		XPathExpr rhs = null;
+		BinaryExpr.Op op = null;
+	}
 	:
-		unary_expr	(	(	STAR^
-							{
-								currentPredicateHandler().multiply();
-							}
-						|	DIV^
-							{
-								currentPredicateHandler().divide();
-							}
-						|	MOD^
-							{
-								currentPredicateHandler().modulo();
-							}
-						)
-						unary_expr
-					)?
+		lhs=unary_expr	(	(	STAR^	{ op = BinaryExpr.Op.MULTIPLY; }
+							|	DIV^	{ op = BinaryExpr.Op.DIV; }
+							|	MOD^	{ op = BinaryExpr.Op.MOD; }
+							)
+							rhs=unary_expr
+						)?
+
+		{
+			expr = makeBinaryExpr(op, lhs, rhs);
+		}
 	;
 
 // .... production [27] ....
 //
-unary_expr
+unary_expr returns [XPathExpr expr]
+	{
+		expr = null;
+	}
 	:
-			union_expr 
+			expr=union_expr 
 		|	
+			MINUS expr=unary_expr 
 			{
-				currentPredicateHandler().negative();
+				expr = new NegativeUnaryExpr(expr);
 			}
-			MINUS unary_expr 
 	;
