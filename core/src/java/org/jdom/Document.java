@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.51 2002/02/13 16:58:47 jhunter Exp $
+ $Id: Document.java,v 1.52 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,12 +70,12 @@ import java.util.*;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.51 $, $Date: 2002/02/13 16:58:47 $
+ * @version $Revision: 1.52 $, $Date: 2002/02/19 06:46:03 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.51 $ $Date: 2002/02/13 16:58:47 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.52 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -331,7 +331,7 @@ public class Document implements Serializable, Cloneable {
      * </p>
      *
      * <p>
-     * When all objects in the supplied List are valid and before the new
+     * When all objects in the supplied List are legal and before the new
      * content is added, all objects in the old content will have their
      * parentage set to null (no parent) and the old content list will be
      * cleared. This has the effect that any active list (previously obtained

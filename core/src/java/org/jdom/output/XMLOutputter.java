@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.74 2002/02/07 13:45:39 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.75 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.74 $, $Date: 2002/02/07 13:45:39 $
+ * @version $Revision: 1.75 $, $Date: 2002/02/19 06:46:03 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.74 $ $Date: 2002/02/07 13:45:39 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.75 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1023,7 +1023,7 @@ public class XMLOutputter implements Cloneable {
    /**
      * <p>
      * Return a string representing a list of nodes.  The list is
-     * assumed to contain valid JDOM nodes.
+     * assumed to contain legal JDOM nodes.
      * </p>
      *
      * @param list <code>List</code> to format.

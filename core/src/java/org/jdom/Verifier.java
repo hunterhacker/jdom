@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.29 2002/02/08 05:40:56 jhunter Exp $
+ $Id: Verifier.java,v 1.30 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,12 +69,12 @@ import java.util.List;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.29 $, $Date: 2002/02/08 05:40:56 $
+ * @version $Revision: 1.30 $, $Date: 2002/02/19 06:46:03 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.29 $ $Date: 2002/02/08 05:40:56 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.30 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     /**
      * <p>
@@ -85,12 +85,12 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it valid for use as
+     *  This will check the supplied name to see if it legal for use as
      *    a JDOM <code>{@link Element}</code> name.
      * </p>
      *
      * @param name <code>String</code> name to check.
-     * @return <code>String</code> - reason name is invalid, or
+     * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkElementName(String name) {
@@ -111,12 +111,12 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it valid for use as
+     *  This will check the supplied name to see if it legal for use as
      *    a JDOM <code>{@link Attribute}</code> name.
      * </p>
      *
      * @param name <code>String</code> name to check.
-     * @return <code>String</code> - reason name is invalid, or
+     * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkAttributeName(String name) {
@@ -165,7 +165,7 @@ final public class Verifier {
      * </p>
      *
      * @param name <code>String</code> value to check.
-     * @return <code>String</code> - reason name is invalid, or
+     * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkCharacterData(String text) {
@@ -195,7 +195,7 @@ final public class Verifier {
      * </p>
      *
      * @param data <code>String</code> data to check.
-     * @return <code>String</code> - reason data is invalid, or
+     * @return <code>String</code> - reason data is illegal, or
      *         <code>null</code> is name is OK.
      */
     public static final String checkCDATASection(String data) {
@@ -215,12 +215,12 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it valid for use as
+     *  This will check the supplied name to see if it legal for use as
      *    a JDOM <code>{@link Namespace}</code> prefix.
      * </p>
      *
      * @param prefix <code>String</code> prefix to check.
-     * @return <code>String</code> - reason name is invalid, or
+     * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkNamespacePrefix(String prefix) {
@@ -252,7 +252,7 @@ final public class Verifier {
                    "\"xml\" in any combination of case";
         }
 
-        // Ensure valid content
+        // Ensure legal content
         for (int i=0, len = prefix.length(); i<len; i++) {
             char c = prefix.charAt(i);
             if (!isXMLNameCharacter(c)) {
@@ -272,12 +272,12 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it valid for use as
+     *  This will check the supplied name to see if it legal for use as
      *    a JDOM <code>{@link Namespace}</code> URI.
      * </p>
      *
      * @param uri <code>String</code> URI to check.
-     * @return <code>String</code> - reason name is invalid, or
+     * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkNamespaceURI(String uri) {
@@ -448,12 +448,12 @@ final public class Verifier {
 
     /**
      * <p>
-     *  This will check the supplied name to see if it valid for use as
+     *  This will check the supplied name to see if it legal for use as
      *    a JDOM processing instruction target.
      * </p>
      *
      * @param target <code>String</code> target to check.
-     * @return <code>String</code> - reason target is invalid, or
+     * @return <code>String</code> - reason target is illegal, or
      *         <code>null</code> if name is OK.
      */
     public static final String checkProcessingInstructionTarget(String target) {
@@ -489,7 +489,7 @@ final public class Verifier {
      * </p>
      *
      * @param data <code>String</code> data to check.
-     * @return <code>String</code> - reason data is invalid, or
+     * @return <code>String</code> - reason data is illegal, or
      *         <code>null</code> if data is OK.
      */
     public static final String checkCommentData(String data) {
@@ -535,7 +535,7 @@ final public class Verifier {
      * </p>
      *
      * @param publicID <code>String</code> public ID to check.
-     * @return <code>String</code> - reason public ID is invalid, or
+     * @return <code>String</code> - reason public ID is illegal, or
      *         <code>null</code> if public ID is OK.
      */
     public static final String checkPublicID(String publicID) {
@@ -563,7 +563,7 @@ final public class Verifier {
      * </p>
      *
      * @param systemLiteral <code>String</code> system literal to check.
-     * @return <code>String</code> - reason system literal is invalid, or
+     * @return <code>String</code> - reason system literal is illegal, or
      *         <code>null</code> if system literal is OK.
      */
     public static final String checkSystemLiteral(String systemLiteral) {
@@ -591,7 +591,7 @@ final public class Verifier {
      * </p>
      *
      * @param name <code>String</code> to check for XML name compliance.
-     * @return <code>String</code> - reason the name is invalid, or
+     * @return <code>String</code> - reason the name is illegal, or
      *         <code>null</code> if OK.
      */
     public static String checkXMLName(String name) {
@@ -608,7 +608,7 @@ final public class Verifier {
             return "XML names cannot begin with the character \"" + 
                    first + "\"";
         }
-        // Ensure valid content
+        // Ensure legal content
         for (int i=0, len = name.length(); i<len; i++) {
             char c = name.charAt(i);
             if (!isXMLNameCharacter(c)) {

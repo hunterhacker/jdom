@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.37 2002/02/08 02:49:41 jhunter Exp $
+ $Id: Attribute.java,v 1.38 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.37 $, $Date: 2002/02/08 02:49:41 $
+ * @version $Revision: 1.38 $, $Date: 2002/02/19 06:46:03 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.37 $ $Date: 2002/02/08 02:49:41 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.38 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     /**
      * <p>
@@ -371,7 +371,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>Attribute</code> - the attribute modified.
-     * @throws IllegalNameException if the given name is invalid as an
+     * @throws IllegalNameException if the given name is illegal as an
      *         attribute name.
      */
     public Attribute setName(String name) {
@@ -545,7 +545,7 @@ public class Attribute implements Serializable, Cloneable {
     public Attribute setAttributeType(int type) {
         if ((type < UNDECLARED_ATTRIBUTE) || (type > ENUMERATED_ATTRIBUTE)) {
             throw new IllegalDataException(String.valueOf(type),
-                                        "attribute", "Invalid attribute type");
+                                        "attribute", "Illegal attribute type");
         }
         this.type = type;
         return this;

@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.3 2002/02/13 16:58:47 jhunter Exp $
+ $Id: ContentList.java,v 1.4 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -60,7 +60,7 @@ import java.util.*;
 
 /**
  * <p>
- * <code>ContentList</code> represents valid JDOM content, including content
+ * <code>ContentList</code> represents legal JDOM content, including content
  * for <code>Document</code>s or <code>Element</code>s.
  * This class is NOT PUBLIC; users should see it as a simple List
  * implementation.
@@ -69,7 +69,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2002/02/13 16:58:47 $
+ * @version $Revision: 1.4 $, $Date: 2002/02/19 06:46:03 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -81,7 +81,7 @@ class ContentList extends AbstractList
                          implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.3 $ $Date: 2002/02/13 16:58:47 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.4 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -676,7 +676,7 @@ class ContentList extends AbstractList
 
     /**
      * <p>
-     * <code>FilterList</code> represents valid JDOM content, including content
+     * <code>FilterList</code> represents legal JDOM content, including content
      * for <code>Document</code>s or <code>Element</code>s.
      * </p>
      */

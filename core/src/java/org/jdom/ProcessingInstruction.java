@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.24 2002/02/12 06:34:09 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.25 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,13 +77,13 @@ import java.util.StringTokenizer;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.24 $, $Date: 2002/02/12 06:34:09 $
+ * @version $Revision: 1.25 $, $Date: 2002/02/19 06:46:03 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.24 $ $Date: 2002/02/12 06:34:09 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.25 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -114,7 +114,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @param target <code>String</code> target of PI.
      * @param data <code>Map</code> data for PI, in
      *             name/value pairs
-     * @throws IllegalTargetException if the given target is invalid
+     * @throws IllegalTargetException if the given target is illegal
      *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, Map data) {
@@ -136,7 +136,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *
      * @param target <code>String</code> target of PI.
      * @param rawData <code>String</code> data for PI.
-     * @throws IllegalTargetException if the given target is invalid
+     * @throws IllegalTargetException if the given target is illegal
      *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, String data) {
@@ -466,7 +466,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * can use either single or double quotes, but they must match up.
      * A singly quoted string can contain an unbalanced amount of double
      * quotes, or vice versa. For example, the String "JDOM's the best"
-     * is valid as is 'JDOM"s the best'.
+     * is legal as is 'JDOM"s the best'.
      *
      * @param rawData the input string from which a quoted string is to
      *                be extracted.

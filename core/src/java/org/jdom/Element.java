@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.109 2002/02/14 05:33:17 jhunter Exp $
+ $Id: Element.java,v 1.110 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.109 $, $Date: 2002/02/14 05:33:17 $
+ * @version $Revision: 1.110 $, $Date: 2002/02/19 06:46:03 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.109 $ $Date: 2002/02/14 05:33:17 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.110 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -211,7 +211,7 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>Element</code> - the element modified.
-     * @throws IllegalNameException if the given name is invalid as an
+     * @throws IllegalNameException if the given name is illegal as an
      *         Element name.
      */
     public Element setName(String name) {
@@ -770,7 +770,7 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * <p>
-     * When all objects in the supplied List are valid and before the new
+     * When all objects in the supplied List are legal and before the new
      * content is added, all objects in the old content will have their
      * parentage set to null (no parent) and the old content list will be
      * cleared. This has the effect that any active list (previously obtained
@@ -1299,7 +1299,7 @@ public class Element implements Serializable, Cloneable {
      * </p>
      *
      * <p>
-     * When all objects in the supplied List are valid and before the new
+     * When all objects in the supplied List are legal and before the new
      * attributes is added, all objects in the old attributes will have their
      * parentage set to null (no parent) and the old attributes list will be
      * cleared. This has the effect that any active attribute list (previously

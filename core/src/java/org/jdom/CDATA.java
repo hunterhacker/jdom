@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.18 2002/01/26 07:57:37 jhunter Exp $
+ $Id: CDATA.java,v 1.19 2002/02/19 06:46:03 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -61,7 +61,7 @@ import java.io.Serializable;
 /**
  * <p><code><b>CDATA</b></code> represents character-based content within an
  *   XML document represented by JDOM. It is intended to provide a modular,
- *   perantable method of representing CDATA. Additionally,
+ *   printable method of representing CDATA. Additionally,
  *   <code>CDATA</code> makes no guarantees about the underlying textual
  *   representation of character data, but does expose that data as a Java
  *   <code>String</code>.</p>
@@ -70,12 +70,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.18 $, $Date: 2002/01/26 07:57:37 $
+ * @version $Revision: 1.19 $, $Date: 2002/02/19 06:46:03 $
  */
 public class CDATA implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.18 $ $Date: 2002/01/26 07:57:37 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.19 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
