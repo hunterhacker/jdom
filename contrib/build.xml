@@ -103,8 +103,9 @@ These are the meaningful targets for this build file:
     <property name="parser.jar"         value="${jdom.lib.dir}/xerces.jar"/>
     <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
     <property name="jdom-contrib"       value="${build.dest}"/>
+
     <property name="jakarta-regexp.jar" value="${lib.dir}/jakarta-regexp-1.1.jar"/>
-    <property name="isorelax.jar" value="${lib.dir}/isorelax.jar"/>
+    <property name="iso-relax-api.jar"  value="${lib.dir}/isorelax.jar"/>
 
     <!-- Compilation class path -->
     <path id="compile.class.path">
@@ -112,7 +113,7 @@ These are the meaningful targets for this build file:
       <pathelement location="${parser.jar}"/>
       <pathelement location="${jdom-core.jar}"/>
       <pathelement location="${jakarta-regexp.jar}"/>
-      <pathelement location="${isorelax.jar}"/>
+      <pathelement location="${iso-relax-api.jar}"/>
 
       <!-- We used to include the CLASSPATH environment variable in
            compilation path as it might contain the path to the JDK 1.1
@@ -195,12 +196,19 @@ These are the meaningful targets for this build file:
     <available property="swing.present"
                classname="javax.swing.tree.DefaultMutableTreeNode"
                classpathref="compile.class.path" />
+
+    <!-- Compile the schema package only if the JARV classes are found -->
+    <available property="jarv.present"
+               classname="org.iso_relax.verifier.Verifier"
+               classpathref="compile.class.path" />
+
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
            deprecation="${compile.deprecation}">
       <exclude name="**/*JTree*.java" unless="swing.present" />
+      <exclude name="**/schema/*.java" unless="jarv.present" />
 
       <classpath refid="compile.class.path"/>
     </javac>

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Schema.java,v 1.1 2003/04/30 01:07:35 jhunter Exp $
+ $Id: Schema.java,v 1.2 2003/06/27 20:28:21 jhunter Exp $
 
  Copyright (C) 2003 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -94,28 +94,29 @@ import org.jdom.output.JDOMLocator;
  * API at runtime, such as Sun's
  * <a href="http://wwws.sun.com/software/xml/developers/multischema/">Multi-Schema
  * Validator</a>.</p>
- *
- * To validate a document against a W3C XML Schema definition:
+ * <p>
+ * To validate a document against a W3C XML Schema definition:</p>
  * <pre>
-   import org.jdom.contrib.schema.Schema;
-
-   String uri = &lt;The URL of the schema document&gt;;
-   Document doc = &lt;a JDOM document&gt;;
-
-   Schema schema = Schema.parse(uri, Schema.W3C_XML_SCHEMA);
-   List errors = schema.validate(doc);
-   if (errors != null) {
-     // Validation errors
-     for (Iterator i=errors.iterator(); i.hasNext(); ) {
-       ValidationError e = (ValidationError)(i.next());
-       System.out.println(e);
-     }
-   }
-   // Else: No error, document is valid.
- </pre>
+ * import org.jdom.contrib.schema.Schema;
+ *
+ *    String uri = &lt;The URL of the schema document&gt;;
+ *    Document doc = &lt;a JDOM document&gt;;
+ *
+ *    Schema schema = Schema.parse(uri, Schema.W3C_XML_SCHEMA);
+ *    List errors = schema.validate(doc);
+ *    if (errors != null) {
+ *      // Validation errors
+ *      for (Iterator i=errors.iterator(); i.hasNext(); ) {
+ *        ValidationError e = (ValidationError)(i.next());
+ *        System.out.println(e);
+ *      }
+ *    }
+ *    // Else: No error, document is valid.
+ * </pre>
+ * <p>
  * The current limitations are those of JARV, i.e. no support for validating a
  * document against multiple schemas. This can be work around for elements
- * (calling validate(Element) on another Schema) but not for attributes.
+ * (calling validate(Element) on another Schema) but not for attributes.</p>
  *
  * @author Laurent Bihanic
  */
@@ -257,7 +258,7 @@ public class Schema {
             errorHandler.setContentHandler(verifier.getVerifierHandler());
             new SAXOutputter(errorHandler).output(doc);
         }
-        catch (SAXException e) { /* Fatal validation error encounted. */
+        catch (SAXException e) { /* Fatal validation error encountered. */
         }
 
         // Retrieve validation errors, if any.
@@ -288,7 +289,7 @@ public class Schema {
             errorHandler.setContentHandler(verifier.getVerifierHandler());
             new SAXOutputter(errorHandler).output(nodes);
         }
-        catch (SAXException e) { /* Fatal validation error encounted. */
+        catch (SAXException e) { /* Fatal validation error encountered. */
         }
 
         // Retrieve validation errors, if any.
