@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.93 2003/05/01 01:45:25 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.94 2003/05/02 00:52:58 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -58,6 +58,7 @@ package org.jdom.output;
 
 import java.io.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import org.jdom.*;
 
@@ -170,7 +171,7 @@ import org.jdom.*;
  * xml:space with the value "default" formatting is turned back on for the child
  * element and then off for the remainder of the parent element.
  *
- * @version $Revision: 1.93 $, $Date: 2003/05/01 01:45:25 $
+ * @version $Revision: 1.94 $, $Date: 2003/05/02 00:52:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -185,7 +186,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.93 $ $Date: 2003/05/01 01:45:25 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.94 $ $Date: 2003/05/02 00:52:58 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -228,6 +229,9 @@ public class XMLOutputter implements Cloneable {
         /** The default new line flag, set to do new lines only as in
           * original document */
         boolean newlines = false;
+
+        /** entity escape logic */
+        EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
 
         Format() {}
 
@@ -375,6 +379,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void setEncoding(String encoding) {
         this.encoding = encoding;
+        defaultFormat.escapeStrategy = new DefaultEscapeStrategy(encoding);
     }
 
     /**
@@ -1597,6 +1602,15 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
+     * Sets the EscapeStrategy for handling character entities.
+     *
+     * @param escapeStrategy for handling character entities
+     */
+    public void setEscapeStrategy(EscapeStrategy escapeStrategy) {
+        currentFormat.escapeStrategy = escapeStrategy;
+    }
+
+    /**
      * This will take the pre-defined entities in XML 1.0 and
      * convert their character representation to the appropriate
      * entity reference, suitable for XML attributes.  It does
@@ -1633,7 +1647,12 @@ public class XMLOutputter implements Cloneable {
                     entity = "&amp;";
                     break;
                 default :
-                    entity = null;
+                    if (currentFormat.escapeStrategy.shouldEscape(ch)) {
+                        entity = "&#" + (int)ch + ";";
+                    }
+                    else {
+                        entity = null;
+                    }
                     break;
             }
             if (buffer == null) {
@@ -1692,7 +1711,12 @@ public class XMLOutputter implements Cloneable {
                     entity = "&amp;";
                     break;
                 default :
-                    entity = null;
+                    if (currentFormat.escapeStrategy.shouldEscape(ch)) {
+                        entity = "&#" + (int)ch + ";";
+                    }
+                    else {
+                        entity = null;
+                    }
                     break;
             }
             if (buffer == null) {
@@ -1940,4 +1964,71 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
+
+    /**
+     * Handle common charsets quickly and easily.  Use reflection
+     * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
+     * If JDK 1.4 isn't around, default to no special encoding.
+     */
+    class DefaultEscapeStrategy implements EscapeStrategy {
+        private int bits;
+        Object encoder;
+        Method canEncode;
+
+        public DefaultEscapeStrategy(String encoding) {
+            if ("UTF-8".equalsIgnoreCase(encoding) ||
+                "UTF-16".equalsIgnoreCase(encoding)) {
+                bits = 16;
+            }
+            else if ("ISO-8859-1".equalsIgnoreCase(encoding) ||
+                     "Latin1".equalsIgnoreCase(encoding)) {
+                bits = 8;
+            }
+            else if ("US-ASCII".equalsIgnoreCase(encoding) ||
+                     "ASCII".equalsIgnoreCase(encoding)) {
+                bits = 7;
+            }
+            else {
+                bits = 0;
+                //encoder = Charset.forName(encoding).newEncoder();
+                try {
+                    Class charsetClass = Class.forName("java.nio.charset.Charset");
+                    Class encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
+                    Method forName = charsetClass.getMethod("forName", new Class[] {String.class});
+                    Object charsetObj = forName.invoke(null, new Object[] { encoding });
+                    Method newEncoder = charsetClass.getMethod("newEncoder", null);
+                    encoder = newEncoder.invoke(charsetObj, null);
+                    canEncode = encoderClass.getMethod("canEncode", new Class[] {char.class});
+                }
+                catch (Exception ignored) { }
+            }
+        }
+
+        public boolean shouldEscape(char ch) {
+            if (bits == 16) {
+                return false;
+            }
+            if (bits == 8) {
+                if ((int)ch > 255) return true;
+                else return false;
+            }
+            if (bits == 7) {
+                if ((int)ch > 127) return true;
+                else return false;
+            }
+            else {
+                if (canEncode != null && encoder != null) {
+                    try {
+                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[] { new Character(ch) });
+                        return !val.booleanValue();
+                    }
+                    catch (Exception ignored) { }
+                }
+                // Return false if we don't know.  This risks not escaping
+                // things which should be escaped, but also means people won't
+                // start getting loads of unnecessary escapes.
+                return false;
+            }
+        }
+    }
 }
