@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.43 2001/04/20 07:30:35 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.44 2001/04/20 16:32:33 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -550,6 +550,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
+     **/
     public void outputElementContent(Element element, Writer out)
                       throws IOException {
         List mixedContent = element.getMixedContent();
@@ -567,6 +568,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param element <code>Element</code> to output.
      * @param out <code>OutputStream</code> to write to.
+     **/
     public void outputElementContent(Element element, OutputStream out)
                                          throws IOException {
         Writer writer = makeWriter(out);
