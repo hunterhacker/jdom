@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application SYSTEM "test.dtd" 
+[
+<!ENTITY rdquo  "internal">
+<!ENTITY % local.p.class  "fff">
+<!-- comment3 -->
+]
+>
+<application>&rdquo;
+	<!-- comment -->
+	<display-name>MainIndex</display-name>
+	&ldquo;
+</application>

@@ -1,0 +1,6 @@
+<!ELEMENT application (display-name)>
+<!-- comment2 -->
+<!ELEMENT display-name (#PCDATA)>
+<!ENTITY ldquo  "external">
+<!ENTITY ext SYSTEM "entity.txt">
+<!ENTITY % ext.statusp.class  "uuu">

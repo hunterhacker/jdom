@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--the external dtd with comments -->
+	<!ELEMENT internalentities (#PCDATA)>
+	<!ATTLIST internalentities test CDATA #IMPLIED>
+    <!ATTLIST internalentities image ENTITY #REQUIRED>
+	<!ENTITY didsimple 'simple entity' >
+	<!ENTITY dtdsimple2 'another simple entity'>
+	<!ENTITY % param '<!ELEMENT test (#PCDATA)>' >
+<!-- dtd closing comment -->
+

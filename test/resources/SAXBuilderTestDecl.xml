@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!DOCTYPE internalentities SYSTEM "SAXBuilderTestDecl.dtd" [
+<!--the internal subset -->
+	<!NOTATION n1 SYSTEM "http://www.w3.org/">
+	<!NOTATION n2 PUBLIC "//foo/foo" "http://www.w3.org/">
+
+	<!ENTITY simple 'simple entity' >
+	<!ENTITY simple2 'another simple entity'>
+	<!ENTITY annotation SYSTEM "http://www.foo.org/image.gif" NDATA n1 >
+
+
+]>
+
+<internalentities test="foo" image="annotation">&simple; &simple2;
+</internalentities>
