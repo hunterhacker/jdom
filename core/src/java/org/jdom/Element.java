@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.98 2001/08/16 16:10:55 bmclaugh Exp $
+ $Id: Element.java,v 1.99 2001/08/29 21:45:28 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.98 $ $Date: 2001/08/16 16:10:55 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.99 $ $Date: 2001/08/29 21:45:28 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1745,6 +1745,23 @@ public class Element implements Serializable, Cloneable {
             }
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * This removes the supplied Attribute should it exist.
+     * </p>
+     *
+     * @param attribute Reference to the attribute to be removed.
+     * @return whether the attribute was removed
+     */
+    public boolean removeAttribute(Attribute attribute) {
+        if (attributes == null || 
+           (attribute == null) || (attribute.getParent() != this)) {
+            return false;
+        }
+        
+        return attributes.remove(attribute);
     }
 
     /**
