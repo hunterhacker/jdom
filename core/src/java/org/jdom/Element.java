@@ -54,16 +54,8 @@
 
 package org.jdom;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 /**
  * <p><code>Element</code> defines behavior for an XML
@@ -341,7 +333,12 @@ public class Element implements Serializable, Cloneable {
      * @return <code>List</code> - the additional namespace declarations.
      */
     public List getAdditionalNamespaces() {
-        return additionalNamespaces;
+        if (additionalNamespaces == null) {
+            return Collections.EMPTY_LIST;
+        }
+        else {
+            return additionalNamespaces;
+        }
     }
 
     /**
@@ -714,9 +711,9 @@ public class Element implements Serializable, Cloneable {
      *   deep would have to be obtained with:
      * <pre>
      * <code>
-     *   List nestedElements = currentElement.getChildren();
-     *   for (int i=0; i&lt;nestedElements.size(); i++) {
-     *     Element oneLevelDeep = (Element)nestedElements.get(i);
+     *   Iterator itr = currentElement.getChildren().iterator();
+     *   while (itr.hasNext()) {
+     *     Element oneLevelDeep = (Element)nestedElements.next();
      *     List twoLevelsDeep = oneLevelDeep.getChildren();
      *     // Do something with these children
      *   }
@@ -1411,7 +1408,7 @@ public class Element implements Serializable, Cloneable {
      *
      * @return the clone of this element
      */
-    public final Object clone() {
+    public Object clone() {
         Element element = new Element(name, namespace);
 
         if (attributes != null) {

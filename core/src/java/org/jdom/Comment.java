@@ -190,7 +190,7 @@ public class Comment implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>Comment</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         Comment comment = new Comment(text);
         return comment;
     }

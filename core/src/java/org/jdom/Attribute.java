@@ -353,7 +353,7 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>Attribute</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         Attribute attribute = new Attribute(name, value, namespace);
 
         return attribute;

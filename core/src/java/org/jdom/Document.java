@@ -507,7 +507,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>Document</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         Document doc = new Document(null);
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {

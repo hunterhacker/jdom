@@ -405,7 +405,7 @@ public class Entity implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>Entity</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         Entity entity = new Entity(name);
         entity.content = (List)((LinkedList)content).clone();
 

@@ -341,17 +341,15 @@ public class SAXBuilder {
                 SAXParseException p = (SAXParseException)e;
                 String systemId = p.getSystemId();
                 if (systemId != null) {
-                    throw new JDOMException(e.getMessage(),
-                              new JDOMException("Error on line " + 
+                    throw new JDOMException("Error on line " + 
                               p.getLineNumber() + " of document "
-                              + systemId + ": " + p.getMessage(), e));
+                              + systemId, e);
                 } else {
-                    throw new JDOMException(e.getMessage(),
-                              new JDOMException("Error on line " +
-                              p.getLineNumber() + ": " + p.getMessage(), e));
+                    throw new JDOMException("Error on line " +
+                              p.getLineNumber(), e);
                 }
             } else {
-                throw new JDOMException(e.getMessage(), e);
+                throw new JDOMException("Error in building", e);
             }
         }
     }
@@ -387,7 +385,7 @@ public class SAXBuilder {
             URL url = fileToURL(file);
             return build(url);
         } catch (MalformedURLException e) {
-            throw new JDOMException(e.getMessage(), e);
+            throw new JDOMException("Error in building", e);
         }
     }
 

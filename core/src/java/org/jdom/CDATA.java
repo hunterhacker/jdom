@@ -185,7 +185,7 @@ public class CDATA implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>CDATA</code>.
      */
-    public final Object clone() {
+    public Object clone() {
 	CDATA clone = new CDATA(text);
 	return clone;
     }

@@ -293,7 +293,7 @@ public class DocType implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>DocType</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         DocType docType = new DocType(elementName, publicID, systemID);
 
         return docType;

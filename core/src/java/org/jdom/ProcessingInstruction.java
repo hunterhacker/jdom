@@ -371,7 +371,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>Object</code> - clone of this 
      * <code>ProcessingInstruction</code>.
      */
-    public final Object clone() {
+    public Object clone() {
         return new ProcessingInstruction(target, rawData);
     }
 }

@@ -2,6 +2,28 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Examine if it's worth doing an intern() on element and attribute names,
+  of if it's too much to pay since SAX is likely doing it already
+  http://www.megginson.com/SAX/Java/features.html
+  Probably turn off SAX interning and do it ourselves?
+
+* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
+  If necessary, that is.
+
+* Add an Attribute.getParent() method (to help XPath)
+  Also on Comment, PI, and Entity.  Maybe on CDATA.
+
+* Since DOMOutputter is just DOM1, consider a DOM2 outputter
+  Probably support DOM2 only, in theory of tracking latest versions
+
+* Consider enhancing SAXBuilder to use filters per
+  http://www.megginson.com/SAX/Java/filters.html
+  That would let someone remove surrounding whitespace and other fancy things.
+
+* Consider visitor pattern (again, just to be sure)
+
+* Make entity.clone() truly a deep copy.
+
 * Use custom singly LinkedList!
 
 * Consider using a List of instance data so elements only use what they really
@@ -19,14 +41,11 @@ Items that need to be done:
     27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
     27 Sep 2000.
 
-* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
-
 * Straighten up the Entity API, bringing its API in line with Element and
   supporting EntityReferences.
 
-* Make entity.clone() truly a deep copy.
-
 * Test LinkedList vs ArrayList for speed and memory consumption.
+  (With OptimizeIt)
 
 --- FOR JDOM 1.0 ---
 
@@ -51,20 +70,6 @@ Items that need to be done:
    void setXmlEncoding(java.lang.String newJavaEncoding,
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
-
-* Probably add an Attribute.getParent() method (to help XPath)
-  Also on Comment, PI, and Entity.  Maybe on CDATA.
-
-* Add better handling of bogus undeclared prefixes like <bogus:foo/>
-
-* Consider having element.getChild("foo") use the namespace of the invoked 
-  element.  Currently is would be the default namespace.  With this new
-  approach you'd pass null to use the default.  This would be more convenient,
-  but the downside I see is that it would be inconsistent since 
-  new Element("foo") would only create elements in the default namespace.
-
-* Since DOMOutputter is just DOM1, consider a DOM2 outputter
-  Probably support DOM2 only, in theory of tracking latest versions
 
 * Figure out if there should be a public no-arg Document constructor to
   support building docs with more than just root elts.  Currently you have to
@@ -98,14 +103,8 @@ Items that need to be done:
                 God forts&auml;ttning p&aring; det nya millenniet!
         </DOCUMENT>
 
-* Finalize how regular entities are to work
-
 * Consider SAXBuilder.setIgnoreingWhitespace() and similar
   Should save lots of memory.
-
-* Consider enhancing SAXBuilder to use filters per
-  http://www.megginson.com/SAX/Java/filters.html
-  That would let someone remove surrounding whitespace and other fancy things.
 
 * Writing a "Getting started" guide for newbies 
   (Tom Clements <clements@eng.sun.com>)
@@ -114,24 +113,13 @@ Items that need to be done:
   JAXP model so they are usable without JAXP, and can be trivially made to
   work with JAXP.
 
-* Think about somewhat crazy idea of using more inheritance in JDOM to allow
-  lightweight but not XML 1.0 complete implementations.  For example Element
-  could have a superclass "CommonXMLElement" that supported only what Common 
-  XML requires.  Builders could build such elements to be faster and lighter 
-  than full elements -- perfect for things like reading config files.
-
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions
-
-* Look at standard parser features (http://apache.org/xml/features/dom) for
-  ideas on things that may be needed.
 
 * Perhaps have builder flags to indicate if surrounding whitespace (not just
   ignorable whitespace) should be trimmed, if entity refs should be expanded,
   if CDATA sections should be included, and if comment sections should be
   included.  All seem like reasonable customizations.
-
-* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
 
 --- FOR JDOM 1.1 ---
 
@@ -166,8 +154,6 @@ Items that need to be done:
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
-* Figure out if we need to support maintaining CDATA sections
-
 * Put www.jdom.org content under CVS
 
 * Write a guide for contributors
@@ -193,6 +179,22 @@ Items that need to be done:
 
 * Consider having the license be clear org.jdom is a protected namespace.
 
-* Consider visitor pattern (again, just to be sure)
+--- WILD IDEAS ---
 
+* Consider having element.getChild("foo") use the namespace of the invoked 
+  element.  Currently is would be the default namespace.  With this new
+  approach you'd pass null to use the default.  This would be more convenient,
+  but the downside I see is that it would be inconsistent since 
+  new Element("foo") would only create elements in the default namespace.
+
+* Think about somewhat crazy idea of using more inheritance in JDOM to allow
+  lightweight but not XML 1.0 complete implementations.  For example Element
+  could have a superclass "CommonXMLElement" that supported only what Common 
+  XML requires.  Builders could build such elements to be faster and lighter 
+  than full elements -- perfect for things like reading config files.  Lots
+  of difficulties with this design though.
+
+* Look at Xerces parser features (http://apache.org/xml/features/dom) for
+  ideas on things that may be needed.
+  http://xml.apache.org/xerces-j/features.html
 
