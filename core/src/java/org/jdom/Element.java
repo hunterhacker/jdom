@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.78 2001/05/19 00:43:23 jhunter Exp $
+ $Id: Element.java,v 1.79 2001/05/24 08:57:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,9 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.78 $ $Date: 2001/05/19 00:43:23 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.79 $ $Date: 2001/05/24 08:57:17 $ $Name:  $";
+
+    private static final int INITIAL_ARRAY_SIZE = 5;
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -88,7 +90,7 @@ public class Element implements Serializable, Cloneable {
 
     /** Additional <code>{@link Namespace}</code> declarations on this 
         element */
-    protected transient LinkedList additionalNamespaces;
+    protected transient ArrayList additionalNamespaces;
 
     /** Parent element, or null if none */
     protected Element parent;
@@ -102,7 +104,7 @@ public class Element implements Serializable, Cloneable {
     protected List attributes;
     
     /** The mixed content of the <code>Element</code> */
-    protected LinkedList content;
+    protected ArrayList content;
     
     /**
      * <p>
@@ -399,7 +401,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (additionalNamespaces == null) {
-            additionalNamespaces = new LinkedList();
+            additionalNamespaces = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         additionalNamespaces.add(additionalNamespace);
@@ -747,7 +749,7 @@ public class Element implements Serializable, Cloneable {
         if (content != null) {
             content.clear();
         } else {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         if (text != null) {
@@ -816,7 +818,7 @@ public class Element implements Serializable, Cloneable {
      */
     public List getMixedContent() {
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         PartialList result = new PartialList(content, this);
@@ -846,8 +848,8 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Save list with original content and create a new list
-        LinkedList oldContent = content;
-        content = new LinkedList();
+        ArrayList oldContent = content;
+        content = new ArrayList(INITIAL_ARRAY_SIZE);
 
         RuntimeException ex = null;
         int itemsAdded = 0;
@@ -976,7 +978,7 @@ public class Element implements Serializable, Cloneable {
      */
     public List getChildren() {
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
  
         PartialList elements = new PartialList(content, this);
@@ -1129,14 +1131,15 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addContent(String text) {
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
-        if (content.size() > 0) {
-            Object ob = content.getLast();
+        int size = content.size();
+        if (size > 0) {
+            Object ob = content.get(size - 1);
             if (ob instanceof String) {
                 text = (String)ob + text;
-                content.removeLast();
+                content.remove(size - 1);
             }
         }
         content.add(text);
@@ -1173,7 +1176,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         element.setParent(this);
@@ -1215,7 +1218,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(pi);
@@ -1241,7 +1244,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(entity);
@@ -1259,7 +1262,7 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addContent(CDATA cdata) {
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(cdata);
@@ -1288,7 +1291,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-            content = new LinkedList();
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(comment);
@@ -1431,7 +1434,7 @@ public class Element implements Serializable, Cloneable {
      */
     public List getAttributes() {
         if (attributes == null) {
-            attributes = new LinkedList();
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         PartialList atts = new PartialList(attributes, this);
@@ -1602,7 +1605,7 @@ public class Element implements Serializable, Cloneable {
         }
   
         if (attributes == null) {
-            attributes = new LinkedList();
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
         else if (preExisting) {
             // Remove any pre-existing attribute
@@ -1775,9 +1778,10 @@ public class Element implements Serializable, Cloneable {
 
         // Reference to content list and attribute lists are copyed by 
         // super.clone() so we set it new lists if the original had lists
-        element.content = (this.content == null) ? null : new LinkedList();
-        element.attributes = (this.attributes == null) ?
-                                                   null : new LinkedList();
+        element.content = (this.content == null) ? null :
+                                  new ArrayList(INITIAL_ARRAY_SIZE);
+        element.attributes = (this.attributes == null) ? null :
+                                  new ArrayList(INITIAL_ARRAY_SIZE);
 
         // Cloning attributes
         if (attributes != null) {
@@ -1820,7 +1824,7 @@ public class Element implements Serializable, Cloneable {
         // Handle additional namespaces
         if (additionalNamespaces != null) {
             element.additionalNamespaces =
-                (LinkedList) additionalNamespaces.clone();
+                (ArrayList) additionalNamespaces.clone();
         }
 
         return element;
@@ -1994,7 +1998,7 @@ public class Element implements Serializable, Cloneable {
         // another attribute prefix or this element's prefix
 
         if (attributes == null) {
-            attributes = new LinkedList();
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         attributes.add(attribute);

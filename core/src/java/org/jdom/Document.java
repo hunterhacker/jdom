@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.40 2001/05/08 22:23:55 jhunter Exp $
+ $Id: Document.java,v 1.41 2001/05/24 08:57:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,9 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.40 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.41 $ $Date: 2001/05/24 08:57:17 $ $Name:  $";
+
+    private static final int INITIAL_ARRAY_SIZE = 5;
 
     /**
      * This <code>Document</code>'s
@@ -81,7 +83,7 @@ public class Document implements Serializable, Cloneable {
      *   <code>{@link ProcessingInstruction}</code>s and
      *   the root <code>{@link Element}</code>
      */
-    protected List content = new LinkedList();
+    protected List content = new ArrayList(INITIAL_ARRAY_SIZE);
 
     /** The <code>{@link DocType}</code> declaration */
     protected DocType docType;
@@ -358,7 +360,7 @@ public class Document implements Serializable, Cloneable {
         // Save original content and create a new list
         Element oldRoot = getRootElement();
         List oldContent = content;
-        content = new LinkedList();
+        content = new ArrayList(INITIAL_ARRAY_SIZE);
 
         RuntimeException ex = null;
         boolean didRoot = false;
@@ -527,7 +529,7 @@ public class Document implements Serializable, Cloneable {
 
         // The clone has a reference to this object's content list, so
         // owerwrite with a empty list
-        doc.content = new LinkedList();
+        doc.content = new ArrayList(INITIAL_ARRAY_SIZE);
 
         // Add the cloned content to clone
 
