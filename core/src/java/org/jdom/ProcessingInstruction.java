@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: ProcessingInstruction.java,v 1.38 2003/05/05 07:24:00 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.39 2003/05/05 07:41:18 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -65,7 +65,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.38 $, $Date: 2003/05/05 07:24:00 $
+ * @version $Revision: 1.39 $, $Date: 2003/05/05 07:41:18 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -73,8 +73,8 @@ import java.util.*;
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.38 $ $Date: 2003/05/05 07:24:00 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.39 $ $Date: 2003/05/05 07:41:18 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -170,7 +170,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * This detaches the PI from its parent, or does nothing if the
      * PI has no parent.
      *
-     * @return <code>ProcessingInstruction</code> - this 
+     * @return <code>ProcessingInstruction</code> - this
      * <code>ProcessingInstruction</code> modified.
      */
     public ProcessingInstruction detach() {
@@ -338,7 +338,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction setValue(String name,
                                           String value) {
-        return setPseudoAttributeValue(name, value);
+        return setPseudoAttribute(name, value);
     }
 
     /**
@@ -350,8 +350,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @param value <code>String</code> value for pair.
      * @return <code>ProcessingInstruction</code> this PI modified.
      */
-    public ProcessingInstruction setPseudoAttributeValue(String name,
-                                                         String value) {
+    public ProcessingInstruction setPseudoAttribute(String name, String value) {
         String reason = Verifier.checkProcessingInstructionData(name);
         if (reason != null) {
             throw new IllegalDataException(name, reason);
@@ -377,12 +376,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         instruction was removed.
      */
     public boolean removeValue(String name) {
-        if ((mapData.remove(name)) != null) {
-            rawData = toString(mapData);
-            return true;
-        }
-
-        return false;
+        return removePseudoAttribute(name);
     }
 
     /**
@@ -391,7 +385,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>boolean</code> - whether the requested
      *         instruction was removed.
      */
-    public boolean removePseudoAttributeValue(String name) {
+    public boolean removePseudoAttribute(String name) {
         if ((mapData.remove(name)) != null) {
             rawData = toString(mapData);
             return true;
@@ -433,7 +427,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     private Map parseData(String rawData) {
         // The parsing here is done largely "by hand" which means the code
-        // gets a little tricky/messy.  The following conditions should 
+        // gets a little tricky/messy.  The following conditions should
         // now be handled correctly:
         //   <?pi href="http://hi/a=b"?>        Reads OK
         //   <?pi href = 'http://hi/a=b' ?>     Reads OK
@@ -556,7 +550,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
         return null;
     }
-    
+
     /**
      * This returns a <code>String</code> representation of the
      * <code>ProcessingInstruction</code>, suitable for debugging. If the XML
@@ -600,7 +594,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /**
      * This will return a clone of this <code>ProcessingInstruction</code>.
      *
-     * @return <code>Object</code> - clone of this 
+     * @return <code>Object</code> - clone of this
      * <code>ProcessingInstruction</code>.
      */
     public Object clone() {
