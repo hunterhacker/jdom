@@ -1130,67 +1130,6 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     * This will handle printing out an <code>{@link Attribute}</code> list.
-     * </p>
-     *
-     * @param attributes <code>List</code> of Attribute objcts
-     * @param out <code>Writer</code> to write to
-     */
-    protected void printAttributes(List attributes, Element parent, 
-                                   Writer out) throws IOException {
-
-        // I do not yet handle the case where the same prefix maps to
-        // two different URIs. For attributes on the same element
-        // this is illegal; but as yet we don;t throw an exception
-        // if someone tries to do this
-        Set prefixes = new HashSet();
-
-        for (int i=0, size=attributes.size(); i < size; i++) {
-            Attribute attribute = (Attribute)attributes.get(i);
-            Namespace ns = attribute.getNamespace();
-            if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
-                if (!prefixes.contains(ns.getPrefix())) {
-                    prefixes.add(ns.getPrefix());
-                    boolean printedNamespace = false;
-                    Element ancestor = parent;
-                    while (ancestor != null) {
-                        Namespace ancestorSpace = ancestor.getNamespace();
-                        if (ancestorSpace == Namespace.NO_NAMESPACE) continue;
-                        if (ancestorSpace == Namespace.XML_NAMESPACE) continue;
-                        String uri    = ancestorSpace.getURI();
-                        String prefix = ancestorSpace.getPrefix();
-                        if (uri.equals(ns.getURI())) {
-                            if (prefix.equals(ns.getPrefix())) {
-                                printedNamespace = true;
-                                break;
-                            }
-                        }
-                        else { // different URI
-                            if (prefix.equals(ns.getPrefix())) {
-                               // Different URI, but same prefix; 
-                               // prefix has been redeclared; therefore we must
-                               // redeclare
-                               break;
-                             }
-                        }
-                        ancestor = ancestor.getParent();             
-                    }            
-                    if (!printedNamespace) printNamespace(attribute.getNamespace(), out);
-                }
-            }
-            
-            out.write(" ");
-            out.write(attribute.getQualifiedName());
-            out.write("=");
-
-            out.write("\"");
-            out.write(escapeAttributeEntities(attribute.getValue()));
-            out.write("\"");
-        }   
-    }
-
-    /**
-     * <p>
      * This will take the five pre-defined entities in XML 1.0 and
      *   convert their character representation to the appropriate
      *   entity reference, suitable for XML attributes.
