@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.31 2001/03/16 23:39:42 jhunter Exp $
+ $Id: Document.java,v 1.32 2001/04/11 05:17:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -485,7 +485,8 @@ public class Document implements Serializable, Cloneable {
                 throw new IllegalAddException(
                     "A Document may directly contain only objects of type " +
                     "Element, Comment, and ProcessingInstruction: " +
-                    obj.getClass().getName() + " not allowed");
+                    (obj == null ? "null" : obj.getClass().getName()) + 
+                    " is not allowed");
             }
         }
 

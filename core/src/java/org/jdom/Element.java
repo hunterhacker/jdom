@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.63 2001/04/04 00:42:58 jhunter Exp $
+ $Id: Element.java,v 1.64 2001/04/11 05:17:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -800,7 +800,8 @@ public class Element implements Serializable, Cloneable {
                 throw new IllegalAddException(
                     "An Element may directly contain only objects of type " +
                     "String, Element, Comment, CDATA, Entity, and " + 
-                    "ProcessingInstruction: " + obj.getClass().getName() +
+                    "ProcessingInstruction: " +
+                    (obj == null ? "null" : obj.getClass().getName()) + 
                     " is not allowed");
             }
         }
