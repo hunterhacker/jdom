@@ -18,9 +18,6 @@ Items that need to be done:
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
   necessary.  Consider using LinkedHashMap from JPDA to preserve attrib order.
 
-* Add new Document(List) constructor, to help putting things before a root
-  Also new Element(List) for consistency.
-
 * Shouldn't Attribute(String name, String prefix, String uri, String value)
   be Attribute(String name, String value, String prefix, String uri)?
 
@@ -28,28 +25,19 @@ Items that need to be done:
   public String getAttributeValue(String name, String default)
   public String getAttributeValue(String name, Namespace ns, String default)
 
-* Change adapters to support creating a Document with a DOCTYPE, to allow 
-  DOMBuilder to set the DOCTYPE on a built document
-
 * Fix bug where addNamespaceDeclaration() doesn't check for conflicts with the
   same prefix already existing on the element or being the document's prefix
   already
 
-* Shouldn't there be a removeNamespaceDeclaration(Namespace)?
-
-* Shouldn't addNamespaceDeclaration() have a name to match
-  getAdditionalNamespaces().
-
 * Examine if it's worth doing an intern() on element and attribute names,
-  of if it's too much to pay since SAX is likely doing it already
+  or if it's too much to pay since SAX is likely doing it already
   http://www.megginson.com/SAX/Java/features.html
   Probably turn off SAX interning and do it ourselves?
 
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
 
-* Consider enhancing SAXBuilder to use filters per
-  http://www.megginson.com/SAX/Java/filters.html
-  That would let someone remove surrounding whitespace and other fancy things.
+* Consider providing a SAX XMLFilter that would let someone remove 
+  surrounding whitespace and other fancy things.
   We should probably respect xml:space.
 
 * Consider visitor pattern (again, just to be sure)
@@ -129,8 +117,7 @@ Items that need to be done:
   opposite way and disallow creating docs without roots, thus enforcing the
   rule that JDOM only creates well-formed docs and docs are well-formed from
   the beginning.  That makes sense to me, actually.  The builders can create a
-  List and then at the end assign it as the doc's mixed content.  Wonder if we
-  should have a Document(List) constructor?  Prob'ly not.
+  List and then at the end assign it as the doc's mixed content.
 
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
@@ -311,3 +298,7 @@ Items that need to be done:
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
   by Bob to help with XPath.)
+
+* Shouldn't addNamespaceDeclaration() have a name to match
+  getAdditionalNamespaces().
+
