@@ -1,0 +1,15 @@
+The following people are committers on the "jdom-contrib" module, listed
+alphabetically by last name.
+
+DO NOT WRITE THESE PEOPLE FOR TECH SUPPORT.  THEY WILL NOT ANSWER.
+WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
+
+Alex Chaffee <guru@edamame.stinky.com>
+James Davies <J.Davies@jacobus.co.uk>
+Jools Enticknap <jools@jools.org>
+Elliotte Rusty Harold <elharo@metalab.unc.edu>
+Michael Hinchey <michael.hinchey@inference.com>
+Jason Hunter <jhunter@jdom.org>
+Brett McLaughlin <brett@jdom.org>
+Wolfgang Werner <wwerner@picturesafe.de>
+
