@@ -106,7 +106,7 @@ public class Element implements Serializable, Cloneable {
      * simply calling super() (or letting the compiler add the implicit 
      * super() call) will not initialize the instance variables which will 
      * cause many of the methods to throw a 
-     * <code>{@link NullPointerException>}</code>.  Therefor, the 
+     * <code>NullPointerException</code>.  Therefore, the 
      * constructor for these subclasses should call one of the public 
      * constructors so variable initialization is handled automatically.
      * </p>
