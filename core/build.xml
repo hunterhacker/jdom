@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.42 2003/04/04 04:16:27 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.43 2003/04/05 00:33:23 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -173,7 +173,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
-  <target name="samples" depends="prepare-samples,compile"
+  <target name="samples" depends="prepare-samples,package"
           description="Compiles the samples directory">
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
