@@ -824,9 +824,13 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addContent(Element element) {
         if (element.isRootElement()) {
-            throw new IllegalAddException(element, this);
+            throw new IllegalAddException(this, element,
+                "The element already has an existing parent " +
+                "(the document root)");
         } else if (element.getParent() != null) {
-            throw new IllegalAddException(element, this);
+            throw new IllegalAddException(this, element,
+                "The element already has an existing parent \"" +
+                element.getParent().getQualifiedName() + "\"");
         }
 
         if (content == null) {
@@ -1131,8 +1135,8 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addAttribute(Attribute attribute) {
         if (getAttribute(attribute.getName(), attribute.getNamespace()) != null) {
-            throw new IllegalAddException(attribute, this,
-                                          "Duplicate attributes are not allowed.");
+            throw new IllegalAddException(
+                this, attribute, "Duplicate attributes are not allowed.");
         }
 
         if (attributes == null) {

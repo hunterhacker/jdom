@@ -375,9 +375,7 @@ public class Document implements Serializable, Cloneable {
     public Document addContent(Element element) {
         if (getRootElement() != null) {
             throw new IllegalAddException(
-                "The element " + element.getQualifiedName() + 
-                " could not be added to the document because the" +
-                " document already has a root element");
+                this, element, "The document already has a root element");
         }
         setRootElement(element);
 

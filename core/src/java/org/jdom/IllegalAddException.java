@@ -61,16 +61,16 @@ public class IllegalAddException extends IllegalArgumentException {
      *   is illegal.
      * </p>
      *
-     * @param attribute <code>Attribute</code> that could not be added
-     * @param element <code>Element</code> that <code>Attribute</code>
-     *        couldn't be added to.
+     * @param base <code>Element</code> that <code>Attribute</code>
+     *        couldn't be added to
+     * @param added <code>Attribute</code> that could not be added
      */
-    public IllegalAddException(Attribute attribute, Element element, String reason) {
+    public IllegalAddException(Element base, Attribute added, String reason) {
         super(new StringBuffer()
               .append("The attribute \"")
-              .append(attribute.getQualifiedName())
+              .append(added.getQualifiedName())
               .append("\" could not be added to the element \"")
-              .append(element.getQualifiedName())
+              .append(base.getQualifiedName())
               .append("\": ")
               .append(reason)
               .toString());
@@ -83,21 +83,35 @@ public class IllegalAddException extends IllegalArgumentException {
      *   supplied as a child of the supplied parent is not allowed.
      * </p>
      *
-     * @param element <code>Element</code> that could not be added
-     * @param parent <code>Element</code> that the child
-     *        couldn't be added to.
+     * @param base <code>Element</code> that the child
+     *        couldn't be added to
+     * @param added <code>Element</code> that could not be added
      */
-    public IllegalAddException(Element element, Element parent) {
+    public IllegalAddException(Element base, Element added, String reason) {
         super(new StringBuffer()
-              .append("The element ")
-              .append(element.getQualifiedName())
-              .append(" could not be added as a child of ")
-              .append(parent.getQualifiedName())
-              .append(" because it already has an existing parent (")
-              .append((element.isRootElement() ?
-                  "document root" :
-                  element.getParent().getQualifiedName()))
-              .append(").")
+              .append("The element \"")
+              .append(added.getQualifiedName())
+              .append("\" could not be added as a child of \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Element}</code>
+     *   supplied as a child of the document is not allowed.
+     * </p>
+     *
+     */
+    public IllegalAddException(Document base, Element added, String reason) {
+        super(new StringBuffer()
+              .append("The element \"")
+              .append(added.getQualifiedName())
+              .append("\" could not be added as the root of the document: ")
+              .append(reason)
               .toString());
     }
 
@@ -108,7 +122,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * </p>
      *
      */
-    public IllegalAddException(String msg) {
-        super(msg);
+    public IllegalAddException(String reason) {
+        super(reason);
     }
 }
