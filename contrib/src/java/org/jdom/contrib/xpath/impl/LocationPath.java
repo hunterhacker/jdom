@@ -1,80 +1,97 @@
 
 package org.jdom.contrib.xpath.impl;
 
-import org.jdom.contrib.xpath.XPathExpr;
-import org.jdom.contrib.xpath.Context;
-
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Iterator;
 
-public class LocationPath extends PathExpr
-{
+import org.jdom.contrib.xpath.XPathExpr;
+import org.jdom.contrib.xpath.Context;
+import org.jdom.contrib.xpath.NodeSet;
+import org.jdom.contrib.xpath.XPathParseException;
+
+/**
+ * XPath location path contains a number of steps and if the path is absolute.
+ *
+ * @author Bob
+ * @author Michael Hinchey
+ * @version 1.0
+ */
+public class LocationPath extends PathExpr {
 
   // ----------------------------------------
   // Private members
-  
+
   private boolean _isAbsolute   = false;
-  private Vector  _steps        = new Vector();
+
+  /**
+   * Ordered list of {@link Step}s.
+   */
+  private ArrayList  _steps        = new ArrayList();
 
 
   // ----------------------------------------
   // Methods members
 
-  public LocationPath()
-  {
+  public LocationPath() {
   }
 
-  public void isAbsolute(boolean isAbsolute)
-  {
+  /**
+   * For debugging.
+   */
+  public String toString() {
+    return "[LocationPath: " + _steps + "]";
+  }
+
+  public void isAbsolute(boolean isAbsolute) {
     _isAbsolute = isAbsolute;
+    if (_steps.size() == 1) {
+      // set the first step to be absolute
+      ((Step) _steps.get(0)).setAbsolute(isAbsolute);
+    }
   }
 
-  public boolean isAbsolute()
-  {
+  public boolean isAbsolute() {
     return _isAbsolute;
   }
 
-  public void addStep(Step step)
-  {
+  public void addStep(Step step) {
     _steps.add(step);
+    if (_steps.size() == 1) {
+      // set the first step to be absolute
+      step.setAbsolute(_isAbsolute);
+    }
   }
 
-  public Object apply(Context context)
-  {
-    Object result = null;
-
-    Iterator stepIter = _steps.iterator();
-    Iterator resultIter = null;
-
-    Context current = null;
-    Step step = null;
-
-    List results = new Vector();
-    List tmpResults = null;
-    List nextResults = null;
-
+  public Object apply(Context context) {
+    List results = new ArrayList();
     results.add(context);
 
-    while (stepIter.hasNext())
-    {
-      step = (Step) stepIter.next();
-
-      resultIter = results.iterator();
-      tmpResults = new Vector();
-
-      while (resultIter.hasNext())
-      {
-        current = (Context) resultIter.next();
-        
-        tmpResults.addAll(current.walkStep(step.getAxis(),
-                                           step.getNodeTest()));
-      }
-
-      results = tmpResults;
+    for (Iterator iter = _steps.iterator(); iter.hasNext(); ) {
+      Step step = (Step) iter.next();
+      results = forEachWalkStep(results, step);
     }
-
     return results;
+  }
+
+  private List forEachWalkStep(List nodeSet, Step step) {
+    List result = new ArrayList();
+    for (Iterator iter = nodeSet.iterator(); iter.hasNext(); ) {
+      Context each = (Context) iter.next();
+
+      result.addAll(each.walkStep(step));
+    }
+    return result;
+  }
+
+  /**
+   * Apply self to given nodeset, to which modifications may apply.
+   */
+  public void apply(NodeSet nodeset) throws XPathParseException {
+    for (Iterator iter = _steps.iterator(); iter.hasNext(); ) {
+      Step step = (Step) iter.next();
+      step.apply(nodeset);
+    }
   }
 
 }

@@ -1,44 +1,97 @@
 
 package org.jdom.contrib.xpath.impl;
 
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
-public class Step
-{
-  // ----------------------------------------
-  // Private members
+import org.jdom.contrib.xpath.NodeSet;
+import org.jdom.contrib.xpath.XPathParseException;
 
-  private String _axis         = null;
-  private String _nodeTest     = null;
-  private Vector _predicates   = new Vector();
+/**
+ * A single step in an xpath.
+ *
+ * @author Bob
+ * @author Michael Hinchey
+ * @version 1.0
+ */
+public class Step extends XPathExprImpl {
 
-  // ----------------------------------------
-  // Methods
+  private boolean isAbsolute = false;
+  private Axis axis;
+  private Nodetype nodetype;
+  private String prefix;
+  private String localName;
+  private List predicates = new ArrayList();
 
-  public Step(String nodeTest)
-  {
-    _nodeTest = nodeTest;
+  /**
+   * Constructor
+   * @param axis Null means child.
+   * @param nodetype Null means node.
+   * @param prefix Namespace prefix or null.
+   * @param localName Null or '*' means ALL.
+   */
+  public Step(String axis, String nodetype, String prefix, String localName) {
+    this.axis = new Axis(axis);
+    this.nodetype = new Nodetype(nodetype);
+    this.prefix = prefix;
+    this.localName = localName;
   }
 
-  public Step(String axis,
-              String nodeTest)
-  {
-    _axis = axis;
-    _nodeTest = nodeTest;
+  /**
+   * For debugging.
+   */
+  public String toString() {
+    return "[Step: " + (isAbsolute ? "/" : "")
+      + axis + nodetype + prefix + ":" + localName + "]";
   }
 
-  public void addPredicate(Predicate pred)
-  {
-    _predicates.add(pred);
+  public void setAbsolute(boolean isAbsolute) {
+    this.isAbsolute = isAbsolute;
   }
 
-  public String getNodeTest()
-  {
-    return _nodeTest;
+  public boolean isAbsolute() {
+    return isAbsolute;
   }
 
-  public String getAxis()
-  {
-    return _axis;
+  public void addPredicate(Predicate pred) {
+    predicates.add(pred);
   }
+
+  public Axis getAxis() {
+    return axis;
+  }
+
+  public Nodetype getNodetype() {
+    return nodetype;
+  }
+
+  public String getPrefix() {
+    return prefix;
+  }
+
+  public String getLocalName() {
+    return localName;
+  }
+
+  public List getPredicates() {
+    return predicates;
+  }
+
+  /**
+   * Apply self to given nodeset, to which modifications may apply.
+   */
+  public void apply(NodeSet nodeset) throws XPathParseException {
+    System.out.println("before nodetest: " + nodeset);
+    nodeset.applyNodetest(this);
+    System.out.println("after nodetest: " + nodeset);
+
+    // apply predicates
+    for (Iterator iter = predicates.iterator(); iter.hasNext(); ) {
+      Predicate each = (Predicate) iter.next();
+      nodeset.applyPredicate(each);
+      System.out.println("after " + each + ": " + nodeset);
+    }
+  }
+
 }
