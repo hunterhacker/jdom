@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.80 2004/02/17 02:29:23 jhunter Exp $
+ $Id: Document.java,v 1.81 2004/02/19 05:44:57 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.80 $, $Date: 2004/02/17 02:29:23 $
+ * @version $Revision: 1.81 $, $Date: 2004/02/19 05:44:57 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.80 $ $Date: 2004/02/17 02:29:23 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.81 $ $Date: 2004/02/19 05:44:57 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -711,7 +711,8 @@ public class Document implements Parent {
 
     /**
      * Assigns an arbitrary object to be associated with this document under
-     * the given "id" string.  Null values are permitted.
+     * the given "id" string.  Null values are permitted.  Strings beginning
+     * with "http://www.jdom.org/ are reserved for JDOM use.
      *
      * @param id     the id of the stored object
      * @param value  the object to store
