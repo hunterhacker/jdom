@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.72 2001/04/24 23:33:10 jhunter Exp $
+ $Id: Element.java,v 1.73 2001/04/27 23:11:59 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.72 $ $Date: 2001/04/24 23:33:10 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.73 $ $Date: 2001/04/27 23:11:59 $ $Name:  $";
 
     /** The local name of the <code>Element</code> */
     protected String name;
@@ -779,7 +779,8 @@ public class Element implements Serializable, Cloneable {
      * @return a <code>List</code> containing the mixed content of the
      *         element: may contain <code>String</code>,
      *         <code>{@link Element}</code>, <code>{@link Comment}</code>,
-     *         <code>{@link ProcessingInstruction}</code>, and 
+     *         <code>{@link ProcessingInstruction}</code>,
+     *         <code>{@link CDATA}</code>, and
      *         <code>{@link Entity}</code> objects.
      */
     public List getMixedContent() {
