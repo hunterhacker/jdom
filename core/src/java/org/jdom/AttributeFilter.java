@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AttributeFilter.java,v 1.1 2001/12/11 07:32:03 jhunter Exp $
+ $Id: AttributeFilter.java,v 1.2 2001/12/19 04:49:36 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -87,7 +87,11 @@ final class AttributeFilter implements Filter {
      * @param parent The parent element reference.
      */
     AttributeFilter(Element parent) {
-        this(parent, null, null);
+        //this(parent, null, null);
+        // Some JDK 1.1.x compilers choke on the above
+        this.parent = parent;
+        this.name   = null;
+        this.ns     = null;
     }    
 
     /**
