@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.2 2001/03/28 18:35:23 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.3 2001/04/03 19:34:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -252,7 +252,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             element = new Element(localName, elementNamespace);
 
             // Remove this namespace from those in the temp declared list
-            declaredNamespaces.remove(elementNamespace);
+            if (declaredNamespaces.size() > 0) {
+                declaredNamespaces.remove(elementNamespace);
+            }
 
             // It's now in available scope
             availableNamespaces.addFirst(elementNamespace);
@@ -392,7 +394,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
 
         // Remove the namespaces that this element makes available
-        availableNamespaces.remove(element.getAdditionalNamespaces());
+        List addl = element.getAdditionalNamespaces();
+        if (addl.size() > 0) {
+            availableNamespaces.remove(addl);
+        }
     }
 
     /**
