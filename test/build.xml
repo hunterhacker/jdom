@@ -132,6 +132,12 @@ These are the meaningful targets for this build file:
              token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
     <replace dir="${build.src}" includes="org/**"
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
+    <!-- The following replace handles the "import java.util.*" case by    -->
+    <!-- adding an "import com.sun.java.util.collections.*" after it.      -->
+    <!-- BTW, \u000a is the Unicode escape for a new line. (jhunter)       -->
+    <replace dir="${build.src}" includes="org/**"
+             token="java.util.*"
+             value="java.util.*;\u000aimport ${coll.import}.*"/>
   </target>
 
   <!-- =================================================================== -->
@@ -151,7 +157,7 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="collections">
+  <target name="compile" depends="prepare-src,collections">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
