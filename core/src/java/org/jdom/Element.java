@@ -96,7 +96,7 @@ public class Element implements Serializable, Cloneable {
     protected List attributes;
     
     /** The mixed content of the <code>Element</code> */
-    protected List content;
+    protected LinkedList content;
     
     /*
      * XXX: We may want to build in a "cache" with the child elements -
@@ -881,11 +881,10 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content.size() > 0) {
-            int lastIndex = content.size() - 1;
-            Object ob = content.get(lastIndex);
+            Object ob = content.getLast();
             if (ob instanceof String) {
                 text = (String)ob + text;
-                content.remove(lastIndex);
+                content.removeLast();
             }
         }
         content.add(text);
