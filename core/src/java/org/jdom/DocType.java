@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.26 2003/05/20 21:53:59 jhunter Exp $
+ $Id: DocType.java,v 1.27 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,12 +62,12 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.26 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.27 $, $Date: 2004/02/06 03:39:03 $
  */
-public class DocType implements Child {
+public class DocType extends Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.26 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.27 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -77,9 +77,6 @@ public class DocType implements Child {
 
     /** The system ID of the DOCTYPE */
     protected String systemID;
-
-    /** The document having this DOCTYPE */
-    protected Document parent;
 
     /** The internal subset of the DOCTYPE */
     protected String internalSubset;
@@ -236,28 +233,6 @@ public class DocType implements Child {
         return this;
     }
 
-    public Child detach() {
-        if (parent != null) {
-            parent.removeContent(this);
-        }
-        return this;
-    }
-
-    /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this DocType, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this DocType, or null.
-     */
-    public Document getDocument() {
-        return parent;
-    }
-
-    public Parent getParent() {
-        return parent;
-    }
-
     /**
      * Returns the empty string since doctypes don't have an XPath
      * 1.0 string value.
@@ -265,17 +240,6 @@ public class DocType implements Child {
      */
     public String getValue() {
         return "";  // doctypes don't have an XPath string value
-    }
-
-    /**
-     * This sets the <code>{@link Document}</code> holding this doctype.
-     *
-     * @param parent parent document holding this doctype
-     * @return <code>Document</code> this <code>DocType</code> modified
-     */
-    protected DocType setParent(Document parent) {
-        this.parent = parent;
-        return this;
     }
 
     /**
@@ -335,24 +299,4 @@ public class DocType implements Child {
         return super.hashCode();
     }
 
-    /**
-     * This will return a clone of this <code>DocType</code>.
-     *
-     * @return <code>Object</code> - clone of this <code>DocType</code>.
-     */
-    public Object clone() {
-        DocType docType = null;
-
-        try {
-            docType = (DocType) super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
-
-        docType.parent = null;
-
-        // elementName, publicID, and systemID are all immutable 
-        // (Strings) and references are copied by Object.clone()
-        return docType;
-    }
 }

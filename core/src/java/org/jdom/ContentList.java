@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.31 2004/02/05 09:35:56 jhunter Exp $
+ $Id: ContentList.java,v 1.32 2004/02/06 03:39:02 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,15 +72,15 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.31 $, $Date: 2004/02/05 09:35:56 $
+ * @version $Revision: 1.32 $, $Date: 2004/02/06 03:39:02 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
  */
-class ContentList extends AbstractList implements java.io.Serializable {
+final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.31 $ $Date: 2004/02/05 09:35:56 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.32 $ $Date: 2004/02/06 03:39:02 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -99,28 +99,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
 
     /** Our backing list */
 //    protected ArrayList list;
-    private Object elementData[];
+    private Child elementData[];
     private int size;
 
     /** Document or Element this list belongs to */
-    private Object parent;
+    private Parent parent;
 
     /** Force either a Document or Element parent */
-    private ContentList() { }
-
-    /**
-     * Create a new instance of the ContentList representing
-     * Document content
-     */
-    ContentList(Document document) {
-        this.parent = document;
-    }
-
-    /**
-     * Create a new instance of the ContentList representing
-     * Element content
-     */
-    ContentList(Element parent) {
+    ContentList(Parent parent) {
         this.parent = parent;
     }
 
@@ -134,33 +120,15 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
     public void add(int index, Object obj) {
-        if (obj instanceof Element) {
-            add(index, (Element) obj);
+        if (obj == null) {
+            throw new IllegalAddException("Cannot add null object");
         }
-        else if (obj instanceof Text) {
-            add(index, (Text) obj);
-        }
-        else if (obj instanceof Comment) {
-            add(index, (Comment) obj);
-        }
-        else if (obj instanceof ProcessingInstruction) {
-            add(index, (ProcessingInstruction) obj);
-        }
-        else if (obj instanceof EntityRef) {
-            add(index, (EntityRef) obj);
-        }
-        else if (obj instanceof DocType) {
-            add(index, (DocType) obj);
-        }
-        else {
-            if (obj == null) {
-                throw new IllegalAddException("Cannot add null object");
-            }
-            else {
-                throw new IllegalAddException("Class " +
-                             obj.getClass().getName() +
-                             " is of unrecognized type and cannot be added");
-            }
+        if ((obj instanceof Child)) {
+            add(index, (Child) obj);
+        } else {
+            throw new IllegalAddException("Class " +
+                         obj.getClass().getName() +
+                         " is of unrecognized type and cannot be added");
         }
     }
 
@@ -169,35 +137,36 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * the given index.
      *
      * @param index index where to add <code>Element</code>
-     * @param element <code>Element</code> to add
+     * @param child <code>Element</code> to add
      */
-    void add(int index, Element element) {
-        if (element == null) {
+    void add(int index, Child child) {
+        if (child == null) {
             throw new IllegalAddException("Cannot add null object");
         }
+        parent.canContain(child, index);
 
-        if (element.getParent() != null) {
-            Parent p = element.getParent();
+        if (child.getParent() != null) {
+            Parent p = child.getParent();
             if (p instanceof Document) {
-                throw new IllegalAddException(element,
-                        "The element is the root element of another document");
+                throw new IllegalAddException((Element)child,
+                   "The Child already has an existing parent document");
             }
             else {
                 throw new IllegalAddException(
-                     "The element already has an existing parent \"" +
+                     "The Child already has an existing parent \"" +
                      ((Element)p).getQualifiedName() + "\"");
             }
         }
 
-        if (element == parent) {
+        if (child == parent) {
             throw new IllegalAddException(
-                "The element cannot be added to itself");
+                "The Element cannot be added to itself");
         }
 
-        if ((parent instanceof Element) &&
-                ((Element) parent).isAncestor(element)) {
+        if ((parent instanceof Element && child instanceof Element) &&
+                ((Element) parent).isAncestor((Element)child)) {
             throw new IllegalAddException(
-                "The element cannot be added as a descendent of itself");
+                "The Element cannot be added as a descendent of itself");
         }
 
         if (index<0 || index>size) {
@@ -205,301 +174,14 @@ class ContentList extends AbstractList implements java.io.Serializable {
                                                 " Size: " + size());
         }
 
-        if (parent instanceof Document) {
-            if (indexOfFirstElement() >= 0) {
-                throw new IllegalAddException(
-                  "Cannot add a second root element, only one is allowed");
-            }
-            if (indexOfDocType() > index) {
-                throw new IllegalAddException(
-                        "A root element cannot be added before the DocType");
-            }
-            element.setParent((Document) parent);
-        }
-        else {
-            element.setParent((Element) parent);
-        }
+        child.setParent(parent);
 
         ensureCapacity(size+1);
         if( index==size ) {
-            elementData[size++] = element;
+            elementData[size++] = child;
         } else {
             System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = element;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>Element</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>Element</code>
-     * @param doctype <code>DocType</code> to add
-     */
-    void add(int index, DocType doctype) {
-        if (doctype == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (doctype.getParent() != null) {
-            throw new IllegalAddException(doctype,
-                               "The doctype already has an existing document");
-        }
-
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        if (parent instanceof Element) {
-            throw new IllegalAddException(
-                    "A DocType is not allowed except at the document level");
-        }
-
-        int firstElt = indexOfFirstElement();
-        if (firstElt != -1 && firstElt < index) {
-            throw new IllegalAddException(
-                    "A DocType cannot be added after the root element");
-        }
-
-        if (parent instanceof Document) {
-            if (indexOfDocType() >= 0) {
-                throw new IllegalAddException(
-                        "Cannot add a second doctype, only one is allowed");
-            }
-            doctype.setParent((Document) parent);
-        }
-
-        ensureCapacity(size + 1);
-        if (index == size) {
-            elementData[size++] = doctype;
-        }
-        else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = doctype;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>Comment</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>Comment</code>
-     * @param comment <code>Comment</code> to add
-     */
-    void add(int index, Comment comment) {
-        if (comment == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (comment.getParent() != null) {
-            Parent p = comment.getParent();
-            if (p instanceof Document) {
-                throw new IllegalAddException(comment,
-                        "The comment is already attached to a document");
-            }
-            else {
-                throw new IllegalAddException(
-                     "The comment already has an existing parent \"" +
-                     ((Element)p).getQualifiedName() + "\"");
-            }
-        }
-
-        if (index<0 || index>size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        // XXX We can simplify this
-        if (parent instanceof Document) {
-            comment.setParent((Document) parent);
-        }
-        else {
-            comment.setParent((Element) parent);
-        }
-
-        ensureCapacity(size+1);
-        if( index==size ) {
-            elementData[size++] = comment;
-        } else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = comment;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>ProcessingInstruction</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>ProcessingInstruction</code>
-     * @param pi <code>ProcessingInstruction</code> to add
-     */
-    void add(int index, ProcessingInstruction pi) {
-        if (pi == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (pi.getParent() != null) {
-            Parent p = pi.getParent();
-            if (p instanceof Document) {
-                throw new IllegalAddException(
-                        "The PI is already attached to a document");
-            }
-            else {
-                throw new IllegalAddException(
-                          "The PI already has an existing parent \"" +
-                          ((Element)p).getQualifiedName() + "\"");
-            }
-        }
-
-        if (index<0 || index>size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        // XXX We can simplify this
-        if (parent instanceof Document) {
-            pi.setParent((Document) parent);
-        }
-        else {
-            pi.setParent((Element) parent);
-        }
-
-        ensureCapacity(size+1);
-        if( index==size ) {
-            elementData[size++] = pi;
-        } else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = pi;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>CDATA</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>CDATA</code>
-     * @param cdata <code>CDATA</code> to add
-     */
-    void add(int index, CDATA cdata) {
-        if (cdata == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (parent instanceof Document) {
-            throw new IllegalAddException(
-                          "A CDATA is not allowed at the document root");
-        }
-
-        if (cdata.getParent() != null) {
-            throw new IllegalAddException(
-                       "The CDATA already has an existing parent \"" +
-                       ((Element)cdata.getParent()).getQualifiedName() + "\"");
-        }
-
-        if (index<0 || index>size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        cdata.setParent((Element) parent);
-
-        ensureCapacity(size+1);
-        if( index==size ) {
-            elementData[size++] = cdata;
-        } else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = cdata;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>Text</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>Text</code>
-     * @param text <code>Text</code> to add
-     */
-    void add(int index, Text text) {
-        if (text == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (parent instanceof Document) {
-            throw new IllegalAddException(
-                          "A Text not allowed at the document root");
-        }
-
-        if (text.getParent() != null) {
-            throw new IllegalAddException(
-                       "The Text already has an existing parent \"" +
-                       ((Element)text.getParent()).getQualifiedName() + "\"");
-        }
-
-        if (index<0 || index>size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        text.setParent((Element) parent);
-
-        ensureCapacity(size+1);
-        if( index==size ) {
-            elementData[size++] = text;
-        } else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = text;
-            size++;
-        }
-        modCount++;
-    }
-
-    /**
-     * Check and add the <code>EntityRef</code> to this list at
-     * the given index.
-     *
-     * @param index index where to add <code>Entity</code>
-     * @param entity <code>Entity</code> to add
-     */
-    void add(int index, EntityRef entity) {
-        if (entity == null) {
-            throw new IllegalAddException("Cannot add null object");
-        }
-
-        if (parent instanceof Document) {
-            throw new IllegalAddException(
-                        "An EntityRef is not allowed at the document root");
-        }
-
-        if (entity.getParent() != null) {
-            throw new IllegalAddException(
-                      "The EntityRef already has an existing parent \"" +
-                      ((Element)entity.getParent()).getQualifiedName() + "\"");
-        }
-
-        if (index<0 || index>size) {
-            throw new IndexOutOfBoundsException("Index: " + index +
-                                                " Size: " + size());
-        }
-
-        entity.setParent((Element) parent);
-
-        ensureCapacity(size+1);
-        if( index==size ) {
-            elementData[size++] = entity;
-        } else {
-            System.arraycopy(elementData, index, elementData, index + 1, size - index);
-            elementData[index] = entity;
+            elementData[index] = child;
             size++;
         }
         modCount++;
@@ -580,7 +262,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param collection The collection to use.
      */
     void clearAndSet(Collection collection) {
-        Object[] old = elementData;
+        Child[] old = elementData;
         int oldSize = size;
 
         elementData = null;
@@ -615,7 +297,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      */
     void ensureCapacity(int minCapacity) {
         if( elementData==null ) {
-            elementData = new Object[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
+            elementData = new Child[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
         } else {
             int oldCapacity = elementData.length;
             if (minCapacity > oldCapacity) {
@@ -623,7 +305,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
                 int newCapacity = (oldCapacity * 3)/2 + 1;
                 if (newCapacity < minCapacity)
                     newCapacity = minCapacity;
-                elementData = new Object[newCapacity];
+                elementData = new Child[newCapacity];
                 System.arraycopy(oldData, 0, elementData, 0, size);
             }
         }

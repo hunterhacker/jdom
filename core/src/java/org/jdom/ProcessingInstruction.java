@@ -1,6 +1,6 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.40 2003/05/20 21:53:59 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.41 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,16 +64,16 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.40 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.41 $, $Date: 2004/02/06 03:39:03 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
  */
 
-public class ProcessingInstruction implements Child {
+public class ProcessingInstruction extends Child {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.40 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.41 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -83,9 +83,6 @@ public class ProcessingInstruction implements Child {
 
     /** The data for the PI in name/value pairs */
     protected Map mapData;
-
-    /** Parent element, document, or null if none */
-    protected Parent parent;
 
     /**
      * Default, no-args constructor for implementations
@@ -140,19 +137,6 @@ public class ProcessingInstruction implements Child {
     }
 
     /**
-     * This will return the parent of this <code>ProcessingInstruction</code>.
-     * If there is no parent, then this returns <code>null</code>.
-     *
-     * @return parent of this <code>ProcessingInstruction</code>
-     */
-    public Parent getParent() {
-        if (parent instanceof Element) {
-            return (Element) parent;
-        }
-        return null;
-    }
-
-    /**
      * Returns the XPath 1.0 string value of this element, which is the
      * data of this PI.
      *
@@ -162,49 +146,6 @@ public class ProcessingInstruction implements Child {
         return rawData;
     }
 
-    /**
-     * <p>
-     * This will set the parent of this <code>ProcessingInstruction</code>.
-     * </p>
-     *
-     * @param parent <code>Element</code> to be new parent.
-     * @return this <code>ProcessingInstruction</code> modified.
-     */
-    protected ProcessingInstruction setParent(Parent parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    /**
-     * This detaches the PI from its parent, or does nothing if the
-     * PI has no parent.
-     *
-     * @return <code>ProcessingInstruction</code> - this
-     * <code>ProcessingInstruction</code> modified.
-     */
-    public Child detach() {
-        if (parent != null) {
-            parent.removeContent(this);
-        }
-        return this;
-    }
-
-    /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this PI, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this PI, or null.
-     */
-    public Document getDocument() {
-        if (parent instanceof Document) {
-            return (Document) parent;
-        }
-        if (parent instanceof Element) {
-            return ((Element)parent).getDocument();
-        }
-        return null;
-    }
 
     /**
      * This will retrieve the target of the PI.
@@ -593,26 +534,15 @@ public class ProcessingInstruction implements Child {
      * <code>ProcessingInstruction</code>.
      */
     public Object clone() {
-        ProcessingInstruction pi = null;
-
-        try {
-             pi = (ProcessingInstruction) super.clone();
-        } catch (CloneNotSupportedException ce) {
-             // Can't happen
-        }
+        ProcessingInstruction pi = (ProcessingInstruction) super.clone();
 
         // target and rawdata are immutable and references copied by
         // Object.clone()
-
-        // parent reference is copied by Object.clone(), so
-        // must set to null
-        pi.parent = null;
 
         // Create a new Map object for the clone (since Map isn't Cloneable)
         if (mapData != null) {
             pi.mapData = parseData(rawData);
         }
-
         return pi;
     }
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.74 2004/02/05 10:45:33 jhunter Exp $
+ $Id: Document.java,v 1.75 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.74 $, $Date: 2004/02/05 10:45:33 $
+ * @version $Revision: 1.75 $, $Date: 2004/02/06 03:39:03 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.74 $ $Date: 2004/02/05 10:45:33 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.75 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -676,5 +676,50 @@ public class Document implements Parent {
     public Document(List newContent, DocType docType) {
         setContent(newContent);
         setDocType(docType);
+    }
+
+    /**
+     * @see org.jdom.Parent#getDocument()
+     */
+    public Document getDocument() {
+        return this;
+    }
+
+    /**
+     * @see org.jdom.ContentList#add(int, org.jdom.Child)
+     */
+    public void canContain(Child child, int index) throws IllegalAddException {
+        if (child instanceof Element) {
+            if (child instanceof Element && content.indexOfFirstElement() >= 0) {
+                throw new IllegalAddException(
+                  "Cannot add a second root element, only one is allowed");
+            }
+            if (child instanceof Element && content.indexOfDocType() > index) {
+                throw new IllegalAddException(
+                        "A root element cannot be added before the DocType");
+            }
+        }
+        if (child instanceof DocType) {
+            if (content.indexOfDocType() >= 0) {
+                throw new IllegalAddException(
+                        "Cannot add a second doctype, only one is allowed");
+            }
+            int firstElt = content.indexOfFirstElement();
+            if (firstElt != -1 && firstElt < index) {
+                throw new IllegalAddException(
+                        "A DocType cannot be added after the root element");
+            }
+        }
+        if (child instanceof CDATA) {
+            throw new IllegalAddException("A CDATA is not allowed at the document root");
+        }
+
+        if (child instanceof Text) {
+            throw new IllegalAddException("A Text is not allowed at the document root");
+        }
+
+        if (child instanceof EntityRef) {
+            throw new IllegalAddException("An EntityRef is not allowed at the document root");
+        }
     }
 }

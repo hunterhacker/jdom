@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.139 2003/06/18 02:59:44 jhunter Exp $
+ $Id: Element.java,v 1.140 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.139 $, $Date: 2003/06/18 02:59:44 $
+ * @version $Revision: 1.140 $, $Date: 2004/02/06 03:39:03 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -78,10 +78,10 @@ import org.jdom.filter.*;
  * @author  Alex Rosen
  * @author  Bradley S. Huffman
  */
-public class Element implements Parent, Child {
+public class Element extends Child implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.139 $ $Date: 2003/06/18 02:59:44 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.140 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -387,16 +387,6 @@ public class Element implements Parent, Child {
     }
 
     /**
-     * Returns the parent of this element or null if unattached. The parent
-     * can be either a Document or Element.
-     *
-     * @return                     parent of this element
-     */
-    public Parent getParent() {
-        return parent;
-    }
-
-    /**
      * Returns the XPath 1.0 string value of this element, which is the
      * complete, ordered content of all text node descendants of this element
      * (i.e. the text that’s left after all references are resolved and all
@@ -415,34 +405,6 @@ public class Element implements Parent, Child {
             }
         }
         return buffer.toString();
-    }
-
-    /**
-     * Sets the parent of this element. The caller is responsible for removing
-     * any pre-existing parentage.
-     *
-     * @param  parent              new parent element
-     * @return                     the target element
-     */
-    protected Element setParent(Parent parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    /**
-     * Detaches the element from its element parent or document, or does nothing
-     * if the element has no parent.
-     *
-     * @return                     the target element
-     */
-    public Child detach() {
-        if (parent instanceof Element) {
-            parent.removeContent(this);
-        }
-        else if (parent instanceof Document) {
-            ((Document) parent).detachRootElement();
-        }
-        return this;
     }
 
     /**
@@ -474,23 +436,6 @@ public class Element implements Parent, Child {
 //        return -1;
 //    }
 
-    /**
-     * Returns the owning document for this element, or null if it's not a
-     * currently a member of a document.
-     *
-     * @return                     the document owning this element, or null if
-     *                             none
-     */
-    public Document getDocument() {
-        if (parent instanceof Document) {
-            return (Document) parent;
-        }
-        if (parent instanceof Element) {
-            return ((Element)parent).getDocument();
-        }
-
-        return null;
-    }
 
     /**
      * Returns the textual content directly held under this element as a string.
@@ -1436,18 +1381,15 @@ public class Element implements Parent, Child {
 
         Element element = null;
 
-        try {
             element = (Element) super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
 
         // name and namespace are references to immutable objects
         // so super.clone() handles them ok
 
         // Reference to parent is copied by super.clone()
         // (Object.clone()) so we have to remove it
-        element.parent = null;
+        // Actually, super is a Child, which has already detached in the clone().
+        // element.parent = null;
 
         // Reference to content list and attribute lists are copyed by
         // super.clone() so we set it new lists if the original had lists
@@ -1770,4 +1712,12 @@ public class Element implements Parent, Child {
 
         return deletedSome;
     }
+    
+    public void canContain(Child child, int index) throws IllegalAddException {
+        if (child instanceof DocType) {
+            throw new IllegalAddException(
+                    "A DocType is not allowed except at the document level");
+        }
+    }
+    
 }

@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: EntityRef.java,v 1.16 2003/06/04 17:40:52 jhunter Exp $
+ $Id: EntityRef.java,v 1.17 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -59,16 +59,16 @@ package org.jdom;
 /**
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
- * 
- * @version $Revision: 1.16 $, $Date: 2003/06/04 17:40:52 $
+ *
+ * @version $Revision: 1.17 $, $Date: 2004/02/06 03:39:03 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
  */
-public class EntityRef implements Child {
+public class EntityRef extends Child {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.16 $ $Date: 2003/06/04 17:40:52 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.17 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -78,9 +78,6 @@ public class EntityRef implements Child {
 
     /** The SystemID of the <code>EntityRef</code> */
     protected String systemID;
-
-    /** Parent element or null if none */
-    protected Element parent;
 
     /**
      * Default, no-args constructor for implementations to use if needed.
@@ -130,43 +127,6 @@ public class EntityRef implements Child {
     }
 
     /**
-     * This will return a clone of this <code>EntityRef</code>.
-     *
-     * @return <code>Object</code> - clone of this <code>EntityRef</code>.
-     */
-    public Object clone() {
-        EntityRef entity = null;
-
-        try {
-            entity = (EntityRef) super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
-
-        // name is a reference to an immutable (String) object
-        // and is copied by Object.clone()
-
-        // The parent reference is copied by Object.clone(), so
-        // must set to null
-        entity.parent = null;
-
-        return entity;
-    }
-
-    /**
-     * This detaches the <code>Entity</code> from its parent, or does nothing 
-     * if the <code>Entity</code> has no parent.
-     *
-     * @return <code>Entity</code> - this <code>Entity</code> modified.
-     */
-    public Child detach() {
-        if (parent != null) {
-            parent.removeContent(this);
-        }
-        return this;
-    }
-
-    /**
      * This tests for equality of this <code>Entity</code> to the supplied
      * <code>Object</code>.
      *
@@ -179,37 +139,12 @@ public class EntityRef implements Child {
     }
 
     /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this Entity, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this Entity, or null.
-     */
-    public Document getDocument() {
-        if (parent != null) {
-            return parent.getDocument();
-        }
-
-        return null;
-    }
-
-    /**
      * This returns the name of the <code>EntityRef</code>.
      *
      * @return <code>String</code> - entity name.
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * This will return the parent of this <code>EntityRef</code>.
-     * If there is no parent, then this returns <code>null</code>.
-     *
-     * @return parent of this <code>EntityRef</code>
-     */
-    public Parent getParent() {
-        return parent;
     }
 
     /**
@@ -248,17 +183,6 @@ public class EntityRef implements Child {
      */
     public final int hashCode() {
         return super.hashCode();
-    }
-
-    /**
-     * This will set the parent of this <code>Entity</code>.
-     *
-     * @param parent <code>Element</code> to be new parent.
-     * @return this <code>Entity</code> modified.
-     */
-    protected EntityRef setParent(Element parent) {
-        this.parent = parent;
-        return this;
     }
 
     /**

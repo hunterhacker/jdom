@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.28 2003/05/20 21:53:59 jhunter Exp $
+ $Id: Comment.java,v 1.29 2004/02/06 03:39:02 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,20 +60,17 @@ package org.jdom;
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
  *
- * @version $Revision: 1.28 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.29 $, $Date: 2004/02/06 03:39:02 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
-public class Comment implements Child {
+public class Comment extends Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.28 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.29 $ $Date: 2004/02/06 03:39:02 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;
-
-    /** Parent element, document, or null if none */
-    protected Parent parent;
 
     /**
      * Default, no-args constructor for implementations to use if needed.
@@ -89,18 +86,6 @@ public class Comment implements Child {
         setText(text);
     }
 
-    /**
-     * This will return the parent of this <code>Comment</code>.
-     * If there is no parent, then this returns <code>null</code>.
-     *
-     * @return parent of this <code>Comment</code>
-     */
-    public Parent getParent() {
-        if (parent instanceof Element) {
-            return (Element) parent;
-        }
-        return null;
-    }
 
     /**
      * Returns the XPath 1.0 string value of this element, which is the
@@ -110,48 +95,6 @@ public class Comment implements Child {
      */
     public String getValue() {
         return text;
-    }
-
-    /**
-     * This will set the parent of this <code>Comment</code>.
-     *
-     * @param parent <code>Element</code> to be new parent.
-     * @return this <code>Comment</code> modified.
-     */
-    protected Comment setParent(Parent parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    /**
-     * This detaches the <code>Comment</code> from its parent, or does 
-     * nothing if the <code>Comment</code> has no parent.
-     *
-     * @return <code>Comment</code> - this 
-     * <code>Comment</code> modified.
-     */
-    public Child detach() {
-        if (parent != null) {
-            parent.removeContent(this);
-        }
-        return this;
-    }
-
-    /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this Comment, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this Element, or null.
-     */
-    public Document getDocument() {
-        if (parent instanceof Document) {
-            return (Document) parent;
-        }
-        if (parent instanceof Element) {
-            return ((Element)parent).getDocument();
-        }
-        return null;
     }
 
     /**
@@ -220,26 +163,4 @@ public class Comment implements Child {
         return super.hashCode();
     }
 
-    /**
-     * This will return a clone of this <code>Comment</code>.
-     *
-     * @return <code>Object</code> - clone of this <code>Comment</code>.
-     */
-    public Object clone() {
-        Comment comment = null;
-
-        try {
-            comment = (Comment) super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
-
-        // The text is a reference to a immutable String object
-        // and is already copied by Object.clone();
-
-        // parent reference is copied by Object.clone()
-        // and must be set to null
-        comment.parent = null;
-        return comment;
-    }
 }

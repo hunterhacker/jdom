@@ -1,6 +1,6 @@
 /*--
 
- $Id: Child.java,v 1.3 2003/06/04 17:40:52 jhunter Exp $
+ $Id: Child.java,v 1.4 2004/02/06 03:39:02 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,26 +72,27 @@ import java.io.*;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.3 $, $Date: 2003/06/04 17:40:52 $
+ * @version $Revision: 1.4 $, $Date: 2004/02/06 03:39:02 $
  */
-public interface Child extends Cloneable, Serializable {
-
+public abstract class Child implements Cloneable, Serializable {
+    
+    protected Parent parent = null;
+    
+    protected Child() {}
+    
     /**
      * Detaches this child from its parent or does nothing if the child
      * has no parent.
      *
      * @return this child detached
      */
-    Child detach();
-
-    /**
-     * Return this child's owning document or null if the branch containing
-     * this child is currently not attached to a document.
-     *
-     * @return this child's owning document or null if none
-     */
-    Document getDocument();
-
+    public Child detach() {
+        if (parent != null) {
+            parent.removeContent(this);
+        }
+        return this;
+    }
+    
     /**
      * Return this child's parent, or null if this child is currently
      * not attached. The parent can be either an {@link Element}
@@ -99,14 +100,40 @@ public interface Child extends Cloneable, Serializable {
      *
      * @return this child's parent or null if none
      */
-    Parent getParent();
+    public Parent getParent() {
+        return parent;
+    }
 
+    /**
+     * Sets the parent of this Child. The caller is responsible for removing
+     * any pre-existing parentage.
+     *
+     * @param  parent              new parent element
+     * @return                     the target element
+     */
+    protected Child setParent(Parent parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    /**
+     * Return this child's owning document or null if the branch containing
+     * this child is currently not attached to a document.
+     *
+     * @return this child's owning document or null if none
+     */
+    public Document getDocument() {
+        if (parent == null) return null;
+        return parent.getDocument(); 
+    }
+
+    
     /**
      * Returns the XPath 1.0 string value of this child.
      *
      * @return xpath string value of this child.
      */
-    String getValue();
+    public abstract String getValue();
 
     /**
      * Returns a deep, unattached copy of this child and its descendants
@@ -114,5 +141,15 @@ public interface Child extends Cloneable, Serializable {
      *
      * @return a detached deep copy of this child and descendants
      */
-    Object clone();
+    public Object clone() {
+        try {
+            Child c = (Child)super.clone();
+            c.parent = null;
+            return c;
+        } catch (CloneNotSupportedException e) {
+            //Can not happen ....
+            //e.printStackTrace();
+            return null;
+        }
+    }
 }

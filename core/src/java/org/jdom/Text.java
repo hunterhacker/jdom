@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.18 2003/05/29 02:47:40 jhunter Exp $
+ $Id: Text.java,v 1.19 2004/02/06 03:39:03 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,15 +61,15 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.18 $, $Date: 2003/05/29 02:47:40 $
+ * @version $Revision: 1.19 $, $Date: 2004/02/06 03:39:03 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
  */
-public class Text implements Child {
+public class Text extends Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.18 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.19 $ $Date: 2004/02/06 03:39:03 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 
@@ -80,7 +80,7 @@ public class Text implements Child {
     protected String value;
 
     /** This <code>Text</code> node's parent. */
-    protected Element parent;
+    protected Parent parent;
 
     /**
      * This is the protected, no-args constructor standard in all JDOM
@@ -231,16 +231,6 @@ public class Text implements Child {
     }
 
     /**
-     * This will return the parent of this <code>Text</code> node, which
-     * is always a JDOM <code>{@link Element}</code>.
-     *
-     * @return <code>Element</code> - this node's parent.
-     */
-    public Parent getParent() {
-        return parent;
-    }
-
-    /**
      * Returns the XPath 1.0 string value of this element, which is the
      * text itself.
      *
@@ -248,20 +238,6 @@ public class Text implements Child {
      */
     public String getValue() {
         return value;
-    }
-
-    /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this <code>Text</code>, or null if not a currently a member
-     * of a <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this <code>Text</code>, or null.
-     */
-    public Document getDocument() {
-        if (parent != null) {
-            return parent.getDocument();
-        }
-        return null;
     }
 
     /**
@@ -276,21 +252,8 @@ public class Text implements Child {
      *
      * @param parent parent for this node.
      */
-    protected Text setParent(Element parent) {
+    protected Child setParent(Parent parent) {
         this.parent = parent;
-        return this;
-    }
-
-    /**
-     * Detaches the <code>Text</code> from its parent, or does nothing
-     * if the <code>Text</code> has no parent.
-     *
-     * @return <code>Text</code> - this <code>Text</code> modified.
-     */
-    public Child detach() {
-        if (parent != null) {
-            parent.removeContent(this);
-        }
         return this;
     }
 
@@ -328,17 +291,8 @@ public class Text implements Child {
      * @return <code>Text</code> - cloned node.
      */
     public Object clone() {
-        Text text = null;
-
-        try {
-            text = (Text)super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
-
-        text.parent = null;
+        Text text = (Text)super.clone();
         text.value = value;
-
         return text;
     }
 
