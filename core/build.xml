@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.37 2003/04/02 22:38:05 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.38 2003/04/02 22:50:31 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -13,9 +13,10 @@ For instructions on how to build JDOM, please view the README.txt file.
     <tstamp/>
     <property name="Name" value="JDOM"/>
     <property name="name" value="jdom"/>
-    <property name="version" value="1.0 beta9-dev"/>
+    <property name="version" value="1.0beta9-dev"/>
     <property name="version.impl" value="${version}"/>
     <property name="version.spec" value="0.9"/>
+    <property name="year" value="2003"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
