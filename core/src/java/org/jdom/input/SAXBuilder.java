@@ -149,7 +149,7 @@ public class SAXBuilder {
     /**
      * <p>
      * This builds a document from the supplied
-     *   input stream.
+     *   input source.
      * </p>
      *
      * @param in <code>InputSource</code> to read from.
@@ -157,8 +157,7 @@ public class SAXBuilder {
      * @throws <code>JDOMException</code> when errors occur in
      *                                    parsing.
      */
-    protected Document build(InputSource in)
-        throws JDOMException {
+    protected Document build(InputSource in) throws JDOMException {
 
         Document doc = new Document(null);
 
@@ -253,8 +252,7 @@ public class SAXBuilder {
      * @throws <code>JDOMException</code> when errors occur in
      *                                    parsing.
      */
-    public Document build(InputStream in)
-        throws JDOMException {
+    public Document build(InputStream in) throws JDOMException {
 
         return build(new InputSource(in));
     }
@@ -326,8 +324,7 @@ public class SAXBuilder {
      * @throws <code>JDOMException</code> when errors occur in
      *                                    parsing.
      */
-    public Document build(Reader characterStream)
-        throws JDOMException {
+    public Document build(Reader characterStream) throws JDOMException {
 
         return build(new InputSource(characterStream));
     }
@@ -362,8 +359,7 @@ public class SAXBuilder {
      * @throws <code>JDOMException</code> when errors occur in
      *                                    parsing.
      */
-    public Document build(String systemId)
-        throws JDOMException {
+    public Document build(String systemId) throws JDOMException {
 
         return build(new InputSource(systemId));
     }

@@ -112,15 +112,10 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Compiles the samples directory                                       -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples">
-    <!-- Compile the Spitfire demo only if the Spitfire classes are found -->
-    <available property="spitfire.present" 
-     classname="com.XML_Technologies.Spitfire.Parsers.Element" />
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}">
-      <exclude name="**/SpitfireParserDemo.java" unless="spitfire.present" />
-    </javac>
+           optimize="${optimize}"/>
   </target>
 
   <!-- =================================================================== -->
