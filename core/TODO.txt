@@ -2,6 +2,13 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Shouldn't Attribute(String name, String prefix, String uri, String value)
+  be Attribute(String name, String value, String prefix, String uri)?
+
+* Consider Mike Jennings' proposal of two new methods on Element:
+  public String getAttributeValue(String name, String default)
+  public String getAttributeValue(String name, Namespace ns, String default)
+
 * Change adapters to support creating a Document with a DOCTYPE, to allow 
   DOMBuilder to set the DOCTYPE on a built document
 
@@ -22,11 +29,6 @@ Items that need to be done:
 * Figure out a way to set "standalone" in the decl, like doc.setStandalone().
   If necessary, that is.
 
-* Fix DOMBuilder to attach xmlns declarations on the proper nodes.
-  Change code to depend on DOM2 handling of namespaces, so we can read 
-  even on a mutated DOM2 doc; but does that eliminate the ability to do
-  validation at the same time?
-
 * Consider enhancing SAXBuilder to use filters per
   http://www.megginson.com/SAX/Java/filters.html
   That would let someone remove surrounding whitespace and other fancy things.
@@ -41,7 +43,7 @@ Items that need to be done:
 
 * Make entity.clone() truly a deep copy.
 
-* Use custom singly LinkedList!
+* Use custom singly LinkedList to save memory.  (Jools has code.)
 
 * Consider using a List of instance data so elements only use what they really
   need (saving attrib list, namespace list)
@@ -61,7 +63,7 @@ Items that need to be done:
 * Straighten up the Entity API, bringing its API in line with Element and
   supporting EntityReferences.
 
-* Test LinkedList vs ArrayList for speed and memory consumption.
+* Test SinglyLinkedList vs ArrayList for speed and memory consumption.
   (With OptimizeIt)
 
 * Verify we get good error handling if someone passes null to any add/set
@@ -191,6 +193,9 @@ Items that need to be done:
   classes executed by a "java -jar jdom.jar" command.  
   See http://java.sun.com/docs/books/tutorial/jar/
 
+* Add JDOM version info to the MANIFEST.MF so servlets and such can depend on
+  it using http://java.sun.com/j2se/1.3/docs/guide/extensions/versioning.html
+
 * Investigate including a library to convert XML data to instantiated Java
   objects, probably with an XML config file dictating how to do the mapping.
   See http://xmlhack.com/read.php?item=674 for something along these lines.
@@ -198,6 +203,7 @@ Items that need to be done:
 * Investigate adding Andy's library (jhunter)
 
 * Verify JDOM is compliant with Infoset
+  http://xmlhack.com/read.php?item=966
 
 * Consider a builder for a read-only document.  It could "intern" objects to
   reduce memory consumption.  In fact, interning may be good for String
@@ -233,4 +239,13 @@ Items that need to be done:
   bits in the returned value indicate that char's ability to be used for a
   task.  So "lookup[(int)'x'] & LETTER_MASK" tells us if it's a letter
   or not.
+
+* Use new Ant regexp task for more efficient JDK 1.1 package renaming.
+
+* Consider methods to return an item's XPath, suggested by 
+    Mores Stanislav <stm@prosoft.sk>
+  /** Return XPath of this node */ 
+  public StringBuffer getXPath(); 
+  /** Return XPath of this node relative to given context node. */ 
+  public StringBuffer getRelativeXPath(Element ancestor);
 
