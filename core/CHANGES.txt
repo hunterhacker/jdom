@@ -1,4 +1,4 @@
-* * * * * * Beta10 (future tag: jdom_1_0_b10) from Beta9 * * * * * *
+* * * * * * Beta10 (tag: jdom_1_0_b10) from Beta9 * * * * * *
 
 PARENT AND CONTENT
 ------------------
@@ -144,6 +144,11 @@ reverse iteration.
 
 Changed JDOMException.initCause() to return "this" instead of "cause"
 since that's what Throwable says it should do.
+
+Fixed bug with elt.isAncestor() where it had been acting like "is descendant".
+
+Fixed bug in DOMOutputter where it could have problems outputting documents
+with a DocType.
 
 
 DEPRECATED METHODS
