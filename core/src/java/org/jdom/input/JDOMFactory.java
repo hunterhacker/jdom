@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.1 2001/05/18 22:13:10 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.2 2001/11/30 14:44:48 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -89,6 +89,21 @@ public interface JDOMFactory {
     /**
      * <p>
      * This will create a new <code>Attribute</code> with the
+     *   specified (local) name, value, and type, and in the provided
+     *   <code>{@link Namespace}</code>.
+     * </p>
+     *
+     * @param name <code>String</code> name of <code>Attribute</code>.
+     * @param value <code>String</code> value for new attribute.
+     * @param type <code>int</code> type for new attribute.
+     * @param namespace <code>Namespace</code> namespace for new attribute.
+     */
+    public Attribute attribute(String name, String value,
+                                            int type, Namespace namespace);
+
+    /**
+     * <p>
+     * This will create a new <code>Attribute</code> with the
      *   specified (local) name and value, and does not place
      *   the attribute in a <code>{@link Namespace}</code>.
      * </p><p>
@@ -101,6 +116,23 @@ public interface JDOMFactory {
      * @param value <code>String</code> value for new attribute.
      */
     public Attribute attribute(String name, String value);
+
+    /**
+     * <p>
+     * This will create a new <code>Attribute</code> with the
+     *   specified (local) name, value and type, and does not place
+     *   the attribute in a <code>{@link Namespace}</code>.
+     * </p><p>
+     *  <b>Note</b>: This actually explicitly puts the
+     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
+     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * </p>
+     *
+     * @param name <code>String</code> name of <code>Attribute</code>.
+     * @param value <code>String</code> value for new attribute.
+     * @param type <code>int</code> type for new attribute.
+     */
+    public Attribute attribute(String name, String value, int type);
 
     // **** constructing CDATA ****
 

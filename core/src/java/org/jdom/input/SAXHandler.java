@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.25 2001/11/27 14:40:52 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.26 2001/11/30 14:44:48 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.25 $ $Date: 2001/11/27 14:40:52 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.26 $ $Date: 2001/11/30 14:44:48 $ $Name:  $";
+
+    /** Hash table to map SAX attribute type names to JDOM attribute types. */
+    private static final Map attrNameToTypeMap = new HashMap(13);
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -133,6 +136,48 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /** Whether to ignore ignorable whitespace */
     private boolean ignoringWhite = false;
+
+    /** The SAX Locator object provided by the parser */
+    private Locator locator;
+
+    /**
+     * <p>
+     * Class initializer: Populate a table to translate SAX attribute
+     * type names into JDOM attribute type value (integer).
+     * </p><p>
+     * <b>Note that all the mappings defined below are compliant with
+     * the SAX 2.0 specification exception for "ENUMERATION" with is
+     * specific to Crinsom 1.1.X and Xerces 2.0.0-betaX which report
+     * attributes of enumerated types with a type "ENUMERATION"
+     * instead of the expected "NMTOKEN".
+     * </p><p>
+     * Note also that Xerces 1.4.X is not SAX 2.0 compliant either
+     * but handling its case requires
+     * {@link #getAttributeType specific code}.
+     * </p>
+     */
+    static {
+        attrNameToTypeMap.put("CDATA",
+                              new Integer(Attribute.CDATA_ATTRIBUTE));
+        attrNameToTypeMap.put("ID",
+                              new Integer(Attribute.ID_ATTRIBUTE));
+        attrNameToTypeMap.put("IDREF",
+                              new Integer(Attribute.IDREF_ATTRIBUTE));
+        attrNameToTypeMap.put("IDREFS",
+                              new Integer(Attribute.IDREFS_ATTRIBUTE));
+        attrNameToTypeMap.put("ENTITY",
+                              new Integer(Attribute.ENTITY_ATTRIBUTE));
+        attrNameToTypeMap.put("ENTITIES",
+                              new Integer(Attribute.ENTITIES_ATTRIBUTE));
+        attrNameToTypeMap.put("NMTOKEN",
+                              new Integer(Attribute.NMTOKEN_ATTRIBUTE));
+        attrNameToTypeMap.put("NMTOKENS",
+                              new Integer(Attribute.NMTOKENS_ATTRIBUTE));
+        attrNameToTypeMap.put("NOTATION",
+                              new Integer(Attribute.NOTATION_ATTRIBUTE));
+        attrNameToTypeMap.put("ENUMERATION",
+                              new Integer(Attribute.ENUMERATED_ATTRIBUTE));
+    }
 
     /**
      * <p>
@@ -529,6 +574,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
             String attLocalName = atts.getLocalName(i);
             String attQName = atts.getQName(i);
+            int    attType  = getAttributeType(atts.getType(i));
 
             // Bypass any xmlns attributes which might appear, as we got
             // them already in startPrefixMapping().
@@ -542,9 +588,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             if (attLocalName != attQName) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
-                                              getNamespace(attPrefix));
+                                              attType, getNamespace(attPrefix));
             } else {
-                attribute = factory.attribute(attLocalName, atts.getValue(i));
+                attribute = factory.attribute(attLocalName, atts.getValue(i),
+                                              attType);
             }
             element.setAttribute(attribute);
         }
@@ -915,4 +962,66 @@ if (!inDTD) {
                 "Ill-formed XML document (multiple root elements detected)");
         }
     }
+
+    /**
+     * <p>
+     * Returns the the JDOM Attribute type value from the SAX 2.0
+     * attribute type string provided by the parser.
+     * </p>
+     *
+     * @param typeName <code>String</code> the SAX 2.0 attribute
+     * type string.
+     *
+     * @return <code>int</code> the JDOM attribute type.
+     *
+     * @see Attribute#setAttributeType
+     * @see Attributes#getType
+     */
+    private int getAttributeType(String typeName) {
+        Integer type = (Integer)(attrNameToTypeMap.get(typeName));
+        if (type == null) {
+            if (typeName.charAt(0) == '(') {
+                // Xerces 1.4.X reports attributes of enumerated type with
+                // a type string equals to the enumeration definition, i.e.
+                // starting with an parenthesis.
+                return Attribute.ENUMERATED_ATTRIBUTE;
+            }
+            else {
+                return Attribute.UNDECLARED_ATTRIBUTE;
+            }
+        } else {
+            return type.intValue();
+        }
+    }
+
+    /**
+     * <p>
+     * Receives an object for locating the origin of SAX document
+     * events.  This method is invoked by the SAX parser.
+     * </p><p>
+     * {@link JDOMFactory} implementations can use the
+     * {@link #getDocumentLocator} method to get access to the
+     * {@link Locator} during parse.
+     * </p>
+     *
+     * @param locator <code>Locator</code> an object that can return
+     * the location of any SAX document event.
+     */
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
+    }
+
+    /**
+     * <p>
+     * Provides access to the {@link Locator} object provided by the
+     * SAX parser.
+     * </p>
+     *
+     * @return <code>Locator</code> an object that can return
+     * the location of any SAX document event.
+     */
+    public Locator getDocumentLocator() {
+        return locator;
+    }
 }
+

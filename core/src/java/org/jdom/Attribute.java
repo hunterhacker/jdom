@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.32 2001/06/22 05:31:22 jhunter Exp $
+ $Id: Attribute.java,v 1.33 2001/11/30 14:44:47 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,116 @@ import java.io.IOException;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.32 $ $Date: 2001/06/22 05:31:22 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.33 $ $Date: 2001/11/30 14:44:47 $ $Name:  $";
+
+    /**
+     * <p>
+     * Attribute type: the attribute has not been declared or type
+     * is unknown.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int UNDECLARED_ATTRIBUTE = 0;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a string.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int CDATA_ATTRIBUTE = 1;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a unique identifier.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int ID_ATTRIBUTE = 2;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a reference to a
+     * unique identifier.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int IDREF_ATTRIBUTE = 3;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a list of references to
+     * unique identifiers.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int IDREFS_ATTRIBUTE = 4;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is the name of an entity.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int ENTITY_ATTRIBUTE = 5;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a list of entity names.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int ENTITIES_ATTRIBUTE = 6;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a name token.
+     * </p><p>
+     * According to SAX 2.0 specification, attributes of enumerated
+     * types should be reported as "NMTOKEN" by SAX parsers.  But the
+     * major parsers (Xerces and Crimson) provide specific values
+     * that permit to recognize them as {@link #ENUMERATED_ATTRIBUTE}.
+     *
+     * @see #getAttributeType
+     */
+    public final static int NMTOKEN_ATTRIBUTE = 7;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a list of name tokens.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int NMTOKENS_ATTRIBUTE = 8;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is the name of a notation.
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int NOTATION_ATTRIBUTE = 9;
+
+    /**
+     * <p>
+     * Attribute type: the attribute value is a name token from an
+     * enumeration..
+     * </p>
+     *
+     * @see #getAttributeType
+     */
+    public final static int ENUMERATED_ATTRIBUTE = 10;
+
+
 
     /** The local name of the <code>Attribute</code> */
     protected String name;
@@ -87,6 +196,9 @@ public class Attribute implements Serializable, Cloneable {
 
     /** The value of the <code>Attribute</code> */
     protected String value;
+
+    /** The type of the <code>Attribute</code> */
+    protected int type = UNDECLARED_ATTRIBUTE;
 
     /** Parent element, or null if none */
     protected Element parent;
@@ -108,10 +220,30 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @param name <code>String</code> name of <code>Attribute</code>.
      * @param value <code>String</code> value for new attribute.
+     * @param namespace <code>Namespace</code> namespace for new attribute.
      */
     public Attribute(String name, String value, Namespace namespace) {
         setName(name);
         setValue(value);
+        setNamespace(namespace);
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>Attribute</code> with the
+     *   specified (local) name, value, and type, and in the provided
+     *   <code>{@link Namespace}</code>.
+     * </p>
+     *
+     * @param name <code>String</code> name of <code>Attribute</code>.
+     * @param value <code>String</code> value for new attribute.
+     * @param type <code>int</code> type for new attribute.
+     * @param namespace <code>Namespace</code> namespace for new attribute.
+     */
+    public Attribute(String name, String value, int type, Namespace namespace) {
+        setName(name);
+        setValue(value);
+        setAttributeType(type);
         setNamespace(namespace);
     }
 
@@ -130,7 +262,26 @@ public class Attribute implements Serializable, Cloneable {
      * @param value <code>String</code> value for new attribute.
      */
     public Attribute(String name, String value) {
-        this(name, value, Namespace.NO_NAMESPACE);
+        this(name, value, UNDECLARED_ATTRIBUTE, Namespace.NO_NAMESPACE);
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>Attribute</code> with the
+     *   specified (local) name, value and type, and does not place
+     *   the attribute in a <code>{@link Namespace}</code>.
+     * </p><p>
+     *  <b>Note</b>: This actually explicitly puts the
+     *    <code>Attribute</code> in the "empty" <code>Namespace</code>
+     *    (<code>{@link Namespace#NO_NAMESPACE}</code>).
+     * </p>
+     *
+     * @param name <code>String</code> name of <code>Attribute</code>.
+     * @param value <code>String</code> value for new attribute.
+     * @param type <code>int</code> type for new attribute.
+     */
+    public Attribute(String name, String value, int type) {
+        this(name, value, type, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -366,6 +517,37 @@ public class Attribute implements Serializable, Cloneable {
             throw new IllegalDataException(value, "attribute", reason);
         }
         this.value = value;
+        return this;
+    }
+
+    /**
+     * <p>
+     * This will return the actual declared type of this
+     *   <code>Attribute</code>.
+     * </p>
+     *
+     * @return <code>int</code> - type for this attribute.
+     */
+    public int getAttributeType() {
+        return type;
+    }
+
+    /**
+     * <p>
+     * This will set the type of the <code>Attribute</code>.
+     * </p>
+     *
+     * @param type <code>int</code> type for the attribute.
+     * @return <code>Attribute</code> - this Attribute modified.
+     * @throws IllegalDataException if the given attribute type is
+     *         not one of the supported types.
+     */
+    public Attribute setAttributeType(int type) {
+        if ((type < UNDECLARED_ATTRIBUTE) || (type > ENUMERATED_ATTRIBUTE)) {
+            throw new IllegalDataException(String.valueOf(type),
+                                        "attribute", "Invalid attribute type");
+        }
+        this.type = type;
         return this;
     }
 

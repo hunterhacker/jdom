@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.14 2001/11/27 14:40:53 bmclaugh Exp $
+ $Id: SAXOutputter.java,v 1.15 2001/11/30 14:44:48 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -105,7 +105,7 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.14 $ $Date: 2001/11/27 14:40:53 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.15 $ $Date: 2001/11/30 14:44:48 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -135,6 +135,23 @@ public class SAXOutputter {
     private static final String DECL_HANDLER_ALT_PROPERTY =
                         "http://xml.org/sax/handlers/DeclHandler";
 
+    /**
+     * Array to map JDOM attribute type (as entry index) to SAX
+     * attribute type names.
+     */
+    private static final String[] attrTypeToNameMap = new String[] {
+        "CDATA",        // Attribute.UNDEFINED_ATTRIBUTE, as per SAX 2.0 spec.
+        "CDATA",        // Attribute.CDATA_ATTRIBUTE
+        "ID",           // Attribute.ID_ATTRIBUTE
+        "IDREF",        // Attribute.IDREF_ATTRIBUTE
+        "IDREFS",       // Attribute.IDREFS_ATTRIBUTE
+        "ENTITY",       // Attribute.ENTITY_ATTRIBUTE
+        "ENTITIES",     // Attribute.ENTITIES_ATTRIBUTE
+        "NMTOKEN",      // Attribute.NMTOKEN_ATTRIBUTE
+        "NMTOKENS",     // Attribute.NMTOKENS_ATTRIBUTE
+        "NOTATION",     // Attribute.NOTATION_ATTRIBUTE
+        "NMTOKEN",      // Attribute.ENUMERATED_ATTRIBUTE, as per SAX 2.0 spec.
+    };
 
     /** registered <code>ContentHandler</code> */
     private ContentHandler contentHandler;
@@ -900,7 +917,7 @@ public class SAXOutputter {
             atts.addAttribute(a.getNamespaceURI(),
                               a.getName(),
                               a.getQualifiedName(),
-                              "CDATA",
+                              getAttributeTypeName(a.getAttributeType()),
                               a.getValue());
         }
          
@@ -1036,6 +1053,26 @@ public class SAXOutputter {
                               ns.getURI());                // value
         }
         return atts;
+    }
+
+    /**
+     * <p>
+     * Returns the SAX 2.0 attribute type string from the type of
+     * a JDOM Attribute.
+     * </p>
+     *
+     * @param type <code>int</code> the type of the JDOM attribute.
+     *
+     * @return <code>String</code> the SAX 2.0 attribute type string.
+     *
+     * @see org.jdom.Attribute#getAttributeType
+     * @see org.xml.sax.Attributes#getType
+     */
+    private String getAttributeTypeName(int type) {
+        if ((type < 0) || (type >= attrTypeToNameMap.length)) {
+            type = Attribute.UNDECLARED_ATTRIBUTE;
+        }
+        return attrTypeToNameMap[type];
     }
 
     /**
