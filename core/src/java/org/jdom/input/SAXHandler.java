@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.59 2003/06/17 20:49:43 jhunter Exp $
+ $Id: SAXHandler.java,v 1.60 2004/01/23 17:59:55 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.59 $, $Date: 2003/06/17 20:49:43 $
+ * @version $Revision: 1.60 $, $Date: 2004/01/23 17:59:55 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.59 $ $Date: 2003/06/17 20:49:43 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.60 $ $Date: 2004/01/23 17:59:55 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -774,7 +774,7 @@ if (!inDTD) {
     }
 
     /**
-     * Report a CDATA section - ignored in SAXBuilder.
+     * Report a CDATA section
      */
     public void startCDATA() throws SAXException {
         if (suppress) return;
@@ -783,7 +783,7 @@ if (!inDTD) {
     }
 
     /**
-     * Report a CDATA section - ignored in SAXBuilder.
+     * Report a CDATA section
      */
     public void endCDATA() throws SAXException {
         if (suppress) return;
