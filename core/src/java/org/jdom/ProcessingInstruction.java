@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.34 2003/04/06 02:00:44 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.35 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,13 +70,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.34 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.35 $, $Date: 2003/04/08 04:14:49 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.34 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.35 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -116,7 +116,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * with the specified target and data.
      *
      * @param target <code>String</code> target of PI.
-     * @param rawData <code>String</code> data for PI.
+     * @param data <code>String</code> data for PI.
      * @throws IllegalTargetException if the given target is illegal
      *         as a processing instruction name.
      */
@@ -128,7 +128,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /**
      * This will set the target for the PI.
      *
-     * @param target <code>String</code> new target of PI.
+     * @param newTarget <code>String</code> new target of PI.
      * @return <code>ProcessingInstruction</code> - this PI modified.
      */
     public ProcessingInstruction setTarget(String newTarget) {
@@ -197,7 +197,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
             return (Document) parent;
         }
         if (parent instanceof Element) {
-            return (Document) ((Element)parent).getDocument();
+            return ((Element)parent).getDocument();
         }
         return null;
     }
@@ -252,7 +252,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /**
      * This will set the raw data for the PI.
      *
-     * @param rawData <code>String</code> data of PI.
+     * @param data <code>String</code> data of PI.
      * @return <code>ProcessingInstruction</code> - this PI modified.
      */
     public ProcessingInstruction setData(String data) {
@@ -443,7 +443,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return the first quoted string encountered in the input data. If
      *         no quoted string is found, then the empty string, "", is
      *         returned.
-     * @see parseData
+     * @see #parseData
      */
     private int[] extractQuotedString(String rawData) {
         // Remembers whether we're actually in a quoted string yet

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.62 2003/04/06 02:00:44 jhunter Exp $
+ $Id: Document.java,v 1.63 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,12 +70,12 @@ import org.jdom.filter.*;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.62 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.63 $, $Date: 2003/04/08 04:14:49 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.62 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.63 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -133,7 +133,7 @@ public class Document implements Serializable, Cloneable {
      * with the supplied list of content, and the supplied
      * <code>{@link DocType}</code> declaration.
      *
-     * @param content <code>List</code> of starter content
+     * @param newContent <code>List</code> of starter content
      * @param docType <code>DocType</code> declaration.
      * @throws IllegalAddException if (1) the List contains more than
      *         one Element or objects of illegal types, or (2) if the
@@ -371,7 +371,7 @@ public class Document implements Serializable, Cloneable {
      * If the specified <code>ProcessingInstruction</code> is not a child of
      * this <code>Document</code>, this method does nothing.
      *
-     * @param child <code>ProcessingInstruction</code> to delete
+     * @param pi <code>ProcessingInstruction</code> to delete
      * @return whether deletion occurred
      */
     public boolean removeContent(ProcessingInstruction pi) {

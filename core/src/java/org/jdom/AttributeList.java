@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.14 2003/04/06 02:00:44 jhunter Exp $
+ $Id: AttributeList.java,v 1.15 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.14 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.15 $, $Date: 2003/04/08 04:14:49 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,9 +78,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.14 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
-
-    private static final int INITIAL_ARRAY_SIZE = 3;
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.15 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     /** The backing list */
     private Attribute elementData[];
@@ -104,7 +102,6 @@ class AttributeList extends AbstractList
      * Add a attribute to the end of the list or replace a existing
      * attribute with the same name and <code>Namespace</code>.
      *
-     * @param index The location to set the value to.
      * @param obj The object to insert into the list.
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
@@ -124,7 +121,7 @@ class AttributeList extends AbstractList
         }
         else {
             throw new IllegalAddException("Class " +
-                                          obj.getClass().getName() + 
+                                          obj.getClass().getName() +
                                           " is not an attribute");
         }
         return true;
@@ -153,7 +150,7 @@ class AttributeList extends AbstractList
         }
         else {
             throw new IllegalAddException("Class " +
-                                          obj.getClass().getName() + 
+                                          obj.getClass().getName() +
                                           " is not an attribute");
         }
         modCount++;
@@ -432,7 +429,7 @@ class AttributeList extends AbstractList
         }
         else {
             throw new IllegalAddException("Class " +
-                                          obj.getClass().getName() + 
+                                          obj.getClass().getName() +
                                           " is not an attribute");
         }
     }
@@ -442,14 +439,14 @@ class AttributeList extends AbstractList
      * object. Note: does not check for duplicate attributes.
      *
      * @param index The location to set the value to.
-     * @param obj The location to set the value to.
+     * @param attribute The attribute to set.
      * @return The object which was replaced.
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
     protected Object set(int index, Attribute attribute) {
-        if (index<0 || index>=size)
+        if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index +
-                                                 " Size: " + size());
+                                                " Size: " + size());
 
         if (attribute.getParent() != null) {
             throw new IllegalAddException(
@@ -490,7 +487,7 @@ class AttributeList extends AbstractList
     public int size() {
         return size;
     }
- 
+
     /**
      * Return this list as a <code>String</code>
      */

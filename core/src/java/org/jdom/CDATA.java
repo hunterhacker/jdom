@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.25 2002/05/16 16:29:26 jhunter Exp $
+ $Id: CDATA.java,v 1.26 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,12 +68,12 @@ package org.jdom;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.25 $, $Date: 2002/05/16 16:29:26 $
+ * @version $Revision: 1.26 $, $Date: 2003/04/08 04:14:49 $
  */
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.25 $ $Date: 2002/05/16 16:29:26 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.26 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 
@@ -160,7 +160,7 @@ public class CDATA extends Text {
      * <code>CDATA</code> node, suitable for debugging. If the XML
      * representation of the <code>CDATA</code> node is desired,
      * either <code>{@link #getText}</code> or
-     * {@link org.jdom.output.XMLOutputter#output(CDATA, Writer)}</code>
+     * {@link org.jdom.output.XMLOutputter#output(CDATA, java.io.Writer)}</code>
      * should be used.
      *
      * @return <code>String</code> - information about this node.

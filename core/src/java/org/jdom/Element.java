@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.128 2003/04/06 02:00:44 jhunter Exp $
+ $Id: Element.java,v 1.129 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -78,12 +78,12 @@ import org.jdom.filter.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.128 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.129 $, $Date: 2003/04/08 04:14:49 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.128 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.129 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -483,7 +483,7 @@ public class Element implements Serializable, Cloneable {
             return (Document) parent;
         }
         if (parent instanceof Element) {
-            return (Document) ((Element)parent).getDocument();
+            return ((Element)parent).getDocument();
         }
 
         return null;
@@ -1207,7 +1207,7 @@ public class Element implements Serializable, Cloneable {
      * the attributes in the supplied attributes will be unaltered.
      * </p>
      *
-     * @param attributes <code>List</code> of attributes to set
+     * @param newAttributes <code>List</code> of attributes to set
      * @return this element modified
      * @throws IllegalAddException if the List contains objects 
      *         that are not instances of <code>Attribute</code>,
@@ -1325,7 +1325,7 @@ public class Element implements Serializable, Cloneable {
      * this <code>Element</code>, this method does nothing.
      * </p>
      *
-     * @param child <code>Element</code> to delete
+     * @param element <code>Element</code> to delete
      * @return whether deletion occurred
      */
     public boolean removeContent(Element element) {
@@ -1339,7 +1339,7 @@ public class Element implements Serializable, Cloneable {
      * this <code>Element</code>, this method does nothing.
      * </p>
      *
-     * @param child <code>ProcessingInstruction</code> to delete
+     * @param pi <code>ProcessingInstruction</code> to delete
      * @return whether deletion occurred
      */
     public boolean removeContent(ProcessingInstruction pi) {
@@ -1381,7 +1381,7 @@ public class Element implements Serializable, Cloneable {
      * this <code>Element</code>, this method does nothing.
      * </p>
      *
-     * @param child <code>EntityRef</code> to delete
+     * @param entity <code>EntityRef</code> to delete
      * @return whether deletion occurred
      */
     public boolean removeContent(EntityRef entity) {

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.41 2002/07/22 12:22:12 jhunter Exp $
+ $Id: Verifier.java,v 1.42 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.41 $, $Date: 2002/07/22 12:22:12 $
+ * @version $Revision: 1.42 $, $Date: 2003/04/08 04:14:49 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.41 $ $Date: 2002/07/22 12:22:12 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.42 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -146,7 +146,7 @@ final public class Verifier {
      * when the value is serialized. 
      * </p>
      *
-     * @param name <code>String</code> value to check.
+     * @param text <code>String</code> value to check.
      * @return <code>String</code> - reason name is illegal, or
      *         <code>null</code> if name is OK.
      */

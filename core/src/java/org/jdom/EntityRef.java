@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.12 2002/11/16 13:51:37 jhunter Exp $
+ $Id: EntityRef.java,v 1.13 2003/04/08 04:14:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,12 +64,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.12 $, $Date: 2002/11/16 13:51:37 $
+ * @version $Revision: 1.13 $, $Date: 2003/04/08 04:14:49 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.12 $ $Date: 2002/11/16 13:51:37 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.13 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -276,7 +276,7 @@ public class EntityRef implements Serializable, Cloneable {
     /**
      * This will set the public ID of this <code>EntityRef</code>.
      *
-     * @param newPublicID new public id
+     * @param publicID new public id
      * @return this <code>EntityRef</code> modified.
      * @throws IllegalDataException if the given public ID is not a legal
      *         public ID.
@@ -293,7 +293,7 @@ public class EntityRef implements Serializable, Cloneable {
     /**
      * This will set the system ID of this <code>EntityRef</code>.
      *
-     * @param newSystemID new system id
+     * @param systemID new system id
      * @throws IllegalDataException if the given system ID is not a legal
      *         system literal.
      * @return this <code>EntityRef</code> modified.
