@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.46 2001/05/09 07:23:24 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.47 2001/05/18 22:13:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.46 $ $Date: 2001/05/09 07:23:24 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.47 $ $Date: 2001/05/18 22:13:10 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -113,6 +113,9 @@ public class SAXBuilder {
     /** XMLFilter instance to use */
     private XMLFilter saxXMLFilter = null;
  
+    /** The factory for creating new JDOM objects */
+    private JDOMFactory factory = new DefaultJDOMFactory();
+
     /**
      * <p>
      * Creates a new SAXBuilder which will attempt to first locate
@@ -237,7 +240,8 @@ public class SAXBuilder {
      */
     protected Document build(InputSource in) throws JDOMException {
 
-        Document doc = new Document((Element)null);
+        // XXX We should probably let SAXHandler construct the document
+        Document doc = factory.document((Element)null);
 
         try {
             XMLReader parser = null;
@@ -310,7 +314,7 @@ public class SAXBuilder {
                 parser = saxXMLFilter;
             }
 
-            SAXHandler contentHandler = new SAXHandler(doc);
+            SAXHandler contentHandler = new SAXHandler(doc, factory);
             contentHandler.setExpandEntities(expand);  // pass thru behavior
 
             parser.setContentHandler(contentHandler);
@@ -391,29 +395,35 @@ public class SAXBuilder {
                 }
             }
 
-/*
             // Set entity expansion
+            // Note SAXHandler can work regardless of how this is set, but when
+            // entity expansion it's worth it to try to tell the parser not to
+            // even bother with external general entities.
+            // Apparently no parsers yet support this feature.
+            // XXX It might make sense to setEntityResolver() with a resolver
+            // that simply ignores external general entities
             try {
-                //Crimson doesn't support this feature but does report it 
-                // as true so...
                 if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
                     parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
                 }
 
             }
             catch (SAXNotRecognizedException e) {
+            /*
                 // No entity expansion available
                 throw new JDOMException(
                   "Entity expansion feature not recognized by " + 
                   saxDriverClass);
+            */
             }
             catch (SAXNotSupportedException e) {
+            /*
                 // No entity expansion available
                 throw new JDOMException(
                   "Entity expansion feature not supported by " +
                   saxDriverClass);
+            */
             }
-*/
             
             parser.parse(in);
 

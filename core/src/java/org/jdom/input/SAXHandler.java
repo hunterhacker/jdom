@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.10 2001/05/09 07:11:46 jhunter Exp $
+ $Id: SAXHandler.java,v 1.11 2001/05/18 22:13:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.10 $ $Date: 2001/05/09 07:11:46 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.11 $ $Date: 2001/05/18 22:13:10 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -115,6 +115,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     private Map externalEntities;
 
+    /** The JDOMFactory used for JDOM object creation */
+    private JDOMFactory factory;
+
     /**
      * <p>
      * This will set the <code>Document</code> to use.
@@ -124,7 +127,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @throws IOException when errors occur.
      */
     public SAXHandler(Document document) throws IOException {
+        // XXX This is the second use of DJF; this should be the only one
+        this(document, new DefaultJDOMFactory());
+    }
+
+    /**
+     * <p>
+     * This will set the <code>Document</code> to use.
+     * </p>
+     *
+     * @param document <code>Document</code> being parsed.
+     * @throws IOException when errors occur.
+     */
+    public SAXHandler(Document document, JDOMFactory factory)
+                                             throws IOException {
         this.document = document;
+        this.factory = factory;
         atRoot = true;
         stack = new Stack();
         declaredNamespaces = new LinkedList();
@@ -189,10 +207,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         if (suppress) return;
 
         if (atRoot) {
-            document.addContent(new ProcessingInstruction(target, data));
+            document.addContent(factory.processingInstruction(target, data));
         } else {
             ((Element)stack.peek()).addContent(
-                new ProcessingInstruction(target, data));
+                factory.processingInstruction(target, data));
         }
     }
 
@@ -279,7 +297,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             }
             Namespace elementNamespace =
                 Namespace.getNamespace(prefix, namespaceURI);
-            element = new Element(localName, elementNamespace);
+            element = factory.element(localName, elementNamespace);
 
             // Remove this namespace from those in the temp declared list
             if (declaredNamespaces.size() > 0) {
@@ -289,7 +307,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             // It's now in available scope
             availableNamespaces.addFirst(elementNamespace);
         } else {
-            element = new Element(localName);
+            element = factory.element(localName);
         }
 
         // Take leftover declared namespaces and add them to this element's
@@ -305,10 +323,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
             if (attLocalName != attQName) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
-                attribute = new Attribute(attLocalName, atts.getValue(i),
+                attribute = factory.attribute(attLocalName, atts.getValue(i),
                                           getNamespace(attPrefix));
             } else {
-                attribute = new Attribute(attLocalName, atts.getValue(i));
+                attribute = factory.attribute(attLocalName, atts.getValue(i));
             }
 
             element.setAttribute(attribute);
@@ -393,7 +411,7 @@ if (!inDTD) {
 */
 
         if (inCDATA) {
-            ((Element)stack.peek()).addContent(new CDATA(data));
+            ((Element)stack.peek()).addContent(factory.cdata(data));
         }
         else {
             Element e = (Element)stack.peek();
@@ -467,7 +485,7 @@ if (!inDTD) {
         throws SAXException {
 
         document.setDocType(
-            new DocType(name, publicId, systemId));
+            factory.docType(name, publicId, systemId));
         inDTD = true;
     }
 
@@ -506,7 +524,7 @@ if (!inDTD) {
                   pub = ids[0];  // may be null, that's OK
                   sys = ids[1];  // may be null, that's OK
                 }
-                EntityRef entity = new EntityRef(name, pub, sys);
+                EntityRef entity = factory.entityRef(name, pub, sys);
                 ((Element)stack.peek()).addContent(entity);
                 suppress = true;
             }
@@ -565,10 +583,10 @@ if (!inDTD) {
         if ((!inDTD) && (!commentText.equals(""))) {
             if (stack.empty()) {
                 document.addContent(
-                   new Comment(commentText));
+                   factory.comment(commentText));
             } else {
                 ((Element)stack.peek()).addContent(
-                    new Comment(commentText));
+                    factory.comment(commentText));
             }
         }
     }
