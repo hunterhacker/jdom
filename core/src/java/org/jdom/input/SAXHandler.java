@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.33 2002/02/05 08:03:18 jhunter Exp $
+ $Id: SAXHandler.java,v 1.34 2002/02/06 02:11:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.33 $, $Date: 2002/02/05 08:03:18 $
+ * @version $Revision: 1.34 $, $Date: 2002/02/06 02:11:42 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.33 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.34 $ $Date: 2002/02/06 02:11:42 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -690,10 +690,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @throws SAXException when things go wrong
      */
     protected void flushCharacters() throws SAXException {
-        previousCDATA = inCDATA;
 
-        if (textBuffer.length() == 0)
+        if (textBuffer.length() == 0) {
+            previousCDATA = inCDATA;
             return;
+        }
 
         String data = textBuffer.substring(0);
         textBuffer.setLength(0);
@@ -709,12 +710,14 @@ if (!inDTD) {
 }
 */
 
-        if (inCDATA) {
+        if (previousCDATA) {
             getCurrentElement().addContent(factory.cdata(data));
         }
         else {
             getCurrentElement().addContent(factory.text(data));
         }
+
+        previousCDATA = inCDATA;
     }
 
     /**
@@ -880,7 +883,6 @@ if (!inDTD) {
     public void startCDATA() throws SAXException {
         if (suppress) return;
 
-        previousCDATA = inCDATA;
         inCDATA = true;
     }
 
@@ -892,7 +894,7 @@ if (!inDTD) {
     public void endCDATA() throws SAXException {
         if (suppress) return;
 
-        previousCDATA = inCDATA;
+        previousCDATA = true;
         inCDATA = false;
     }
 
