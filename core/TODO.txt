@@ -39,6 +39,8 @@ Items that need to be done:
 	bulk easier?  Should adds just do detach automatically?  Why do we throw on
   that?
 
+* Look at Attribute.get/setAttributeType() and see if we should make them just
+  get/setType().
 
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
