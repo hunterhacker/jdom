@@ -1524,12 +1524,15 @@ public class Element implements Serializable, Cloneable {
                 Object obj = i.next();
                 if (obj instanceof String) {
                     element.addContent((String)obj);
-                } else if (obj instanceof Comment) {
-                    element.addContent((Comment)((Comment)obj).clone());
-                } else if (obj instanceof Entity) {
-                    element.addContent((Entity)((Entity)obj).clone());
                 } else if (obj instanceof Element) {
                     element.addContent((Element)((Element)obj).clone());
+                } else if (obj instanceof Comment) {
+                    element.addContent((Comment)((Comment)obj).clone());
+                } else if (obj instanceof ProcessingInstruction) {
+                    element.addContent((ProcessingInstruction)
+                                        ((ProcessingInstruction)obj).clone());
+                } else if (obj instanceof Entity) {
+                    element.addContent((Entity)((Entity)obj).clone());
                 } else if (obj instanceof CDATA) {
                     element.addContent((CDATA)((CDATA)obj).clone());
                 }
