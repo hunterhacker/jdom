@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.90 2004/12/11 01:31:50 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.91 2004/12/11 02:17:58 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.90 $, $Date: 2004/12/11 01:31:50 $
+ * @version $Revision: 1.91 $, $Date: 2004/12/11 02:17:58 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.90 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.91 $ $Date: 2004/12/11 02:17:58 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -355,7 +355,10 @@ public class SAXBuilder {
      * turned on.  The {@link #setIgnoringElementContentWhitespace(boolean)}
      * call impacts the SAX parse process while this method impacts the JDOM
      * build process, so it can be beneficial to turn both on for efficiency.
-     * The default is <code>false</code>.
+     * For implementation efficiency, this method actually removes all
+     * whitespace-only text() nodes.  That can, in some cases (like beteween an
+     * element tag and a comment), include whitespace that isn't just boundary
+     * whitespace.  The default is <code>false</code>.
      *
      * @param ignoringBoundaryWhite Whether to ignore whitespace-only text
      *  noes
