@@ -113,6 +113,7 @@ public class SAXBuilderDemo {
 
         // Create an outputter with default formatting
         XMLOutputter outputter = new XMLOutputter("", false);
+        outputter.setExpandEmptyElements(true);
         outputter.output(doc, out);                
     }
 
