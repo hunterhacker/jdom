@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.63 2001/07/20 03:31:34 bmclaugh Exp $
+ $Id: XMLOutputter.java,v 1.64 2001/08/09 21:10:55 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,11 +112,14 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.63 $ $Date: 2001/07/20 03:31:34 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.64 $ $Date: 2001/08/09 21:10:55 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
     
+    /** standard string with which to end a line **/
+    protected static final String STANDARD_LINE_SEPARATOR = "\r\n";
+
     /** Whether or not to output the XML declaration 
       * - default is <code>false</code> */
     private boolean omitDeclaration = false;
@@ -140,7 +143,7 @@ public class XMLOutputter implements Cloneable {
     private boolean newlines = false;
 
     /** New line separator */
-    private String lineSeparator = "\r\n";
+    private String lineSeparator = STANDARD_LINE_SEPARATOR;
 
     /** Should we preserve whitespace or not in text nodes */
     private boolean textNormalize = false;
@@ -223,6 +226,28 @@ public class XMLOutputter implements Cloneable {
         this.encoding = that.encoding;
         this.lineSeparator = that.lineSeparator;
         this.textNormalize = that.textNormalize;
+    }
+
+    /**
+     * Returns a copy of this XMLOutputter.
+     **/
+    public Object clone() {
+ // Implementation notes: Since all state of an XMLOutputter is
+ // embodied in simple private instance variables, Object.clone
+ // can be used.  Note that since Object.clone is totally
+ // broken, we must catch an exception that will never be
+ // thrown.
+ // (See 
+ try {
+     return super.clone();
+ }
+ catch (java.lang.CloneNotSupportedException e) {
+     // even though this should never ever happen, it's still
+     // possible to fool Java into throwing a
+     // CloneNotSupportedException.  If that happens, we
+     // shouldn't swallow it.
+     throw new RuntimeException(e.toString());
+ }
     }
     
     /**
@@ -424,9 +449,23 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to
      */
     protected void maybePrintln(Writer out) throws IOException  {
+        maybePrintln(out, 0);
+    }
+
+    /**
+     * <p>     
+     * This will print a new line only if the newlines flag was set to
+     * true, and then print indents (only if indent is non-null)
+     * </p>
+     *
+     * @param out <code>Writer</code> to write to
+     * @param indentLevel current indent level (number of tabs)
+     */
+    protected void maybePrintln(Writer out, int indentLevel) throws IOException {
         if (newlines) {
             out.write(lineSeparator);
         }
+        indent(out, indentLevel);
     }
 
     /**
@@ -1119,7 +1158,8 @@ public class XMLOutputter implements Cloneable {
      *
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
-     * @param indent <code>int</code> level of indention.  */
+     * @param indent <code>int</code> level of indentation.
+     **/
     protected void printElementContent(Element element, Writer out,
                                        int indentLevel,
                                        NamespaceStack namespaces,
@@ -1173,25 +1213,33 @@ public class XMLOutputter implements Cloneable {
                 // See if text, an element, a PI or a comment
                 if (content instanceof Comment) {
                     if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+                        maybePrintln(out, indentLevel);
                     }
                     printComment((Comment) content, out);
                     justOutput = Comment.class;
                 } else if (content instanceof String) {
                     String scontent = (String) content;
+
+     // bugfix: don't print lines for whitespace that's
+     // only sticking between close tags
+     if (textNormalize && isWhitespace(scontent)) {
+ wasFullyWhite = true;
+ continue;
+     }
+     
                     if ((justOutput == CDATA.class) && 
                         (textNormalize) &&
                         (startsWithWhite(scontent))) {
-
                         out.write(" ");
                     } else if ((justOutput != CDATA.class) && 
                                (justOutput != String.class) &&
-                               (justOutput != null) &&
-                               (justOutput != Element.class)) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+        (justOutput != null)
+                               // (justOutput != Element.class)
+        )
+     {
+                        maybePrintln(out, indentLevel);
                     }
+     // if scontent is not a single-character newline
                     if (!((scontent.length() == 1) && 
                          ("\r\n".indexOf(scontent.charAt(0)) != -1))) {
                         printString(scontent, out);
@@ -1201,23 +1249,20 @@ public class XMLOutputter implements Cloneable {
                     }
                 } else if (content instanceof Element) {
                     if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+                        maybePrintln(out, indentLevel);
                     }
                     printElement((Element) content, out,
                                  indentLevel, namespaces);
                     justOutput = Element.class;
                 } else if (content instanceof EntityRef) {
                     if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+                        maybePrintln(out, indentLevel);
                     }
                     printEntityRef((EntityRef) content, out);
                     justOutput = EntityRef.class;
                 } else if (content instanceof ProcessingInstruction) {
                     if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+                        maybePrintln(out, indentLevel);
                     }
                     printProcessingInstruction((ProcessingInstruction) content,
                                                out);
@@ -1227,18 +1272,17 @@ public class XMLOutputter implements Cloneable {
                         (textNormalize) &&
                         (endedWithWhite)) {
                         out.write(" ");  // padding
-                    } else if ((justOutput != String.class) &&
-                               (justOutput != CDATA.class)) {
-                        maybePrintln(out);
-                        indent(out, indentLevel);
+                    }
+                    else if (justOutput != String.class &&
+                             justOutput != CDATA.class) {
+                        maybePrintln(out, indentLevel);
                     }
                     printCDATA((CDATA)content, out);
                     justOutput = CDATA.class;
                 }
                 // Unsupported types are *not* printed, nor should they exist
             }
-            maybePrintln(out);
-            indent(out, indentLevel - 1);
+            maybePrintln(out, indentLevel - 1);
         }
     }  // printElementContent
 
@@ -1586,6 +1630,42 @@ public class XMLOutputter implements Cloneable {
         return true;
     }
 
+    /**
+     * @return a string listing the settings for this XMLOutputter instance
+     **/
+    public String toString() {
+        return
+            "XMLOutputter[omitDeclaration = " + omitDeclaration + ", " +
+            "encoding = " + encoding + ", " +
+            "omitEncoding = " + omitEncoding + ", " +
+            "indent = '" + indent + "'" + ", " +
+            "expandEmptyElements = " + expandEmptyElements + ", " +
+            "newlines = " + newlines + ", " +
+            "lineSeparator = '" + toBytes(lineSeparator) + "', " +
+            "textNormalize = " + textNormalize + "]";
+    }
+
+    private String toBytes(String x) {
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<x.length(); ++i) {
+            buf.append(toByte(x.charAt(i)));
+        }
+        return buf.toString();
+    }
+
+    private String toByte(char ch) {
+        switch (ch) {
+        case '\r':
+            return "\\r";
+        case '\n':
+            return "\\n";
+        case '\t':
+            return "\\t";
+        default:
+            return ("[" + ((int)ch) + "]");
+        }
+    }
+    
     /**
      * Factory for making new NamespaceStack objects.  The NamespaceStack
      * created is actually an inner class extending the package protected
