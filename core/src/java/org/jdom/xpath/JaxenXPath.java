@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.1 2002/03/30 11:02:22 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.2 2002/03/30 11:09:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,6 +73,8 @@ import org.jaxen.JaxenException;
 
 /**
  * A JDOM-oriented wrapper around XPath engines.
+ *
+ * @author Laurent Bihanic
  */
 class JaxenXPath extends XPath {  // package protected
 
@@ -114,11 +116,11 @@ class JaxenXPath extends XPath {  // package protected
     */
    public List selectNodes(Object context) throws JDOMException {
       try {
-         return (xPath.selectNodes(context));
+         return xPath.selectNodes(context);
       }
       catch (JaxenException ex1) {
-         throw (new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1));
+         throw new JDOMException("XPath error while evaluating \"" +
+                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
       }
    }
 
@@ -141,11 +143,11 @@ class JaxenXPath extends XPath {  // package protected
     */
    public Object selectSingleNode(Object context) throws JDOMException {
       try {
-         return (xPath.selectSingleNode(context));
+         return xPath.selectSingleNode(context);
       }
       catch (JaxenException ex1) {
-         throw (new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1));
+         throw new JDOMException("XPath error while evaluating \"" +
+                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
       }
    }
 
@@ -165,11 +167,11 @@ class JaxenXPath extends XPath {  // package protected
     */
    public String valueOf(Object context) throws JDOMException {
       try {
-         return (xPath.valueOf(context));
+         return xPath.valueOf(context);
       }
       catch (JaxenException ex1) {
-         throw (new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1));
+         throw new JDOMException("XPath error while evaluating \"" +
+                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
       }
    }
 
@@ -193,11 +195,11 @@ class JaxenXPath extends XPath {  // package protected
     */
    public Number numberValueOf(Object context) throws JDOMException {
       try {
-         return (xPath.numberValueOf(context));
+         return xPath.numberValueOf(context);
       }
       catch (JaxenException ex1) {
-         throw (new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1));
+         throw new JDOMException("XPath error while evaluating \"" +
+                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
       }
    }
 
@@ -242,8 +244,8 @@ class JaxenXPath extends XPath {  // package protected
          xPath = new org.jaxen.jdom.XPath(expr);
       }
       catch (SAXPathException ex1) {
-         throw (new JDOMException(
-                        "Invalid XPath expression: \"" + expr + "\"", ex1));
+         throw new JDOMException(
+                        "Invalid XPath expression: \"" + expr + "\"", ex1);
       }
    }
 
@@ -256,14 +258,14 @@ class JaxenXPath extends XPath {  // package protected
       if (o instanceof JaxenXPath) {
          JaxenXPath x = (JaxenXPath)o;
 
-         return ((super.equals(o)) &&
-                 (xPath.toString().equals(x.xPath.toString())));
+         return (super.equals(o) &&
+                 xPath.toString().equals(x.xPath.toString()));
       }
-      return (false);
+      return false;
    }
 
    public int hashCode() {
-      return (xPath.hashCode());
+      return xPath.hashCode();
    }
 
 
@@ -292,7 +294,7 @@ class JaxenXPath extends XPath {  // package protected
          this.setXPath(in.readUTF());
       }
       catch (JDOMException ex1) {
-         throw (new IOException(ex1.toString()));
+         throw new IOException(ex1.toString());
       }
    }
 }

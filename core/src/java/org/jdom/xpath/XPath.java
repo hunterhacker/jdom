@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.1 2002/03/30 11:02:22 jhunter Exp $
+ $Id: XPath.java,v 1.2 2002/03/30 11:09:43 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,11 +65,13 @@ import org.jdom.JDOMException;
 
 /**
  * A JDOM-oriented wrapper around XPath engines.
+ * 
+ * @author Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.1 $ $Date: 2002/03/30 11:02:22 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.2 $ $Date: 2002/03/30 11:09:43 $ $Name:  $";
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -91,7 +93,7 @@ public abstract class XPath implements Serializable {
     * @throws JDOMException   if the XPath expression is invalid.
     */
    public static XPath newInstance(String path) throws JDOMException {
-      return (new JaxenXPath(path));
+      return new JaxenXPath(path);
    }
 
    /**
@@ -218,7 +220,7 @@ public abstract class XPath implements Serializable {
     */
    public static List selectNodes(Object context, String path)
                                                         throws JDOMException {
-      return (newInstance(path).selectNodes(context));
+      return newInstance(path).selectNodes(context);
    }
 
    /**
@@ -249,7 +251,7 @@ public abstract class XPath implements Serializable {
     */
    public static Object selectSingleNode(Object context, String path)
                                                         throws JDOMException {
-      return (newInstance(path).selectSingleNode(context));
+      return newInstance(path).selectSingleNode(context);
    }
 }
 
