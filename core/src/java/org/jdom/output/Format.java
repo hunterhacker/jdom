@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.1 2003/05/02 03:34:41 jhunter Exp $
+ $Id: Format.java,v 1.2 2003/05/05 20:26:26 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -134,13 +134,13 @@ import java.lang.reflect.Method;
  * xml:space with the value "default" formatting is turned back on for the child
  * element and then off for the remainder of the parent element.
  *
- * @version $Revision: 1.1 $, $Date: 2003/05/02 03:34:41 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/05 20:26:26 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.1 $ $Date: 2003/05/02 03:34:41 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.2 $ $Date: 2003/05/05 20:26:26 $ $Name:  $";
 
     /**
      * Returns a Format object that performs no whitespace changes, uses
@@ -230,6 +230,17 @@ public class Format implements Cloneable {
     Format() { }
 
     /**
+     * Sets the {@link EscapeStrategy} to use for character escaping.
+     *
+     * @param strategy the EscapeStrategy to use
+     * @return a pointer to this Format for chaining
+     */
+    public Format setEscapeStrategy(EscapeStrategy strategy) {
+        escapeStrategy = strategy;
+        return this;
+    }
+
+    /**
      * This will set the newline separator (<code>lineSeparator</code>).
      * The default is <code>\r\n</code>. Note that if the "newlines"
      * property is false, this value is irrelevant.  To make it output
@@ -254,6 +265,7 @@ public class Format implements Cloneable {
      * @see #setTextNormalize(boolean)
      *
      * @param separator <code>String</code> line separator to use.
+     * @return a pointer to this Format for chaining
      */
     public Format setLineSeparator(String separator) {
         this.lineSeparator = separator;
@@ -269,6 +281,7 @@ public class Format implements Cloneable {
      *
      * @param omitEncoding <code>boolean</code> indicating whether or not
      *        the XML declaration should indicate the document encoding.
+     * @return a pointer to this Format for chaining
      */
     public Format setOmitEncoding(boolean omitEncoding) {
         this.omitEncoding = omitEncoding;
@@ -283,6 +296,7 @@ public class Format implements Cloneable {
      *
      * @param omitDeclaration <code>boolean</code> indicating whether or not
      *        the XML declaration should be omitted.
+     * @return a pointer to this Format for chaining
      */
     public Format setOmitDeclaration(boolean omitDeclaration) {
         this.omitDeclaration = omitDeclaration;
@@ -296,6 +310,7 @@ public class Format implements Cloneable {
      *
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
      *        empty elements should be expanded.
+     * @return a pointer to this Format for chaining
      */
     public Format setExpandEmptyElements(boolean expandEmptyElements) {
         this.expandEmptyElements = expandEmptyElements;
@@ -310,6 +325,7 @@ public class Format implements Cloneable {
      *
      * @param trimAllWhite <code>boolean</code> true=>content consisting of
      *                 only whitespace is not print, false=>use text verbatim
+     * @return a pointer to this Format for chaining
      */
     public Format setTrimAllWhite(boolean trimAllWhite) {
         this.trimAllWhite = trimAllWhite;
@@ -324,6 +340,7 @@ public class Format implements Cloneable {
      *
      * @param textTrim <code>boolean</code> true=>trim the leading/trailing
      *                 whitespace, false=>use text verbatim
+     * @return a pointer to this Format for chaining
      */
     public Format setTextTrim(boolean textTrim) {
         this.textTrim = textTrim;
@@ -339,6 +356,7 @@ public class Format implements Cloneable {
      *
      * @param textNormalize <code>boolean</code> true=>normalize the
      *        whitespace, false=>use text verbatim
+     * @return a pointer to this Format for chaining
      */
     public Format setTextNormalize(boolean textNormalize) {
         this.textNormalize = textNormalize;
@@ -352,6 +370,7 @@ public class Format implements Cloneable {
      * happen.  Default: none (null)
      *
      * @param indent <code>String</code> to use for indentation.
+     * @return a pointer to this Format for chaining
      */
     public Format setIndent(String indent) {
         // if passed the empty string, change it to null, for marginal
@@ -371,6 +390,7 @@ public class Format implements Cloneable {
      *
      * @param encoding the encoding format.  Use XML-style names like
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
+     * @return a pointer to this Format for chaining
      */
     public Format setEncoding(String encoding) {
         this.encoding = encoding;
