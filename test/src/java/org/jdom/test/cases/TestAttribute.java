@@ -1,4 +1,57 @@
-/* Please run replic.pl on me ! */
+/*-- 
+
+ Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+ 
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows 
+    these conditions in the documentation and/or other materials 
+    provided with the distribution.
+
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact license@jdom.org.
+ 
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management (pm@jdom.org).
+ 
+ In addition, we request (but do not require) that you include in the 
+ end-user documentation provided with the redistribution and/or in the 
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos 
+ available at http://www.jdom.org/images/logos.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ This software consists of voluntary contributions made by many 
+ individuals on behalf of the JDOM Project and was originally 
+ created by Brett McLaughlin <brett@jdom.org> and 
+ Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ JDOM Project, please see <http://www.jdom.org/>.
+ 
+ */
+
 package org.jdom.test.cases;
 
 /**
@@ -51,19 +104,7 @@ public static Test suite () {
 		junit.textui.TestRunner.run(suite());
 	}
 
-	/**
-	 * Test code goes here. Replace this comment.
-	 */
-	public void test_TCC___String_String_String_String() {
-		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
-
-		assert("incorrect attribute name", attr.getName().equals("test"));
-		assert("incoorect attribute value", attr.getValue().equals("value"));
-		assert("incorrect attribute namespace", attr.getNamespace().equals(ns));
-
-	}
 
 	/**
 	 * Test the simple case of constructing an attribute without
@@ -104,7 +145,10 @@ public static Test suite () {
 	 * Test that an Attribute returns the correct Namespace URI.
 	 */
 	public void test_TCM__String_getNamespaceURI() {
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+		
+		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+
+		Attribute attr = new Attribute("test", "value", ns);
 		assert("incorrect URI", attr.getNamespaceURI().equals("http://some.other.place"));
 
 	}
@@ -190,9 +234,10 @@ public void test_TCM__float_getFloatValue() {
 	public void test_TCM__OrgJdomNamespace_getNamespace() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+		Attribute attr = new Attribute("test", "value", ns);
+		Namespace ns2 = Namespace.getNamespace("prefx", "http://some.other.place");
 
-		assert("incorrect Namespace", attr.getNamespace().equals(ns));
+		assert("incorrect Namespace", attr.getNamespace().equals(ns2));
 
 	}
 
@@ -231,7 +276,10 @@ public void test_TCM__float_getFloatValue() {
  	 * Test that an Attribute returns the correct Namespace prefix.
 	 */
 	public void test_TCM__String_getNamespacePrefix() {
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+		
+		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+
+		Attribute attr = new Attribute("test", "value", ns);
 		assert("incorrect prefix", attr.getNamespacePrefix().equals("prefx"));
 	}
 
@@ -239,7 +287,10 @@ public void test_TCM__float_getFloatValue() {
 	 * Tests that an Attribute returns the correct Qualified Name.
 	 */
 	public void test_TCM__String_getQualifiedName() {
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+
+		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+
+		Attribute attr = new Attribute("test", "value", ns);
 		assert("incorrect qualified name", attr.getQualifiedName().equals("prefx:test"));	
 
 	}
@@ -266,8 +317,8 @@ public void test_TCM__float_getFloatValue() {
 
 		assert("incorrect name in clone", attr2.getName().equals("test"));
 		assert("incorrect value in clone", attr2.getValue().equals("value"));
-
-		attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+		attr = new Attribute("test", "value", ns);
 		attr2 = (Attribute)attr.clone();
 		assert("incorrect name in clone", attr2.getName().equals("test"));
 		assert("incorrect value in clone", attr2.getValue().equals("value"));
@@ -354,7 +405,9 @@ public void test_TCM__float_getFloatValue() {
 	 * Test that an Attribute returns the correct value.
 	 */
 	public void test_TCM__String_getValue() {
-		Attribute attr = new Attribute("test", "prefx", "http://some.other.place", "value");
+
+		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+		Attribute attr = new Attribute("test", "value", ns);
 		assert("incorrect value", attr.getValue().equals("value"));
 
 	}
@@ -363,8 +416,11 @@ public void test_TCM__float_getFloatValue() {
  * Test that setting an Attribute's value works correctly.
  */
 public void test_TCM__OrgJdomAttribute_setValue_String() {
+
+	Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
+
 	Attribute attr=
-		new Attribute("test", "prefx", "http://some.other.place", "value");
+		new Attribute("test", "value", ns);
 
 	assert("incorrect value before set", attr.getValue().equals("value"));
 	attr.setValue("foo");
