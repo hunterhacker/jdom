@@ -1,12 +1,23 @@
 Items that need to be done:
 
+--- API CHANGES FOR Beta 9 ---
+
+* Laurent's various build script and builder fixes.
+
+
 --- API CHANGES FOR 1.0 ---
 
-* Remove canAdd() and canRemove() from Filter.
+* Make sure the filter classes have hashCode() methods.
 
 * Add DocType to the content list returned by Document so it can have a
   location.  Fix the outputters and builders to respect it.  Keep the easy get
   method however.
+
+* Add in serialization of Element's additional namespaces.  Right now we
+  have special support for the element's namespace, but not any additional
+  ones.  The solution is to add logic to the writeObject/readObject methods.
+  Michael Lipp explains why in http://www.servlets.com/archive/servlet/
+   ReadMsg?msgId=338149&listName=jdom-interest
 
 * Look at interfaces for the core classes, Element with ConcreteElement being
   our code.  Base on the factory model.  Allow no access between objects
@@ -23,8 +34,6 @@ Items that need to be done:
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
 
-* Should CDATA be a flag on Text or a subclass of Text?
-
 * Finalize the XPath class interface.
 
 * Add methods to recursively get content and get filtered content.
@@ -37,8 +46,11 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005644.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
-  Brad Huffman has a good proposal.
-  (Brad's)
+  Alex proposal:
+    http://www.servlets.com/archive/servlet/ReadMsg?msgId=334148
+  Brad proposals:
+    http://www.servlets.com/archive/servlet/ReadMsg?msgId=334184
+    http://www.servlets.com/archive/servlet/ReadMsg?msgId=312047
 
 * Look at where Namespace may need to be synchronized or made no longer a
   flyweight.  See
@@ -63,8 +75,6 @@ Items that need to be done:
   See "serialVersionUID" thread especially Peter V. Gadjokov's remarks at
   http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
   It may be OK to worry about fast short-term serialization only.
-
---- AFTER BETA 8 ---
 
 * Investigate serialization issue raised by Tom Preston
   http://lists.denveronline.net/lists/jdom-interest/2002-March/009857.html
@@ -313,3 +323,16 @@ Items that need to be done:
   satisfy the programmer's requests.  See Ayal Spitz' post at
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005685.html
 
+* Create an HTMLOutputter to handle the HTML specific aspects (closing tags,
+  escaped characters like &eacute;, etc).
+
+* Add Laurent's <?javax.xml.transform.disable-output-escaping?> 
+  and <?javax.xml.transform.enable-output-escaping?> support
+
+* Fix the sorting problem.
+  Alex idea: http://www.servlets.com/archive/servlet/ReadMsg?msgId=211785
+
+* Change the various setAttributeValue() methods in Element and 
+  Attribute to check the attribute type and normalize the string 
+  according to the attribute type. i.e. normalize the white space if 
+  the attribute has any type other than CDATA or UNDECLARED.
