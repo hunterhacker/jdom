@@ -33,6 +33,9 @@ simply overlooked before.
 Also added to Element the method getChildTextNormalize().  This method is
 similar to getChildTextTrim().
 
+Also added to Element two new styles of getAttributeValue() which let the
+programmer specify default values if the attribute doesn't exist.
+
 Added to SAXBuilder the methods setFeature() and setProperty().  These methods
 to allow programmers to customize the underlying parser.
 
@@ -408,7 +411,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.6 2002/02/20 10:28:33 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.7 2002/02/20 10:42:57 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
