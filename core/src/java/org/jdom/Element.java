@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.125 2002/06/08 02:13:22 jhunter Exp $
+ $Id: Element.java,v 1.126 2003/02/27 00:03:19 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,12 +79,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.125 $, $Date: 2002/06/08 02:13:22 $
+ * @version $Revision: 1.126 $, $Date: 2003/02/27 00:03:19 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.125 $ $Date: 2002/06/08 02:13:22 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.126 $ $Date: 2003/02/27 00:03:19 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -285,6 +285,11 @@ public class Element implements Serializable, Cloneable {
     public Namespace getNamespace(String prefix) {
         if (prefix == null) {
             return null;
+        }
+
+        if (prefix.equals("xml")) {
+            // Namespace "xml" is always bound.
+            return Namespace.XML_NAMESPACE;
         }
 
         // Check if the prefix is the prefix for this element
