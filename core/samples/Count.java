@@ -121,7 +121,7 @@ public class Count {
         numAttributes = 0;
         numProcessingInstructions = 0;  
 
-        List children = doc.getMixedContent();
+        List children = doc.getContent();
         Iterator iterator = children.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
@@ -142,7 +142,7 @@ public class Count {
 
         List attributes = element.getAttributes();
         numAttributes += attributes.size();
-        List children = element.getMixedContent();
+        List children = element.getContent();
         Iterator iterator = children.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
