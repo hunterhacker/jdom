@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.132 2003/04/30 21:51:51 jhunter Exp $
+ $Id: Element.java,v 1.133 2003/04/30 22:00:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.132 $, $Date: 2003/04/30 21:51:51 $
+ * @version $Revision: 1.133 $, $Date: 2003/04/30 22:00:12 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.132 $ $Date: 2003/04/30 21:51:51 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.133 $ $Date: 2003/04/30 22:00:12 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1062,7 +1062,7 @@ public class Element implements Serializable, Cloneable {
      * @return attribute for the element
      */
     public Attribute getAttribute(String name) {
-        return (Attribute) attributes.get(name, Namespace.NO_NAMESPACE);
+        return getAttribute(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1090,9 +1090,7 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or null if no such attribute
      */
     public String getAttributeValue(String name) {
-        Attribute attribute = (Attribute) attributes.get(name,
-                                              Namespace.NO_NAMESPACE);
-        return (attribute == null) ? null : attribute.getValue();
+        return getAttributeValue(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1124,9 +1122,7 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or the default if no such attribute
      */
     public String getAttributeValue(String name, String def) {
-        Attribute attribute = (Attribute) attributes.get(name,
-                                              Namespace.NO_NAMESPACE);
-        return (attribute == null) ? def : attribute.getValue();
+        return getAttributeValue(name, Namespace.NO_NAMESPACE, def);
     }
 
     /**
@@ -1141,8 +1137,7 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or null if no such attribute
      */
     public String getAttributeValue(String name, Namespace ns) {
-        Attribute attribute = (Attribute) attributes.get(name, ns);
-        return (attribute == null) ? null : attribute.getValue();
+        return getAttributeValue(name, ns, null);
     }
 
     /**
@@ -1262,7 +1257,7 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(String name) {
-        return attributes.remove(name, Namespace.NO_NAMESPACE);
+        return removeAttribute(name, Namespace.NO_NAMESPACE);
     }
 
     /**
