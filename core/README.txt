@@ -93,4 +93,3 @@ be sure to include enough information to reproduce the bug and full exception
 stack traces.  You might also want to read the FAQ at http://jdom.org to find
 out if your problem is not really a bug and just a common misunderstanding
 about how XML or JDOM works.
-
