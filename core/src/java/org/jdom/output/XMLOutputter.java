@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.111 2004/08/31 05:37:41 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.112 2004/09/01 06:08:18 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.111 $, $Date: 2004/08/31 05:37:41 $
+ * @version $Revision: 1.112 $, $Date: 2004/09/01 06:08:18 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -115,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.111 $ $Date: 2004/08/31 05:37:41 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.112 $ $Date: 2004/09/01 06:08:18 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -142,11 +142,11 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * This will create an <code>XMLOutputter</code> with the specified
-     * format characteristics.  The format object is retained directly
-     * (not cloned).
+     * format characteristics.  Note the format object is cloned internally
+     * before use.
      */
     public XMLOutputter(Format format) {
-        userFormat = format;
+        userFormat = (Format) format.clone();
         currentFormat = userFormat;
     }
 
@@ -167,21 +167,22 @@ public class XMLOutputter implements Cloneable {
     // * * * * * * * * * * Set parameters methods * * * * * * * * * *
 
     /**
-     * Sets the new format logic for the outputter.
+     * Sets the new format logic for the outputter.  Note the Format
+     * object is cloned internally before use.
      *
      * @param newFormat the format to use for output
      */
     public void setFormat(Format newFormat) {
-        this.userFormat = newFormat;
+        this.userFormat = (Format) newFormat.clone();
         this.currentFormat = userFormat;
     }
 
     /**
-     * Returns the current format object in use by the outputter.  The object
-     * is returned directly (not cloned).
+     * Returns the current format in use by the outputter.  Note the 
+     * Format object returned is a clone of the one used internally.
      */
     public Format getFormat() {
-        return userFormat;
+        return (Format) userFormat.clone();
     }
 
     // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
