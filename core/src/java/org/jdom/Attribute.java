@@ -159,7 +159,7 @@ public class Attribute implements Serializable, Cloneable {
      *   <code>[namespacePrefix]:[attributeName]</code>,
      *   the local name of the attribute would be
      *   <code>[attributeName]</code>. When the attribute
-     *   has no namespace , the local name is simply the attribute
+     *   has no namespace, the local name is simply the attribute
      *   name.
      * </p><p>
      * To obtain the namespace prefix for this
