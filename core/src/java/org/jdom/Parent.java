@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.9 2004/02/06 09:28:30 jhunter Exp $
+ $Id: Parent.java,v 1.10 2004/02/19 06:02:20 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.10 $, $Date: 2004/02/19 06:02:20 $
  */
 public interface Parent extends Cloneable, Serializable {
 
@@ -369,14 +369,4 @@ public interface Parent extends Cloneable, Serializable {
      */
     Document getDocument();
 
-    /**
-     * Checks if this parent can contain the given child at the specified
-     * position, throwing a descriptive IllegalAddException if not and
-     * simply returning if it's allowed.
-     *
-     * @param child   the potential child to be added to this parent
-     * @param index   the location for the potential child
-     * @throws IllegalAddException  if the child add isn't allowed
-     */
-    void canContain(Content child, int index) throws IllegalAddException;
 }

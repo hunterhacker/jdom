@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.36 2004/02/11 20:53:26 jhunter Exp $
+ $Id: ContentList.java,v 1.37 2004/02/19 06:02:19 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.36 $, $Date: 2004/02/11 20:53:26 $
+ * @version $Revision: 1.37 $, $Date: 2004/02/19 06:02:19 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.36 $ $Date: 2004/02/11 20:53:26 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.37 $ $Date: 2004/02/19 06:02:19 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -133,6 +133,51 @@ final class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
+     * @see org.jdom.ContentList#add(int, org.jdom.Content)
+     */
+    private void documentCanContain(int index, Content child) throws IllegalAddException {
+        if (child instanceof Element) {
+            if (child instanceof Element && indexOfFirstElement() >= 0) {
+                throw new IllegalAddException(
+                        "Cannot add a second root element, only one is allowed");
+            }
+            if (child instanceof Element && indexOfDocType() > index) {
+                throw new IllegalAddException(
+                        "A root element cannot be added before the DocType");
+            }
+        }
+        if (child instanceof DocType) {
+            if (indexOfDocType() >= 0) {
+                throw new IllegalAddException(
+                        "Cannot add a second doctype, only one is allowed");
+            }
+            int firstElt = indexOfFirstElement();
+            if (firstElt != -1 && firstElt < index) {
+                throw new IllegalAddException(
+                        "A DocType cannot be added after the root element");
+            }
+        }
+        if (child instanceof CDATA) {
+            throw new IllegalAddException("A CDATA is not allowed at the document root");
+        }
+
+        if (child instanceof Text) {
+            throw new IllegalAddException("A Text is not allowed at the document root");
+        }
+
+        if (child instanceof EntityRef) {
+            throw new IllegalAddException("An EntityRef is not allowed at the document root");
+        }
+    }
+
+    private void elementCanContain(int index, Content child) throws IllegalAddException {
+        if (child instanceof DocType) {
+            throw new IllegalAddException(
+                    "A DocType is not allowed except at the document level");
+        }
+    }
+
+    /**
      * Check and add the <code>Element</code> to this list at
      * the given index.
      *
@@ -143,7 +188,12 @@ final class ContentList extends AbstractList implements java.io.Serializable {
         if (child == null) {
             throw new IllegalAddException("Cannot add null object");
         }
-        parent.canContain(child, index);
+        if (parent instanceof Document) {
+          documentCanContain(index, child);
+        }
+        else {
+          elementCanContain(index, child);
+        }
 
         if (child.getParent() != null) {
             Parent p = child.getParent();

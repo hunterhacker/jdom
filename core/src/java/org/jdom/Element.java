@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.145 2004/02/11 21:12:43 jhunter Exp $
+ $Id: Element.java,v 1.146 2004/02/19 06:02:20 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.145 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.146 $, $Date: 2004/02/19 06:02:20 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.145 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.146 $ $Date: 2004/02/19 06:02:20 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1489,13 +1489,6 @@ public class Element extends Content implements Parent {
         }
 
         return deletedSome;
-    }
-
-    public void canContain(Content child, int index) throws IllegalAddException {
-        if (child instanceof DocType) {
-            throw new IllegalAddException(
-                    "A DocType is not allowed except at the document level");
-        }
     }
 
 }
