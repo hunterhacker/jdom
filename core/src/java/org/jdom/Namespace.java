@@ -54,7 +54,7 @@ import java.util.HashMap;
  * @author Wesley Biggs
  * @version 1.0
  */
-public class Namespace {
+public final class Namespace {
 
     /** Factory list of namespaces */
     private static HashMap namespaces;
@@ -66,10 +66,10 @@ public class Namespace {
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
     /** The prefix mapped to this namespace */
-    protected String prefix;
+    private String prefix;
 
     /** The URI for this namespace */
-    protected String uri;
+    private String uri;
 
     /**
      * <p>
@@ -178,7 +178,7 @@ public class Namespace {
      * @param prefix <code>String</code> prefix to map to this namespace.
      * @param uri <code>String</code> URI for namespace.
      */
-    protected Namespace(String prefix, String uri) {
+    private Namespace(String prefix, String uri) {
         this.prefix = prefix;
         this.uri = uri;
     }

@@ -58,6 +58,7 @@ import java.util.Map;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Lucas Gonze
  * @author Kevin Regan
  * @version 1.0
  */
@@ -166,6 +167,67 @@ public class Element implements Serializable, Cloneable {
      */
     public Element(String name, String prefix, String uri) {
         this(name, Namespace.getNamespace(prefix, uri));
+    }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in the specified <code>{@link Namespace}</code>.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     * @param ns <code>Namespace</code> to put copy in.
+     * @return <code>Element</code> copy of this <code>Element</code>.
+     */
+    public Element getCopy(String name, Namespace ns) {
+        Element clone = (Element)clone();
+        clone.namespace = ns;
+        clone.name = name;
+
+        return clone;
+    }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in the <code>{@link Namespace}</code> identified
+     *    by the supplied URI.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     * @param uri <code>String</code> URI for copy's <code>{@link Namespace}</code>.
+     * @return <code>Element</code> copy of this <code>Element</code>.
+     */
+    public Element getCopy(String name, String uri) {
+        return getCopy(name, Namespace.getNamespace("", uri));
+    }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in the <code>{@link Namespace}</code> identified
+     *    by the supplied prefix and URI.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     * @param prefix <code>String</code> prefix for copy's <code>{@link Namespace}</code>.
+     * @param uri <code>String</code> URI for copy's <code>{@link Namespace}</code>.
+     * @return <code>Element</code> copy of this <code>Element</code>.
+     */
+    public Element getCopy(String name, String prefix, String uri) {
+        return getCopy(name, Namespace.getNamespace(prefix, uri));
+    }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in no namespace.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     */
+    public Element getCopy(String name) {
+        return getCopy(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1213,13 +1275,275 @@ public class Element implements Serializable, Cloneable {
      */
     public final Object clone() {
         Element element = new Element(name, namespace);
-        element.attributes = (List)((LinkedList)attributes).clone();
-        element.content = (List)((LinkedList)content).clone();
+
+        List list = new LinkedList();
+        for (Iterator i = attributes.iterator(); i.hasNext(); ) {
+            list.add(((Attribute)i.next()).clone());
+        }
+        element.attributes = list;
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof String) {
+                element.addChild((String)obj);
+            } else if (obj instanceof Comment) {
+                element.addChild((Comment)((Comment)obj).clone());
+            } else if (obj instanceof Entity) {
+                element.addChild((Entity)((Entity)obj).clone());
+            } else if (obj instanceof Element) {
+                element.addChild((Element)((Element)obj).clone());
+            }
+        }
 
         // Remove out the parent
         element.setParent(null);
 
         return element;
+    }
+
+    /////////////////////////////////////////////////////////////////
+    // Convenience Methods below here
+    /////////////////////////////////////////////////////////////////
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>int</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @param defaultValue <code>int</code> default.
+     * @return <code>int</code> value of element.
+     */
+    public int getIntContent(int defaultValue) {
+        try {
+            return Integer.parseInt(getContent());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>int</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>int</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public int getIntContent() throws DataConversionException {
+        try {
+            return Integer.parseInt(getContent());
+        } catch (NumberFormatException e) {
+            throw new DataConversionException(name, "int");
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>long</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @param defaultValue <code>long</code> default.
+     * @return <code>long</code> value of element.
+     */
+    public long getLongContent(long defaultValue) {
+        try {
+            return Long.parseLong(getContent());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>long</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>long</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public long getLongContent() throws DataConversionException {
+        try {
+            return Long.parseLong(getContent());
+        } catch (NumberFormatException e) {
+            throw new DataConversionException(name, "long");
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>float</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @param defaultValue <code>float</code> default.
+     * @return <code>float</code> value of element.
+     */
+    public float getFloatContent(float defaultValue) {
+        try {
+            return Float.parseFloat(getContent());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>float</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>float</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public float getFloatContent() throws DataConversionException {
+        try {
+            return Float.parseFloat(getContent());
+        } catch (NumberFormatException e) {
+            throw new DataConversionException(name, "float");
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>double</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @param defaultValue <code>double</code> default.
+     * @return <code>double</code> value of element.
+     */
+    public double getDoubleContent(double defaultValue) {
+        try {
+            return Double.parseDouble(getContent());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>double</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>double</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public double getDoubleContent() throws DataConversionException {
+        try {
+            return Double.parseDouble(getContent());
+        } catch (NumberFormatException e) {
+            throw new DataConversionException(name, "double");
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>boolean</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @param defaultValue <code>boolean</code> default.
+     * @return <code>boolean</code> value of element.
+     */
+    public boolean getBooleanContent(boolean defaultValue) {
+        String value = getContent();
+        if ((value.equalsIgnoreCase("true")) ||
+            (value.equalsIgnoreCase("on")) ||
+            (value.equalsIgnoreCase("yes"))) {
+            return true;
+        } else if ((value.equalsIgnoreCase("false")) ||
+                   (value.equalsIgnoreCase("off")) ||
+                   (value.equalsIgnoreCase("no"))) {
+            return false;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>boolean</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>boolean</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public boolean getBooleanContent() throws DataConversionException {
+        String value = getContent();
+        if ((value.equalsIgnoreCase("true")) ||
+            (value.equalsIgnoreCase("on")) ||
+            (value.equalsIgnoreCase("yes"))) {
+            return true;
+        } else if ((value.equalsIgnoreCase("false")) ||
+                   (value.equalsIgnoreCase("off")) ||
+                   (value.equalsIgnoreCase("no"))) {
+            return false;
+        } else {
+            throw new DataConversionException(name, "boolean");
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>char</code> form, and if no conversion
+     *   can occur, returns the supplied default
+     *   value.
+     * </p>
+     *
+     * @return <code>char</code> value of element.
+     */
+    public char getCharContent(char defaultValue) {
+        try {
+            return getContent().charAt(0);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * <p>
+     * This gets the value of the element, in
+     *   <code>char</code> form, and if no conversion
+     *   can occur, throws a
+     *   <code>{@link DataConversionException}</code>
+     * </p>
+     *
+     * @return <code>char</code> value of element.
+     * @throws <code>DataConversionException</code> - when conversion fails.
+     */
+    public char getCharContent() throws DataConversionException {
+        try {
+            return getContent().charAt(0);
+        } catch (Exception e) {
+            throw new DataConversionException(name, "char");
+        }
     }
 
 }

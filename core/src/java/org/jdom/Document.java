@@ -63,17 +63,6 @@ import java.util.List;
 public class Document implements Serializable, Cloneable {
 
     /**
-     * <code>{@link ProcessingInstruction}</code>s of
-     *   <code>Document</code>, with order preserved.
-     *   These are stored at the document level, so while
-     *   order is consistent, placement is not.  In
-     *   other words the resulting <code>Document</code> is
-     *   the same functionally as when created, but not
-     *   neccessarily lexically.
-     */
-    protected List processingInstructions;
-
-    /**
      * This <code>Document</code>'s
      *   <code>{@link Comment}</code>s and
      *   the root <code>{@link Element}</code>
@@ -111,7 +100,6 @@ public class Document implements Serializable, Cloneable {
     public Document(Element rootElement, DocType docType) {
         this.rootElement = rootElement;
         this.docType = docType;
-        processingInstructions = new LinkedList();
         content = new LinkedList();
 
         if (rootElement != null) {
@@ -213,7 +201,16 @@ public class Document implements Serializable, Cloneable {
      * @return <code>List</code> - PIs for document.
      */
     public List getProcessingInstructions() {
-        return processingInstructions;
+        PartialList pis = new PartialList(content);
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                pis.addPartial(obj);
+            }
+        }
+
+        return pis;
     }
 
     /**
@@ -227,14 +224,14 @@ public class Document implements Serializable, Cloneable {
      *         target.
      */
     public List getProcessingInstructions(String target) {
-        PartialList pis = new PartialList(processingInstructions);
+        PartialList pis = new PartialList(content);
 
-        Iterator i = processingInstructions.iterator();
-        while (i.hasNext()) {
-            ProcessingInstruction pi =
-            (ProcessingInstruction)i.next();
-            if (pi.getTarget().equals(target)) {
-                pis.addPartial(pi);
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    pis.addPartial(obj);
+                }
             }
         }
 
@@ -254,12 +251,12 @@ public class Document implements Serializable, Cloneable {
     public ProcessingInstruction getProcessingInstruction(String target)
         throws NoSuchProcessingInstructionException {
 
-        Iterator i = processingInstructions.iterator();
-        while (i.hasNext()) {
-            ProcessingInstruction pi =
-            (ProcessingInstruction)i.next();
-            if (pi.getTarget().equals(target)) {
-                return pi;
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    return (ProcessingInstruction)obj;
+                }
             }
         }
 
@@ -275,7 +272,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> this document modified.
      */
     public Document addProcessingInstruction(ProcessingInstruction pi) {
-        processingInstructions.add(pi);
+        content.add(pi);
 
         return this;
     }
@@ -289,7 +286,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> this document modified.
      */
     public Document addProcessingInstruction(String target, String data) {
-        processingInstructions.add(new ProcessingInstruction(target, data));
+        content.add(new ProcessingInstruction(target, data));
 
         return this;
     }
@@ -303,7 +300,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> this document modified.
      */
     public Document addProcessingInstruction(String target, Map data) {
-        processingInstructions.add(new ProcessingInstruction(target, data));
+        content.add(new ProcessingInstruction(target, data));
 
         return this;
     }
@@ -320,7 +317,13 @@ public class Document implements Serializable, Cloneable {
     public Document setProcessingInstructions(
         List processingInstructions) {
 
-        this.processingInstructions = processingInstructions;
+        List current = getProcessingInstructions();
+        for (Iterator i = current.iterator(); i.hasNext(); ) {
+            i.remove();
+        }
+
+        content.addAll(processingInstructions);
+
         return this;
     }
 
@@ -336,8 +339,7 @@ public class Document implements Serializable, Cloneable {
     public boolean removeProcessingInstruction(
                                               ProcessingInstruction processingInstruction) {
 
-        return processingInstructions.remove(
-                                            processingInstruction);
+        return content.remove(processingInstruction);
     }
 
     /**
@@ -351,8 +353,7 @@ public class Document implements Serializable, Cloneable {
     public boolean removeProcessingInstruction(String target) {
 
         try {
-            return processingInstructions.remove(
-                                                getProcessingInstruction(target));
+            return content.remove(getProcessingInstruction(target));
         } catch (NoSuchProcessingInstructionException e) {
             return false;
         }
@@ -369,12 +370,12 @@ public class Document implements Serializable, Cloneable {
     public boolean removeProcessingInstructions(String target) {
         boolean deletedSome = false;
 
-        Iterator i = processingInstructions.iterator();
-        while (i.hasNext()) {
-            ProcessingInstruction pi =
-            (ProcessingInstruction)i.next();
-            if (pi.getTarget().equals(target)) {
-                i.remove();
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof ProcessingInstruction) {
+                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                    i.remove();
+                }
             }
         }
 
@@ -487,9 +488,18 @@ public class Document implements Serializable, Cloneable {
      */
     public final Object clone() {
         Document doc = new Document((Element)rootElement.clone());
-        doc.processingInstructions =
-            (List)((LinkedList)processingInstructions).clone();
-        doc.content = (List)((LinkedList)content).clone();
+
+        for (Iterator i = content.iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                continue;
+            } else if (obj instanceof Comment) {
+                doc.addComment((Comment)((Comment)obj).clone());
+            } else if (obj instanceof ProcessingInstruction) {
+                doc.addProcessingInstruction((ProcessingInstruction)((ProcessingInstruction)obj).clone());
+            }
+        }
+
         if (docType != null) {
             doc.docType = (DocType)docType.clone();
         }
