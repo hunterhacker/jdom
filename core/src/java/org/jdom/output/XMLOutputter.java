@@ -45,7 +45,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,6 +78,7 @@ import org.jdom.ProcessingInstruction;
  * @author Jason Hunter
  * @author Jason Reid
  * @author Wolfgang Werner
+ * @author Elliotte Rusty Harold
  * @version 1.0
  */
 public class XMLOutputter {
@@ -120,7 +121,7 @@ public class XMLOutputter {
     /**
      * <p>
      * This will create an <code>XMLOutputter</code> with
-     *   the given indent and new lines printing only if newlines is
+     *   the given indent that prints newlines only if <code>newlines</code> is
      *   <code>true</code>.
      * </p>
      *
@@ -160,24 +161,34 @@ public class XMLOutputter {
      * This will print the proper indent characters for the given indent level.
      * </p>
      *
-     * @param out <code>PrintWriter</code> to write to
+     * @param out <code>Writer</code> to write to
      * @param level <code>int</code> indentation level
      */
-    protected void indent(PrintWriter out, int level) {
+    protected void indent(Writer out, int level) throws IOException {
         for (int i = 0; i < level; i++) {
-            out.print(indent);
+            out.write(indent);
         }
     }
+
+    // We could change this to the System default, 
+    // but I prefer not to make output platform dependent.
+    // A carriage return, linefeed pair is the most generally
+    // acceptable linebreak.  Another possibility is to use
+    // only a line feed, which is XML's preferred (but not required)
+    // solution. However both carriage return and linefeed are
+    // required for many network protocols, and the parser on the
+    // other end should normalize this. 
+    private static String newline = "\r\n";
 
     /**
      * <p>
      * This will print a new line only if the newlines flag was set to true
      * </p>
      *
-     * @param out <code>PrintWriter</code> to write to
+     * @param out <code>Writer</code> to write to
      */
-    protected void maybePrintln(PrintWriter out) {
-        if (newlines) out.println();
+    protected void maybePrintln(Writer out) throws IOException  {
+        if (newlines) out.write(newline);
     }
 
     /**
@@ -194,11 +205,10 @@ public class XMLOutputter {
     public void output(Document doc, OutputStream out, String encoding)
                                            throws IOException {
         /**
-         * Get a PrintWriter, use general-purpose UTF-8 encoding.
+         * Get an OutputStreamWriter, use specified encoding.
          */
-        PrintWriter writer = new PrintWriter(
-                             new OutputStreamWriter(
-                             new BufferedOutputStream(out), encoding));
+        Writer writer = new OutputStreamWriter(
+                         new BufferedOutputStream(out), encoding);
 
         // Print out XML declaration
         printDeclaration(doc, writer, encoding);
@@ -217,7 +227,7 @@ public class XMLOutputter {
                     // 0 is indentation
                     printElement(doc.getRootElement(), writer, 0);
                 } else if (obj instanceof Comment) {
-                    writer.print(((Comment)obj).getSerializedForm());
+                    writer.write(((Comment)obj).getSerializedForm());
                 }
             }
         } catch (NoSuchChildException e) {
@@ -236,7 +246,7 @@ public class XMLOutputter {
      * </p>
      *
      * @param doc <code>Document</code> to format.
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>Writer</code> to write to.
      * @throws <code>IOException</code> - if there's any problem writing.
      */
     public void output(Document doc, OutputStream out)
@@ -246,33 +256,35 @@ public class XMLOutputter {
 
     /**
      * <p>
-     * This will print the declaration to the given output stream.
+     * This will write the declaration to the given output stream.
      *   Assumes XML version 1.0 since we don't directly know.
      * </p>
      *
      * @param docType <code>DocType</code> whose declaration to write.
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>Writer</code> to write to.
      */
     protected void printDeclaration(Document doc,
-                                    PrintWriter out,
-                                    String encoding) {
+                                    Writer out,
+                                    String encoding)  throws IOException {
         // Assume 1.0 version
-        if (encoding.equals("UTF8"))
-            out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        else
-            out.println("<?xml version=\"1.0\" encoding=\"" + encoding +
-                        "\"?>");
+        if (encoding.equals("UTF8")) {
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + newline);
+        }
+        else {
+            out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
+        }
+        
     }
 
     /**
      * <p>
-     * This will print the DOCTYPE declaration if one exists.
+     * This will write the DOCTYPE declaration if one exists.
      * </p>
      *
      * @param doc <code>Document</code> whose declaration to write.
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>Writer</code> to write to.
      */
-    protected void printDocType(DocType docType, PrintWriter out) {
+    protected void printDocType(DocType docType, Writer out)  throws IOException {
         if (docType == null) {
             return;
         }
@@ -281,49 +293,49 @@ public class XMLOutputter {
         String systemID = docType.getSystemID();
         boolean hasPublic = false;
 
-        out.print("<!DOCTYPE ");
-        out.print(docType.getElementName());
+        out.write("<!DOCTYPE ");
+        out.write(docType.getElementName());
         if ((publicID != null) && (!publicID.equals(""))) {
-            out.print(" PUBLIC \"");
-            out.print(publicID);
-            out.print("\"");
+            out.write(" PUBLIC \"");
+            out.write(publicID);
+            out.write("\"");
             hasPublic = true;
         }
         if ((systemID != null) && (!systemID.equals(""))) {
             if (!hasPublic) {
-                out.print(" SYSTEM");
+                out.write(" SYSTEM");
             }
-            out.print(" \"");
-            out.print(systemID);
-            out.print("\"");
+            out.write(" \"");
+            out.write(systemID);
+            out.write("\"");
         }
-        out.print(">");
-        out.println();
-        out.println();
+        out.write(">");
+        out.write(newline);
+        out.write(newline);
     }
 
     /**
      * <p>
-     * This will print the processing instructions to the given output stream.
+     * This will write the processing instructions to the given Writer.
      *   Assumes the <code>List</code> contains nothing but
      *   <code>ProcessingInstruction</code> objects.
      * </p>
      *
      * @param pis <code>List</code> of ProcessingInstructions to print
-     * @param out <code>PrintWriter</code> to write to
+     * @param out <code>Writer</code> to write to
      */
-    protected void printProcessingInstructions(List pis, PrintWriter out) {
+    protected void printProcessingInstructions(List pis, Writer out) throws IOException {
         for (int i=0, size=pis.size(); i<size; i++) {
             ProcessingInstruction pi =
                 (ProcessingInstruction)pis.get(i);
-            out.print("<?");
-            out.print(pi.getTarget());
-            out.print(" ");
-            out.print(pi.getData());
-            out.print("?>");
-            out.println();
+            out.write("<?");
+            out.write(pi.getTarget());
+            out.write(" ");
+            out.write(pi.getData());
+            out.write("?>");
+            out.write(newline);
         }
-        out.println();
+        out.write(newline);
     }
 
     /**
@@ -333,11 +345,11 @@ public class XMLOutputter {
      * </p>
      *
      * @param element <code>Element</code> to output.
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>Writer</code> to write to.
      * @param indent <code>int</code> level of indention.
      */
-    protected void printElement(Element element, PrintWriter out,
-                                int indentLevel) {
+    protected void printElement(Element element, Writer out,
+                                int indentLevel)  throws IOException {
 
         List mixedContent = element.getMixedContent();
 
@@ -353,8 +365,8 @@ public class XMLOutputter {
 
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
-        out.print("<");
-        out.print(element.getQualifiedName());
+        out.write("<");
+        out.write(element.getQualifiedName());
         Namespace ns = element.getNamespace();
         boolean printedNS = false;
         if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
@@ -367,15 +379,15 @@ public class XMLOutputter {
 
         if (empty) {
             // Simply close up
-            out.print(" />");
+            out.write(" />");
         } else if (stringOnly) {
             // Print the tag  with String on same line
             // Example: <tag name="value">content</tag>
-            out.print(">");
-            out.print(escapeElementEntities(element.getContent()));
-            out.print("</");
-            out.print(element.getQualifiedName());
-            out.print(">");
+            out.write(">");
+            out.write(escapeElementEntities(element.getContent()));
+            out.write("</");
+            out.write(element.getQualifiedName());
+            out.write(">");
         } else {
             /**
              * Print with children on future lines
@@ -384,7 +396,7 @@ public class XMLOutputter {
              *             <child/>
              *          </tag>
              */
-            out.print(">");
+            out.write(">");
 
             // Iterate through children
             Object content = null;
@@ -394,29 +406,29 @@ public class XMLOutputter {
                 if (content instanceof Comment) {
                     maybePrintln(out);
                     indent(out, indentLevel + 1);  // one extra
-                    out.print(((Comment)content).getSerializedForm());
+                    out.write(((Comment)content).getSerializedForm());
                 } else if (content instanceof String) {
                     /*
                      * XXX: We handle the 5 XML 1.0 entities
                      *   but what about CDATA? (brett)
                      */
-                    out.print(escapeElementEntities(content.toString()));
+                    out.write(escapeElementEntities(content.toString()));
                 } else if (content instanceof Element) {
                     printElement((Element)content, out, indentLevel + 1);
                 } else if (content instanceof Entity) {
-                    out.print(((Entity)content).getSerializedForm());
+                    out.write(((Entity)content).getSerializedForm());
                 } else if (content instanceof ProcessingInstruction) {
                     maybePrintln(out);
                     indent(out, indentLevel + 1);
-                    out.print(((ProcessingInstruction)content).getSerializedForm());
+                    out.write(((ProcessingInstruction)content).getSerializedForm());
                 } // Unsupported types are *not* printed
             }
 
             maybePrintln(out);
             indent(out, indentLevel);
-            out.print("</");
-            out.print(element.getQualifiedName());
-            out.print(">");
+            out.write("</");
+            out.write(element.getQualifiedName());
+            out.write(">");
 
            // After recursion, remove the namespace defined on the element (if any)
           if (printedNS) {
@@ -432,17 +444,17 @@ public class XMLOutputter {
      * </p>
      *
      * @param ns <code>Namespace</code> to print definition of
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>Writer</code> to write to.
      */
-    protected void printNamespace(Namespace ns, PrintWriter out) {
-        out.print(" xmlns");
+    protected void printNamespace(Namespace ns, Writer out) throws IOException {
+        out.write(" xmlns");
         if (!ns.getPrefix().equals("")) {
-            out.print(":");
-            out.print(ns.getPrefix());
+            out.write(":");
+            out.write(ns.getPrefix());
         }
-        out.print("=\"");
-        out.print(ns.getURI());
-        out.print("\"");
+        out.write("=\"");
+        out.write(ns.getURI());
+        out.write("\"");
     }
 
     /**
@@ -451,22 +463,22 @@ public class XMLOutputter {
      * </p>
      *
      * @param attributes <code>List</code> of Attribute objcts
-     * @param out <code>PrintWriter</code> to write to
+     * @param out <code>Writer</code> to write to
      */
-    protected void printAttributes(List attributes, PrintWriter out) {
+    protected void printAttributes(List attributes, Writer out) throws IOException {
         for (int i=0, size=attributes.size(); i<size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
             Namespace ns = attribute.getNamespace();
             if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
                 printNamespace(attribute.getNamespace(), out);
             }
-            out.print(" ");
-            out.print(attribute.getQualifiedName());
-            out.print("=");
+            out.write(" ");
+            out.write(attribute.getQualifiedName());
+            out.write("=");
 
-            out.print("\"");
-            out.print(escapeAttributeEntities(attribute.getValue()));
-            out.print("\"");
+            out.write("\"");
+            out.write(escapeAttributeEntities(attribute.getValue()));
+            out.write("\"");
         }
     }
 
