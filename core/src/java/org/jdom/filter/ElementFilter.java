@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementFilter.java,v 1.14 2004/02/04 23:43:25 jhunter Exp $
+ $Id: ElementFilter.java,v 1.15 2004/02/05 03:56:01 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,25 +56,27 @@
 
 package org.jdom.filter;
 
+import java.io.*;
+import java.util.*;
 import org.jdom.*;
 
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.14 $, $Date: 2004/02/04 23:43:25 $
+ * @version $Revision: 1.15 $, $Date: 2004/02/05 03:56:01 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
 public class ElementFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.14 $ $Date: 2004/02/04 23:43:25 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.15 $ $Date: 2004/02/05 03:56:01 $ $Name:  $";
 
     /** The element name */
     private String name;
 
     /** The element namespace */
-    private Namespace namespace;
+    private transient Namespace namespace;
 
     /**
      * Select only the Elements.
@@ -153,5 +155,26 @@ public class ElementFilter extends AbstractFilter {
         result = (name != null ? name.hashCode() : 0);
         result = 29 * result + (namespace != null ? namespace.hashCode() : 0);
         return result;
+    }
+
+    // Support a custom Namespace serialization so no two namespace
+    // object instances may exist for the same prefix/uri pair
+    private void writeObject(ObjectOutputStream out) throws IOException {
+
+        out.defaultWriteObject();
+
+        // We use writeObject() and not writeUTF() to minimize space
+        // This allows for writing pointers to already written strings
+        out.writeObject(namespace.getPrefix());
+        out.writeObject(namespace.getURI());
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+
+        in.defaultReadObject();
+
+        namespace = Namespace.getNamespace(
+                (String) in.readObject(), (String) in.readObject());
     }
 }

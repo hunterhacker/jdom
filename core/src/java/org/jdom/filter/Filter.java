@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.7 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Filter.java,v 1.8 2004/02/05 03:56:01 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,11 +60,11 @@ package org.jdom.filter;
 /**
  * A generalized filter to restrict visibility or mutability on a list.
  *
- * @version $Revision: 1.7 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.8 $, $Date: 2004/02/05 03:56:01 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
-public interface Filter {
+public interface Filter extends java.io.Serializable {
     /**
      * Check to see if the object matches a predefined set of rules.
      *

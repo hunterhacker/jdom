@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.27 2003/05/31 06:25:53 jhunter Exp $
+ $Id: ContentList.java,v 1.28 2004/02/05 03:56:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.27 $, $Date: 2003/05/31 06:25:53 $
+ * @version $Revision: 1.28 $, $Date: 2004/02/05 03:56:00 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.27 $ $Date: 2003/05/31 06:25:53 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.28 $ $Date: 2004/02/05 03:56:00 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -814,7 +814,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * for <code>Document</code>s or <code>Element</code>s.
      */
 
-    class FilterList extends AbstractList {
+    class FilterList extends AbstractList implements java.io.Serializable {
 
         /** The Filter */
         Filter filter;
