@@ -115,9 +115,11 @@ public class Comment implements Serializable, Cloneable {
      * </p>
      *
      * @param text <code>String</code> text for comment.
+     * @return <code>Comment</code> - this Comment modified.
      */
-    public void setText(String text) {
+    public Comment setText(String text) {
         this.text = text;
+        return this;
     }
 
     /**
