@@ -51,7 +51,7 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package samples.sax;
+package sax;
 
 import java.util.Stack;
 
