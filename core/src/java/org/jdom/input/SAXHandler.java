@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.35 2002/02/07 02:10:21 jhunter Exp $
+ $Id: SAXHandler.java,v 1.36 2002/02/23 11:19:01 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.35 $, $Date: 2002/02/07 02:10:21 $
+ * @version $Revision: 1.36 $, $Date: 2002/02/23 11:19:01 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.35 $ $Date: 2002/02/07 02:10:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.36 $ $Date: 2002/02/23 11:19:01 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -102,7 +102,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** Indicator of where in the document we are */
     protected boolean atRoot;
 
-    /** Indicator of whether we are in the DocType */
+    /** Indicator of whether we are in the DocType. Note that the DTD consists
+     * of both the internal subset (inside the <!DOCTYPE> tag) and the 
+      * external subset (in a separate .dtd file). */
     protected boolean inDTD = false;
 
     /** Indicator of whether we are in the internal subset */
@@ -122,7 +124,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     protected boolean suppress = false;
 
     /** How many nested entities we're currently within */
-    private int entityDepth = 0;
+    private int entityDepth = 0;  // XXX may not be necessary anymore?
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
@@ -340,33 +342,24 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * </p>
      *
      * @param name entity name
-     * @param publicId public id
-     * @param systemId system id
+     * @param publicID public id
+     * @param systemID system id
      * @throws SAXException when things go wrong
      */
     public void externalEntityDecl(String name,
-                                   String publicId, String systemId)
+                                   String publicID, String systemID)
                                    throws SAXException {
         // Store the public and system ids for the name
-        externalEntities.put(name, new String[]{publicId, systemId});
+        externalEntities.put(name, new String[]{publicID, systemID});
 
         if (!inInternalSubset) return;
 
         buffer.append("  <!ENTITY ")
               .append(name);
-        if (publicId != null) {
-            buffer.append(" PUBLIC \"")
-                  .append(publicId)
-                  .append("\" ");
-        }
-        if (systemId != null) {
-            buffer.append(" SYSTEM \"")
-                  .append(systemId)
-                  .append("\" ");
-        }
+        appendExternalId(publicID, systemID);
         buffer.append(">\n");
     }
-	
+
     /**
      * <P>
      *  This handles an attribute declaration in the internal subset
@@ -403,7 +396,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                   .append(value)
                   .append("\"");
         }
-        buffer.append(">\n");	
+        buffer.append(">\n");
     }
 
     /**
@@ -415,6 +408,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param model <code>String</code> model of the element in DTD syntax
      */
     public void elementDecl(String name, String model) throws SAXException {
+        // Skip elements that come from the external subset
+        if (!inInternalSubset) return;
+
         buffer.append("  <!ELEMENT ")
               .append(name)
               .append(" ")
@@ -433,7 +429,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     public void internalEntityDecl(String name, String value)
         throws SAXException { 
 
-        //skip entities that come from the dtd
+        // Skip entities that come from the external subset
         if (!inInternalSubset) return;
 
         buffer.append("  <!ENTITY ");
@@ -813,16 +809,16 @@ if (!inDTD) {
      * </p>
      *
      * @param name <code>String</code> name of element listed in DTD
-     * @param publicId <code>String</code> public ID of DTD
-     * @param systemId <code>String</code> system ID of DTD
+     * @param publicID <code>String</code> public ID of DTD
+     * @param systemID <code>String</code> system ID of DTD
      */
-    public void startDTD(String name, String publicId, String systemId)
+    public void startDTD(String name, String publicID, String systemID)
         throws SAXException {
 
         flushCharacters(); //XXX Is this needed here?
 
         document.setDocType(
-            factory.docType(name, publicId, systemId));
+            factory.docType(name, publicID, systemID));
         inDTD = true;
         inInternalSubset = true;
     }
@@ -847,7 +843,8 @@ if (!inDTD) {
             return;
         }
 
-        if (inDTD) {
+        // A "[dtd]" entity indicates the beginning of the external subset
+        if (name.equals("[dtd]")) {
             inInternalSubset = false;
             return;
         }
@@ -894,8 +891,9 @@ if (!inDTD) {
             // regardless of the "expand" value
             suppress = false;
         }
-        if (inDTD)
+        if (name.equals("[dtd]")) {
             inInternalSubset = true;
+        }
     }
 
     /**
@@ -973,10 +971,9 @@ if (!inDTD) {
         if (!inInternalSubset) return;
 
         buffer.append("  <!NOTATION ")
-              .append(name)
-              .append(" \"")
-              .append(systemID)
-              .append("\">\n");	
+              .append(name);
+        appendExternalId(publicID, systemID);    
+        buffer.append(">\n");
     }
 
     /**
@@ -985,32 +982,50 @@ if (!inDTD) {
      * </P>
      *
      * @param name <code>String</code> of the unparsed entity decl
-     * @param publicId <code>String</code> of the unparsed entity decl
-     * @param systemId <code>String</code> of the unparsed entity decl
+     * @param publicID <code>String</code> of the unparsed entity decl
+     * @param systemID <code>String</code> of the unparsed entity decl
      * @param notationName <code>String</code> of the unparsed entity decl
      */
-    public void unparsedEntityDecl(String name, String publicId,
-                                   String systemId, String notationName)
+    public void unparsedEntityDecl(String name, String publicID,
+                                   String systemID, String notationName)
         throws SAXException {
 
         if (!inInternalSubset) return;
 
         buffer.append("  <!ENTITY ")
               .append(name);
-        if (publicId != null) {
-            buffer.append(" PUBLIC \"")
-                  .append(publicId)
-                  .append("\" ");
-        }
-        if (systemId != null) {
-            buffer.append(" SYSTEM \"")
-                  .append(systemId)
-                  .append("\" ");
-        }
-
+        appendExternalId(publicID, systemID);
         buffer.append(" NDATA ")
               .append(notationName);
         buffer.append(">\n");
+    }
+
+    /**
+     * <P>
+     *  Appends an external ID to the internal subset buffer. Either publicID
+     *  or systemID may be null, but not both.
+     * </P>
+     *
+     * @param publicID the public ID
+     * @param systemID the system ID
+     */
+    protected void appendExternalId(String publicID, String systemID) {
+        if (publicID != null) {
+            buffer.append(" PUBLIC \"")
+                  .append(publicID)
+                  .append("\"");
+        }
+        if (systemID != null) {
+            if (publicID == null) {
+                buffer.append(" SYSTEM ");
+            }
+            else {
+                buffer.append(" ");
+            }
+            buffer.append("\"")
+                  .append(systemID)
+                  .append("\"");
+        }
     }
 
     /**
