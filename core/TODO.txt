@@ -1,14 +1,15 @@
 Items that need to be done:
 
---- AFTER BETA 8 ---
+--- API CHANGES FOR 1.0 ---
+
+* Deprecate all XMLOutputter setIndent methods except setIndent(String).
+
+* Rework SAXBuilder exception strategy, throwing IOEx when an underlying IOEx
+  is raised instead of wrapping it in a JDOMEx.
+
+* Finalize the XPath class interface.
 
 * Add methods to recursively get content and get filtered content.
-
-* Look into hasContent() and hasAttributes() methods to eliminate need to
-  create lists during output.
-
-* Look at making CDATA and Text either the same class or in the same class
-  hierarchy.
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
@@ -21,13 +22,6 @@ Items that need to be done:
   Brad Huffman has a good proposal.
   (Brad's)
 
-* Start shipping Xerces 2.0+
-  Xerces 2.0.0 bugs found when using DOMBuilder:
-   * In cdata.xml we're getting entity callbacks for chars inside CDATA
-     sections (bug 6316 in Xerces' Bugzilla)
-   * In web.xml we're seeing the comments from the external DTD appear in our
-     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar)
-
 * Look at where Namespace may need to be synchronized or made no longer a
   flyweight.  See
   http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
@@ -38,6 +32,26 @@ Items that need to be done:
   allow it to report errors or to return a code indicating the element should 
   be ignored.
   (Laurent Bihanic wrote JH a private email about this on Dec 28 2001.)
+
+* Make sure that JDOMException is compatible with JDK 1.4 nested exceptions.
+  E.g. should getNestedException find 1.4-type nested exceptions? Do both
+  1.4-type nested exceptions and JDOMException both try to print child
+  stack traces, causing them to be printed twice?
+
+--- AFTER BETA 8 ---
+
+* Investigate serialization issue raised by Tom Preston
+  http://lists.denveronline.net/lists/jdom-interest/2002-March/009857.html
+
+* Look into hasContent() and hasAttributes() methods to eliminate need to
+  create lists during output.
+
+* Start shipping Xerces 2.0+
+  Xerces 2.0.0 bugs found when using DOMBuilder:
+   * In cdata.xml we're getting entity callbacks for chars inside CDATA
+     sections (bug 6316 in Xerces' Bugzilla)
+   * In web.xml we're seeing the comments from the external DTD appear in our
+     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar)
 
 * Performance optimize.  See following thread for test data.
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
@@ -65,6 +79,8 @@ Items that need to be done:
   lines" for some discussion.
 
 --- FOR JDOM 1.0 ---
+
+* Write a "GNU JAXP (i.e. AElfred) DOM adapter" (elharo looking into this).
 
 * Create "build dist" for distribution
   Use fixcrlf in dist (instead of package as currently done)
@@ -113,11 +129,6 @@ Items that need to be done:
 * Joe summarizes his issues at
   http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
 
-* Make sure that JDOMException is compatible with JDK 1.4 nested exceptions.
-  E.g. should getNestedException find 1.4-type nested exceptions? Do both
-  1.4-type nested exceptions and JDOMException both try to print child
-  stack traces, causing them to be printed twice?
-
 * Clean up Javadocs right before final release.
 
 --- FOR JDOM 1.1 ---
@@ -135,16 +146,6 @@ Items that need to be done:
   Also see posts with the subject "How to ease traversal of JDOM tree"
 
 * Add setIgnoringAllWhitespace(boolean) method.
-
-* Add XPath support, most likely integrating Bob McWhirter's package.
-
-* Figure out XPath interface, current best is this:
-    List    XPath.getList(Element e, String xpath)  // or Document param
-    Comment XPath.getComment(Element e, String xpath)
-    Element XPath.getElement(Element e, String xpath)
-    ProcIns XPath.getProcIns(Element e, String xpath)
-    Entity  XPath.getEntity(Element e, String xpath)
-    String  XPath.getText(Element e, String xpath)
 
 * Investigate a way to do in-memory validation.  First step is probably 
   to get an in-memory representation of a DTD as per
