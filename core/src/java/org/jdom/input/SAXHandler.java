@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.16 2001/06/15 23:09:44 jhunter Exp $
+ $Id: SAXHandler.java,v 1.17 2001/06/18 16:06:42 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.16 $ $Date: 2001/06/15 23:09:44 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.17 $ $Date: 2001/06/18 16:06:42 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -641,14 +641,14 @@ if (!inDTD) {
      *
      * @param ch <code>ch[]</code> array of comment characters.
      * @param start <code>int</code> index to start reading from.
-     * @param end <code>int</code> index to end reading at.
+     * @param length <code>int</code> length of data.
      */
-    public void comment(char[] ch, int start, int end)
+    public void comment(char[] ch, int start, int length)
         throws SAXException {
 
         if (suppress) return;
 
-        String commentText = new String(ch, start, end);
+        String commentText = new String(ch, start, length);
         if ((!inDTD) && (!commentText.equals(""))) {
             if (stack.empty()) {
                 document.addContent(
