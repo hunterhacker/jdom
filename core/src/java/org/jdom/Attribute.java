@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.36 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Attribute.java,v 1.37 2002/02/08 02:49:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,12 +72,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.36 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.37 $, $Date: 2002/02/08 02:49:41 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.36 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.37 $ $Date: 2002/02/08 02:49:41 $ $Name:  $";
 
     /**
      * <p>
@@ -179,7 +179,7 @@ public class Attribute implements Serializable, Cloneable {
     /**
      * <p>
      * Attribute type: the attribute value is a name token from an
-     * enumeration..
+     * enumeration.
      * </p>
      *
      * @see #getAttributeType
