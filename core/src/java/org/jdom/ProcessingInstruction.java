@@ -154,7 +154,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will set the parent of this <code>Element</code>.
+     * This will set the parent of this <code>ProcessingInstruction</code>.
      * </p>
      *
      * @param parent <code>Element</code> to be new parent.
@@ -162,6 +162,29 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     protected ProcessingInstruction setParent(Element parent) {
         this.parent = parent;
+        return this;
+    }
+
+    /**
+     * <p>
+     * This detaches the PI from its parent, or does nothing if the
+     * PI has no parent.
+     * </p>
+     *
+     * @return <code>ProcessingInstruction</code> - this 
+     * <code>ProcessingInstruction</code> modified.
+     */
+    public ProcessingInstruction detach() {
+        Element p = getParent();
+        if (p != null) {
+            p.removeContent(this);
+        }
+        else {
+            Document d = getDocument();
+            if (d != null) {
+                d.removeContent(this);
+            }
+        }
         return this;
     }
 

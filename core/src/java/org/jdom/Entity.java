@@ -140,6 +140,22 @@ public class Entity implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This detaches the <code>Entity</code> from its parent, or does nothing 
+     * if the <code>Entity</code> has no parent.
+     * </p>
+     *
+     * @return <code>Entity</code> - this <code>Entity</code> modified.
+     */
+    public Entity detach() {
+        Element p = getParent();
+        if (p != null) {
+            p.removeContent(this);
+        }
+        return this;
+    }
+
+    /**
+     * <p>
      * This retrieves the owning <code>{@link Document}</code> for
      *   this Entity, or null if not a currently a member of a
      *   <code>{@link Document}</code>.

@@ -190,6 +190,22 @@ public class Attribute implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This detaches the <code>Attribute</code> from its parent, or does 
+     * nothing if the <code>Attribute</code> has no parent.
+     * </p>
+     *
+     * @return <code>Attribute</code> - this <code>Attribute</code> modified.
+     */
+    public Attribute detach() {
+        Element p = getParent();
+        if (p != null) {
+            p.removeAttribute(this.getName(), this.getNamespace());
+        }
+        return this;
+    }
+
+    /**
+     * <p>
      * This will retrieve the local name of the
      *   <code>Attribute</code>. For any XML attribute
      *   which appears as

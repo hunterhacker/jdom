@@ -127,6 +127,29 @@ public class Comment implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This detaches the <code>Comment</code> from its parent, or does 
+     * nothing if the <code>Comment</code> has no parent.
+     * </p>
+     *
+     * @return <code>Comment</code> - this 
+     * <code>Comment</code> modified.
+     */
+    public Comment detach() {
+        Element p = getParent();
+        if (p != null) {
+            p.removeContent(this);
+        }
+        else {
+            Document d = getDocument();
+            if (d != null) {
+                d.removeContent(this);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * <p>
      * This retrieves the owning <code>{@link Document}</code> for
      *   this Comment, or null if not a currently a member of a
      *   <code>{@link Document}</code>.

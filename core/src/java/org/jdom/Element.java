@@ -413,6 +413,28 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This detaches the element from its parent, or does nothing if the
+     * element has no parent.
+     * </p>
+     *
+     * @return <code>Element</code> - this <code>Element</code> modified.
+     */
+    public Element detach() {
+        Element p = getParent();
+        if (p != null) {
+            p.removeContent(this);
+        }
+        else {
+            Document d = getDocument();
+            if (d != null) {
+                d.setRootElement(new Element("placeholder"));
+            }
+        }
+        return this;
+    }
+
+    /**
+     * <p>
      * This returns a <code>boolean</code> value indicating
      *   whether this <code>Element</code> is a root
      *   <code>Element</code> for a JDOM <code>{@link Document}</code>.
