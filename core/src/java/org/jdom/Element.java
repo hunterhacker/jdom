@@ -517,7 +517,7 @@ public class Element implements Serializable, Cloneable {
      *   element, an empty <code>String</code> ("") is returned.
      * </p>
      *
-     * @return text content for this element, or null if none
+     * @return text content for this element, or empty string if none
      */
     public String getText() {
         if ((content == null) || 
@@ -563,7 +563,8 @@ public class Element implements Serializable, Cloneable {
      * returned.
      * </p>
      *
-     * @return normalized text content for this element, or null if none
+     * @return normalized text content for this element, or empty string
+     * if none
      */
     public String getTextTrim() {
         String text = getText();
