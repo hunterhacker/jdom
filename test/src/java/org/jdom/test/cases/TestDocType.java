@@ -229,7 +229,6 @@ public static Test suite () {
 	 */
 	public void test_TCM__String_getSystemID() {
 		String systemID = "FILE://temp/doodah.dtd";
-		
 		DocType theDocType = new DocType("anElement", systemID);
 
 		assertEquals(systemID, theDocType.getSystemID());
@@ -241,11 +240,10 @@ public static Test suite () {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";
 		DocType theDocType = new DocType("anElement", publicID, systemID);
-
 		String result = theDocType.toString();
 		String compareTo =
 		"[DocType: <!DOCTYPE anElement PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN\"" +
-		" \"FILE://temp/test.dtd\">\r\n]";
+		" \"FILE://temp/test.dtd\">]";
 
 		assertEquals("incorrect toString form", compareTo, result);
 	}
