@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.8 2001/03/15 06:07:18 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.9 2001/03/28 19:26:19 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      *   parser handle parsing using the supplied stream.
      * </p>
      *
-     * @param in <code>InputStream</code> to parse.
+     * @param filename file to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
      * @throws Exception when errors occur in parsing.
