@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.106 2002/01/25 18:42:52 jhunter Exp $
+ $Id: Element.java,v 1.107 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.106 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.107 $, $Date: 2002/02/05 08:03:18 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.106 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.107 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -215,6 +215,9 @@ public class Element implements Serializable, Cloneable {
      *         Element name.
      */
     public Element setName(String name) {
+        // XXX elharo things we shold use checkXMLName() instead of
+        // checkElementName() here because we should allow this to contain 
+        // a colon
         String reason = Verifier.checkElementName(name);
         if (reason != null) {
             throw new IllegalNameException(name, "element", reason);

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.5 2002/01/08 09:17:10 jhunter Exp $
+ $Id: EntityRef.java,v 1.6 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,17 +59,17 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <p><code>EntityRef</code> Defines an XML entity in Java.</p>
+ * <p><code>EntityRef</code> Defines an XML entity reference in Java.</p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.5 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.6 $, $Date: 2002/02/05 08:03:18 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.5 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.6 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -101,10 +101,27 @@ public class EntityRef implements Serializable, Cloneable {
      * </p>
      *
      * @param name <code>String</code> name of element.
+     * @throws IllegalNameException if the given name is not a legal
+     *         XML name.
      */
     public EntityRef(String name) {
-        this.name = name;
-        
+        this(name, null, null);
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>EntityRef</code>
+     *   with the supplied name and system id.
+     * </p>
+     *
+     * @param name <code>String</code> name of element.
+     * @throws IllegalNameException if the given name is not a legal
+     *         XML name.
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal.
+     */
+    public EntityRef(String name, String systemID) {
+        this(name, null, systemID);
     }
 
     /**
@@ -114,11 +131,16 @@ public class EntityRef implements Serializable, Cloneable {
      * </p>
      *
      * @param name <code>String</code> name of element.
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal or the the given public ID is not a
+     *         legal public ID
+     * @throws IllegalNameException if the given name is not a legal
+     *         XML name.
      */
     public EntityRef(String name, String publicID, String systemID) {
-        this.name = name;
-        this.publicID = publicID;
-        this.systemID = systemID;
+        setName(name);
+        setPublicID(publicID);
+        setSystemID(systemID);
     }
 
     /**
@@ -232,7 +254,7 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @return public ID of this <code>EntityRef</code>
      */
-    public java.lang.String getPublicID() {
+    public String getPublicID() {
         return publicID;
     }
 
@@ -244,7 +266,7 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @return system ID of this <code>EntityRef</code>
      */
-    public java.lang.String getSystemID() {
+    public String getSystemID() {
         return systemID;
     }
 
@@ -279,8 +301,16 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @param name new name of the entity
      * @return this <code>EntityRef</code> modified.
+     * @throws IllegalNameException if the given name is not a legal
+     *         XML name.
      */
     public EntityRef setName(String name) {
+        // This can contain a colon so we use checkXMLName()
+        // instead of checkElementName()
+        String reason = Verifier.checkXMLName(name);
+        if (reason != null) {
+            throw new IllegalNameException(name, "EntityRef", reason);
+        }
         this.name = name;
         return this;
     }
@@ -292,8 +322,14 @@ public class EntityRef implements Serializable, Cloneable {
      *
      * @param newPublicID new public id
      * @return this <code>EntityRef</code> modified.
+     * @throws IllegalDataException if the given public ID is not a legal
+     *         public ID.
      */
     public EntityRef setPublicID(String newPublicID) {
+        String reason = Verifier.checkPublicID(publicID);
+        if (reason != null) {
+            throw new IllegalDataException(publicID, "EntityRef", reason);
+        }
         this.publicID = newPublicID;
         return this;
     }
@@ -304,9 +340,15 @@ public class EntityRef implements Serializable, Cloneable {
      * </p>
      *
      * @param newSystemID new system id
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal.
      * @return this <code>EntityRef</code> modified.
      */
     public EntityRef setSystemID(String newSystemID) {
+        String reason = Verifier.checkSystemLiteral(systemID);
+        if (reason != null) {
+            throw new IllegalDataException(systemID, "EntityRef", reason);
+        }
         this.systemID = newSystemID;
         return this;
     }

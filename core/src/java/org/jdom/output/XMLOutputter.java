@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.72 2002/01/30 03:32:11 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.73 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.72 $, $Date: 2002/01/30 03:32:11 $
+ * @version $Revision: 1.73 $, $Date: 2002/02/05 08:03:18 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.72 $ $Date: 2002/01/30 03:32:11 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.73 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1179,13 +1179,13 @@ public class XMLOutputter implements Cloneable {
 
         out.write("<!DOCTYPE ");
         out.write(docType.getElementName());
-        if ((publicID != null) && (!publicID.equals(""))) {
+        if (publicID != null) {
             out.write(" PUBLIC \"");
             out.write(publicID);
             out.write("\"");
             hasPublic = true;
         }
-        if ((systemID != null) && (!systemID.equals(""))) {
+        if (systemID != null) {
             if (!hasPublic) {
                 out.write(" SYSTEM");
             }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.17 2002/01/08 09:17:10 jhunter Exp $
+ $Id: DocType.java,v 1.18 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,12 +65,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.17 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.18 $, $Date: 2002/02/05 08:03:18 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.17 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.18 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -113,11 +113,15 @@ public class DocType implements Serializable, Cloneable {
      *        referenced DTD
      * @param systemID <code>String</code> system ID of
      *        referenced DTD
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal or the public ID is not a legal public ID.
+     * @throws IllegalNameException if the given root element name is not a
+     *         legal XML element name.
      */
     public DocType(String elementName, String publicID, String systemID) {
-        this.elementName = elementName;
-        this.publicID = publicID;
-        this.systemID = systemID;
+        setElementName(elementName);
+        setPublicID(publicID);
+        setSystemID(systemID);
     }
 
     /**
@@ -131,9 +135,13 @@ public class DocType implements Serializable, Cloneable {
      *        element being constrained.
      * @param systemID <code>String</code> system ID of
      *        referenced DTD
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal.
+     * @throws IllegalNameException if the given root element name is not a
+     *         legal XML element name.
      */
     public DocType(String elementName, String systemID) {
-        this(elementName, "", systemID);
+        this(elementName, null, systemID);
     }
 
     /**
@@ -144,9 +152,11 @@ public class DocType implements Serializable, Cloneable {
      *
      * @param elementName <code>String</code> name of
      *        element being constrained.
+     * @throws IllegalNameException if the given root element name is not a
+     *         legal XML element name.
      */
     public DocType(String elementName) {
-        this(elementName, "", "");
+        this(elementName, null, null);
     }
 
     /**
@@ -159,6 +169,29 @@ public class DocType implements Serializable, Cloneable {
      */
     public String getElementName() {
         return elementName;
+    }
+
+    /**
+     * <p>
+     * This will set the root element name declared by this
+     *  DOCTYPE declaration.
+     * </p>
+     *
+     * @return DocType <code>DocType</code> this DocType object
+     * @param elementName <code>String</code> name of
+     *        root element being constrained.
+     * @throws IllegalNameException if the given root element name is not a
+     *         legal XML element name.
+     */
+    public DocType setElementName(String elementName) {
+        // This can contain a colon so we use checkXMLName()
+        // instead of checkElementName()
+        String reason = Verifier.checkXMLName(elementName);
+        if (reason != null) {
+            throw new IllegalNameException(elementName, "DocType", reason);
+        }
+        this.elementName = elementName;
+        return this;
     }
 
     /**
@@ -180,10 +213,15 @@ public class DocType implements Serializable, Cloneable {
      *   referenced DTD.
      * </p>
      *
-     * @return publicID <code>String</code> public ID of
-     *                  referenced DTD.
+     * @return DocType <code>DocType</code> this DocType object
+     * @throws IllegalDataException if the given public ID is not a legal
+     *         public ID.
      */
     public DocType setPublicID(String publicID) {
+        String reason = Verifier.checkPublicID(publicID);
+        if (reason != null) {
+            throw new IllegalDataException(publicID, "DocType", reason);
+        }
         this.publicID = publicID;
 
         return this;
@@ -210,8 +248,14 @@ public class DocType implements Serializable, Cloneable {
      *
      * @return systemID <code>String</code> system ID of
      *                  referenced DTD.
+     * @throws IllegalDataException if the given system ID is not a legal
+     *         system literal.
      */
     public DocType setSystemID(String systemID) {
+        String reason = Verifier.checkSystemLiteral(systemID);
+        if (reason != null) {
+            throw new IllegalDataException(systemID, "DocType", reason);
+        }
         this.systemID = systemID;
 
         return this;
@@ -235,7 +279,7 @@ public class DocType implements Serializable, Cloneable {
      * This sets the <code>{@link Document}</code> holding this doctype.
      * </p>
      *
-     * @param document <code>Document</code> holding this doctype
+     * @param DocType <code>Document</code> holding this doctype
      * @return <code>Document</code> this <code>DocType</code> modified
      */
     protected DocType setDocument(Document document) {

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.39 2002/01/08 09:17:10 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.40 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -87,12 +87,12 @@ import org.xml.sax.*;
  * @author Yusuf Goolamabbas
  * @author Dan Schaffer
  * @author Bradley S. Huffman
- * @version $Revision: 1.39 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.40 $, $Date: 2002/02/05 08:03:18 $
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.39 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.40 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -518,12 +518,8 @@ public class DOMBuilder {
                 String systemID = domDocType.getSystemId();
 
                 DocType docType = factory.docType(domDocType.getName());
-                if ((publicID != null) && (!publicID.equals(""))) {
-                    docType.setPublicID(publicID);
-                }
-                if ((systemID != null) && (!systemID.equals(""))) {
-                    docType.setSystemID(systemID);
-                }
+                docType.setPublicID(publicID);
+                docType.setSystemID(systemID);
 
                 doc.setDocType(docType);
                 break;

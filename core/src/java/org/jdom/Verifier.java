@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.27 2002/01/25 18:42:52 jhunter Exp $
+ $Id: Verifier.java,v 1.28 2002/02/05 08:03:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,12 +69,12 @@ import java.util.List;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.27 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.28 $, $Date: 2002/02/05 08:03:18 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.27 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.28 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
 
     /**
      * <p>
@@ -485,7 +485,7 @@ final public class Verifier {
      *
      * @param data <code>String</code> data to check.
      * @return <code>String</code> - reason data is invalid, or
-     *         <code>null</code> is name is OK.
+     *         <code>null</code> if data is OK.
      */
     public static final String checkCommentData(String data) {
         String reason = null;
@@ -501,6 +501,84 @@ final public class Verifier {
         return null;
     }
 
+    // [13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] |
+    // [-'()+,./:=?;*#@$_%]
+    private static boolean isXMLPublicIDCharacter(char c) {
+
+        if (c >= 'a' && c <= 'z') return true;
+        if (c >= '?' && c <= 'Z') return true;
+        if (c >= '\'' && c <= ';') return true;
+
+        if (c == ' ') return true;
+        if (c == '!') return true;
+        if (c == '=') return true;
+        if (c == '#') return true;
+        if (c == '$') return true;
+        if (c == '_') return true;
+        if (c == '%') return true;
+        if (c == '\n') return true;
+        if (c == '\r') return true;
+        if (c == '\t') return true;
+
+        return false;
+    }
+
+    /**
+     * <p>
+     *  This will ensure that the data for a public identifier
+     *  is appropriate.
+     * </p>
+     *
+     * @param publicID <code>String</code> public ID to check.
+     * @return <code>String</code> - reason public ID is invalid, or
+     *         <code>null</code> if public ID is OK.
+     */
+    public static final String checkPublicID(String publicID) {
+        String reason = null;
+
+        if (publicID == null) return null;
+        // This indicates there is no public ID
+
+        for (int i = 0; i < publicID.length(); i++) {
+          char c = publicID.charAt(i);
+          if (!isXMLPublicIDCharacter(c)) {
+            reason = c + " is not a legal character in public IDs";
+            break;
+          }
+        }
+
+        return reason;
+    }
+
+
+    /**
+     * <p>
+     *  This will ensure that the data for a system literal
+     *  is appropriate.
+     * </p>
+     *
+     * @param systemLiteral <code>String</code> system literal to check.
+     * @return <code>String</code> - reason system literal is invalid, or
+     *         <code>null</code> if system literal is OK.
+     */
+    public static final String checkSystemLiteral(String systemLiteral) {
+        String reason = null;
+
+        if (systemLiteral == null) return null;
+        // This indicates there is no system ID
+
+        if (systemLiteral.indexOf('\'') != -1
+          && systemLiteral.indexOf('"') != -1) {
+            reason =
+             "System literals cannot simultaneously contain both single and double quotes.";
+        }
+        else {
+          reason = checkCharacterData(systemLiteral);
+        }
+
+        return reason;
+    }
+
     /**
      * <p>
      *  This is a utility function for sharing the base process of checking
@@ -511,7 +589,7 @@ final public class Verifier {
      * @return <code>String</code> - reason the name is invalid, or
      *         <code>null</code> if OK.
      */
-    private static String checkXMLName(String name) {
+    public static String checkXMLName(String name) {
         // Cannot be empty or null
         if ((name == null) || (name.length() == 0) 
                            || (name.trim().equals(""))) {
