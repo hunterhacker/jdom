@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.19 2001/08/01 00:30:28 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.20 2001/08/17 17:16:40 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.19 $ $Date: 2001/08/01 00:30:28 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.20 $ $Date: 2001/08/17 17:16:40 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -469,6 +469,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         throws SAXException {
 
         if (suppress) return;
+        if (length == 0) return;
 
         String data = new String(ch, start, length);
 
@@ -509,6 +510,7 @@ if (!inDTD) {
                                                      throws SAXException {
         if (suppress) return;
         if (ignoringWhite) return;
+        if (length == 0) return;
 
         ((Element)stack.peek()).addContent(new String(ch, start, length));
 
