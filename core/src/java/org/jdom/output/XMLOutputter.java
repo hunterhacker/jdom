@@ -89,7 +89,7 @@ public class XMLOutputter {
     private boolean newlines = true;
 
     /** The encoding format */
-    private String encoding = "UTF8";
+    private String enc = "UTF8";
 
     /** Namespaces on the document */
     private LinkedList namespaces;
@@ -151,7 +151,7 @@ public class XMLOutputter {
     public XMLOutputter(String indent, boolean newlines, String encoding) {
        this.indent = indent;
        this.newlines = newlines;
-       this.encoding = encoding;
+       this.enc = encoding;
        namespaces = new LinkedList();
     }
 
@@ -183,42 +183,25 @@ public class XMLOutputter {
     /**
      * <p>
      * This will print the <code>Document</code> to the given output stream.
-     *   The characters are printed using UTF-8 encoding.
+     *   The characters are printed using the specified encoding.
      * </p>
      *
      * @param doc <code>Document</code> to format.
      * @param out <code>OutputStream</code> to write to.
-     * @param encoding set encoding format.
+     * @param encoding encoding format to use
      * @throws <code>IOException</code> - if there's any problem writing.
      */
     public void output(Document doc, OutputStream out, String encoding)
                                            throws IOException {
-        this.encoding = encoding;
-        output(doc, out);
-    }
-
-    /**
-     * <p>
-     * This will print the <code>Document</code> to the given output stream.
-     *   The characters are printed using UTF-8 encoding.
-     * </p>
-     *
-     * @param doc <code>Document</code> to format.
-     * @param out <code>PrintWriter</code> to write to.
-     * @throws <code>IOException</code> - if there's any problem writing.
-     */
-    public void output(Document doc, OutputStream out)
-                                           throws IOException {
         /**
          * Get a PrintWriter, use general-purpose UTF-8 encoding.
-         *   Specify it as "UTF8" to work with older JDK versions.
          */
         PrintWriter writer = new PrintWriter(
                              new OutputStreamWriter(
                              new BufferedOutputStream(out), encoding));
 
         // Print out XML declaration
-        printDeclaration(doc, writer);
+        printDeclaration(doc, writer, encoding);
 
         printDocType(doc.getDocType(), writer);
 
@@ -247,6 +230,22 @@ public class XMLOutputter {
 
     /**
      * <p>
+     * This will print the <code>Document</code> to the given output stream.
+     *   The characters are printed using the encoding specified in the
+     *   constructor, or a default of UTF-8.
+     * </p>
+     *
+     * @param doc <code>Document</code> to format.
+     * @param out <code>PrintWriter</code> to write to.
+     * @throws <code>IOException</code> - if there's any problem writing.
+     */
+    public void output(Document doc, OutputStream out)
+                                           throws IOException {
+        output(doc, out, this.enc);  
+    }
+
+    /**
+     * <p>
      * This will print the declaration to the given output stream.
      *   Assumes XML version 1.0 since we don't directly know.
      * </p>
@@ -254,7 +253,9 @@ public class XMLOutputter {
      * @param docType <code>DocType</code> whose declaration to write.
      * @param out <code>PrintWriter</code> to write to.
      */
-    protected void printDeclaration(Document doc, PrintWriter out) {
+    protected void printDeclaration(Document doc,
+                                    PrintWriter out,
+                                    String encoding) {
         // Assume 1.0 version
         if (encoding.equals("UTF8"))
             out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
