@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.28 2002/04/28 02:54:01 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.29 2002/04/28 02:59:07 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,13 +71,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.28 $, $Date: 2002/04/28 02:54:01 $
+ * @version $Revision: 1.29 $, $Date: 2002/04/28 02:59:07 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.28 $ $Date: 2002/04/28 02:54:01 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.29 $ $Date: 2002/04/28 02:59:07 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -112,13 +112,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, Map data) {
-        String reason;
-        if ((reason = Verifier.checkProcessingInstructionTarget(target))
-                                    != null) {
-            throw new IllegalTargetException(target, reason);
-        }
-
-        this.target = target;
+        setTarget(target);
         setData(data);
     }
 
@@ -134,14 +128,27 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         as a processing instruction name.
      */
     public ProcessingInstruction(String target, String data) {
+        setTarget(target);
+        setData(data);
+    }
+
+    /**
+     * <p>
+     * This will set the target for the PI.
+     * </p>
+     *
+     * @param target <code>String</code> new target of PI.
+     * @return <code>ProcessingInstruction</code> - this PI modified.
+     */
+    public ProcessingInstruction setTarget(String newTarget) {
         String reason;
-        if ((reason = Verifier.checkProcessingInstructionTarget(target))
+        if ((reason = Verifier.checkProcessingInstructionTarget(newTarget))
                                     != null) {
-            throw new IllegalTargetException(target, reason);
+            throw new IllegalTargetException(newTarget, reason);
         }
 
-        this.target = target;
-        setData(data);
+        target = newTarget;
+        return this;
     }
 
     /**
