@@ -1,69 +1,42 @@
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Java;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.BufferedInputStream;
 
-import java.util.Arrays;
-
-public class Antlr extends Task
+public class Antlr extends Java
 {
+    private final static String ANTLR_TOOL = "antlr.Tool";
 
-    private File _grammar = null;
+    private File grammar = null;
 
     public Antlr()
     {
-
+        setClassname(ANTLR_TOOL);
+        setFork("true");
     }
 
     public void setGrammar(String grammar)
     {
-        _grammar = new File(grammar);
+        this.grammar = new File(grammar);
     }
 
     public void execute()
         throws BuildException
     {
+        File grammarDir = this.grammar.getParentFile();
+        String grammar = this.grammar.getName();
 
-        try
-        {
-            File outputDir = _grammar.getParentFile();
+        setDir(grammarDir.toString());
+        setArgs(grammar);
+        setJvmargs("-Duser.dir=" + grammarDir);
 
-            String command = "java antlr.Tool " + _grammar.getName();
-            
-            String myos = System.getProperty("os.name");
+        String classpath = System.getProperty("java.class.path");
+        setClasspath(classpath);
 
-            if (myos.toLowerCase().indexOf("windows") >= 0) {
-                if (!outputDir.equals(project.resolveFile(".")))
-                    command = "cmd /c cd " + outputDir + " && " + command;
-            } else {
-
-                String ant = project.getProperty("ant.home");
-                if (ant == null)
-                {
-                    throw new BuildException("Property 'ant.home' not found");
-                }
-
-                String antRun = project.resolveFile(ant + "/bin/antRun").toString();
-                
-                command = antRun + " " + outputDir + " " + command;
-            }
-
-            Process pid = Runtime.getRuntime().exec(command);
-            pid.waitFor();
-
-            if (pid.exitValue() != 0)
-            {
-                throw new BuildException("antlr failed: " + pid.exitValue());
-            }
-        }
-        catch (Exception e)
-        {
-            throw new BuildException(e);
-        }
-            
+        super.execute();
     }
 
 }
