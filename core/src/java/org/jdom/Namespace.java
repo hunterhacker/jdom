@@ -80,6 +80,9 @@ import java.util.List;
  */
 public final class Namespace {
 
+    // XXX May want to use weak references to keep the maps from growing 
+    // large with extended use
+
     /** 
      * Factory list of namespaces. 
      *  Keys are <i>prefix</i>&amp;<i>URI</i>. 
