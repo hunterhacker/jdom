@@ -1,5 +1,9 @@
 Items that need to be done:
 
+* Automate build process, using ant tasks to EOL handling
+  Consider .zip readable by JAR
+  Consider releasing source with jdom.jar as sole distribution
+
 * Figure out how to manage whitespace preservation
 
 * Implement DOMOutputter (Kevin Regan <kevinr@valicert.com> is working on it)
