@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: XMLOutputter.java,v 1.68 2002/01/08 09:17:10 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.69 2002/01/25 18:42:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,58 +46,145 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.output;
 
 import java.io.*;
 import java.util.*;
-   
+
 import org.jdom.*;
+import org.jdom.output.*;
 
 /**
- * <p><code>XMLOutputter</code> takes a JDOM tree and formats it to a
+ * <p>
+ * <code>XMLOutputter</code> takes a JDOM tree and formats it to a
  * stream as XML.  The outputter can manage many styles of document
- * formatting, from untouched to pretty printed.  The default constructor
- * creates an outputter to output the document exactly as created.  
- * Constructor parameters control the indent amount and whether new lines 
- * are printed between elements.  The other parameters are configurable
- * through the <code>set*</code> methods.
- * The XML declaration is always printed on its own line.  Empty elements 
- * are by default printed as &lt;empty/&gt but that can be configured.
- * Text-only contents are printed as &lt;tag&gt;content&lt;/tag&gt; on a 
- * single line.</p>
- *
- * <p>For compact machine-readable output create a default
- * XMLOutputter and call setTextNormalize(true) to normalize any whitespace
- * that was preserved from the source.</p>
- *
- * <p>For pretty output, set the indent to "  ", set the new lines feature 
- * to true, and set text trimming to true.</p>
- *
- * <p> There are <code>output(...)</code> methods to print any of the
- * standard JDOM classes, including <code>Document</code> and
- * <code>Element</code>, to either a <code>Writer</code> or an
- * <code>OutputStream</code>.  Warning: When outputting to a Writer, make
- * sure the writer's encoding matches the encoding setting in the
- * XMLOutputter.  This ensures the encoding in which the content is written
- * (controlled by the Writer configuration) matches the encoding placed in
- * the document's XML declaration (controlled by the XMLOutputter).  Because a
- * Writer cannot be queried for its encoding, the information must be passed 
- * to the XMLOutputter manually in its constructor or via the setEncoding() 
- * method.  The default XMLOutputter encoding is UTF-8.
+ * formatting, from untouched to pretty printed.  The default is to
+ * output the document content exactly as created, but this can be
+ * changed with the various <code>set*()</code> methods.
  * </p>
  *
- * <p> The methods <code>outputString(...)</code> are for convenience
- * only; for top performance you should call <code>output(...)</code>
- * and pass in your own <code>Writer</code> or
- * <code>OutputStream</code> to if possible.  </p>
+ * <p>
+ * There are <code>output(...)</code> methods to print any of the
+ * standard JDOM classes, including <code>Document</code> and
+ * <code>Element</code>, to either a <code>Writer</code> or an
+ * <code>OutputStream</code>. <b>Warning</b>: When outputting to a
+ * Writer, make sure the writer's encoding matches the encoding setting
+ * in the XMLOutputter.  This ensures the encoding in which the content
+ * is written (controlled by the Writer configuration) matches the
+ * encoding placed in the document's XML declaration (controlled by the
+ * XMLOutputter).  Because a Writer cannot be queried for its encoding,
+ * the information must be passed to the XMLOutputter manually in its
+ * constructor or via the setEncoding() method.  The default XMLOutputter
+ * encoding is UTF-8.
+ * </p>
+ *
+ * <p>
+ * The methods <code>outputString(...)</code> are for convenience
+ * only; for top performance you should call one of the
+ * <code>output(...)</code> and pass in your own <code>Writer</code> or
+ * <code>OutputStream</code> if possible.
+ * </p>
+ *
+ * <p>
+ * XML declarations are always printed on their own line followed by a
+ * line seperator (this doesn't change the semantics of the document). To
+ * omit printing of the declaration use <code>setOmitDeclaration</code>.
+ * To omit printing of the encoding in the declaration use
+ * <code>setOmitEncoding</code>. Unfortunatly there is currently no way
+ * to know the original encoding of the document.
+ * </p>
+ *
+ * <p>
+ * Empty elements are by default printed as &lt;empty/&gt, but this can
+ * be configured with <code>setExpandEmptyElements</code> to cause them to
+ * be expanded to &lt;empty&gt&lt;/empty&gt;.
+ * </p>
+ *
+ * <p>
+ * Several modes are available to effect the way textual content is printed.
+ * All modes are configurable through corresponding set*() methods. 
+ * Below is a table which explains the modes and the effect on the
+ * resulting output.
+ * </p>
+ *
+ * <table>
+ *   <tr>
+ *     <th align="left">
+ *       Text Mode
+ *     </th>
+ *     <th>
+ *       Resulting behavior.
+ *     </th>
+ *   </tr>
+ *
+ *   <tr valign="top">
+ *     <td>
+ *       <i>Default</i>
+ *     </td>
+ *     <td>
+ *       All content is printed in the format it was created, no whitespace
+ *       or line separators are are added or removed.
+ *     </td>
+ *   </tr>
+ *
+ *   <tr valign="top">
+ *     <td>
+ *       TrimAllWhite
+ *     </td>
+ *     <td>
+ *       Content between tags consisting of all whitespace is not printed.
+ *       If the content contains even one non-whitespace character, it is
+ *       printed verbatim, whitespace and all.
+ *     </td>
+ *   </tr>
+ *
+ *   <tr valign="top">
+ *     <td>
+ *       TextTrim
+ *     </td>
+ *     <td>
+ *       Same as TrimAllWhite, plus leading/trailing whitespace are
+ *       trimmed.
+ *     </td>
+ *   </tr>
+ *
+ *   <tr valign="top">
+ *     <td>
+ *       TextNormalize
+ *     </td>
+ *     <td>
+ *       Same as TextTrim, in addition interior whitespace is compressed to
+ *       a single space.
+ *     </td>
+ *   </tr>
+ * </table>
+ *
+ * <p>
+ * For pretty-print output, use <code>setNewlines</code> in conjunction
+ * with <code>setIndent</code>. Setting newlines to <code>true</code> causes
+ * tags to be aligned and possibly indented. With newlines <code>true</code>,
+ * whitespace might be added back to fit alignment needs. In most cases
+ * texual content is aligned with the surrounding tags (after the
+ * appropriate text mode is applied).  In the case where the only content
+ * between the start and end tags is textual, the start tag, text, and end
+ * tag are all printed on the same line.
+ *
+ * <p>
+ * When a element has a xml:space attribute with the value of "preserve",
+ * all formating is turned off and reverts back to the default until the
+ * element and it's contents have been printed.  If a nested element
+ * contains another xml:space with the value "default" formatting is turned
+ * back on for the child element and then off for the remainder of the
+ * parent element.
+ * </p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
@@ -108,52 +195,70 @@ import org.jdom.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.68 $, $Date: 2002/01/08 09:17:10 $ 
+ * @version $Revision: 1.69 $, $Date: 2002/01/25 18:42:52 $
  */
+
 public class XMLOutputter implements Cloneable {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.68 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.69 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
 
-    /** standard value to indent by, if we are indenting **/
-    protected static final String STANDARD_INDENT = "  ";
-    
-    /** standard string with which to end a line **/
-    protected static final String STANDARD_LINE_SEPARATOR = "\r\n";
-
-    /** Whether or not to output the XML declaration 
+    /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
     private boolean omitDeclaration = false;
 
     /** The encoding format */
     private String encoding = "UTF-8";
 
-    /** Whether or not to output the encoding in the XML declaration 
+    /** Whether or not to output the encoding in the XML declaration
       * - default is <code>false</code> */
     private boolean omitEncoding = false;
 
-    /** The default indent is no spaces (as original document) */
-    private String indent = null;
+    class Format {
+        /** standard value to indent by, if we are indenting */
+        static final String STANDARD_INDENT = "  ";
 
-    /** Whether or not to expand empty elements to 
-      * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
-    private boolean expandEmptyElements = false;
+        /** standard string with which to end a line */
+        static final String STANDARD_LINE_SEPARATOR = "\r\n";
 
-    /** The default new line flag, set to do new lines only as in 
-      * original document */
-    private boolean newlines = false;
+        /** The default indent is no spaces (as original document) */
+        String indent = null;
 
-    /** New line separator */
-    private String lineSeparator = STANDARD_LINE_SEPARATOR;
+        /** Whether or not to expand empty elements to
+          * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
+        boolean expandEmptyElements = false;
 
-    /** Should we preserve whitespace or not in text nodes */
-    private boolean textNormalize = false;
+        /** New line separator */
+        String lineSeparator = STANDARD_LINE_SEPARATOR;
+
+        /** Should we trim whitespace only content or not */
+        boolean trimAllWhite = false;
+
+        /** Should we trim leading/trailing whitespace or not in text nodes */
+        boolean textTrim = false;
+
+        /** Should we preserve whitespace or not in text nodes */
+        boolean textNormalize = false;
+
+        /** The default new line flag, set to do new lines only as in
+          * original document */
+        boolean newlines = false;
+
+        Format() {}
+    }
+
+    Format noFormatting = new Format();
+    Format defaultFormat = new Format();
+    Format currentFormat = defaultFormat;
+
+    // * * * * * * * * * * Constructors * * * * * * * * * *
+    // * * * * * * * * * * Constructors * * * * * * * * * *
 
     /**
      * <p>
-     * This will create an <code>XMLOutputter</code> with
-     *   no additional whitespace (indent or new lines) added;
-     *   the whitespace from the element text content is fully preserved.
+     * This will create an <code>XMLOutputter</code> with no additional
+     * whitespace (indent or newlines) added; the whitespace from the
+     * element text content is fully preserved.
      * </p>
      */
     public XMLOutputter() {
@@ -161,23 +266,23 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     * This will create an <code>XMLOutputter</code> with
-     *   the given indent added but no new lines added;
-     *   all whitespace from the element text content is included as well.
+     * This will create an <code>XMLOutputter</code> with the given indent
+     * added but no new lines added; all whitespace from the element text
+     * content is included as well.
      * </p>
      *
      * @param indent  the indent string, usually some number of spaces
      */
     public XMLOutputter(String indent) {
-       this.indent = indent;
+       defaultFormat.indent = indent;
     }
 
     /**
      * <p>
-     * This will create an <code>XMLOutputter</code> with
-     *   the given indent that prints newlines only if <code>newlines</code> is
-     *   <code>true</code>; 
-     *   all whitespace from the element text content is included as well.
+     * This will create an <code>XMLOutputter</code> with the given indent
+     * that prints newlines only if <code>newlines</code> is
+     * <code>true</code>; all whitespace from the element text content is
+     * included as well.
      * </p>
      *
      * @param indent the indent <code>String</code>, usually some number
@@ -186,15 +291,16 @@ public class XMLOutputter implements Cloneable {
      *                 printed, else new lines are ignored (compacted).
      */
     public XMLOutputter(String indent, boolean newlines) {
-       this.indent = indent;
-       this.newlines = newlines;
+       defaultFormat.indent = indent;
+       setNewlines( newlines);
     }
 
     /**
      * <p>
      * This will create an <code>XMLOutputter</code> with
-     *   the given indent and new lines printing only if newlines is
-     *   <code>true</code>, and encoding format <code>encoding</code>.
+     * the given indent and new lines printing only if
+     * <code>newlines</code> is <code>true</code>, and encoding format
+     * <code>encoding</code>.
      * </p>
      *
      * @param indent the indent <code>String</code>, usually some number
@@ -205,60 +311,40 @@ public class XMLOutputter implements Cloneable {
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      */
     public XMLOutputter(String indent, boolean newlines, String encoding) {
-       this.indent = indent;
-       this.newlines = newlines;
        this.encoding = encoding;
+       defaultFormat.indent = indent;
+       setNewlines( newlines);
     }
 
     /**
-     * <p> This will create an <code>XMLOutputter</code> with all the
+     * <p>
+     * This will create an <code>XMLOutputter</code> with all the
      * options as set in the given <code>XMLOutputter</code>.  Note
      * that <code>XMLOutputter two = (XMLOutputter)one.clone();</code>
-     * would work equally well.  </p>
+     * would work equally well.
+     * </p>
      *
      * @param that the XMLOutputter to clone
-     **/
+     */
     public XMLOutputter(XMLOutputter that) {
+        this.encoding = that.encoding;
         this.omitDeclaration = that.omitDeclaration;
         this.omitEncoding = that.omitEncoding;
-        this.indent = that.indent;
-        this.expandEmptyElements = that.expandEmptyElements;
-        this.newlines = that.newlines;
-        this.encoding = that.encoding;
-        this.lineSeparator = that.lineSeparator;
-        this.textNormalize = that.textNormalize;
+        this.defaultFormat = that.defaultFormat;
     }
 
+    // * * * * * * * * * * Set parameters methods * * * * * * * * * *
+    // * * * * * * * * * * Set parameters methods * * * * * * * * * *
+
     /**
-     * Returns a copy of this XMLOutputter.
-     **/
-    public Object clone() {
- // Implementation notes: Since all state of an XMLOutputter is
- // embodied in simple private instance variables, Object.clone
- // can be used.  Note that since Object.clone is totally
- // broken, we must catch an exception that will never be
- // thrown.
- // (See 
- try {
-     return super.clone();
- }
- catch (java.lang.CloneNotSupportedException e) {
-     // even though this should never ever happen, it's still
-     // possible to fool Java into throwing a
-     // CloneNotSupportedException.  If that happens, we
-     // shouldn't swallow it.
-     throw new RuntimeException(e.toString());
- }
-    }
-    
-    /**
-     * <p>This will set the new-line separator. The default is
-     * <code>\r\n</code>. Note that if the "newlines" property is
-     * false, this value is irrelevant.  To make it output the system
-     * default line ending string, call
+     * <p>
+     * This will set the newline separator (<code>lineSeparator</code>).
+     * The default is <code>\r\n</code>. Note that if the "newlines"
+     * property is false, this value is irrelevant.  To make it output
+     * the system default line ending string, call
      * <code>setLineSeparator(System.getProperty("line.separator"))</code>
      * </p>
-     * 
+     *
      * <p>
      * To output "UNIX-style" documents, call
      * <code>setLineSeparator("\n")</code>.  To output "Mac-style"
@@ -278,37 +364,44 @@ public class XMLOutputter implements Cloneable {
      * @see #setTextNormalize(boolean)
      *
      * @param separator <code>String</code> line separator to use.
-     **/
+     */
     public void setLineSeparator(String separator) {
-        lineSeparator = separator;
+        defaultFormat.lineSeparator = separator;
     }
 
     /**
+     * <p>
+     * Sets whether newlines (<code>lineSeparator</code>) should
+     * be printed.
+     * </p>
+     *
      * @see #setLineSeparator(String)
      * @param newlines <code>true</code> indicates new lines should be
      *                 printed, else new lines are ignored (compacted).
-     **/
+     */
     public void setNewlines(boolean newlines) {
-        this.newlines = newlines;
+        defaultFormat.newlines = newlines;
     }
 
     /**
+     * <p>
      * Sets the output encoding.  The name should be an accepted XML
      * encoding.
+     * </p>
      *
      * @param encoding the encoding format.  Use XML-style names like
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
-     **/
+     */
     public void setEncoding(String encoding) {
         this.encoding = encoding;
     }
 
     /**
      * <p>
-     *  This will set whether the XML declaration 
-     *  (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
-     *  includes the encoding of the document. It is common to omit 
-     *  this in uses such as WML and other wireless device protocols.
+     * This will set whether the XML declaration
+     * (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
+     * includes the encoding of the document. It is common to omit
+     * this in uses such as WML and other wireless device protocols.
      * </p>
      *
      * @param omitEncoding <code>boolean</code> indicating whether or not
@@ -320,10 +413,10 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     *  This will set whether the XML declaration 
-     *  (<code>&lt;?xml version="1.0"?&gt;</code>)
-     *  will be omitted or not. It is common to omit this in uses such
-     *  as SOAP and XML-RPC calls.
+     * This will set whether the XML declaration
+     * (<code>&lt;?xml version="1.0"?&gt;</code>)
+     * will be omitted or not. It is common to omit this in uses such
+     * as SOAP and XML-RPC calls.
      * </p>
      *
      * @param omitDeclaration <code>boolean</code> indicating whether or not
@@ -335,70 +428,120 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     *  This will set whether empty elements are expanded from 
-     *  <code>&lt;tagName&gt;</code> to
-     *  <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
+     * This will set whether empty elements are expanded from
+     * <code>&lt;tagName/&gt;</code> to
+     * <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
      * </p>
      *
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
      *        empty elements should be expanded.
      */
     public void setExpandEmptyElements(boolean expandEmptyElements) {
-        this.expandEmptyElements = expandEmptyElements;
+        defaultFormat.expandEmptyElements = expandEmptyElements;
     }
 
     /**
-     * <p> This will set whether the text is output verbatim (false)
-     *  or with whitespace normalized as per <code>{@link
-     *  org.jdom.Element#getTextNormalize()}</code>.<p>
+     * <p>
+     * This will set whether content between tags consisting of all
+     * whitespace is printed or trimmed.
+     * </p>
      *
      * <p>Default: false </p>
      *
-     * @param textNormalize <code>boolean</code> true=>normalize the 
-     * whitespace, false=>use text verbatim
-     **/
-    public void setTextNormalize(boolean textNormalize) {
-        this.textNormalize = textNormalize;
+     * @param trimAllWhite <code>boolean</code> true=>content consisting of
+     *                 only whitespace is not print, false=>use text verbatim
+     */
+    public void setTrimAllWhite(boolean trimAllWhite) {
+        defaultFormat.trimAllWhite = trimAllWhite;
     }
 
     /**
-     * <p> This will set the indent <code>String</code> to use; this
-     *   is usually a <code>String</code> of empty spaces. If you pass
-     *   null, or the empty string (""), then no indentation will
-     *   happen. </p>
-     * Default: none (null)
+     * <p>
+     * This will set whether the text has leading/trailing whitespace
+     * trimmed.
+     * </p>
+     *
+     * <p>Default: false </p>
+     *
+     * @param textTrim <code>boolean</code> true=>trim the leading/trailing
+     *                 whitespace, false=>use text verbatim
+     */
+    public void setTextTrim(boolean textTrim) {
+        defaultFormat.textTrim = textTrim;
+    }
+
+    /**
+     * <p>
+     * This will set whether the text is output verbatim (false)
+     * or with whitespace normalized as per <code>{@link
+     * org.jdom.Element#getTextNormalize()}</code>.
+     * </p>
+     *
+     * <p>Default: false </p>
+     *
+     * @param textNormalize <code>boolean</code> true=>normalize the
+     *        whitespace, false=>use text verbatim
+     */
+    public void setTextNormalize(boolean textNormalize) {
+        defaultFormat.textNormalize = textNormalize;
+    }
+
+    /**
+     * <p>
+     * This will set the indent <code>String</code> to use; this
+     * is usually a <code>String</code> of empty spaces. If you pass
+     * null, or the empty string (""), then no indentation will
+     * happen.  Default: none (null)
+     * </p>
      *
      * @param indent <code>String</code> to use for indentation.
-     **/
+     */
     public void setIndent(String indent) {
         // if passed the empty string, change it to null, for marginal
         // performance gains later (can compare to null first instead
         // of calling equals())
-        if ("".equals(indent))
+        if ("".equals(indent)) {
             indent = null;
-        this.indent = indent;
+        }
+        defaultFormat.indent = indent;
     }
 
     /**
-     * Set the indent on or off.  If setting on, will use the value of
-     * STANDARD_INDENT, which is usually two spaces.
+     * <p>
+     * Set the indent on or off, newlines must be set to <code>true</code>
+     * for indentation to actually occur.  If setting on, will use the
+     * value of STANDARD_INDENT, which is usually two spaces.
+     * </p>
      *
      * @param doIndent if true, set indenting on; if false, set indenting off
-     **/
+     */
     public void setIndent(boolean doIndent) {
-        if (doIndent) { 
-            this.indent = STANDARD_INDENT;
+        if (doIndent) {
+            defaultFormat.indent = STANDARD_INDENT;
         }
         else {
-            this.indent = null;
+            defaultFormat.indent = null;
         }
     }
 
     /**
      * <p>
-     *   This will set the indent <code>String</code>'s size; an indentSize
-     *   of 4 would result in the indentation being equivalent to the 
-     *   <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four space chars).
+     * This will set the indent <code>String</code>'s size; a size
+     * of 4 would result in the indentation being equivalent to the
+     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
+     * </p>
+     *
+     * @param size <code>int</code> number of spaces in indentation.
+     */
+    public void setIndent(int size) {
+        setIndentSize(size);
+    }
+
+    /**
+     * <p>
+     * This will set the indent <code>String</code>'s size; an indentSize
+     * of 4 would result in the indentation being equivalent to the
+     * <code>String</code> "&nbsp;&nbsp;&nbsp;&nbsp;" (four spaces).
      * </p>
      *
      * @param indentSize <code>int</code> number of spaces in indentation.
@@ -408,108 +551,224 @@ public class XMLOutputter implements Cloneable {
         for (int i=0; i<indentSize; i++) {
             indentBuffer.append(" ");
         }
-        this.indent = indentBuffer.toString();
+        defaultFormat.indent = indentBuffer.toString();
     }
 
-    /**
-     * <p>
-     * This will print the proper indent characters for the given indent level.
-     * </p>
-     *
-     * @param out <code>Writer</code> to write to
-     * @param level <code>int</code> indentation level
-     */
-    protected void indent(Writer out, int level) throws IOException {
-        if (indent != null && !indent.equals("")) {
-            for (int i = 0; i < level; i++) {
-                out.write(indent);
-            }
-        }
-    }
-    
-    /**
-     * <p>
-     * This will print a new line only if the newlines flag was set to true
-     * </p>
-     *
-     * @param out <code>Writer</code> to write to
-     */
-    protected void maybePrintln(Writer out) throws IOException  {
-        maybePrintln(out, 0);
-    }
+    // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
+    // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
 
-    /**
-     * <p>     
-     * This will print a new line only if the newlines flag was set to
-     * true, and then print indents (only if indent is non-null)
-     * </p>
-     *
-     * @param out <code>Writer</code> to write to
-     * @param indentLevel current indent level (number of tabs)
-     */
-    protected void maybePrintln(Writer out, int indentLevel) throws IOException {
-        if (newlines) {
-            out.write(lineSeparator);
-        }
-        indent(out, indentLevel);
-    }
-
-    /**
-     * Get an OutputStreamWriter, use preferred encoding.
-     */
-    protected Writer makeWriter(OutputStream out)
-                         throws java.io.UnsupportedEncodingException {
-        return makeWriter(out, this.encoding);
-    }
-    
-    /**
-     * Get an OutputStreamWriter, use specified encoding.
-     */
-    protected Writer makeWriter(OutputStream out, String enc)
-                         throws java.io.UnsupportedEncodingException {
-        // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate into 
-        // "UTF8" which works with all JDKs. 
-        if ("UTF-8".equals(enc)) {
-            enc = "UTF8";
-        }
-
-        Writer writer = new BufferedWriter
-            (new OutputStreamWriter
-            (new BufferedOutputStream(out), enc));
-        return writer;
-    }
-    
     /**
      * <p>
      * This will print the <code>Document</code> to the given output stream.
-     *   The characters are printed using the encoding specified in the
-     *   constructor, or a default of UTF-8.
+     * The characters are printed using the encoding specified in the
+     * constructor, or a default of UTF-8.
      * </p>
      *
      * @param doc <code>Document</code> to format.
-     * @param out <code>OutputStream</code> to write to.
+     * @param out <code>OutputStream</code> to use.
      * @throws IOException - if there's any problem writing.
      */
     public void output(Document doc, OutputStream out)
-                                           throws IOException {
+                    throws IOException {
         Writer writer = makeWriter(out);
         output(doc, writer);  // output() flushes
     }
 
     /**
-     * <p> This will print the <code>Document</code> to the given
-     * Writer.
+     * <p>
+     * Print out the <code>{@link DocType}</code>.
      * </p>
      *
-     * <p> Warning: using your own Writer may cause the outputter's
+     * @param doctype <code>DocType</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(DocType doctype, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(doctype, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out an <code>{@link Element}</code>, including
+     * it's <code>{@link Attribute}</code>s, and all
+     * contained (child) elements, etc.
+     * </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(Element element, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(element, writer);  // output() flushes
+    }
+
+    /**
+     * This will handle printing out an <code>{@link
+     * Element}</code>'s content only, not including its tag, and
+     * attributes.  This can be useful for printing the content of an
+     * element that contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".
+     * </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void outputElementContent(Element element, OutputStream out)
+                    throws IOException {
+        Writer writer = makeWriter(out);
+        outputElementContent(element, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * This will handle printing out a list of nodes.
+     * This can be useful for printing the content of an element that
+     * contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".
+     * </p>
+     *
+     * @param list <code>List</code> of nodes.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(List list, OutputStream out)
+                    throws IOException {
+        Writer writer = makeWriter(out);
+        output(list, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link CDATA}</code> node.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(CDATA cdata, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(cdata, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link Text}</code> node.  Perfoms
+     * the necessary entity escaping and whitespace stripping.
+     * </p>
+     *
+     * @param text <code>Text</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(Text text, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(text, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.  </p>
+     * </p>
+     *
+     * @param string <code>String</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     * @deprecated see output(<code>Text</code>,<code>OutputStream</code>)
+     */
+    public void output(String string, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(string, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link Comment}</code>.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(Comment comment, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(comment, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link ProcessingInstruction}</code>.
+     * </p>
+     *
+     * @param processingInstruction <code>ProcessingInstruction</code>
+     *                              to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(ProcessingInstruction pi, OutputStream out)
+                                 throws IOException {
+        Writer writer = makeWriter(out);
+        output(pi, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link EntityRef}</code>.
+     * </p>
+     *
+     * @param entity <code>EntityRef</code> to output.
+     * @param out <code>OutputStream</code> to use.
+     */
+    public void output(EntityRef entity, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(entity, writer);  // output() flushes
+    }
+
+    /**
+     * <p>
+     * Get an OutputStreamWriter, using prefered encoding
+     * (see {@link #setEncoding}).
+     * </p>
+     */
+    protected Writer makeWriter(OutputStream out)
+                         throws java.io.UnsupportedEncodingException {
+        return makeWriter(out, this.encoding);
+    }
+
+    /**
+     * <p>
+     * Get an OutputStreamWriter, use specified encoding.
+     * </p>
+     */
+    protected Writer makeWriter(OutputStream out, String enc)
+                         throws java.io.UnsupportedEncodingException {
+        // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
+        // into "UTF8" which works with all JDKs.
+        if ("UTF-8".equals(enc)) {
+            enc = "UTF8";
+        }
+
+        Writer writer = new BufferedWriter(
+                            (new OutputStreamWriter(
+                                new BufferedOutputStream(out), enc)
+                            ));
+        return writer;
+    }
+
+    // * * * * * * * * * * Output to a Writer * * * * * * * * * *
+    // * * * * * * * * * * Output to a Writer * * * * * * * * * *
+
+    /**
+     * <p>
+     * This will print the <code>Document</code> to the given Writer.
+     * </p>
+     *
+     * <p>
+     * Warning: using your own Writer may cause the outputter's
      * preferred character encoding to be ignored.  If you use
      * encodings other than UTF-8, we recommend using the method that
-     * takes an OutputStream instead.  </p>
+     * takes an OutputStream instead.
+     * </p>
      *
      * @param doc <code>Document</code> to format.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      * @throws IOException - if there's any problem writing.
-     **/
+     */
     public void output(Document doc, Writer out) throws IOException {
 
         printDeclaration(doc, out, encoding);
@@ -517,13 +776,13 @@ public class XMLOutputter implements Cloneable {
         if (doc.getDocType() != null) {
             printDocType(doc.getDocType(), out);
         }
-        
+
         // Print out root element, as well as any root level
-        // comments and processing instructions, 
+        // comments and processing instructions,
         // starting with no indentation
-        Iterator i = doc.getContent().iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
+        List content = doc.getContent();
+        for( int i = 0; i < content.size(); i++) {
+            Object obj = content.get( i);
             if (obj instanceof Element) {
                 printElement(doc.getRootElement(), out, 0,
                              createNamespaceStack());
@@ -534,292 +793,180 @@ public class XMLOutputter implements Cloneable {
             else if (obj instanceof ProcessingInstruction) {
                 printProcessingInstruction((ProcessingInstruction) obj, out);
             }
-            maybePrintln(out);
+            else {
+                // XXX if we get here then we have a illegal content, for
+                //     now we'll just ignore it
+            }
+
+            newline(out);
+            indent(out, 0);
         }
 
         // Output final line separator
-        out.write(lineSeparator);
+        newline(out);
 
         out.flush();
     }
 
-    // * * * * * Element * * * * *
-    
+    /**
+     * <p>
+     * Print out the <code>{@link DocType}</code>.
+     * </p>
+     *
+     * @param doctype <code>DocType</code> to output.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(DocType doctype, Writer out) throws IOException {
+        printDocType(doctype, out);
+        out.flush();
+    }
+
     /**
      * <p>
      * Print out an <code>{@link Element}</code>, including
-     *   its <code>{@link Attribute}</code>s, and its value, and all
-     *   contained (child) elements etc.
+     * it's <code>{@link Attribute}</code>s, and all
+     * contained (child) elements, etc.
      * </p>
      *
      * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
+     * @param out <code>Writer</code> to use.
+     */
     public void output(Element element, Writer out) throws IOException {
-        // If this is the root element we could pre-initialize the 
+        // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
         printElement(element, out, 0, createNamespaceStack());
         out.flush();
     }
-    
+
     /**
      * <p>
-     * Print out an <code>{@link Element}</code>, including
-     *   its <code>{@link Attribute}</code>s, and its value, and all
-     *   contained (child) elements etc.
+     * This will handle printing out an <code>{@link
+     * Element}</code>'s content only, not including its tag, and
+     * attributes.  This can be useful for printing the content of an
+     * element that contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".
      * </p>
      *
      * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
-    public void output(Element element, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(element, writer);  // output() flushes
-    }
-
-    /**
-     * <p> This will handle printing out an <code>{@link
-     * Element}</code>'s content only, not including its tag, and
-     * attributes.  This can be useful for printing the content of an
-     * element that contains HTML, like "&lt;description&gt;JDOM is
-     * &lt;b&gt;fun&gt;!&lt;/description&gt;".  </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
+     * @param out <code>Writer</code> to use.
+     */
     public void outputElementContent(Element element, Writer out)
-                      throws IOException {
-        List eltContent = element.getContent();
-        printElementContent(element, out, 0, createNamespaceStack(),
-                            eltContent);
+                    throws IOException {
+        printContent(element.getContent(), out, 0, createNamespaceStack());
         out.flush();
     }
-    
-    /**
-     * <p> This will handle printing out an <code>{@link
-     * Element}</code>'s content only, not including its tag, and
-     * attributes.  This can be useful for printing the content of an
-     * element that contains HTML, like "&lt;description&gt;JDOM is
-     * &lt;b&gt;fun&gt;!&lt;/description&gt;".  </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void outputElementContent(Element element, OutputStream out)
-                                         throws IOException {
-        Writer writer = makeWriter(out);
-        outputElementContent(element, writer);  // output() flushes
-    }
-
-    // * * * * * CDATA * * * * *
 
     /**
      * <p>
-     * Print out a <code>{@link CDATA}</code>
+     * This will handle printing out a list of nodes.
+     * This can be useful for printing the content of an element that
+     * contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".
+     * </p>
+     *
+     * @param list <code>List</code> of nodes.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(List list, Writer out)
+                    throws IOException {
+        printContent(list, out, 0, createNamespaceStack());
+        out.flush();
+    }
+
+    /**
+     * <p>
+     * Print out a <code>{@link CDATA}</code> node.
      * </p>
      *
      * @param cdata <code>CDATA</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
+     * @param out <code>Writer</code> to use.
+     */
     public void output(CDATA cdata, Writer out) throws IOException {
         printCDATA(cdata, out);
         out.flush();
     }
-    
-    /**
-     * <p>
-     * Print out a <code>{@link CDATA}</code>
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(CDATA cdata, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(cdata, writer);  // output() flushes
-    }
-
-    // * * * * * Comment * * * * *
 
     /**
      * <p>
-     * Print out a <code>{@link Comment}</code>
+     * Print out a <code>{@link Text}</code> node.  Perfoms
+     * the necessary entity escaping and whitespace stripping.
      * </p>
      *
-     * @param comment <code>Comment</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
-    public void output(Comment comment, Writer out) throws IOException {
-        printComment(comment, out);
+     * @param text <code>Text</code> to output.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(Text text, Writer out) throws IOException {
+        printText(text, out);
         out.flush();
     }
-    
+
     /**
      * <p>
-     * Print out a <code>{@link Comment}</code>
+     * Print out a <code>{@link java.lang.String}</code>.  Perfoms
+     * the necessary entity escaping and whitespace stripping.
      * </p>
      *
-     * @param comment <code>Comment</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(Comment comment, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(comment, writer);  // output() flushes
-    }
-    
-
-    // * * * * * String * * * * *
-
-    /**
-     * <p> Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
-     *
      * @param string <code>String</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
+     * @param out <code>Writer</code> to use.
+     * @deprecated see output(<code>Text</code>,<code>Writer</code>)
+     */
     public void output(String string, Writer out) throws IOException {
         printString(string, out);
         out.flush();
     }
-    
+
     /**
      * <p>
-     * <p> Print out a <code>{@link java.lang.String}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
+     * Print out a <code>{@link Comment}</code>.
      * </p>
      *
-     * @param string <code>String</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(String string, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(string, writer);  // output() flushes
-    }
-
-
-    // * * * * * Text * * * * *
-
-    /**
-     * <p> Print out a <code>{@link Text}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
-     *
-     * @param text <code>Text</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
-    public void output(Text text, Writer out) throws IOException {
-        printString(text.getText(), out);
+     * @param comment <code>Comment</code> to output.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(Comment comment, Writer out) throws IOException {
+        printComment(comment, out);
         out.flush();
     }
 
     /**
      * <p>
-     * <p> Print out a <code>{@link Text}</code>.  Perfoms
-     * the necessary entity escaping and whitespace stripping.  </p>
-     * </p>
-     *
-     * @param text <code>Text</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(Text text, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(text, writer);  // output() flushes
-    }
-    
-    // * * * * * EntityRef * * * * *
-
-    /**
-     * <p> Print out an <code>{@link EntityRef}</code>.  
-     * </p>
-     *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
-    public void output(EntityRef entity, Writer out) throws IOException {
-        printEntityRef(entity, out);
-        out.flush();
-    }
-    
-    /**
-     * <p>
-     * Print out an <code>{@link EntityRef}</code>. 
-     * </p>
-     *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(EntityRef entity, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(entity, writer);  // output() flushes
-    }
-    
-
-    // * * * * * ProcessingInstruction * * * * *
-
-    /**
-     * <p>
-     * Print out a <code>{@link ProcessingInstruction}</code>
+     * Print out a <code>{@link ProcessingInstruction}</code>.
      * </p>
      *
      * @param element <code>ProcessingInstruction</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
+     * @param out <code>Writer</code> to use.
+     */
     public void output(ProcessingInstruction pi, Writer out)
                                  throws IOException {
         printProcessingInstruction(pi, out);
         out.flush();
     }
-    
+
     /**
      * <p>
-     * Print out a <code>{@link ProcessingInstruction}</code>
+     * Print out a <code>{@link EntityRef}</code>.
      * </p>
      *
-     * @param processingInstruction <code>ProcessingInstruction</code> 
-     * to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(ProcessingInstruction pi, OutputStream out)
-                                 throws IOException {
-        Writer writer = makeWriter(out);
-        output(pi, writer);  // output() flushes
-    }
-    
-    /**
-     * <p>
-     * Print out a <code>{@link DocType}</code>
-     * </p>
-     *
-     * @param doctype <code>DocType</code> to output.
-     * @param out <code>Writer</code> to write to.
-     **/
-    public void output(DocType doctype, Writer out) throws IOException {
-        printDocType(doctype, out);
+     * @param entity <code>EntityRef</code> to output.
+     * @param out <code>Writer</code> to use.
+     */
+    public void output(EntityRef entity, Writer out) throws IOException {
+        printEntityRef(entity, out);
         out.flush();
     }
-    
+
+    // * * * * * * * * * * Output to a String * * * * * * * * * *
+    // * * * * * * * * * * Output to a String * * * * * * * * * *
+
     /**
      * <p>
-     * Print out a <code>{@link DocType}</code>
-     * </p>
-     *
-     * @param doctype <code>DocType</code> to output.
-     * @param out <code>OutputStream</code> to write to.
-     **/
-    public void output(DocType doctype, OutputStream out) throws IOException {
-        Writer writer = makeWriter(out);
-        output(doctype, writer);  // output() flushes
-    }
-    
-
-    // * * * * * String * * * * *
-    
-    /**
      * Return a string representing a document.  Uses an internal
      * StringWriter. Warning: a String is Unicode, which may not match
      * the outputter's specified encoding.
+     * </p>
      *
      * @param doc <code>Document</code> to format.
-     **/
+     */
     public String outputString(Document doc) {
         StringWriter out = new StringWriter();
         try {
@@ -829,12 +976,31 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
+     * <p>
+     * Return a string representing a DocType. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     * </p>
+     *
+     * @param doctype <code>DocType</code> to format.
+     */
+    public String outputString(DocType doctype) {
+        StringWriter out = new StringWriter();
+        try {
+            output(doctype, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * <p>
      * Return a string representing an element. Warning: a String is
      * Unicode, which may not match the outputter's specified
      * encoding.
+     * </p>
      *
-     * @param doc <code>Element</code> to format.
-     **/
+     * @param element <code>Element</code> to format.
+     */
     public String outputString(Element element) {
         StringWriter out = new StringWriter();
         try {
@@ -843,28 +1009,31 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
-    /**
-     * Return a string representing a comment. Warning: a String is
-     * Unicode, which may not match the outputter's specified
-     * encoding.
+   /**
+     * <p>
+     * Return a string representing a list of nodes.  The list is
+     * assumed to contain valid JDOM nodes.
+     * </p>
      *
-     * @param comment <code>Comment</code> to format.
-     **/
-    public String outputString(Comment comment) {
+     * @param list <code>List</code> to format.
+     */
+    public String outputString(List list) {
         StringWriter out = new StringWriter();
         try {
-            output(comment, out);  // output() flushes
+            output(list, out);  // output() flushes
         } catch (IOException e) { }
         return out.toString();
     }
 
     /**
-     * Return a string representing a CDATA section. Warning: a String is
+     * <p>
+     * Return a string representing a CDATA node. Warning: a String is
      * Unicode, which may not match the outputter's specified
      * encoding.
+     * </p>
      *
      * @param cdata <code>CDATA</code> to format.
-     **/
+     */
     public String outputString(CDATA cdata) {
         StringWriter out = new StringWriter();
         try {
@@ -874,12 +1043,66 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
+     * <p>
+     * Return a string representing a Text node. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     * </p>
+     *
+     * @param text <code>Text</code> to format.
+     */
+    public String outputString(Text text) {
+        StringWriter out = new StringWriter();
+        try {
+            output(text, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * <p>
+     * Return a string representing (with trimming, normalizatio, and
+     * escaping possibly applied) a <code>String</code>. Warning: a
+     * String is Unicode, which may not match the outputter's specified
+     * encoding.
+     * </p>
+     *
+     * @param str <code>String</code> to format.
+     */
+    public String outputString(String str) {
+        StringWriter out = new StringWriter();
+        try {
+            output(str, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * <p>
+     * Return a string representing a comment. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to format.
+     */
+    public String outputString(Comment comment) {
+        StringWriter out = new StringWriter();
+        try {
+            output(comment, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * <p>
      * Return a string representing a PI. Warning: a String is
      * Unicode, which may not match the outputter's specified
      * encoding.
+     * </p>
      *
-     * @param doc <code>ProcessingInstruction</code> to format.
-     **/
+     * @param pi <code>ProcessingInstruction</code> to format.
+     */
     public String outputString(ProcessingInstruction pi) {
         StringWriter out = new StringWriter();
         try {
@@ -888,28 +1111,15 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
-    /**
-     * Return a string representing a DocType. Warning: a String is
-     * Unicode, which may not match the outputter's specified
-     * encoding.
-     *
-     * @param doc <code>DocType</code> to format.
-     **/
-    public String outputString(DocType doctype) {
-        StringWriter out = new StringWriter();
-        try {
-            output(doctype, out);  // output() flushes
-        } catch (IOException e) { }
-        return out.toString();
-    }
-
    /**
+     * <p>
      * Return a string representing an entity. Warning: a String is
      * Unicode, which may not match the outputter's specified
      * encoding.
+     * </p>
      *
-     * @param doc <code>EntityRef</code> to format.
-     **/
+     * @param entity <code>EntityRef</code> to format.
+     */
     public String outputString(EntityRef entity) {
         StringWriter out = new StringWriter();
         try {
@@ -918,20 +1128,20 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
-    // * * * * * Internal printing methods * * * * *
-    
+    // * * * * * * * * * * Internal printing methods * * * * * * * * * *
+    // * * * * * * * * * * Internal printing methods * * * * * * * * * *
+
     /**
      * <p>
-     * This will write the declaration to the given Writer.
-     *   Assumes XML version 1.0 since we don't directly know.
+     * This will handle printing of the declaration.
+     * Assumes XML version 1.0 since we don't directly know.
      * </p>
      *
      * @param doc <code>Document</code> whose declaration to write.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      * @param encoding The encoding to add to the declaration
      */
-    protected void printDeclaration(Document doc,
-                                    Writer out,
+    protected void printDeclaration(Document doc, Writer out,
                                     String encoding) throws IOException {
 
         // Only print the declaration if it's not being omitted
@@ -946,26 +1156,24 @@ public class XMLOutputter implements Cloneable {
             // Print new line after decl always, even if no other new lines
             // Helps the output look better and is semantically
             // inconsequential
-            out.write(lineSeparator);
+            out.write( currentFormat.lineSeparator);
         }
     }
 
     /**
      * <p>
-     * This will write the DOCTYPE declaration if one exists.
+     * This handle printing the DOCTYPE declaration if one exists.
      * </p>
      *
      * @param doc <code>Document</code> whose declaration to write.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      */
     protected void printDocType(DocType docType, Writer out)
                         throws IOException {
-        if (docType == null) {
-            return;
-        }
 
         String publicID = docType.getPublicID();
         String systemID = docType.getSystemID();
+        String internalSubset = docType.getInternalSubset();
         boolean hasPublic = false;
 
         out.write("<!DOCTYPE ");
@@ -984,41 +1192,40 @@ public class XMLOutputter implements Cloneable {
             out.write(systemID);
             out.write("\"");
         }
-        if (docType.getInternalSubset() != null) {
+        if ((internalSubset != null) && (!internalSubset.equals(""))) {
             out.write(" [\n");
             out.write(docType.getInternalSubset());
             out.write("]");
         }
         out.write(">");
 
-        // Print new line after decl always, even if no other new lines
-        // Helps the output look better and is semantically
-        // inconsequential
-        out.write(lineSeparator);
+        // Always print line separator after declaration, helps the
+        // output look better and is semantically inconsequential
+        out.write( currentFormat.lineSeparator);
     }
 
     /**
      * <p>
-     * This will write the comment to the specified writer.
+     * This will handle printing of comments.
      * </p>
      *
      * @param comment <code>Comment</code> to write.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      */
     protected void printComment(Comment comment, Writer out)
-                                  throws IOException {
+                       throws IOException {
         out.write("<!--");
         out.write(comment.getText());
         out.write("-->");
     }
-      
+
     /**
      * <p>
-     * This will write the processing instruction to the specified writer.
+     * This will handle printing of processing instructions.
      * </p>
      *
      * @param comment <code>ProcessingInstruction</code> to write.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      */
     protected void printProcessingInstruction(ProcessingInstruction pi,
                                               Writer out) throws IOException {
@@ -1039,56 +1246,102 @@ public class XMLOutputter implements Cloneable {
             out.write("?>");
         }
     }
-    
+
     /**
      * <p>
-     * This will handle printing out an <code>{@link CDATA}</code>,
-     *   and its value.
+     * This will handle printing a <code>{@link EntityRef}</code>.
+     * Only the entity reference such as <code>&amp;entity;</code>
+     * will be printed. However, subclasses are free to override
+     * this method to print the contents of the entity instead.
+     * </p>
+     *
+     * @param entity <code>EntityRef</code> to output.
+     * @param out <code>Writer</code> to use.  */
+    protected void printEntityRef(EntityRef entity, Writer out)
+                       throws IOException {
+        out.write("&");
+        out.write(entity.getName());
+        out.write(";");
+    }
+
+    /**
+     * <p>
+     * This will handle printing of <code>{@link CDATA}</code> text.
      * </p>
      *
      * @param cdata <code>CDATA</code> to output.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      */
-    protected void printCDATA(CDATA cdata, Writer out)
-                                       throws IOException {
+    protected void printCDATA(CDATA cdata, Writer out) throws IOException {
+        String str = currentFormat.textNormalize
+                     ? cdata.getTextNormalize()
+                     : ((currentFormat.textTrim) ? cdata.getText().trim()
+                                                 : cdata.getText());
         out.write("<![CDATA[");
-        out.write(cdata.getText());
+        out.write( str);
         out.write("]]>");
     }
 
     /**
      * <p>
-     * This will handle printing out an <code>{@link Text}</code>,
-     *   and its value.
+     * This will handle printing of <code>{@link Text}</code> strings.
      * </p>
      *
-     * @param text <code>Text</code> to output.
-     * @param out <code>Writer</code> to write to.
+     * @param text <code>Text</code> to write.
+     * @param out <code>Writer</code> to use.
      */
-    protected void printText(Text text, Writer out)
-                                       throws IOException {
-        printString(text.getText(),out);
+    protected void printText(Text text, Writer out) throws IOException {
+        String str = currentFormat.textNormalize
+                     ? text.getTextNormalize()
+                     : ((currentFormat.textTrim) ? text.getText().trim()
+                                                 : text.getText());
+        out.write( escapeElementEntities( str));
+    }
+
+    /**
+     * This will handle printing a string.  Escapes the element entities,
+     * trims interior whitespace, etc. if necessary.
+     */
+    protected void printString(String str, Writer out) throws IOException {
+        if (currentFormat.textNormalize)
+             str = Text.normalizeString( str);
+        else if (currentFormat.textTrim)
+                 str = str.trim();
+        out.write( escapeElementEntities( str));
     }
 
     /**
      * <p>
-     * This will handle printing out an <code>{@link Element}</code>,
-     *   its <code>{@link Attribute}</code>s, and its value.
+     * This will handle printing of a <code>{@link Element}</code>,
+     * it's <code>{@link Attribute}</code>s, and all contained (child)
+     * elements, etc.
      * </p>
      *
      * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      * @param indent <code>int</code> level of indention.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
     protected void printElement(Element element, Writer out,
-                                int indentLevel, NamespaceStack namespaces)
-                                throws IOException {
+                                int level, NamespaceStack namespaces)
+                       throws IOException {
 
-        // This method prints from the beginning < to the trailing >.
-        // (no leading or trailing whitespace!)
+        List attributes = element.getAttributes();
+        List content = element.getContent();
 
-        List eltContent = element.getContent();
+        // Check for xml:space and adjust format settings
+        String space = null;
+        if (attributes != null) {
+            space = element.getAttributeValue( "space",
+                                               Namespace.XML_NAMESPACE);
+        }
+
+        Format previousFormat = currentFormat;
+
+        if ("default".equals( space))
+            currentFormat = defaultFormat;
+        else if ("preserve".equals( space))
+                 currentFormat = noFormatting;
 
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
@@ -1104,48 +1357,46 @@ public class XMLOutputter implements Cloneable {
         // Print out additional namespace declarations
         printAdditionalNamespaces(element, out, namespaces);
 
-        printAttributes(element.getAttributes(), element, out, namespaces);
+        // Print out attributes
+        if (attributes != null)
+            printAttributes( attributes, element, out, namespaces);
 
-        // Calculate if the contents are String/CDATA only
-        // This helps later with the "empty" check
-        boolean stringOnly = true;
-        Iterator itr = eltContent.iterator();
-        while (itr.hasNext()) {
-            Object o = itr.next();
-            if (!(o instanceof Text) && !(o instanceof CDATA)) {
-                stringOnly = false;
-                break;
-            }
-        }
+        // Depending on the settings (newlines, textNormalize, etc), we may
+        // or may not want to print all of the content, so determine the
+        // index of the start of the content we're interested
+        // in based on the current settings.
 
-        // Calculate if the content is empty
-        // We can handle "" string same as empty (CDATA has no effect here)
-        boolean empty = false;
-        if (stringOnly) {
-            String elementText =
-                textNormalize ? element.getTextNormalize() : element.getText();
-            if (elementText == null || elementText.equals("")) {
-                empty = true;
-            }
-        }
-
-        // If empty, print closing; if not empty, print content
-        if (empty) {
-            // Simply close up
-            if (!expandEmptyElements) {
-                out.write(" />");
-            }
-            else {
+        int start = skipLeadingWhite( content, 0);
+        if (start >= content.size()) {
+            // Case content is empty or all insignificant whitespace
+            if (currentFormat.expandEmptyElements) {
                 out.write("></");
                 out.write(element.getQualifiedName());
                 out.write(">");
             }
+            else {
+                out.write(" />");
+            }
         }
         else {
-            // We know it's not null or empty from above
             out.write(">");
-            printElementContent(element, out, indentLevel + 1,
-                                namespaces, eltContent);
+
+            // For a special case where the content is only CDATA
+            // or Text we don't want to indent after the start or
+            // before the end tag.
+
+            if (nextNonText( content, start) < content.size()) {
+                // Case Mixed Content - normal indentation
+                newline(out);
+                printContentRange(content, start, content.size(), out,
+                                  level + 1, namespaces);
+                newline(out);
+                indent(out, level);
+            }
+            else {
+                // Case all CDATA or Text - no indentation
+                printTextRange(content, start, content.size(), out);
+            }
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");
@@ -1155,411 +1406,575 @@ public class XMLOutputter implements Cloneable {
         while (namespaces.size() > previouslyDeclaredNamespaces) {
             namespaces.pop();
         }
+
+        // Restore our format settings
+        currentFormat = previousFormat;
     }
-    
-    /**
-     * <p> This will handle printing out an <code>{@link
-     * Element}</code>'s content only, not including its tag,
-     * attributes, and namespace info.  </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
-     * @param indent <code>int</code> level of indentation.
-     **/
-    protected void printElementContent(Element element, Writer out,
-                                       int indentLevel,
-                                       NamespaceStack namespaces,
-                                       List eltContent) throws IOException {
-        // get same local flags as printElement does
-        // a little redundant code-wise, but not performance-wise
-        boolean empty = eltContent.size() == 0;
 
-        // Calculate if the content is String/CDATA only
-        boolean stringOnly = true;
-        if (!empty) {
-            stringOnly = isStringOnly(eltContent);
-        }
-
-        if (stringOnly) {
-            Class justOutput = null;
-            boolean endedWithWhite = false;
-            Iterator itr = eltContent.iterator();
-            while (itr.hasNext()) {
-                Object content = itr.next();
-                if (content instanceof Text) {
-                    String scontent = ((Text) content).getText();
-                    if ((justOutput == CDATA.class) && 
-                        (textNormalize) &&
-                        (startsWithWhite(scontent))) {
-                        out.write(" ");
-                    }
-                    printString(scontent, out);
-                    endedWithWhite = endsWithWhite(scontent);
-                    justOutput = String.class;
-                } else {
-                    // We're in a CDATA section
-                    if ((justOutput == String.class) &&
-                        (textNormalize) &&
-                        (endedWithWhite)) {
-                        out.write(" ");  // padding
-                    }
-                    printCDATA((CDATA)content, out);
-                    justOutput = CDATA.class;
-                }
-            }
-        } else {
-            // Iterate through children
-            Object content = null;
-            Class justOutput = null;
-            boolean endedWithWhite = false;
-            boolean wasFullyWhite = false;
-            Iterator itr = eltContent.iterator();
-            while (itr.hasNext()) {
-                content = itr.next();
-                // See if text, an element, a PI or a comment
-                if (content instanceof Comment) {
-                    if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out, indentLevel);
-                    }
-                    printComment((Comment) content, out);
-                    justOutput = Comment.class;
-                } else if (content instanceof Text) {
-                    String scontent = ((Text) content).getText();
-
-     // bugfix: don't print lines for whitespace that's
-     // only sticking between close tags
-     if (textNormalize && isWhitespace(scontent)) {
- wasFullyWhite = true;
- continue;
-     }
-     
-                    if ((justOutput == CDATA.class) && 
-                        (textNormalize) &&
-                        (startsWithWhite(scontent))) {
-                        out.write(" ");
-                    } else if ((justOutput != CDATA.class) && 
-                               (justOutput != String.class) &&
-        (justOutput != null)
-                               // (justOutput != Element.class)
-        )
-     {
-                        maybePrintln(out, indentLevel);
-                    }
-     // if scontent is not a single-character newline
-                    if (!((scontent.length() == 1) && 
-                         ("\r\n".indexOf(scontent.charAt(0)) != -1))) {
-                        printString(scontent, out);
-                        endedWithWhite = endsWithWhite(scontent);
-                        justOutput = String.class;
-                        wasFullyWhite = (scontent.trim().length() == 0);
-                    }
-                } else if (content instanceof Element) {
-                    if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out, indentLevel);
-                    }
-                    printElement((Element) content, out,
-                                 indentLevel, namespaces);
-                    justOutput = Element.class;
-                } else if (content instanceof EntityRef) {
-                    if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out, indentLevel);
-                    }
-                    printEntityRef((EntityRef) content, out);
-                    justOutput = EntityRef.class;
-                } else if (content instanceof ProcessingInstruction) {
-                    if (!((justOutput == String.class) && (wasFullyWhite))) {
-                        maybePrintln(out, indentLevel);
-                    }
-                    printProcessingInstruction((ProcessingInstruction) content,
-                                               out);
-                    justOutput = ProcessingInstruction.class;
-                } else if (content instanceof CDATA) {
-                    if ((justOutput == String.class) &&
-                        (textNormalize) &&
-                        (endedWithWhite)) {
-                        out.write(" ");  // padding
-                    }
-                    else if (justOutput != String.class &&
-                             justOutput != CDATA.class) {
-                        maybePrintln(out, indentLevel);
-                    }
-                    printCDATA((CDATA)content, out);
-                    justOutput = CDATA.class;
-                }
-                // Unsupported types are *not* printed, nor should they exist
-            }
-            maybePrintln(out, indentLevel - 1);
-        }
-    }  // printElementContent
-
-
-    /**
-     * Print a string.  Escapes the element entities, trims interior
-     * whitespace if necessary.
-     **/     
-    protected void printString(String s, Writer out) throws IOException {
-        s = escapeElementEntities(s);
-        // patch by Brad Morgan to strip interior whitespace
-        // (Brad.Morgan@e-pubcorp.com)
-        if (textNormalize) {
-            StringTokenizer tokenizer = new StringTokenizer(s);
-            while (tokenizer.hasMoreTokens()) {
-                String token = tokenizer.nextToken();
-                out.write(token);
-                if (tokenizer.hasMoreTokens()) {
-                    out.write(" ");
-                }
-            }
-        }
-        else {                    
-            out.write(s);
-        }
-    }
-    
     /**
      * <p>
-     * This will handle printing out an <code>{@link EntityRef}</code>.
-     * Only the entity reference such as <code>&amp;entity;</code>
-     * will be printed. However, subclasses are free to override 
-     * this method to print the contents of the entity instead.
+     * This will handle printing of a <code>{@link
+     * Element}</code>'s content only, not including it's tag,
+     * attributes, or namespace info.
      * </p>
      *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out <code>Writer</code> to write to.  */
-    protected void printEntityRef(EntityRef entity, Writer out) 
-                                                   throws IOException {
-        out.write(new StringBuffer()
-            .append("&")
-            .append(entity.getName())
-            .append(";")
-            .toString());
+     * @param element <code>Element</code> to output.
+     * @param out <code>Writer</code> to use.
+     * @param level <code>int</code> level of indentation.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    protected void printElementContent(Element element, Writer out,
+                                       int level,
+                                       NamespaceStack namespaces)
+                       throws IOException {
+        printContent( element.getContent(), out, level, namespaces);
     }
 
     /**
      * <p>
-     *  This will handle printing out any needed <code>{@link Namespace}</code>
-     *    declarations.
+     * This will handle printing of a <code>{@link
+     * Element}</code>'s content only, not including it's tag,
+     * attributes, or namespace info.
+     * </p>
+     *
+     * @param content <code>List</code> of content to output.
+     * @param out <code>Writer</code> to use.
+     * @param level <code>int</code> level of indentation.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    protected void printContent(List content, Writer out,
+                                int level, NamespaceStack namespaces)
+                       throws IOException {
+        printContentRange(content, 0, content.size(), out,
+                          level, namespaces);
+    }
+
+    /**
+     * <p>
+     * This will handle printing of content within a given range.
+     * The range to print is specified in typical Java fashion; the
+     * starting index is inclusive, while the ending index is
+     * exclusive.
+     * </p>
+     *
+     * @param content <code>List</code> of content to output
+     * @param starting index of first content node (inclusive.
+     * @param ending index of last content node (exclusive).
+     * @param out <code>Writer</code> to use.
+     * @param level <code>int</code> level of indentation.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    protected void printContentRange(List content, int start, int end,
+                                     Writer out, int level,
+                                     NamespaceStack namespaces)
+                       throws IOException {
+        boolean firstNode; // Flag for 1st node in content
+        Object next;       // Node we're about to print
+        int first, index;  // Indexes into the list of content
+
+        index = start;
+        while( index < end) {
+            firstNode = (index == start) ? true : false;
+            next = content.get( index);
+
+            //
+            // Handle consecutive CDATA and Text nodes all at once
+            //
+            if ((next instanceof CDATA) ||
+                (next instanceof Text)) {
+                first = skipLeadingWhite( content, index);
+                // Set index to next node for loop
+                index = nextNonText( content, first);
+
+                // If it's not all whitespace - print it!
+                if (first < index) {
+                    if (!firstNode)
+                        newline(out);
+                    indent(out, level);
+                    printTextRange( content, first, index, out);
+                }
+                continue;
+            }
+
+            //
+            // Handle other nodes
+            //
+            if (!firstNode)
+                newline(out);
+            indent(out, level);
+
+            if (next instanceof Comment) {
+                printComment((Comment)next, out);
+            }
+            else if (next instanceof Element) {
+                printElement((Element)next, out, level, namespaces);
+            }
+            else if (next instanceof EntityRef) {
+                printEntityRef((EntityRef)next, out);
+            }
+            else if (next instanceof ProcessingInstruction) {
+                printProcessingInstruction((ProcessingInstruction)next, out);
+            }
+            else {
+                // XXX if we get here then we have a illegal content, for
+                //     now we'll just ignore it (probably should throw
+                //     a exception)
+            }
+
+            index++;
+        } /* while */
+    }
+
+    /**
+     * <p>
+     * This will handle printing of a sequence of <code>{@link CDATA}</code>
+     * or <code>{@link Text}</code> nodes.  It is a error to have any other
+     * pass this method any other type of node.
+     * </p>
+     *
+     * @param content <code>List</code> of content to output
+     * @param starting index of first content node (inclusive).
+     * @param ending index of last content node (exclusive).
+     * @param out <code>Writer</code> to use.
+     */
+    protected void printTextRange(List content, int start, int end,
+                                  Writer out) throws IOException {
+        String previous; // Previous text printed
+        Object node;     // Next node to print
+        String next;     // Next text to print
+
+        previous = null;
+
+        // Remove leading whitespace-only nodes
+        start = skipLeadingWhite( content, start);
+
+        if (start < content.size()) {
+            // And remove trialing whitespace-only nodes
+            end = skipTrialingWhite( content, end);
+
+            for( int i = start; i < end; i++) {
+                node = content.get( i);
+
+                // Get the unmangled version of the text
+                // we are about to print
+                if (node instanceof CDATA)
+                     next = ((CDATA) node).getText();
+                else next = ((Text) node).getText();
+
+                // This may save a little time
+                if (next == null || "".equals( next))
+                    continue;
+
+                // Determine if we need to pad the output (padding is
+                // only need in trim or normalizing mode)
+                if (previous != null) { // Not 1st node
+                    if (currentFormat.textNormalize ||
+                        currentFormat.textTrim) {
+                            if ((endsWithWhite(previous)) ||
+                                (startsWithWhite(next))) {
+                                    out.write(" ");
+                            }
+                    }
+                }
+
+                // Print the node
+                if (node instanceof CDATA)
+                     printCDATA( (CDATA) node, out);
+                else printString( next, out);
+
+                previous = next;
+            }
+        }
+    }
+
+    /**
+     * <p>
+     *  This will handle printing of any needed <code>{@link Namespace}</code>
+     *  declarations.
      * </p>
      *
      * @param ns <code>Namespace</code> to print definition of
-     * @param out <code>Writer</code> to write to.
+     * @param out <code>Writer</code> to use.
      */
-    private void printNamespace(Namespace ns, Writer out) throws IOException {
-        out.write(" xmlns");
+    private void printNamespace(Namespace ns, Writer out,
+                                NamespaceStack namespaces)
+                     throws IOException {
         String prefix = ns.getPrefix();
+        String uri = ns.getURI();
+
+        // Already printed namespace decl?
+        if (uri.equals( namespaces.getURI(prefix)))
+            return;
+
+        out.write(" xmlns");
         if (!prefix.equals("")) {
             out.write(":");
             out.write(prefix);
         }
         out.write("=\"");
-        out.write(ns.getURI());
+        out.write(uri);
         out.write("\"");
+        namespaces.push(ns);
     }
 
     /**
      * <p>
-     * This will handle printing out an <code>{@link Attribute}</code> list.
+     * This will handle printing of a <code>{@link Attribute}</code> list.
      * </p>
      *
      * @param attributes <code>List</code> of Attribute objcts
-     * @param out <code>Writer</code> to write to
+     * @param out <code>Writer</code> to use
      */
-    protected void printAttributes(List attributes, Element parent, 
-                                   Writer out, NamespaceStack namespaces) 
-      throws IOException {
+    protected void printAttributes(List attributes, Element parent,
+                                   Writer out, NamespaceStack namespaces)
+                       throws IOException {
 
         // I do not yet handle the case where the same prefix maps to
         // two different URIs. For attributes on the same element
         // this is illegal; but as yet we don't throw an exception
         // if someone tries to do this
-        Iterator itr = attributes.iterator();
-        while (itr.hasNext()) {
-            Attribute attribute = (Attribute)itr.next();
+        // Set prefixes = new HashSet();
+        for( int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = (Attribute) attributes.get( i);
             Namespace ns = attribute.getNamespace();
-            if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
-                String prefix = ns.getPrefix();           
-                String uri = namespaces.getURI(prefix);
-                if (!ns.getURI().equals(uri)) { // output a new namespace decl
-                    printNamespace(ns, out);
-                    namespaces.push(ns);
-                }
+            if ((ns != Namespace.NO_NAMESPACE) &&
+                (ns != Namespace.XML_NAMESPACE)) {
+                    printNamespace(ns, out, namespaces);
             }
-            
+
             out.write(" ");
             out.write(attribute.getQualifiedName());
             out.write("=");
 
             out.write("\"");
-            out.write(escapeAttributeEntities(attribute.getValue()));
+            out.write( escapeAttributeEntities(attribute.getValue()));
             out.write("\"");
         }
-        
     }
 
-    private void printElementNamespace(Element element, Writer out, 
-                                       NamespaceStack namespaces) 
+    private void printElementNamespace(Element element, Writer out,
+                                       NamespaceStack namespaces)
                              throws IOException {
-        // Add namespace decl only if it's not the XML namespace and it's 
+        // Add namespace decl only if it's not the XML namespace and it's
         // not the NO_NAMESPACE with the prefix "" not yet mapped
         // (we do output xmlns="" if the "" prefix was already used and we
         // need to reclaim it for the NO_NAMESPACE)
         Namespace ns = element.getNamespace();
-        if (ns != Namespace.XML_NAMESPACE &&
-            !(ns == Namespace.NO_NAMESPACE && namespaces.getURI("") == null)) {
-            String prefix = ns.getPrefix();        
-            String uri = namespaces.getURI(prefix);
-            if (!ns.getURI().equals(uri)) { // output a new namespace decl
-                namespaces.push(ns);
-                printNamespace(ns, out);
+        if (ns == Namespace.XML_NAMESPACE)
+            return;
+        if ( !((ns == Namespace.NO_NAMESPACE) &&
+               (namespaces.getURI("") == null))) {
+            printNamespace(ns, out, namespaces);
+        }
+    }
+
+    private void printAdditionalNamespaces(Element element, Writer out,
+                                           NamespaceStack namespaces)
+                                throws IOException {
+        List list = element.getAdditionalNamespaces();
+        if (list != null) {
+            for( int i = 0; i < list.size(); i++) {
+                Namespace additional = (Namespace)list.get( i);
+                printNamespace(additional, out, namespaces);
             }
         }
     }
 
-    private void printAdditionalNamespaces(Element element, Writer out, 
-                                           NamespaceStack namespaces)
-                                throws IOException {
-        List additionalNamespaces = element.getAdditionalNamespaces();
-        if (additionalNamespaces != null) {
-            Iterator itr = additionalNamespaces.iterator();
-            while (itr.hasNext()) {
-                Namespace additional = (Namespace)itr.next();
-                String prefix = additional.getPrefix();        
-                String uri = namespaces.getURI(prefix);
-                if (!additional.getURI().equals(uri)) {
-                    namespaces.push(additional);
-                    printNamespace(additional, out);
-                }
+    // * * * * * * * * * * Support methods * * * * * * * * * *
+    // * * * * * * * * * * Support methods * * * * * * * * * *
+
+    /**
+     * <p>
+     * This will print a new line only if the newlines flag was set to
+     * true.
+     * </p>
+     *
+     * @param out <code>Writer</code> to use
+     */
+    protected void newline(Writer out) throws IOException {
+        if (currentFormat.newlines)
+            out.write(defaultFormat.lineSeparator);
+    }
+
+    /**
+     * <p>
+     * This will print indents (only if the newlines flag was
+     * set to <code>true</code>, and indent is non-null).
+     * </p>
+     *
+     * @param out <code>Writer</code> to use
+     * @param level current indent level (number of tabs)
+     * @deprecated since it's never used in XMLOutputter, used
+     * in XMLOutputter indent( out, 0) instead
+     */
+    protected void indent(Writer out) throws IOException  {
+        indent(out, 0);
+    }
+
+    /**
+     * <p>
+     * This will print indents (only if the newlines flag was
+     * set to <code>true</code>, and indent is non-null).
+     * </p>
+     *
+     * @param out <code>Writer</code> to use
+     * @param level current indent level (number of tabs)
+     */
+    protected void indent(Writer out, int level) throws IOException {
+        if (currentFormat.newlines) {
+            if (defaultFormat.indent == null ||
+                defaultFormat.indent.equals(""))
+                    return;
+
+            for (int i = 0; i < level; i++) {
+                out.write(defaultFormat.indent);
             }
         }
+    }
+
+    // Returns the index of the first non-all-whitespace CDATA or Text,
+    // index = content.size() is returned if content contains
+    // all whitespace.
+    // @param start index to begin search (inclusive)
+    private int skipLeadingWhite( List content, int start) {
+        if (start < 0)
+             start = 0;
+
+        int index = start;
+        if (currentFormat.trimAllWhite
+                || currentFormat.textNormalize
+                || currentFormat.textTrim
+                || currentFormat.newlines) {
+            while( index < content.size()) {
+                if ( !isAllWhitespace( content.get(index)))
+                    break;
+                index++;
+            }
+        }
+        return index;
+    }
+
+    // Return the index + 1 of the last non-all-whitespace CDATA or
+    // Text node,  index < 0 is returned
+    // if content contains all whitespace.
+    // @param start index to begin search (exclusive)
+    private int skipTrialingWhite( List content, int start) {
+        if (start > content.size())
+            start = content.size();
+
+        int index = start;
+        if (currentFormat.trimAllWhite
+                || currentFormat.textNormalize
+                || currentFormat.textTrim
+                || currentFormat.newlines) {
+            while( index >= 0) {
+                if ( !isAllWhitespace( content.get(index - 1)))
+                    break;
+                --index;
+            }
+        }
+        return index;
+    }
+
+    // Return the next non-CDATA or non-Text node, index = content.size()
+    // is returned if there is no more non-CDATA or non-Text nodes
+    // @param start index to begin search (inclusive)
+    private int nextNonText( List content, int start) {
+        if (start < 0)
+            start = 0;
+
+        int index = start;
+        while( index < content.size()) {
+            if ( !((content.get( index) instanceof CDATA) ||
+                   (content.get( index) instanceof Text)))
+                break;
+            index++;
+        }
+        return index;
+    }
+
+    // Determine if a Object is all whitespace
+    private boolean isAllWhitespace(Object obj) {
+        String str = null;
+
+        if (obj instanceof String) {
+            str = (String) obj;
+        }
+        else if (obj instanceof CDATA) {
+            str = ((CDATA) obj).getText();
+        }
+        else if (obj instanceof Text) {
+            str = ((Text) obj).getText();
+        }
+        else {
+            return false;
+        }
+
+        for (int i = 0; i < str.length(); i++) {
+            if ( !isWhitespace( str.charAt( i)))
+                return false;
+        }
+        return true;
+    }
+
+    // Determine if a string starts with a XML whitespace.
+    private boolean startsWithWhite(String str) {
+        if ((str != null) &&
+            (str.length() > 0) &&
+            isWhitespace( str.charAt(0))) {
+           return true;
+        }
+        return false;
+    }
+
+    // Determine if a string ends with a XML whitespace.
+    private boolean endsWithWhite(String str) {
+        if ((str != null) &&
+            (str.length() > 0) &&
+            isWhitespace( str.charAt(str.length() - 1))) {
+           return true;
+        }
+        return false;
+    }
+
+    // Determine if a character is a XML whitespace.
+    // XXX should this method be in Verifier
+    private boolean isWhitespace(char ch) {
+        if (" \t\n\r".indexOf(ch) < 0) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * <p>
      * This will take the pre-defined entities in XML 1.0 and
-     *   convert their character representation to the appropriate
-     *   entity reference, suitable for XML attributes.  It does
-     *   no converstion for ' because it's not necessary as the outputter 
-     *   writes attributes surrounded by double-quotes.
+     * convert their character representation to the appropriate
+     * entity reference, suitable for XML attributes.  It does
+     * no converstion for ' because it's not necessary as the outputter
+     * writes attributes surrounded by double-quotes.
      * </p>
      *
-     * @param st <code>String</code> input to escape.
+     * @param str <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
      */
-    protected String escapeAttributeEntities(String st) {
-        StringBuffer buff = null;
-        int length = st.length();
-        String stEntity = null;
-        int i, last;
+    public String escapeAttributeEntities(String str) {
+        StringBuffer buffer;
+        char ch;
+        String entity;
 
-        for (i=0, last=0; i < length; i++) {
-            switch(st.charAt(i)) {
+        buffer = null;
+        for (int i = 0; i < str.length(); i++) {
+            ch = str.charAt(i);
+            switch(ch) {
                 case '<' :
-                    stEntity = "&lt;";
+                    entity = "&lt;";
                     break;
                 case '>' :
-                    stEntity = "&gt;";
+                    entity = "&gt;";
                     break;
 /*
                 case '\'' :
-                    stEntity = "&apos;";
+                    entity = "&apos;";
                     break;
 */
                 case '\"' :
-                    stEntity = "&quot;";
+                    entity = "&quot;";
                     break;
                 case '&' :
-                    stEntity = "&amp;";
+                    entity = "&amp;";
                     break;
                 default :
-                    /* no-op */ ;
+                    entity = null;
+                    break;
             }
-            if (stEntity != null) {
-                // An entity occurred, so we'll have to use the StringBuffer.
-                if (buff == null) {
-                    buff = new StringBuffer(length + 20); // allow room for a few more entities
+            if (buffer == null) {
+                if (entity != null) {
+                    // An entity occurred, so we'll have to use StringBuffer
+                    // (allocate room for it plus a few more entities).
+                    buffer = new StringBuffer(str.length() + 20);
+                    // Copy previous skipped characters and fall through
+                    // to pickup current character
+                    buffer.append( str.substring( 0, i));
                 }
-                buff.append(st.substring(last, i));
-                buff.append(stEntity);
-                stEntity = null;
-                last = i + 1;
+            }
+            else {
+                if (entity == null)
+                     buffer.append( ch);
+                else buffer.append(entity);
             }
         }
 
-        // If there were any entities, return the escaped charactes that we 
-        // put in the StringBuffer. Otherwise, just return the unmodified 
-        // input string.
-        if (buff != null) {
-            if(last < length) {
-                buff.append(st.substring(last, i));
-            }
-            return buff.toString();
-        } else {
-            return st;
-        }
+        // If there were any entities, return the escaped characters
+        // that we put in the StringBuffer. Otherwise, just return
+        // the unmodified input string.
+        return (buffer == null) ? str : buffer.toString();
     }
 
 
     /**
      * <p>
      * This will take the three pre-defined entities in XML 1.0
-     *   (used specifically in XML elements) and
-     *   convert their character representation to the appropriate
-     *   entity reference, suitable for XML element.
+     * (used specifically in XML elements) and convert their character
+     * representation to the appropriate entity reference, suitable for
+     * XML element content.
      * </p>
      *
      * @param st <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
      */
-    protected String escapeElementEntities(String st) {
-        StringBuffer buff = null;
-        int length = st.length();
-        String stEntity = null;
-        int i, last;
+    public String escapeElementEntities(String str) {
+        StringBuffer buffer;
+        char ch;
+        String entity;
 
-        for (i=0, last=0; i < length; i++) {
-            switch(st.charAt(i)) {
+        buffer = null;
+        for (int i = 0; i < str.length(); i++) {
+            ch = str.charAt(i);
+            switch(ch) {
                 case '<' :
-                    stEntity = "&lt;";
+                    entity = "&lt;";
                     break;
                 case '>' :
-                    stEntity = "&gt;";
+                    entity = "&gt;";
                     break;
                 case '&' :
-                    stEntity = "&amp;";
+                    entity = "&amp;";
                     break;
                 default :
-                    /* no-op */ ;
+                    entity = null;
+                    break;
             }
-            if (stEntity != null) {
-                // An entity occurred, so we'll have to use the StringBuffer.
-                if (buff == null) {
-                    buff = new StringBuffer(length + 20); // allow room for a few more entities
+            if (buffer == null) {
+                if (entity != null) {
+                    // An entity occurred, so we'll have to use StringBuffer
+                    // (allocate room for it plus a few more entities).
+                    buffer = new StringBuffer(str.length() + 20);
+                    // Copy previous skipped characters and fall through
+                    // to pickup current character
+                    buffer.append( str.substring( 0, i));
                 }
-                buff.append(st.substring(last, i));
-                buff.append(stEntity);
-                stEntity = null;
-                last = i + 1;
+            }
+            else {
+                if (entity == null)
+                     buffer.append( ch);
+                else buffer.append(entity);
             }
         }
 
-        // If there were any entities, return the escaped charactes that we 
-        // put in the StringBuffer. Otherwise, just return the unmodified 
-        // input string.
-        if (buff != null) {
-            if (last < length) {
-                buff.append(st.substring(last, i));
-            }
-            return buff.toString();
-        } else {
-            return st;
-        }
+        // If there were any entities, return the escaped characters
+        // that we put in the StringBuffer. Otherwise, just return
+        // the unmodified input string.
+        return (buffer == null) ? str : buffer.toString();
     }
 
     /**
-     * parse command-line arguments of the form <code>-omitEncoding
+     * <p>
+     * Parse command-line arguments of the form <code>-omitEncoding
      * -indentSize 3 ...</code>
+     * </p>
      * @return int index of first parameter that we didn't understand
-     **/      
+     */
     public int parseArgs(String[] args, int i) {
         for (; i<args.length; ++i) {
             if (args[i].equals("-omitDeclaration")) {
@@ -1586,6 +2001,12 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-lineSeparator")) {
                 setLineSeparator(args[++i]);
             }
+            else if (args[i].equals("-trimAllWhite")) {
+                setTrimAllWhite(true);
+            }
+            else if (args[i].equals("-textTrim")) {
+                setTextTrim(true);
+            }
             else if (args[i].equals("-textNormalize")) {
                 setTextNormalize(true);
             }
@@ -1594,124 +2015,130 @@ public class XMLOutputter implements Cloneable {
             }
         }
         return i;
-    } // parseArgs
-
-    private boolean startsWithWhite(String s) {
-        return (s.length() > 0 && s.charAt(0) <= ' ');
-    }
-
-    private boolean endsWithWhite(String s) {
-        return (s.length() > 0 && s.charAt(s.length() - 1) <= ' ');
-    }
-
-    // true if string is all whitespace (space, tab, cr, lf only)
-    private boolean isWhitespace(String s) {
-        int length = s.length();
-        for (int i=0; i<length; ++i) {
-            if (" \t\n\r".indexOf(s.charAt(i)) == -1) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // returns the text of the element, taking "textNormalize" into account
-    private String getElementText(Element element) {
-       return textNormalize ? element.getTextNormalize() : element.getText();
-    }
- 
-    // returns true if this is an empty element (meaning no content, or only 
-    // whitespace content with textNormalize true)
-    private boolean isEmpty(Element element) {
-        // Calculate if the content is empty
-        // We can handle "" string same as empty (CDATA has no effect here)    
-        List eltContent = element.getContent();
-        // An element with absolutely no content is empty
-        if (eltContent.size() == 0) {
-            return true;
-        }
-        // An element with only string content, whose string content
-        // adds up to nothing, is empty
-        if (isStringOnly(eltContent)) {
-             String elementText = getElementText(element);
-             if (elementText == null || elementText.equals("")) {
-                return true;
-            }
-        }
-        // anything else is not empty
-        return false;
-    }
-
-    // Return true if the element's content list consists only of
-    // String or CDATA nodes (or is empty)
-    private boolean isStringOnly(List eltContent) {
-        // Calculate if the contents are String/CDATA only
-        Iterator itr = eltContent.iterator();
-        while (itr.hasNext()) {
-            Object o = itr.next();
-            if (!(o instanceof Text) && !(o instanceof CDATA)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
+     * Returns a copy of this XMLOutputter.
+     */
+    public Object clone() {
+        // Implementation notes: Since all state of an XMLOutputter is
+        // embodied in simple private instance variables, Object.clone
+        // can be used.  Note that since Object.clone is totally
+        // broken, we must catch an exception that will never be
+        // thrown.
+        try {
+            return super.clone();
+        }
+        catch (java.lang.CloneNotSupportedException e) {
+            // even though this should never ever happen, it's still
+            // possible to fool Java into throwing a
+            // CloneNotSupportedException.  If that happens, we
+            // shouldn't swallow it.
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    /**
+     * <p>
+     * Return a string listing of the settings for this
+     * XMLOutputter instance.
+     * </p>
+     *
      * @return a string listing the settings for this XMLOutputter instance
-     **/
+     */
     public String toString() {
-        return
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < defaultFormat.lineSeparator.length(); i++) {
+            char ch = defaultFormat.lineSeparator.charAt( i);
+            switch (ch) {
+            case '\r': buffer.append("\\r");
+                       break;
+            case '\n': buffer.append("\\n");
+                       break;
+            case '\t': buffer.append("\\t");
+                       break;
+            default:   buffer.append("[" + ((int)ch) + "]");
+                       break;
+            }
+        }
+
+        return (
             "XMLOutputter[omitDeclaration = " + omitDeclaration + ", " +
             "encoding = " + encoding + ", " +
             "omitEncoding = " + omitEncoding + ", " +
-            "indent = '" + indent + "'" + ", " +
-            "expandEmptyElements = " + expandEmptyElements + ", " +
-            "newlines = " + newlines + ", " +
-            "lineSeparator = '" + toBytes(lineSeparator) + "', " +
-            "textNormalize = " + textNormalize + "]";
+            "indent = '" + defaultFormat.indent + "'" + ", " +
+            "expandEmptyElements = " + defaultFormat.expandEmptyElements + ", " +
+            "newlines = " + defaultFormat.newlines + ", " +
+            "lineSeparator = '" + buffer.toString() + "', " +
+            "trimAllWhite = " + defaultFormat.trimAllWhite +
+            "textTrim = " + defaultFormat.textTrim +
+            "textNormalize = " + defaultFormat.textNormalize + "]"
+        );
     }
 
-    private String toBytes(String x) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<x.length(); ++i) {
-            buf.append(toByte(x.charAt(i)));
-        }
-        return buf.toString();
-    }
-
-    private String toByte(char ch) {
-        switch (ch) {
-        case '\r':
-            return "\\r";
-        case '\n':
-            return "\\n";
-        case '\t':
-            return "\\t";
-        default:
-            return ("[" + ((int)ch) + "]");
-        }
-    }
-    
     /**
+     * <p>
      * Factory for making new NamespaceStack objects.  The NamespaceStack
      * created is actually an inner class extending the package protected
      * NamespaceStack, as a way to make NamespaceStack "friendly" toward
      * subclassers.
-     **/
+     * </p>
+     */
     protected NamespaceStack createNamespaceStack() {
        // actually returns a XMLOutputter.NamespaceStack (see below)
        return new NamespaceStack();
     }
 
-     /**
+    /**
+     * <p>
      * Our own null subclass of NamespaceStack.  This plays a little
      * trick with Java access protection.  We want subclasses of
      * XMLOutputter to be able to override protected methods that
      * declare a NamespaceStack parameter, but we don't want to
-     * declare the parent NamespaceStack class as public.  
-     **/
+     * declare the parent NamespaceStack class as public.
+     * </p>
+     */
     protected class NamespaceStack
-       extends org.jdom.output.NamespaceStack
+        extends org.jdom.output.NamespaceStack
     {
+    }
+
+    // * * * * * * * * * * Deprecated methods * * * * * * * * * *
+    // * * * * * * * * * * Deprecated methods * * * * * * * * * *
+
+    /**
+     * <p>
+     * Ensure that text immediately preceded by or followed by an
+     * element will be "padded" with a single space.
+     * </p>
+     *
+     * @deprecated Deprecated in beta7, because this is no longer necessary
+     */
+    public void setPadText(boolean padText) { }
+
+    /**
+     * <p>
+     * Set the initial indentation level.
+     * </p>
+     *
+     * @deprecated Deprecated in beta7, because this is better done with a
+     *             stacked FilterOutputStream
+     */
+    public void setIndentLevel(int level) { }
+
+    /**
+     * <p>
+     * This will set whether the XML declaration
+     * (<code>&lt;?xml version="1.0"?&gt;</code>)
+     * will be suppressed or not. It is common to suppress this in uses such
+     * as SOAP and XML-RPC calls.
+     * </p>
+     *
+     * @param suppressDeclaration <code>boolean</code> indicating whether or not
+     *        the XML declaration should be suppressed.
+     * @deprecated Deprecated in beta7, use setOmitDeclaration() instead
+     */
+    public void setSuppressDeclaration(boolean suppressDeclaration) {
+        this.omitDeclaration = suppressDeclaration;
     }
 }

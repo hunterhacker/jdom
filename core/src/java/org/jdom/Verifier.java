@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.26 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Verifier.java,v 1.27 2002/01/25 18:42:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,6 +56,9 @@
 
 package org.jdom;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * <p>
  * <code>Verifier</code> handles XML checks on names, data, and other
@@ -65,12 +68,13 @@ package org.jdom;
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
- * @version $Revision: 1.26 $, $Date: 2002/01/08 09:17:10 $
+ * @author Bradley S. Huffman
+ * @version $Revision: 1.27 $, $Date: 2002/01/25 18:42:52 $
  */
-public final class Verifier {
+final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.26 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.27 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
 
     /**
      * <p>
@@ -298,6 +302,143 @@ public final class Verifier {
 
         // If we got here, everything is OK
         return null;
+    }
+
+    /**
+     * <p>
+     * Check if two namespaces collide.
+     * </p>
+     *
+     * @param namespace <code>Namespace</code> to check.
+     * @param other <code>Namespace</code> to check agianst.
+     * @return <code>String</code> - reason for collision, or
+     *         <code>null</code> if no collision.
+     */
+    public static final String checkNamespaceCollision(Namespace namespace,
+                                                       Namespace other) {
+        String p1,p2,u1,u2,reason;
+
+        reason = null;
+        p1 = namespace.getPrefix();
+        u1 = namespace.getURI();
+        p2 = other.getPrefix();
+        u2 = other.getURI();
+        if (p1.equals(p2) && !u1.equals(u2)) {
+            reason = "The namespace prefix \"" + p1 + "\" collides";
+        }
+        return reason;
+    }
+
+    /**
+     * <p>
+     * Check if Attribute's namespace collides with a 
+     * Element's namespace.
+     * </p>
+     *
+     * @param attribute <code>Attribute</code> to check.
+     * @param element <code>Element</code> to check agianst.
+     * @return <code>String</code> - reason for collision, or
+     *         <code>null</code> if no collision.
+     */
+    public static final String checkNamespaceCollision(Attribute attribute,
+                                                       Element element) {
+        Namespace namespace = attribute.getNamespace();
+        String prefix = namespace.getPrefix();
+        if ("".equals(prefix)) {
+            return null;
+        }
+
+        return checkNamespaceCollision(namespace, element);
+    }
+
+    /**
+     * <p>
+     * Check if namespace collides with a Element's namespace.
+     * </p>
+     *
+     * @param namespace <code>Namespace</code> to check.
+     * @param element <code>Element</code> to check agianst.
+     * @return <code>String</code> - reason for collision, or
+     *         <code>null</code> if no collision.
+     */
+    public static final String checkNamespaceCollision(Namespace namespace,
+                                                       Element element) {
+        String reason = checkNamespaceCollision(namespace,
+                                                element.getNamespace());
+        if (reason != null) {
+            return reason + " with the element namespace prefix";
+        }
+
+        reason = checkNamespaceCollision(namespace,
+                                         element.getAdditionalNamespaces());
+        if (reason != null) {
+            return reason;
+        }
+
+        reason = checkNamespaceCollision(namespace, element.getAttributes());
+        if (reason != null) {
+            return reason;
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>
+     * Check if namespace collides with a Attribute's namespace.
+     * </p>
+     *
+     * @param namespace <code>Namespace</code> to check.
+     * @param attribute <code>Attribute</code> to check agianst.
+     * @return <code>String</code> - reason for collision, or
+     *         <code>null</code> if no collision.
+     */
+    public static final String checkNamespaceCollision(Namespace namespace,
+                                                       Attribute attribute) {
+        String reason = checkNamespaceCollision(namespace,
+                                                attribute.getNamespace());
+        if (reason != null) {
+            reason += " with an attribute namespace prefix on the element";
+        }
+        return reason;
+    }
+
+    /**
+     * <p>
+     * Check if namespace collides with any object's namespace from a
+     * list of objects.
+     * </p>
+     *
+     * @param namespace <code>Namespace</code> to check.
+     * @param list <code>List</code> to check agianst.
+     * @return <code>String</code> - reason for collision, or
+     *         <code>null</code> if no collision.
+     */
+    public static final String checkNamespaceCollision(Namespace namespace,
+                                                       List list) {
+        if (list == null) {
+            return null;
+        }
+
+        String reason = null;
+        Iterator i = list.iterator();
+        while ((reason == null) && i.hasNext()) {
+            Object obj = i.next();
+            if (obj instanceof Attribute) {
+                reason = checkNamespaceCollision(namespace, (Attribute) obj);
+            }
+            else if (obj instanceof Element) {
+                reason = checkNamespaceCollision(namespace, (Element) obj);
+            }
+            else if (obj instanceof Namespace) {
+                reason = checkNamespaceCollision(namespace, (Namespace) obj);
+                if (reason != null) {
+                    reason += " with an additional namespace declared" +
+                              " by the element";
+                }
+            }
+        }
+        return reason;
     }
 
     /**

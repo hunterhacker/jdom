@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: Document.java,v 1.49 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Document.java,v 1.50 2002/01/25 18:42:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -62,31 +62,30 @@ import java.util.*;
 /**
  * <p>
  * <code>Document</code> defines behavior for an XML Document, modeled
- *   in Java.  Methods allow the user to the root element as well
+ *   in Java.  Methods allow access to the root element as well
  *   as processing instructions and other document-level information.
  * </p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Jools Enticknap
- * @version $Revision: 1.49 $, $Date: 2002/01/08 09:17:10 $
+ * @author Bradley S. Huffman
+ * @version $Revision: 1.50 $, $Date: 2002/01/25 18:42:52 $
  */
 public class Document implements Serializable, Cloneable {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.49 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
-
-    private static final int INITIAL_ARRAY_SIZE = 5;
+    private static final String CVS_ID =
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.50 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
-     *   <code>{@link Comment}</code>s,  
-     *   <code>{@link ProcessingInstruction}</code>s and
-     *   the root <code>{@link Element}</code>
+     * <code>{@link Comment}</code>s,
+     * <code>{@link ProcessingInstruction}</code>s and
+     * the root <code>{@link Element}</code>.
      */
-    protected List content = new ArrayList(INITIAL_ARRAY_SIZE);
+    protected ContentList content = new ContentList(this);
 
-    /** The <code>{@link DocType}</code> declaration */
+    /** The <code>{@link DocType}</code> declaration. */
     protected DocType docType;
 
     /**
@@ -100,25 +99,26 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied <code>{@link Element}</code>
-     *   as the root element and the supplied
-     *   <code>{@link DocType}</code> declaration.
+     * with the supplied <code>{@link Element}</code>
+     * as the root element and the supplied
+     * <code>{@link DocType}</code> declaration.
      * </p>
      *
      * @param rootElement <code>Element</code> for document root.
      * @param docType <code>DocType</code> declaration.
      */
     public Document(Element rootElement, DocType docType) {
-        setRootElement(rootElement);
+        if (rootElement != null)
+            setRootElement(rootElement);
         setDocType(docType);
     }
 
     /**
      * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied <code>{@link Element}</code>
-     *   as the root element, and no <code>{@link DocType}</code>
-     *   declaration.
+     * with the supplied <code>{@link Element}</code>
+     * as the root element, and no <code>{@link DocType}</code>
+     * declaration.
      * </p>
      *
      * @param rootElement <code>Element</code> for document root
@@ -130,8 +130,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied list of content, and the supplied 
-     *   <code>{@link DocType}</code> declaration.
+     * with the supplied list of content, and the supplied
+     * <code>{@link DocType}</code> declaration.
      * </p>
      *
      * @param content <code>List</code> of starter content
@@ -140,16 +140,16 @@ public class Document implements Serializable, Cloneable {
      *         one Element or objects of illegal types, or (2) if the
      *         given docType object is already attached to a document.
      */
-    public Document(List content, DocType docType) {
-        setContent(content);
+    public Document(List newContent, DocType docType) {
+        setContent(newContent);
         setDocType(docType);
     }
 
     /**
      * <p>
      * This will create a new <code>Document</code>,
-     *   with the supplied list of content, and no 
-     *   <code>{@link DocType}</code> declaration.
+     * with the supplied list of content, and no
+     * <code>{@link DocType}</code> declaration.
      * </p>
      *
      * @param content <code>List</code> of starter content
@@ -162,28 +162,39 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This will return <code>true</code> if this document has a
+     * root element, <code>false</code> otherwise.
+     * </p>
+     *
+     * @return <code>true</code> if this document has a root element,
+     *         <code>false</code> otherwise.
+     */
+    public boolean hasRootElement() {
+        return (content.indexOfFirstElement() < 0) ? false : true;
+    }
+
+    /**
+     * <p>
      * This will return the root <code>Element</code>
-     *   for this <code>Document</code>
+     * for this <code>Document</code>
      * </p>
      *
      * @return <code>Element</code> - the document's root element
+     * @throws IllegalStateException if the root element hasn't been set
      */
     public Element getRootElement() {
-        Iterator itr = content.iterator();
-        while (itr.hasNext()) {
-            Object obj = itr.next();
-            if (obj instanceof Element) {
-                return (Element) obj;
-            }
+        int index = content.indexOfFirstElement();
+        if (index < 0) {
+            throw new IllegalStateException("Root element not set"); 
         }
-
-        return null;  // sometimes happens during internal manipulations
+        return (Element) content.get(index);
     }
 
     /**
      * <p>
      * This sets the root <code>{@link Element}</code> for the
-     *   <code>Document</code>.
+     * <code>Document</code>. If the document already has a root
+     * element, it is replaced.
      * </p>
      *
      * @param rootElement <code>Element</code> to be new root.
@@ -192,50 +203,35 @@ public class Document implements Serializable, Cloneable {
      *         a parent.
      */
     public Document setRootElement(Element rootElement) {
-        // XXX Remove this special case pronto
-        if (rootElement == null) return this;
-
-        // Conduct some sanity checking
-        if (rootElement.isRootElement()) {
-            throw new IllegalAddException(this, rootElement,
-                "The element already has an existing parent " +
-                "(the document root)");
-        }
-        else if (rootElement.getParent() != null) {
-            throw new IllegalAddException(this, rootElement,
-                "The element already has an existing parent \"" +
-                rootElement.getParent().getQualifiedName() + "\"");
-        }
-
-        boolean hadRoot = false;
-
-        // Find the current root and replace it
-        ListIterator itr = content.listIterator();
-        while (itr.hasNext()) {
-            Object obj = itr.next();
-            if (obj instanceof Element) {
-                Element departingRoot = (Element) obj;
-                departingRoot.setDocument(null);
-                itr.set(rootElement);  // replaces
-                hadRoot = true;
-            }
-        }
-
-        // No current root
-        if (hadRoot == false) {
-            itr.add(rootElement);  // adds at end
-        }
-
-        rootElement.setDocument(this);
-
+        content.add(rootElement);
         return this;
     }
 
     /**
      * <p>
+     * Detach the root <code>{@link Element}</code> from this document.
+     * </p>
+     *
+     * @return removed root <code>Element</code>
+     */
+    public Element detachRootElement() {
+        int index = content.indexOfFirstElement();
+        if (index < 0)
+            return null;
+        return (Element) removeContent(index);
+    }
+
+    // Remove Object at given index, or null if index is out of
+    // range or content cannot be removed.
+    private Object removeContent(int index) {
+        return content.remove(index);
+    }
+
+    /**
+     * <p>
      * This will return the <code>{@link DocType}</code>
-     *   declaration for this <code>Document</code>, or
-     *   <code>null</code> if none exists.
+     * declaration for this <code>Document</code>, or
+     * <code>null</code> if none exists.
      * </p>
      *
      * @return <code>DocType</code> - the DOCTYPE declaration.
@@ -247,11 +243,11 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will set the <code>{@link DocType}</code>
-     *   declaration for this <code>Document</code>. Note
-     *   that a DocType can only be attached to one Document.
-     *   Attempting to set the DocType to a DocType object
-     *   that already belongs to a Document will result in an
-     *   IllegalAddException being thrown.
+     * declaration for this <code>Document</code>. Note
+     * that a DocType can only be attached to one Document.
+     * Attempting to set the DocType to a DocType object
+     * that already belongs to a Document will result in an
+     * IllegalAddException being thrown.
      * </p>
      *
      * @param docType <code>DocType</code> declaration.
@@ -259,12 +255,11 @@ public class Document implements Serializable, Cloneable {
      *   already attached to a Document.
      */
     public Document setDocType(DocType docType) {
-        if (docType != null && (docType.getDocument() != null)) {
-            throw new IllegalAddException(this, docType,
-                "The docType already is attached to a document");
-        }
-
         if (docType != null) {
+            if (docType.getDocument() != null) {
+                throw new IllegalAddException(this, docType,
+                          "The docType already is attached to a document");
+            }
             docType.setDocument(this);
         }
 
@@ -281,24 +276,13 @@ public class Document implements Serializable, Cloneable {
      * Adds the specified PI to the document.
      * </p>
      *
-     * @param pi the PI to add.
+     * @param pi the ProcessingInstruction to add.
      * @return <code>Document</code> this document modified.
      * @throws IllegalAddException if the given processing instruction
      *         already has a parent element.
      */
     public Document addContent(ProcessingInstruction pi) {
-        if (pi.getParent() != null) {
-            throw new IllegalAddException(this, pi,
-                "The PI already has an existing parent \"" +
-                pi.getParent().getQualifiedName() + "\"");
-        } else if (pi.getDocument() != null) {
-            throw new IllegalAddException(this, pi,
-                "The PI already has an existing parent " +
-                "(the document root)");
-        }
-
         content.add(pi);
-        pi.setDocument(this);
         return this;
     }
 
@@ -313,162 +297,102 @@ public class Document implements Serializable, Cloneable {
      *         parent element.
      */
     public Document addContent(Comment comment) {
-        if (comment.getParent() != null) {
-            throw new IllegalAddException(this, comment,
-                "The comment already has an existing parent \"" +
-                comment.getParent().getQualifiedName() + "\"");
-        } else if (comment.getDocument() != null) {
-            throw new IllegalAddException(this, comment,
-                "The element already has an existing parent " +
-                "(the document root)");
-        }
-
         content.add(comment);
-        comment.setDocument(this);
         return this;
     }
 
     /**
      * <p>
      * This will return all content for the <code>Document</code>.
-     * The returned list is "live" in document order and changes to it 
+     * The returned list is "live" in document order and changes to it
      * affect the document's actual content.
      * </p>
      *
      * @return <code>List</code> - all Document content
+     * @throws IllegalStateException if the root element hasn't been set
      */
     public List getContent() {
-        return new FilterList(new DocumentContentFilter(this));
-    }
-
-    List getContentBackingList() {
+        if (!hasRootElement())
+            throw new IllegalStateException("Root element not set"); 
         return content;
     }
 
     /**
      * <p>
-     * This will set all content for the <code>Document</code>.
-     * The List may contain only objects of type Element, Comment, and
-     * ProcessingInstruction; and only one Element that becomes the root.
-     * In event of an exception the original content will be unchanged
-     * and the items in the added content will be unaltered.
+     * This sets the content of the <code>Document</code>.  The supplied
+     * List should contain only objects of type <code>Element</code>,
+     * <code>Comment</code>, and <code>ProcessingInstruction</code>.
      * </p>
      *
-     * @param content the new content
-     * @return the modified Document
-     * @throws IllegalAddException if the List contains more than
-     *         one Element or objects of illegal types.
+     * <p>
+     * When all objects in the supplied List are valid and before the new
+     * content is added, all objects in the old content will have their
+     * parentage set to null (no parent) and the old content list will be
+     * cleared. This has the effect that any active list (previously obtained
+     * with a call to {@link #getContent}) will also
+     * change to reflect the new content.  In addition, all objects in the
+     * supplied List will have their parentage set to this document, but the
+     * List itself will not be "live" and further removals and additions will
+     * have no effect on this document content. If the user wants to continue
+     * working with a "live" list, then a call to setContent should be
+     * followed by a call to {@link #getContent} to
+     * obtain a "live" version of the content.
+     * </p>
+     *
+     * <p>
+     * Passing a null or empty List clears the existing content.
+     * </p>
+     *
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the objects in the supplied content will be unaltered.
+     * </p>
+     *
+     * @parem newContent <code>List</code> of content to set
+     * @return this document modified
+     * @throws IllegalAddException if the List contains objects of
+     *         illegal types.
      */
     public Document setContent(List newContent) {
-
-        if (newContent == null) {
-            return this;
-        }
-
-        // Save original content and create a new list
-        Element oldRoot = getRootElement();
-        List oldContent = content;
-        content = new ArrayList(INITIAL_ARRAY_SIZE);
-
-        RuntimeException ex = null;
-        boolean didRoot = false;
-        int itemsAdded = 0;
-
-        try {
-            for (Iterator i = newContent.iterator(); i.hasNext(); ) {
-                Object obj = i.next();
-                if (obj instanceof Element) {
-                    if (didRoot == false) {
-                        setRootElement((Element)obj);
-                        // Manually remove old root's doc ref, because
-                        // setRootElement() can't see the old content list to
-                        // do it for us
-                        if (oldRoot != null) {
-                            oldRoot.setDocument(null);
-                        }
-                        didRoot = true;
-                    }
-                    else {
-                        throw new IllegalAddException(
-                          "A Document may contain only one root element");
-                    }
-                }
-                else if (obj instanceof Comment) {
-                    addContent((Comment)obj);
-                }
-                else if (obj instanceof ProcessingInstruction) {
-                    addContent((ProcessingInstruction)obj);
-                }
-                else {
-                    throw new IllegalAddException(
-                      "A Document may directly contain only objects of type " +
-                      "Element, Comment, and ProcessingInstruction: " +
-                      (obj == null ? "null" : obj.getClass().getName()) + 
-                      " is not allowed");
-                }
-                itemsAdded++;
-            }
-    
-            // Make sure they set a root element
-            if (didRoot == false) {
-                throw new IllegalAddException(
-                    "A Document must contain a root element");
-            }
-        }
-        catch (RuntimeException e) {
-            ex = e;
-        }
-        finally {
-            if (ex != null) {
-                // Restore the original state and parentage and throw
-                content = oldContent;
-                if (oldRoot != null) {
-                    oldRoot.setDocument(this);
-                }
-                // Unmodify all modified elements.  DO NOT change any later
-                // elements tho because they may already have parents!
-                Iterator itr = newContent.iterator();
-                while (itemsAdded-- > 0) {
-                    Object obj = itr.next();
-                    if (obj instanceof Element) {
-                        ((Element)obj).setDocument(null);
-                    }
-                    else if (obj instanceof Comment) {
-                        ((Comment)obj).setDocument(null);
-                    }
-                    else if (obj instanceof ProcessingInstruction) {
-                        ((ProcessingInstruction)obj).setDocument(null);
-                    }
-                }
-                throw ex;
-            }
-        }
-
-        // Remove parentage on the old content
-        Iterator itr = oldContent.iterator();
-        while (itr.hasNext()) {
-            Object obj = itr.next();
-            if (obj instanceof Element) {
-                ((Element)obj).setDocument(null);
-            }
-            else if (obj instanceof Comment) {
-                ((Comment)obj).setDocument(null);
-            }
-            else if (obj instanceof ProcessingInstruction) {
-                ((ProcessingInstruction)obj).setDocument(null);
-            }
-        }
-
+        content.clearAndSet(newContent);
         return this;
     }
 
     /**
      * <p>
-     *  This returns a <code>String</code> representation of the
-     *    <code>Document</code>, suitable for debugging. If the XML
-     *    representation of the <code>Document</code> is desired,
-     *    {@link org.jdom.output.XMLOutputter#outputString(Document)} 
-     *    should be used.
+     * This removes the specified <code>ProcessingInstruction</code>.
+     * If the specified <code>ProcessingInstruction</code> is not a child of
+     * this <code>Document</code>, this method does nothing.
+     * </p>
+     *
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(ProcessingInstruction pi) {
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Comment</code>.
+     * If the specified <code>Comment</code> is not a child of
+     * this <code>Document</code>, this method does nothing.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Comment comment) {
+        return content.remove(comment);
+    }
+
+    /**
+     * <p>
+     * This returns a <code>String</code> representation of the
+     * <code>Document</code>, suitable for debugging. If the XML
+     * representation of the <code>Document</code> is desired,
+     * {@link org.jdom.output.XMLOutputter#outputString(Document)}
+     * should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -500,8 +424,8 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This tests for equality of this <code>Document</code> to the supplied
-     *    <code>Object</code>.
+     * This tests for equality of this <code>Document</code> to the supplied
+     * <code>Object</code>.
      * </p>
      *
      * @param ob <code>Object</code> to compare to.
@@ -514,7 +438,7 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This returns the hash code for this <code>Document</code>.
+     * This returns the hash code for this <code>Document</code>.
      * </p>
      *
      * @return <code>int</code> - hash code.
@@ -525,7 +449,7 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This will return a deep clone of this <code>Document</code>.
+     * This will return a deep clone of this <code>Document</code>.
      * </p>
      *
      * @return <code>Object</code> - clone of this <code>Document</code>.
@@ -539,74 +463,33 @@ public class Document implements Serializable, Cloneable {
             // Can't happen
         }
 
-        // The clone has a reference to this object's content list, so
-        // owerwrite with a empty list
-        doc.content = new ArrayList(INITIAL_ARRAY_SIZE);
-
-        // Add the cloned content to clone
-
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                doc.setRootElement((Element)((Element)obj).clone());
-            }
-            else if (obj instanceof Comment) {
-                doc.addContent((Comment)((Comment)obj).clone());
-            }
-            else if (obj instanceof ProcessingInstruction) {
-                doc.addContent((ProcessingInstruction)
-                          ((ProcessingInstruction)obj).clone());
-            }
-        }
-
         if (docType != null) {
             doc.docType = (DocType)docType.clone();
         }
 
+        // The clone has a reference to this object's content list, so
+        // owerwrite with a empty list
+        doc.content = new ContentList(doc);
+
+        // Add the cloned content to clone
+
+        for (int i = 0; i < content.size(); i++) {
+            Object obj = content.get(i);
+            if (obj instanceof Element) {
+                Element element = (Element)((Element)obj).clone();
+                doc.content.add(element);
+            }
+            else if (obj instanceof Comment) {
+                Comment comment = (Comment)((Comment)obj).clone();
+                doc.content.add(comment);
+            }
+            else if (obj instanceof ProcessingInstruction) {
+                ProcessingInstruction pi = (ProcessingInstruction)
+                           ((ProcessingInstruction)obj).clone();
+                doc.content.add(pi);
+            }
+        }
+
         return doc;
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>ProcessingInstruction</code>.
-     * If the specified <code>ProcessingInstruction</code> is not a child of
-     * this <code>Document</code>, this method does nothing.
-     * </p>
-     *
-     * @param child <code>ProcessingInstruction</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(ProcessingInstruction pi) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(pi)) {
-            pi.setDocument(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Comment</code>.
-     * If the specified <code>Comment</code> is not a child of
-     * this <code>Document</code>, this method does nothing.
-     * </p>
-     *
-     * @param comment <code>Comment</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Comment comment) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(comment)) {
-            comment.setDocument(null);
-            return true;
-        } else {
-            return false;
-        }
     }
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.2 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Filter.java,v 1.3 2002/01/25 18:42:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,8 +56,6 @@
 
 package org.jdom;
 
-import java.util.List;
-
 /**
  * <p>
  * Classes which wish to modify the behaviour of the FilterList
@@ -67,29 +65,10 @@ import java.util.List;
  * </p>
  *
  * @author Jools Enticknap
- * @version $Revision: 1.2 $, $Date: 2002/01/08 09:17:10 $
+ * @author Bradley S. Huffman
+ * @version $Revision: 1.3 $, $Date: 2002/01/25 18:42:52 $
  */
-public interface Filter {
-    /**
-     * <p>
-     * Check to see if the object matches a predefined set of rules.
-     * </p>
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object matches a predfined 
-     *           set of rules.
-     */
-    public boolean matches(Object obj);
-
-    /**
-     * <p>
-     * Returns true if matches() will always return true.
-     * </p>
-     *
-     * @return <code>true</code> if this filter matches all objects.
-     */
-    public boolean matchesAll();
-
+interface Filter {
     /**
      * <p>
      * Check to see if the object can be added to the list.
@@ -112,8 +91,12 @@ public interface Filter {
 
     /**
      * <p>
-     * Create the backing list for this filter. Called by the FilterList
-     * if the backing list is null, and a modification method has been called.
+     * Check to see if the object matches a predefined set of rules.
+     * </p>
+     *
+     * @param obj The object to verify.
+     * @return <code>true</code> if the object matches a predfined 
+     *           set of rules.
      */
-    public List getBackingList(boolean create);
+    public boolean matches(Object obj);
 }

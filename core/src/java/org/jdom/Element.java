@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: Element.java,v 1.105 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Element.java,v 1.106 2002/01/25 18:42:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom;
@@ -75,13 +75,14 @@ import java.util.*;
  * @author Yusuf Goolamabbas
  * @author Kent C. Johnson
  * @author Jools Enticknap
+ * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.105 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.106 $, $Date: 2002/01/25 18:42:52 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.105 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.106 $ $Date: 2002/01/25 18:42:52 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -91,41 +92,39 @@ public class Element implements Serializable, Cloneable {
     /** The <code>{@link Namespace}</code> of the <code>Element</code> */
     protected transient Namespace namespace;
 
-    /** Additional <code>{@link Namespace}</code> declarations on this 
+    /** Additional <code>{@link Namespace}</code> declarations on this
         element */
     protected transient List additionalNamespaces;
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
     // for a possible memory optimization here (using a RootElement subclass)
-    
+
     /** Parent element, document, or null if none */
     protected Object parent;
 
-    /** The attributes of the <code>Element</code>. May be null if
-    this Element has no attributes. */
-    protected List attributes;
-    
-    /** The mixed content of the <code>Element</code>. May be null if
-    this Element has no content. */
-    protected List content;
-    
+    /** The attributes of the <code>Element</code>. */
+    protected AttributeList attributes = new AttributeList(this);
+
+    /** The mixed content of the <code>Element</code>. */
+    protected ContentList content = new ContentList(this);
+
     /**
      * <p>
-     * This protected constructor is provided in order to support an Element 
-     * subclass that wants full control over variable initialization.  It 
-     * intentionally leaves all instance variables null, allowing a 
-     * lightweight subclass implementation.  The subclass is responsible for 
+     * This protected constructor is provided in order to support an Element
+     * subclass that wants full control over variable initialization.  It
+     * intentionally leaves all instance variables null, allowing a
+     * lightweight subclass implementation.  The subclass is responsible for
      * ensuring all the get and set methods on Element behave as documented.
      * </p>
      *
      * <p>
      * When implementing an <code>Element</code> subclass which doesn't
      * require full control over variable initialization, be aware that
-     * simply calling super() (or letting the compiler add the implicit 
-     * super() call) will not initialize the instance variables which will 
-     * cause many of the methods to throw a 
-     * <code>NullPointerException</code>.  Therefore, the 
-     * constructor for these subclasses should call one of the public 
+     * simply calling super() (or letting the compiler add the implicit
+     * super() call) will not initialize the instance variables which will
+     * cause many of the methods to throw a
+     * <code>NullPointerException</code>.  Therefore, the
+     * constructor for these subclasses should call one of the public
      * constructors so variable initialization is handled automatically.
      * </p>
      */
@@ -136,7 +135,7 @@ public class Element implements Serializable, Cloneable {
      * This will create a new <code>Element</code>
      *   with the supplied (local) name, and define
      *   the <code>{@link Namespace}</code> to be used.
-     * If the provided namespace is null, the element will have 
+     * If the provided namespace is null, the element will have
      * no namespace.
      * </p>
      *
@@ -216,8 +215,8 @@ public class Element implements Serializable, Cloneable {
      *         Element name.
      */
     public Element setName(String name) {
-        String reason;
-        if ((reason = Verifier.checkElementName(name)) != null) {
+        String reason = Verifier.checkElementName(name);
+        if (reason != null) {
             throw new IllegalNameException(name, "element", reason);
         }
         this.name = name;
@@ -230,7 +229,7 @@ public class Element implements Serializable, Cloneable {
      *    <code>{@link Namespace}</code>.
      * </p>
      *
-     * @return <code>Namespace</code> - Namespace object for this 
+     * @return <code>Namespace</code> - Namespace object for this
      *         <code>Element</code>
      */
     public Namespace getNamespace() {
@@ -275,7 +274,7 @@ public class Element implements Serializable, Cloneable {
      *   mapping is found, an empty <code>String</code> is returned.
      * </p>
      *
-     * @return <code>String</code> - namespace URI for this 
+     * @return <code>String</code> - namespace URI for this
      * <code>Element</code>.
      */
     public String getNamespaceURI() {
@@ -284,15 +283,15 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This returns the Namespace in scope on this element for the given 
-     * prefix (this involves searching up the tree, so the results depend 
+     * This returns the Namespace in scope on this element for the given
+     * prefix (this involves searching up the tree, so the results depend
      * on the current location of the element).  It returns null if there
-     * is no Namespace in scope with the given prefix at this point in 
+     * is no Namespace in scope with the given prefix at this point in
      * the document.
      * </p>
      *
      * @param prefix  namespace prefix to look up
-     * @return <code>Namespace</code> - namespace in scope for the given 
+     * @return <code>Namespace</code> - namespace in scope for the given
      * prefix on this <code>Element</code>, or null if none.
      */
     public Namespace getNamespace(String prefix) {
@@ -306,11 +305,9 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Scan the additional namespaces
-        List addl = getAdditionalNamespaces();
-        if (addl.size() > 0) {
-            Iterator itr = addl.iterator();
-            while (itr.hasNext()) {
-                Namespace ns = (Namespace) itr.next();
+        if (additionalNamespaces != null) {
+            for (int i = 0; i < additionalNamespaces.size(); i++) {
+                Namespace ns = (Namespace) additionalNamespaces.get(i);
                 if (prefix.equals(ns.getPrefix())) {
                     return ns;
                 }
@@ -357,56 +354,24 @@ public class Element implements Serializable, Cloneable {
      *    declarations on the element not relating directly to itself.
      * </p>
      *
-     * @param additionalNamespace <code>Namespace</code> to add.
-     * @throws IllegalAddException if the namespace prefix collides with 
+     * @param additional <code>Namespace</code> to add.
+     * @throws IllegalAddException if the namespace prefix collides with
      *   another namespace prefix on the element.
      */
-    public void addNamespaceDeclaration(Namespace additionalNamespace) {
+    public void addNamespaceDeclaration(Namespace additional) {
 
-        // Verify the new namespace prefix doesn't collide with another 
+        // Verify the new namespace prefix doesn't collide with another
         // declared namespace, an attribute prefix, or this element's prefix
-        String prefix = additionalNamespace.getPrefix();
-        String uri = additionalNamespace.getURI();
-        if (prefix.equals(getNamespacePrefix()) && 
-              !uri.equals(getNamespaceURI())) {
-            throw new IllegalAddException(this, additionalNamespace,
-                "The namespace prefix \"" + prefix + "\" collides " +
-                "with the element namespace prefix");
-        }
-        if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
-            Iterator itr = additionalNamespaces.iterator();
-            while (itr.hasNext()) {
-                Namespace ns = (Namespace) itr.next();
-                if (prefix.equals(ns.getPrefix()) && 
-                      !uri.equals(ns.getURI())) {
-                    throw new IllegalAddException(this, additionalNamespace,
-                        "The namespace prefix \"" + prefix +
-                        "\" collides with an additional namespace declared " +
-                        "by the element");
-                }
-            }
-        }
-        if (attributes != null && attributes.size() > 0) {
-            Iterator itr = attributes.iterator();
-            while (itr.hasNext()) {
-                Namespace ns = 
-                   (Namespace) ((Attribute)itr.next()).getNamespace();
-                if ((ns != Namespace.NO_NAMESPACE) &&
-                     prefix.equals(ns.getPrefix()) && 
-                     !uri.equals(ns.getURI())) {
-                    throw new IllegalAddException(this, additionalNamespace,
-                        "The namespace prefix \"" + prefix +
-                        "\" collides with an attribute namespace on " +
-                        "the element");
-                }
-            }
+        String reason = Verifier.checkNamespaceCollision(additional, this);
+        if (reason != null) {
+            throw new IllegalAddException(this, additional, reason);
         }
 
         if (additionalNamespaces == null) {
             additionalNamespaces = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
-        additionalNamespaces.add(additionalNamespace);
+        additionalNamespaces.add(additional);
     }
 
     /**
@@ -434,7 +399,7 @@ public class Element implements Serializable, Cloneable {
      *    that exist, <i>excluding</i> the namespace of the element
      *    itself, which can be obtained through
      *    <code>{@link #getNamespace()}</code>. If there are no additional
-     *    declarations, this returns an empty list.  Note, the returned 
+     *    declarations, this returns an empty list.  Note, the returned
      *    list is not live, for performance reasons.
      * </p>
      *
@@ -442,14 +407,12 @@ public class Element implements Serializable, Cloneable {
      */
     public List getAdditionalNamespaces() {
         // Not having the returned list be live allows us to avoid creating a
-        // new list object when XMLOutputter calls this method on an elt
+        // new list object when XMLOutputter calls this method on an element
         // with an empty list.
         if (additionalNamespaces == null) {
             return Collections.EMPTY_LIST;
         }
-        else {
-            return Collections.unmodifiableList(additionalNamespaces);
-        }
+        return Collections.unmodifiableList(additionalNamespaces);
     }
 
     /**
@@ -468,9 +431,7 @@ public class Element implements Serializable, Cloneable {
         if (parent instanceof Element) {
             return (Element) parent;
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -497,14 +458,11 @@ public class Element implements Serializable, Cloneable {
      */
     public Element detach() {
         if (parent instanceof Element) {
-            ((Element)parent).removeContent(this);
+            ((Element) parent).removeContent(this);
         }
         else if (parent instanceof Document) {
-            ((Document)parent).setRootElement(
-                        new Element("root-element-was-detached"));
+            ((Document) parent).detachRootElement();
         }
-        // A null parent is a no-op
-
         return this;
     }
 
@@ -537,13 +495,12 @@ public class Element implements Serializable, Cloneable {
      */
     protected Element setDocument(Document document) {
         this.parent = document;
-
         return this;
     }
 
     /**
      * <p>
-     * This retrieves the owning <code>{@link Document}</code> for 
+     * This retrieves the owning <code>{@link Document}</code> for
      *   this Element, or null if not a currently a member of a
      *   <code>{@link Document}</code>.
      * </p>
@@ -560,25 +517,23 @@ public class Element implements Serializable, Cloneable {
 
         return null;
     }
-        
+
     /**
      * <p>
      * This returns the textual content directly held under this
-     *   element.  This will include all text within
-     *   this single element, including whitespace and CDATA
-     *   sections if they exist.  It's essentially the concatenation of
-     *   all <code>Text</code> and <code>CDATA</code> nodes returned by
-     *   getContent().  The call does not recurse into child elements.
-     *   If no textual value exists for the 
-     *   element, an empty <code>String</code> ("") is returned.
+     * element.  This will include all text within
+     * this single element, including whitespace and CDATA
+     * sections if they exist.  It's essentially the concatenation of
+     * all <code>Text</code> and <code>CDATA</code> nodes returned by
+     * getContent().  The call does not recurse into child elements.
+     * If no textual value exists for the
+     * element, an empty <code>String</code> ("") is returned.
      * </p>
      *
      * @return text content for this element, or empty string if none
      */
     public String getText() {
-        if ((content == null) || 
-             (content.size() < 1) || 
-             (content.get(0) == null)) {
+        if (content.size() == 0) {
             return "";
         }
 
@@ -598,9 +553,8 @@ public class Element implements Serializable, Cloneable {
         StringBuffer textContent = new StringBuffer();
         boolean hasText = false;
 
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
+        for (int i = 0; i < content.size(); i++) {
+            Object obj = content.get(i);
             if (obj instanceof Text) {
                 textContent.append(((Text) obj).getText());
                 hasText = true;
@@ -612,15 +566,16 @@ public class Element implements Serializable, Cloneable {
 
         if (!hasText) {
             return "";
-        } else {
+        }
+        else {
             return textContent.toString();
         }
     }
 
     /**
      * <p>
-     * This returns the textual content of this element with all 
-     * surrounding whitespace removed.  If no textual value exists for 
+     * This returns the textual content of this element with all
+     * surrounding whitespace removed.  If no textual value exists for
      * the element, or if only whitespace exists, the empty string is
      * returned.
      * </p>
@@ -634,7 +589,7 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This returns the textual content of this element with all 
+     * This returns the textual content of this element with all
      * surrounding whitespace removed and internal whitespace normalized
      * to a single space.  If no textual value exists for the element,
      * or if only whitespace exists, the empty string is returned.
@@ -662,15 +617,14 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name);
         if (child == null) {
             return null;
-        } else {
-            return child.getText();
         }
+        return child.getText();
     }
 
     /**
      * <p>
-     *  This convenience method returns the trimmed textual content of the 
-     *    named child element, or returns null if there's no such child.  
+     *  This convenience method returns the trimmed textual content of the
+     *    named child element, or returns null if there's no such child.
      *    See <code>{@link #getTextTrim()}</code> for details of text trimming.
      * </p>
      *
@@ -681,15 +635,14 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name);
         if (child == null) {
             return null;
-        } else {
-            return child.getTextTrim();
         }
+        return child.getTextTrim();
     }
 
     /**
      * <p>
-     *  This convenience method returns the normalized textual content of the 
-     *    named child element, or returns null if there's no such child.  
+     *  This convenience method returns the normalized textual content of the
+     *    named child element, or returns null if there's no such child.
      *    See <code>{@link #getTextNormalize()}</code> for details of text
      *    normalizing.
      * </p>
@@ -701,9 +654,8 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name);
         if (child == null) {
             return null;
-        } else {
-            return child.getTextNormalize();
         }
+        return child.getTextNormalize();
     }
 
     /**
@@ -720,15 +672,14 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name, ns);
         if (child == null) {
             return null;
-        } else {
-            return child.getText();
         }
+        return child.getText();
     }
 
     /**
      * <p>
-     *  This convenience method returns the trimmed textual content of the 
-     *    named child element, or returns null if there's no such child.  
+     *  This convenience method returns the trimmed textual content of the
+     *    named child element, or returns null if there's no such child.
      *    See <code>{@link #getTextTrim()}</code> for
      *    details of text trimming.
      * </p>
@@ -741,15 +692,14 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name, ns);
         if (child == null) {
             return null;
-        } else {
-            return child.getTextTrim();
         }
+        return child.getTextTrim();
     }
 
     /**
      * <p>
-     *  This convenience method returns the normalized textual content of the 
-     *    named child element, or returns null if there's no such child.  
+     *  This convenience method returns the normalized textual content of the
+     *    named child element, or returns null if there's no such child.
      *    See <code>{@link #getTextNormalize()}</code> for
      *    details of text normalizing.
      * </p>
@@ -762,16 +712,15 @@ public class Element implements Serializable, Cloneable {
         Element child = getChild(name, ns);
         if (child == null) {
             return null;
-        } else {
-            return child.getTextNormalize();
         }
+        return child.getTextNormalize();
     }
 
     /**
      * <p>
      * This sets the content of the element to be the text given.
      * All existing text content and non-text context is removed.
-     * If this element should have both textual content and nested 
+     * If this element should have both textual content and nested
      * elements, use <code>{@link #setContent}</code> instead.
      * Setting a null text value is equivalent to setting an empty string
      * value.
@@ -781,14 +730,10 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setText(String text) {
-        if (content != null) {
-            content.clear();
-        } else {
-            createContentList();
-        }
+        content.clear();
 
         if (text != null) {
-            content.add(new Text(text));
+            addContent(new Text(text));
         }
 
         return this;
@@ -799,9 +744,9 @@ public class Element implements Serializable, Cloneable {
      * This returns the full content of the element as a List which
      * may contain objects of type <code>Text</code>, <code>Element</code>,
      * <code>Comment</code>, <code>ProcessingInstruction</code>,
-     * <code>CDATA</code>, and <code>EntityRef</code>.  
-     * The List returned is "live" in document order and modifications 
-     * to it affect the element's actual contents.  Whitespace content is 
+     * <code>CDATA</code>, and <code>EntityRef</code>.
+     * The List returned is "live" in document order and modifications
+     * to it affect the element's actual contents.  Whitespace content is
      * returned in its entirety.
      * </p>
      *
@@ -813,167 +758,64 @@ public class Element implements Serializable, Cloneable {
      *         <code>{@link EntityRef}</code> objects.
      */
     public List getContent() {
-        return new FilterList(new ElementContentFilter(this));
-    }
-
-    /**
-     * <p>
-     * Creates the list that holds the content items. Called internally,
-     * and by our Filters.
-     * </p>
-     */
-    private List createContentList() {
-        content = new ArrayList(INITIAL_ARRAY_SIZE);
-        return content;
-    }
-
-    List getContentBackingList(boolean create) {
-        if (content == null && create == true) {
-            createContentList();
-        }
-
         return content;
     }
 
     /**
      * <p>
-     * This sets the content of the element.  The passed in List should
-     * contain only objects of type <code>String</code>, <code>Text</code>,
-     * <code>Element</code>, <code>Comment</code>,
-     * <code>ProcessingInstruction</code>, 
-     * <code>CDATA</code>, and <code>EntityRef</code>.  Passing a null or
-     * empty List clears the existing content.  In event of an exception 
-     * the original content will be unchanged and the items in the added
-     * content will be unaltered.
+     * This sets the content of the element.  The supplied List should
+     * contain only objects of type <code>Element</code>, <code>Text</code>,
+     * <code>CDATA</code>, <code>Comment</code>,
+     * <code>ProcessingInstruction</code>, and <code>EntityRef</code>.
      * </p>
      *
+     * <p>
+     * When all objects in the supplied List are valid and before the new
+     * content is added, all objects in the old content will have their
+     * parentage set to null (no parent) and the old content list will be
+     * cleared. This has the effect that any active list (previously obtained
+     * with a call to {@link #getContent} or {@link #getChildren}) will also
+     * change to reflect the new content.  In addition, all objects in the
+     * supplied List will have their parentage set to this element, but the
+     * List itself will not be "live" and further removals and additions will
+     * have no effect on this elements content. If the user wants to continue
+     * working with a "live" list, then a call to setContent should be
+     * followed by a call to {@link #getContent} or {@link #getChildren} to
+     * obtain a "live" version of the content.
+     * </p>
+     *
+     * <p>
+     * Passing a null or empty List clears the existing content.
+     * </p>
+     *
+     * <p>
+     * In event of an exception the original content will be unchanged and
+     * the objects in the supplied content will be unaltered.
+     * </p>
+     *
+     * @param newContent <code>List</code> of content to set
      * @return this element modified
-     * @throws IllegalAddException if the List contains objects of 
+     * @throws IllegalAddException if the List contains objects of
      *         illegal types.
      */
     public Element setContent(List newContent) {
-
-        if (newContent == null) {
-            newContent = new ArrayList(0);
-        }
-
-        // Save list with original content and create a new list
-        List oldContent = content;
-        createContentList();
-
-        RuntimeException ex = null;
-        int itemsAdded = 0;
-
-        try {
-            for (Iterator i = newContent.iterator(); i.hasNext(); ) {
-                Object obj = i.next();
-                if (obj instanceof Element) {
-                    addContent((Element)obj);
-                }
-                else if (obj instanceof String) {
-                    addContent(new Text((String) obj));
-                }
-                else if (obj instanceof Text) {
-                    addContent((Text)obj);
-                }
-                else if (obj instanceof Comment) {
-                    addContent((Comment)obj);
-                }
-                else if (obj instanceof ProcessingInstruction) {
-                    addContent((ProcessingInstruction)obj);
-                }
-                else if (obj instanceof CDATA) {
-                    addContent((CDATA)obj);
-                }
-                else if (obj instanceof EntityRef) {
-                    addContent((EntityRef)obj);
-                }
-                else {
-                    throw new IllegalAddException(
-                      "An Element may directly contain only objects of type " +
-                      "String, Text, Element, Comment, CDATA, EntityRef, " +
-                      "and ProcessingInstruction: " +
-                      (obj == null ? "null" : obj.getClass().getName()) + 
-                      " is not allowed");
-                }
-                itemsAdded++;
-            }
-        }
-        catch (RuntimeException e) {
-            ex = e;
-        }
-        finally {
-            if (ex != null) {
-                // Restore the original state
-                content = oldContent;
-                // Unmodify all modified elements.  DO NOT change any later 
-                // elements tho because they may already have parents!
-                Iterator i = newContent.iterator();
-                while (itemsAdded-- > 0) {
-                    Object obj = i.next();
-                    if (obj instanceof Element) {
-                        ((Element)obj).setParent(null);
-                    }
-                    else if (obj instanceof Text) {
-                        ((Text)obj).setParent(null);
-                    }
-                    else if (obj instanceof Comment) {
-                        ((Comment)obj).setParent(null);
-                    }
-                    else if (obj instanceof CDATA) {
-                        ((CDATA)obj).setParent(null);
-                    }
-                    else if (obj instanceof ProcessingInstruction) {
-                        ((ProcessingInstruction)obj).setParent(null);
-                    }
-                    else if (obj instanceof EntityRef) {
-                        ((EntityRef)obj).setParent(null);
-                    }
-                }
-                throw ex;
-            }
-        }
-
-        // There was no old content, so just return
-        if (oldContent == null) {
-            return this;
-        } 
-
-        // Remove parentage on the old content
-        Iterator itr = oldContent.iterator();
-        while (itr.hasNext()) {
-            Object obj = itr.next();
-            if (obj instanceof Element) {
-                ((Element)obj).setParent(null);
-            }
-            else if (obj instanceof Text) {
-                ((Text)obj).setParent(null);
-            }
-            else if (obj instanceof Comment) {
-                ((Comment)obj).setParent(null);
-            }
-            else if (obj instanceof CDATA) {
-                ((CDATA)obj).setParent(null);
-            }
-            else if (obj instanceof ProcessingInstruction) {
-                ((ProcessingInstruction)obj).setParent(null);
-            }
-            else if (obj instanceof EntityRef) {
-                ((EntityRef)obj).setParent(null);
-            }
-        }
-
+        content.clearAndSet(newContent);
         return this;
     }
 
+    /**
+     * <p>
+     * Test whether this element has a child element.
+     * This method can be used before a call to {@link #getContent},
+     * which always creates a "live" list, to improve performance.
+     * </p>
+     *
+     * @return <code>true</code> if this element has at least
+     *         one child element
+     */
     public boolean hasChildren() {
-        if (content == null || content.size() == 0) {
-            return false;
-        }
-          
-        Iterator i = content.iterator();
-        while (i.hasNext()){
-            if (i.next() instanceof Element) {
+        for (int i = 0; i < content.size(); i++) {
+            if (content.get(i) instanceof Element) {
                 return true;
             }
         }
@@ -983,20 +825,27 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns a <code>List</code> of all the child elements
-     * nested directly (one level deep) within this element, as 
-     * <code>Element</code> objects.  If this target element has no nested 
+     * nested directly (one level deep) within this element, as
+     * <code>Element</code> objects.  If this target element has no nested
      * elements, an empty List is returned.  The returned list is "live"
-     * in document order and changes to it affect the element's actual 
+     * in document order and changes to it affect the element's actual
      * contents.
      * </p>
+     *
      * <p>
-     * This performs no recursion, so elements nested two levels
-     *   deep would have to be obtained with:
+     * Since getChildren always returns a "live" and modifiable list, even
+     * if the element contains no children, performance conscious users
+     * should call {@link #hasChildren} first to check for content.
+     * </p>
+     *
+     * <p>
+     * No recursion is performed, so elements nested two levels deep
+     * would have to be obtained with:
      * <pre>
      * <code>
-     *   Iterator itr = currentElement.getChildren().iterator();
-     *   while (itr.hasNext()) {
-     *     Element oneLevelDeep = (Element)nestedElements.next();
+     *   List childern = currentElement.getChildren();
+     *   for (int i = 0; i < childern.size(); i++) {
+     *     Element oneLevelDeep = (Element)childern.get(i);
      *     List twoLevelsDeep = oneLevelDeep.getChildren();
      *     // Do something with these children
      *   }
@@ -1007,31 +856,55 @@ public class Element implements Serializable, Cloneable {
      * @return list of child <code>Element</code> objects for this element
      */
     public List getChildren() {
-        return new FilterList(new ElementFilter(this));
+        return content.getView(new ElementFilter());
     }
 
     /**
      * <p>
-     * This sets the content of the element to be the List of 
-     * <code>Element</code> objects within the supplied <code>List</code>.
-     * All existing element and non-element content of the element is removed.
-     * In event of an exception the children may be partially added.
+     * This sets the content of the element the same as {@link #setContent},
+     * except only <code>Element</code> objects are allowed in the supplied
+     * list.
      * </p>
      *
      * @param children <code>List</code> of <code>Element</code> objects to add
      * @return this element modified
      */
     public Element setChildren(List children) {
-        return setContent(children);
+        List list = content.getView(new ElementFilter());
+        // Save initial size
+        int size = list.size();
+        try {
+            // Try adding the list
+            list.addAll(children);
+        }
+        catch(RuntimeException exception) {
+            // Restore to original state by removing
+            // items that where appended
+            removeRange(list, size, list.size());
+            throw exception;
+        }
+
+        // Add was sucessful, remove old children
+        removeRange(list, 0, size);
+        return this;
+    }
+
+    /** Remove a range of items from a list */
+    private void removeRange(List list, int start, int end) {
+        ListIterator i = list.listIterator(start);
+        for (int j = 0; j < (end - start); j++) {
+            i.next();
+            i.remove();
+        }
     }
 
     /**
      * <p>
      * This returns a <code>List</code> of all the child elements
      * nested directly (one level deep) within this element with the given
-     * local name and belonging to no namespace, returned as 
-     * <code>Element</code> objects.  If this target element has no nested 
-     * elements with the given name outside a namespace, an empty List 
+     * local name and belonging to no namespace, returned as
+     * <code>Element</code> objects.  If this target element has no nested
+     * elements with the given name outside a namespace, an empty List
      * is returned.  The returned list is "live" in document order
      * and changes to it affect the element's actual contents.
      * </p>
@@ -1051,9 +924,9 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This returns a <code>List</code> of all the child elements
      * nested directly (one level deep) within this element with the given
-     * local name and belonging to the given Namespace, returned as 
-     * <code>Element</code> objects.  If this target element has no nested 
-     * elements with the given name in the given Namespace, an empty List 
+     * local name and belonging to the given Namespace, returned as
+     * <code>Element</code> objects.  If this target element has no nested
+     * elements with the given name in the given Namespace, an empty List
      * is returned.  The returned list is "live" in document order
      * and changes to it affect the element's actual contents.
      * </p>
@@ -1067,14 +940,14 @@ public class Element implements Serializable, Cloneable {
      * @return all matching child elements
      */
     public List getChildren(String name, Namespace ns) {
-        return new FilterList(new ElementFilter(this, name, ns));
+        return content.getView(new ElementFilter(name, ns));
     }
 
     /**
      * <p>
-     * This returns the first child element within this element with the 
+     * This returns the first child element within this element with the
      * given local name and belonging to the given namespace.
-     * If no elements exist for the specified name and namespace, null is 
+     * If no elements exist for the specified name and namespace, null is
      * returned.
      * </p>
      *
@@ -1083,32 +956,19 @@ public class Element implements Serializable, Cloneable {
      * @return the first matching child element, or null if not found
      */
     public Element getChild(String name, Namespace ns) {
-        if (content == null) {
-            return null;
+        List elements = content.getView(new ElementFilter(name, ns));
+        Iterator i = elements.iterator();
+        if (i.hasNext()) {
+            return (Element) i.next();
         }
-
-        String uri = ns.getURI();
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                Element element = (Element)obj;
-                if ((element.getNamespaceURI().equals(uri)) &&
-                    (element.getName().equals(name))) {
-                    return element;
-                }
-            }
-        }
-
-        // If we got here, none found
         return null;
     }
 
     /**
      * <p>
-     * This returns the first child element within this element with the 
+     * This returns the first child element within this element with the
      * given local name and belonging to no namespace.
-     * If no elements exist for the specified name and namespace, null is 
+     * If no elements exist for the specified name and namespace, null is
      * returned.
      * </p>
      *
@@ -1129,23 +989,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(String str) {
-        if (content == null) {
-            createContentList();
-        }
-
-        int size = content.size();
-        if (size > 0) {
-            Object ob = content.get(size - 1);
-            if (ob instanceof Text) {
-                Text txt = (Text) ob;
-                txt.append(str);
-                return this;
-            }
-        }
-        Text txt = new Text(str);
-        txt.setParent(this);
-        content.add(txt);
-        return this;
+        return addContent(new Text(str));
     }
 
     /**
@@ -1158,21 +1002,40 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Text text) {
-        if (content == null) {
-            createContentList();
-        }
-
         int size = content.size();
         if (size > 0) {
             Object ob = content.get(size - 1);
             if (ob instanceof Text) {
-                Text txt = (Text) ob;
-                txt.append(text);
+                Text old = (Text) ob;
+                old.append(text);
                 return this;
             }
         }
+
         content.add(text);
-        text.setParent(this);
+        return this;
+    }
+
+    /**
+     * <p>
+     * This adds a CDATA section as content to this element.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to add
+     * @return this element modified
+     */
+    public Element addContent(CDATA cdata) {
+        int size = content.size();
+        if (size > 0) {
+            Object ob = content.get(size - 1);
+            if (ob instanceof CDATA) {
+                CDATA old = (CDATA) ob;
+                old.append(cdata);
+                return this;
+            }
+        }
+
+        content.add(cdata);
         return this;
     }
 
@@ -1189,41 +1052,8 @@ public class Element implements Serializable, Cloneable {
      *         a recursive element definition!).
      */
     public Element addContent(Element element) {
-        if (element.isRootElement()) {
-            throw new IllegalAddException(this, element,
-                "The element already has an existing parent " +
-                "(the document root)");
-        } else if (element.getParent() != null) {
-            throw new IllegalAddException(this, element,
-                "The element already has an existing parent \"" +
-                element.getParent().getQualifiedName() + "\"");
-        } else if (element == this) {
-            throw new IllegalAddException(this, element,
-                "The element cannot be added to itself");
-        } else if (isAncestor(element)) {
-            throw new IllegalAddException(this, element,
-                "The element cannot be added as a descendent of itself");
-        }
-
-        if (content == null) {
-            createContentList();
-        }
-
-        element.setParent(this);
         content.add(element);
         return this;
-    }
-
-    // Scan ancestry looking for an element
-    boolean isAncestor(Element e) {
-        Object p = parent;
-        while (p instanceof Element) {
-            if (p == e) {
-                return true;
-            }
-            p = ((Element)p).getParent();
-        }
-        return false;
     }
 
     /**
@@ -1237,22 +1067,7 @@ public class Element implements Serializable, Cloneable {
      *         <code>pi</code>, already has a parent.
      */
     public Element addContent(ProcessingInstruction pi) {
-        if (pi.getParent() != null) {
-            throw new IllegalAddException(this, pi,
-                "The PI already has an existing parent \"" +
-                pi.getParent().getQualifiedName() + "\"");
-        } else if (pi.getDocument() != null) {
-            throw new IllegalAddException(this, pi,
-                "The PI already has an existing parent " +
-                "(the document root)");
-        }
-
-        if (content == null) {
-            createContentList();
-        }
-
         content.add(pi);
-        pi.setParent(this);
         return this;
     }
 
@@ -1267,36 +1082,7 @@ public class Element implements Serializable, Cloneable {
      *         parent.
      */
     public Element addContent(EntityRef entity) {
-        if (entity.getParent() != null) {
-            throw new IllegalAddException(this, entity,
-                "The entity reference already has an existing parent \"" +
-                entity.getParent().getQualifiedName() + "\"");
-        }
-
-        if (content == null) {
-            createContentList();
-        }
-
         content.add(entity);
-        entity.setParent(this);
-        return this;
-    }
-
-    /**
-     * <p>
-     * This adds a CDATA section as content to this element.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to add
-     * @return this element modified
-     */
-    public Element addContent(CDATA cdata) {
-        if (content == null) {
-            createContentList();
-        }
-
-        content.add(cdata);
-        cdata.setParent(this);
         return this;
     }
 
@@ -1311,23 +1097,28 @@ public class Element implements Serializable, Cloneable {
      *         parent.
      */
     public Element addContent(Comment comment) {
-        if (comment.getParent() != null) {
-            throw new IllegalAddException(this, comment,
-                "The comment already has an existing parent \"" +
-                comment.getParent().getQualifiedName() + "\"");
-        } else if (comment.getDocument() != null) {
-            throw new IllegalAddException(this, comment,
-                "The comment already has an existing parent " +
-                "(the document root)");
-        }
-
-        if (content == null) {
-            createContentList();
-        }
-
         content.add(comment);
-        comment.setParent(this);
         return this;
+    }
+
+    /**
+     * <p>
+     * Determines if this element is the ancestor of another element.
+     * </p>
+     *
+     * @param element <code>Element</code> to check against
+     * @return <code>true</code> if this element is the ancestor of the
+     *         supplied element
+     */
+    public boolean isAncestor(Element element) {
+        Object p = parent;
+        while (p instanceof Element) {
+            if (p == element) {
+                return true;
+            }
+            p = ((Element) p).getParent();
+        }
+        return false;
     }
 
     /**
@@ -1356,26 +1147,14 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeChild(String name, Namespace ns) {
-        if (content == null) {
-            return false;
+        List old = content.getView(new ElementFilter(name, ns));
+        Iterator i = old.iterator();
+        if (i.hasNext()) {
+            i.next();
+            i.remove();
+            return true;
         }
 
-        String uri = ns.getURI();
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                Element element = (Element)obj;
-                if ((element.getNamespaceURI().equals(uri)) &&
-                    (element.getName().equals(name))) {
-                    element.setParent(null);
-                    i.remove();
-                    return true;
-                }
-            }
-        }
-
-        // If we got here, none found
         return false;
     }
 
@@ -1405,24 +1184,14 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeChildren(String name, Namespace ns) {
-        if (content == null) {
-            return false;
-        }
-
-        String uri = ns.getURI();
         boolean deletedSome = false;
-        Iterator i = content.iterator();
+
+        List old = content.getView(new ElementFilter(name, ns));
+        Iterator i = old.iterator();
         while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                Element element = (Element)obj;
-                if ((element.getNamespaceURI().equals(uri)) &&
-                    (element.getName().equals(name))) {
-                    element.setParent(null);
-                    i.remove();
-                    deletedSome = true;
-                }
-            }
+            i.next();
+            i.remove();
+            deletedSome = true;
         }
 
         return deletedSome;
@@ -1437,72 +1206,50 @@ public class Element implements Serializable, Cloneable {
      */
     public boolean removeChildren() {
         boolean deletedSome = false;
-        if (content != null) {
-            Iterator i = content.iterator();
-            while (i.hasNext()) {
-                Object obj = i.next();
-                if (obj instanceof Element) {
-                    Element element = (Element)obj;
-                    i.remove();
-                    element.setParent(null);
-                    deletedSome = true;
-                }
-            }
+
+        List old = content.getView(new ElementFilter());
+        Iterator i = old.iterator();
+        while (i.hasNext()) {
+            i.next();
+            i.remove();
+            deletedSome = true;
         }
+
         return deletedSome;
     }
 
     /**
      * <p>
-     * This returns the complete set of attributes for this element, as a 
-     * <code>List</code> of <code>Attribute</code> objects in no particular 
-     * order, or an empty list if there are none.  
-     * The returned list is "live" and changes to it affect the 
+     * This returns the complete set of attributes for this element, as a
+     * <code>List</code> of <code>Attribute</code> objects in no particular
+     * order, or an empty list if there are none.
+     * The returned list is "live" and changes to it affect the
      * element's actual attributes.
      * </p>
      *
      * @return attributes for the element
      */
     public List getAttributes() {
-        return new FilterList(new AttributeFilter(this));
-    }
-
-    /**
-     * <p>
-     * Creates the list that holds the attributes. Called internally,
-     * and by our Filters.
-     * </p>
-     */
-    private List createAttributeList() {
-        attributes = new ArrayList(INITIAL_ARRAY_SIZE);
-        return attributes;
-    }
-
-    List getAttributeBackingList(boolean create) {
-        if (attributes == null && create == true) {
-            createAttributeList();
-        }
-
         return attributes;
     }
 
     /**
      * <p>
      * This returns the attribute for this element with the given name
-     * and within no namespace.  
+     * and within no namespace.
      * </p>
      *
      * @param name name of the attribute to return
      * @return attribute for the element
      */
     public Attribute getAttribute(String name) {
-        return getAttribute(name, Namespace.NO_NAMESPACE);
+        return (Attribute) attributes.get(name, Namespace.NO_NAMESPACE);
     }
 
     /**
      * <p>
      * This returns the attribute for this element with the given name
-     * and within the given Namespace.  
+     * and within the given Namespace.
      * </p>
      *
      * @param name name of the attribute to return
@@ -1510,22 +1257,7 @@ public class Element implements Serializable, Cloneable {
      * @return attribute for the element
      */
     public Attribute getAttribute(String name, Namespace ns) {
-        if (attributes == null) {
-            return null;
-        }        
-
-        String uri = ns.getURI();
-        Iterator i = attributes.iterator();
-        while (i.hasNext()) {
-            Attribute att = (Attribute)i.next();
-            if ((att.getNamespaceURI().equals(uri)) &&
-                (att.getName().equals(name))) {
-                return att;
-            }
-        }
-
-        // If we got here, nothing found
-        return null;
+        return (Attribute) attributes.get(name, ns);
     }
 
     /**
@@ -1539,7 +1271,9 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or null if no such attribute
      */
     public String getAttributeValue(String name) {
-        return getAttributeValue(name, Namespace.NO_NAMESPACE);
+        Attribute attribute = (Attribute) attributes.get(name,
+                                              Namespace.NO_NAMESPACE);
+        return (attribute == null) ? null : attribute.getValue();
     }
 
     /**
@@ -1554,70 +1288,53 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or null if no such attribute
      */
     public String getAttributeValue(String name, Namespace ns) {
-        Attribute attrib = getAttribute(name, ns);
-        if (attrib == null) {
-            return null;
-        } else {
-            return attrib.getValue();
-        }
+        Attribute attribute = (Attribute) attributes.get(name, ns);
+        return (attribute == null) ? null : attribute.getValue();
     }
 
     /**
      * <p>
-     * This sets all the attributes for this element to be those
-     * in the given <code>List</code>; all existing attributes are removed.
+     * This sets the attributes of the element.  The supplied List should
+     * contain only objects of type <code>Attribute</code>.
+     * </p>
+     *
+     * <p>
+     * When all objects in the supplied List are valid and before the new
+     * attributes is added, all objects in the old attributes will have their
+     * parentage set to null (no parent) and the old attributes list will be
+     * cleared. This has the effect that any active attribute list (previously
+     * obtained with a call to {@link #getAttributes}) will also change to
+     * reflect the new attributes.  In addition, all objects in the supplied
+     * List will have their parentage set to this element, but the List itself
+     * will not be "live" and further removals and additions will have no
+     * effect on this elements attributes. If the user wants to continue
+     * working with a "live" attribute list, then a call to setAttributes
+     * should be followed by a call to {@link #getAttributes} to obtain a
+     * "live" version of the attributes.
+     * </p>
+     *
+     * <p>
+     * Passing a null or empty List clears the existing attributes.
+     * </p>
+     *
+     * <p>
+     * In cases where the List contains duplicate attributes, only the last
+     * one will be retained.  This has the same effect as calling
+     * {@link #setAttribute(Attribute)} sequentially.
+     * </p>
+     *
+     * <p>
+     * In event of an exception the original attributes will be unchanged and
+     * the objects in the supplied attributes will be unaltered.
      * </p>
      *
      * @param attributes <code>List</code> of attributes to set
      * @return this element modified
+     * @throws IllegalAddException if the List contains objects of
+     *         illegal types.
      */
-    public Element setAttributes(List attributes) {
-        // Save the old list.
-        List oldList = this.attributes;
-        this.attributes = null;
-        
-        int itemsAdded = 0;
-        RuntimeException exception = null;
-        try {
-            Iterator iter = attributes.iterator();
-            while (iter.hasNext()) {
-                Object obj = iter.next();
-                if (obj instanceof Attribute) {
-                    setAttribute((Attribute) obj);
-                    itemsAdded++;
-                }
-                else {
-                    throw new IllegalAddException("Non-Attribute in list");
-                }
-            }
-        } catch (RuntimeException re) {
-            exception = re;
-        } finally {
-            if (exception != null) {
-                // Copy back the old list (might be null)            
-                this.attributes = oldList;
-                
-                // Only reset the attributes we have copied.
-                Iterator i = attributes.iterator();
-                while (itemsAdded-- > 0) {    
-                    Object obj = i.next();
-                    if (obj instanceof Attribute) {
-                        ((Attribute) obj).setParent(null);
-                    }
-                }
-
-                throw exception;
-            }
-        }
-
-        // Orphan the old attributes.
-        if (oldList != null && oldList.size() > 0) {
-            Iterator iter = oldList.iterator();
-            while (iter.hasNext()) {
-                ((Attribute)iter.next()).setParent(null);
-            }
-        }
-
+    public Element setAttributes(List newAttributes) {
+        attributes.clearAndSet(newAttributes);
         return this;
     }
 
@@ -1652,87 +1369,18 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This sets an attribute value for this element.  Any existing attribute 
+     * This sets an attribute value for this element.  Any existing attribute
      * with the same name and namespace URI is removed.
      * </p>
      *
      * @param attribute <code>Attribute</code> to set
      * @return this element modified
-     * @throws IllegalAddException if the attribute being added already has a 
-     *   parent or if the attribute namespace prefix collides with another 
+     * @throws IllegalAddException if the attribute being added already has a
+     *   parent or if the attribute namespace prefix collides with another
      *   namespace prefix on the element.
      */
     public Element setAttribute(Attribute attribute) {
-        if (attribute.getParent() != null) {
-            throw new IllegalAddException(this, attribute,
-                "The attribute already has an existing parent \"" +
-                attribute.getParent().getQualifiedName() + "\"");
-        }
-
-        // Performance optimizing flag to help determine if we need to 
-        // bother removing an old attribute
-        boolean preExisting = false;
-
-        // Verify the attribute's namespace prefix doesn't collide with
-        // another attribute prefix or this element's prefix.
-        // This is unfortunately pretty heavyweight but we don't need to do it
-        // for attributes without a namespace, and a little testing shows no
-        // real difference in build times anyway.
-        String prefix = attribute.getNamespace().getPrefix();
-        String uri = attribute.getNamespace().getURI();
-        if (!prefix.equals("")) {
-          if (prefix.equals(getNamespacePrefix()) && 
-                !uri.equals(getNamespaceURI())) {
-              throw new IllegalAddException(this, attribute,
-                "The attribute namespace prefix \"" + prefix + 
-                "\" collides with the element namespace prefix");
-          }
-          if (additionalNamespaces != null && additionalNamespaces.size() > 0) {
-              Iterator itr = additionalNamespaces.iterator();
-              while (itr.hasNext()) {
-                  Namespace ns = (Namespace) itr.next();
-                  if (prefix.equals(ns.getPrefix()) && 
-                        !uri.equals(ns.getURI())) {
-                      throw new IllegalAddException(this, attribute,
-                        "The attribute namespace prefix \"" + prefix +
-                        "\" collides with a namespace declared by the element");
-                  }
-              }
-          }
-        }
-
-        // Walk the attributes looking for one to replace, or for a ns conflict
-        if (attributes != null && attributes.size() > 0) {
-            Iterator itr = attributes.iterator();
-            while (itr.hasNext()) {
-                Attribute att = (Attribute)itr.next();
-                Namespace ns = att.getNamespace();
-                // Keep track if we have an existing attribute
-                if (attribute.getName().equals(att.getName()) &&
-                      ns.getURI().equals(att.getNamespaceURI())) {
-                    preExisting = true;
-                }
-
-                if (!prefix.equals("") && prefix.equals(ns.getPrefix()) && 
-                      !uri.equals(ns.getURI())) {
-                    throw new IllegalAddException(this, attribute,
-                        "The attribute namespace prefix \"" + prefix +
-                        "\" collides with another attribute namespace on " +
-                        "the element");
-                }
-            }
-        }
-  
-        if (attributes == null) {
-            createAttributeList();
-        }
-        else if (preExisting) {
-            // Remove any pre-existing attribute
-            removeAttribute(attribute.getName(), attribute.getNamespace());
-        }
-
         attributes.add(attribute);
-        attribute.setParent(this);
         return this;
     }
 
@@ -1746,7 +1394,7 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(String name) {
-        return removeAttribute(name, Namespace.NO_NAMESPACE);
+        return attributes.remove(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1761,22 +1409,7 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(String name, Namespace ns) {
-        if (attributes == null) {
-            return false;
-        }
-
-        String uri = ns.getURI();
-        Iterator i = attributes.iterator();
-        while (i.hasNext()) {
-            Attribute att = (Attribute)i.next();
-            if ((att.getNamespaceURI().equals(uri)) &&
-                (att.getName().equals(name))) {
-                i.remove();
-                att.setParent(null);
-                return true;
-            }
-        }
-        return false;
+        return attributes.remove(name, ns);
     }
 
     /**
@@ -1788,12 +1421,91 @@ public class Element implements Serializable, Cloneable {
      * @return whether the attribute was removed
      */
     public boolean removeAttribute(Attribute attribute) {
-        if (attributes == null || 
-           (attribute == null) || (attribute.getParent() != this)) {
-            return false;
-        }
-        
         return attributes.remove(attribute);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Element</code>.
+     * If the specified <code>Element</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param child <code>Element</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Element element) {
+        return content.remove(element);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>ProcessingInstruction</code>.
+     * If the specified <code>ProcessingInstruction</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(ProcessingInstruction pi) {
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Comment</code>.
+     * If the specified <code>Comment</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Comment comment) {
+        return content.remove(comment);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>CDATA</code>.
+     * If the specified <code>CDATA</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(CDATA cdata) {
+        return content.remove(cdata);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Text</code>.
+     * If the specified <code>Text</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param text <code>Text</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Text text) {
+        return content.remove(text);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>EntityRef</code>.
+     * If the specified <code>EntityRef</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param child <code>EntityRef</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(EntityRef entity) {
+        return content.remove(entity);
     }
 
     /**
@@ -1801,7 +1513,7 @@ public class Element implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Element</code>, suitable for debugging. If the XML
      *    representation of the <code>Element</code> is desired,
-     *    {@link org.jdom.output.XMLOutputter#outputString(Element)} 
+     *    {@link org.jdom.output.XMLOutputter#outputString(Element)}
      *    should be used.
      * </p>
      *
@@ -1828,7 +1540,7 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      *  This tests for equality of this <code>Element</code> to the supplied
-     *    <code>Object</code>, explicitly using the == operator.  
+     *    <code>Object</code>, explicitly using the == operator.
      * </p>
      *
      * @param ob <code>Object</code> to compare to
@@ -1853,7 +1565,7 @@ public class Element implements Serializable, Cloneable {
      * <p>
      *  This returns a deep clone of this element.
      *  The new element is detached from its parent, and getParent()
-     *  on the clone will return null. 
+     *  on the clone will return null.
      * </p>
      *
      * @return the clone of this element
@@ -1873,54 +1585,47 @@ public class Element implements Serializable, Cloneable {
         // name and namespace are references to imutable objects
         // so super.clone() handles them ok
 
-        // Reference to parent is copied by super.clone() 
+        // Reference to parent is copied by super.clone()
         // (Object.clone()) so we have to remove it
         element.parent = null;
 
-        // Reference to content list and attribute lists are copyed by 
+        // Reference to content list and attribute lists are copyed by
         // super.clone() so we set it new lists if the original had lists
-        element.content = (this.content == null) ? null :
-                                  new ArrayList(INITIAL_ARRAY_SIZE);
-        element.attributes = (this.attributes == null) ? null :
-                                  new ArrayList(INITIAL_ARRAY_SIZE);
+        element.content = new ContentList(element);
+        element.attributes = new AttributeList(element);
 
         // Cloning attributes
         if (attributes != null) {
-            for (Iterator i = attributes.iterator(); i.hasNext(); ) {
-                Attribute a = (Attribute)((Attribute)i.next()).clone();
-                a.setParent(element);
-                element.attributes.add(a);
+            for (int i = 0; i < attributes.size(); i++) {
+                Object obj = attributes.get(i);
+                Attribute attribute = (Attribute)((Attribute)obj).clone();
+                element.attributes.add(attribute);
             }
         }
 
         // Cloning content
         if (content != null) {
-            for (Iterator i = content.iterator(); i.hasNext(); ) {
-                Object obj = i.next();
+            for (int i = 0; i < content.size(); i++) {
+                Object obj = content.get(i);
                 if (obj instanceof Element) {
-                    Element e = (Element)((Element)obj).clone();
-                    e.setParent(element);
-                    element.content.add(e);
+                    Element elt = (Element)((Element)obj).clone();
+                    element.content.add(elt);
                 } else if (obj instanceof Text) {
-                    Text t = (Text)((Text)obj).clone();
-                    t.setParent(element);
-                    element.content.add(t);
+                    Text text = (Text)((Text)obj).clone();
+                    element.content.add(text);
                 } else if (obj instanceof Comment) {
-                    Comment c = (Comment)((Comment)obj).clone();
-                    c.setParent(element);
-                    element.content.add(c);
+                    Comment comment = (Comment)((Comment)obj).clone();
+                    element.content.add(comment);
                 } else if (obj instanceof CDATA) {
-                    CDATA d = (CDATA)((CDATA)obj).clone();
-                    d.setParent(element);
-                    element.content.add(d);
+                    CDATA cdata = (CDATA)((CDATA)obj).clone();
+                    element.content.add(cdata);
                 } else if (obj instanceof ProcessingInstruction) {
-                    ProcessingInstruction p = (ProcessingInstruction)
+                    ProcessingInstruction pi = (ProcessingInstruction)
                         ((ProcessingInstruction)obj).clone();
-                    element.content.add(p);
+                    element.content.add(pi);
                 } else if (obj instanceof EntityRef) {
-                    EntityRef e = (EntityRef)((EntityRef)obj).clone();
-                    e.setParent(element);
-                    element.content.add(e);
+                    EntityRef entity = (EntityRef)((EntityRef)obj).clone();
+                    element.content.add(entity);
                 }
             }
         }
@@ -1934,7 +1639,7 @@ public class Element implements Serializable, Cloneable {
 
         return element;
     }
-    
+
     // Support a custom Namespace serialization so no two namespace
     // object instances may exist for the same prefix/uri pair
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -1949,143 +1654,10 @@ public class Element implements Serializable, Cloneable {
 
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
-        
+
         in.defaultReadObject();
 
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Element</code>.
-     * If the specified <code>Element</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param child <code>Element</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Element element) {
-        if (content == null) {
-            return false;
-        }
-
-        if (content.remove(element)) {
-            element.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>ProcessingInstruction</code>.
-     * If the specified <code>ProcessingInstruction</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param child <code>ProcessingInstruction</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(ProcessingInstruction pi) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(pi)) {
-            pi.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Comment</code>.
-     * If the specified <code>Comment</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param comment <code>Comment</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Comment comment) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(comment)) {
-            comment.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>CDATA</code>.
-     * If the specified <code>CDATA</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(CDATA cdata) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(cdata)) {
-            cdata.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>Text</code>.
-     * If the specified <code>Text</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param text <code>Text</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(Text text) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(text)) {
-            text.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * <p>
-     * This removes the specified <code>EntityRef</code>.
-     * If the specified <code>EntityRef</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param child <code>EntityRef</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(EntityRef entity) {
-        if (content == null) {
-            return false;
-        }
-        if (content.remove(entity)) {
-            entity.setParent(null);
-            return true;
-        } else {
-            return false;
-        }
     }
 }
