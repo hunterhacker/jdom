@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.54 2001/06/15 23:20:08 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.55 2001/06/18 20:21:00 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,11 +84,11 @@ import org.jdom.*;
  * <p> There are <code>output(...)</code> methods to print any of the
  * standard JDOM classes, including <code>Document</code> and
  * <code>Element</code>, to either a <code>Writer</code> or an
- * <code>OutputStream</code>.  Warning: When outputting to a Writer make 
- * sure the writer's encoding matches the encoding expected by the 
- * XMLOutputter.  This ensures the encoding in which the content is written 
- * (controlled by the Writer configuration) matches the encoding placed in 
- * the document's declaration (controlled by the XMLOutputter).  Because a 
+ * <code>OutputStream</code>.  Warning: When outputting to a Writer, make
+ * sure the writer's encoding matches the encoding setting in the
+ * XMLOutputter.  This ensures the encoding in which the content is written
+ * (controlled by the Writer configuration) matches the encoding placed in
+ * the document's XML declaration (controlled by the XMLOutputter).  Because a
  * Writer cannot be queried for its encoding, the information must be passed 
  * to the XMLOutputter manually in its constructor or via the setEncoding() 
  * method.  The default XMLOutputter encoding is UTF-8.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.54 $ $Date: 2001/06/15 23:20:08 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.55 $ $Date: 2001/06/18 20:21:00 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
