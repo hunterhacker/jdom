@@ -108,7 +108,7 @@ public class JDOMHelper {
         }
 
         // Finally, we set the content list back into the parent Element.
-        parent.setContent(null);
+        parent.setContent((List)null);
         parent.setContent(content);
     }
 }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: IdElement.java,v 1.3 2003/05/05 06:58:19 jhunter Exp $
+ $Id: IdElement.java,v 1.4 2003/05/20 21:54:47 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -97,7 +97,7 @@ public class IdElement extends Element {
       Document prevDoc = this.getDocument();
 
       // Attach to the new owning document.
-      super.setDocument(doc);
+      super.setParent(doc);
 
       if (doc != prevDoc) {
          // New and previous owning documents are different.
