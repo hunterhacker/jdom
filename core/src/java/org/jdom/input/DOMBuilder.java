@@ -180,8 +180,7 @@ public class DOMBuilder {
      *
      * @param in <code>InputStream</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(InputStream in) throws JDOMException {
         Document doc = new Document((Element)null);
@@ -273,8 +272,7 @@ public class DOMBuilder {
      *
      * @param file <code>File</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(File file) throws JDOMException {
         try {
@@ -296,8 +294,7 @@ public class DOMBuilder {
      *
      * @param url <code>URL</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(URL url) throws JDOMException {
         try {

@@ -485,7 +485,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param doc <code>Document</code> to format.
      * @param out <code>OutputStream</code> to write to.
-     * @throws <code>IOException</code> - if there's any problem writing.
+     * @throws IOException - if there's any problem writing.
      */
     public void output(Document doc, OutputStream out)
                                            throws IOException {
@@ -509,7 +509,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param doc <code>Document</code> to format.
      * @param out <code>Writer</code> to write to.
-     * @throws <code>IOException</code> - if there's any problem writing.
+     * @throws IOException - if there's any problem writing.
      **/
     public void output(Document doc, Writer writer)
                                            throws IOException {

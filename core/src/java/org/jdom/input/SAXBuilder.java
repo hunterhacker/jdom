@@ -249,8 +249,7 @@ public class SAXBuilder {
      *
      * @param in <code>InputSource</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     protected Document build(InputSource in) throws JDOMException {
 
@@ -421,8 +420,7 @@ public class SAXBuilder {
      *
      * @param in <code>InputStream</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(InputStream in) throws JDOMException {
         return build(new InputSource(in));
@@ -436,8 +434,7 @@ public class SAXBuilder {
      *
      * @param file <code>File</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(File file) throws JDOMException {
         try {
@@ -456,8 +453,7 @@ public class SAXBuilder {
      *
      * @param url <code>URL</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(URL url) throws JDOMException {
         String systemID = url.toExternalForm();
@@ -473,8 +469,7 @@ public class SAXBuilder {
      * @param in <code>InputStream</code> to read from.
      * @param systemId base for resolving relative URIs
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(InputStream in, String systemId)
         throws JDOMException {
@@ -492,8 +487,7 @@ public class SAXBuilder {
      *
      * @param in <code>Reader</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(Reader characterStream) throws JDOMException {
         return build(new InputSource(characterStream));
@@ -508,8 +502,7 @@ public class SAXBuilder {
      * @param in <code>Reader</code> to read from.
      * @param systemId base for resolving relative URIs
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(Reader characterStream, String SystemId)
         throws JDOMException {
@@ -526,8 +519,7 @@ public class SAXBuilder {
      * </p>
      * @param systemId URI for the input
      * @return <code>Document</code> - resultant Document object.
-     * @throws <code>JDOMException</code> when errors occur in
-     *                                    parsing.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document build(String systemId) throws JDOMException {
         return build(new InputSource(systemId));
@@ -590,7 +582,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * </p>
      *
      * @param document <code>Document</code> being parsed.
-     * @throws <code>IOException</code> when errors occur.
+     * @throws IOException when errors occur.
      */
     public SAXHandler(Document document) throws IOException {
         this.document = document;
@@ -614,7 +606,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param data <code>String</code containing all data sent to the PI.
      *             This typically looks like one or more attribute value
      *             pairs.
-     * @throws <code>SAXException</code> when things go wrong
+     * @throws SAXException when things go wrong
      */
     public void processingInstruction(String target, String data)
         throws SAXException {
@@ -687,7 +679,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param qName <code>String</code> XML 1.0 version of element name:
      *                [namespace prefix]:[localName]
      * @param atts <code>Attributes</code> list for this element
-     * @throws <code>SAXException</code> when things go wrong
+     * @throws SAXException when things go wrong
      */
     public void startElement(String namespaceURI, String localName,
                              String qName, Attributes atts)
@@ -776,7 +768,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param ch <code>char[]</code> character array with character data
      * @param start <code>int</code> index in array where data starts.
      * @param end <code>int</code> index in array where data ends.
-     * @throws <code>SAXException</code> when things go wrong
+     * @throws SAXException when things go wrong
      */
     public void characters(char[] ch, int start, int end)
         throws SAXException {
@@ -817,7 +809,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      *                     element is associated with
      * @param localName <code>String</code> name of element without prefix
      * @param rawName <code>String</code> name of element in XML 1.0 form
-     * @throws <code>SAXException</code> when things go wrong
+     * @throws SAXException when things go wrong
      */
     public void endElement(String namespaceURI, String localName,
                            String rawName) {

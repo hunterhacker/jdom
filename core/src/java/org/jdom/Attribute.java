@@ -425,7 +425,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>int</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
+     * @throws DataConversionException - when conversion fails.
      */
     public int getIntValue() throws DataConversionException {
         try {
@@ -444,7 +444,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>long</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
+     * @throws DataConversionException - when conversion fails.
      */
     public long getLongValue() throws DataConversionException {
         try {
@@ -463,7 +463,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>float</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
+     * @throws DataConversionException - when conversion fails.
      */
     public float getFloatValue() throws DataConversionException {
         try {
@@ -483,7 +483,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>double</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
+     *  <code>DataConversionException</code> - when conversion fails.
      */
     public double getDoubleValue() throws DataConversionException {
         try {
@@ -503,7 +503,7 @@ public class Attribute implements Serializable, Cloneable {
      * </p>
      *
      * @return <code>boolean</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
+     *  <code>DataConversionException</code> - when conversion fails.
      */
     public boolean getBooleanValue() throws DataConversionException {
         if ((value.equalsIgnoreCase("true")) ||

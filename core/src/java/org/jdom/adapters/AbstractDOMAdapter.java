@@ -87,8 +87,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws <code>Exception</code> when errors occur in
-     *                                  parsing.
+     * @throws Exception when errors occur in parsing.
      */
     public Document getDocument(File filename, boolean validate)
         throws Exception {
@@ -106,8 +105,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws <code>Exception</code> when errors occur in
-     *                                  parsing.
+     * @throws Exception when errors occur in parsing.
      */
     public abstract Document getDocument(InputStream in, boolean validate)
         throws Exception;
@@ -119,7 +117,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws <code>Exception</code> when errors occur.
+     * @throws Exception when errors occur.
      */
     public abstract Document createDocument() throws Exception;
 
@@ -133,7 +131,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      *
      * @param doctype Initial <code>DocType</code> of the document.
      * @return <code>Document</code> - created DOM Document.
-     * @throws <code>Exception</code> when errors occur.
+     * @throws Exception when errors occur.
      */
     public Document createDocument(DocType doctype) throws Exception {
         if (doctype == null) {

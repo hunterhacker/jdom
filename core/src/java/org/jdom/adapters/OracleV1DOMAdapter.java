@@ -87,8 +87,7 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
      * @param in <code>InputStream</code> to parse.
      * @param validate <code>boolean</code> to indicate if validation should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws <code>IOException</code> when errors occur in
-     *                                  parsing.
+     * @throws IOException when errors occur in parsing.
      */
     public Document getDocument(InputStream in, boolean validate)
         throws IOException  {
@@ -135,7 +134,7 @@ public class OracleV1DOMAdapter extends AbstractDOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws <code>IOException</code> when errors occur.
+     * @throws IOException when errors occur.
      */
     public Document createDocument() throws IOException {
         try {

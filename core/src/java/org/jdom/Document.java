@@ -145,7 +145,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @param content <code>List</code> of starter content
      * @param docType <code>DocType</code> declaration.
-     * @throws <code>IllegalAddException</code> if the List contains more than
+     * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types
      */
     public Document(List content, DocType docType) {
@@ -162,7 +162,7 @@ public class Document implements Serializable, Cloneable {
      * </p>
      *
      * @param content <code>List</code> of starter content
-     * @throws <code>IllegalAddException</code> if the List contains more than
+     * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types
      */
     public Document(List content) {
@@ -455,7 +455,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @param content the new mixed content
      * @return the modified Document
-     * @throws <code>IllegalAddException</code> if the List contains more than
+     * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types
      */
     public Document setMixedContent(List content) {
