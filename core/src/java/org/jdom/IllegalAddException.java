@@ -58,20 +58,21 @@ public class IllegalAddException extends IllegalArgumentException {
      * This will create an <code>Exception</code> indicating
      *   that the addition of the <code>{@link Attribute}</code>
      *   supplied to the <code>{@link Element}</code> supplied
-     *   is illegal..
+     *   is illegal.
      * </p>
      *
      * @param attribute <code>Attribute</code> that could not be added
      * @param element <code>Element</code> that <code>Attribute</code>
      *        couldn't be added to.
      */
-    public IllegalAddException(Attribute attribute, Element element) {
+    public IllegalAddException(Attribute attribute, Element element, String reason) {
         super(new StringBuffer()
-              .append("The attribute ")
+              .append("The attribute \"")
               .append(attribute.getQualifiedName())
-              .append(" could not be added to ")
+              .append("\" could not be added to the element \"")
               .append(element.getQualifiedName())
-              .append(" because it already has an existing parent.")
+              .append("\": ")
+              .append(reason)
               .toString());
     }
 

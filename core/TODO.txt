@@ -8,9 +8,6 @@ Items that need to be done:
 * Probably remove removeContent(*) since the List API provides this
   functionality
 
-* Implement preservation of whitespace, making it available using
-  getContent(true) and getMixedContent(true).
-
 * Polish the DOMOutputter code
 
 * Set up build to automatically handle JDK 1.1 + Collections using an Ant task
@@ -62,8 +59,6 @@ Items that need to be done:
 * Fix Document.getMixedContent() to preserve whitespace
 
 * Add Document.setMixedContent().  Do we ensure it contains only one Element?
-
-* Ensure that element.addAttribute(attr) doesn't permit duplicates
 
 * Add methods/logic to Verifier for all XML spec. constraints
 

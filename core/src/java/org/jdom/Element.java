@@ -918,19 +918,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes the specified <code>String</code>, compared using ==.
-     * </p>
-     *
-     * @param text <code>String</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(String text) {
-        clearContentCache();
-        return content.remove(text);
-    }
-
-    /**
-     * <p>
      * This removes the specified <code>Element</code>.
      * </p>
      *
@@ -985,15 +972,30 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This removes the first child element (one level deep) with the
-     * given local name and belonging to a namespace at the given URI.
+     * given local name and belonging to no namespace.
      * Returns true if a child was removed.
      * </p>
      *
      * @param name the name of child elements to remove
-     * @param uri the namespace URI of elements to remove
      * @return whether deletion occurred
      */
-    protected boolean removeChild(String name, String uri) {
+    public boolean removeChild(String name) {
+        return removeChild(name, Namespace.NO_NAMESPACE);
+    }
+
+    /**
+     * <p>
+     * This removes the first child element (one level deep) with the
+     * given local name and belonging to the given namespace.
+     * Returns true if a child was removed.
+     * </p>
+     *
+     * @param name the name of child element to remove
+     * @param ns <code>Namespace</code> to search within
+     * @return whether deletion occurred
+     */
+    public boolean removeChild(String name, Namespace ns) {
+        String uri = ns.getURI();
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
@@ -1010,35 +1012,6 @@ public class Element implements Serializable, Cloneable {
 
         // If we got here, none found
         return false;
-    }
-
-    /**
-     * <p>
-     * This removes the first child element (one level deep) with the
-     * given local name and belonging to no namespace.
-     * Returns true if a child was removed.
-     * </p>
-     *
-     * @param name the name of child elements to remove
-     * @return whether deletion occurred
-     */
-    public boolean removeChild(String name) {
-        return removeChild(name, "");
-    }
-
-    /**
-     * <p>
-     * This removes the first child element (one level deep) with the
-     * given local name and belonging to the given namespace.
-     * Returns true if a child was removed.
-     * </p>
-     *
-     * @param name the name of child element to remove
-     * @param ns <code>Namespace</code> to search within
-     * @return whether deletion occurred
-     */
-    public boolean removeChild(String name, Namespace ns) {
-        return removeChild(name, ns.getURI());
     }
 
     /**
@@ -1140,30 +1113,6 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      * This returns the attribute for this element with the given name
-     * and within the given namespace URI.  
-     * </p>
-     *
-     * @param name name of the attribute to return
-     * @param uri namespace URI of the attribute to return
-     * @return attribute for the element
-     */
-    protected Attribute getAttribute(String name, String uri) {
-        Iterator i = attributes.iterator();
-        while (i.hasNext()) {
-            Attribute att = (Attribute)i.next();
-            if ((att.getNamespaceURI().equals(uri)) &&
-                (att.getName().equals(name))) {
-                return att;
-            }
-        }
-
-        // If we got here, nothing found
-        return null;
-    }
-
-    /**
-     * <p>
-     * This returns the attribute for this element with the given name
      * and within no namespace.  
      * </p>
      *
@@ -1171,7 +1120,7 @@ public class Element implements Serializable, Cloneable {
      * @return attribute for the element
      */
     public Attribute getAttribute(String name) {
-        return getAttribute(name, "");
+        return getAttribute(name, Namespace.NO_NAMESPACE);
     }
 
     /**
@@ -1185,7 +1134,18 @@ public class Element implements Serializable, Cloneable {
      * @return attribute for the element
      */
     public Attribute getAttribute(String name, Namespace ns) {
-        return getAttribute(name, ns.getURI());
+        String uri = ns.getURI();
+        Iterator i = attributes.iterator();
+        while (i.hasNext()) {
+            Attribute att = (Attribute)i.next();
+            if ((att.getNamespaceURI().equals(uri)) &&
+                (att.getName().equals(name))) {
+                return att;
+            }
+        }
+
+        // If we got here, nothing found
+        return null;
     }
 
     /**
@@ -1214,7 +1174,7 @@ public class Element implements Serializable, Cloneable {
      * @return the named attribute's value, or null if no such attribute
      */
     public String getAttributeValue(String name, Namespace ns) {
-        Attribute attrib = getAttribute(name, ns.getURI());
+        Attribute attrib = getAttribute(name, ns);
         if (attrib == null) {
             return null;
         }
@@ -1248,6 +1208,11 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addAttribute(Attribute attribute) {
+        if (getAttribute(attribute.getName(), attribute.getNamespace()) != null) {
+            throw new IllegalAddException(attribute, this,
+                                          "Duplicate attributes are not allowed.");
+        }
+
         attributes.add(attribute);
         return this;
     }
