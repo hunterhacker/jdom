@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.15 2002/04/29 13:38:15 jhunter Exp $
+ $Id: JDOMException.java,v 1.16 2002/05/11 04:13:27 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -78,12 +78,12 @@ import org.xml.sax.SAXException;
  * 
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.15 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.16 $, $Date: 2002/05/11 04:13:27 $
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.15 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.16 $ $Date: 2002/05/11 04:13:27 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;
@@ -227,7 +227,7 @@ public class JDOMException extends Exception {
         // Print the stack trace for each nested exception.
         while((child = getNestedException(parent)) != null) {
             if (child != null) {
-                System.err.print("Caused by: ");
+                s.print("Caused by: ");
                 child.printStackTrace(s);
                 // Any nested JDOMException will print its own children,
                 // so we need to break out of here.
