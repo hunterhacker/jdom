@@ -264,8 +264,6 @@ public class DOMBuilder {
                            Document doc,
                            Element current,
                            boolean atRoot) {
-        LinkedList additionalNamespaces = new LinkedList();
-
         // Recurse through the tree
         switch (node.getNodeType()) {
             case Node.DOCUMENT_NODE:
