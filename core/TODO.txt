@@ -2,24 +2,24 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Make setText() not replace children
-
-* Take action on detach() allowing a Doc to have its root removed with an ISE
-  upon later access.  This also removes the need to remove the Document(null)
-  usage by builders.
-
 * Implement the ability to output the same DOCTYPE as was input.  Store the
   internal DTD subset as a String variable in DocType.  This means we need 
   to reconstruct the String based on SAX events of the DTDHandler/DeclHandler.
   Or if reading from DOM then from the DOM DocumentType.
   (Harry Evans <hevans@elite.com> and Phil Nelson are working on this.)
 
+* Consider a getNames() method to ProcessingInstruction to iterate over the
+  names.
+
+* Consider if setText() should not replace children
+
+* Take action on detach() allowing a Doc to have its root removed with an ISE
+  upon later access.  This also removes the need to remove the Document(null)
+  usage by builders.
+
 * Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
   for the minor bug where pretty print (indented, newlines, trim text) prints 
-  an extra whitespace line between one closing element and another.  Also
-  included may be a fix for the unconfirmed bug of unwanted line breaks 
-  occurring between tags.
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003241.html
+  an extra whitespace line between one closing element and another.
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
