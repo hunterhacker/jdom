@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.5 2002/03/12 06:53:57 jhunter Exp $
+ $Id: ContentList.java,v 1.6 2002/03/13 03:57:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2002/03/12 06:53:57 $
+ * @version $Revision: 1.6 $, $Date: 2002/03/13 03:57:41 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +83,7 @@ class ContentList extends AbstractList
                          implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.5 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.6 $ $Date: 2002/03/13 03:57:41 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -206,11 +206,13 @@ class ContentList extends AbstractList
                 throw new IllegalAddException(
                   "Cannot add a second root element, only one is allowed");
             }
+            element.setDocument((Document) parent);
+        }
+        else {
+            element.setParent((Element) parent);
         }
 
         list.add(index, element);
-        element.parent = parent;
-
         modCount++;
     }
 
@@ -244,9 +246,14 @@ class ContentList extends AbstractList
             }
         }
 
-        list.add(index, comment);
-        comment.parent = parent;
+        if (parent instanceof Document) {
+            comment.setDocument((Document) parent);
+        }
+        else {
+            comment.setParent((Element) parent);
+        }
 
+        list.add(index, comment);
         modCount++;
     }
 
@@ -280,9 +287,14 @@ class ContentList extends AbstractList
             }
         }
 
-        list.add(index, pi);
-        pi.parent = parent;
+        if (parent instanceof Document) {
+            pi.setDocument((Document) parent);
+        }
+        else {
+            pi.setParent((Element) parent);
+        }
 
+        list.add(index, pi);
         modCount++;
     }
 
@@ -321,8 +333,7 @@ class ContentList extends AbstractList
             }
         }
         list.add(index, cdata);
-        cdata.parent = (Element) parent;
-
+        cdata.setParent((Element) parent);
         modCount++;
     }
 
@@ -360,9 +371,9 @@ class ContentList extends AbstractList
                                                     " Size: " + size());
             }
         }
-        list.add(index, text);
-        text.parent = (Element) parent;
 
+        list.add(index, text);
+        text.setParent((Element) parent);
         modCount++;
     }
 
@@ -400,9 +411,9 @@ class ContentList extends AbstractList
                                                     " Size: " + size());
             }
         }
-        list.add(index, entity);
-        entity.parent = (Element) parent;
 
+        list.add(index, entity);
+        entity.setParent((Element) parent);
         modCount++;
     }
 
@@ -583,27 +594,27 @@ class ContentList extends AbstractList
     private void removeParent(Object obj) {
         if (obj instanceof Element) {
             Element element = (Element) obj;
-            element.parent = null;
+            element.setParent(null);
         }
         else if (obj instanceof Comment) {
             Comment comment = (Comment) obj;
-            comment.parent = null;
+            comment.setParent(null);
         }
         else if (obj instanceof ProcessingInstruction) {
             ProcessingInstruction pi = (ProcessingInstruction) obj;
-            pi.parent = null;
+            pi.setParent(null);
         }
         else if (obj instanceof CDATA) {
             CDATA cdata = (CDATA) obj;
-            cdata.parent = null;
+            cdata.setParent(null);
         }
         else if (obj instanceof Text) {
             Text text = (Text) obj;
-            text.parent = null;
+            text.setParent(null);
         }
         else if (obj instanceof EntityRef) {
             EntityRef entity = (EntityRef) obj;
-            entity.parent = null;
+            entity.setParent(null);
         }
     }
 
