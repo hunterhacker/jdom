@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.28 2004/02/05 03:56:00 jhunter Exp $
+ $Id: ContentList.java,v 1.29 2004/02/05 08:34:08 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.28 $, $Date: 2004/02/05 03:56:00 $
+ * @version $Revision: 1.29 $, $Date: 2004/02/05 08:34:08 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.28 $ $Date: 2004/02/05 03:56:00 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.29 $ $Date: 2004/02/05 08:34:08 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1080,9 +1080,10 @@ class ContentList extends AbstractList implements java.io.Serializable {
             checkConcurrentModification();
 
             switch(lastOperation) {
-            case CREATE:  cursor = initialCursor - 1;
-                          if (cursor >= ContentList.this.size()) {
-                               cursor = moveBackward(initialCursor - 1);
+            case CREATE:  cursor = initialCursor;
+                          int size = ContentList.this.size();
+                          if (cursor >= size) {
+                              cursor = moveBackward(size - 1);
                           }
                           break;
             case PREV:
@@ -1250,7 +1251,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
 
         /**
-         * Returns index in the backing list by moving forward start + 1
+         * Returns index in the backing list by moving forward start
          * objects that match our filter.
          */
         private int initializeCursor(int start) {
