@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.21 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Verifier.java,v 1.22 2001/04/13 04:52:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -274,9 +274,6 @@ public final class Verifier {
      *         <code>null</code> if name is OK.
      */
     public static final String checkNamespaceURI(String uri) {
-        // TODO/XXX: Bring this code in line with RFC 2396
-        // ftp://ftp.isi.edu/in-notes/rfc2396.txt
-
         // Manually do rules, since URIs can be null or empty
         if ((uri == null) || (uri.equals(""))) {
             return null;
