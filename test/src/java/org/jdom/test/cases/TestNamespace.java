@@ -148,19 +148,7 @@ public static Test suite () {
 
 	}
 
-	/**
-	 * Test retrieval of a namespace with a prefix and Element.
-	 */
-	public void test_TCM__OrgJdomNamespace_getNamespace_String_OrgJdomElement() {
-		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
-		Element test = new Element("root",ns);
-		ns = null;
 
-		ns = Namespace.getNamespace("prefx", test);
-		assertEquals("invalid namespace prefix", "prefx", ns.getPrefix());
-		assertEquals("invalid namespace URI", "http://some.other.place", ns.getURI());
-
-	}
 
 	/**
 	 * Test the object comparison method.
