@@ -61,195 +61,195 @@ import java.io.IOException;
  */
 class ClassGenerator {
 
-	/** Constructor prefix 'TestCaseConstructor' */
-	private static String ctorPrefix   = "TTC_";
+    /** Constructor prefix 'TestCaseConstructor' */
+    private static String ctorPrefix   = "TTC_";
 
-	/** Method prefix 'TestCaseMethod' */
-	private static String methodPrefix = "TTM_";
+    /** Method prefix 'TestCaseMethod' */
+    private static String methodPrefix = "TTM_";
 
-	/** File object pointing to the directory in which to place the files */
-	private File path;
+    /** File object pointing to the directory in which to place the files */
+    private File path;
 
-	/** The package name of the class */
-	private String packageName;
+    /** The package name of the class */
+    private String packageName;
 
-	/** The name of the class minus the package name */
-	private String className;
+    /** The name of the class minus the package name */
+    private String className;
 
-	/**
-	 * Create a ClassGenerator which will output it's files into 'path'
-	 * and the class name will be denoted as 'className'.
-	 *
-	 * @param path		The location for the output files.
-	 * @param className	The name of the class.
-	 */
-	ClassGenerator(File path, String className, String packageName) {
-		this.path        = path;
-		this.className   = className;
-		this.packageName = packageName;
-	}
+    /**
+     * Create a ClassGenerator which will output it's files into 'path'
+     * and the class name will be denoted as 'className'.
+     *
+     * @param path        The location for the output files.
+     * @param className    The name of the class.
+     */
+    ClassGenerator(File path, String className, String packageName) {
+        this.path        = path;
+        this.className   = className;
+        this.packageName = packageName;
+    }
 
-	/**
-	 * Generate a test case for a method.
-	 *
-	 * @param method	The method for which the test case will be
-	 *                  generated.
-	 */
-	void generate(Method method) throws GeneratorException {
-		StringBuffer buffer = new StringBuffer(methodPrefix);
-		buffer.append(className);
-		String outputClass=NameMangler.getMangledName(method,buffer).toString();
+    /**
+     * Generate a test case for a method.
+     *
+     * @param method    The method for which the test case will be
+     *                  generated.
+     */
+    void generate(Method method) throws GeneratorException {
+        StringBuffer buffer = new StringBuffer(methodPrefix);
+        buffer.append(className);
+        String outputClass=NameMangler.getMangledName(method,buffer).toString();
 
-		// Add the required prefixes.
-		String fileName = buffer.append(".java")
-						  .toString();
-		
-		File f = new File(path, fileName);
-		try {
-			f.createNewFile();
-			writeClass(f, outputClass);
-		} catch( IOException ioe ) {
-			throw new GeneratorException(ioe.getMessage());
-		}
-	}
+        // Add the required prefixes.
+        String fileName = buffer.append(".java")
+                          .toString();
+        
+        File f = new File(path, fileName);
+        try {
+            f.createNewFile();
+            writeClass(f, outputClass);
+        } catch( IOException ioe ) {
+            throw new GeneratorException(ioe.getMessage());
+        }
+    }
 
-	/**
-	 * Generate a test case for a Constructor.
-	 *
-	 * @param constructor	The constructor for which the test case will be
-	 *                      generated.
-	 */
-	void generate(Constructor ctor) throws GeneratorException {
-		StringBuffer buffer = new StringBuffer(ctorPrefix);
-		
-		buffer.append(className);
+    /**
+     * Generate a test case for a Constructor.
+     *
+     * @param constructor    The constructor for which the test case will be
+     *                      generated.
+     */
+    void generate(Constructor ctor) throws GeneratorException {
+        StringBuffer buffer = new StringBuffer(ctorPrefix);
+        
+        buffer.append(className);
 
-		String outputClass = NameMangler.getMangledName(ctor,buffer).toString();
-		
-		String fileName = buffer.append(".java")
-						  .toString();
+        String outputClass = NameMangler.getMangledName(ctor,buffer).toString();
+        
+        String fileName = buffer.append(".java")
+                          .toString();
 
 
-		File f = new File(path, fileName);
-		try {
-			f.createNewFile();
-			writeClass(f, outputClass);
-		} catch( IOException ioe ) {
-			throw new GeneratorException(ioe.getMessage());
-		}
-	}
+        File f = new File(path, fileName);
+        try {
+            f.createNewFile();
+            writeClass(f, outputClass);
+        } catch( IOException ioe ) {
+            throw new GeneratorException(ioe.getMessage());
+        }
+    }
 
-	/**
-	 * 
-	 *
-	 */
-	void writeClass(File f, String outputClass) throws IOException {
-		ClassWriter out = new ClassWriter(f, outputClass, packageName);
-		out.generate();
-		out.close();
-	}
+    /**
+     * 
+     *
+     */
+    void writeClass(File f, String outputClass) throws IOException {
+        ClassWriter out = new ClassWriter(f, outputClass, packageName);
+        out.generate();
+        out.close();
+    }
 
-	private static class ClassWriter extends IndentWriter {
+    private static class ClassWriter extends IndentWriter {
 
-		private String className;
-		private String packageName;
-		
-		ClassWriter(File f, String className, String packageName) 
-		throws IOException 
-		{
-			super(f);
-			this.className = className;
-			this.packageName = packageName;
-		}
+        private String className;
+        private String packageName;
+        
+        ClassWriter(File f, String className, String packageName) 
+        throws IOException 
+        {
+            super(f);
+            this.className = className;
+            this.packageName = packageName;
+        }
 
-		void generate() {
-			packageDef();
+        void generate() {
+            packageDef();
 
-			classDef();
-			writeCtor();
-			writeMethod("setUp");
-			writeMethod("tearDown");
-			writeMethod("test");
-		}
+            classDef();
+            writeCtor();
+            writeMethod("setUp");
+            writeMethod("tearDown");
+            writeMethod("test");
+        }
 
-		private void packageDef() {
-			println("package "+packageName+";");
-			println();
-		}
+        private void packageDef() {
+            println("package "+packageName+";");
+            println();
+        }
 
-		private void classDef() {
-			println(new StringBuffer("public final class ")
-		            .append(className)
-					.toString());
+        private void classDef() {
+            println(new StringBuffer("public final class ")
+                    .append(className)
+                    .toString());
 
-			println("extends junit.framework.TestCase");
-			println("{");
+            println("extends junit.framework.TestCase");
+            println("{");
 
-		}
-		
-		void writeCtor() {
-			incr();
-			println(new StringBuffer("public ")
-		   	            .append(className)
-						.append("() {")
-						.toString() );
-			incr();
-			println("super(\"Test Case\");");
-			decr();
-			println("}");
-			println();
-			reset();
-		}
+        }
+        
+        void writeCtor() {
+            incr();
+            println(new StringBuffer("public ")
+                           .append(className)
+                        .append("() {")
+                        .toString() );
+            incr();
+            println("super(\"Test Case\");");
+            decr();
+            println("}");
+            println();
+            reset();
+        }
 
-		void writeMethod(String name) {
-			incr();
-			println(new StringBuffer("public void ")
-			        .append(name)
-					.append("() {")
-					.toString());
-			println("}");
-			decr();
-			println();
-		}
+        void writeMethod(String name) {
+            incr();
+            println(new StringBuffer("public void ")
+                    .append(name)
+                    .append("() {")
+                    .toString());
+            println("}");
+            decr();
+            println();
+        }
 
-		public void close() {
-			reset();
-			println("}");
-			super.close();
-		}
+        public void close() {
+            reset();
+            println("}");
+            super.close();
+        }
 
-	}
+    }
 
-	private static class IndentWriter extends PrintWriter {
-		int indent;
-		
-		IndentWriter(File f) throws IOException {
-			super(new BufferedWriter(new FileWriter(f)));
-		}
+    private static class IndentWriter extends PrintWriter {
+        int indent;
+        
+        IndentWriter(File f) throws IOException {
+            super(new BufferedWriter(new FileWriter(f)));
+        }
 
-		void incr() {
-			indent++;
-		}
+        void incr() {
+            indent++;
+        }
 
-		void decr() {
-			indent--;
-		}
+        void decr() {
+            indent--;
+        }
 
-		void reset() {
-			indent = 0;
-		}
+        void reset() {
+            indent = 0;
+        }
 
-		public void println(String s) {
-			StringBuffer out = new StringBuffer();
-			if (indent>0) {
-				for(int i=0; i<indent; i++) {
-					out.append("    ");
-				}
-			}
+        public void println(String s) {
+            StringBuffer out = new StringBuffer();
+            if (indent>0) {
+                for(int i=0; i<indent; i++) {
+                    out.append("    ");
+                }
+            }
 
-			out.append(s);
-			super.println(out.toString());
-		}
+            out.append(s);
+            super.println(out.toString());
+        }
 
-	}
+    }
 }

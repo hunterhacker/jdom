@@ -47,99 +47,99 @@ import java.util.Properties;
 /**
  * Main entry point for the test case generation.
  *
- * @author	Jools Enticknap
- * @version	1.00
+ * @author    Jools Enticknap
+ * @version    1.00
  */
 public final class Main {
 
-	/** All the options an a synopsis */
-	private final static String[] options = {
-		"-ui",		// Run the Swing GUI.
-		"-source",	// Specify the source class.
-		"-rootdir",	// Specify the root directory of the jdom-test.
-		"-author",	// Specify the name of the author.
-		"-report"	// Report on how upto date the test case is.
-	};
+    /** All the options an a synopsis */
+    private final static String[] options = {
+        "-ui",        // Run the Swing GUI.
+        "-source",    // Specify the source class.
+        "-rootdir",    // Specify the root directory of the jdom-test.
+        "-author",    // Specify the name of the author.
+        "-report"    // Report on how upto date the test case is.
+    };
 
-	/** Name of the source class */
-	private static String source;
+    /** Name of the source class */
+    private static String source;
 
-	/** Root directory for the source code */
-	private static String rootDir;
+    /** Root directory for the source code */
+    private static String rootDir;
 
-	/** Authors name */
-	private static String author = "unascribed";
+    /** Authors name */
+    private static String author = "unascribed";
 
-	/** Run the GUI */
-	private static boolean ui;
+    /** Run the GUI */
+    private static boolean ui;
 
-	/**
-	 * Main entry point.
-	 *
-	 * @param args	Arguments passed from the command line.
-	 */
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			usage();
-		}
-		
-		// Process the command line arguments.
-		// No rocket science here :-)
-		Properties props = new Properties();
-		for(int i=0; i<args.length; i++) {
-			if (args.equals("-ui")) {
-				ui = true;
-			} else if (args[i].equals("-source")) {
-				source = args[++i];
-				props.setProperty("source", source);
-			} else if (args[i].equals("-rootdir")) {
-				rootDir = args[++i];
-				props.setProperty("rootdir", rootDir);
-			} else if (args[i].equals("-author")) {
-				author = args[++i];
-				props.setProperty("author", source);
-			} else {
-				System.out.println( "unknown argument "+args[i]);
-			}
-		}
-		
-		// Must have a source directory and a root directory.
-		if (source == null || rootDir == null) {
-			usage();
-		}
+    /**
+     * Main entry point.
+     *
+     * @param args    Arguments passed from the command line.
+     */
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            usage();
+        }
+        
+        // Process the command line arguments.
+        // No rocket science here :-)
+        Properties props = new Properties();
+        for(int i=0; i<args.length; i++) {
+            if (args.equals("-ui")) {
+                ui = true;
+            } else if (args[i].equals("-source")) {
+                source = args[++i];
+                props.setProperty("source", source);
+            } else if (args[i].equals("-rootdir")) {
+                rootDir = args[++i];
+                props.setProperty("rootdir", rootDir);
+            } else if (args[i].equals("-author")) {
+                author = args[++i];
+                props.setProperty("author", source);
+            } else {
+                System.out.println( "unknown argument "+args[i]);
+            }
+        }
+        
+        // Must have a source directory and a root directory.
+        if (source == null || rootDir == null) {
+            usage();
+        }
 
-		TestCaseGenerator tcg = new TestCaseGenerator(props);
+        TestCaseGenerator tcg = new TestCaseGenerator(props);
 
-		// Off we go.
-		if (ui) {
-			runUI(props);
-		} else {
-			try {
-				tcg.generate();
-			} catch(GeneratorException ge) {
-				System.out.println(ge.getMessage());
-				ge.printStackTrace();
-			}
-		}
-	}
-	
-	/**
-	 * Run the GUI passing in the command line options.
-	 */
-	private static void runUI(Properties props) {
-	
-	}
-	
-	/**
-	 * Display a usage summary to the user.
-	 */
-	private static void usage() {
-		StringBuffer sb = new StringBuffer();
+        // Off we go.
+        if (ui) {
+            runUI(props);
+        } else {
+            try {
+                tcg.generate();
+            } catch(GeneratorException ge) {
+                System.out.println(ge.getMessage());
+                ge.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Run the GUI passing in the command line options.
+     */
+    private static void runUI(Properties props) {
+    
+    }
+    
+    /**
+     * Display a usage summary to the user.
+     */
+    private static void usage() {
+        StringBuffer sb = new StringBuffer();
 
-		sb.append("JDOM test case generator.");
-		
+        sb.append("JDOM test case generator.");
+        
 
-		System.out.println(sb);
-		System.exit(1);
-	}
+        System.out.println(sb);
+        System.exit(1);
+    }
 }

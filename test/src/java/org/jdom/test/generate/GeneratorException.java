@@ -43,7 +43,7 @@
 package org.jdom.test.generate;
 
 class GeneratorException extends Exception {
-	GeneratorException(String msg) {
-		super(msg);
-	}
+    GeneratorException(String msg) {
+        super(msg);
+    }
 }
