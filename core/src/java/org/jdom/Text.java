@@ -69,7 +69,12 @@ import java.io.Serializable;
  */
 public class Text implements Serializable, Cloneable {
 
-    /** The actual character content */
+    /** The actual character content */ 
+    // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8776
+    // from Alex Rosen for a reason why String might be better
+    // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612
+    // from elharo for a description of why Java characters may not suffice
+    // long term
     protected StringBuffer value;
 
     /** This <code>Text</code> node's parent. */
