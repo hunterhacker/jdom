@@ -70,7 +70,12 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
 /**
- * <p><code>DOMBuilder</code> builds a JDOM tree using DOM.</p>
+ * <p><code>DOMBuilder</code> builds a JDOM tree using DOM.
+ * Note that this class should only be used for building from a pre-existing
+ * DOM tree.  The class can be used to build from files, streams, etc but
+ * other builders like SAXBuilder can perform the task faster because
+ * they don't create a DOM tree first.
+ * </p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
