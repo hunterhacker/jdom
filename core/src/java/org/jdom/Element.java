@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.152 2004/09/03 06:35:39 jhunter Exp $
+ $Id: Element.java,v 1.153 2004/12/11 00:12:04 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.152 $, $Date: 2004/09/03 06:35:39 $
+ * @version $Revision: 1.153 $, $Date: 2004/12/11 00:12:04 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.152 $ $Date: 2004/09/03 06:35:39 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.153 $ $Date: 2004/12/11 00:12:04 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -779,7 +779,7 @@ public class Element extends Content implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Parent setContent(int index, Collection collection) {
+    public Element setContent(int index, Collection collection) {
         content.remove(index);
         content.addAll(index, collection);
         return this;
