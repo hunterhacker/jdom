@@ -747,9 +747,12 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
         Element element = (Element)stack.pop();
         
+        if (stack.empty()) {
+            atRoot = true;
+        }
+
         // Remove the namespaces that this element makes available
         availableNamespaces.remove(element.getAdditionalNamespaces());
-        
     }
 
     /**
