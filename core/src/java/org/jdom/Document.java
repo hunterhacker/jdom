@@ -126,7 +126,8 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return the root <code>Element</code>
-     *   for this <code>Document</code>, or null if there is none.
+     *   for this <code>Document</code>, or throw a NoSuchElementException
+     *   if it hasn't been properly set.
      * </p>
      *
      * @return <code>Element</code> - the document's root element
