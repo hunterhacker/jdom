@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.52 2001/06/16 01:10:01 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.53 2001/06/21 17:06:36 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -74,16 +74,17 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * <p>Known issues: Relative paths for a DocType or EntityRef may be
  * converted by the SAX parser into absolute paths</p>
  *
- * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Brett McLaughlin
  * @author Dan Schaffer
  * @author Philip Nelson
+ * @author Alex Rosen
  * @version 1.0
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.52 $ $Date: 2001/06/16 01:10:01 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.53 $ $Date: 2001/06/21 17:06:36 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -114,7 +115,7 @@ public class SAXBuilder {
     private XMLFilter saxXMLFilter = null;
  
     /** The factory for creating new JDOM objects */
-    private JDOMFactory factory = null;
+    protected JDOMFactory factory = null;
 
     /** Whether to ignore ignorable whitespace */
     private boolean ignoringWhite = false;
@@ -274,190 +275,15 @@ public class SAXBuilder {
         SAXHandler contentHandler = null;
 
         try {
-            XMLReader parser = null;
-            if (saxDriverClass != null) {
-                // The user knows that they want to use a particular class
-                parser = XMLReaderFactory.createXMLReader(saxDriverClass);
-                // System.out.println("using specific " + saxDriverClass);
-            } else {
-                // Try using JAXP...
-                // Note we need JAXP 1.1, and if JAXP 1.0 is all that's
-                // available then the getXMLReader call fails and we skip
-                // to the hard coded default parser
-                try {
-                    Class factoryClass = 
-                        Class.forName("javax.xml.parsers.SAXParserFactory");
+            // Create and configure the content handler.
+            contentHandler = createContentHandler();
+            configureContentHandler(contentHandler);
 
-                    // factory = SAXParserFactory.newInstance();
-                    Method newParserInstance = 
-                        factoryClass.getMethod("newInstance", null);
-                    Object factory = newParserInstance.invoke(null, null);
+            // Create and configure the parser.
+            XMLReader parser = createParser();
+            configureParser(parser, contentHandler);
 
-                    // factory.setValidating(validate);
-                    Method setValidating = 
-                        factoryClass.getMethod("setValidating", 
-                                               new Class[]{boolean.class});
-                    setValidating.invoke(factory, 
-                                         new Object[]{new Boolean(validate)});
-
-                    // jaxpParser = factory.newSAXParser();
-                    Method newSAXParser = 
-                        factoryClass.getMethod("newSAXParser", null);
-                    Object jaxpParser  = newSAXParser.invoke(factory, null);
-
-                    // parser = jaxpParser.getXMLReader();
-                    Class parserClass = jaxpParser.getClass();
-                    Method getXMLReader = 
-                        parserClass.getMethod("getXMLReader", null);
-                    parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
-                    saxDriverClass = parser.getClass().getName();
-
-                    // System.out.println("Using jaxp " +
-                    //   parser.getClass().getName());
-                } catch (ClassNotFoundException e) {
-                    //e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    //e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    //e.printStackTrace();
-                }
-            }
-
-            // Check to see if we got a parser yet, if not, try to use a
-            // hard coded default
-            if (parser == null) {
-                parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
-                // System.out.println("using default " + DEFAULT_SAX_DRIVER);
-                saxDriverClass = parser.getClass().getName();
-            }
-
-            // Install optional filter
-            if (saxXMLFilter != null) {
-                // Connect filter chain to parser
-                XMLFilter root = saxXMLFilter;
-                while (root.getParent() instanceof XMLFilter) {
-                    root = (XMLFilter)root.getParent();
-                }
-                root.setParent(parser);
-
-                // Read from filter
-                parser = saxXMLFilter;
-            }
-
-            contentHandler = new SAXHandler(factory);
-
-            // Pass through behavior
-            contentHandler.setExpandEntities(expand);
-            contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
-
-            parser.setContentHandler(contentHandler);
-
-            if (saxEntityResolver != null) {
-                parser.setEntityResolver(saxEntityResolver);
-            }
-
-            if (saxDTDHandler != null) {
-                parser.setDTDHandler(saxDTDHandler);
-            }
-
-            boolean lexicalReporting = false;
-            try {
-                parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
-                                   contentHandler);
-                lexicalReporting = true;
-            } catch (SAXNotSupportedException e) {
-                // No lexical reporting available
-            } catch (SAXNotRecognizedException e) {
-                // No lexical reporting available
-            }
-
-            // Some parsers use alternate property for lexical handling (grr...)
-            if (!lexicalReporting) {
-                try {
-                    parser.setProperty(
-                        "http://xml.org/sax/properties/lexical-handler",
-                        contentHandler);
-                    lexicalReporting = true;
-                } catch (SAXNotSupportedException e) {
-                    // No lexical reporting available
-                } catch (SAXNotRecognizedException e) {
-                    // No lexical reporting available
-                }
-            }
-
-            // Try setting the DeclHandler if entity expansion is off
-            if (!expand) {
-                try {
-                    parser.setProperty(
-                        "http://xml.org/sax/properties/declaration-handler",
-                        contentHandler);
-                } catch (SAXNotSupportedException e) {
-                    // No lexical reporting available
-                } catch (SAXNotRecognizedException e) {
-                    // No lexical reporting available
-                }
-            }
-
-            // Set validation
-            try {
-                parser.setFeature(
-                    "http://xml.org/sax/features/validation", validate);
-                parser.setFeature(
-                    "http://xml.org/sax/features/namespaces", true);
-                parser.setFeature(
-                    "http://xml.org/sax/features/namespace-prefixes", false);
-                if (saxErrorHandler != null) {
-                     parser.setErrorHandler(saxErrorHandler);
-                } else {
-                     parser.setErrorHandler(new BuilderErrorHandler());
-                }
-            }
-            catch (SAXNotRecognizedException e) {
-                // No validation available
-                if (validate) {
-                    throw new JDOMException(
-                        "Validation feature not recognized by " + 
-                        saxDriverClass);
-                }
-            }
-            catch (SAXNotSupportedException e) {
-                // No validation available
-                if (validate) {
-                    throw new JDOMException(
-                        "Validation not supported by " + saxDriverClass);
-                }
-            }
-
-            // Set entity expansion
-            // Note SAXHandler can work regardless of how this is set, but when
-            // entity expansion it's worth it to try to tell the parser not to
-            // even bother with external general entities.
-            // Apparently no parsers yet support this feature.
-            // XXX It might make sense to setEntityResolver() with a resolver
-            // that simply ignores external general entities
-            try {
-                if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
-                    parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
-                }
-
-            }
-            catch (SAXNotRecognizedException e) {
-            /*
-                // No entity expansion available
-                throw new JDOMException(
-                  "Entity expansion feature not recognized by " + 
-                  saxDriverClass);
-            */
-            }
-            catch (SAXNotSupportedException e) {
-            /*
-                // No entity expansion available
-                throw new JDOMException(
-                  "Entity expansion feature not supported by " +
-                  saxDriverClass);
-            */
-            }
-            
+            // Parse the document.
             parser.parse(in);
 
             return contentHandler.getDocument();
@@ -474,6 +300,8 @@ public class SAXBuilder {
                     throw new JDOMException("Error on line " +
                               p.getLineNumber(), e);
                 }
+            } else if (e instanceof JDOMException) {
+                throw (JDOMException)e;
             } else {
                 throw new JDOMException("Error in building", e);
             }
@@ -483,6 +311,261 @@ public class SAXBuilder {
             // It's a stack var so this shouldn't be necessary, but it
             // seems to help on some JVMs
             contentHandler = null;
+        }
+    }
+
+    /**
+     * <p>
+     * This creates the SAXHandler that will be used to build the Document.
+     * </p>
+     */
+    protected SAXHandler createContentHandler() throws Exception {
+        SAXHandler contentHandler = new SAXHandler(factory);
+        return contentHandler;
+    }
+
+    /**
+     * <p>
+     * This configures the SAXHandler that will be used to build the Document.
+     * </p>
+     * <p>
+     * The default implementation simply passes through some configuration
+     * settings that were set on the SAXBuilder: setExpandEntities() and
+     * setIgnoringElementContentWhitespace().
+     * </p>
+     */
+    protected void configureContentHandler(SAXHandler contentHandler) 
+                    throws Exception {
+        // Setup pass through behavior
+        contentHandler.setExpandEntities(expand);
+        contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
+    }
+
+    /**
+     * <p>
+     * This creates the XMLReader to be used for reading the XML document.
+     * </p>
+     * <p>
+     * The default behavior is to (1) use the saxDriverClass, if it has been
+     * set, (2) try to obtain a parser from JAXP, if it is available, and 
+     * (3) if all else fails, use a hard-coded default parser (currently
+     * the Xerces parser). Subclasses may override this method to determine
+     * the parser to use in a different way.
+     * </p>
+     */
+    protected XMLReader createParser() throws Exception {
+        XMLReader parser = null;
+        if (saxDriverClass != null) {
+            // The user knows that they want to use a particular class
+            parser = XMLReaderFactory.createXMLReader(saxDriverClass);
+            // System.out.println("using specific " + saxDriverClass);
+        } else {
+            // Try using JAXP...
+            // Note we need JAXP 1.1, and if JAXP 1.0 is all that's
+            // available then the getXMLReader call fails and we skip
+            // to the hard coded default parser
+            try {
+                Class factoryClass = 
+                    Class.forName("javax.xml.parsers.SAXParserFactory");
+
+                // factory = SAXParserFactory.newInstance();
+                Method newParserInstance = 
+                    factoryClass.getMethod("newInstance", null);
+                Object factory = newParserInstance.invoke(null, null);
+
+                // factory.setValidating(validate);
+                Method setValidating = 
+                    factoryClass.getMethod("setValidating", 
+                                           new Class[]{boolean.class});
+                setValidating.invoke(factory, 
+                                     new Object[]{new Boolean(validate)});
+
+                // jaxpParser = factory.newSAXParser();
+                Method newSAXParser = 
+                    factoryClass.getMethod("newSAXParser", null);
+                Object jaxpParser  = newSAXParser.invoke(factory, null);
+
+                // parser = jaxpParser.getXMLReader();
+                Class parserClass = jaxpParser.getClass();
+                Method getXMLReader = 
+                    parserClass.getMethod("getXMLReader", null);
+                parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
+                saxDriverClass = parser.getClass().getName();
+
+                // System.out.println("Using jaxp " +
+                //   parser.getClass().getName());
+            } catch (ClassNotFoundException e) {
+                //e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                //e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                //e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                //e.printStackTrace();
+            }
+        }
+
+        // Check to see if we got a parser yet, if not, try to use a
+        // hard coded default
+        if (parser == null) {
+            parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
+            // System.out.println("using default " + DEFAULT_SAX_DRIVER);
+            saxDriverClass = parser.getClass().getName();
+        }
+
+        return parser;
+    }
+
+    /**
+     * <p>
+     * This configures the XMLReader to be used for reading the XML document.
+     * </p>
+     * <p>
+     * The default implementation will set various options on the returned XMLReader,
+     * and that those options may change in future releases. It will set the
+     * validation flag, the XMLFilter, the DTD resolver, and the entity handler
+     * according to the options that were set (e.g. via setEntityResolver),
+     * and it will set various SAX properties and features that it needs set
+     * in order to work correctly. Change this behavior at your own risk.
+     * </p>
+     */
+    protected void configureParser(XMLReader parser, SAXHandler contentHandler)
+                    throws Exception {
+
+        // Install optional filter
+        if (saxXMLFilter != null) {
+            // Connect filter chain to parser
+            XMLFilter root = saxXMLFilter;
+            while (root.getParent() instanceof XMLFilter) {
+                root = (XMLFilter)root.getParent();
+            }
+            root.setParent(parser);
+
+            // Read from filter
+            parser = saxXMLFilter;
+        }
+
+        // Setup SAX handlers.
+
+        parser.setContentHandler(contentHandler);
+
+        if (saxEntityResolver != null) {
+            parser.setEntityResolver(saxEntityResolver);
+        }
+
+        if (saxDTDHandler != null) {
+            parser.setDTDHandler(saxDTDHandler);
+        }
+
+        if (saxErrorHandler != null) {
+             parser.setErrorHandler(saxErrorHandler);
+        } else {
+             parser.setErrorHandler(new BuilderErrorHandler());
+        }
+
+        // Setup lexical reporting.
+        boolean lexicalReporting = false;
+        try {
+            parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
+                               contentHandler);
+            lexicalReporting = true;
+        } catch (SAXNotSupportedException e) {
+            // No lexical reporting available
+        } catch (SAXNotRecognizedException e) {
+            // No lexical reporting available
+        }
+
+        // Some parsers use alternate property for lexical handling (grr...)
+        if (!lexicalReporting) {
+            try {
+                parser.setProperty(
+                    "http://xml.org/sax/properties/lexical-handler",
+                    contentHandler);
+                lexicalReporting = true;
+            } catch (SAXNotSupportedException e) {
+                // No lexical reporting available
+            } catch (SAXNotRecognizedException e) {
+                // No lexical reporting available
+            }
+        }
+
+        // Try setting the DeclHandler if entity expansion is off
+        if (!expand) {
+            try {
+                parser.setProperty(
+                    "http://xml.org/sax/properties/declaration-handler",
+                    contentHandler);
+            } catch (SAXNotSupportedException e) {
+                // No lexical reporting available
+            } catch (SAXNotRecognizedException e) {
+                // No lexical reporting available
+            }
+        }
+
+        // Set validation.
+        try {
+            internalSetFeature(parser, "http://xml.org/sax/features/validation", 
+                    validate, "Validation");
+        } catch (JDOMException e) {
+            // If validation is not supported, and the user is requesting
+            // that we don't validate, that's fine - don't throw an exception.
+            if (validate)
+                throw e;
+        }
+
+        // Setup some namespace features.
+        internalSetFeature(parser, "http://xml.org/sax/features/namespaces", 
+                true, "Namespaces");
+        internalSetFeature(parser, "http://xml.org/sax/features/namespace-prefixes", 
+                false, "Namespace prefixes");
+
+        // Set entity expansion
+        // Note SAXHandler can work regardless of how this is set, but when
+        // entity expansion it's worth it to try to tell the parser not to
+        // even bother with external general entities.
+        // Apparently no parsers yet support this feature.
+        // XXX It might make sense to setEntityResolver() with a resolver
+        // that simply ignores external general entities
+        try {
+            if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) { 
+                parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
+            }
+
+        }
+        catch (SAXNotRecognizedException e) {
+        /*
+            // No entity expansion available
+            throw new JDOMException(
+              "Entity expansion feature not recognized by " + 
+              saxDriverClass);
+        */
+        }
+        catch (SAXNotSupportedException e) {
+        /*
+            // No entity expansion available
+            throw new JDOMException(
+              "Entity expansion feature not supported by " +
+              saxDriverClass);
+        */
+        }
+    }
+
+    /**
+     * <p>
+     * Tries to set a feature on the parser. If the feature cannot be set,
+     * throws a JDOMException describing the problem.
+     * </p>
+     */
+    private void internalSetFeature(XMLReader parser, String feature, 
+                    boolean value, String displayName) throws JDOMException {
+        try {
+            parser.setFeature(feature, value);
+        } catch (SAXNotSupportedException e) {
+            throw new JDOMException(
+                displayName + " not supported for SAX driver " + saxDriverClass);
+        } catch (SAXNotRecognizedException e) {
+            throw new JDOMException(
+                displayName + " feature not recognized for SAX driver" + saxDriverClass);
         }
     }
 
