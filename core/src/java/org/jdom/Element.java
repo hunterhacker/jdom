@@ -1079,17 +1079,20 @@ public class Element implements Serializable, Cloneable {
      * @return whether deletion occurred
      */
     public boolean removeChildren() {
+        boolean deletedSome = false;
         if (content != null) {
             Iterator i = content.iterator();
             while (i.hasNext()) {
                 Object obj = i.next();
                 if (obj instanceof Element) {
+                    Element element = (Element)obj;
                     i.remove();
+                    element.setParent(null);
+                    deletedSome = true;
                 }
             }
         }
-
-        return true;
+        return deletedSome;
     }
 
     /**
