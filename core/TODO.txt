@@ -37,8 +37,6 @@ Items that need to be done:
 
 * Add better handling of bogus undeclared prefixes like <bogus:foo/>
 
-* Check in the CDATA class (coding being done by Dan.Schaffer@time0.com)
-
 * Writer XMLOutputter.serialize(doc/elem/comment/doctype/entity/pi/attrib)
   Have these methods replace getSerializedForm().  Going this way allows
   tweaks to the XMLOutputter behavior before serialization.
