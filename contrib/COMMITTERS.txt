@@ -11,6 +11,6 @@ Elliotte Rusty Harold <elharo@metalab.unc.edu>
 Michael Hinchey <michael.hinchey@inference.com>
 Jason Hunter <jhunter@jdom.org>
 Brett McLaughlin <brett@jdom.org>
-Bob Werken <bob@werken.com>
+Bob McWhirter <bob@werken.com>
 Wolfgang Werner <wwerner@picturesafe.de>
 
