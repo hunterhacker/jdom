@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.35 2003/04/02 00:23:59 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.36 2003/04/02 04:17:03 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -27,6 +27,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
     <property name="src.dir" value="./src/java"/>
     <property name="samples.dir" value="./samples"/>
+    <property name="samples.dest" value="./build/samples"/>
     <property name="lib.dir" value="./lib"/>
     <property name="packages" value="org.jdom.*"/>
 
@@ -145,10 +146,10 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <target name="prepare-samples" depends="prepare">
     <!-- create directories -->
-    <mkdir dir="${build.dest}/samples"/>
+    <mkdir dir="${samples.dest}"/>
 
     <!-- copy src files -->
-    <copy todir="${build.dest}/samples"
+    <copy todir="${samples.dest}"
           filtering="yes">
           <fileset dir="${samples.dir}"/>
     </copy>
@@ -180,8 +181,8 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- Compiles the samples directory                                      -->
   <!-- =================================================================== -->
   <target name="samples" depends="prepare-samples,collections">
-    <javac srcdir="${build.dest}/samples"
-           destdir="${build.dest}/samples"
+    <javac srcdir="${samples.dest}"
+           destdir="${samples.dest}"
            debug="${debug}"
            optimize="${optimize}"/>
   </target>

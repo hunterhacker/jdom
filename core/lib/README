@@ -4,31 +4,52 @@ accompanying the JARs.  Note that the build scripts (build*) take
 care of adding the proper JARs to the path for building.  However
 you need to set your classpath properly for runtime execution.
 
+
+Short summary:
+
+JDK 1.4 includes XML parser and transformation classes, so if you're using JDK
+1.4+ you don't really need to worry about most of the JARs in this directory.
+However, you might want to add xerces.jar to your classpath so JDOM will use
+Xerces 2.4.0 instead of the Crimson 1.1 which comes with the JDK.  You can
+also add xalan.jar to your classpath to use Xalan 2.5_D1 instead of the older
+Xalan that comes with the JDK.
+
+For JDK 1.3 and earlier users, just add xerces.jar, xml-apis.jar, and
+xalan.jar to your classpath, or any other JAXP-compliant parser along with the
+JAXP library.
+
+All users should add jaxen-core.jar, jaxen-jdom.jar, and saxpath.jar to their
+classpath to use the XPath features in JDOM.
+
+
+Full explanation:
+
 ant.jar
-  Used for building JDOM.
+  Used for building JDOM.  The build scripts include it automatically.
+  Don't include it in your runtime path.
 
 collections.jar
-  Needed only if building JDOM on JDK 1.1.  Not needed for JDK 1.2.  Do not
-  put this in your classpath if you're using JDK 1.2 or later.
+  Needed only if building JDOM on JDK 1.1.  Not needed for J2SE 1.2.  Do not
+  put this in your classpath if you're using J2SE 1.2 or later.
 
 xerces.jar
-  An XML parser you can use with JDOM.  It's very popular but doesn't have 
-  JAXP 1.1 support and it has a large JAR footprint.  Use this parser if you 
-  don't care about XSLT transforms.  It's the default if no other parsers 
-  are in your classpath.
+  An XML parser you can use with JDOM.  It's very popular and supports JAXP.
+  Place this JAR at the head of your classpath and it'll be used.
 
-crimson.jar
-  Another XML parser you can use with JDOM.  It has JAXP 1.1 support and a 
-  relatively small JAR.  Use this parser if you're doing transforms or want
-  a small footprint.  It's the default JAXP parser, so JDOM will use Crimson
-  if you have jaxp.jar and this JAR in your classpath.
-
-jaxp.jar
-  The Java API for XML Processing containing javax.xml.* classes.  Put this 
-  in your classpath if you're doing XSLT transforms.
+xml-apis.jar
+  A support JAR for Xerces holding the DOM and SAX classes.  It's included
+  with J2SE 1.4+.  Include this JAR if using Xerces on older J2SE versions.
 
 xalan.jar
-  An XSLT processor.  Put this in your classpath if you're doing transforms.
+  An XSLT processor.  Included in J2SE 1.4+.  Put this in your classpath if 
+  you're doing transforms on older J2SE versions.
+
+jaxen-core.jar
+jaxen-jdom.jar
+saxpath.jar
+  These JARs support the XPath feature of JDOM.  Put these in your classpath
+  if you're using XPath.
+
 
 --
 
