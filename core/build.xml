@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.30 2002/03/12 07:25:39 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.31 2002/03/29 01:25:52 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -113,6 +113,8 @@ For instructions on how to build JDOM, please view the README.txt file.
              token="java.util.List" value="${coll.import}.List"/>
     <replace dir="${build.src}" includes="**"
              token="java.util.LinkedList" value="${coll.import}.LinkedList"/>
+    <replace dir="${build.src}" includes="**"
+             token="java.util.AbstractList" value="${coll.import}.AbstractList"/>
     <replace dir="${build.src}" includes="**"
              token="java.util.Set" value="${coll.import}.Set"/>
     <replace dir="${build.src}" includes="**"

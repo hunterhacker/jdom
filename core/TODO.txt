@@ -2,6 +2,8 @@ Items that need to be done:
 
 --- AFTER BETA 8 ---
 
+* Add methods to recursively get content and get filtered content.
+
 * Look into hasContent() and hasAttributes() methods to eliminate need to
   create lists during output.
 
@@ -24,7 +26,7 @@ Items that need to be done:
    * In cdata.xml we're getting entity callbacks for chars inside CDATA
      sections (bug 6316 in Xerces' Bugzilla)
    * In web.xml we're seeing the comments from the external DTD appear in our
-     document (bug 6317 in Xerces' Bugzilla)
+     document (bug 6317 in Xerces' Bugzilla, fixed 13 Mar)
 
 * Look at where Namespace may need to be synchronized or made no longer a
   flyweight.  See
