@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.14 2001/04/27 18:21:19 jhunter Exp $
+ $Id: DocType.java,v 1.15 2001/09/03 14:15:28 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import java.io.Serializable;
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.14 $ $Date: 2001/04/27 18:21:19 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.15 $ $Date: 2001/09/03 14:15:28 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
@@ -83,6 +83,9 @@ public class DocType implements Serializable, Cloneable {
 
     /** The document having this DOCTYPE */
     protected Document document;
+
+    /** The internal subset of the DOCTYPE */
+    protected String internalSubset;
 
     /**
      * <p>
@@ -238,6 +241,25 @@ public class DocType implements Serializable, Cloneable {
     protected DocType setDocument(Document document) {
         this.document = document;
         return this;
+    }
+
+    /**
+     * <p>This sets the data for the internal subset.</p>
+     * 
+     * @param newData data for the internal subset, as a 
+     *        <code>String</code>.
+     */
+    public void setInternalSubset(String newData) {
+        internalSubset = newData;
+    }
+
+    /**
+     * <p>This returns the data for the internal subset</p>
+     * 
+     * @return <code>String</code> - the internal subset
+     */
+    public String getInternalSubset() {
+        return internalSubset;
     }
 
     /**
