@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.29 2002/04/28 02:59:07 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.30 2002/04/28 03:41:49 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,13 +71,13 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version $Revision: 1.29 $, $Date: 2002/04/28 02:59:07 $
+ * @version $Revision: 1.30 $, $Date: 2002/04/28 03:41:49 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.29 $ $Date: 2002/04/28 02:59:07 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.30 $ $Date: 2002/04/28 03:41:49 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -398,7 +398,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         // now be handled correctly:
         //   <?pi href="http://hi/a=b"?>        Reads OK
         //   <?pi href = 'http://hi/a=b' ?>     Reads OK
-        //   <?pi href\t = \t'http://hi/a-b'?>  Reads OK
+        //   <?pi href\t = \t'http://hi/a=b'?>  Reads OK
+        //   <?pi href  =  "http://hi/a=b"?>    Reads OK
         //   <?pi?>                             Empty Map
         //   <?pi id=22?>                       Empty Map
         //   <?pi id='22?>                      Empty Map
@@ -424,13 +425,17 @@ public class ProcessingInstruction implements Serializable, Cloneable {
                 char currentChar = inputData.charAt(pos);
                 if (currentChar == '=') {
                     name = inputData.substring(startName, pos).trim();
-                    value = extractQuotedString(
-                                     inputData.substring(pos+1).trim());
+                    // Get the boundaries on the quoted string
+                    // We use boundaries so we know where to start next
+                    int[] bounds = extractQuotedString(
+                                     inputData.substring(pos+1));
                     // A null value means a parse error and we return empty!
-                    if (value == null) {
+                    if (bounds == null) {
                         return new HashMap();
                     }
-                    pos += value.length() + 1;  // skip over equals and value
+                    value = inputData.substring(bounds[0]+pos+1,
+                                                bounds[1]+pos+1);
+                    pos += bounds[1] + 1;  // skip past value
                     break;
                 }
                 else if (Character.isWhitespace(previousChar)
@@ -478,7 +483,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         returned.
      * @see parseData
      */
-    private String extractQuotedString(String rawData) {
+    private int[] extractQuotedString(String rawData) {
         // Remembers whether we're actually in a quoted string yet
         boolean inQuotes = false;
 
@@ -503,15 +508,13 @@ public class ProcessingInstruction implements Serializable, Cloneable {
                 else if (quoteChar == currentChar) {
                     // We're leaving a quoted string
                     inQuotes = false;
-                    return rawData.substring(start, pos);
+                    return new int[] { start, pos };
                 }
                 // Otherwise we've encountered a quote
                 // inside a quote, so just continue
             }
         }
 
-        // Should we throw an exception if no quoted string was found,
-        // or simply return an empty string???
         return null;
     }
     
