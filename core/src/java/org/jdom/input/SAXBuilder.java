@@ -80,7 +80,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Jason Hunter
  * @version 1.0
  */
-public class SAXBuilder {
+public class SAXBuilder implements Builder {
 
     /** Default parser class to use */
     private static final String DEFAULT_SAX_DRIVER =
