@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.7 2002/03/15 05:29:37 jhunter Exp $
+ $Id: AttributeList.java,v 1.8 2002/03/20 10:07:54 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.7 $, $Date: 2002/03/15 05:29:37 $
+ * @version $Revision: 1.8 $, $Date: 2002/03/20 10:07:54 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -82,7 +82,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.7 $ $Date: 2002/03/15 05:29:37 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.8 $ $Date: 2002/03/20 10:07:54 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 3;
 
@@ -116,12 +116,23 @@ class AttributeList extends AbstractList
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
     public boolean add(Object obj) {
-        int duplicate = indexOfDuplicate(obj);
-        if (duplicate < 0) {
-            add(size(), obj);
+        if (obj instanceof Attribute) {
+            Attribute attribute = (Attribute) obj;
+            int duplicate = indexOfDuplicate(attribute);
+            if (duplicate < 0) {
+                add(size(), attribute);
+            }
+            else {
+                set(duplicate, attribute);
+            }
+        }
+        else if (obj == null) {
+            throw new IllegalAddException("Cannot add null attribute");
         }
         else {
-            set(duplicate, obj);
+            throw new IllegalAddException("Class " +
+                                          obj.getClass().getName() + 
+                                          " is not an attribute");
         }
         return true;
     }
@@ -139,17 +150,20 @@ class AttributeList extends AbstractList
      */
     public void add(int index, Object obj) {
         if (obj instanceof Attribute) {
-            add(index, (Attribute) obj);
+            Attribute attribute = (Attribute) obj;
+            int duplicate = indexOfDuplicate(attribute);
+            if (duplicate >= 0) {
+                throw new IllegalAddException("Cannot add duplicate attribute");
+            }
+            add(index, attribute);
+        }
+        else if (obj == null) {
+            throw new IllegalAddException("Cannot add null attribute");
         }
         else {
-            if (obj == null) {
-                throw new IllegalAddException("Cannot add null attribute");
-            }
-            else {
-                throw new IllegalAddException("Class " +
-                                              obj.getClass().getName() + 
-                                              " is not an attribute");
-            }
+            throw new IllegalAddException("Class " +
+                                          obj.getClass().getName() + 
+                                          " is not an attribute");
         }
         modCount++;
     }
@@ -157,17 +171,14 @@ class AttributeList extends AbstractList
     /**
      * <p>
      * Check and add the <code>Attribute</code> to this list at
-     * the given index.
+     * the given index. Note: does not check for duplicate
+     * attributes.
      * </p>
      *
      * @param index index where to add <code>Attribute</code>
      * @param attribute <code>Attribute</code> to add
      */
     protected void add(int index, Attribute attribute) {
-        if (attribute == null) {
-            throw new IllegalAddException("Cannot add null attribute");
-        }
-
         if (attribute.getParent() != null) {
             throw new IllegalAddException(
                           "The attribute already has an existing parent \"" +
@@ -189,14 +200,7 @@ class AttributeList extends AbstractList
             }
         }
 
-        int duplicate = indexOfDuplicate(attribute);
-        if (duplicate < 0) {
-            list.add(index, attribute);
-        }
-        else {
-            throw new IllegalAddException("Cannot add duplicate attribute");
-        }
-
+        list.add(index, attribute);
         attribute.setParent(parent);
     }
 
@@ -264,7 +268,8 @@ class AttributeList extends AbstractList
     public void clear() {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                removeParent(list.get(i));
+                Attribute attribute = (Attribute) list.get(i);
+                attribute.setParent(null);
             }
             list = null;
         }
@@ -297,7 +302,8 @@ class AttributeList extends AbstractList
 
         if (old != null) {
             for (int i = 0; i < old.size(); i++) {
-                removeParent(old.get(i));
+                Attribute attribute = (Attribute) old.get(i);
+                attribute.setParent(null);
             }
         }
     }
@@ -386,8 +392,8 @@ class AttributeList extends AbstractList
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
 
-        Object old = list.get(index);
-        removeParent(old);
+        Attribute old = (Attribute) list.get(index);
+        old.setParent(null);
         modCount++;
         list.remove(index);
         return old;
@@ -412,12 +418,6 @@ class AttributeList extends AbstractList
         return true;
     }
 
-    /** Remove the parent of a Attribute */
-    private void removeParent(Object obj) {
-        Attribute attribute = (Attribute) obj;
-        attribute.setParent(null);
-    }
-
     /**
      * <p>
      * Set the object at the specified location to the supplied
@@ -430,24 +430,55 @@ class AttributeList extends AbstractList
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
     public Object set(int index, Object obj) {
+        if (obj instanceof Attribute) {
+            Attribute attribute = (Attribute) obj;
+            int duplicate = indexOfDuplicate(attribute);
+            if ((duplicate >= 0) && (duplicate != index)) {
+                throw new IllegalAddException("Cannot set duplicate attribute");
+            }
+            return set(index, attribute);
+        }
+        else if (obj == null) {
+            throw new IllegalAddException("Cannot add null attribute");
+        }
+        else {
+            throw new IllegalAddException("Class " +
+                                          obj.getClass().getName() + 
+                                          " is not an attribute");
+        }
+    }
+
+    /**
+     * <p>
+     * Set the object at the specified location to the supplied
+     * object. Note: does not check for duplicate attributes.
+     * </p>
+     *
+     * @param index The location to set the value to.
+     * @param obj The location to set the value to.
+     * @return The object which was replaced.
+     * throws IndexOutOfBoundsException if index < 0 || index >= size()
+     */
+    protected Object set(int index, Attribute attribute) {
         if (list == null)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
-        int duplicate = indexOfDuplicate(obj);
-        if ((duplicate >= 0) && (duplicate != index)) {
-            throw new IllegalAddException("Cannot set duplicate attribute");
+        if (attribute.getParent() != null) {
+            throw new IllegalAddException(
+                          "The attribute already has an existing parent \"" +
+                          attribute.getParent().getQualifiedName() + "\"");
         }
 
-        Object old = remove(index);
-        try {
-            add(index, obj);
-        }
-        catch (RuntimeException exception) {
-            add(index, old);
-            throw exception;
+        String reason = Verifier.checkNamespaceCollision(attribute, parent);
+        if (reason != null) {
+            throw new IllegalAddException(parent, attribute, reason);
         }
 
+        Attribute old = (Attribute) list.get(index);
+        old.setParent(null);
+
+        list.set(index, attribute);
         return old;
     }
 
@@ -455,14 +486,11 @@ class AttributeList extends AbstractList
      * Return index of attribute with same name and Namespace, or
      * -1 if one doesn't exist
      */
-    private int indexOfDuplicate(Object obj) {
+    private int indexOfDuplicate(Attribute attribute) {
         int duplicate = -1;
-        if (obj instanceof Attribute) {
-            Attribute attribute = (Attribute) obj;
-            String name = attribute.getName();
-            Namespace namespace = attribute.getNamespace();
-            duplicate = indexOf(name, namespace);
-        }
+        String name = attribute.getName();
+        Namespace namespace = attribute.getNamespace();
+        duplicate = indexOf(name, namespace);
         return duplicate;
     }
 
