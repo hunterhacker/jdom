@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.23 2002/05/15 04:42:47 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.24 2002/06/26 04:17:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -103,12 +103,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.23 $, $Date: 2002/05/15 04:42:47 $
+ * @version $Revision: 1.24 $, $Date: 2002/06/26 04:17:00 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.23 $ $Date: 2002/05/15 04:42:47 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.24 $ $Date: 2002/06/26 04:17:00 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -603,10 +603,6 @@ public class SAXOutputter {
                 // contentHandler.processingInstruction()
                 processingInstruction((ProcessingInstruction) obj);
             }
-            else if (obj instanceof CDATA) {
-                // contentHandler.characters()
-                characters(((CDATA) obj).getText());
-            }
             else if (obj instanceof Comment) {
                 // lexicalHandler.comment()
                 comment(((Comment)obj).getText()); 
@@ -979,6 +975,10 @@ public class SAXOutputter {
                 else if (content instanceof ProcessingInstruction) {
                     // contentHandler.processingInstruction()
                     processingInstruction((ProcessingInstruction) content);
+                }
+                else if (content instanceof Comment) {
+                    // lexicalHandler.comment()
+                    comment(((Comment) content).getText()); 
                 }
             }
         }
