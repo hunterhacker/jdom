@@ -124,6 +124,9 @@ public final class Verifier {
      */
     public static final String checkNamespacePrefix(String prefix) {
         // Manually do rules, since URIs can be null or empty
+        if ((prefix == null) || (prefix.equals(""))) {
+          return null;
+        }
 
         // Cannot start with a number
         char first = prefix.charAt(0);
@@ -171,6 +174,9 @@ public final class Verifier {
      */
     public static final String checkNamespaceURI(String uri) {
         // Manually do rules, since URIs can be null or empty
+        if ((uri == null) || (uri.equals(""))) {
+            return null;
+        }
 
         // Cannot start with a number
         char first = uri.charAt(0);

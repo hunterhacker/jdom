@@ -545,15 +545,11 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                     prefix = name.substring(0, attSplit);
                     name = name.substring(attSplit + 1);
                 }
-        System.out.println("B2");
-        System.out.println(name + prefix + getNamespaceURI(prefix) + atts.getValue(i));
-                element.addAttribute(new Attribute(name, atts.getValue(i)));
-                /*
+                element.addAttribute(
                     new Attribute(name,
                                   prefix,
                                   getNamespaceURI(prefix),
-                                  atts.getValue(i)));*/
-        System.out.println("B3");
+                                  atts.getValue(i)));
             }
         }
 

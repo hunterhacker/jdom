@@ -234,7 +234,7 @@ public class XMLOutputter {
                     // 0 is indentation
                     printElement(doc.getRootElement(), writer, 0);
                 } else if (obj instanceof Comment) {
-                    writer.print("<!--" + obj.toString() + "-->");
+                    writer.print(((Comment)obj).getSerializedForm());
                 }
             }
         } catch (NoSuchElementException e) {
@@ -390,33 +390,24 @@ public class XMLOutputter {
             for (int i=0, size=mixedContent.size(); i<size; i++) {
                 content = mixedContent.get(i);
                 // See if text or an element
-                if (content instanceof String) {
+                if (content instanceof Comment) {
+                    maybePrintln(out);
+                    indent(out, indentLevel + 1);  // one extra
+                    out.print(((Comment)content).getSerializedForm());
+                } else if (content instanceof String) {
                     /*
                      * XXX: We handle the 5 XML 1.0 entities
                      *   but what about CDATA? (brett)
                      */
                     out.print(escapeElementEntities(content.toString()));
-                } else if (content instanceof Comment) {
-                    maybePrintln(out);
-                    indent(out, indentLevel + 1);  // one extra
-                    out.print(((Comment)content).getSerializedForm());
                 } else if (content instanceof Element) {
                     printElement((Element)content, out, indentLevel + 1);
-                    //maybePrintln(out);
                 } else if (content instanceof Entity) {
-                    out.print("&");
                     out.print(((Entity)content).getSerializedForm());
-                    out.print(";");
                 } else if (content instanceof ProcessingInstruction) {
                     maybePrintln(out);
                     indent(out, indentLevel + 1);
-                    ProcessingInstruction pi =
-                        (ProcessingInstruction)content;
-                    out.print("<?");
-                    out.print(pi.getTarget());
-                    out.print(" ");
-                    out.print(pi.getData());
-                    out.print("?>");
+                    out.print(((ProcessingInstruction)content).getSerializedForm());
                 } // Unsupported types are *not* printed
             }
 
