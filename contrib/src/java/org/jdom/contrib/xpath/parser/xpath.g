@@ -22,13 +22,13 @@ license: BSD/MIT
 header
 {
 	package org.jdom.contrib.xpath.parser;
-	
+
 	import org.jdom.contrib.xpath.XPathExpr;
 	import org.jdom.contrib.xpath.impl.*;
 }
 
 class XPathRecognizer extends Parser;
-	options 
+	options
 	{
 		k = 2;
 		exportVocab=xpath;
@@ -73,8 +73,8 @@ absolute_location_path returns [LocationPath path]
 		(	SLASH^
 		|	DOUBLE_SLASH^
 		)
-		(	(STAR|IDENTIFIER)=> 
-			path=relative_location_path 
+		(	(STAR|IDENTIFIER)=>
+			path=relative_location_path
 		)?
 
 		{
@@ -93,13 +93,13 @@ relative_location_path returns [LocationPath path]
 		Step step = null;
 	}
 	:
-		step=step 
+		step=step
 		{
 			path.addStep(step);
 		}
 		(	(	SLASH^
 			|	DOUBLE_SLASH^
-			) 	step=step 
+			) 	step=step
 				{
 					path.addStep(step);
 				}
@@ -116,13 +116,13 @@ step returns [Step step]
 	:
 		(	nodeTest=abbr_step
 			{
-					step = new Step(nodeTest);
+					step = new Step(null, null, null, nodeTest);
 			}
-		|	
+		|
 			(	(IDENTIFIER|AT)=> axis=axis
-			| 
+			|
 			)
-			(	id:IDENTIFIER 
+			(	id:IDENTIFIER
 				{
 					nodeTest = id.getText();
 				}
@@ -132,14 +132,14 @@ step returns [Step step]
 				}
 			)
 			{
-				step = new Step(axis, nodeTest);
+				step = new Step(axis, null, null, nodeTest);
 			}
-			(	
-				pred=predicate	
+			(
+				pred=predicate
 				{
 					step.addPredicate(pred);
 				}
-			|	function_call 
+			|	function_call
 			|	// default simple case
 			)
 		)
@@ -259,7 +259,7 @@ variable_reference
 
 // ----------------------------------------
 //		Section 3.2
-//			Function Calls	
+//			Function Calls
 // ----------------------------------------
 
 // .... production [16] ....
@@ -305,9 +305,9 @@ union_expr returns [XPathExpr expr]
 		BinaryExpr.Op op = null;
 	}
 	:
-		lhs=path_expr 
+		lhs=path_expr
 		( 	PIPE! 			{ op=BinaryExpr.Op.UNION; }
-			rhs=path_expr 
+			rhs=path_expr
 		)*
 
 		{
@@ -392,7 +392,7 @@ equality_expr returns [XPathExpr expr]
 	:
 		lhs=relational_expr (	(	EQUALS^		{ op = BinaryExpr.Op.EQUAL; }
 								|	NOT_EQUALS^	{ op = BinaryExpr.Op.NOT_EQUAL; }
-								) 
+								)
 								rhs=relational_expr
 							)?
 		{
@@ -417,7 +417,7 @@ relational_expr returns [XPathExpr expr]
 								|	GTE^	{ op = BinaryExpr.Op.GT_EQUAL; }
 								)
 								rhs=additive_expr
-							)?		
+							)?
 		{
 			expr = makeBinaryExpr(op, lhs, rhs);
 		}
@@ -478,9 +478,9 @@ unary_expr returns [XPathExpr expr]
 		expr = null;
 	}
 	:
-			expr=union_expr 
-		|	
-			MINUS expr=unary_expr 
+			expr=union_expr
+		|
+			MINUS expr=unary_expr
 			{
 				expr = new NegativeUnaryExpr(expr);
 			}
