@@ -22,6 +22,7 @@ These are the meaningful targets for this build file:
  - compile -> compiles the contributed source code
  - javadoc -> generates the API documentation in ./build/javadocs
  - clean -> restores the distribution to its original and clean state
+ - test -> runs tests one test class at a time (all test cases starting with "Test")
 
 -->
 
@@ -55,6 +56,7 @@ These are the meaningful targets for this build file:
 
     <property name="test.jarFile" value="./build/jdom-test.jar"/>
     <property name="test.outputDir" value="./testOutput"/>
+    <property name="test.scratchDir" value="./tmp"/>
 	<!-- choose between xml and plain text output for tests -->
     <property name="test.outputFormat" value="xml"/>
 
@@ -107,8 +109,8 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <target name="prepare-tests" depends="init">
     <mkdir dir="${test.outputDir}"/>
+    <mkdir dir="${test.scratchDir}"/>
   </target>
-
 
   <!-- =================================================================== -->
   <!-- Prepares the source code                                            -->
