@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.80 2003/06/14 06:36:26 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.81 2003/06/18 19:23:56 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.80 $, $Date: 2003/06/14 06:36:26 $
+ * @version $Revision: 1.81 $, $Date: 2003/06/18 19:23:56 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.80 $ $Date: 2003/06/14 06:36:26 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.81 $ $Date: 2003/06/18 19:23:56 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -405,11 +405,11 @@ public class SAXBuilder {
      * This builds a document from the supplied
      * input source.
      *
-     * @param in <code>InputSource</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @param in <code>InputSource</code> to read from
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(InputSource in) 
      throws JDOMException, IOException {
@@ -446,7 +446,7 @@ public class SAXBuilder {
                 }
             }
             else {
-                // Reset content handler as SAXHandler instances can not
+                // Reset content handler as SAXHandler instances cannot
                 // be reused
                 configureParser(parser, contentHandler);
             }
@@ -758,9 +758,9 @@ public class SAXBuilder {
      *   input stream.
      * </p>
      *
-     * @param in <code>InputStream</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @param in <code>InputStream</code> to read from
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed.
      */
@@ -775,11 +775,11 @@ public class SAXBuilder {
      *   filename.
      * </p>
      *
-     * @param file <code>File</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @param file <code>File</code> to read from
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(File file) 
         throws JDOMException, IOException {
@@ -799,7 +799,7 @@ public class SAXBuilder {
      *
      * @param url <code>URL</code> to read from.
      * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed.
      */
@@ -817,10 +817,10 @@ public class SAXBuilder {
      *
      * @param in <code>InputStream</code> to read from.
      * @param systemId base for resolving relative URIs
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(InputStream in, String systemId)
         throws JDOMException, IOException {
@@ -838,11 +838,11 @@ public class SAXBuilder {
      *   to use an InputStream rather than a Reader, if it's available.
      * </p>
      *
-     * @param characterStream <code>Reader</code> to read from.
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @param characterStream <code>Reader</code> to read from
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(Reader characterStream) 
         throws JDOMException, IOException {
@@ -859,10 +859,10 @@ public class SAXBuilder {
      *
      * @param characterStream <code>Reader</code> to read from.
      * @param systemId base for resolving relative URIs
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(Reader characterStream, String systemId)
         throws JDOMException, IOException {
@@ -878,10 +878,10 @@ public class SAXBuilder {
      *   URI.
      * </p>
      * @param systemId URI for the input
-     * @return <code>Document</code> - resultant Document object.
-     * @throws JDOMException when errors occur in parsing.
+     * @return <code>Document</code> resultant Document object
+     * @throws JDOMException when errors occur in parsing
      * @throws IOException when an I/O error prevents a document
-     *         from being fully parsed.
+     *         from being fully parsed
      */
     public Document build(String systemId) 
         throws JDOMException, IOException {
