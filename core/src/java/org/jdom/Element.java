@@ -100,14 +100,8 @@ public class Element implements Serializable, Cloneable {
     /** The mixed content of the <code>Element</code> */
     protected List content;
     
-    /** The textual content of this element <em>for optimization</em> */
-    private String textualContent;
-
-    /** The trimmed textual content of this element <em>for optimization</em> */
-    private String trimmedContent;
-
     /*
-     * XXX: We need to build in a "cache" with the child elements -
+     * XXX: We may want to build in a "cache" with the child elements -
      *  They are accessed so frequently we could improve out
      *  performance big time with this. (brett)
      */
@@ -386,19 +380,11 @@ public class Element implements Serializable, Cloneable {
      * @return text content for this element, or null if none
      */
     public String getText() {
-        // Use "cached" text if available
-        if (textualContent != null) {	
-            return textualContent;
+        // If we hold only a String, return it directly
+        if (content.size() == 1 && content.get(0) instanceof String) {
+            return (String) content.get(0);
         }
 
-        // If there's no content, then there's no text
-        if (content == null) {
-            return null;
-        }
-
-        // XXX Potential optimization: Avoid the StringBuffer unless there
-        // XXX are more than one String objects in the List, if there's one
-        // XXX just return the String itself.
         StringBuffer textContent = new StringBuffer();
         boolean hasText = false;
 
@@ -413,12 +399,11 @@ public class Element implements Serializable, Cloneable {
                 hasText = true;
             }
         }
-        textualContent = textContent.toString();
-	
+
         if (!hasText) {
             return null;
         } else {
-            return textualContent;
+            return textContent.toString();
         }
     }
 
@@ -434,27 +419,22 @@ public class Element implements Serializable, Cloneable {
      * @return normalized text content for this element, or null if none
      */
     public String getTextTrim() {
-        // Use "cached" trimmed text if available
-        if (trimmedContent == null) {	
-            String text = getText();
-            if (text == null) {
-                return null;
-            }
-
-            StringBuffer textContent = new StringBuffer();
-            StringTokenizer tokenizer = new StringTokenizer(text);
-            while (tokenizer.hasMoreTokens()) {
-                String str = tokenizer.nextToken();
-                textContent.append(str);
-                if (tokenizer.hasMoreTokens()) {
-                    textContent.append(" ");  // separator
-                }
-            }
-
-            trimmedContent = textContent.toString();
+        String text = getText();
+        if (text == null) {
+            return null;
         }
 
-        return trimmedContent;
+        StringBuffer textContent = new StringBuffer();
+        StringTokenizer tokenizer = new StringTokenizer(text);
+        while (tokenizer.hasMoreTokens()) {
+            String str = tokenizer.nextToken();
+            textContent.append(str);
+            if (tokenizer.hasMoreTokens()) {
+                textContent.append(" ");  // separator
+            }
+        }
+
+        return textContent.toString();
     }
 
     /**
@@ -551,7 +531,6 @@ public class Element implements Serializable, Cloneable {
     public Element setText(String text) {
         if (content != null) {
             content.clear();
-            clearContentCache();
         } else {
             content = new LinkedList();
         }
@@ -635,7 +614,6 @@ public class Element implements Serializable, Cloneable {
     public Element setMixedContent(List mixedContent) {
         if (content != null) {
             content.clear();
-            clearContentCache();
         } else {
             content = new LinkedList();
         }
@@ -822,9 +800,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(String text) {
-        if (content != null) {
-            clearContentCache();
-        } else {
+        if (content == null) {
             content = new LinkedList();
         }
 
@@ -1366,16 +1342,6 @@ public class Element implements Serializable, Cloneable {
         return element;
     }
     
-    /**
-     * <p>
-     *  This "clears" the textual content cache for this element.
-     * </p>
-     */
-    protected void clearContentCache() {
-	textualContent = null;
-	trimmedContent = null;
-    }
-
     // Support a custom Namespace serialization so no two namespace
     // object instances may exist for the same prefix/uri pair
     private void writeObject(ObjectOutputStream out) throws IOException {
