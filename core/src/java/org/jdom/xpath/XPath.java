@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.13 2004/02/05 20:56:09 jhunter Exp $
+ $Id: XPath.java,v 1.14 2004/02/06 09:03:31 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -71,13 +71,13 @@ import org.jdom.*;
  * can choose an implementation using either {@link #setXPathClass} or
  * the system property "org.jdom.xpath.class".
  *
- * @version $Revision: 1.13 $, $Date: 2004/02/05 20:56:09 $
+ * @version $Revision: 1.14 $, $Date: 2004/02/06 09:03:31 $
  * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.13 $ $Date: 2004/02/05 20:56:09 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.14 $ $Date: 2004/02/06 09:03:31 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the
@@ -101,18 +101,6 @@ public abstract class XPath implements Serializable {
     * @see    #newInstance
     */
    private static Constructor constructor = null;
-
-   /**
-    * Creates a new XPath wrapper object, compiling the specified
-    * XPath expression.
-    *
-    * @param  expr   the XPath expression to wrap.
-    *
-    * @throws JDOMException   if the XPath expression is invalid.
-    */
-   protected XPath(String expr) throws JDOMException {
-       // XXX We can probably remove this constructor
-   }
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
