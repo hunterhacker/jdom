@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.13 2001/10/12 00:40:02 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.14 2001/11/27 14:40:53 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,6 +57,8 @@
 package org.jdom.output;
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import org.xml.sax.*;
@@ -65,6 +67,7 @@ import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.jdom.*;
 
@@ -102,7 +105,7 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.13 $ $Date: 2001/10/12 00:40:02 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.14 $ $Date: 2001/11/27 14:40:53 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -572,11 +575,8 @@ public class SAXOutputter {
         // contentHandler.startDocument()
         startDocument();
 
-        // entityResolver.resolveEntity()
-        entityResolver(document);
-
-        // JDOM cannot read unparsed entities and notations in DTD (yet)
-        // dtdHandler(document);
+        // Fire DTD events
+        dtdEvents(document);
 
         // Handle root element, as well as any root level
         // processing instructions and CDATA sections
@@ -607,41 +607,76 @@ public class SAXOutputter {
    
     /**
      * <p>
-     * This enables an application to resolve external entities.
+     * This parses a DTD declaration to fire the related events towards
+     * the registered handlers.
      * </p>
      *
-     * @param document JDOM <code>Document</code>.
+     * @param document <code>JDOM Document</code> the DocType is to
+     *                 process.
      */
-    private void entityResolver(Document document) throws JDOMException {
-        if (entityResolver != null) {
-            DocType docType = document.getDocType();
-            String publicID = null;
-            String systemID = null;
-            if (docType != null) {
-                publicID = docType.getPublicID();
-                systemID = docType.getSystemID();
+    private void dtdEvents(Document document) throws JDOMException {
+        DocType docType = document.getDocType();
+
+        if ((docType != null) &&
+            ((dtdHandler != null) || (declHandler != null))) {
+            // Fire DTD-related events only if handlers have been registered
+            String publicID  = docType.getPublicID();
+            String systemID  = docType.getSystemID();
+            String intSubset = docType.getInternalSubset();
+
+            if (intSubset != null) {
+                intSubset = intSubset.trim();
             }
 
-            if ((publicID != null) || (systemID != null)) {
+            // Build dummy XML document to reference DTD.
+            StringBuffer buf = new StringBuffer(64);
+            buf.append("<!DOCTYPE ").append(docType.getElementName());
+
+            if ((intSubset != null) && (intSubset.length() !=0)) {
+               // Internal subset present => Parse it
+               buf.append(" [\n").append(intSubset).append(']');
+            }
+            else {
+               // No internal subset defined => Try to parse original DTD
+               if ((publicID != null) || (systemID != null)) {
+                    if (publicID != null) {
+                        buf.append(" PUBLIC ");
+                        buf.append('\"').append(publicID).append('\"');
+                    }
+                    else {
+                        buf.append(" SYSTEM ");
+                    }
+                    buf.append('\"').append(systemID).append('\"');
+                }
+                else {
+                    // Doctype is totally empty! => Skip parsing
+                    buf.setLength(0);
+                }
+            }
+
+            if (buf.length() != 0) {
                 try {
-                    entityResolver.resolveEntity(publicID, systemID);
+                    String dtdDoc = buf.append('>').toString();
+
+                    // Parse dummy XML document to fire DTD events.
+                    createDTDParser().parse(new InputSource(
+                                                new StringReader(dtdDoc)));
                 }
-                catch (SAXException se) {
-                    throw new JDOMException("Exception in entityResolver", se);
+                catch (SAXParseException ex1) {
+                    // Expected exception: There's no root element in DTD
+                    // so the parser complains!
+                    // ex1.printStackTrace();
                 }
-                catch (IOException ioe) {
-                    throw new JDOMException("Exception in entityResolver", ioe);
+                catch (SAXException ex2) {
+                    throw new JDOMException("DTD parsing error", ex2);
+                }
+                catch (IOException ex3) {
+                    throw new JDOMException("DTD parsing error", ex3);
                 }
             }
         }
     }
-   
-    // XXX Not implemented yet, since a JDOM Document does not
-    // have access to the unparsed entities and notations
-    // defined in a DTD (yet)
-    // private void dtdHandler(Document document) {
-    // }
-   
+
     /**
      * <p>
      * This method tells you the line of the XML file being parsed.
@@ -1001,5 +1036,120 @@ public class SAXOutputter {
                               ns.getURI());                // value
         }
         return atts;
+    }
+
+    /**
+     * <p>
+     * Creates a SAX XMLReader.
+     * </p>
+     *
+     * @return <code>XMLReader</code> a SAX2 parser.
+     *
+     * @throws Exception if no parser can be created.
+     */
+    protected XMLReader createParser() throws Exception {
+        XMLReader parser = null;
+
+        // Try using JAXP...
+        // Note we need JAXP 1.1, and if JAXP 1.0 is all that's
+        // available then the getXMLReader call fails and we skip
+        // to the hard coded default parser
+        try {
+            Class factoryClass = 
+                    Class.forName("javax.xml.parsers.SAXParserFactory");
+
+            // factory = SAXParserFactory.newInstance();
+            Method newParserInstance = 
+                    factoryClass.getMethod("newInstance", null);
+            Object factory = newParserInstance.invoke(null, null);
+
+            // jaxpParser = factory.newSAXParser();
+            Method newSAXParser = factoryClass.getMethod("newSAXParser", null);
+            Object jaxpParser   = newSAXParser.invoke(factory, null);
+
+            // parser = jaxpParser.getXMLReader();
+            Class parserClass = jaxpParser.getClass();
+            Method getXMLReader = 
+                    parserClass.getMethod("getXMLReader", null);
+            parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
+        } catch (ClassNotFoundException e) {
+            //e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            //e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            //e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            //e.printStackTrace();
+        }
+
+        // Check to see if we got a parser yet, if not, try to use a
+        // hard coded default
+        if (parser == null) {
+            parser = XMLReaderFactory.createXMLReader(
+                                "org.apache.xerces.parsers.SAXParser");
+        }
+        return parser;
+    }
+
+    /**
+     * <p>
+     * This will create a SAX XMLReader capable of parsing a DTD and
+     * configure it so that the DTD parsing events are routed to the
+     * handlers registered onto this SAXOutputter.
+     * </p>
+     *
+     * @return <code>XMLReader</code> a SAX2 parser.
+     *
+     * @throws JDOMException if no parser can be created.
+     */
+    private XMLReader createDTDParser() throws JDOMException {
+        XMLReader parser = null;
+
+        // Get a parser instance
+        try
+        {
+            parser = createParser();
+        }
+        catch (Exception ex1) {
+           throw new JDOMException("Error in SAX parser allocation", ex1);
+        }
+
+        // Register handlers
+        if (this.getDTDHandler() != null) {
+            parser.setDTDHandler(this.getDTDHandler());
+        }
+        if (this.getEntityResolver() != null) {
+            parser.setEntityResolver(this.getEntityResolver());
+        }
+        if (this.getLexicalHandler() != null) {
+            try {
+                parser.setProperty(LEXICAL_HANDLER_SAX_PROPERTY,
+                                   this.getLexicalHandler());
+            }
+            catch (SAXException ex1) {
+                try {
+                    parser.setProperty(LEXICAL_HANDLER_ALT_PROPERTY,
+                                       this.getLexicalHandler());
+                } catch (SAXException ex2) {
+                    // Forget it!
+                }
+            }
+        }
+        if (this.getDeclHandler() != null) {
+            try {
+                parser.setProperty(DECL_HANDLER_SAX_PROPERTY,
+                                   this.getDeclHandler());
+            }
+            catch (SAXException ex1) {
+                try {
+                    parser.setProperty(DECL_HANDLER_ALT_PROPERTY,
+                                       this.getDeclHandler());
+                } catch (SAXException ex2) {
+                    // Forget it!
+                }
+            }
+        }
+
+        return (parser);
     }
 }

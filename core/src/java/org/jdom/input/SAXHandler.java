@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.24 2001/10/07 21:22:01 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.25 2001/11/27 14:40:52 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.24 $ $Date: 2001/10/07 21:22:01 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.25 $ $Date: 2001/11/27 14:40:52 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -96,8 +96,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     /** Indicator of where in the document we are */
     protected boolean atRoot;
 
-    /** Indicator of whether we are in a DTD */
+    /** Indicator of whether we are in the DocType */
     protected boolean inDTD = false;
+
+    /** Indicator of whether we are in the internal subset */
+    protected boolean inInternalSubset = false;
 
     /** Indicator of whether we are in a CDATA */
     protected boolean inCDATA = false;
@@ -292,6 +295,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         // Store the public and system ids for the name
         externalEntities.put(name, new String[]{publicId, systemId}); 
 
+        if (!inInternalSubset) return;
+
         buffer.append("  <!ENTITY ")
               .append(name);
         if (publicId != null) {
@@ -309,7 +314,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 	
     /**
      * <P>
-     *  This handles an attribute declaration in a DTD
+     *  This handles an attribute declaration in the internal subset
      * </P>
      *
      * @param eName <code>String</code> element name of attribute
@@ -321,6 +326,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     public void attributeDecl(String eName, String aName, String type,
                               String valueDefault, String value) 
         throws SAXException { 
+
+        if (!inInternalSubset) return;
 
         buffer.append("  <!ATTLIST ")
               .append(eName)
@@ -370,10 +377,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     public void internalEntityDecl(String name, String value) 
         throws SAXException { 	
+        //skip entities that come from the dtd
+        if (!inInternalSubset) return;
 
-        buffer.append("  <!ENTITY ")
-              .append(name)
-              .append(" \"")
+        buffer.append("  <!ENTITY ");
+        if (name.startsWith("%")) {
+           buffer.append("% ").append(name.substring(1));
+        } else {
+           buffer.append(name);
+        }
+        buffer.append(" \"")
               .append(value)
               .append("\">\n");
     }
@@ -700,6 +713,7 @@ if (!inDTD) {
         document.setDocType(
             factory.docType(name, publicId, systemId));
         inDTD = true;
+        inInternalSubset = true;
     }
 
     /**
@@ -710,6 +724,7 @@ if (!inDTD) {
     public void endDTD() throws SAXException {
         document.getDocType().setInternalSubset(buffer.toString());
         inDTD = false;
+        inInternalSubset = false;
     }
 
     public void startEntity(String name)
@@ -722,6 +737,10 @@ if (!inDTD) {
             return;
         }
 
+        if (inDTD) {
+            inInternalSubset = false;
+            return;
+        }
         // Ignore DTD references, and translate the standard 5
         if ((!inDTD) &&
             (!name.equals("amp")) &&
@@ -738,8 +757,19 @@ if (!inDTD) {
                   pub = ids[0];  // may be null, that's OK
                   sys = ids[1];  // may be null, that's OK
                 }
-                EntityRef entity = factory.entityRef(name, pub, sys);
-                getCurrentElement().addContent(entity);
+                /**
+                 * if stack is empty, this entity belongs to an attribute
+                 * in these cases, it is an error on the part of the parser
+                 * to call startEntity but this will help in some cases.  
+                 * See org/xml/sax/ext/LexicalHandler.html#startEntity(java.lang.String)
+                 * for more information 
+                 */
+                if (!(atRoot || stack.isEmpty())) {
+                    EntityRef entity = factory.entityRef(name, pub, sys);
+
+                    //no way to tell if the entity was from an attribute or element so just assume element
+                    getCurrentElement().addContent(entity);
+                }
                 suppress = true;
             }
         }
@@ -752,6 +782,8 @@ if (!inDTD) {
             // regardless of the "expand" value
             suppress = false;
         }
+        if (inDTD)
+            inInternalSubset = true;
     }
 
     /**
@@ -794,10 +826,10 @@ if (!inDTD) {
         if (suppress) return;
 
         String commentText = new String(ch, start, length);
-        if (inDTD) {
-            String comment = new String(ch, start, length);
+        if (inDTD && inInternalSubset && (expand == false)) {
+            // String comment = new String(ch, start, length);
             buffer.append("  <!--")
-                  .append(comment)
+                  .append(commentText)
                   .append("-->\n");
             return;
         }
@@ -824,6 +856,8 @@ if (!inDTD) {
     public void notationDecl(String name, String publicID, String systemID) 
         throws SAXException {
 
+        if (!inInternalSubset) return;
+
         buffer.append("  <!NOTATION ")
               .append(name)
               .append(" \"")
@@ -844,6 +878,8 @@ if (!inDTD) {
     public void unparsedEntityDecl(String name, String publicId,
                                    String systemId, String notationName)
         throws SAXException { 
+
+        if (!inInternalSubset) return;
 
         buffer.append("  <!ENTITY ")
               .append(name);
