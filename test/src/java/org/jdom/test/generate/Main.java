@@ -57,7 +57,6 @@ public final class Main {
         "-ui",        // Run the Swing GUI.
         "-source",    // Specify the source class.
         "-rootdir",    // Specify the root directory of the jdom-test.
-        "-author",    // Specify the name of the author.
         "-report"    // Report on how upto date the test case is.
     };
 
@@ -65,10 +64,7 @@ public final class Main {
     private static String source;
 
     /** Root directory for the source code */
-    private static String rootDir;
-
-    /** Authors name */
-    private static String author = "unascribed";
+    private static String rootDir = ".";
 
     /** Run the GUI */
     private static boolean ui;
@@ -86,6 +82,10 @@ public final class Main {
         // Process the command line arguments.
         // No rocket science here :-)
         Properties props = new Properties();
+
+		// Put in the defaults.
+        props.put("rootdir", rootDir);
+
         for(int i=0; i<args.length; i++) {
             if (args.equals("-ui")) {
                 ui = true;
@@ -95,16 +95,13 @@ public final class Main {
             } else if (args[i].equals("-rootdir")) {
                 rootDir = args[++i];
                 props.put("rootdir", rootDir);
-            } else if (args[i].equals("-author")) {
-                author = args[++i];
-                props.put("author", source);
             } else {
                 System.out.println( "unknown argument "+args[i]);
             }
         }
         
         // Must have a source directory and a root directory.
-        if (source == null || rootDir == null) {
+        if (source == null) {
             usage();
         }
 
@@ -134,12 +131,19 @@ public final class Main {
      * Display a usage summary to the user.
      */
     private static void usage() {
-        StringBuffer sb = new StringBuffer();
 
-        sb.append("JDOM test case generator.");
+        System.out.println("JDOM test case generator.");
+        System.out.println("Options are;");
+
+        System.out.println("");
         
+		System.out.println("-ui       <Run swing based GUI (1.2 only)>");
+		System.out.println("-source   <Source class e.g. org.jdom.Element>");
+		System.out.println("-rootdir  <Root directory for output files>");
+		System.out.println("-report   <Check that -source class is upto date>");
 
-        System.out.println(sb);
+        System.out.println("");
+
         System.exit(1);
     }
 }
