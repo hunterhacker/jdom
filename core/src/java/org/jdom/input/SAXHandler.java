@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.22 2001/09/03 14:45:55 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.23 2001/09/04 20:22:35 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.22 $ $Date: 2001/09/03 14:45:55 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.23 $ $Date: 2001/09/04 20:22:35 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -696,7 +696,6 @@ if (!inDTD) {
 
         document.setDocType(
             factory.docType(name, publicId, systemId));
-        document.getDocType().setInternalSubset(buffer.toString());
         inDTD = true;
     }
 
@@ -706,6 +705,7 @@ if (!inDTD) {
      * </p>
      */
     public void endDTD() throws SAXException {
+        document.getDocType().setInternalSubset(buffer.toString());
         inDTD = false;
     }
 
