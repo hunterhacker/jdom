@@ -84,14 +84,6 @@ public class DOMOutputter {
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";
 
-    /** Namespaces on the document */
-    // XXX This shouldn't be an instance var.  It's unlikely, but someone 
-    // might use the same outputter in two threads at the same time.  More
-    // technically, namespaces isn't state for the outputter, it's transient
-    // state of the output() call and should be passed around like a normal 
-    // parameter (jhunter)
-    private LinkedList namespaces;
-
     /**
      * <p>
      * This creates a <code>DOMOutputter</code>.
@@ -128,8 +120,7 @@ public class DOMOutputter {
      */
     public org.w3c.dom.Document output(Document document,
                                        String domAdapterClass) {
-        // This should be passed like a normal parameter
-        namespaces = new LinkedList();
+        LinkedList namespaces = new LinkedList();
         org.w3c.dom.Document domDoc = null;
         try {
             DOMAdapter adapter =
@@ -137,34 +128,32 @@ public class DOMOutputter {
 
             domDoc = adapter.createDocument();
 
-            // XXX find a way to reuse some of the "walking" code
+            // XXX We could reuse some of the "walking" code
 
-            // XXX doc.getMixedContent() doesn't preserve whitespace yet, 
-            // but when it is, it seems we should call it so whitespace 
-            // is preserved when converting to the DOM.  Maybe this should 
-            // be configurable?
+            // XXX Should whitespace handling be configurable?
+
             List docContent = document.getMixedContent();
-            for (int i=0; i<docContent.size(); i++) {
+            for (int i = 0; i < docContent.size(); i++) {
+                Object docObject = docContent.get(i);
 
-                if (docContent.get(i) instanceof Comment) {
+                if (docObject instanceof Comment) {
                     org.w3c.dom.Comment domComment =
-                        domDoc.createComment(
-                            ((Comment)docContent.get(i)).getText());
+                        domDoc.createComment(((Comment)docObject).getText());
                     domDoc.appendChild(domComment);
                 }
 
-                else if (docContent.get(i) instanceof ProcessingInstruction) {
+                else if (docObject instanceof ProcessingInstruction) {
                     ProcessingInstruction pi = 
-                        (ProcessingInstruction)docContent.get(i);
+                        (ProcessingInstruction)docObject;
                     org.w3c.dom.ProcessingInstruction domPI =
                          domDoc.createProcessingInstruction(
                          pi.getTarget(), pi.getData());
                     domDoc.appendChild(domPI);
                 }
 
-                else if (docContent.get(i) instanceof Element) {
+                else if (docObject instanceof Element) {
                     // Build the rest of the DOM tree from JDOM's root element
-                    buildDOMTree(docContent.get(i), domDoc, null, true);
+                    buildDOMTree(docObject, domDoc, null, true, namespaces);
                 }
             }
         } catch (Exception e) {
@@ -186,16 +175,18 @@ public class DOMOutputter {
      * @param doc DOM <code>Document</code> being built.
      * @param current <code>Element</code> that is current parent.
      * @param atRoot <code>boolean</code> indicating whether at root level.
+     * @param namespaces <code>LinkedList</code> containing namespaces in scope
      */
     protected void buildDOMTree(Object content,
                                 org.w3c.dom.Document doc,
                                 org.w3c.dom.Element current,
-                                boolean atRoot) {
+                                boolean atRoot,
+                                LinkedList namespaces) {
         boolean printedNS = false;
-        if (content instanceof Element ) {
+        if (content instanceof Element) {
             Element element = (Element)content;
-            String elementName = element.getQualifiedName();
-            org.w3c.dom.Element domElement = doc.createElement(elementName);
+            org.w3c.dom.Element domElement =
+                doc.createElement(element.getQualifiedName());
 
             // Add namespace attributes
             Namespace ns = element.getNamespace();
@@ -208,11 +199,11 @@ public class DOMOutputter {
 
             // Add attributes to the DOM element
             List attributes = element.getAttributes();
-            for (int i=0, size=attributes.size(); i<size; i++) {
+            for (int i = 0, size = attributes.size(); i < size; i++) {
                 Attribute attribute = (Attribute)attributes.get(i);
                 Namespace ns1 = attribute.getNamespace();
                 if ((ns1 != Namespace.NO_NAMESPACE) && 
-                   (!namespaces.contains(ns1))) {
+                                 (!namespaces.contains(ns1))) {
                     String attrName = getXmlnsTagFor(ns1);
                     printedNS = true;
                     namespaces.add(ns1);
@@ -232,8 +223,9 @@ public class DOMOutputter {
 
             // Recurse on child nodes
             List children = ((Element)content).getMixedContent();
-            for (int i=0; i<children.size(); i++) {
-                buildDOMTree(children.get(i), doc, domElement, false);
+            for (int i = 0; i < children.size(); i++) {
+                buildDOMTree(children.get(i), doc, 
+                             domElement, false, namespaces);
             }
         } else if (content instanceof String) {
             // XXX: CDATA currently handled as text (Matt)
