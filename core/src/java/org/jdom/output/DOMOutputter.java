@@ -204,13 +204,11 @@ public class DOMOutputter {
 
             // XXX We could reuse some of the "walking" code
 
-            // XXX Should use an iterator and not get(i) for speed
-
             // XXX Should whitespace handling be configurable?
 
-            List docContent = document.getMixedContent();
-            for (int i = 0; i < docContent.size(); i++) {
-                Object docObject = docContent.get(i);
+            Iterator itr = document.getMixedContent().iterator();
+            while (itr.hasNext()) {
+                Object docObject = itr.next();
 
                 if (docObject instanceof Comment) {
                     org.w3c.dom.Comment domComment =
@@ -309,9 +307,9 @@ public class DOMOutputter {
             }
 
             // Add attributes to the DOM element
-            List attributes = element.getAttributes();
-            for (int i = 0, size = attributes.size(); i < size; i++) {
-                Attribute attribute = (Attribute)attributes.get(i);
+            Iterator itr = element.getAttributes().iterator();
+            while (itr.hasNext()) {
+                Attribute attribute = (Attribute) itr.next();
                 Namespace ns1 = attribute.getNamespace();
                 if ((ns1 != Namespace.NO_NAMESPACE) && 
                     (ns1 != Namespace.XML_NAMESPACE) &&
@@ -334,9 +332,9 @@ public class DOMOutputter {
             }
 
             // Recurse on child nodes
-            List children = ((Element)content).getMixedContent();
-            for (int i = 0; i < children.size(); i++) {
-                buildDOMTree(children.get(i), doc, 
+            itr = ((Element)content).getMixedContent().iterator();
+            while (itr.hasNext()) {
+                buildDOMTree(itr.next(), doc, 
                              domElement, false, namespaces);
             }
         } else if (content instanceof String) {
