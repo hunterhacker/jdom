@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.11 2002/04/29 13:38:15 jhunter Exp $
+ $Id: EntityRef.java,v 1.12 2002/11/16 13:51:37 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,12 +64,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
- * @version $Revision: 1.11 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.12 $, $Date: 2002/11/16 13:51:37 $
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.11 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.12 $ $Date: 2002/11/16 13:51:37 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
@@ -281,12 +281,12 @@ public class EntityRef implements Serializable, Cloneable {
      * @throws IllegalDataException if the given public ID is not a legal
      *         public ID.
      */
-    public EntityRef setPublicID(String newPublicID) {
+    public EntityRef setPublicID(String publicID) {
         String reason = Verifier.checkPublicID(publicID);
         if (reason != null) {
             throw new IllegalDataException(publicID, "EntityRef", reason);
         }
-        this.publicID = newPublicID;
+        this.publicID = publicID;
         return this;
     }
 
@@ -298,12 +298,12 @@ public class EntityRef implements Serializable, Cloneable {
      *         system literal.
      * @return this <code>EntityRef</code> modified.
      */
-    public EntityRef setSystemID(String newSystemID) {
+    public EntityRef setSystemID(String systemID) {
         String reason = Verifier.checkSystemLiteral(systemID);
         if (reason != null) {
             throw new IllegalDataException(systemID, "EntityRef", reason);
         }
-        this.systemID = newSystemID;
+        this.systemID = systemID;
         return this;
     }
 
