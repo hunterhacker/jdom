@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.113 2002/02/23 11:30:13 jhunter Exp $
+ $Id: Element.java,v 1.114 2002/03/12 06:53:57 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,6 +59,9 @@ package org.jdom;
 import java.io.*;
 import java.util.*;
 
+import org.jdom.filter.ElementFilter;
+import org.jdom.filter.Filter;
+
 /**
  * <p><code>Element</code> defines behavior for an XML
  *   element, modeled in Java.  Methods allow the user
@@ -77,12 +80,12 @@ import java.util.*;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.113 $, $Date: 2002/02/23 11:30:13 $
+ * @version $Revision: 1.114 $, $Date: 2002/03/12 06:53:57 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.113 $ $Date: 2002/02/23 11:30:13 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.114 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -759,6 +762,18 @@ public class Element implements Serializable, Cloneable {
      */
     public List getContent() {
         return content;
+    }
+
+    /**
+     * <p>
+     * Return a filter view of this <code>Element</code>'s content.
+     * </p>
+     *
+     * @param filter <code>Filter</code> to apply
+     * @return <code>List</code> - filtered Element content 
+     */
+    public List getContent(Filter filter) {
+        return content.getView(filter);
     }
 
     /**

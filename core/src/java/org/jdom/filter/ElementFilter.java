@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.4 2002/02/05 10:07:43 jhunter Exp $
+ $Id: ElementFilter.java,v 1.1 2002/03/12 06:53:57 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -54,7 +54,9 @@
  
  */
 
-package org.jdom;
+package org.jdom.filter;
+
+import org.jdom.*;
 
 /**
  * <p>
@@ -64,12 +66,12 @@ package org.jdom;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.4 $, $Date: 2002/02/05 10:07:43 $
+ * @version $Revision: 1.1 $, $Date: 2002/03/12 06:53:57 $
  */
-class ElementFilter implements Filter {
+public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.4 $ $Date: 2002/02/05 10:07:43 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.1 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
 
     /** The element name */
     protected String name;

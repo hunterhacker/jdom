@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.53 2002/02/20 10:22:20 jhunter Exp $
+ $Id: Document.java,v 1.54 2002/03/12 06:53:57 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,6 +59,8 @@ package org.jdom;
 import java.io.Serializable;
 import java.util.*;
 
+import org.jdom.filter.Filter;
+
 /**
  * <p>
  * <code>Document</code> defines behavior for an XML Document, modeled
@@ -70,12 +72,12 @@ import java.util.*;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.53 $, $Date: 2002/02/20 10:22:20 $
+ * @version $Revision: 1.54 $, $Date: 2002/03/12 06:53:57 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.53 $ $Date: 2002/02/20 10:22:20 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.54 $ $Date: 2002/03/12 06:53:57 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -325,6 +327,21 @@ public class Document implements Serializable, Cloneable {
         return content;
     }
 
+    /**
+     * <p>
+     * Return a filtered view of this <code>Document</code>'s content.
+     * </p>
+     *
+     * @param filter <code>Filter</code> to apply
+     * @return <code>List</code> - filtered Document content
+     * @throws IllegalStateException if the root element hasn't been set
+     */
+    public List getContent(Filter filter) {
+        if (!hasRootElement())
+            throw new IllegalStateException("Root element not set"); 
+        return content.getView(filter);
+    }
+  
     /**
      * <p>
      * This sets the content of the <code>Document</code>.  The supplied

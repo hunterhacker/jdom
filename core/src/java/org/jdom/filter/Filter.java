@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.3 2002/01/25 18:42:52 jhunter Exp $
+ $Id: Filter.java,v 1.1 2002/03/12 06:53:57 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -54,7 +54,9 @@
  
  */
 
-package org.jdom;
+package org.jdom.filter;
+
+import org.jdom.*;
 
 /**
  * <p>
@@ -66,9 +68,9 @@ package org.jdom;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2002/01/25 18:42:52 $
+ * @version $Revision: 1.1 $, $Date: 2002/03/12 06:53:57 $
  */
-interface Filter {
+public interface Filter {
     /**
      * <p>
      * Check to see if the object can be added to the list.
