@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMTransformer.java,v 1.2 2003/05/02 03:19:51 jhunter Exp $
+ $Id: JDOMTransformer.java,v 1.3 2003/05/02 18:59:51 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,13 +59,14 @@ package org.jdom.transform;
 import java.util.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
-import org.jdom.Document;
+import org.jdom.*;
 
 /**
  * A convenience class to handle simple transformations. The JAXP TrAX classes
  * have more bells and whistles and can be used with {@link JDOMSource} and
  * {@link JDOMResult} for advanced uses. This class handles the common case and
- * presents a simple interface.
+ * presents a simple interface.  JDOMTransformer is thread safe and may be
+ * used from multiple threads.
  *
  * <pre><code>
  * JDOMTransformer transformer = new JDOMTransformer("file.xsl");
@@ -74,70 +75,84 @@ import org.jdom.Document;
  * Document y2 = transformer.transform(y);  // y is a Document
  * </code></pre>
  *
- * @version $Revision: 1.2 $, $Date: 2003/05/02 03:19:51 $
+ * @version $Revision: 1.3 $, $Date: 2003/05/02 18:59:51 $
  * @author  Jason Hunter
  */
 public class JDOMTransformer {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.2 $ $Date: 2003/05/02 03:19:51 $ $Name:  $";
+            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.3 $ $Date: 2003/05/02 18:59:51 $ $Name:  $";
 
-    private Transformer transformer;
+    private Templates templates;
 
     /**
      * Creates a transformer for a given {@link javax.xml.transform.Source}
      * stylesheet.
      *
-     * @param  stylesheet                        source stylesheet as a Source
-     *                                           object
-     * @throws TransformerConfigurationException if there's a problem in the
-     *                                           TrAX back-end
+     * @param  stylesheet          source stylesheet as a Source object
+     * @throws JDOMException       if there's a problem in the TrAX back-end
      */
-    public JDOMTransformer(Source stylesheet)
-                    throws TransformerConfigurationException {
-        transformer = TransformerFactory.newInstance()
-            .newTransformer(stylesheet);
+    public JDOMTransformer(Source stylesheet) throws JDOMException {
+        try {
+            templates = TransformerFactory.newInstance()
+                    .newTemplates(stylesheet);
+        }
+        catch (TransformerException e) {
+            throw new JDOMException("Could not construct JDOMTransformer", e);
+        }
     }
 
     /**
      * Creates a transformer for a given stylesheet system id.
      *
-     * @param  stylesheetSystemId                source stylesheet as a Source
-     *                                           object
-     * @throws TransformerConfigurationException if there's a problem in the
-     *                                           TrAX back-end
+     * @param  stylesheetSystemId  source stylesheet as a Source object
+     * @throws JDOMException       if there's a problem in the TrAX back-end
      */
-    public JDOMTransformer(String stylesheetSystemId)
-                    throws TransformerConfigurationException {
-        transformer = TransformerFactory.newInstance()
-            .newTransformer(new StreamSource(stylesheetSystemId));
+    public JDOMTransformer(String stylesheetSystemId) throws JDOMException {
+        try {
+            templates = TransformerFactory.newInstance()
+                .newTemplates(new StreamSource(stylesheetSystemId));
+        }
+        catch (TransformerException e) {
+            throw new JDOMException("Could not construct JDOMTransformer", e);
+        }
     }
 
     /**
      * Transforms the given input nodes to a list of output nodes.
      *
-     * @param  inputNodes           input nodes
-     * @return                      transformed output nodes
-     * @throws TransformerException if there's a problem in the transformation
+     * @param  inputNodes          input nodes
+     * @return                     transformed output nodes
+     * @throws JDOMException       if there's a problem in the transformation
      */
-    public List transform(List inputNodes) throws TransformerException {
+    public List transform(List inputNodes) throws JDOMException {
         JDOMSource source = new JDOMSource(inputNodes);
         JDOMResult result = new JDOMResult();
-        transformer.transform(source, result);
-        return result.getResult();
+        try {
+            templates.newTransformer().transform(source, result);
+            return result.getResult();
+        }
+        catch (TransformerException e) {
+            throw new JDOMException("Could not perform transformation", e);
+        }
     }
 
     /**
      * Transforms the given document to an output document.
      *
-     * @param  inputDoc             input document
-     * @return                      transformed output document
-     * @throws TransformerException if there's a problem in the transformation
+     * @param  inputDoc            input document
+     * @return                     transformed output document
+     * @throws JDOMException       if there's a problem in the transformation
      */
-    public Document transform(Document inputDoc) throws TransformerException {
+    public Document transform(Document inputDoc) throws JDOMException {
         JDOMSource source = new JDOMSource(inputDoc);
         JDOMResult result = new JDOMResult();
-        transformer.transform(source, result);
-        return result.getDocument();
+        try {
+            templates.newTransformer().transform(source, result);
+            return result.getDocument();
+        }
+        catch (TransformerException e) {
+            throw new JDOMException("Could not perform transformation", e);
+        }
     }
 }
