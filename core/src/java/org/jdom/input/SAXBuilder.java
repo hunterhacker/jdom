@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.77 2003/04/30 21:58:19 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.78 2003/05/29 02:51:34 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -81,7 +81,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.77 $, $Date: 2003/04/30 21:58:19 $
+ * @version $Revision: 1.78 $, $Date: 2003/05/29 02:51:34 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.77 $ $Date: 2003/04/30 21:58:19 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.78 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -120,9 +120,9 @@ public class SAXBuilder {
 
     /** XMLFilter instance to use */
     private XMLFilter saxXMLFilter = null;
- 
+
     /** The factory for creating new JDOM objects */
-    protected JDOMFactory factory = null;
+    private JDOMFactory factory = new DefaultJDOMFactory();
 
     /** Whether to ignore ignorable whitespace */
     private boolean ignoringWhite = false;
@@ -135,9 +135,9 @@ public class SAXBuilder {
 
     /**
      * Whether parser reuse is allowed.
-     * <p>Default: <code>false</code></p>
+     * <p>Default: <code>true</code></p>
      */
-    private boolean reuseParser = false;
+    private boolean reuseParser = true;
 
     /** The current SAX parser, if parser reuse has been activated. */
     private XMLReader saxParser = null;
@@ -190,6 +190,23 @@ public class SAXBuilder {
         this.validate = validate;
     }
 
+    /**
+     * Returns the driver class assigned in the constructor, or null if none.
+     *
+     * @return the driver class assigned in the constructor
+     */
+    public String getDriverClass() {
+        return saxDriverClass;
+    }
+
+    /**
+     * Returns the current {@link JDOMFactory} in use.
+     * @return the factory in use
+     */
+    public JDOMFactory getFactory() {
+        return factory;
+    }
+
     /*
      * This sets a custom JDOMFactory for the builder.  Use this to build
      * the tree with your own subclasses of the JDOM classes.
@@ -198,6 +215,15 @@ public class SAXBuilder {
      */
     public void setFactory(JDOMFactory factory) {
         this.factory = factory;
+    }
+
+    /**
+     * Returns whether validation is to be performed during the build.
+     *
+     * @return whether validation is to be performed during the build
+     */
+    public boolean getValidation() {
+        return validate;
     }
 
     /**
@@ -211,12 +237,29 @@ public class SAXBuilder {
     }
 
     /**
+     * Returns the {@link ErrorHandler} assigned, or null if none.
+     * @return
+     */
+    public ErrorHandler getErrorHandler() {
+        return saxErrorHandler;
+    }
+
+    /**
      * This sets custom ErrorHandler for the <code>Builder</code>.
      *
      * @param errorHandler <code>ErrorHandler</code>
      */
     public void setErrorHandler(ErrorHandler errorHandler) {
         saxErrorHandler = errorHandler;
+    }
+
+    /**
+     * Returns the {@link EntityResolver} assigned, or null if none.
+     *
+     * @return the EntityResolver assigned
+     */
+    public EntityResolver getEntityResolver() {
+        return saxEntityResolver;
     }
 
     /**
@@ -229,6 +272,15 @@ public class SAXBuilder {
     }
 
     /**
+     * Returns the {@link DTDHandler} assigned, or null if none.
+     *
+     * @return the DTDHandler assigned
+     */
+    public DTDHandler getDTDHandler() {
+        return saxDTDHandler;
+    }
+
+    /**
      * This sets custom DTDHandler for the <code>Builder</code>.
      *
      * @param dtdHandler <code>DTDHandler</code>
@@ -238,14 +290,34 @@ public class SAXBuilder {
     }
 
     /**
-     * This sets custom XMLFilter for the <code>Builder</code>.
+     * Returns the {@link XMLFilter} used during parsing, or null if none.
      *
-     * @param xmlFilter <code>XMLFilter</code>
+     * @return the XMLFilter used during parsing
+     */
+    public XMLFilter getXMLFilter() {
+        return saxXMLFilter;
+    }
+
+    /**
+     * This sets a custom {@link org.xml.sax.XMLFilter} for the builder.
+     *
+     * @param xmlFilter the filter to use
      */
     public void setXMLFilter(XMLFilter xmlFilter) {
         saxXMLFilter = xmlFilter;
     }
- 
+
+    /**
+     * Returns whether element content whitespace is to be ignored during the
+     * build.
+     *
+     * @return whether element content whitespace is to be ignored during the
+     * build
+     */
+    public boolean getIgnoringElementContentWhitespace() {
+        return ignoringWhite;
+    }
+
     /**
      * Specifies whether or not the parser should elminate whitespace in 
      * element content (sometimes known as "ignorable whitespace") when
@@ -262,11 +334,22 @@ public class SAXBuilder {
     }
 
     /**
+     * Returns whether the contained SAX parser instance is reused across
+     * multiple parses.  The default is true.
+     *
+     * @return whether the contained SAX parser instance is reused across
+     * multiple parses
+     */
+    public boolean getReuseParser() {
+        return reuseParser;
+    }
+
+    /**
      * Specifies whether this builder shall reuse the same SAX parser
      * when performing subsequent parses or allocate a new parser for
      * each parse.  The default value of this setting is
-     * <code>false</code> (no parser reuse).  Setting the value to
-     * <code>true</code> can result in a performance improvement when parsing
+     * <code>true</code> (parser reuse).  Setting the value to
+     * <code>false</code> can result in a performance improvement when parsing
      * large numbers of files in sequence.
      * <p>
      * <strong>Note</strong>: As SAX parser instances are not thread safe,
@@ -380,16 +463,16 @@ public class SAXBuilder {
             if (systemId != null) {
                 throw new JDOMParseException("Error on line " + 
                     e.getLineNumber() + " of document " + systemId,
-                    contentHandler.getDocument(), e);
+                    e, contentHandler.getDocument());
             } else {
                 throw new JDOMParseException("Error on line " +
-                    e.getLineNumber(),
-                    contentHandler.getDocument(), e);
+                    e.getLineNumber(), e,
+                    contentHandler.getDocument());
             }
         }
         catch (SAXException e) {
             throw new JDOMParseException("Error in building: " + 
-                e.getMessage(), contentHandler.getDocument(), e);
+                e.getMessage(), e, contentHandler.getDocument());
         }
         finally {
             // Explicitly nullify the handler to encourage GC
@@ -703,7 +786,7 @@ public class SAXBuilder {
     public Document build(File file) 
         throws JDOMException, IOException {
         try {
-            URL url = fileToURL(file);
+            URL url = file.toURL();
             return build(url);
         } catch (MalformedURLException e) {
             throw new JDOMException("Error in building", e);
@@ -807,27 +890,37 @@ public class SAXBuilder {
         return build(new InputSource(systemId));
     }
 
+//    /**
+//     * Imitation of File.toURL(), a JDK 1.2 method, reimplemented
+//     * here to work with JDK 1.1.
+//     *
+//     * @see java.io.File
+//     *
+//     * @param f the file to convert
+//     * @return the file path converted to a file: URL
+//     */
+//    protected URL fileToURL(File f) throws MalformedURLException {
+//        String path = f.getAbsolutePath();
+//        if (File.separatorChar != '/') {
+//            path = path.replace(File.separatorChar, '/');
+//        }
+//        if (!path.startsWith("/")) {
+//            path = "/" + path;
+//        }
+//        if (!path.endsWith("/") && f.isDirectory()) {
+//            path = path + "/";
+//        }
+//        return new URL("file", "", path);
+//    }
+
     /**
-     * Imitation of File.toURL(), a JDK 1.2 method, reimplemented 
-     * here to work with JDK 1.1.
+     * Returns whether or not entities are being expanded into normal text
+     * content.
      *
-     * @see java.io.File
-     *
-     * @param f the file to convert
-     * @return the file path converted to a file: URL
+     * @return whether entities are being expanded
      */
-    protected URL fileToURL(File f) throws MalformedURLException {
-        String path = f.getAbsolutePath();
-        if (File.separatorChar != '/') {
-            path = path.replace(File.separatorChar, '/');
-        }
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        if (!path.endsWith("/") && f.isDirectory()) {
-            path = path + "/";
-        }
-        return new URL("file", "", path);
+    public boolean getExpandEntities() {
+        return expand;
     }
 
     /**

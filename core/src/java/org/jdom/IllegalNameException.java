@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalNameException.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
+ $Id: IllegalNameException.java,v 1.12 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,14 +60,14 @@ package org.jdom;
  * Thrown when a name is supplied in construction of a JDOM construct whose
  * where the name breaks XML naming conventions.
  * 
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  */
 public class IllegalNameException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -79,7 +79,7 @@ public class IllegalNameException extends IllegalArgumentException {
      *        that <code>name</code> was supplied to.
      * @param reason <code>String</code> message or reason name is illegal.
      */
-    public IllegalNameException(String name, String construct, String reason) {
+    IllegalNameException(String name, String construct, String reason) {
         super(new StringBuffer()
               .append("The name \"")
               .append(name)
@@ -100,7 +100,7 @@ public class IllegalNameException extends IllegalArgumentException {
      * @param construct <code>String</code> name of JDOM construct
      *        that <code>name</code> was supplied to.
      */
-    public IllegalNameException(String name, String construct) {
+    IllegalNameException(String name, String construct) {
         super(new StringBuffer()
               .append("The name \"")
               .append(name)
@@ -108,5 +108,14 @@ public class IllegalNameException extends IllegalArgumentException {
               .append(construct)
               .append("s.")
               .toString());
+    }
+
+    /**
+     * Creates an exception with the specified error message.
+     *
+     * @param reason cause of the problem
+     */
+    public IllegalNameException(String reason) {
+        super(reason);
     }
 }

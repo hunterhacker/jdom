@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.136 2003/05/21 09:17:45 jhunter Exp $
+ $Id: Element.java,v 1.137 2003/05/29 02:47:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.136 $, $Date: 2003/05/21 09:17:45 $
+ * @version $Revision: 1.137 $, $Date: 2003/05/29 02:47:39 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Parent, Child {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.136 $ $Date: 2003/05/21 09:17:45 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.137 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -101,11 +101,17 @@ public class Element implements Parent, Child {
     /** Parent or null if none */
     protected Parent parent;
 
-    /** The attributes of the element */
-    protected AttributeList attributes = new AttributeList(this);
+    /**
+     *  The attributes of the element.  Subclassers have to
+     * track attributes using their own mechanism.
+     */
+    AttributeList attributes = new AttributeList(this);
 
-    /** The mixed content of the element */
-    protected ContentList content = new ContentList(this);
+    /**
+     * The content of the element.  Subclassers have to
+     * track content using their own mechanism.
+     */
+    ContentList content = new ContentList(this);
 
     /**
      * This protected constructor is provided in order to support an Element
@@ -458,15 +464,15 @@ public class Element implements Parent, Child {
         return content.indexOf(child);
     }
 
-    private int childIndex(int start, Filter filter) {
-        int size = getChildCount();
-        for (int i = start; i < size; i++) {
-            if (filter.matches(getContent(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
+//    private int childIndex(int start, Filter filter) {
+//        int size = getChildCount();
+//        for (int i = start; i < size; i++) {
+//            if (filter.matches(getContent(i))) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
     /**
      * Returns the owning document for this element, or null if it's not a

@@ -1,6 +1,6 @@
 /*--
 
- $Id: DescendantIterator.java,v 1.1 2003/05/21 09:17:44 jhunter Exp $
+ $Id: DescendantIterator.java,v 1.2 2003/05/29 02:47:39 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.Parent;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.1 $, $Date: 2003/05/21 09:17:44 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/29 02:47:39 $
  */
 class DescendantIterator implements Iterator {
 
@@ -75,10 +75,13 @@ class DescendantIterator implements Iterator {
     private Iterator nextIterator;
     private List stack = new ArrayList();
 
+    private static final String CVS_ID =
+            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
+
     /**
      * Iterator for the descendants of the supplied object.
      */
-    public DescendantIterator(Parent parent) {
+    DescendantIterator(Parent parent) {
         if (parent == null) {
             throw new IllegalArgumentException("parent parameter was null");
         }

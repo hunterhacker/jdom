@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalTargetException.java,v 1.12 2003/04/30 09:55:12 jhunter Exp $
+ $Id: IllegalTargetException.java,v 1.13 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,13 +60,13 @@ package org.jdom;
  * Thrown when a target is supplied in construction of a JDOM {@link
  * ProcessingInstruction}, and that name breaks XML naming conventions.
  * 
- * @version $Revision: 1.12 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.13 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  */
 public class IllegalTargetException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.12 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.13 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -76,7 +76,7 @@ public class IllegalTargetException extends IllegalArgumentException {
      * @param target <code>String</code> target that breaks rules.
      * @param reason <code>String</code> message or reason target is illegal.
      */
-    public IllegalTargetException(String target, String reason) {
+    IllegalTargetException(String target, String reason) {
         super(new StringBuffer()
               .append("The target \"")
               .append(target)
@@ -87,17 +87,11 @@ public class IllegalTargetException extends IllegalArgumentException {
     }
 
     /**
-     * This will create an <code>Exception</code> indicating
-     * that the specified target is illegal for the
-     * <code>{@link ProcessingInstruction}</code> it was supplied to.
+     * Creates an exception with the specified error message.
      *
-     * @param target <code>String</code> target that breaks rules.
+     * @param reason cause of the problem
      */
-    public IllegalTargetException(String target) {
-        super(new StringBuffer()
-              .append("The name \"")
-              .append(target)
-              .append("\" is not legal for JDOM/XML Processing Instructions.")
-              .toString());
+    public IllegalTargetException(String reason) {
+        super(reason);
     }
 }

@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: JDOMParseException.java,v 1.4 2003/04/30 09:55:13 jhunter Exp $
+ $Id: JDOMParseException.java,v 1.5 2003/05/29 02:51:34 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.input;
@@ -62,14 +62,14 @@ import org.xml.sax.*;
 /**
  * Thrown during parse errors, with information about where the parse error
  * occurred as well as access to the partially built document.
- * 
- * @version $Revision: 1.4 $, $Date: 2003/04/30 09:55:13 $
+ *
+ * @version $Revision: 1.5 $, $Date: 2003/05/29 02:51:34 $
  * @author  Laurent Bihanic
  */
 public class JDOMParseException extends JDOMException {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.4 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    private static final String CVS_ID =
+      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.5 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
 
     /**
      * The portion of the document that was successfully built before
@@ -88,7 +88,7 @@ public class JDOMParseException extends JDOMException {
      *              to be thrown.
      */
     public JDOMParseException(String message, Throwable cause)  {
-        this(message, null, cause);
+        this(message, cause, null);
     }
 
     /**
@@ -98,23 +98,32 @@ public class JDOMParseException extends JDOMException {
      *
      * @param message <code>String</code> message indicating
      *                the problem that occurred.
+     * @param cause <code>Throwable</code> that caused this
+     *              to be thrown.
      * @param partialDocument <code>Document</code> the portion of
      *                        the input XML document that was
      *                        successfully built.
-     * @param cause <code>Throwable</code> that caused this
-     *              to be thrown.
      */
-    public JDOMParseException(String message, Document partialDocument,
-                                              Throwable cause)  {
+    public JDOMParseException(String message, Throwable cause,
+                              Document partialDocument)  {
         super(message, cause);
         this.partialDocument = partialDocument;
     }
 
     /**
-     * Returns the partial document that was successfully built before 
+     * @deprecated Use {@link JDOMParseException(String, Throwable, Document)}
+     * instead.
+     */
+    public JDOMParseException(String message, Document partialDocument,
+                              Throwable cause) {
+        this(message, cause, partialDocument);
+    }
+
+    /**
+     * Returns the partial document that was successfully built before
      * the error occurred.
      *
-     * @return the partial document.
+     * @return the partial document or null if none.
      */
     public Document getPartialDocument() {
         return partialDocument;

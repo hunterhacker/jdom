@@ -1,6 +1,6 @@
 /*--
 
- $Id: XSLTransformException.java,v 1.1 2003/05/05 08:30:23 jhunter Exp $
+ $Id: XSLTransformException.java,v 1.2 2003/05/29 02:52:05 jhunter Exp $
 
  Copyright (C) 2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,10 +61,13 @@ import org.jdom.JDOMException;
 /**
  * Thrown when an XSL stylesheet fails to compile or an XSL transform fails
  *
- * @version $Revision: 1.1 $, $Date: 2003/05/05 08:30:23 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/29 02:52:05 $
  * @author  Jason Hunter
  */
 public class XSLTransformException extends JDOMException {
+
+    private static final String CVS_ID =
+            "@(#) $RCSfile: XSLTransformException.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:52:05 $ $Name:  $";
 
     public XSLTransformException() {
     }

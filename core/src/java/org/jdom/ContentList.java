@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.25 2003/05/20 21:53:59 jhunter Exp $
+ $Id: ContentList.java,v 1.26 2003/05/29 02:47:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.25 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.26 $, $Date: 2003/05/29 02:47:39 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.25 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.26 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -103,7 +103,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     private int size;
 
     /** Document or Element this list belongs to */
-    protected Object parent;
+    private Object parent;
 
     /** Force either a Document or Element parent */
     private ContentList() { }
@@ -112,7 +112,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * Create a new instance of the ContentList representing
      * Document content
      */
-    protected ContentList(Document document) {
+    ContentList(Document document) {
         this.parent = document;
     }
 
@@ -120,7 +120,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * Create a new instance of the ContentList representing
      * Element content
      */
-    protected ContentList(Element parent) {
+    ContentList(Element parent) {
         this.parent = parent;
     }
 
@@ -171,7 +171,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Element</code>
      * @param element <code>Element</code> to add
      */
-    protected void add(int index, Element element) {
+    void add(int index, Element element) {
         if (element == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -236,7 +236,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Element</code>
      * @param doctype <code>DocType</code> to add
      */
-    protected void add(int index, DocType doctype) {
+    void add(int index, DocType doctype) {
         if (doctype == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -289,7 +289,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Comment</code>
      * @param comment <code>Comment</code> to add
      */
-    protected void add(int index, Comment comment) {
+    void add(int index, Comment comment) {
         if (comment == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -336,7 +336,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>ProcessingInstruction</code>
      * @param pi <code>ProcessingInstruction</code> to add
      */
-    protected void add(int index, ProcessingInstruction pi) {
+    void add(int index, ProcessingInstruction pi) {
         if (pi == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -383,7 +383,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>CDATA</code>
      * @param cdata <code>CDATA</code> to add
      */
-    protected void add(int index, CDATA cdata) {
+    void add(int index, CDATA cdata) {
         if (cdata == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -424,7 +424,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Text</code>
      * @param text <code>Text</code> to add
      */
-    protected void add(int index, Text text) {
+    void add(int index, Text text) {
         if (text == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -465,7 +465,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param index index where to add <code>Entity</code>
      * @param entity <code>Entity</code> to add
      */
-    protected void add(int index, EntityRef entity) {
+    void add(int index, EntityRef entity) {
         if (entity == null) {
             throw new IllegalAddException("Cannot add null object");
         }
@@ -572,7 +572,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      *
      * @param collection The collection to use.
      */
-    protected void clearAndSet(Collection collection) {
+    void clearAndSet(Collection collection) {
         Object[] old = elementData;
         int oldSize = size;
 
@@ -606,7 +606,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      *
      * @param minCapacity the desired minimum capacity.
      */
-    protected void ensureCapacity(int minCapacity) {
+    void ensureCapacity(int minCapacity) {
         if( elementData==null ) {
             elementData = new Object[INITIAL_ARRAY_SIZE];
         } else {
@@ -642,7 +642,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @param filter <code>Filter</code> for this view.
      * @return a list representing the rules of the <code>Filter</code>.
      */
-    protected List getView(Filter filter) {
+    List getView(Filter filter) {
         return new FilterList(filter);
     }
 
@@ -653,7 +653,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      *
      * @return index of first element, or -1 if one doesn't exist
      */
-    protected int indexOfFirstElement() {
+    int indexOfFirstElement() {
         if( elementData!=null ) {
             for (int i = 0; i < size; i++) {
                 if (elementData[i] instanceof Element) {
@@ -671,7 +671,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      * @return                     index of the DocType, or -1 if it doesn't
      *                             exist
      */
-    protected int indexOfDocType() {
+    int indexOfDocType() {
         if (elementData != null) {
             for (int i = 0; i < size; i++) {
                 if (elementData[i] instanceof DocType) {
@@ -811,7 +811,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
     class FilterList extends AbstractList {
 
         /** The Filter */
-        protected Filter filter;
+        Filter filter;
 
         /** Current number of items in this view */
         int count = 0;

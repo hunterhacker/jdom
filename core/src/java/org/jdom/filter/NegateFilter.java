@@ -1,6 +1,6 @@
 /*--
 
- $Id: NegateFilter.java,v 1.1 2003/05/21 09:17:45 jhunter Exp $
+ $Id: NegateFilter.java,v 1.2 2003/05/29 02:51:11 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,37 +61,15 @@ package org.jdom.filter;
  *
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2003/05/21 09:17:45 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/29 02:51:11 $
  */
-class NegateFilter extends AbstractFilter {
+final class NegateFilter extends AbstractFilter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NegateFilter.java,v $ $Revision: 1.1 $ $Date: 2003/05/21 09:17:45 $";
+      "@(#) $RCSfile: NegateFilter.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:51:11 $";
 
     // Underlying filter.
     private Filter filter;
-
-    /**
-     * This is the protected, no-args constructor standard in all JDOM
-     * classes. It allows subclassers to get a raw instance with no
-     * initialization.
-     * <p>
-     * It intentionally leaves all instance variables null, allowing a
-     * lightweight subclass implementation.  The subclass is responsible for
-     * ensuring all the get and set methods behave as documented.
-     * </p>
-     * <p>
-     * When implementing a subclass which doesn't require full control over
-     * variable initialization, be aware that simply calling super() (or
-     * letting the compiler add the implicit super() call) will not
-     * initialize the instance variables which will cause many of the methods
-     * to throw a <code>NullPointerException</code>.  Therefore, the
-     * constructor for these subclasses should call one of the public
-     * constructors so variable initialization is handled automatically.
-     * </p>
-     */
-    protected NegateFilter() {
-    }
 
     /**
      * Match if the supplied filter <b>does not</b> match.
@@ -103,7 +81,7 @@ class NegateFilter extends AbstractFilter {
     }
 
     public boolean matches(Object obj) {
-        return filter.matches(obj) == false;
+        return !filter.matches(obj);
     }
 
     public Filter negate() {

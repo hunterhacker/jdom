@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.69 2003/05/23 21:59:28 jhunter Exp $
+ $Id: Document.java,v 1.70 2003/05/29 02:47:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.69 $, $Date: 2003/05/23 21:59:28 $
+ * @version $Revision: 1.70 $, $Date: 2003/05/29 02:47:39 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,19 +72,19 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.69 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.70 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
 
     /**
-     * This <code>Document</code>'s
-     * <code>{@link Comment}</code>s,
-     * <code>{@link ProcessingInstruction}</code>s and
-     * the root <code>{@link Element}</code>.
+     * This document's content including comments, PIs, a possible
+     * DocType, and a root element.
+     * Subclassers have to track content using their own
+     * mechanism.
      */
-    protected ContentList content = new ContentList(this);
+    ContentList content = new ContentList(this);
 
     // See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/
     //                                     core.html#baseURIs-Considerations
-    private String baseURI = null;
+    protected String baseURI = null;
 
     /**
      * Creates a new empty document.  A document must have a root element,
@@ -172,22 +172,22 @@ public class Document implements Parent {
         return content.indexOf(child);
     }
 
-    /**
-     * Starting at the given index (inclusive), return the index of
-     * the first child matching the supplied filter, or -1
-     * if none is found.
-     *
-     * @return index of child, or -1 if none found.
-     */
-    private int childIndex(int start, Filter filter) {
-        int size = getChildCount();
-        for (int i = start; i < size; i++) {
-            if (filter.matches(getContent(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
+//    /**
+//     * Starting at the given index (inclusive), return the index of
+//     * the first child matching the supplied filter, or -1
+//     * if none is found.
+//     *
+//     * @return index of child, or -1 if none found.
+//     */
+//    private int childIndex(int start, Filter filter) {
+//        int size = getChildCount();
+//        for (int i = start; i < size; i++) {
+//            if (filter.matches(getContent(i))) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
     /**
      * This will return <code>true</code> if this document has a

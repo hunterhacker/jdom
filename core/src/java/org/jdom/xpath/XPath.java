@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
+ $Id: XPath.java,v 1.12 2003/05/29 02:52:15 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,15 +67,17 @@ import org.jdom.*;
 /**
  * A utility class for performing XPath calls on JDOM nodes, with a factory
  * interface for obtaining a first XPath instance. Users operate against this
- * class while XPath vendors can plug-in implementations underneath.
+ * class while XPath vendors can plug-in implementations underneath.  Users
+ * can choose an implementation using either {@link #setXPathClass} or
+ * the system property "org.jdom.xpath.class".
  *
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/29 02:52:15 $
  * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:52:15 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the
@@ -109,6 +111,7 @@ public abstract class XPath implements Serializable {
     * @throws JDOMException   if the XPath expression is invalid.
     */
    protected XPath(String expr) throws JDOMException {
+       // XXX We can probably remove this constructor
    }
 
    /**
@@ -406,7 +409,7 @@ public abstract class XPath implements Serializable {
 
    /**
     * The XPathString is dedicated to serialize instances of
-    * XPathsubclasses in a implementation-independent manner.
+    * XPath subclasses in a implementation-independent manner.
     * <p>
     * XPathString ensures that only string data are serialized.  Upon
     * deserialization, XPathString relies on XPath factory method to

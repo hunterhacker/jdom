@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.22 2003/04/30 09:55:12 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.23 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,14 +59,14 @@ package org.jdom;
 /**
  * Thrown when trying to add a illegal object to a JDOM construct.
  *
- * @version $Revision: 1.22 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.23 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.22 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.23 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -78,7 +78,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Attribute</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, Attribute added, String reason) {
+    IllegalAddException(Element base, Attribute added, String reason) {
         super(new StringBuffer()
               .append("The attribute \"")
               .append(added.getQualifiedName())
@@ -99,7 +99,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Element</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, Element added, String reason) {
+    IllegalAddException(Element base, Element added, String reason) {
         super(new StringBuffer()
               .append("The element \"")
               .append(added.getQualifiedName())
@@ -120,7 +120,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Element</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Document base, Element added, String reason) {
+    IllegalAddException(Document base, Element added, String reason) {
         super(new StringBuffer()
               .append("The element \"")
               .append(added.getQualifiedName())
@@ -139,7 +139,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>ProcessingInstruction</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, ProcessingInstruction added,
+    IllegalAddException(Element base, ProcessingInstruction added,
                                String reason) {
         super(new StringBuffer()
               .append("The PI \"")
@@ -161,7 +161,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>ProcessingInstruction</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Document base, ProcessingInstruction added,
+    IllegalAddException(Document base, ProcessingInstruction added,
                                String reason) {
         super(new StringBuffer()
               .append("The PI \"")
@@ -181,7 +181,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Comment</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, Comment added, String reason) {
+    IllegalAddException(Element base, Comment added, String reason) {
         super(new StringBuffer()
               .append("The comment \"")
               .append(added.getText())
@@ -202,7 +202,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>CDATA</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, CDATA added, String reason) {
+    IllegalAddException(Element base, CDATA added, String reason) {
         super(new StringBuffer()
               .append("The CDATA \"")
               .append(added.getText())
@@ -224,7 +224,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Text</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, Text added, String reason) {
+    IllegalAddException(Element base, Text added, String reason) {
         super(new StringBuffer()
               .append("The Text \"")
               .append(added.getText())
@@ -245,7 +245,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Comment</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Document base, Comment added, String reason) {
+    IllegalAddException(Document base, Comment added, String reason) {
         super(new StringBuffer()
               .append("The comment \"")
               .append(added.getText())
@@ -264,7 +264,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>EntityRef</code> reference that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, EntityRef added, String reason) {
+    IllegalAddException(Element base, EntityRef added, String reason) {
         super(new StringBuffer()
               .append("The entity reference\"")
               .append(added.getName())
@@ -285,7 +285,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>Namespace</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Element base, Namespace added, String reason) {
+    IllegalAddException(Element base, Namespace added, String reason) {
         super(new StringBuffer()
               .append("The namespace xmlns")
               .append((added.getPrefix() == null ||
@@ -310,7 +310,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param added <code>DocType</code> that could not be added
      * @param reason cause of the problem
      */
-    public IllegalAddException(Document base, DocType added, String reason) {
+    IllegalAddException(Document base, DocType added, String reason) {
         super(new StringBuffer()
               .append("The DOCTYPE ")
               .append(added.toString())

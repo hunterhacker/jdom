@@ -1,6 +1,6 @@
 /*--
 
- $Id: FilterIterator.java,v 1.1 2003/05/21 09:17:45 jhunter Exp $
+ $Id: FilterIterator.java,v 1.2 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import org.jdom.filter.*;
  * Traverse a parent's children that match the supplied filter.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2003/05/21 09:17:45 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/29 02:47:40 $
  */
 class FilterIterator implements Iterator {
 
@@ -72,8 +72,8 @@ class FilterIterator implements Iterator {
     private Filter filter;
     private Object nextObject;
 
-    protected FilterIterator() {
-    }
+    private static final String CVS_ID =
+            "@(#) $RCSfile: FilterIterator.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     public FilterIterator(Iterator iterator, Filter filter) {
         if ((iterator == null) || (filter == null)) {

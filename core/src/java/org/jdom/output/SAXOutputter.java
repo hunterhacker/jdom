@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.32 2003/05/05 06:57:57 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.33 2003/05/29 02:51:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.32 $, $Date: 2003/05/05 06:57:57 $
+ * @version $Revision: 1.33 $, $Date: 2003/05/29 02:51:49 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.32 $ $Date: 2003/05/05 06:57:57 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.33 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -361,6 +361,17 @@ public class SAXOutputter {
     }
 
     /**
+     * Returns whether attribute namespace declarations shall be reported as
+     * "xmlns" attributes.
+     *
+     * @return whether attribute namespace declarations shall be reported as
+     * "xmlns" attributes.
+     */
+    public boolean getReportNamespaceDeclarations() {
+        return declareNamespaces;
+    }
+
+    /**
      * This will define whether attribute namespace declarations shall be
      * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
      * and behaves as the "namespace-prefixes" SAX core feature.
@@ -370,6 +381,15 @@ public class SAXOutputter {
      */
     public void setReportNamespaceDeclarations(boolean declareNamespaces) {
         this.declareNamespaces = declareNamespaces;
+    }
+
+    /**
+     * Returns whether DTD events will be reported.
+     *
+     * @return whether DTD events will be reported
+     */
+    public boolean getReportDTDEvents() {
+        return reportDtdEvents;
     }
 
     /**
@@ -1169,7 +1189,7 @@ public class SAXOutputter {
      *                       or if the error handler fired a
      *                       {@link SAXException}.
      */
-    protected void handleError(JDOMException exception) throws JDOMException {
+    private void handleError(JDOMException exception) throws JDOMException {
         if (errorHandler != null) {
             try {
                 errorHandler.error(new SAXParseException(

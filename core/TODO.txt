@@ -2,9 +2,6 @@ Items that need to be done:
 
 --- API CHANGES FOR 1.0 ---
 
-* Look at Brad's experimental tree for good ideas to integrate.
-  ftp://a.cs.okstate.edu/pub/hip/jdom-x.zip
-
 * Look at interfaces for the core classes, Element with ConcreteElement being
   our code.  Base on the factory model.  Allow no access between objects
   except using the public API, to avoid the import node problem.  Do the big
@@ -12,26 +9,29 @@ Items that need to be done:
   for the concretes.  May not need to break existing code (sick and wrong).
   - read-only?
 
-* Try to remove the number of protected fields and methods in SAXHandler,
-  SAXOutputter, and XMLOutputter.  Use the strategy pattern instead perhaps.
-
 * Should there be ValidityException and MalformedException subclasses of
   JDOMException?  Elharo has a proposal.
 
-* Should there be XPath support within Element, Document, etc?
-
-* Consider moving JDOMFactory to org.jdom.
-
-* Investigate serialization issue raised by Tom Preston
-  http://lists.denveronline.net/lists/jdom-interest/2002-March/009857.html
-
-* Fix the sorting problem.
-  Alex idea: http://www.servlets.com/archive/servlet/ReadMsg?msgId=211785
-
-* Should adds just do detach automatically?  Why do we throw on that?
+* Consider moving JDOMFactory to org.jdom.  Then we can have a FastFactory
+  which skips Verification.
 
 * Look at Attribute.get/setAttributeType() and see if we should make them just
   get/setType().
+
+* Rusty's "base uri" support for Element and the rest.
+
+* Rusty bug report: "While testing this patch, I noticed a significant and
+  likely unrelated bug in the SAXBuilder class when loading URLs such as 
+  http://www.cafeconleche.org with no trailing slash. Relative URLs that 
+  point to DTDs from the DOCTYPE system identifier are not correctly resolved.
+  I'm not sure why. However, testing on a different system indicates that this
+  bug is present before my changes, so I'm going ahead and submitting this 
+  patch anyway. Time permitting I'll hunt that bug down soon unless someone 
+  else beats me to it. :-)
+
+* Must "pretty" output normalize text or is trim enough?
+
+* Should Child have a getType() returning an int?
 
 
 --- FOR JDOM 1.0 COMMUNITY REVIEW ---
@@ -40,9 +40,30 @@ Items that need to be done:
 
 * Note in the docs where necessary our multithreading policy.
 
+* Create a JDOM logo.
+
+* Make sure to test serialization.
+
+* Run OptimizeIt to look for bottlenecks.
+
+* Look at http://www.sosnoski.com/opensrc/xmls/format.html.
 
 
 --- FUTURE IDEAS ---
+
+* Add Laurent's <?javax.xml.transform.disable-output-escaping?> 
+  and <?javax.xml.transform.enable-output-escaping?> support
+
+* Ensure JDOM is appropriately tweaked for subclassing, per the threads
+  started by Joe Bowbeer.
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7601 begins it
+
+* Ensure JDOM is flawless regarding clone semantics, per more threads by
+  Joe Bowbeer.
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7602 begins it
+
+* Joe summarizes his issues at
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
 
 * Add in attribute type support to DOM to match what's in SAX.
 
@@ -60,45 +81,12 @@ Items that need to be done:
   Use fixcrlf in dist (instead of package as currently done)
   Probably include source with jdom.jar built
 
-* Consider changing XMLOutputter to have more set methods like Enhydra's
-  DOMFormatter.  Possible good ones:
-   void setPreserveSpace(boolean preserve) 
-                       Set the default space-preservation flag.
-   void setXmlEncoding(java.lang.String newXmlEncoding) 
-                       Set the encoding using the XML encoding name.
-   void setXmlEncoding(java.lang.String newJavaEncoding,
-                       java.lang.String newXmlEncoding) 
-                       Set both the XML and Java encodings.
-
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
   and let the caller pass the exception through
 
 * Populate jdom-test.  Hong Zhang <Hong.Zhang AT Sun.COM> once volunteered to
   help with the J2EE CTS.
-
-* Ensure JDOM is appropriately tweaked for subclassing, per the threads
-  started by Joe Bowbeer.
-  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7601 begins it
-
-* Ensure JDOM is flawless regarding clone semantics, per more threads by
-  Joe Bowbeer.
-  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7602 begins it
-
-* Joe summarizes his issues at
-  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
-
-* Consider visitor pattern
-  Use cases: count elements, count nodes, translate comments, remove PIs
-  Would implement with option to visit depth or breadth first
-  Maybe go crazy with pre-order, in-order, and post-order too :-)
-  Methods would exist on Document and Element
-  FYI, DOM's much overweight Traversal-Range spec is at
-    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
-  Joe Bowbeer has ideas at:
-  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
-  We may be able to just have doc.iterator() methods
-  Also see posts with the subject "How to ease traversal of JDOM tree"
 
 * Add setIgnoringAllWhitespace(boolean) method.
 
@@ -166,16 +154,10 @@ Items that need to be done:
   than full elements -- perfect for things like reading config files.  Lots
   of difficulties with this design though.
 
-* Create a JDOM logo.
-
 * Create a Verifier lookup table as an int[256] growable to int[64K] where 
   bits in the returned value indicate that char's ability to be used for a
   task.  So "lookup[(int)'x'] & LETTER_MASK" tells us if it's a letter
   or not.
-
-* Consider elt.getTreeText() which would recursively get the text (in order) 
-  for the subtree, effectively ripping out interveneing Elements.  (Suggested
-  by Bob to help with XPath.)
 
 * Consider an HTMLBuilder that reads not-necessarily-well-formed HTML and
   produces a JDOM Document.  The approach I'd suggest is to build on top of
@@ -185,6 +167,7 @@ Items that need to be done:
   instead of making a DOM Document or XML stream first.  That would be a lot 
   faster, use less memory, and make our dist smaller.  See
   http://www.sourceforge.net/projects/jtidy for Tidy.
+  See post by Jacob.Robertson@argushealth.com on 2/13/2002.
 
 * Look at a (contrib?) outputter option using SAX filters per
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003303.html
@@ -218,9 +201,6 @@ Items that need to be done:
 * Create an HTMLOutputter to handle the HTML specific aspects (closing tags,
   escaped characters like &eacute;, etc).
 
-* Add Laurent's <?javax.xml.transform.disable-output-escaping?> 
-  and <?javax.xml.transform.enable-output-escaping?> support
-
 * Change the various setAttributeValue() methods in Element and 
   Attribute to check the attribute type and normalize the string 
   according to the attribute type. i.e. normalize the white space if 
@@ -230,4 +210,6 @@ Items that need to be done:
   receivable from SAXBuilder, but it would be from DOMBuilder and other
   builders.  Then give XMLOutputter the ability to avoid outputting
   "unspecified" attributes.
+
+* Should there be XPath support within Element, Document, etc?
 

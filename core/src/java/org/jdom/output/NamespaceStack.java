@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.12 2003/05/29 02:51:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import org.jdom.Namespace;
  * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
  * during output.
  *
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/29 02:51:49 $
  * @author  Elliotte Rusty Harolde
  * @author  Fred Trimble
  * @author  Brett McLaughlin
@@ -72,7 +72,7 @@ import org.jdom.Namespace;
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;
@@ -83,7 +83,7 @@ class NamespaceStack {
     /**
      * This creates the needed storage.
      */
-    public NamespaceStack() {
+    NamespaceStack() {
         prefixes = new Stack();
         uris = new Stack();
     }
@@ -105,7 +105,7 @@ class NamespaceStack {
      *
      * @return <code>String</code> - the popped namespace prefix.
      */
-    public String pop() {      
+    public String pop() {
         String prefix = (String)prefixes.pop();
         uris.pop();
 

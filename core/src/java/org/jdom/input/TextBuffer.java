@@ -1,6 +1,6 @@
 /*--
 
- $Id: TextBuffer.java,v 1.6 2003/04/30 09:55:13 jhunter Exp $
+ $Id: TextBuffer.java,v 1.7 2003/05/29 02:51:34 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -69,14 +69,14 @@ package org.jdom.input;
  * means that no extra unused char array space will be kept around after parsing
  * is through.
  *
- * @version $Revision: 1.6 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.7 $, $Date: 2003/05/29 02:51:34 $
  * @author  Bradley S. Huffman
  * @author  Alex Rosen
  */
 class TextBuffer {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.6 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.7 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
 
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */
@@ -91,13 +91,13 @@ class TextBuffer {
     private int arraySize;
 
     /** Constructor */
-    public TextBuffer() {
+    TextBuffer() {
         array = new char[4096]; // initial capacity
         arraySize = 0;
     }
 
     /** Append the specified text to the text value of this buffer. */
-    public void append(char[] source, int start, int count) {
+    void append(char[] source, int start, int count) {
         if (prefixString == null) {
             // This is the first chunk, so we'll store it in the prefix string
             prefixString = new String(source, start, count);
@@ -111,7 +111,7 @@ class TextBuffer {
     }
 
     /** Returns the size of the text value. */
-    public int size() {
+    int size() {
         if (prefixString == null) {
             return 0;
         }
@@ -121,7 +121,7 @@ class TextBuffer {
     }
 
     /** Clears the text value and prepares the TextBuffer for reuse. */
-    public void clear() {
+    void clear() {
         arraySize = 0;
         prefixString = null;
     }

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.17 2003/05/20 21:53:59 jhunter Exp $
+ $Id: Text.java,v 1.18 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,7 +61,7 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.17 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.18 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
@@ -69,9 +69,9 @@ package org.jdom;
 public class Text implements Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.17 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.18 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
-    private static final String EMPTY_STRING = "";
+    static final String EMPTY_STRING = "";
 
     /** The actual character content */
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612

@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.16 2003/04/18 04:04:11 jhunter Exp $
+ $Id: AttributeList.java,v 1.17 2003/05/29 02:47:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.16 $, $Date: 2003/04/18 04:04:11 $
+ * @version $Revision: 1.17 $, $Date: 2003/05/29 02:47:39 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,14 +78,14 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.16 $ $Date: 2003/04/18 04:04:11 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.17 $ $Date: 2003/05/29 02:47:39 $ $Name:  $";
 
     /** The backing list */
     private Attribute elementData[];
     private int size;
 
     /** The parent Element */
-    protected Element parent;
+    private Element parent;
 
     /** Force an Element parent */
     private AttributeList() {}
@@ -94,7 +94,7 @@ class AttributeList extends AbstractList
      * Create a new instance of the AttributeList representing
      * Element content
      */
-    public AttributeList(Element parent) {
+    AttributeList(Element parent) {
         this.parent = parent;
     }
 
@@ -164,7 +164,7 @@ class AttributeList extends AbstractList
      * @param index index where to add <code>Attribute</code>
      * @param attribute <code>Attribute</code> to add
      */
-    protected void add(int index, Attribute attribute) {
+    void add(int index, Attribute attribute) {
         if (attribute.getParent() != null) {
             throw new IllegalAddException(
                           "The attribute already has an existing parent \"" +
@@ -267,7 +267,7 @@ class AttributeList extends AbstractList
      *
      * @param collection The collection to use.
      */
-    public void clearAndSet(Collection collection) {
+    void clearAndSet(Collection collection) {
         Attribute[] old = elementData;
         int oldSize = size;
 
@@ -302,7 +302,7 @@ class AttributeList extends AbstractList
      *
      * @param minCapacity the desired minimum capacity.
      */
-    protected void ensureCapacity(int minCapacity) {
+    private void ensureCapacity(int minCapacity) {
         if (elementData == null) {
             elementData = new Attribute[minCapacity];
         }
@@ -341,7 +341,7 @@ class AttributeList extends AbstractList
      * @param namespace <code>Namespace</code> to match
      * @return the <code>Attribute</code>, or null if one doesn't exist.
      */
-    protected Object get(String name, Namespace namespace) {
+    Object get(String name, Namespace namespace) {
         int index = indexOf(name, namespace);
         if (index < 0) {
             return null;
@@ -353,7 +353,7 @@ class AttributeList extends AbstractList
      * Return index of the <code>Attribute</code> with the
      * given name and uri.
      */
-    protected int indexOf(String name, Namespace namespace) {
+    int indexOf(String name, Namespace namespace) {
         String uri = namespace.getURI();
         if (elementData != null) {
             for (int i = 0; i < size; i++) {
@@ -397,7 +397,7 @@ class AttributeList extends AbstractList
      * @return the <code>true</code> if attribute was removed,
      *             <code>false</code> otherwise
      */
-    protected boolean remove(String name, Namespace namespace) {
+    boolean remove(String name, Namespace namespace) {
         int index = indexOf(name, namespace);
         if (index < 0) {
             return false;
@@ -443,7 +443,7 @@ class AttributeList extends AbstractList
      * @return The object which was replaced.
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
-    protected Object set(int index, Attribute attribute) {
+    Object set(int index, Attribute attribute) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());

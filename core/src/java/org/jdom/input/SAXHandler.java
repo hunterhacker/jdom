@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.57 2003/05/23 21:59:28 jhunter Exp $
+ $Id: SAXHandler.java,v 1.58 2003/05/29 02:51:34 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.57 $, $Date: 2003/05/23 21:59:28 $
+ * @version $Revision: 1.58 $, $Date: 2003/05/29 02:51:34 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.57 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.58 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -87,38 +87,38 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     private Document document;
 
     /** <code>Element</code> object being built */
-    protected Element currentElement;
+    private Element currentElement;
 
     /** Indicator of where in the document we are */
-    protected boolean atRoot;
+    private boolean atRoot;
 
     /** Indicator of whether we are in the DocType. Note that the DTD consists
      * of both the internal subset (inside the <!DOCTYPE> tag) and the
       * external subset (in a separate .dtd file). */
-    protected boolean inDTD = false;
+    private boolean inDTD = false;
 
     /** Indicator of whether we are in the internal subset */
-    protected boolean inInternalSubset = false;
+    private boolean inInternalSubset = false;
 
     /** Indicator of whether we previously were in a CDATA */
-    protected boolean previousCDATA = false;
+    private boolean previousCDATA = false;
 
     /** Indicator of whether we are in a CDATA */
-    protected boolean inCDATA = false;
+    private boolean inCDATA = false;
 
     /** Indicator of whether we should expand entities */
     private boolean expand = true;
 
     /** Indicator of whether we are actively suppressing (non-expanding) a
         current entity */
-    protected boolean suppress = false;
+    private boolean suppress = false;
 
     /** How many nested entities we're currently within */
     private int entityDepth = 0;  // XXX may not be necessary anymore?
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
-    protected List declaredNamespaces;
+    private List declaredNamespaces;
 
     /** Temporary holder for the internal subset */
     private StringBuffer internalSubset = new StringBuffer();
@@ -206,6 +206,17 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         externalEntities = new HashMap();
 
         document = this.factory.document((Element)null);
+    }
+
+    /**
+     * Builds content under a dummy root element.  Useful for building
+     * content that would otherwise be a non-well formed document.
+     *
+     * @param root root element under which content will be built
+     */
+    protected void setAlternateRoot(Element root) {
+        this.currentElement = root;
+        this.atRoot = false;
     }
 
     /**
@@ -602,7 +613,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         textBuffer.clear();
     }
 
-    protected void flushCharacters(String data) throws SAXException {
+    private void flushCharacters(String data) throws SAXException {
         if (data.length() == 0) {
             previousCDATA = inCDATA;
             return;
@@ -854,7 +865,7 @@ if (!inDTD) {
      * @param publicID the public ID
      * @param systemID the system ID
      */
-    protected void appendExternalId(String publicID, String systemID) {
+    private void appendExternalId(String publicID, String systemID) {
         if (publicID != null) {
             internalSubset.append(" PUBLIC \"")
                   .append(publicID)
@@ -878,7 +889,7 @@ if (!inDTD) {
      *
      * @return <code>Element</code> - element being built.
      */
-    protected Element getCurrentElement() throws SAXException {
+    public Element getCurrentElement() throws SAXException {
         if (currentElement == null) {
             throw new SAXException(
                 "Ill-formed XML document (multiple root elements detected)");

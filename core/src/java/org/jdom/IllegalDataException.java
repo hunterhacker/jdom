@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalDataException.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
+ $Id: IllegalDataException.java,v 1.12 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,14 +59,14 @@ package org.jdom;
 /**
  * Thrown when illegal text is supplied to a JDOM construct.
  *
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  */
 public class IllegalDataException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -77,7 +77,7 @@ public class IllegalDataException extends IllegalArgumentException {
      * @param construct <code>String</code> construct that data is illegal for.
      * @param reason <code>String</code> message or reason data is illegal.
      */
-    public IllegalDataException(String data, String construct, String reason) {
+    IllegalDataException(String data, String construct, String reason) {
         super(new StringBuffer()
               .append("The data \"")
               .append(data)
@@ -97,7 +97,7 @@ public class IllegalDataException extends IllegalArgumentException {
      * @param data <code>String</code> data that breaks rules.
      * @param construct <code>String</code> construct that data is illegal for.
      */
-    public IllegalDataException(String data, String construct) {
+    IllegalDataException(String data, String construct) {
         super(new StringBuffer()
               .append("The data \"")
               .append(data)
@@ -105,5 +105,14 @@ public class IllegalDataException extends IllegalArgumentException {
               .append(construct)
               .append(".")
               .toString());
+    }
+
+    /**
+     * This will create an exceptoin with the specified error message.
+     *
+     * @param reason cause of the problem
+     */
+    public IllegalDataException(String reason) {
+        super(reason);
     }
 }

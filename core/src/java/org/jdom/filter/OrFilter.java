@@ -1,6 +1,6 @@
 /*--
 
- $Id: OrFilter.java,v 1.1 2003/05/21 09:17:45 jhunter Exp $
+ $Id: OrFilter.java,v 1.2 2003/05/29 02:51:11 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,40 +63,18 @@ import org.jdom.Child;
  * <b>or</b> operation.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.1 $, $Date: 2003/05/21 09:17:45 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/29 02:51:11 $
  */
-class OrFilter extends AbstractFilter {
+final class OrFilter extends AbstractFilter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OrFilter.java,v $ $Revision: 1.1 $ $Date: 2003/05/21 09:17:45 $";
+      "@(#) $RCSfile: OrFilter.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:51:11 $";
 
     /** Filter for left side of logical <b>or</b> */
-    protected Filter left;
+    private Filter left;
 
     /** Filter for right side of logical <b>or</b> */
-    protected Filter right;
-
-    /**
-     * This is the protected, no-args constructor standard in all JDOM
-     * classes. It allows subclassers to get a raw instance with no
-     * initialization.
-     * <p>
-     * It intentionally leaves all instance variables null, allowing a
-     * lightweight subclass implementation.  The subclass is responsible for
-     * ensuring all the get and set methods behave as documented.
-     * </p>
-     * <p>
-     * When implementing a subclass which doesn't require full control over
-     * variable initialization, be aware that simply calling super() (or
-     * letting the compiler add the implicit super() call) will not
-     * initialize the instance variables which will cause many of the methods
-     * to throw a <code>NullPointerException</code>.  Therefore, the
-     * constructor for these subclasses should call one of the public
-     * constructors so variable initialization is handled automatically.
-     * </p>
-     */
-    protected OrFilter() {
-    }
+    private Filter right;
 
     /**
      * Match if either of the supplied filters.

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.19 2003/04/30 09:55:12 jhunter Exp $
+ $Id: JDOMException.java,v 1.20 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -69,17 +69,17 @@ import org.xml.sax.*;
  * can be caught to handle all JDOM specific problems (some methods may throw
  * {@link java.io.IOException} and such).
  *
- * @version $Revision: 1.19 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.20 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.19 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.20 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
-    protected Throwable cause;
+    private Throwable cause;
 
     /**
      * This will create an <code>Exception</code>.

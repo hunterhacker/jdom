@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.98 2003/05/22 08:48:00 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.99 2003/05/29 02:51:49 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.98 $, $Date: 2003/05/22 08:48:00 $
+ * @version $Revision: 1.99 $, $Date: 2003/05/29 02:51:49 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,24 +113,23 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.98 $ $Date: 2003/05/22 08:48:00 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.99 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
 
     // For normal output
-    private Format userFormat = Format.getRawFormat();
+    protected Format userFormat = Format.getRawFormat();
 
     // For xml:space="preserve"
-    private Format preserveFormat = Format.getRawFormat();
+    protected Format preserveFormat = Format.getRawFormat();
 
     // What's currently in use
-    private Format currentFormat = userFormat;
+    protected Format currentFormat = userFormat;
 
     // * * * * * * * * * * Constructors * * * * * * * * * *
     // * * * * * * * * * * Constructors * * * * * * * * * *
 
     /**
-     * This will create an <code>XMLOutputter</code> with no additional
-     * whitespace (indent or newlines) added; the whitespace from the
-     * element text content is fully preserved.
+     * This will create an <code>XMLOutputter</code> with the default
+     * {@link Format} matching {@link Format#getRawFormat}.
      */
     public XMLOutputter() {
     }
@@ -511,7 +510,7 @@ public class XMLOutputter implements Cloneable {
      * Get an OutputStreamWriter, using prefered encoding
      * (see {@link #setEncoding}).
      */
-    protected Writer makeWriter(OutputStream out)
+    private Writer makeWriter(OutputStream out)
                          throws java.io.UnsupportedEncodingException {
         return makeWriter(out, userFormat.encoding);
     }
@@ -519,7 +518,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * Get an OutputStreamWriter, use specified encoding.
      */
-    protected Writer makeWriter(OutputStream out, String enc)
+    private Writer makeWriter(OutputStream out, String enc)
                          throws java.io.UnsupportedEncodingException {
         // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
         // into "UTF8" which works with all JDKs.
@@ -553,7 +552,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(Document doc, Writer out) throws IOException {
 
-        printDeclaration(doc, out, userFormat.encoding);
+        printDeclaration(out, doc, userFormat.encoding);
 
         // Print out root element, as well as any root level
         // comments and processing instructions,
@@ -564,17 +563,17 @@ public class XMLOutputter implements Cloneable {
             Object obj = content.get(i);
 
             if (obj instanceof Element) {
-                printElement(doc.getRootElement(), out, 0,
+                printElement(out, doc.getRootElement(), 0,
                              createNamespaceStack());
             }
             else if (obj instanceof Comment) {
-                printComment((Comment) obj, out);
+                printComment(out, (Comment) obj);
             }
             else if (obj instanceof ProcessingInstruction) {
-                printProcessingInstruction((ProcessingInstruction) obj, out);
+                printProcessingInstruction(out, (ProcessingInstruction) obj);
             }
             else if (obj instanceof DocType) {
-                printDocType(doc.getDocType(), out);
+                printDocType(out, doc.getDocType());
                 // Always print line separator after declaration, helps the
                 // output look better and is semantically inconsequential
                 out.write(currentFormat.lineSeparator);
@@ -602,7 +601,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     public void output(DocType doctype, Writer out) throws IOException {
-        printDocType(doctype, out);
+        printDocType(out, doctype);
         out.flush();
     }
 
@@ -617,7 +616,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Element element, Writer out) throws IOException {
         // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
-        printElement(element, out, 0, createNamespaceStack());
+        printElement(out, element, 0, createNamespaceStack());
         out.flush();
     }
 
@@ -634,7 +633,7 @@ public class XMLOutputter implements Cloneable {
     public void outputElementContent(Element element, Writer out)
                     throws IOException {
         List content = element.getContent();
-        printContentRange(content, 0, content.size(), out,
+        printContentRange(out, content, 0, content.size(),
                           0, createNamespaceStack());
         out.flush();
     }
@@ -650,7 +649,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(List list, Writer out)
                     throws IOException {
-        printContentRange(list, 0, list.size(), out,
+        printContentRange(out, list, 0, list.size(),
                           0, createNamespaceStack());
         out.flush();
     }
@@ -662,7 +661,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     public void output(CDATA cdata, Writer out) throws IOException {
-        printCDATA(cdata, out);
+        printCDATA(out, cdata);
         out.flush();
     }
 
@@ -674,7 +673,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     public void output(Text text, Writer out) throws IOException {
-        printText(text, out);
+        printText(out, text);
         out.flush();
     }
 
@@ -685,7 +684,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     public void output(Comment comment, Writer out) throws IOException {
-        printComment(comment, out);
+        printComment(out, comment);
         out.flush();
     }
 
@@ -697,7 +696,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(ProcessingInstruction pi, Writer out)
                                  throws IOException {
-        printProcessingInstruction(pi, out);
+        printProcessingInstruction(out, pi);
         out.flush();
     }
 
@@ -708,7 +707,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      */
     public void output(EntityRef entity, Writer out) throws IOException {
-        printEntityRef(entity, out);
+        printEntityRef(out, entity);
         out.flush();
     }
 
@@ -861,7 +860,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use.
      * @param encoding The encoding to add to the declaration
      */
-    protected void printDeclaration(Document doc, Writer out,
+    protected void printDeclaration(Writer out, Document doc,
                                     String encoding) throws IOException {
 
         // Only print the declaration if it's not being omitted
@@ -886,7 +885,7 @@ public class XMLOutputter implements Cloneable {
      * @param docType <code>Document</code> whose declaration to write.
      * @param out <code>Writer</code> to use.
      */
-    protected void printDocType(DocType docType, Writer out)
+    protected void printDocType(Writer out, DocType docType)
                         throws IOException {
 
         String publicID = docType.getPublicID();
@@ -925,7 +924,7 @@ public class XMLOutputter implements Cloneable {
      * @param comment <code>Comment</code> to write.
      * @param out <code>Writer</code> to use.
      */
-    protected void printComment(Comment comment, Writer out)
+    protected void printComment(Writer out, Comment comment)
                        throws IOException {
         out.write("<!--");
         out.write(comment.getText());
@@ -938,8 +937,8 @@ public class XMLOutputter implements Cloneable {
      * @param pi <code>ProcessingInstruction</code> to write.
      * @param out <code>Writer</code> to use.
      */
-    protected void printProcessingInstruction(ProcessingInstruction pi,
-                                              Writer out) throws IOException {
+    protected void printProcessingInstruction(Writer out, ProcessingInstruction pi
+                                              ) throws IOException {
         String target = pi.getTarget();
         String rawData = pi.getData();
 
@@ -966,7 +965,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param entity <code>EntityRef</code> to output.
      * @param out <code>Writer</code> to use.  */
-    protected void printEntityRef(EntityRef entity, Writer out)
+    protected void printEntityRef(Writer out, EntityRef entity)
                        throws IOException {
         out.write("&");
         out.write(entity.getName());
@@ -979,7 +978,7 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>Writer</code> to use.
      */
-    protected void printCDATA(CDATA cdata, Writer out) throws IOException {
+    protected void printCDATA(Writer out, CDATA cdata) throws IOException {
         String str = currentFormat.textNormalize
                      ? cdata.getTextNormalize()
                      : ((currentFormat.textTrim) ? cdata.getText().trim()
@@ -995,7 +994,7 @@ public class XMLOutputter implements Cloneable {
      * @param text <code>Text</code> to write.
      * @param out <code>Writer</code> to use.
      */
-    protected void printText(Text text, Writer out) throws IOException {
+    protected void printText(Writer out, Text text) throws IOException {
         String str = currentFormat.textNormalize
                      ? text.getTextNormalize()
                      : ((currentFormat.textTrim) ? text.getText().trim()
@@ -1007,7 +1006,7 @@ public class XMLOutputter implements Cloneable {
      * This will handle printing a string.  Escapes the element entities,
      * trims interior whitespace, etc. if necessary.
      */
-    protected void printString(String str, Writer out) throws IOException {
+    protected void printString(Writer out, String str) throws IOException {
         if (currentFormat.textNormalize) {
             str = Text.normalizeString( str);
         }
@@ -1027,7 +1026,7 @@ public class XMLOutputter implements Cloneable {
      * @param level <code>int</code> level of indention.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    protected void printElement(Element element, Writer out,
+    protected void printElement(Writer out, Element element,
                                 int level, NamespaceStack namespaces)
                        throws IOException {
 
@@ -1059,14 +1058,14 @@ public class XMLOutputter implements Cloneable {
         int previouslyDeclaredNamespaces = namespaces.size();
 
         // Print the element's namespace, if appropriate
-        printElementNamespace(element, out, namespaces);
+        printElementNamespace(out, element, namespaces);
 
         // Print out additional namespace declarations
-        printAdditionalNamespaces(element, out, namespaces);
+        printAdditionalNamespaces(out, element, namespaces);
 
         // Print out attributes
         if (attributes != null)
-            printAttributes( attributes, element, out, namespaces);
+            printAttributes(out, attributes, element, namespaces);
 
         // Depending on the settings (newlines, textNormalize, etc), we may
         // or may not want to print all of the content, so determine the
@@ -1096,14 +1095,14 @@ public class XMLOutputter implements Cloneable {
             if (nextNonText( content, start) < size) {
                 // Case Mixed Content - normal indentation
                 newline(out);
-                printContentRange(content, start, size, out,
+                printContentRange(out, content, start, size,
                                   level + 1, namespaces);
                 newline(out);
                 indent(out, level);
             }
             else {
                 // Case all CDATA or Text - no indentation
-                printTextRange(content, start, size, out);
+                printTextRange(out, content, start, size);
             }
             out.write("</");
             out.write(element.getQualifiedName());
@@ -1132,8 +1131,8 @@ public class XMLOutputter implements Cloneable {
      * @param level <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    protected void printContentRange(List content, int start, int end,
-                                     Writer out, int level,
+    protected void printContentRange(Writer out, List content,
+                                     int start, int end, int level,
                                      NamespaceStack namespaces)
                        throws IOException {
         boolean firstNode; // Flag for 1st node in content
@@ -1158,7 +1157,7 @@ public class XMLOutputter implements Cloneable {
                     if (!firstNode)
                         newline(out);
                     indent(out, level);
-                    printTextRange( content, first, index, out);
+                    printTextRange(out, content, first, index);
                 }
                 continue;
             }
@@ -1173,16 +1172,16 @@ public class XMLOutputter implements Cloneable {
             indent(out, level);
 
             if (next instanceof Comment) {
-                printComment((Comment)next, out);
+                printComment(out, (Comment)next);
             }
             else if (next instanceof Element) {
-                printElement((Element)next, out, level, namespaces);
+                printElement(out, (Element)next, level, namespaces);
             }
             else if (next instanceof EntityRef) {
-                printEntityRef((EntityRef)next, out);
+                printEntityRef(out, (EntityRef)next);
             }
             else if (next instanceof ProcessingInstruction) {
-                printProcessingInstruction((ProcessingInstruction)next, out);
+                printProcessingInstruction(out, (ProcessingInstruction)next);
             }
             else {
                 // XXX if we get here then we have a illegal content, for
@@ -1204,8 +1203,8 @@ public class XMLOutputter implements Cloneable {
      * @param end index of last content node (exclusive).
      * @param out <code>Writer</code> to use.
      */
-    protected void printTextRange(List content, int start, int end,
-                                  Writer out) throws IOException {
+    protected void printTextRange(Writer out, List content, int start, int end
+                                  ) throws IOException {
         String previous; // Previous text printed
         Object node;     // Next node to print
         String next;     // Next text to print
@@ -1246,10 +1245,10 @@ public class XMLOutputter implements Cloneable {
 
                 // Print the node
                 if (node instanceof CDATA) {
-                    printCDATA( (CDATA) node, out);
+                    printCDATA(out, (CDATA) node);
                 }
                 else {
-                    printString( next, out);
+                    printString(out, next);
                 }
 
                 previous = next;
@@ -1264,7 +1263,7 @@ public class XMLOutputter implements Cloneable {
      * @param ns <code>Namespace</code> to print definition of
      * @param out <code>Writer</code> to use.
      */
-    private void printNamespace(Namespace ns, Writer out,
+    private void printNamespace(Writer out, Namespace ns,
                                 NamespaceStack namespaces)
                      throws IOException {
         String prefix = ns.getPrefix();
@@ -1292,8 +1291,8 @@ public class XMLOutputter implements Cloneable {
      * @param attributes <code>List</code> of Attribute objcts
      * @param out <code>Writer</code> to use
      */
-    protected void printAttributes(List attributes, Element parent,
-                                   Writer out, NamespaceStack namespaces)
+    protected void printAttributes(Writer out, List attributes, Element parent,
+                                   NamespaceStack namespaces)
                        throws IOException {
 
         // I do not yet handle the case where the same prefix maps to
@@ -1306,7 +1305,7 @@ public class XMLOutputter implements Cloneable {
             Namespace ns = attribute.getNamespace();
             if ((ns != Namespace.NO_NAMESPACE) &&
                 (ns != Namespace.XML_NAMESPACE)) {
-                    printNamespace(ns, out, namespaces);
+                    printNamespace(out, ns, namespaces);
             }
 
             out.write(" ");
@@ -1319,7 +1318,7 @@ public class XMLOutputter implements Cloneable {
         }
     }
 
-    private void printElementNamespace(Element element, Writer out,
+    private void printElementNamespace(Writer out, Element element,
                                        NamespaceStack namespaces)
                              throws IOException {
         // Add namespace decl only if it's not the XML namespace and it's
@@ -1332,18 +1331,18 @@ public class XMLOutputter implements Cloneable {
         }
         if ( !((ns == Namespace.NO_NAMESPACE) &&
                (namespaces.getURI("") == null))) {
-            printNamespace(ns, out, namespaces);
+            printNamespace(out, ns, namespaces);
         }
     }
 
-    private void printAdditionalNamespaces(Element element, Writer out,
+    private void printAdditionalNamespaces(Writer out, Element element,
                                            NamespaceStack namespaces)
                                 throws IOException {
         List list = element.getAdditionalNamespaces();
         if (list != null) {
             for( int i = 0; i < list.size(); i++) {
                 Namespace additional = (Namespace)list.get( i);
-                printNamespace(additional, out, namespaces);
+                printNamespace(out, additional, namespaces);
             }
         }
     }
@@ -1357,7 +1356,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param out <code>Writer</code> to use
      */
-    protected void newline(Writer out) throws IOException {
+    private void newline(Writer out) throws IOException {
         if (currentFormat.indent != null) {
             out.write(currentFormat.lineSeparator);
         }
@@ -1370,7 +1369,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use
      * @param level current indent level (number of tabs)
      */
-    protected void indent(Writer out, int level) throws IOException {
+    private void indent(Writer out, int level) throws IOException {
         if (currentFormat.indent == null ||
             currentFormat.indent.equals("")) {
             return;
@@ -1695,7 +1694,7 @@ public class XMLOutputter implements Cloneable {
      * NamespaceStack, as a way to make NamespaceStack "friendly" toward
      * subclassers.
      */
-    protected NamespaceStack createNamespaceStack() {
+    private NamespaceStack createNamespaceStack() {
        // actually returns a XMLOutputter.NamespaceStack (see below)
        return new NamespaceStack();
     }
@@ -1714,4 +1713,118 @@ public class XMLOutputter implements Cloneable {
 
     // * * * * * * * * * * Deprecated methods * * * * * * * * * *
 
+    /* The methods below here are deprecations of protected methods.  We
+     * don't usually deprecate protected methods, so they're commented out.
+     * They're left here in case this mass deprecation causes people trouble.
+     * Since we're getting close to 1.0 it's actually better for people to
+     * raise issues early though.
+     */
+
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printAttributes(List attributes, Element parent,
+//                                   Writer out, NamespaceStack namespaces)
+//            throws IOException {
+//        printAttributes(out, attributes, parent, namespaces);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printCDATA(CDATA cdata, Writer out) throws IOException {
+//        printCDATA(out, cdata);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printComment(Comment comment, Writer out)
+//            throws IOException {
+//        printComment(out, comment);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printContentRange(List content, int start, int end,
+//                                     Writer out, int level,
+//                                     NamespaceStack namespaces)
+//            throws IOException {
+//        printContentRange(out, content, start, end, level, namespaces);
+//    }
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printDeclaration(Document doc, Writer out,
+//                                    String encoding) throws IOException {
+//        printDeclaration(out, doc, encoding);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printDocType(DocType docType, Writer out)
+//            throws IOException {
+//        printDocType(out, docType);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printElement(Element element, Writer out,
+//                                int level, NamespaceStack namespaces)
+//            throws IOException {
+//        printElement(out, element, level, namespaces);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printEntityRef(EntityRef entity, Writer out)
+//            throws IOException {
+//        printEntityRef(out, entity);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printProcessingInstruction(ProcessingInstruction pi,
+//                                              Writer out) throws IOException {
+//        printProcessingInstruction(out, pi);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printString(String str, Writer out) throws IOException {
+//        printString(out, str);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printText(Text text, Writer out) throws IOException {
+//        printText(out, text);
+//    }
+//
+//    /**
+//     * @deprecated Deprecated in beta 10, use the method with the same name
+//     * but different parameter order.
+//     */
+//    protected void printTextRange(List content, int start, int end,
+//                                  Writer out) throws IOException {
+//        printTextRange(out, content, start, end);
+//    }
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.46 2003/05/23 21:59:28 jhunter Exp $
+ $Id: Verifier.java,v 1.47 2003/05/29 02:47:40 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.46 $, $Date: 2003/05/23 21:59:28 $
+ * @version $Revision: 1.47 $, $Date: 2003/05/29 02:47:40 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.46 $ $Date: 2003/05/23 21:59:28 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.47 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -659,7 +659,7 @@ final public class Verifier {
      * @param c  to check for hex digit.
      * @return true if it's allowed, false otherwise.
      */
-    public static boolean isHexDigit(char c) {
+    private static boolean isHexDigit(char c) {
 
     // I suspect most characters passed to this method will be
     // correct hexadecimal digits, so I test for the true cases
@@ -719,7 +719,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's a character, 
      *                                false otherwise.
      */
-    public static boolean isXMLCharacter(char c) {
+    private static boolean isXMLCharacter(char c) {
     
         if (c == '\n') return true;
         if (c == '\r') return true;
@@ -742,7 +742,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's a name character, 
      *                                false otherwise.
      */
-    public static boolean isXMLNameCharacter(char c) {
+    private static boolean isXMLNameCharacter(char c) {
     
       return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
                              || c == '_' || c == ':' || isXMLCombiningChar(c) 
@@ -760,7 +760,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's a name start character, 
      *                                false otherwise.
      */
-    public static boolean isXMLNameStartCharacter(char c) {
+    private static boolean isXMLNameStartCharacter(char c) {
     
       return (isXMLLetter(c) || c == '_' || c ==':');
     
@@ -775,7 +775,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's letter or digit, 
      *                                false otherwise.
      */
-    public static boolean isXMLLetterOrDigit(char c) {
+    private static boolean isXMLLetterOrDigit(char c) {
     
       return (isXMLLetter(c) || isXMLDigit(c));
     
@@ -788,7 +788,7 @@ final public class Verifier {
      * @param c <code>char</code> to check for XML name compliance.
      * @return <code>String</code> true if it's a letter, false otherwise.
      */
-    public static boolean isXMLLetter(char c) {
+    private static boolean isXMLLetter(char c) {
         // Note that order is very important here.  The search proceeds 
         // from lowest to highest values, so that no searching occurs 
         // above the character's value.  BTW, the first line is equivalent to:
@@ -1013,7 +1013,7 @@ final public class Verifier {
      * @return <code>boolean</code> true if it's a combining character,
      *         false otherwise.
      */
-    public static boolean isXMLCombiningChar(char c) {
+    private static boolean isXMLCombiningChar(char c) {
         // CombiningChar
         if (c < 0x0300) return false;  if (c <= 0x0345) return true;
         if (c < 0x0360) return false;  if (c <= 0x0361) return true;
@@ -1147,7 +1147,7 @@ final public class Verifier {
      * @param c <code>char</code> to check.
      * @return <code>String</code> true if it's an extender, false otherwise.
      */
-    public static boolean isXMLExtender(char c) {
+    private static boolean isXMLExtender(char c) {
 
         if (c < 0x00B6) return false;  // quick short circuit
 
@@ -1177,7 +1177,7 @@ final public class Verifier {
      * @param c <code>char</code> to check for XML digit compliance.
      * @return <code>boolean</code> true if it's a digit, false otherwise.
      */
-    public static boolean isXMLDigit(char c) {
+    private static boolean isXMLDigit(char c) {
       
         if (c < 0x0030) return false;  if (c <= 0x0039) return true;
         if (c < 0x0660) return false;  if (c <= 0x0669) return true;
