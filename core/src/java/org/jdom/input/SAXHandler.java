@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.65 2004/02/27 11:32:58 jhunter Exp $
+ $Id: SAXHandler.java,v 1.66 2004/02/27 21:27:28 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.65 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.66 $, $Date: 2004/02/27 21:27:28 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.65 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.66 $ $Date: 2004/02/27 21:27:28 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -349,22 +349,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         internalSubset.append("  <!ATTLIST ")
               .append(eName)
-              .append(" ")
+              .append(' ')
               .append(aName)
-              .append(" ")
+              .append(' ')
               .append(type)
-              .append(" ");
+              .append(' ');
         if (valueDefault != null) {
               internalSubset.append(valueDefault);
         } else {
-            internalSubset.append("\"")
+            internalSubset.append('\"')
                   .append(value)
-                  .append("\"");
+                  .append('\"');
         }
         if ((valueDefault != null) && (valueDefault.equals("#FIXED"))) {
             internalSubset.append(" \"")
                   .append(value)
-                  .append("\"");
+                  .append('\"');
         }
         internalSubset.append(">\n");
     }
@@ -382,7 +382,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
         internalSubset.append("  <!ELEMENT ")
               .append(name)
-              .append(" ")
+              .append(' ')
               .append(model)
               .append(">\n");
     }
@@ -892,18 +892,18 @@ if (!inDTD) {
         if (publicID != null) {
             internalSubset.append(" PUBLIC \"")
                   .append(publicID)
-                  .append("\"");
+                  .append('\"');
         }
         if (systemID != null) {
             if (publicID == null) {
                 internalSubset.append(" SYSTEM ");
             }
             else {
-                internalSubset.append(" ");
+                internalSubset.append(' ');
             }
-            internalSubset.append("\"")
+            internalSubset.append('\"')
                   .append(systemID)
-                  .append("\"");
+                  .append('\"');
         }
     }
 
