@@ -2,6 +2,10 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Take action on detach() allowing a Doc to have its root removed with an ISE
+  upon later access.  This also removes the need to remove the Document(null)
+  usage by builders.
+
 * How about if we add getTextNormalize() for normalized and make getTextTrim()
   only do a trim?
 
@@ -28,9 +32,6 @@ Items that need to be done:
 * Fix bug where DOMOutputter creates nodes with "" as their
   node.getNamespaceURI() even if the node is not in a namespace.
   http://lists.denveronline.net/lists/jdom-interest/2001-March/005117.html
-
-* Remove hack requiring new Document(null).  The builders can create a
-  List and then at the end assign it as the doc's mixed content.
 
 * Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
   text) prints an extra whitespace line between one closing element and 
@@ -70,12 +71,13 @@ Items that need to be done:
   http://www.megginson.com/SAX/Java/features.html
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
+  Regardless, the SAX builder should not assume there's interning!
 
 * Perhaps have builder flags to indicate if surrounding whitespace (not just
-  ignorable whitespace) should be trimmed, if entity refs should be expanded,
-  if CDATA sections should be included, and if comment sections should be
-  included.  All seem like reasonable customizations.  The whitespace flag
-  should respect xml:space.  It might use an XMLFilter to do the job.
+  ignorable whitespace) should be trimmed, if CDATA sections should be 
+  included, and if comment sections should be included.  All seem like 
+  reasonable customizations.  The whitespace flag should respect xml:space.  
+  It might use an XMLFilter to do the job.
 
 * Investigate a custom singly LinkedList to save memory.  (Jools has code.)
 
