@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.50 2004/08/25 17:53:08 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.51 2004/09/03 18:30:44 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -216,6 +216,9 @@ For instructions on how to build JDOM, please view the README.txt file.
     <copy todir="${build.dest}/META-INF"
           filtering="yes">
           <fileset dir="${package.dir}/META-INF"/>
+          <fileset dir=".">
+                <include name="LICENSE.txt"/>
+          </fileset>
     </copy>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
