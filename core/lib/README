@@ -1,0 +1,32 @@
+The following is a description of the JARs included with JDOM.  
+More information about the JARs can be found by reading the files 
+accompanying the JARs.  Note that the build scripts (build*) take
+care of adding the proper JARs to the path for building.  However
+you need to set your classpath properly for runtime execution.
+
+ant.jar
+  Used for building JDOM.
+
+collections.jar
+  Needed only if building JDOM on JDK 1.1.  Not needed for JDK 1.2.  Do not
+  put this in your classpath if you're using JDK 1.2.
+
+xerces.jar
+  An XML parser you can use with JDOM.  It's very popular but doesn't have 
+  JAXP 1.1 support and it has a large JAR footprint.  Use this parser if you 
+  don't care about XSLT transforms.  It's the default if no other parsers 
+  are in your classpath.
+
+crimson.jar
+  Another XML parser you can use with JDOM.  It has JAXP 1.1 support and a 
+  relatively small JAR.  Use this parser if you're doing transforms or want
+  a small footprint.  It's the default JAXP parser, so JDOM will use Crimson
+  if you have jaxp.jar and this JAR in your classpath.
+
+jaxp.jar
+  The Java API for XML Processing containing javax.xml.* classes.  Put this 
+  in your classpath if you're doing XSLT transforms.
+
+xalan.jar
+  An XSLT processor.  Put this in your classpath if you're doing transforms.
+
