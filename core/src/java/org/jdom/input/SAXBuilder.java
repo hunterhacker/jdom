@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.48 2001/05/18 22:34:07 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.49 2001/05/18 22:45:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.48 $ $Date: 2001/05/18 22:34:07 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.49 $ $Date: 2001/05/18 22:45:10 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -170,6 +170,18 @@ public class SAXBuilder {
     public SAXBuilder(String saxDriverClass, boolean validate) {
         this.saxDriverClass = saxDriverClass;
         this.validate = validate;
+    }
+
+    /*
+     * <p>
+     * This sets a custom JDOMFactory for the builder.  Use this to build
+     * the tree with your own subclasses of the JDOM classes.
+     * </p>
+     *
+     * @param factory <code>JDOMFactory</code> to use
+     */
+    public void setFactory(JDOMFactory factory) {
+        this.factory = factory;
     }
 
     /**

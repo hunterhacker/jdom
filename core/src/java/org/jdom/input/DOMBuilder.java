@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.35 2001/05/09 07:11:46 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.36 2001/05/18 22:45:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -91,7 +91,7 @@ import org.xml.sax.*;
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.35 $ $Date: 2001/05/09 07:11:46 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.36 $ $Date: 2001/05/18 22:45:10 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -104,6 +104,9 @@ public class DOMBuilder {
 
     /** Adapter class to use */
     private String adapterClass;
+
+    /** The factory for creating new JDOM objects */
+    private JDOMFactory factory = new DefaultJDOMFactory();
 
     /**
      * <p>
@@ -163,6 +166,18 @@ public class DOMBuilder {
         setValidation(validate);
     }
 
+    /*
+     * <p>
+     * This sets a custom JDOMFactory for the builder.  Use this to build 
+     * the tree with your own subclasses of the JDOM classes.
+     * </p>
+     *
+     * @param factory <code>JDOMFactory</code> to use
+     */
+    public void setFactory(JDOMFactory factory) {
+        this.factory = factory;
+    }
+
     /**
      * <p>
      * This sets validation for the builder.
@@ -188,7 +203,7 @@ public class DOMBuilder {
      * @throws JDOMException when errors occur in parsing.
      */
     public Document build(InputStream in) throws JDOMException {
-        Document doc = new Document((Element)null);
+        Document doc = factory.document((Element)null);
         org.w3c.dom.Document domDoc = null;
 
         try {
@@ -319,7 +334,7 @@ public class DOMBuilder {
      * @return <code>Document</code> - JDOM document object.
      */
     public Document build(org.w3c.dom.Document domDocument) {
-        Document doc = new Document((Element)null);
+        Document doc = factory.document((Element)null);
         buildTree(domDocument, doc, null, true);
         return doc;
     }
@@ -333,7 +348,7 @@ public class DOMBuilder {
      * @return <code>Element</code> - JDOM Element object
      */
     public org.jdom.Element build(org.w3c.dom.Element domElement) {
-        Document doc = new Document((Element)null);
+        Document doc = factory.document((Element)null);
         buildTree(domElement, doc, null, true);
         return doc.getRootElement();               
     }
@@ -374,11 +389,11 @@ public class DOMBuilder {
                         // Sometimes localName is null, if so try the tag name
                         localName = ((org.w3c.dom.Element)node).getTagName();
                     }
-                    element = new Element(localName);
+                    element = factory.element(localName);
                 }
                 else {
                     ns = Namespace.getNamespace(prefix, uri);
-                    element = new Element(localName, ns);
+                    element = factory.element(localName, ns);
                 }
 
                 // Add attributes
@@ -420,7 +435,7 @@ public class DOMBuilder {
                         }
                         Namespace attns = Namespace.getNamespace(prefix, uri);
                         Attribute attribute =
-                            new Attribute(attLocalName, attvalue, attns);
+                            factory.attribute(attLocalName, attvalue, attns);
                         element.setAttribute(attribute);
                     }
                 }
@@ -454,32 +469,32 @@ public class DOMBuilder {
 
             case Node.CDATA_SECTION_NODE:
                 String cdata = node.getNodeValue();
-                current.addContent(new CDATA(cdata));
+                current.addContent(factory.cdata(cdata));
                 break;
 
 
             case Node.PROCESSING_INSTRUCTION_NODE:
                 if (atRoot) {
                     doc.addContent(
-                        new ProcessingInstruction(node.getNodeName(),
-                                                  node.getNodeValue()));
+                        factory.processingInstruction(node.getNodeName(),
+                                                      node.getNodeValue()));
                 } else {
                     current.addContent(
-                        new ProcessingInstruction(node.getNodeName(),
-                                                  node.getNodeValue()));
+                        factory.processingInstruction(node.getNodeName(),
+                                                      node.getNodeValue()));
                 }
                 break;
 
             case Node.COMMENT_NODE:
                 if (atRoot) {
-                    doc.addContent(new Comment(node.getNodeValue()));
+                    doc.addContent(factory.comment(node.getNodeValue()));
                 } else {
-                    current.addContent(new Comment(node.getNodeValue()));
+                    current.addContent(factory.comment(node.getNodeValue()));
                 }
                 break;
 
             case Node.ENTITY_REFERENCE_NODE:
-                EntityRef entity = new EntityRef(node.getNodeName());
+                EntityRef entity = factory.entityRef(node.getNodeName());
                 current.addContent(entity);
                 break;
 
@@ -492,7 +507,7 @@ public class DOMBuilder {
                 String publicID = domDocType.getPublicId();
                 String systemID = domDocType.getSystemId();
 
-                DocType docType = new DocType(domDocType.getName());
+                DocType docType = factory.docType(domDocType.getName());
                 if ((publicID != null) && (!publicID.equals(""))) {
                     docType.setPublicID(publicID);
                 }
