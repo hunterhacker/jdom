@@ -2,22 +2,6 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-- FilterList
-- Text class (if we're going to do it, we need to do it now)
-- XMLOutputter character escaping, maybe?
-- Decide on serialization
-- Decide on subclassing and protected variables/methods
-- Figure out cloning, maybe?
-- JavaDoc cleanup
-- Lots of test cases!
-- Packaging
-- JSR process crap
-
-* Consider if it's be worthwhile to configure sax not to expand entities and
-  expand them ourselves if necessary, thus being able to get the internal DTD
-  subset even if entity expansion is on.  SAX normally doesn't give you the
-  internal DTD subset if expansion is on.
-
 * Verify we have a solution for when entities are unexpanded and present in
   attribute values.  (Phil Nelson)
 
@@ -237,6 +221,11 @@ Items that need to be done:
 * Create a builder based on Xerces' XNI, which will be more featureful and
   probably faster than the one based on SAX.
   See http://lists.denveronline.net/lists/jdom-interest/2001-July/007362.html
+  Some existing SAX limitations which hurt round-tripping:
+  * Can't tell if attribute values are included from the DTD, because SAX
+    doesn't tell if attributes are standalone/implicit
+  * Can't get access to retain the internal dtd subset unless entity 
+    expansion is off
 
 * Contribute the samples from Elliotte's XML DevCon talk to the samples/
   directory.  http://metalab.unc.edu/xml/slides/xmlsig/jdom/JDOM.html
