@@ -58,6 +58,7 @@ import java.util.Map;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Kevin Regan
  * @version 1.0
  */
 public class Element implements Serializable, Cloneable {
@@ -365,54 +366,17 @@ public class Element implements Serializable, Cloneable {
      *         is mixed content (both textual data and elements).
      */
     public boolean hasMixedContent() {
-        boolean hasText = false;
-        boolean hasElements = false;
-        boolean hasComments = false;
-        boolean hasEntities = false;
-        boolean hasPIs = false;
-
+        Class prevClass = null;
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
-            if (obj instanceof String) {
-                if (hasElements ||
-                    hasComments ||
-                    hasEntities ||
-                    hasPIs) {
-                    return true;
-                }
-                hasText = true;
-            } else if (obj instanceof Element) {
-                if (hasText ||
-                    hasComments ||
-                    hasEntities ||
-                    hasPIs) {
-                    return true;
-                }
-                hasElements = true;
-            } else if (obj instanceof Comment) {
-                if (hasText ||
-                    hasElements ||
-                    hasEntities ||
-                    hasPIs) {
-                    return true;
-                }
-                hasComments = true;
-            } else if (obj instanceof Entity) {
-                if (hasText ||
-                    hasElements ||
-                    hasComments ||
-                    hasPIs) {
-                    return true;
-                }
-                hasEntities = true;
-            } else if (obj instanceof ProcessingInstruction) {
-                if (hasText ||
-                    hasElements ||
-                    hasComments ||
-                    hasEntities) {
-                    return true;
-                }
+            Class newClass = obj.getClass();
+
+            if (newClass != prevClass) {
+               if (prevClass != null) {
+                  return true;
+               }
+               prevClass = newClass;
             }
         }
 

@@ -74,6 +74,7 @@ import org.xml.sax.InputSource;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Philip Nelson
+ * @author Kevin Regan
  * @version 1.0
  */
 public class DOMBuilder implements Builder {
@@ -314,8 +315,11 @@ public class DOMBuilder implements Builder {
                 for (int i=0, size=elementAttributes.size(); i<size; i++) {
                     Node att = (Node)elementAttributes.get(i);
 
-                    element.addAttribute(att.getNodeName(),
-                                         att.getNodeValue());
+					// don't send xmlns attributes to JDOM
+					if (!att.getNodeName().startsWith("xmlns:")) {
+						element.addAttribute(att.getNodeName(),
+											 att.getNodeValue());
+					}
                 }
 
                 // Recurse on child nodes
