@@ -1,14 +1,15 @@
 
 package org.jdom.contrib.xpath.jdom;
 
-import org.jdom.contrib.xpath.Context;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Collections;
 
 import org.jdom.Element;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Collections;
+import org.jdom.contrib.xpath.Context;
+import org.jdom.contrib.xpath.impl.Step;
 
 public class JDOMContext implements Context
 {
@@ -20,29 +21,27 @@ public class JDOMContext implements Context
     _element = element;
   }
 
-  public List walkStep(String axis,
-                         String nodeTest)
-  {
-    return wrapInContexts(_element.getChildren(nodeTest));
+  public List walkStep(Step step) {
+    return wrapInContexts(_element.getChildren(step.getLocalName()));
   }
 
   private List wrapInContexts(List elements)
   {
     Iterator elemIter = elements.iterator();
-    Vector wrapped = new Vector();
+    List wrapped = new ArrayList();
 
     while (elemIter.hasNext())
     {
       wrapped.add( new JDOMContext( (Element) elemIter.next() ) );
     }
-    
+
     return wrapped;
   }
 
   public String toString()
   {
     if (_element != null) {
-      return _element.toString();
+      return _element.toString() + " " + _element.getTextTrim();
     }
 
     return "";
