@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * <p><code>Attribute</code> defines behavior for an XML
@@ -76,7 +77,7 @@ public class Element implements Serializable, Cloneable {
     /** The parent of this <code>Element</code> */
     protected Element parent;
 
-    /** Whether this <code>Element</code> is the root (Document is the parent) */
+    /** Whether this element is the root (Document is the parent) */
     protected boolean isRootElement;
 
     /** The attributes of the <code>Element</code> */
@@ -87,6 +88,9 @@ public class Element implements Serializable, Cloneable {
     
     /** The textual content of this element <em>for optimization</em> */
     private String textualContent;
+
+    /** The trimmed textual content of this element <em>for optimization</em> */
+    private String trimmedContent;
 
     /*
      * XXX: We need to build in a "cache" with the child elements -
@@ -143,6 +147,7 @@ public class Element implements Serializable, Cloneable {
         content = new LinkedList();
         isRootElement = false;
 	textualContent = null;
+	trimmedContent = null;
     }
 
     /**
@@ -390,18 +395,18 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the actual textual content of this
-     *   <code>Element</code>.  This will include all text within
-     *   this single element, including <code>CDATA</code> sections
-     *   if they exist.  If no textual value exists for the
-     *   <code>Element</code>, an empty <code>String</code> is returned.
+     * This returns the textual content directly held under this
+     *   element.  This will include all text within
+     *   this single element, including whitespace and CDATA
+     *   sections if they exist.  It's essentially the concatenation of
+     *   all String nodes returned by getMixedContent().  The call does not
+     *   recurse into child elements.  If no textual value exists for the 
+     *   element, null is returned.
      * </p>
      *
-     * @param preserveWhitespace <code>boolean</code> indicating whether
-     *        whitespace should be preserved.
-     * @return <code>String</code> - value for this element.
+     * @return text content for this element, or null if none
      */
-    public String getContent(boolean preserveWhitespace) {
+    public String getText() {
 	// Use "cached" text if available
 	if (textualContent == null) {	
 
@@ -411,53 +416,151 @@ public class Element implements Serializable, Cloneable {
 	    while (i.hasNext()) {
 		Object obj = i.next();
 		if (obj instanceof String) {
-    		    String text = (String)obj;
-    		    if (preserveWhitespace) {
-    			textContent.append(text);
-    		    } else {
-    			textContent.append(text.trim());
-    		    }
+                    textContent.append((String)obj);
 		}
 	    }
 	    textualContent = textContent.toString();
 	}
 	
-        return textualContent;
+        if (textualContent.length() == 0) {
+            return null;
+        }
+        else {
+            return textualContent;
+        }
     }
 
     /**
      * <p>
-     * This will return the actual textual content of this
-     *   <code>Element</code>.  This will include all text within
-     *   this single element, including <code>CDATA</code> sections
-     *   if they exist.  If no textual value exists for the
-     *   <code>Element</code>, an empty <code>String</code> is returned.
-     * </p>
-     * <p>
-     *  This default version trims whitespace surrounding the content.
+     * This returns the textual content of this element with all 
+     * surrounding whitespace removed and internal whitespace normalized
+     * to a single space.  If no textual value exists for the element, 
+     * null is returned; if only whitespace exists, the empty string is
+     * returned.
      * </p>
      *
-     * @return <code>String</code> - value for this element.
+     * @return normalized text content for this element, or null if none
      */
-    public String getContent() {
-	return getContent(false);
+    public String getTextTrim() {
+	// Use "cached" trimmed text if available
+	if (trimmedContent == null) {	
+
+    	    StringBuffer textContent = new StringBuffer();
+
+            StringTokenizer tokenizer = new StringTokenizer(getText());
+	    while (tokenizer.hasMoreTokens()) {
+		String str = tokenizer.nextToken();
+                textContent.append(str);
+                if (tokenizer.hasMoreTokens()) {
+                    textContent.append(" ");  // separator
+                }
+            }
+
+	    trimmedContent = textContent.toString();
+	}
+	
+        return trimmedContent;
     }
 
     /**
      * <p>
-     * This will set the textual content of the <code>Element</code>.
-     *   If this <code>Element</code> will have both textual content
-     *   and nested elements, <code>{@link #setMixedContent}</code>
-     *   should be used instead,
+     * This convenience method returns the textual content of the named
+     * child element, or returns null if there's no such child or if the 
+     * child has no textual content.
      * </p>
      *
-     * @param textContent <code>String</code> content for <code>Element</code>.
-     * @return <code>Element</code> - this element modified.
+     * @param name the name of the child
+     * @return text content for the named child, or null if none
      */
-    public Element setContent(String textContent) {
+    public String getChildText(String name) {
+        Element child = getChild(name);
+        if (child == null) {
+            return null;
+        }
+        else {
+            return child.getText();
+        }
+    }
+
+    /**
+     * <p>
+     * This convenience method returns the trimmed textual content of the 
+     * named child element, or returns null if there's no such child or if the 
+     * child has no textual content.  See <code>getTextTrim()</code> for
+     * details of text trimming.
+     * </p>
+     *
+     * @param name the name of the child
+     * @return trimmed text content for the named child, or null if none
+     */
+    public String getChildTextTrim(String name) {
+        Element child = getChild(name);
+        if (child == null) {
+            return null;
+        }
+        else {
+            return child.getTextTrim();
+        }
+    }
+
+    /**
+     * <p>
+     * This convenience method returns the textual content of the named
+     * child element, or returns null if there's no such child or if the 
+     * child has no textual content.
+     * </p>
+     *
+     * @param name the name of the child
+     * @param ns the namespace of the child
+     * @return text content for the named child, or null if none
+     */
+    public String getChildText(String name, Namespace ns) {
+        Element child = getChild(name, ns);
+        if (child == null) {
+            return null;
+        }
+        else {
+            return child.getText();
+        }
+    }
+
+    /**
+     * <p>
+     * This convenience method returns the trimmed textual content of the 
+     * named child element, or returns null if there's no such child or if the 
+     * child has no textual content.  See <code>getTextTrim()</code> for
+     * details of text trimming.
+     * </p>
+     *
+     * @param name the name of the child
+     * @param ns the namespace of the child
+     * @return trimmed text content for the named child, or null if none
+     */
+    public String getChildTextTrim(String name, Namespace ns) {
+        Element child = getChild(name, ns);
+        if (child == null) {
+            return null;
+        }
+        else {
+            return child.getTextTrim();
+        }
+    }
+
+    /**
+     * <p>
+     * This sets the content of the element to be the text given.
+     * All existing text content and non-text context is removed.
+     * If this element should have both textual content and nested 
+     * elements, use <code>{@link #setMixedContent}</code> instead.
+     * </p>
+     *
+     * @param text new content for the element
+     * @return this element modified
+     */
+    public Element setText(String text) {
         content.clear();
-        content.add(textContent);
-	textualContent = null;
+	clearContentCache();
+        content.add(text);
 
         return this;
     }
@@ -494,95 +597,54 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the content of the element.  This should be
-     *   used when the <code>{@link #hasMixedContent}</code>
-     *   evaluates to <code>true</code>.  When there is no mixed
-     *   content, it returns a <code>List</code> with a single
-     *   <code>String</code> (when only data is present) or a
-     *   <code>List</code> with only elements (when only nested
-     *   elements are present).  The List returned is "live" and 
-     *   modifications to it affect the element's actual contents.
+     * This returns the full content of the element as a List which
+     * may contain objects of type <code>String</code>, <code>Element</code>,
+     * <code>Comment</code>, <code>ProcessingInstruction</code>, and
+     * <code>Entity</code>.  When there is technically no mixed content and
+     * all contents are of the same type, then all objects returned in the
+     * List will be of the same type.  The List returned is "live" and 
+     * modifications to it affect the element's actual contents.  Whitespace
+     * content is returned in its entirety.
      * </p>
      *
-     * @param preserveWhitespace <code>boolean</code> indicating whether
-     *        whitespace should be preserved around text.
-     * @return <code>List</code> - the mixed content of the
-     *         <code>Element</code>: contains <code>String</code>,
-     *         <code>Element</code>, <code>{@link Comment}</code>,
-     *         and <code>{@link Entity}</code> objects.
+     * @return a <code>List</code> containing the mixed content of the
+     *         element: may contain <code>String</code>,
+     *         <code>{@link Element}</code>, <code>{@link Comment}</code>,
+     *         <code>{@link ProcessingInstruction}</code>, and 
+     *         <code>{@link Entity}</code> objects.
      */
-    public List getMixedContent(boolean preserveWhitespace) {
+    public List getMixedContent() {
         PartialList result = new PartialList(content, this);
-	if (preserveWhitespace) {
-	    result.addAllPartial(content);
-	} else {
-	    for (Iterator i = content.iterator(); i.hasNext(); ) {
-		Object obj = i.next();
-		if (obj instanceof String) {
-		    result.addPartial(((String)obj).trim());
-		} else {
-		    result.addPartial(obj);
-		}
-	    }
-	}
+	result.addAllPartial(content);
         return result;
     }
 
     /**
      * <p>
-     * This will return the content of the element.  This should be
-     *   used when the <code>{@link #hasMixedContent}</code>
-     *   evaluates to <code>true</code>.  When there is no mixed
-     *   content, it returns a <code>List</code> with a single
-     *   <code>String</code> (when only data is present) or a
-     *   <code>List</code> with only elements (when only nested
-     *   elements are present).  The List returned is "live" and 
-     *   modifications to it affect the element's actual contents.
-     * </p>
-     * <p>
-     *  This default version trims all surrounding whitespace from
-     *    textual content.
+     * This sets the content of the element.  The passed in List should
+     * contain only objects of type <code>String</code>, <code>Element</code>,
+     * <code>Comment</code>, <code>ProcessingInstruction</code>, and
+     * <code>Entity</code>.
      * </p>
      *
-     * @return <code>List</code> - the mixed content of the
-     *         <code>Element</code>: contains <code>String</code>,
-     *         <code>Element</code>, <code>{@link Comment}</code>,
-     *         and <code>{@link Entity}</code> objects.
-     */
-    public List getMixedContent() {
-	return getMixedContent(false);
-    }
-
-    /**
-     * <p>
-     * This will return the content of the element.  This should be
-     *   used when the <code>{@link #hasMixedContent}</code>
-     *   evaluates to <code>true</code>.  When there is no mixed
-     *   content, it returns a <code>List</code> with a single
-     *   <code>String</code> (when only data is present) or a
-     *   <code>List</code> with only elements (when only nested
-     *   elements are present).
-     * </p>
-     *
-     * @return <code>Element</code> - this element modified.
+     * @return this element modified
      */
     public Element setMixedContent(List mixedContent) {
         content.clear();
+        clearContentCache();
         content.addAll(mixedContent);
-	textualContent = null;
-
         return this;
     }
 
     /**
      * <p>
-     * This will return a <code>List</code> of all the XML
-     *   elements nested directly (one level deep) within
-     *   this <code>Element</code>, each in <code>Element</code>
-     *   form.  If the <code>Element</code> has no nested elements,
-     *   an empty list will be returned.  The returned list is "live"
-     *   and changes to it affect the element's actual contents.
-     * </p><p>
+     * This returns a <code>List</code> of all the child elements
+     * nested directly (one level deep) within this element, as 
+     * <code>Element</code> objects.  If this target element has no nested 
+     * elements, an empty List is returned.  The returned list is "live"
+     * and changes to it affect the element's actual contents.
+     * </p>
+     * <p>
      * This performs no recursion, so an elements nested two levels
      *   deep would have to be obtained with:
      * <pre>
@@ -597,9 +659,7 @@ public class Element implements Serializable, Cloneable {
      * </pre>
      * </p>
      *
-     * @return <code>List</code> - list of nested
-     *                               <code>Element</code>
-     *                               instances for this element.
+     * @return list of child <code>Element</code> objects for this element
      */
     public List getChildren() {
         PartialList elements = new PartialList(content, this);
@@ -617,13 +677,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will set the children of this <code>Element</code> to the
-     *   <code>Element</code>s within the supplied <code>:ost</code>.
-     *   All existing children of this <code>Element</code> are replaced.
+     * This sets the content of the element to be the List of 
+     * <code>Element</code> objects within the supplied <code>List</code>.
+     * All existing element and non-element content of the element is removed.
      * </p>
      *
-     * @param children <code>List</code> of <code>Element</code>s to add.
-     * @return <code>Element</code> - this element modified.
+     * @param children <code>List</code> of <code>Element</code> objects to add
+     * @return this element modified
      */
     public Element setChildren(List children) {
         return setMixedContent(children);
@@ -631,30 +691,24 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return a <code>List</code> of all the XML
-     *   elements nested directly (one level deep) within
-     *   this <code>Element</code> whose names match the name
-     *   specified, each in <code>Element</code>
-     *   form.  If the <code>Element</code> has no nested elements
-     *   that match the requested name, an empty list will be returned.
-     *   The returned list is "live" and changes to it affect the 
-     *   element's actual contents.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - the
-     *   supplied URI defines the <code>{@link Namespace}</code> that
-     *   retrieved <code>Element</code>s should be in.
-     * </p><p>
+     * This returns a <code>List</code> of all the child elements
+     * nested directly (one level deep) within this element with the given
+     * local name and belonging to a namespace at the given URI, returned as 
+     * <code>Element</code> objects.  If this target element has no nested 
+     * elements with the given name in the given namespace URI, an empty List 
+     * is returned.  The returned list is "live"
+     * and changes to it affect the element's actual contents.
+     * </p>
+     * <p>
      * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * for a code example.
      * </p>
      *
-     *
-     * @param name <code>String</code> name of attribute to return.
-     * @return <code>List</code> - all matching child elements.
+     * @param name local name for the children to match
+     * @param uri namespace URI for the children to belong to
+     * @return all matching child elements
      */
-    public List getChildren(String name, String uri) {
+    protected List getChildren(String name, String uri) {
         PartialList children = new PartialList(getChildren(), this);
 
         Iterator i = content.iterator();
@@ -674,28 +728,21 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return a <code>List</code> of all the XML
-     *   elements nested directly (one level deep) within
-     *   this <code>Element</code> whose names match the name
-     *   specified, each in <code>Element</code>
-     *   form.  If the <code>Element</code> has no nested elements
-     *   that match the requested name, an empty list will be returned.
-     *   The returned list is "live" and changes to it affect the 
-     *   element's actual contents.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - this
-     *   assumes that the <code>Element</code> is not in
-     *   a <code>{@link Namespace}</code>.
-     * </p><p>
+     * This returns a <code>List</code> of all the child elements
+     * nested directly (one level deep) within this element with the given
+     * local name and belonging to no namespace, returned as 
+     * <code>Element</code> objects.  If this target element has no nested 
+     * elements with the given name outside a namespace, an empty List 
+     * is returned.  The returned list is "live"
+     * and changes to it affect the element's actual contents.
+     * </p>
+     * <p>
      * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * for a code example.
      * </p>
      *
-     *
-     * @param name <code>String</code> name of attribute to return.
-     * @return <code>List</code> - all matching child elements.
+     * @param name local name for the children to match
+     * @return all matching child elements
      */
     public List getChildren(String name) {
         return getChildren(name, "");
@@ -703,58 +750,39 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return a <code>List</code> of all the XML
-     *   elements nested directly (one level deep) within
-     *   this <code>Element</code> whose names match the name
-     *   specified, each in <code>Element</code>
-     *   form.  If the <code>Element</code> has no nested elements
-     *   that match the requested name, an empty list will be returned.
-     *   The returned list is "live" and changes to it affect the 
-     *   element's actual contents.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - the
-     *   supplied <code>{@link Namespace}</code> defines the <code>Namespace</code> that
-     *   retrieved <code>Element</code>s should be in.
-     * </p><p>
+     * This returns a <code>List</code> of all the child elements
+     * nested directly (one level deep) within this element with the given
+     * local name and belonging to the given Namespace, returned as 
+     * <code>Element</code> objects.  If this target element has no nested 
+     * elements with the given name in the given Namespace, an empty List 
+     * is returned.  The returned list is "live"
+     * and changes to it affect the element's actual contents.
+     * </p>
+     * <p>
      * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * for a code example.
      * </p>
      *
-     *
-     * @param name <code>String</code> name of attribute to return.
-     * @return <code>List</code> - all matching child elements.
+     * @param name local name for the children to match
+     * @param ns <code>Namespace</code> to search within
+     * @return all matching child elements
      */
     public List getChildren(String name, Namespace ns) {
         return getChildren(name, ns.getURI());
     }
 
-
     /**
      * <p>
-     * This will return the child <code>{@link Element}</code>s for the
-     *   specified element name on this <code>Element</code>.  If
-     *   multiple elements exist for the specified name, only the first is
-     *   returned.  If no elements exist for the specified name, null is
-     *   returned.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - the
-     *   supplied URI defines the <code>{@link Namespace}</code> that
-     *   retrieved <code>Element</code>s should be in.
-     * </p><p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * This returns the first child element within this element with the 
+     * given local name and belonging to a namespace at the given URI.
+     * If no elements exist for the specified name, null is returned.
      * </p>
      *
-     * @param name <code>String</code> name of child elements to return.
-     * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element, or
-     *   null if not found.
+     * @param name local name of child element to match
+     * @param uri namespace URI the child must belong to
+     * @return the first matching child element, or null if not found
      */
-    public Element getChild(String name, String uri) {
+    protected Element getChild(String name, String uri) {
 
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -774,26 +802,15 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the child <code>{@link Element}</code>s for the
-     *   specified element name on this <code>Element</code>.  If
-     *   multiple elements exist for the specified name, only the first is
-     *   returned.  If no elements exist for the specified name, null is
-     *   returned.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - the
-     *   supplied <code>{@link Namespace}</code> defines the <code>Namespace</code> that
-     *   retrieved <code>Element</code>s should be in.
-     * </p><p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * This returns the first child element within this element with the 
+     * given local name and belonging to the given namespace.
+     * If no elements exist for the specified name and namespace, null is 
+     * returned.
      * </p>
      *
-     * @param name <code>String</code> name of child elements to return.
-     * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element,
-     *     or null if no child is found.
+     * @param name local name of child element to match
+     * @param ns <code>Namespace</code> to search within
+     * @return the first matching child element, or null if not found
      */
     public Element getChild(String name, Namespace ns) {
         return getChild(name, ns.getURI());
@@ -801,26 +818,14 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the child <code>{@link Element}</code>s for the
-     *   specified element name on this <code>Element</code>.  If
-     *   multiple elements exist for the specified name, only the first is
-     *   returned.  If no elements exist for the specified name, null is
-     *   returned.
-     * </p><p>
-     * The local name of the <code>Element</code> should be used - this
-     *   assumes that the <code>Element</code> is not in
-     *   a <code>{@link Namespace}</code>.
-     * </p><p>
-     * Please see the notes for <code>{@link #getChildren}</code>
-     *   regarding how deep this search will go within element
-     *   nestings. Only elements directly nested within this <code>Element</code>
-     *   will be returned.
+     * This returns the first child element within this element with the 
+     * given local name and belonging to no namespace.
+     * If no elements exist for the specified name and namespace, null is 
+     * returned.
      * </p>
      *
-     * @param name <code>String</code> name of child elements to return.
-     * @param uri <code>String</code> namespace URI of elements to find.
-     * @return <code>Element</code> - the first matching child element,
-     *    of null if no such child is found.
+     * @param name local name of child element to match
+     * @return the first matching child element, or null if not found
      */
     public Element getChild(String name) {
         return getChild(name, "");
@@ -828,14 +833,15 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add text to the content of this
-     *   <code>Element</code>.
+     * This adds text content to this element.  It does not replace the
+     * existing content as does <code>setText()</code>.
      * </p>
      *
-     * @param text <code>String</code> to add as content.
-     * @return <code>Element</code> - this element modified.
+     * @param text <code>String</code> to add
+     * @return this element modified
      */
-    public Element addChild(String text) {
+    public Element addContent(String text) {
+        clearContentCache();
         if (content.size() > 0) {
             Object ob = content.get(content.size() - 1);
             if (ob instanceof String) {
@@ -844,20 +850,18 @@ public class Element implements Serializable, Cloneable {
             }
         }
         content.add(text);
-
         return this;
     }
 
     /**
      * <p>
-     * This will add an <code>Element</code> as a child of this
-     *   <code>Element</code>.
+     * This adds element content to this element.
      * </p>
      *
-     * @param element <code>Element</code> to add as a child.
-     * @return <code>Element</code> - this element modified.
+     * @param element <code>Element</code> to add
+     * @return this element modified
      */
-    public Element addChild(Element element) {
+    public Element addContent(Element element) {
         if (element.isRootElement()) {
             throw new IllegalAddException(element, this);
         } else if (element.getParent() != null) {
@@ -866,62 +870,70 @@ public class Element implements Serializable, Cloneable {
 
         element.setParent(this);
         content.add(element);
-
         return this;
     }
 
     /**
      * <p>
-     * This will add an <code>Entity</code> as a child of this
-     *   <code>Element</code>.
+     * This adds a processing instruction as content to this element.
      * </p>
      *
-     * @param entity <code>Entity</code> to add as a child.
-     * @return <code>Element</code> - this element modified.
+     * @param pi <code>ProcessingInstruction</code> to add
+     * @return this element modified
      */
-    public Element addChild(Entity entity) {
+    public Element addContent(ProcessingInstruction pi) {
+        content.add(pi);
+        return this;
+    }
+
+    /**
+     * <p>
+     * This adds entity content to this element.
+     * </p>
+     *
+     * @param entity <code>Entity</code> to add
+     * @return this element modified
+     */
+    public Element addContent(Entity entity) {
         content.add(entity);
-
         return this;
     }
 
     /**
      * <p>
-     * This will add the supplied
-     *   <code>{@link ProcessingInstruction}</code>
-     *   as a child of this <code>Element</code>.
+     * This adds a comment as content to this element.
      * </p>
      *
-     * @param processingInstruction <code>ProcessingInstruction</code> to add.
-     * @return <code>Element</code> - this element modified.
+     * @param comment <code>Comment</code> to add
+     * @return this element modified
      */
-    public Element addChild(ProcessingInstruction processingInstruction) {
-        content.add(processingInstruction);
-
+    public Element addContent(Comment comment) {
+        content.add(comment);
         return this;
     }
 
     /**
      * <p>
-     * This will remove the specified <code>ProcessingInstruction</code>.
+     * This removes the specified <code>String</code>, compared using ==.
      * </p>
      *
-     * @param child <code>ProcessingInstruction</code> to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param text <code>String</code> to delete
+     * @return whether deletion occurred
      */
-    public boolean removeChild(ProcessingInstruction processingInstruction) {
-        return content.remove(processingInstruction);
+    public boolean removeContent(String text) {
+        clearContentCache();
+        return content.remove(text);
     }
 
     /**
      * <p>
-     * This will remove the specified <code>Element</code>.
+     * This removes the specified <code>Element</code>.
      * </p>
      *
-     * @param child <code>Element</code> to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param child <code>Element</code> to delete
+     * @return whether deletion occurred
      */
-    public boolean removeChild(Element element) {
+    public boolean removeContent(Element element) {
         if (content.remove(element)) {
             element.setParent(null);
             return true;
@@ -932,31 +944,52 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the specified <code>Entity</code>.
+     * This removes the specified <code>ProcessingInstruction</code>.
      * </p>
      *
-     * @param child <code>Entity</code> to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param child <code>ProcessingInstruction</code> to delete
+     * @return whether deletion occurred
      */
-    public boolean removeChild(Entity entity) {
+    public boolean removeContent(ProcessingInstruction pi) {
+        return content.remove(pi);
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>Entity</code>.
+     * </p>
+     *
+     * @param child <code>Entity</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeContent(Entity entity) {
         return content.remove(entity);
     }
 
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name, in the <code>{@link Namespace}</code>
-     *   identified by the supplied URI.
-     *   If multiple <code>Element</code>s
-     *   exist with that name, the first matching child is
-     *   removed.
+     * This removes the specified <code>Comment</code>.
      * </p>
      *
-     * @param name <code>String</code> name of child element to remove.
-     * @param uri <code>String</code> namespace URI of element to remove.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param comment <code>Comment</code> to delete
+     * @return whether deletion occurred
      */
-    public boolean removeChild(String name, String uri) {
+    public boolean removeContent(Comment comment) {
+        return content.remove(comment);
+    }
+
+    /**
+     * <p>
+     * This removes the first child element (one level deep) with the
+     * given local name and belonging to a namespace at the given URI.
+     * Returns true if a child was removed.
+     * </p>
+     *
+     * @param name the name of child elements to remove
+     * @param uri the namespace URI of elements to remove
+     * @return whether deletion occurred
+     */
+    protected boolean removeChild(String name, String uri) {
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
@@ -977,15 +1010,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name.  If multiple <code>Element</code>s
-     *   exist with that name, the first matching child is
-     *   removed. It searches for <code>Element</code>s
-     *   that are not in any <code>{@link Namespace}</code>.
+     * This removes the first child element (one level deep) with the
+     * given local name and belonging to no namespace.
+     * Returns true if a child was removed.
      * </p>
      *
-     * @param name <code>String</code> name of child to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param name the name of child elements to remove
+     * @return whether deletion occurred
      */
     public boolean removeChild(String name) {
         return removeChild(name, "");
@@ -993,38 +1024,31 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name, in the <code>{@link Namespace}</code>
-     *   supplied. If multiple <code>Element</code>s
-     *   exist with that name, the first matching child is
-     *   removed. It searches for <code>Element</code>s
-     *   that are not in any <code>{@link Namespace}</code>.
+     * This removes the first child element (one level deep) with the
+     * given local name and belonging to the given namespace.
+     * Returns true if a child was removed.
      * </p>
      *
-     * @param name <code>String</code> name of child to delete.
-     * @param ns <code>Namespace</code> to search within.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param name the name of child element to remove
+     * @param ns <code>Namespace</code> to search within
+     * @return whether deletion occurred
      */
     public boolean removeChild(String name, Namespace ns) {
         return removeChild(name, ns.getURI());
     }
 
-
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name.  If multiple <code>Element</code>s
-     *   exist with that name, the first matching child is
-     *   removed. It searches for <code>Element</code>s within
-     *   the <code>{@link Namespace}</code> identified by the
-     *   supplied URI.
+     * This removes all child elements (one level deep) with the
+     * given local name and belonging to a namespace at the given URI.
+     * Returns true if any were removed.
      * </p>
      *
-     * @param name <code>String</code> name of child elements to remove.
-     * @param uri <code>String</code> namespace URI of elements to remove.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param name the name of child elements to remove
+     * @param uri the namespace URI of elements to remove
+     * @return whether deletion occurred
      */
-    public boolean removeChildren(String name, String uri) {
+    protected boolean removeChildren(String name, String uri) {
         boolean deletedSome = false;
 
         Iterator i = content.iterator();
@@ -1046,15 +1070,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name.  If multiple <code>Element</code>s
-     *   exist with that name, all matching children are
-     *   removed. It searches for <code>Element</code>s
-     *   that in the specified <code>{@link Namespace}</code>.
+     * This removes all child elements (one level deep) with the
+     * given local name and belonging to no namespace.
+     * Returns true if any were removed.
      * </p>
      *
-     * @param name <code>String</code> name of child to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param name the name of child elements to remove
+     * @return whether deletion occurred
      */
     public boolean removeChildren(String name) {
         return removeChildren(name, "");
@@ -1062,15 +1084,14 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the <code>Element</code> with the
-     *   specified name.  If multiple <code>Element</code>s
-     *   exist with that name, all matching children are
-     *   removed.
+     * This removes all child elements (one level deep) with the
+     * given local name and belonging to the given namespace.
+     * Returns true if any were removed.
      * </p>
      *
-     * @param name <code>String</code> name of child to delete.
-     * @param ns <code>Namespace</code> to search within.
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @param name the name of child elements to remove
+     * @param ns <code>Namespace</code> to search within
+     * @return whether deletion occurred
      */
     public boolean removeChildren(String name, Namespace ns) {
         return removeChildren(name, ns.getURI());
@@ -1078,10 +1099,10 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes all children for this <code>Element</code>.
+     * This removes all child elements.  Returns true if any were removed.
      * </p>
      *
-     * @return <code>boolean</code> - whether deletion occurred.
+     * @return whether deletion occurred
      */
     public boolean removeChildren() {
         Iterator i = content.iterator();
@@ -1097,65 +1118,32 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add a <code>{@link Comment}</code> as a child of this
-     *   <code>Element</code>.
+     * This returns the complete set of attributes for this element, as a 
+     * <code>List</code> of <code>Attribute</code> objects in no particular 
+     * order, or an empty list if there are none.  
+     * The returned list is "live" and changes to it affect the 
+     * element's actual attributes.
      * </p>
      *
-     * @param comment <code>Comment</code> to add as a child.
-     * @return <code>Element</code> - this element modified.
-     */
-    public Element addChild(Comment comment) {
-        content.add(comment);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * This will remove the specified <code>Comment</code>.
-     * </p>
-     *
-     * @param comment <code>Comment</code> to delete.
-     * @return <code>boolean</code> - whether deletion occurred.
-     */
-    public boolean removeChild(Comment comment) {
-        return content.remove(comment);
-    }
-
-    /**
-     * <p>
-     * This returns the complete set of
-     *   <code>{@link Attribute}</code>s for
-     *   this <code>Element</code>, in no
-     *   particular order.
-     *   The returned list is "live" and changes to it affect the 
-     *   element's actual attributes.
-     * </p>
-     *
-     * @return <code>List</code> - attributes for the element.
+     * @return attributes for the element
      */
     public List getAttributes() {
         PartialList atts = new PartialList(attributes, this);
         atts.addAllPartial(attributes);
         return atts;
-
     }
 
     /**
      * <p>
-     * This will return the <code>{@link Attribute}</code> for the
-     *   specified attribute name on this <code>Element</code>, within
-     *   the <code>{@link Namespace}</code> defined by the supplied URI,
-     *   or null if no such attribute exists.
+     * This returns the attribute for this element with the given name
+     * and within the given namespace URI.  
      * </p>
      *
-     * @param name <code>String</code> name of child attribute to return.
-     * @param uri <code>String</code> namespace URI of attribute to find.
-     * @return <code>Attribute</code> - the requested attribute, or null
-     *    if the requested attribute does not exist.
+     * @param name name of the attribute to return
+     * @param uri namespace URI of the attribute to return
+     * @return attribute for the element
      */
-    public Attribute getAttribute(String name, String uri) {
-
+    protected Attribute getAttribute(String name, String uri) {
         Iterator i = attributes.iterator();
         while (i.hasNext()) {
             Attribute att = (Attribute)i.next();
@@ -1171,16 +1159,12 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the <code>{@link Attribute}</code> for the
-     *   specified attribute name on this <code>Element</code>
-     *   or null if no such attribute exists.
-     *   It searches for <code>{@link Attribute}</code>s not in
-     *   any <code>{@link Namespace}</code>.
+     * This returns the attribute for this element with the given name
+     * and within no namespace.  
      * </p>
      *
-     * @param name <code>String</code> name of attribute to return.
-     * @return <code>Attribute</code> - the requested attribute, or null
-     *    if the requested attribute does not exist.
+     * @param name name of the attribute to return
+     * @return attribute for the element
      */
     public Attribute getAttribute(String name) {
         return getAttribute(name, "");
@@ -1188,17 +1172,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the <code>{@link Attribute}</code> for the
-     *   specified attribute name on this <code>Element</code>, or null
-     *   if the requested attribute does not exist.
-     *   It searches for <code>{@link Attribute}</code>s in
-     *   the supplied <code>{@link Namespace}</code>.
+     * This returns the attribute for this element with the given name
+     * and within the given Namespace.  
      * </p>
      *
-     * @param name <code>String</code> name of attribute to return.
-     * @param ns <code>Namespace</code> to search within.
-     * @return <code>Attribute</code> - the requested attribute, or null
-     *    if the requested attribute does not exist.
+     * @param name name of the attribute to return
+     * @param ns <code>Namespace</code> to search within
+     * @return attribute for the element
      */
     public Attribute getAttribute(String name, Namespace ns) {
         return getAttribute(name, ns.getURI());
@@ -1206,11 +1186,47 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will set all the attributes for this <code>Element</code>.
+     * This returns the attribute value for the attribute with the given name
+     * and within no namespace, null if there is no such attribute, and the
+     * empty string if the attribute value is empty.
      * </p>
      *
-     * @param attributes <code>List</code> of attributes to add.
-     * @return <code>Element</code> - this element modified.
+     * @param name name of the attribute whose value to be returned
+     * @return the named attribute's value, or null if no such attribute
+     */
+    public String getAttributeValue(String name) {
+        return getAttributeValue(name, Namespace.NO_NAMESPACE);
+    }
+
+    /**
+     * <p>
+     * This returns the attribute value for the attribute with the given name
+     * and within the given Namespace, null if there is no such attribute, and
+     * the empty string if the attribute value is empty.
+     * </p>
+     *
+     * @param name name of the attribute whose valud is to be returned
+     * @param ns <code>Namespace</code> to search within
+     * @return the named attribute's value, or null if no such attribute
+     */
+    public String getAttributeValue(String name, Namespace ns) {
+        Attribute attrib = getAttribute(name, ns.getURI());
+        if (attrib == null) {
+            return null;
+        }
+        else {
+            return attrib.getValue();
+        }
+    }
+
+    /**
+     * <p>
+     * This sets all the attributes for this element to be those
+     * in the given <code>List</code>; all existing attributes are removed.
+     * </p>
+     *
+     * @param attributes <code>List</code> of attributes to set
+     * @return this element modified
      */
     public Element setAttributes(List attributes) {
         this.attributes = attributes;
@@ -1219,12 +1235,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add an <code>{@link Attribute}</code> to this
-     *   <code>Element</code>.
+     * This adds an attribute to this element.  Any existing attribute with
+     * the same name and namespace URI is removed.  (TODO: Code the
+     * replacement logic.)
      * </p>
      *
-     * @param attribute <code>Attribute</code> to add.
-     * @return <code>Element</code> - this element modified.
+     * @param attribute <code>Attribute</code> to add
+     * @return this element modified
      */
     public Element addAttribute(Attribute attribute) {
         attributes.add(attribute);
@@ -1233,13 +1250,13 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add an <code>{@link Attribute}</code> to this
-     *   <code>Element</code>.
+     * This adds an attribute to this element with the given name and value.
+     * To add attributes in namespaces using addAttribute(Attribute).
      * </p>
      *
-     * @param name name of the attribute to add.
-     * @param value value of the attribute to add.
-     * @return <code>Element</code> - this element modified.
+     * @param name name of the attribute to add
+     * @param value value of the attribute to add
+     * @return this element modified
      */
     public Element addAttribute(String name, String value) {
         Attribute attribute = new Attribute(name, value);
@@ -1249,50 +1266,52 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will remove the <code>{@link Attribute}</code> with the given name, within
-     *   the <code>{@link Namespace}</code> identified by the supplied URI.
+     * This removes the attribute with the given name and within the
+     * given namespace URI.
      * </p>
      *
-     * @param name <code>String</code> name of attribute to remove.
-     * @param uri <code>String</code> namespace URI of attribute to remove.
+     * @param name name of attribute to remove
+     * @param uri namespace URI of attribute to remove
+     * @return whether the attribute was removed
      */
-    public void removeAttribute(String name, String uri) {
+    public boolean removeAttribute(String name, String uri) {
         Iterator i = attributes.iterator();
         while (i.hasNext()) {
             Attribute att = (Attribute)i.next();
             if ((att.getNamespaceURI().equals(uri)) &&
                 (att.getName().equals(name))) {
                 i.remove();
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**
      * <p>
-     * This will remove the <code>{@link Attribute}</code> with the given name.
-     *   It searches only within <code>Attribute</code>s that are not
-     *   in any <code>{@link Namespace}</code>.
+     * This removes the attribute with the given name and within no
+     * namespace.
      * </p>
      *
-     * @param name <code>String</code> name of attribute to remove.
+     * @param name name of attribute to remove
+     * @return whether the attribute was removed
      */
-    public void removeAttribute(String name) {
-        removeAttribute(name, "");
+    public boolean removeAttribute(String name) {
+        return removeAttribute(name, "");
     }
 
     /**
      * <p>
-     * This will remove the <code>{@link Attribute}</code> with the given name.
-     *   It searches only within <code>Attribute</code>s the supplied
-     *   <code>{@link Namespace}</code>.
+     * This removes the attribute with the given name and within the
+     * given Namespace.
      * </p>
      *
-     * @param name <code>String</code> name of attribute to remove.
-     * @param ns <code>Namespace</code> to search within.
+     * @param name name of attribute to remove
+     * @param ns namespace URI of attribute to remove
+     * @return whether the attribute was removed
      */
-    public void removeAttribute(String name, Namespace ns) {
-        removeAttribute(name, ns.getURI());
+    public boolean removeAttribute(String name, Namespace ns) {
+        return removeAttribute(name, ns.getURI());
     }
 
     /**
@@ -1332,15 +1351,14 @@ public class Element implements Serializable, Cloneable {
     /**
      * <p>
      *  This tests for equality of this <code>Element</code> to the supplied
-     *    <code>Object</code>.
+     *    <code>Object</code>, explicitly using the == operator.  
      * </p>
      *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>Element</code> is
-     *         equal to the supplied <code>Object</code>.
+     * @param o <code>Object</code> to compare to
+     * @return whether the elements are equal
      */
-    public final boolean equals(Object ob) {
-        return super.equals(ob);
+    public final boolean equals(Object o) {
+        return (this == o);
     }
 
     /**
@@ -1348,7 +1366,7 @@ public class Element implements Serializable, Cloneable {
      *  This returns the hash code for this <code>Element</code>.
      * </p>
      *
-     * @return <code>int</code> - hash code.
+     * @return inherited hash code
      */
     public final int hashCode() {
         return super.hashCode();
@@ -1356,10 +1374,10 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This will return a deep clone of this <code>Element</code>.
+     *  This returns a deep clone of this element.
      * </p>
      *
-     * @return <code>Object</code> - clone of this <code>Element</code>.
+     * @return the clone of this element
      */
     public final Object clone() {
         Element element = new Element(name, namespace);
@@ -1391,12 +1409,12 @@ public class Element implements Serializable, Cloneable {
     
     /**
      * <p>
-     *  This allows other JDOM classes to "clear" the textual content
-     *    for this <code>Element</code>.
+     *  This "clears" the textual content cache for this element.
      * </p>
      */
     protected void clearContentCache() {
 	textualContent = null;
+	trimmedContent = null;
     }
 
     // Support a custom Namespace serialization so no two namespace
@@ -1412,5 +1430,123 @@ public class Element implements Serializable, Cloneable {
                      throws IOException, ClassNotFoundException {
         namespace = Namespace.getNamespace(
                       (String)in.readObject(), (String)in.readObject());
+    }
+
+
+
+
+/************************************************************
+     Methods below here are deprecated and will 
+     be removed before final release!
+*************************************************************/
+
+
+    /**
+     * @deprecated Use getText() and getTextTrim() instead
+     */
+    public String getContent(boolean preserveWhitespace) {
+        if (preserveWhitespace) {
+            return getText();
+        }
+        else {
+            return getTextTrim();
+        }
+    }
+
+    /**
+     * @deprecated Use getTextTrim() instead
+     */
+    public String getContent() {
+	return getTextTrim();
+    }
+
+    /**
+     * @deprecated Use setText(String) instead
+     */
+    public Element setContent(String text) {
+        return setText(text);
+    }
+
+    /**
+     * @deprecated Use getMixedContent(), with no arguments, instead
+     */
+    public List getMixedContent(boolean preserveWhitespace) {
+        PartialList result = new PartialList(content, this);
+	if (preserveWhitespace) {
+	    result.addAllPartial(content);
+	} else {
+	    for (Iterator i = content.iterator(); i.hasNext(); ) {
+		Object obj = i.next();
+		if (obj instanceof String) {
+		    result.addPartial(((String)obj).trim());
+		} else {
+		    result.addPartial(obj);
+		}
+	    }
+	}
+        return result;
+    }
+
+    /**
+     * @deprecated Use addContent(String) instead
+     */
+    public Element addChild(String text) {
+       return addContent(text);
+    }
+
+    /**
+     * @deprecated Use addContent(Element) instead
+     */
+    public Element addChild(Element element) {
+       return addContent(element);
+    }
+
+    /**
+     * @deprecated Use addContent(ProcessingInstruction) instead
+     */
+    public Element addChild(ProcessingInstruction pi) {
+       return addContent(pi);
+    }
+
+    /**
+     * @deprecated Use addContent(Entity) instead
+     */
+    public Element addChild(Entity entity) {
+       return addContent(entity);
+    }
+
+    /**
+     * @deprecated Use addContent(Comment) instead
+     */
+    public Element addChild(Comment comment) {
+       return addContent(comment);
+    }
+
+    /**
+     * @deprecated Use removeContent(Element) instead
+     */
+    public boolean removeChild(Element element) {
+       return removeContent(element);
+    }
+
+    /**
+     * @deprecated Use removeContent(ProcessingInstruction) instead
+     */
+    public boolean removeChild(ProcessingInstruction pi) {
+       return removeContent(pi);
+    }
+
+    /**
+     * @deprecated Use removeContent(Entity) instead
+     */
+    public boolean removeChild(Entity entity) {
+       return removeContent(entity);
+    }
+
+    /**
+     * @deprecated Use removeContent(Comment) instead
+     */
+    public boolean removeChild(Comment comment) {
+       return removeContent(comment);
     }
 }
