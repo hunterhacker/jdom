@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.62 2001/03/22 20:12:15 jhunter Exp $
+ $Id: Element.java,v 1.63 2001/04/04 00:42:58 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -389,7 +389,7 @@ public class Element implements Serializable, Cloneable {
      *    that exist, <i>excluding</i> the namespace of the element
      *    itself, which can be obtained through
      *    <code>{@link #getNamespace()}</code>. If there are no additional
-     *    declarations, this returns <code>null</code>.
+     *    declarations, this returns an empty list.
      * </p>
      *
      * @return <code>List</code> - the additional namespace declarations.
