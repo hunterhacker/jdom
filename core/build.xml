@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.49 2004/02/17 02:03:42 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.50 2004/08/25 17:53:08 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -22,12 +22,8 @@ For instructions on how to build JDOM, please view the README.txt file.
                              Defaults to ${lib.dir}/xml-apis.jar
         - parser.jar         The JAR containing the XML parser to use.
                              Defaults to ${lib.dir}/xerces.jar
-        - jaxen-jdom.jar     The JAR containing the Jaxen adapter for JDOM.
-                             Defaults to ${lib.dir}/jaxen-jdom.jar
-        - jaxen-core.jar     The JAR containing the core Jaxen API
-                             Defaults to ${lib.dir}/jaxen-core.jar
-        - jaxen-saxpath.jar  The JAR containing the SAXPath API Jaxen relies
-                             on. Defaults to ${lib.dir}/saxpath.jar
+        - jaxen.lib.dir      The directory containing the Jaxen JAR libraries.
+                             Defaults to ${lib.dir}
      -->
     <property file="${user.home}/jdom.build.properties" />
     <property file="${basedir}/build.properties" />
@@ -71,17 +67,17 @@ For instructions on how to build JDOM, please view the README.txt file.
     <property name="xml-apis.jar"       value="${lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"         value="${lib.dir}/xerces.jar"/>
     <property name="jdom-core"          value="${build.dest}"/>
-    <property name="jaxen-jdom.jar"     value="${lib.dir}/jaxen-jdom.jar"/>
-    <property name="jaxen-core.jar"     value="${lib.dir}/jaxen-core.jar"/>
-    <property name="jaxen-saxpath.jar"  value="${lib.dir}/saxpath.jar"/>
+    <property name="jaxen.lib.dir"      value="${lib.dir}"/>
 
     <!-- Compilation class path -->
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
-      <pathelement location="${jaxen-jdom.jar}"/>
-      <pathelement location="${jaxen-core.jar}"/>
-      <pathelement location="${jaxen-saxpath.jar}"/>
+
+      <fileset dir="${jaxen.lib.dir}">
+        <include name="jaxen-*.jar"/>
+        <include name="saxpath*.jar"/>
+      </fileset>
 
       <!-- We used to include the CLASSPATH environment variable in 
            compilation path as it might contain the path to the JDK 1.1 

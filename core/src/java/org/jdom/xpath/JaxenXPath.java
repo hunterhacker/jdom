@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.16 2004/02/06 09:28:32 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.17 2004/08/25 17:53:08 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,19 +62,18 @@ import java.util.*;
 import org.jaxen.*;
 import org.jaxen.jdom.*;
 import org.jdom.*;
-import org.saxpath.*;
 
 
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.16 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.17 $, $Date: 2004/08/25 17:53:08 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.16 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.17 $ $Date: 2004/08/25 17:53:08 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
@@ -282,7 +281,7 @@ class JaxenXPath extends    XPath {             // package protected
          xPath = new JDOMXPath(expr);
          xPath.setNamespaceContext(new NSContext());
       }
-      catch (SAXPathException ex1) {
+      catch (Exception ex1) {
          throw new JDOMException(
                         "Invalid XPath expression: \"" + expr + "\"", ex1);
       }
