@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.37 2004/02/06 09:28:32 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.38 2004/02/16 21:05:33 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.37 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.38 $, $Date: 2004/02/16 21:05:33 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.37 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.38 $ $Date: 2004/02/16 21:05:33 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -160,6 +160,9 @@ public class DOMOutputter {
                          domDoc.createProcessingInstruction(
                          pi.getTarget(), pi.getData());
                     domDoc.appendChild(domPI);
+                }
+                else if (node instanceof DocType) {
+                    // We already dealt with the DocType above
                 }
                 else {
                     throw new JDOMException(
