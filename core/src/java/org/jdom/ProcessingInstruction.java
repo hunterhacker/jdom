@@ -232,6 +232,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction setData(String data) {
         // XXX Need to validate the data
+        // XXX Make sure the PI doesn't contain ?> internally, a la CDATA
         this.rawData = data;
         this.mapData = parseData(data);
         return this;
@@ -398,13 +399,23 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         <code>Comment</code>.
      */
     public final String getSerializedForm() {
-        return new StringBuffer()
-            .append("<?")
-            .append(target)
-            .append(" ")
-            .append(rawData)
-            .append("?>")
-            .toString();
+        // Return <?target data?> or if no data then just <?target?>
+        if (!"".equals(rawData)) {
+            return new StringBuffer()
+                .append("<?")
+                .append(target)
+                .append(" ")
+                .append(rawData)
+                .append("?>")
+                .toString();
+        }
+        else {
+            return new StringBuffer()
+                .append("<?")
+                .append(target)
+                .append("?>")
+                .toString();
+        }
     }
 
     /**
