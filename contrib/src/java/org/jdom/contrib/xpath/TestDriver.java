@@ -22,50 +22,66 @@ public class TestDriver
 
     System.out.println("XPath Test Driver");
 
-    if ( args.length != 1 ) {
-      System.err.println("Usage: java ...TestDriver <input file>");
+    if ( args.length != 2 ) {
+      System.err.println("Usage: java ...TestDriver <input file> <xpath_expr>");
       System.exit(1);
     }
 
     SAXBuilder builder = new SAXBuilder();
 
     File inFile = new File(args[0]);
-
+    String xpathExpr = args[1];
+    
     Document doc = builder.build(inFile);
-
+    
     try {
+
       XMLOutputter outputter = new XMLOutputter();
       outputter.output(doc, System.out);
+
     } catch (IOException ioe) {
+
       ioe.printStackTrace();
+
     }
+
     System.out.println();
     System.out.println();
 
-    XPath xpath = new XPath("/b/c");
+    XPath xpath = new XPath(xpathExpr);
 
-    // use JDOMContext
-    JDOMContext context = new JDOMContext(doc.getRootElement());
-
-    List results = (List) xpath.applyTo(context);
-
-    System.out.println("\n\nJDOMContext results for " + xpath + ":");
-    for (Iterator iter = results.iterator(); iter.hasNext(); ) {
-      Object each = iter.next();
-      System.out.println(each);
-    }
-
-    // use NodeSet
-    System.out.println("\n\nNodeSet results for " + xpath + ":");
     NodeSet nodeset = new JdomNodeSet(doc.getRootElement());
-    xpath.apply(nodeset);
+
+    nodeset.apply(xpath);
+
+    // xpath.apply(nodeset);
+
+    Element resultRoot = new Element("xpath-results");
+
+    Document resultDoc = new Document(resultRoot);
+
     for (Iterator iter = nodeset.iterator(); iter.hasNext(); ) {
+
       Object each = iter.next();
+
       if (each instanceof Element) {
+        resultRoot.addContent((Element)((Element)each).clone());
         System.out.println(each + ": " + ((Element)each).getTextTrim());
       } else {
         System.out.println(each);
       }
+      
+    }
+
+    try {
+
+      XMLOutputter outputter = new XMLOutputter("  ", true);
+      outputter.output(resultDoc, System.out);
+
+    } catch (IOException ioe) {
+
+      ioe.printStackTrace();
+
     }
   }
 

@@ -57,6 +57,14 @@ public abstract class NodeSet {
     list.add(object);
   }
 
+  public void apply(XPath xpath) throws XPathParseException {
+    xpath.applyTo(this);
+  }
+
+  public void apply(String xpath) throws XPathParseException {
+    this.apply(new XPath(xpath));
+  }
+
   /**
    * replace list with only the root element
    */
@@ -66,6 +74,8 @@ public abstract class NodeSet {
    * Apply the step's nodetest to this nodeset.
    */
   public void applyNodetest(Step step) throws XPathParseException {
+
+    System.err.println("Applying " + step );
     if (step.isAbsolute()) {
       applyAbsolute();
     }

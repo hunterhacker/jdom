@@ -1,3 +1,6 @@
+/*
+ * See LICENSE.txt
+ */
 
 package org.jdom.contrib.xpath.impl;
 
@@ -13,7 +16,7 @@ import org.jdom.contrib.xpath.XPathParseException;
 /**
  * XPath location path contains a number of steps and if the path is absolute.
  *
- * @author Bob
+ * @author Bob McWhirter
  * @author Michael Hinchey
  * @version 1.0
  */
@@ -61,27 +64,6 @@ public class LocationPath extends PathExpr {
       // set the first step to be absolute
       step.setAbsolute(_isAbsolute);
     }
-  }
-
-  public Object apply(Context context) {
-    List results = new ArrayList();
-    results.add(context);
-
-    for (Iterator iter = _steps.iterator(); iter.hasNext(); ) {
-      Step step = (Step) iter.next();
-      results = forEachWalkStep(results, step);
-    }
-    return results;
-  }
-
-  private List forEachWalkStep(List nodeSet, Step step) {
-    List result = new ArrayList();
-    for (Iterator iter = nodeSet.iterator(); iter.hasNext(); ) {
-      Context each = (Context) iter.next();
-
-      result.addAll(each.walkStep(step));
-    }
-    return result;
   }
 
   /**

@@ -93,77 +93,79 @@ public class JdomNodeSet extends NodeSet {
    */
   protected void nodetestChild(final Object context, final Step step, List list)
   throws XPathParseException {
+
     if ((context instanceof Element) == false) {
       return;
     }
     Element element = (Element) context;
+
     switch (step.getNodetype().getCode()) {
-    case Nodetype.NODE: {
-      if (step.getLocalName() == null) {
-        if (step.isAbsolute()) {
-          list.add(element);
-          // Should we and can we add the other nodes
-          // which belong to the document?
-        } else {
-          list.addAll(element.getMixedContent());
+        case Nodetype.NODE: {
+          if (step.getLocalName() == null) {
+            if (step.isAbsolute()) {
+              list.add(element);
+              // Should we and can we add the other nodes
+              // which belong to the document?
+            } else {
+              list.addAll(element.getMixedContent());
+            }
+          } else {
+            throw new XPathParseException("LocalName for nodes is meaningless.  (localName=" + step.getLocalName() + ")");
+          }
+          break;
         }
-      } else {
-        throw new XPathParseException("LocalName for nodes is meaningless.  (localName=" + step.getLocalName() + ")");
-      }
-      break;
-    }
-    case Nodetype.ELEMENT: {
-      if (step.isAbsolute()) {
-        if (equals(element.getNamespacePrefix(), step.getPrefix())
-          && equals(element.getNamespacePrefix(), step.getLocalName())) {
-          // element is the root element (the only one for a document)
-          list.add(element);
+        case Nodetype.ELEMENT: {
+          if (step.isAbsolute()) {
+            if (equals(element.getNamespacePrefix(), step.getPrefix())
+                && equals(element.getName(), step.getLocalName())) {
+              // element is the root element (the only one for a document)
+              list.add(element);
+            }
+          } else {
+            list.addAll(elemext(element).getChildren(step.getPrefix(), step.getLocalName()) );
+          }
+          break;
         }
-      } else {
-        list.addAll(elemext(element).getChildren(step.getPrefix(), step.getLocalName()) );
-      }
-      break;
-    }
-    case Nodetype.COMMENT: {
-      if (step.getLocalName() == null) {
-        if (step.isAbsolute()) {
-          // Should/can we do anything?
-        } else {
-          list.addAll(elemext(element).getComments());
+        case Nodetype.COMMENT: {
+          if (step.getLocalName() == null) {
+            if (step.isAbsolute()) {
+              // Should/can we do anything?
+            } else {
+              list.addAll(elemext(element).getComments());
+            }
+          } else {
+            throw new XPathParseException("LocalName for comments is meaningless.  (localName=" + step.getLocalName() + ")");
+          }
+          break;
         }
-      } else {
-        throw new XPathParseException("LocalName for comments is meaningless.  (localName=" + step.getLocalName() + ")");
-      }
-      break;
-    }
-    case Nodetype.TEXT: {
-      if (step.getLocalName() == null) {
-        if (step.isAbsolute()) {
-          // Should/can we do anything?
-        } else {
-          list.addAll(elemext(element).getTextChildren());
+        case Nodetype.TEXT: {
+          if (step.getLocalName() == null) {
+            if (step.isAbsolute()) {
+              // Should/can we do anything?
+            } else {
+              list.addAll(elemext(element).getTextChildren());
+            }
+          } else {
+            throw new XPathParseException("LocalName for text is meaningless.  (localName=" + step.getLocalName() + ")");
+          }
+          break;
         }
-      } else {
-        throw new XPathParseException("LocalName for text is meaningless.  (localName=" + step.getLocalName() + ")");
-      }
-      break;
-    }
-    case Nodetype.PROCESSING_INSTRUCTION: {
-      if (step.getLocalName() == null) {
-        if (step.isAbsolute()) {
-          // Should/can we do anything?
-        } else {
-          list.addAll(elemext(element).getProcessingInstructions());
+        case Nodetype.PROCESSING_INSTRUCTION: {
+          if (step.getLocalName() == null) {
+            if (step.isAbsolute()) {
+              // Should/can we do anything?
+            } else {
+              list.addAll(elemext(element).getProcessingInstructions());
+            }
+          } else {
+            if (step.isAbsolute()) {
+              // Should/can we do anything?
+            } else {
+              list.addAll(elemext(element).getProcessingInstructions(step.getLocalName()));
+            }
+          }
+          break;
         }
-      } else {
-        if (step.isAbsolute()) {
-          // Should/can we do anything?
-        } else {
-          list.addAll(elemext(element).getProcessingInstructions(step.getLocalName()));
-        }
-      }
-      break;
-    }
     } // end-switch
   }
 

@@ -108,31 +108,37 @@ relative_location_path returns [LocationPath path]
 
 step returns [Step step]
 	{
-	    step = null;
-		String axis = null;
-		String nodeTest = null;
-		Predicate pred = null;
+	    step             = null;
+		String axis      = "child";
+		String localName = null;
+		String prefix    = "";
+		String nodeType  = "element";
+		Predicate pred   = null;
 	}
 	:
-		(	nodeTest=abbr_step
+		(	localName=abbr_step
 			{
-					step = new Step(null, null, null, nodeTest);
+					step = new Step(axis, nodeType, prefix, localName);
 			}
 		|
 			(	(IDENTIFIER|AT)=> axis=axis
 			|
 			)
-			(	id:IDENTIFIER
+			(	(	ns:IDENTIFIER COLON 
+					{
+						prefix = ns.getText();
+					}
+				)? id:IDENTIFIER
 				{
-					nodeTest = id.getText();
+					localName = id.getText();
 				}
 			|	STAR
 				{
-					nodeTest = "*";
+					localName = "*";
 				}
 			)
 			{
-				step = new Step(axis, null, null, nodeTest);
+				step = new Step(axis, nodeType, prefix, localName);
 			}
 			(
 				pred=predicate

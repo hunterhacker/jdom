@@ -1,3 +1,6 @@
+/*
+  See LICENSE.txt
+*/
 
 package org.jdom.contrib.xpath.impl;
 
@@ -11,18 +14,18 @@ import org.jdom.contrib.xpath.XPathParseException;
 /**
  * A single step in an xpath.
  *
- * @author Bob
+ * @author Bob McWhirter
  * @author Michael Hinchey
  * @version 1.0
  */
 public class Step extends XPathExprImpl {
 
-  private boolean isAbsolute = false;
-  private Axis axis;
-  private Nodetype nodetype;
-  private String prefix;
-  private String localName;
-  private List predicates = new ArrayList();
+  private boolean         isAbsolute = false;
+  private Axis            axis       = null;
+  private Nodetype        nodetype   = null;
+  private String          prefix     = null;
+  private String          localName  = null;
+  private List            predicates = new ArrayList();
 
   /**
    * Constructor
@@ -31,7 +34,11 @@ public class Step extends XPathExprImpl {
    * @param prefix Namespace prefix or null.
    * @param localName Null or '*' means ALL.
    */
-  public Step(String axis, String nodetype, String prefix, String localName) {
+  public Step(String axis,
+              String nodetype,
+              String prefix,
+              String localName) {
+
     this.axis = new Axis(axis);
     this.nodetype = new Nodetype(nodetype);
     this.prefix = prefix;
@@ -42,8 +49,12 @@ public class Step extends XPathExprImpl {
    * For debugging.
    */
   public String toString() {
-    return "[Step: " + (isAbsolute ? "/" : "")
-      + axis + nodetype + prefix + ":" + localName + "]";
+    return "[Step: "
+      + (isAbsolute ? "/" : "")
+      + axis
+      + nodetype
+      + prefix + ":" + localName
+      + "]";
   }
 
   public void setAbsolute(boolean isAbsolute) {
@@ -82,6 +93,7 @@ public class Step extends XPathExprImpl {
    * Apply self to given nodeset, to which modifications may apply.
    */
   public void apply(NodeSet nodeset) throws XPathParseException {
+
     System.out.println("before nodetest: " + nodeset);
     nodeset.applyNodetest(this);
     System.out.println("after nodetest: " + nodeset);

@@ -94,6 +94,9 @@ COMMA
 DOUBLE_COLON
 	:	"::"	;
 
+COLON
+	:	":"		;
+
 SLASH
 	:	'/'		;
 

@@ -11,8 +11,8 @@ import java.io.StringReader;
 
 public class XPath
 {
-  private String _xpath = "";
-  private XPathExpr _expr = null;
+  private String    _xpath = "";
+  private XPathExpr _expr  = null;
 
   public XPath(String xpath) {
     _xpath = xpath;
@@ -43,16 +43,10 @@ public class XPath
     }
   }
 
-  public Object applyTo(Context context) {
-    Object result = _expr.apply(context);
-
-    return result;
-  }
-
   /**
    * Apply self to given nodeset, to which modifications may apply.
    */
-  public void apply(NodeSet nodeset) throws XPathParseException {
+  public void applyTo(NodeSet nodeset) throws XPathParseException {
     _expr.apply(nodeset);
   }
 

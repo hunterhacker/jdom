@@ -93,7 +93,7 @@ public class Nodetype {
    * so <code>nodetype == null</code> will return ELEMENT.
    */
   private static int nodetypeCode(final String nodetype) {
-    if (nodetype == null) {
+    if ( (nodetype == null) || ("element".equals(nodetype)) ) {
       return ELEMENT;
     } else if ("node".equals(nodetype)) {
       return NODE;
