@@ -110,7 +110,8 @@ public class XMLOutputter {
     /**
      * <p>
      * This will create an <code>XMLOutputter</code> with
-     *   a two-space indent and new lines on.
+     *   no additional whitespace (indent or new lines) added;
+     *   the whitespace from the element text content is fully preserved.
      * </p>
      */
     public XMLOutputter() {
@@ -120,7 +121,8 @@ public class XMLOutputter {
     /**
      * <p>
      * This will create an <code>XMLOutputter</code> with
-     *   the given indent and new lines on.
+     *   the given indent added but no new lines added;
+     *   all whitespace from the element text content is included as well.
      * </p>
      *
      * @param indent  the indent string, usually some number of spaces
@@ -134,7 +136,8 @@ public class XMLOutputter {
      * <p>
      * This will create an <code>XMLOutputter</code> with
      *   the given indent that prints newlines only if <code>newlines</code> is
-     *   <code>true</code>.
+     *   <code>true</code>; 
+     *   all whitespace from the element text content is included as well.
      * </p>
      *
      * @param indent the indent <code>String</code>, usually some number
