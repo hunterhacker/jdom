@@ -5,8 +5,6 @@ Items that need to be done:
 * Look at Brad's experimental tree for good ideas to integrate.
   ftp://a.cs.okstate.edu/pub/hip/jdom-x.zip
 
-* Make sure the filter classes have hashCode() methods.
-
 * Add DocType to the content list returned by Document so it can have a
   location.  Fix the outputters and builders to respect it.  Keep the easy get
   method however.
