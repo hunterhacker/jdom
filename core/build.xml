@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.33 2002/04/23 01:00:38 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.34 2002/05/25 09:02:37 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -126,6 +126,8 @@ For instructions on how to build JDOM, please view the README.txt file.
              token="java.util.Iterator" value="${coll.import}.Iterator"/>
     <replace dir="${build.src}" includes="**"
              token="java.util.ConcurrentModificationException" value="${coll.import}.ConcurrentModificationException"/>
+    <replace dir="${build.src}" includes="**"
+             token="UnsupportedOperationException" value="${coll.import}.UnsupportedOperationException"/>
     <replace dir="${build.src}" includes="**"
              token="java.util.ArrayList" value="${coll.import}.ArrayList"/>
     <!-- The following replace handles the "import java.util.*" case by    -->
