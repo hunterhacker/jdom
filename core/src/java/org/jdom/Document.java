@@ -379,10 +379,10 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will add a comment to the <code>Document</code>.
+     * This will add an element to the <code>Document</code>.
      * </p>
      *
-     * @param comment <code>Comment</code> to add.
+     * @param element <code>Element</code> to add.
      * @return <code>Document</code> - this object modified.
      */
     public Document addContent(Element element) {
