@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.35 2003/05/02 01:08:28 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.36 2003/05/23 20:57:54 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.35 $, $Date: 2003/05/02 01:08:28 $
+ * @version $Revision: 1.36 $, $Date: 2003/05/23 20:57:54 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.35 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.36 $ $Date: 2003/05/23 20:57:54 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -242,7 +242,7 @@ public class DOMOutputter {
         
     }
 
-    protected org.w3c.dom.Element output(Element element,
+    private org.w3c.dom.Element output(Element element,
                                          org.w3c.dom.Document domDoc,
                                          NamespaceStack namespaces)
                                          throws JDOMException {
@@ -387,7 +387,7 @@ public class DOMOutputter {
         }
     }
 
-    protected org.w3c.dom.Attr output(Attribute attribute,
+    private org.w3c.dom.Attr output(Attribute attribute,
                                       org.w3c.dom.Document domDoc)
                                       throws JDOMException {
          org.w3c.dom.Attr domAttr = null;
