@@ -147,6 +147,84 @@ public class DOMBuilder {
 
     /**
      * <p>
+     * This builds a document from the supplied
+     *   input stream by constructing a DOM tree and reading information from the
+     *   DOM to create a JDOM document, a slower approach than SAXBuilder but 
+     *   useful for debugging.
+     * </p>
+     *
+     * @param in <code>InputStream</code> to read from.
+     * @return <code>Document</code> - resultant Document object.
+     * @throws <code>JDOMException</code> when errors occur in
+     *                                    parsing.
+     */
+    public Document build(InputStream in) throws JDOMException {
+
+        Document doc = new Document(null);
+
+        try {
+            DOMAdapter adapter =
+                (DOMAdapter)Class.forName(adapterClass)
+                                 .newInstance();
+
+            org.w3c.dom.Document domDoc =
+                adapter.getDocument(in, validate);
+
+            // Start out at root level
+            buildTree(domDoc, doc, null, true);
+
+        } catch (Exception e) {
+            throw new JDOMException(e.getMessage(), e);
+        }
+
+        return doc;
+    }
+
+    /**
+     * <p>
+     * This builds a document from the supplied
+     *   filename by constructing a DOM tree and reading information from the
+     *   DOM to create a JDOM document, a slower approach than SAXBuilder but 
+     *   useful for debugging.
+     * </p>
+     *
+     * @param file <code>File</code> to read from.
+     * @return <code>Document</code> - resultant Document object.
+     * @throws <code>JDOMException</code> when errors occur in
+     *                                    parsing.
+     */
+    public Document build(File file) throws JDOMException {
+        try {
+            FileInputStream in = new FileInputStream(file);
+            return build(in);
+        } catch (FileNotFoundException e) {
+            throw new JDOMException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>
+     * This builds a document from the supplied
+     *   URL by constructing a DOM tree and reading information from the
+     *   DOM to create a JDOM document, a slower approach than SAXBuilder but 
+     *   useful for debugging.
+     * </p>
+     *
+     * @param url <code>URL</code> to read from.
+     * @return <code>Document</code> - resultant Document object.
+     * @throws <code>JDOMException</code> when errors occur in
+     *                                    parsing.
+     */
+    public Document build(URL url) throws JDOMException {
+        try {
+            return build(url.openStream());
+        } catch (IOException e) {
+            throw new JDOMException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>
      * This will build a JDOM tree from an existing DOM tree.
      * </p>
      *
