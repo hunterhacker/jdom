@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.44 2001/04/20 16:32:33 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.45 2001/04/20 20:29:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -652,7 +652,7 @@ public class XMLOutputter implements Cloneable {
      * the necessary entity escaping and whitespace stripping.  </p>
      * </p>
      *
-     * @param cdata <code>CDATA</code> to output.
+     * @param string <code>String</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
     public void output(String string, OutputStream out) throws IOException {
@@ -679,7 +679,7 @@ public class XMLOutputter implements Cloneable {
      * Print out an <code>{@link Entity}</code>. 
      * </p>
      *
-     * @param cdata <code>CDATA</code> to output.
+     * @param entity <code>Entity</code> to output.
      * @param out <code>OutputStream</code> to write to.
      **/
     public void output(Entity entity, OutputStream out) throws IOException {
@@ -783,7 +783,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param doc <code>Element</code> to format.
+     * @param comment <code>Comment</code> to format.
      **/
     public String outputString(Comment comment) {
         StringWriter out = new StringWriter();
@@ -798,7 +798,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param doc <code>Element</code> to format.
+     * @param cdata <code>CDATA</code> to format.
      **/
     public String outputString(CDATA cdata) {
         StringWriter out = new StringWriter();
@@ -846,8 +846,9 @@ public class XMLOutputter implements Cloneable {
      *   Assumes XML version 1.0 since we don't directly know.
      * </p>
      *
-     * @param docType <code>DocType</code> whose declaration to write.
+     * @param doc <code>Document</code> whose declaration to write.
      * @param out <code>Writer</code> to write to.
+     * @param encoding The encoding to add to the declaration
      */
     protected void printDeclaration(Document doc,
                                     Writer out,
