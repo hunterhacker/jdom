@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.52 2002/02/19 06:46:03 jhunter Exp $
+ $Id: Document.java,v 1.53 2002/02/20 10:22:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,12 +70,12 @@ import java.util.*;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.52 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.53 $, $Date: 2002/02/20 10:22:20 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.52 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.53 $ $Date: 2002/02/20 10:22:20 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s
@@ -90,11 +90,13 @@ public class Document implements Serializable, Cloneable {
 
     /**
      * <p>
-     * Default, no-args constructor for implementations
-     *   to use if needed.
+     * Creates a new empty document.  A document must have a root element,
+     * so this document will not be well-formed and accessor methods will
+     * throw an IllegalStateException if this document is accessed before a
+     * root element is added.  This method is most useful for build tools.
      * </p>
      */
-    protected Document() {}
+    public Document() {}
 
     /**
      * <p>
