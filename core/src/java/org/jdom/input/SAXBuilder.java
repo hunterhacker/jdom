@@ -63,6 +63,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -642,9 +643,10 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     }
 
     private void transferNamespaces(Element element) {
-        for (int i=0; i<declaredNamespaces.size(); i++) {
-            Namespace ns = (Namespace)declaredNamespaces.get(i);
-            declaredNamespaces.remove(ns);
+        Iterator i = declaredNamespaces.iterator();
+        while (i.hasNext()) {
+            Namespace ns = (Namespace)i.next();
+            i.remove();
             availableNamespaces.add(ns);
             element.addNamespaceDeclaration(ns);
         }

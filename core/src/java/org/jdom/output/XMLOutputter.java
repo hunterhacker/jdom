@@ -1091,6 +1091,11 @@ public class XMLOutputter implements Cloneable {
      */
     protected void printNamespace(Namespace ns, Writer out) throws IOException {
         out.write(" xmlns");
+        String prefix = ns.getPrefix();
+        if (!prefix.equals("")) {
+            out.write(":");
+            out.write(prefix);
+        }
         out.write("=\"");
         out.write(ns.getURI());
         out.write("\"");
