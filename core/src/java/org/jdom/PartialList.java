@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: PartialList.java,v 1.11 2001/06/15 21:04:24 jhunter Exp $
+ $Id: PartialList.java,v 1.12 2001/06/16 01:04:53 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,7 @@ import java.util.List;
 class PartialList extends LinkedList {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.11 $ $Date: 2001/06/15 21:04:24 $ $Name:  $";
+      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.12 $ $Date: 2001/06/16 01:04:53 $ $Name:  $";
 
     /** The actual backing <code>List</code> */
     protected List backingList;
@@ -245,7 +245,7 @@ class PartialList extends LinkedList {
         if (backingList.isEmpty()) {
             return addAll(0, c);
         } else {
-            return addAll(backingList.indexOf(getLast()), c);
+            return addAll(backingList.indexOf(getLast()) + 1, c);
         }
     }
 
