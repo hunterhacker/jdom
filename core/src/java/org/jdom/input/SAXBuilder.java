@@ -276,8 +276,8 @@ public class SAXBuilder {
             // Set validation
             try {
                 parser.setFeature("http://xml.org/sax/features/validation", validate);
-                parser.setFeature("http://xml.org/sax/features/namespaces", false);
-                parser.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
+                parser.setFeature("http://xml.org/sax/features/namespaces", true);
+                parser.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
                 if (saxErrorHandler != null) {
                      parser.setErrorHandler(saxErrorHandler);
                 }else {
@@ -489,12 +489,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** Namespaces for this Document */
     private LinkedList namespaces;
 
-    /** Mappings on elements for this Document */
-    private HashMap namespaceDefinitions;
-
-    /** Method to get an Attribute's full name */
-    private Method getQName;
-
     /**
      * <p>
      * This will set the <code>Document</code> to use.
@@ -509,22 +503,9 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         stack = new Stack();
         namespaces = new LinkedList();
         namespaces.add(Namespace.XML_NAMESPACE);
-        namespaceDefinitions = new HashMap();
         inEntity = false;
         inDTD = false;
         inCDATA = false;
-
-        // Figure out which SAX is being used, so we use the correct method
-        //   on Attributes
-        try {
-            getQName = Attributes.class.getMethod("getQName", new Class[] {int.class});
-        } catch (NoSuchMethodException e) {
-            try {
-                getQName = Attributes.class.getMethod("getRawName", new Class[] {int.class});
-            } catch (NoSuchMethodException f) {
-                throw new IOException("Cannot locate SAX 2.0 (pre-release or final) classes.");
-            }
-        }
     }
 
     /**
@@ -558,11 +539,28 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @param prefix <code>String</code> namespace prefix.
      * @param uri <code>String</code> namespace URI.
      */
-   public void startPrefixMapping(String prefix, String uri)
-       throws SAXException {
+    public void startPrefixMapping(String prefix, String uri)
+        throws SAXException {
 
-       // Never gets called
-   }
+        Namespace ns = Namespace.getNamespace(prefix, uri);
+        namespaces.add(ns);
+    }
+
+    /**
+     * <p>
+     * This will add the prefix mapping to the JDOM
+     *   <code>Document</code> object.
+     * </p>
+     *
+     * @param prefix <code>String</code> namespace prefix.
+     * @param uri <code>String</code> namespace URI.
+     */
+    public void endPrefixMapping(String prefix, String uri)
+        throws SAXException {
+
+        Namespace ns = Namespace.getNamespace(prefix, uri);
+        namespaces.remove(ns);
+    }
 
     /**
      * <p>
@@ -584,82 +582,38 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      * @throws <code>SAXException</code> when things go wrong
      */
     public void startElement(String namespaceURI, String localName,
-                             String rawName, Attributes atts) throws SAXException {
+                             String qName, Attributes atts) throws SAXException {
 
-        // Handle attributes for namespaces first
-        List elementAttributes = new LinkedList();
-        List elementDefinitions = new LinkedList();
+        Element element = null;
 
-        for (int i=0, size=atts.getLength(); i<size; i++) {
-            String attName;
-            try {
-                attName = (String)getQName.invoke(atts, new Object[] {new Integer(i)});
-            } catch (InvocationTargetException e) {
-                throw new SAXException("Cannot determine Attribute's full name");
-            } catch (IllegalAccessException e) {
-                throw new SAXException("Cannot access Attribute's full name");
+        if ((namespaceURI != null) && (!namespaceURI.equals(""))) {
+            String prefix = "";
+
+            // Determine any prefix on the Element
+            if (localName != qName) {
+                int split = qName.indexOf(":");
+                prefix = qName.substring(0, split);
             }
-
-            if (attName.startsWith("xmlns:")) {
-                int attributeSplit;
-                String prefix = "";
-                String uri = atts.getValue(i);
-                Namespace ns = null;
-                if ((attributeSplit = attName.indexOf(":")) != -1) {
-                    prefix = attName.substring(attributeSplit + 1);
-                }
-
-                // Add namespace to list
-                ns = Namespace.getNamespace(prefix, uri);
-                elementDefinitions.add(ns);
-                namespaces.add(ns);
-            }
+            element = new Element(localName, Namespace.getNamespace(prefix, namespaceURI));
+        } else {
+            element = new Element(localName);
         }
 
-        // Add this element and its definitions to the global mapping map
-        namespaceDefinitions.put(rawName, elementDefinitions);
+        // Handle attributes
+        for (int i=0, len=atts.getLength(); i<len; i++) {
+            Attribute attribute = null;
 
-        int elementSplit;
-        String prefix = "";
-        String name = rawName;
-        if ((elementSplit = rawName.indexOf(":")) != -1) {
-            prefix = rawName.substring(0, elementSplit);
-            name = rawName.substring(elementSplit + 1);
-        }
-        Element element =
-            new Element(name, prefix, getNamespaceURI(prefix));
+            String attLocalName = atts.getLocalName(i);
+            String attQName = atts.getQName(i);
 
-        // With namespaces set up, we can do attributes now
-        for (int i=0, size=atts.getLength(); i<size; i++) {
-            String attName;
-            try {
-                attName = (String)getQName.invoke(atts, new Object[] {new Integer(i)});
-            } catch (InvocationTargetException e) {
-                throw new SAXException("Cannot determine Attribute's full name");
-            } catch (IllegalAccessException e) {
-                throw new SAXException("Cannot access Attribute's full name");
+            if (attLocalName != attQName) {
+                String attPrefix = attQName.substring(0, attQName.indexOf(":"));
+                attribute = new Attribute(attLocalName, atts.getValue(i), getNamespace(attPrefix));
+            } else {
+                attribute = new Attribute(attLocalName, atts.getValue(i));
             }
 
-            if (!attName.startsWith("xmlns:")) {
-                name = attName;
-                int attSplit;
-                prefix = "";
-                if ((attSplit = name.indexOf(":")) != -1) {
-                    prefix = name.substring(0, attSplit);
-                    name = name.substring(attSplit + 1);
-                }
-                // Only put attribute in namespace if there is a prefix
-                if (prefix.equals("")) {
-                    element.addAttribute(
-                        new Attribute(name, atts.getValue(i)));
-                } else {
-                    element.addAttribute(
-                        new Attribute(name,
-                                      prefix,
-                                      getNamespaceURI(prefix),
-                                      atts.getValue(i)));
-                }
-            }
+            element.addAttribute(attribute);
         }
 
         if (atRoot) {
@@ -672,28 +626,15 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         }
     }
 
-    /**
-     * <p>
-     *  This "walks" up the namespaces, and returns the first one found
-     *    (which means it is the last one added) with the prefix
-     *    supplied. For the default namespace, the supplied prefix
-     *    should be "".
-     * </p>
-     *
-     * @param prefix <code>String</code> prefix to look up.
-     * @return <code>String</code> - URI mapped to that prefix.
-     */
-    private String getNamespaceURI(String prefix) {
-        // Cycle backwards and find URI
-        for (int i=namespaces.size() - 1; i >= 0; i--) {
-            Namespace ns = (Namespace)namespaces.get(i);
-            if (ns.getPrefix().equals(prefix)) {
-                return ns.getURI();
+    private Namespace getNamespace(String prefix) {
+        for (int i=namespaces.size(); i>0; i--) {
+            Namespace ns = (Namespace)namespaces.get(i-1);
+            if (prefix.equals(ns.getPrefix())) {
+                return ns;
             }
         }
 
-        // If we got here, no URI
-        return "";
+        return Namespace.NO_NAMESPACE;
     }
 
     /**
@@ -741,14 +682,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                            String rawName) {
 
         stack.pop();
-
-        // Remove the namespaces this Element makes available
-        LinkedList elementDefinitions =
-            (LinkedList)namespaceDefinitions.get(rawName);
-        if (elementDefinitions != null) {
-            elementDefinitions.remove(rawName);
-            namespaces.removeAll(elementDefinitions);
-        }
     }
 
     /**

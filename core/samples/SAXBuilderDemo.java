@@ -112,7 +112,8 @@ public class SAXBuilderDemo {
         Document doc = builder.build(new File(filename));
 
         // Create an outputter with default formatting
-        XMLOutputter outputter = new XMLOutputter("", false);
+        XMLOutputter outputter = new XMLOutputter("  ", true);
+        outputter.setTrimText(true);
         outputter.setExpandEmptyElements(true);
         outputter.output(doc, out);                
     }

@@ -6,7 +6,7 @@
 <?cocoon-process type="xslt"?>
 
 <!-- Java and XML -->
-<JavaXML:Book xmlns:JavaXML="http://www.oreilly.com/catalog/javaxml/">
+<JavaXML:Book xmlns:JavaXML="http://www.oreilly.com/catalog/javaxml/" ora:category="Java" xmlns:ora="http://www.oreilly.com">
  <JavaXML:Title>Java and XML</JavaXML:Title>
  <JavaXML:Contents>
   <JavaXML:Chapter focus="XML">
