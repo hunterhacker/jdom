@@ -1,8 +1,8 @@
 /*--
 
- $Id: Schema.java,v 1.2 2003/06/27 20:28:21 jhunter Exp $
+ $Id: Schema.java,v 1.3 2004/02/06 09:57:49 jhunter Exp $
 
- Copyright (C) 2003 Brett McLaughlin & Jason Hunter.
+ Copyright (C) 2003-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -48,14 +48,13 @@
 
  This software consists of voluntary contributions made by many
  individuals on behalf of the JDOM Project and was originally
- created by Brett McLaughlin <brett@jdom.org> and
- Jason Hunter <jhunter@jdom.org>.  For more information on the
- JDOM Project, please see <http://www.jdom.org/>.
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
 
 package org.jdom.contrib.schema;
-
 
 import java.io.File;
 import java.io.InputStream;
@@ -82,7 +81,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.output.SAXOutputter;
 import org.jdom.output.JDOMLocator;
-
 
 /**
  * The compiled representation of a schema definition capable of
