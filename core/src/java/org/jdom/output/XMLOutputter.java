@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.53 2001/06/15 20:55:52 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.54 2001/06/15 23:20:08 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,14 +112,14 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.53 $ $Date: 2001/06/15 20:55:52 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.54 $ $Date: 2001/06/15 23:20:08 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
     
-    /** Whether or not to suppress the XML declaration 
+    /** Whether or not to output the XML declaration 
       * - default is <code>false</code> */
-    private boolean suppressDeclaration = false;
+    private boolean omitDeclaration = false;
 
     /** The encoding format */
     private String encoding = "UTF-8";
@@ -215,7 +215,7 @@ public class XMLOutputter implements Cloneable {
      * @param that the XMLOutputter to clone
      **/
     public XMLOutputter(XMLOutputter that) {
-        this.suppressDeclaration = that.suppressDeclaration;
+        this.omitDeclaration = that.omitDeclaration;
         this.omitEncoding = that.omitEncoding;
         this.indent = that.indent;
         this.expandEmptyElements = that.expandEmptyElements;
@@ -275,7 +275,7 @@ public class XMLOutputter implements Cloneable {
      * <p>
      *  This will set whether the XML declaration 
      *  (<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>)
-     *  includes the encoding of the document. It is common to suppress 
+     *  includes the encoding of the document. It is common to omit 
      *  this in uses such as WML and other wireless device protocols.
      * </p>
      *
@@ -290,15 +290,15 @@ public class XMLOutputter implements Cloneable {
      * <p>
      *  This will set whether the XML declaration 
      *  (<code>&lt;?xml version="1.0"?&gt;</code>)
-     *  will be suppressed or not. It is common to suppress this in uses such
+     *  will be omitted or not. It is common to omit this in uses such
      *  as SOAP and XML-RPC calls.
      * </p>
      *
-     * @param suppressDeclaration <code>boolean</code> indicating whether or not
-     *        the XML declaration should be suppressed.
+     * @param omitDeclaration <code>boolean</code> indicating whether or not
+     *        the XML declaration should be omitted.
      */
-    public void setSuppressDeclaration(boolean suppressDeclaration) {
-        this.suppressDeclaration = suppressDeclaration;
+    public void setOmitDeclaration(boolean omitDeclaration) {
+        this.omitDeclaration = omitDeclaration;
     }
 
     /**
@@ -858,8 +858,8 @@ public class XMLOutputter implements Cloneable {
                                     Writer out,
                                     String encoding) throws IOException {
 
-        // Only print the declaration if it's not being suppressed
-        if (!suppressDeclaration) {
+        // Only print the declaration if it's not being omitted
+        if (!omitDeclaration) {
             // Assume 1.0 version
             out.write("<?xml version=\"1.0\"");
             if (!omitEncoding) {
@@ -1439,8 +1439,8 @@ public class XMLOutputter implements Cloneable {
      **/      
     public int parseArgs(String[] args, int i) {
         for (; i<args.length; ++i) {
-            if (args[i].equals("-suppressDeclaration")) {
-                setSuppressDeclaration(true);
+            if (args[i].equals("-omitDeclaration")) {
+                setOmitDeclaration(true);
             }
             else if (args[i].equals("-omitEncoding")) {
                 setOmitEncoding(true);
@@ -1496,4 +1496,21 @@ public class XMLOutputter implements Cloneable {
      *             stacked FilterOutputStream
      */
     public void setIndentLevel(int indentLevel) { }
+
+    /**
+     * <p>
+     *  This will set whether the XML declaration 
+     *  (<code>&lt;?xml version="1.0"?&gt;</code>)
+     *  will be suppressed or not. It is common to suppress this in uses such
+     *  as SOAP and XML-RPC calls.
+     * </p>
+     *
+     * @param suppressDeclaration <code>boolean</code> indicating whether or not
+     *        the XML declaration should be suppressed.
+     * @deprecated Deprecated in beta7, use setOmitDeclaration() instead
+     */
+    public void setSuppressDeclaration(boolean suppressDeclaration) {
+        this.omitDeclaration = omitDeclaration;
+    }
+
 }
