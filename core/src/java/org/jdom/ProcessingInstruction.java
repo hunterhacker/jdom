@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.20 2001/05/08 22:23:56 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.21 2001/08/16 00:22:41 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,9 +57,12 @@
 package org.jdom;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -80,7 +83,7 @@ import java.util.StringTokenizer;
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.20 $ $Date: 2001/05/08 22:23:56 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.21 $ $Date: 2001/08/16 00:22:41 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
@@ -253,6 +256,26 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public String getData() {
         return rawData;
+    }
+
+    /**
+     * <p>
+     *  This will return a <code>List</code> containing the names of the
+     *    "attribute" style pieces of name/value pairs in this PI's data.
+     * </p>
+     *
+     * @return <code>List</code> - the <code>List</code> containing the
+     *         "attribute" names.
+     */
+    public List getNames() {
+      Set mapDataSet = mapData.entrySet();
+      List nameList = new ArrayList();
+      for (Iterator i = mapDataSet.iterator(); i.hasNext();) {
+         String wholeSet = (i.next()).toString();
+         String attrName = wholeSet.substring(0,(wholeSet.indexOf("=")));
+         nameList.add(attrName);
+      }
+      return nameList;
     }
 
     /**
