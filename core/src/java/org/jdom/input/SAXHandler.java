@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.23 2001/09/04 20:22:35 bmclaugh Exp $
+ $Id: SAXHandler.java,v 1.24 2001/10/07 21:22:01 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.23 $ $Date: 2001/09/04 20:22:35 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.24 $ $Date: 2001/10/07 21:22:01 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -319,7 +319,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param value <code>String</code> value of attribute
      */
     public void attributeDecl(String eName, String aName, String type,
-                              String valueDefault, String value) { 
+                              String valueDefault, String value) 
+        throws SAXException { 
 
         buffer.append("  <!ATTLIST ")
               .append(eName)
@@ -351,7 +352,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param name <code>String</code> name of element
      * @param model <code>String</code> model of the element in DTD syntax
      */
-    public void elementDecl(String name, String model) { 
+    public void elementDecl(String name, String model) throws SAXException { 
         buffer.append("  <!ELEMENT ")
               .append(name)
               .append(" ")
@@ -367,7 +368,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param name <code>String</code> name of entity
      * @param value <code>String</code> value of the entity
      */
-    public void internalEntityDecl(String name, String value) { 	
+    public void internalEntityDecl(String name, String value) 
+        throws SAXException { 	
+
         buffer.append("  <!ENTITY ")
               .append(name)
               .append(" \"")
@@ -818,7 +821,9 @@ if (!inDTD) {
      * @param publicID the public ID of the notation
      * @param systemID the system ID of the notation
      */
-    public void notationDecl(String name, String publicID, String systemID) {
+    public void notationDecl(String name, String publicID, String systemID) 
+        throws SAXException {
+
         buffer.append("  <!NOTATION ")
               .append(name)
               .append(" \"")
