@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.2 2001/03/22 09:00:49 jhunter Exp $
+ $Id: JDOMSource.java,v 1.3 2001/04/13 17:20:38 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -93,13 +93,32 @@ import javax.xml.transform.sax.SAXSource;
  *   }
  * </pre></blockquote>
  *
- * @see org.jdom.input.JDOMResult
+ * @see org.jdom.contrib.transform.JDOMResult
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
  */
 public class JDOMSource extends SAXSource {
 
+  /**
+   * If {@link javax.xml.transform.TransformerFactory#getFeature}
+   * returns <code>true</code> when passed this value as an
+   * argument, the Transformer natively supports JDOM.
+   * <p>
+   * <strong>Note</strong>: This implementation does not override
+   * the {@link SAXSource#FEATURE} value defined by its superclass
+   * to be considered as a SAXSource by Transformer implementations
+   * not natively supporting JDOM.</p>
+   */
+  public final static String JDOM_FEATURE =
+                      "http://org.jdom.contrib.transform.JDOMSource/feature";
+
+  /**
+   * An optional (chain of) SAX XMLFilter to apply to the SAX events
+   * describing the JDOM document.
+   *
+   * @see    #getXMLReader
+   */
   private XMLFilter xmlFilter = null;
 
   /**
@@ -179,7 +198,7 @@ public class JDOMSource extends SAXSource {
    *
    * @throws UnsupportedOperationException   always!
    *
-   * @see     getXMLReader
+   * @see    #getXMLReader
    */
   public void setXMLReader(XMLReader reader)
                               throws UnsupportedOperationException {
@@ -667,7 +686,7 @@ public class JDOMSource extends SAXSource {
      * Parses an XML document from a system identifier (URI).
      * <p>
      * This implementation does not support reading XML data from
-     * system identifiers, only from JDOM docuements.  Hence,
+     * system identifiers, only from JDOM documents.  Hence,
      * this method always throws a {@SAXNotSupportedException}.</p>
      *
      * @param  systemId   the system identifier (URI).

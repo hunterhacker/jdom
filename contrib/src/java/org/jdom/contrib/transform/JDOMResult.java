@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.2 2001/03/22 09:00:49 jhunter Exp $
+ $Id: JDOMResult.java,v 1.3 2001/04/13 17:20:38 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,8 @@ import org.jdom.output.*;
 import javax.xml.transform.sax.SAXResult;
 
 /**
- * Acts as an holder for JDOM document sources.
+ * Acts as a holder for a transformation result tree, in the form
+ * of a JDOM Document.
  * <p>
  * This class shall be used to get the result of XSL Transformation
  * as a JDOM Document.</p>
@@ -94,17 +95,41 @@ import javax.xml.transform.sax.SAXResult;
  *   }
  * </pre></blockquote>
  *
- * @see      org.jdom.output.JDOMSource
+ * @see      org.jdom.contrib.transform.JDOMSource
  *
  * @author   Laurent Bihanic
  * @author   Jason Hunter
  */
 public class JDOMResult extends SAXResult {
 
+  /**
+   * If {@link javax.xml.transform.TransformerFactory#getFeature}
+   * returns <code>true</code> when passed this value as an
+   * argument, the Transformer natively supports JDOM.
+   * <p>
+   * <strong>Note</strong>: This implementation does not override
+   * the {@link SAXResult#FEATURE} value defined by its superclass
+   * to be considered as a SAXResult by Transformer implementations
+   * not natively supporting JDOM.</p>
+   */
+  public final static String JDOM_FEATURE =
+                      "http://org.jdom.contrib.transform.JDOMResult/feature";
+
+  /**
+   * The JDOM document result of a transformation, as set by
+   * Transformer implementations that natively support JDOM.
+   */
+  private Document result = null;
+
+  /**
+   * The XML filter responsible for building the JDOM document
+   * result of a transformation whenever this object is used as a
+   * {@link #SAXResult} by a {@link javax.xml.transform.Transformer}.
+   */
   private DocumentBuilder documentBuilder = null;
 
   /**
-   * Default empty contructor.
+   * Default empty constructor.
    */
   public JDOMResult() {
     documentBuilder = new DocumentBuilder();
@@ -113,12 +138,30 @@ public class JDOMResult extends SAXResult {
   }
 
   /**
-   * Returns the document produced as result of the XSL Transformation.
+   * Returns the document produced as result of an XSL Transformation.
    *
    * @return the transformation result as a JDOM document.
    */
   public Document getDocument() {
-    return documentBuilder.getDocument();
+    return (result != null)? result: documentBuilder.getDocument();
+  }
+
+  /**
+   * Sets the document produced as result of an XSL Transformation.
+   * <p>
+   * <strong>Note</strong>: This method shall be used by the
+   * {@link javax.xml.transform.Transformer} implementations that
+   * natively support JDOM to directly set the transformation
+   * result rather than considering this object as a
+   * {@link SAXResult}.  Applications should <i>not</i> use this
+   * method.</p>
+   *
+   * @param  document   the JDOM document result of a transformation.
+   *
+   * @see    #getDocument
+   */
+  public void setDocument(Document document) {
+    this.result = document;
   }
 
   //-------------------------------------------------------------------------
@@ -134,41 +177,52 @@ public class JDOMResult extends SAXResult {
 
   /**
    * Set the SAX2 LexicalHandler for the output.
-   * 
-   * <p>This is needed to handle XML comments and the like.  If the 
-   * lexical handler is not set, an attempt should be made by the 
+   *
+   * <p>This is needed to handle XML comments and the like.  If the
+   * lexical handler is not set, an attempt should be made by the
    * transformer to cast the ContentHandler to a LexicalHandler.</p>
    *
-   * @param handler A non-null LexicalHandler for 
+   * @param handler A non-null LexicalHandler for
    * handling lexical parse events.
    */
   public void setLexicalHandler(LexicalHandler handler) { }
 
 
   //=========================================================================
-  // DocumentBuilder nested class 
+  // DocumentBuilder inner class
   //=========================================================================
 
-  private static class DocumentBuilder extends XMLFilterImpl
-                                       implements LexicalHandler {
+  private class DocumentBuilder extends XMLFilterImpl
+                                implements LexicalHandler {
     /**
      * The JDOM document to populate as a result of the XSL
      * Transformation.
      */
     private Document resultDocument = null;
 
+    /**
+     * The actual JDOM document builder.
+     */
     private SAXHandler saxHandler = null;
 
     /**
      * Whether the transformation is complete.
      */
-    private boolean documentReady = false;
+    private boolean documentReady = true;
 
     /**
      * Public default constructor.
      */
     DocumentBuilder() { }
 
+    /**
+     * Returns the JDOM document result of the last transformation
+     * or <code>null</code> if no transformation occurred or if the
+     * transformation is not yet complete.
+     *
+     * @return the JDOM document result of the last transformation
+     *         or <code>null</code> if none is available.
+     */
     public Document getDocument() {
       return (this.documentReady == true) ? this.resultDocument : null;
     }
@@ -177,22 +231,57 @@ public class JDOMResult extends SAXResult {
     // XMLFilterImpl overwritten methods
     //----------------------------------------------------------------------
 
+    /**
+     * Processes a start of document event.
+     * <p>
+     * This implementation creates a new JDOM document builder and
+     * marks the current document as "under construction".</p>
+     *
+     * @throws SAXException   if any error occurred while creating
+     *                        the document builder.
+     *
+     * @see    SAXHandler
+     */
     public void startDocument() throws SAXException {
       try {
+        // Reset any previously set result document.
+        setDocument(null);
+
+        // Mark the current document as "under construction".
         this.documentReady  = false;
+
+        // Create the actual JDOM document builder and register it as
+        // ContentHandler on the superclass (XMLFilterImpl): this
+        // implementation will take care of propagating the LexicalHandler
+        // events.
         this.resultDocument = new Document((Element)null);
         this.saxHandler     = new SAXHandler(this.resultDocument);
-  
         super.setContentHandler(this.saxHandler);
+
+        // And propagate event.
         super.startDocument();
       }
       catch (IOException e) {
         throw new SAXException("SAXHandler allocation failure", e);
       }
     }
-  
+
+    /**
+     * Processes an end of document event.
+     * <p>
+     * This implementation marks the built document as available.</p>
+     *
+     * @throws SAXException   if thrown by the actual document
+     *                        builder.
+     */
     public void endDocument() throws SAXException {
+      // Reset any previously set result document.
+      setDocument(null);
+
+      // Make the result document available.
       this.documentReady = true;
+
+      // And propagate event.
       super.endDocument();
     }
 
