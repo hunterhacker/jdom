@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.31 2002/03/29 01:25:52 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.32 2002/04/02 09:38:23 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -49,6 +49,9 @@ For instructions on how to build JDOM, please view the README.txt file.
     <!-- JDK1.1 collections -->
     <property name="coll.import" value="com.sun.java.util.collections"/>
     <available classname="${coll.import}.Collection" property="coll.present"/>
+
+    <!-- jaxen -->
+    <available classname="org.jaxen.JaxenException" property="jaxen.present"/>
 
   </target>
 
@@ -156,7 +159,9 @@ For instructions on how to build JDOM, please view the README.txt file.
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+           optimize="${optimize}">
+      <exclude name="**/Jaxen*" unless="jaxen.present"/>
+    </javac>
   </target>
 
   <!-- =================================================================== -->

@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.2 2002/03/30 11:09:43 jhunter Exp $
+ $Id: XPath.java,v 1.3 2002/04/02 09:38:24 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -59,6 +59,8 @@ package org.jdom.xpath;
 
 import java.io.Serializable;
 import java.util.List;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.jdom.JDOMException;
 
@@ -71,7 +73,9 @@ import org.jdom.JDOMException;
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.2 $ $Date: 2002/03/30 11:09:43 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.3 $ $Date: 2002/04/02 09:38:24 $ $Name:  $";
+
+   private static Constructor jaxen = null;
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -93,7 +97,26 @@ public abstract class XPath implements Serializable {
     * @throws JDOMException   if the XPath expression is invalid.
     */
    public static XPath newInstance(String path) throws JDOMException {
-      return new JaxenXPath(path);
+      if (jaxen == null) {
+          try {
+              Class clz = Class.forName("org.jdom.xpath.JaxenXPath");
+              jaxen = clz.getConstructor(new Class[] {String.class});
+          } catch (ClassNotFoundException cnfe) {
+              throw new JDOMException(cnfe.toString());
+          } catch (NoSuchMethodException nsme) {
+              throw new JDOMException(nsme.toString());
+          }
+      }
+
+      try {
+          return (XPath) jaxen.newInstance(new Object[] {path});
+      } catch (IllegalAccessException iae) {
+          throw new JDOMException(iae.toString());
+      } catch (InstantiationException ie) {
+          throw new JDOMException(ie.toString());
+      } catch (InvocationTargetException ite) {
+          throw new JDOMException(ite.toString());
+      }
    }
 
    /**
