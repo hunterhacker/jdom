@@ -1,0 +1,112 @@
+/*-- 
+
+ Copyright (C) 2002 Brett McLaughlin & Jason Hunter.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+ 
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows 
+    these conditions in the documentation and/or other materials 
+    provided with the distribution.
+
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact license@jdom.org.
+ 
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management (pm@jdom.org).
+ 
+ In addition, we request (but do not require) that you include in the 
+ end-user documentation provided with the redistribution and/or in the 
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos 
+ available at http://www.jdom.org/images/logos.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ This software consists of voluntary contributions made by many 
+ individuals on behalf of the JDOM Project and was originally 
+ created by Brett McLaughlin <brett@jdom.org> and 
+ Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ JDOM Project, please see <http://www.jdom.org/>.
+ 
+ */
+
+package org.jdom.contrib.helpers;
+
+import org.jdom.*;
+import java.util.*;
+
+/** <p>
+ *    This class contains static helper methods. 
+ *    </p>
+ *    @author Alex Rosen
+ */
+public class JDOMHelper {
+    /**
+     * <p>
+     * Sorts the child elements, using the specified comparator.
+     * Any other intervening content (Text, Comments, etc.) are not moved.
+     * (Note that this means that the elements will now be in a different
+     * order with respect to any comments, which may cause a problem
+     * if the comments describe the elements.)
+     * </p>
+     * <p>
+     * This method overcomes two problems with the standard Collections.sort():
+     * <ul>
+     * <li>Collections.sort() doesn't bother to remove an item from its old
+     * location before placing it in its new location, which causes JDOM to
+     * complain that the item has been added twice.
+     * <li>This method will sort the child Elements without moving other
+     * content, such as formatting text nodes (newlines, indents, etc.)
+	 * Otherwise, all the formatting whitespace would move to the beginning
+	 * or end of the content list.
+     * </ul>
+     * </p>
+     */
+    public static void sortElements(Element parent, Comparator c) {
+        // Create a new, static list of child elements, and sort it.
+        List children = new ArrayList(parent.getChildren());
+        Collections.sort(children, c);
+        ListIterator childrenIter = children.listIterator();
+        
+        // Create a new, static list of all content items.
+        List content = new ArrayList(parent.getContent());
+        ListIterator contentIter = content.listIterator();
+
+        // Loop through the content items, and whenever we find an Element,
+        // we'll insert the next ordered Element in its place. Because the
+        // content list is not live, it won't complain about an Element being
+        // added twice.
+        while(contentIter.hasNext())
+        {
+            Object obj = contentIter.next();
+            if (obj instanceof Element)
+                contentIter.set(childrenIter.next());
+        }
+
+        // Finally, we set the content list back into the parent Element.
+        parent.setContent(null);
+        parent.setContent(content);
+    }
+}
