@@ -541,11 +541,17 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                     prefix = name.substring(0, attSplit);
                     name = name.substring(attSplit + 1);
                 }
-                element.addAttribute(
-                    new Attribute(name,
-                                  prefix,
-                                  getNamespaceURI(prefix),
-                                  atts.getValue(i)));
+                // Only put attribute in namespace if there is a prefix
+                if (prefix.equals("")) {
+                    element.addAttribute(
+                        new Attribute(name, atts.getValue(i)));
+                } else {
+                    element.addAttribute(
+                        new Attribute(name,
+                                      prefix,
+                                      getNamespaceURI(prefix),
+                                      atts.getValue(i)));
+                }
             }
         }
 
