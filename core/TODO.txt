@@ -2,6 +2,17 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+- FilterList
+- Text class (if we're going to do it, we need to do it now)
+- XMLOutputter character escaping, maybe?
+- Decide on serialization
+- Decide on subclassing and protected variables/methods
+- Figure out cloning, maybe?
+- JavaDoc cleanup
+- Lots of test cases!
+- Packaging
+- JSR process crap
+
 * Consider if it's be worthwhile to configure sax not to expand entities and
   expand them ourselves if necessary, thus being able to get the internal DTD
   subset even if entity expansion is on.  SAX normally doesn't give you the
@@ -17,8 +28,6 @@ Items that need to be done:
   (Phil Nelson has been responsible for this.  Laurent is helping w/
   SAXOutputter.)
 
-* Consider if setText() should not replace children
-
 * Take action on detach() allowing a Doc to have its root removed with an ISE
   upon later access.  This also removes the need to remove the Document(null)
   usage by builders.
@@ -26,8 +35,6 @@ Items that need to be done:
 * Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
   for the minor bug where pretty print (indented, newlines, trim text) prints 
   an extra whitespace line between one closing element and another.
-
-* Add setIgnoringAllWhitespace(boolean) method.
 
 * Determine if setContent(), setAttributes(), setChildren(), and addAll() 
   should be atomic on failure (such as when an illegal object is added from 
@@ -39,11 +46,6 @@ Items that need to be done:
   Probably turn off SAX interning and do it ourselves?  Note commentary:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
-
-* Perhaps have builder flags to indicate if CDATA sections should be 
-  included and if comment sections should be included.  All seem like 
-  reasonable customizations.  The whitespace flag may respect xml:space.  
-  It might use an XMLFilter to do the job.
 
 * Integrate FilterList (currently developed in the jdom-wip CVS module)
   which replaced PartialList by more efficiently driving directly off the
@@ -65,8 +67,6 @@ Items that need to be done:
 * Verify we get good error handling if someone passes null to any add/set
   method.  Consensus is throw an NPE if passing null to a setList-style
   method.
-
-* Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
 
 * Look again at if XMLOutputter output methods taking a Writer should 
   auto-flush.  Currently they do, but is that overstepping the contract?
@@ -90,15 +90,8 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
   http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
 
-* Consider an XMLOutputter flag or feature to convert characters with well
-  known named character entities to their named char entity form instead of
-  numeric.
-
 * Determine if there should be a way to output everything on one line
   (including the decl and doctype)
-
-* Look into elharo's report of DOMBuilder throwing away ignorable whitespace.
-  http://www.servlets.com/archive/servlet/ReadMsg?msgId=8313
 
 * Add a Text class (currently stored but unused in org.jdom)
 
@@ -155,17 +148,6 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
   It may be OK to worry about fast short-term serialization only.
 
-* Consider visitor pattern
-  Use cases: count elements, count nodes, translate comments, remove PIs
-  Would implement with option to visit depth or breadth first
-  Maybe go crazy with pre-order, in-order, and post-order too :-)
-  Methods would exist on Document and Element
-  FYI, DOM's much overweight Traversal-Range spec is at
-    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
-  Joe Bowbeer has ideas at:
-  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
-  We may be able to just have doc.iterator() methods
-
 * Ensure JDOM is appropriately tweaked for subclassing, per the threads
   started by Joe Bowbeer.
   http://www.servlets.com/archive/servlet/ReadMsg?msgId=7601 begins it
@@ -182,7 +164,22 @@ Items that need to be done:
   1.4-type nested exceptions and JDOMException both try to print child
   stack traces, causing them to be printed twice?
 
+* Clean up Javadocs right before final release.
+
 --- FOR JDOM 1.1 ---
+
+* Consider visitor pattern
+  Use cases: count elements, count nodes, translate comments, remove PIs
+  Would implement with option to visit depth or breadth first
+  Maybe go crazy with pre-order, in-order, and post-order too :-)
+  Methods would exist on Document and Element
+  FYI, DOM's much overweight Traversal-Range spec is at
+    http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
+  Joe Bowbeer has ideas at:
+  http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
+  We may be able to just have doc.iterator() methods
+
+* Add setIgnoringAllWhitespace(boolean) method.
 
 * Add XPath support, most likely integrating Bob McWhirter's package.
 
@@ -225,6 +222,17 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003422.html
 
 --- UNTIED TO A JDOM VERSION ---
+
+* Consider an XMLOutputter flag or feature to convert characters with well
+  known named character entities to their named char entity form instead of
+  numeric.
+
+* Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
+
+* Perhaps have builder flags to indicate if CDATA sections should be 
+  included and if comment sections should be included.  All seem like 
+  reasonable customizations.  The whitespace flag may respect xml:space.  
+  It might use an XMLFilter to do the job.
 
 * Create a builder based on Xerces' XNI, which will be more featureful and
   probably faster than the one based on SAX.
