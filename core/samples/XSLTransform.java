@@ -1,6 +1,6 @@
 /*--
 
- $Id: XSLTransform.java,v 1.7 2004/02/06 09:39:10 jhunter Exp $
+ $Id: XSLTransform.java,v 1.8 2004/09/07 06:29:07 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ public class XSLTransform {
 
   public static void main(String[] args) throws Exception {
     if (args.length != 2) {
-      System.err.println("Usage: samples.XSLTransformer [some.xml] [some.xsl]");
+      System.err.println("Usage: java XSLTransformer [some.xml] [some.xsl]");
       return;
     }
 

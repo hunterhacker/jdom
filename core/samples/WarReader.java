@@ -1,6 +1,6 @@
 /*--
 
- $Id: WarReader.java,v 1.11 2004/02/06 09:39:10 jhunter Exp $
+ $Id: WarReader.java,v 1.12 2004/09/07 06:29:07 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -77,7 +77,7 @@ public class WarReader {
     
   public static void main(String[] args) throws IOException, JDOMException {
     if (args.length != 1) {
-      System.err.println("Usage: samples.WarReader [web.xml]");
+      System.err.println("Usage: java WarReader [web.xml]");
       return;
     }
     String filename = args[0];

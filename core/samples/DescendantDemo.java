@@ -1,6 +1,6 @@
 /*--
 
- $Id: DescendantDemo.java,v 1.3 2004/02/06 09:39:10 jhunter Exp $
+ $Id: DescendantDemo.java,v 1.4 2004/09/07 06:29:07 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,6 +68,11 @@ import org.jdom.output.*;
 public class DescendantDemo {
 
     public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            System.err.println("Usage: java DescendantDemo [web.xml]");
+            return;
+        }
+
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(args[0]);
 
