@@ -13,13 +13,19 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:./lib/xerces.jar:./lib/ant.jar:./lib/jaxp.jar:$JAVA_HOME/lib/dev.jar
+if [ `echo $OSTYPE | grep -n cygwin` ]; then
+  PS=";"
+else
+  PS=":"
+fi
+
+LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar${PS}./lib/xerces.jar${PS}./lib/ant.jar${PS}./lib/jaxp.jar${PS}$JAVA_HOME/lib/dev.jar
 ANT_HOME=./lib
 
-echo Building with classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH
+echo Building with classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH
 echo
 
 echo Starting Ant...
 echo
 
-$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*
+$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH${PS}$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*

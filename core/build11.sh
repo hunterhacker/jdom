@@ -8,7 +8,13 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip:$JAVA_HOME/lib/rt.jar:./lib/collections.jar
+if [ `echo $OSTYPE | grep -n cygwin` ]; then
+  PS=";"
+else
+  PS=":"
+fi
+
+ADDITIONALCLASSPATH=$JAVA_HOME/lib/classes.zip${PS}$JAVA_HOME/lib/rt.jar${PS}./lib/collections.jar
 export ADDITIONALCLASSPATH
 
 ./build.sh $*
