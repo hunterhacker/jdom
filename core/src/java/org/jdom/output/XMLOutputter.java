@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.73 2002/02/05 08:03:18 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.74 2002/02/07 13:45:39 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.73 $, $Date: 2002/02/05 08:03:18 $
+ * @version $Revision: 1.74 $, $Date: 2002/02/07 13:45:39 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.73 $ $Date: 2002/02/05 08:03:18 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.74 $ $Date: 2002/02/07 13:45:39 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -214,7 +214,7 @@ public class XMLOutputter implements Cloneable {
       * - default is <code>false</code> */
     private boolean omitEncoding = false;
 
-    class Format {
+    class Format implements Cloneable {
         /** standard value to indent by, if we are indenting */
         static final String STANDARD_INDENT = "  ";
 
@@ -245,6 +245,16 @@ public class XMLOutputter implements Cloneable {
         boolean newlines = false;
 
         Format() {}
+
+        protected Object clone() {
+            Format format = null;
+
+            try {
+                format = (Format) super.clone();
+            } catch (CloneNotSupportedException ce) { }
+
+            return format;
+        }
     }
 
     Format noFormatting = new Format();
@@ -274,7 +284,7 @@ public class XMLOutputter implements Cloneable {
      * @param indent  the indent string, usually some number of spaces
      */
     public XMLOutputter(String indent) {
-       defaultFormat.indent = indent;
+       setIndent( indent);
     }
 
     /**
@@ -291,7 +301,7 @@ public class XMLOutputter implements Cloneable {
      *                 printed, else new lines are ignored (compacted).
      */
     public XMLOutputter(String indent, boolean newlines) {
-       defaultFormat.indent = indent;
+       setIndent( indent);
        setNewlines( newlines);
     }
 
@@ -311,8 +321,8 @@ public class XMLOutputter implements Cloneable {
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      */
     public XMLOutputter(String indent, boolean newlines, String encoding) {
-       this.encoding = encoding;
-       defaultFormat.indent = indent;
+       setEncoding( encoding);
+       setIndent( indent);
        setNewlines( newlines);
     }
 
@@ -330,7 +340,7 @@ public class XMLOutputter implements Cloneable {
         this.encoding = that.encoding;
         this.omitDeclaration = that.omitDeclaration;
         this.omitEncoding = that.omitEncoding;
-        this.defaultFormat = that.defaultFormat;
+        this.defaultFormat = (Format) that.defaultFormat.clone();
     }
 
     // * * * * * * * * * * Set parameters methods * * * * * * * * * *
@@ -804,7 +814,7 @@ public class XMLOutputter implements Cloneable {
 
         // Output final line separator
         // We output this no matter what the newline flags say
-        out.write(defaultFormat.lineSeparator);
+        out.write(currentFormat.lineSeparator);
 
         out.flush();
     }
@@ -1694,7 +1704,7 @@ public class XMLOutputter implements Cloneable {
      */
     protected void newline(Writer out) throws IOException {
         if (currentFormat.newlines)
-            out.write(defaultFormat.lineSeparator);
+            out.write(currentFormat.lineSeparator);
     }
 
     /**
@@ -1723,12 +1733,12 @@ public class XMLOutputter implements Cloneable {
      */
     protected void indent(Writer out, int level) throws IOException {
         if (currentFormat.newlines) {
-            if (defaultFormat.indent == null ||
-                defaultFormat.indent.equals(""))
+            if (currentFormat.indent == null ||
+                currentFormat.indent.equals(""))
                     return;
 
             for (int i = 0; i < level; i++) {
-                out.write(defaultFormat.indent);
+                out.write(currentFormat.indent);
             }
         }
     }
