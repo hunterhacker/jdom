@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.10 2001/03/16 23:39:42 jhunter Exp $
+ $Id: DocType.java,v 1.11 2001/04/18 07:35:06 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -274,7 +274,26 @@ public class DocType implements Serializable, Cloneable {
      *         equal to the supplied <code>Object</code>.
      */
     public final boolean equals(Object ob) {
-        return (ob == this);
+        if (ob instanceof DocType) {
+            DocType dt = (DocType) ob;
+            return (stringEquals(dt.elementName, elementName) &&
+                    stringEquals(dt.publicID, publicID) &&
+                    stringEquals(dt.systemID, systemID));
+        }
+        return false;
+    }
+
+    private boolean stringEquals(String s1, String s2) {
+        if (s1 == null && s2 == null) {
+            return true;
+        }
+        else if (s1 == null && s2 != null) {
+            return false;
+        }
+        else {
+            // If we get here we know s1 can't be null 
+            return s1.equals(s2);
+        }
     }
 
     /**
@@ -309,13 +328,3 @@ public class DocType implements Serializable, Cloneable {
         return docType;
     }
 }
-
-
-
-
-
-
-
-
-
-
