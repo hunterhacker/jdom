@@ -8,9 +8,6 @@ Items that need to be done:
   Or if reading from DOM then from the DOM DocumentType.
   (Harry Evans <hevans@elite.com> and Phil Nelson are working on this.)
 
-* Consider a getNames() method to ProcessingInstruction to iterate over the
-  names.
-
 * Consider if setText() should not replace children
 
 * Take action on detach() allowing a Doc to have its root removed with an ISE
