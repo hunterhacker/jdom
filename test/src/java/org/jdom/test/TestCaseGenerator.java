@@ -117,7 +117,7 @@ public final class TestCaseGenerator {
 		
 		File file = new File( baseDir+mangledClassName+".java" );
 		ClassGenerator.generate( file, mangledClassName, 
-										"jdom.org.test.cases", mangled );
+										"org.jdom.test.cases", mangled );
 	}
 
 	public static void main( String[] args ) throws IOException {
