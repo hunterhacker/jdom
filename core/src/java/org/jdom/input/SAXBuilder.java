@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.58 2001/09/03 14:45:55 bmclaugh Exp $
+ $Id: SAXBuilder.java,v 1.59 2001/11/05 07:58:48 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.58 $ $Date: 2001/09/03 14:45:55 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.59 $ $Date: 2001/11/05 07:58:48 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -457,7 +457,6 @@ public class SAXBuilder {
                 Method getXMLReader = 
                     parserClass.getMethod("getXMLReader", null);
                 parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
-                saxDriverClass = parser.getClass().getName();
 
                 // System.out.println("Using jaxp " +
                 //   parser.getClass().getName());
