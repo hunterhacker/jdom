@@ -54,41 +54,71 @@
 
 package org.jdom.test.cases;
 
+import org.jdom.Element;
+import org.jdom.Namespace;
+
+import junit.framework.TestCase;
+
 /**
- * Please put a description of your test here.
  * 
- * @author unascribed
+ * 
+ * @author Jools Enticknap
  * @version 0.1
  */
-public final class TCC_Element__String_String_String
-extends junit.framework.TestCase
-{
+public final class TCC_Element__String_String_String extends TestCase {
     /**
      *  Construct a new instance. 
      */
-    public TCC_Element__String_String_String() {
-        super("public org.jdom.Element(java.lang.String,java.lang.String,java.lang.String)");
-    }
-
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+    public TCC_Element__String_String_String(String s) {
+        super(s);
     }
 
     /**
      * Test code goes here. Replace this comment.
      */
     public void test() {
-        fail("implement me !");
+		String prefix = "test-prefix";
+		String uri    = "test-uri";
+		String name = "test-element";
+		Element e = new Element(name, prefix, uri);
+
+		// Check that the name supplied in the argument to the constructor
+		// is the same as the one returned from getName().
+		if (!e.getName().equals(name)) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("using the the name(")
+							  .append(name)
+							  .append(") but the following value was ")
+							  .append("returned from getName() (")
+							  .append(e.getName())
+							  .append(")");
+	
+        	fail(sb.toString());
+		}
+
+		// Make sure that the URI matches the one supplied in the constructor.
+		if (!e.getNamespaceURI().equals(uri)) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("using the URI(")
+							  .append(uri)
+							  .append(") but the following value was returned (")
+							  .append(e.getNamespaceURI())
+							  .append(")");
+
+        	fail(sb.toString());
+		}
+		
+		// Make sure that the prefix matches the one supplied in the constructor.
+		if (!e.getNamespacePrefix().equals(prefix)) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("using the prefix(")
+							  .append(prefix)
+							  .append(") but the following value was returned (")
+							  .append(e.getNamespacePrefix())
+							  .append(")");
+
+        	fail(sb.toString());
+		}
     }
 
 }
