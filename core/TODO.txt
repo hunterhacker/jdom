@@ -4,37 +4,10 @@ Items that need to be done:
 
 * Add a Text class (Brett)
 
-* Take action on detach() allowing a Doc to have its root removed with an ISE
-  upon later access.  This also removes the need to remove the Document(null)
-  usage by builders.
+* Locate bug where TestBuildTime hits OOME during rebuild loop.  It doesn't
+  happen with beta6.
 
-* Determine if getSerializedForm() should be brought back and implemented
-  to call XMLOutputter.outputString() methods.
-
-* Consider deprecating DOMBuilder.build(File) and company
-  Although I'd like a way to keep them for testing
-
-* Make setAttributes() atomic
-
-* Determine if setMixedContent() should remain atomic on failure or not.
-
-* Fix JDK 1.1 build issues introduced with the Manifest work. (Jools?)
-
-* Figure out if we by default do:
-  With a setIgnoringElementContentWhitespace(boolean) and 
-  setIgnoringAllWhitespace(boolean) pair of methods.
-
-* Make it so elt.getAdditionalNamespaces() returns a mutable list.
-  This means we have to stop using EMPTY_LIST and need to sanity check 
-  additions.
-
-* Fix bug where DOMOutputter creates nodes with "" as their
-  node.getNamespaceURI() even if the node is not in a namespace.
-  http://lists.denveronline.net/lists/jdom-interest/2001-March/005117.html
-
-* Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
-  text) prints an extra whitespace line between one closing element and 
-  another.
+* Add setIgnoringAllWhitespace(boolean) method.
 
 * Implement the ability to output the same DOCTYPE as was input.  Store the
   internal DTD subset as a String variable in DocType.  This means we need 
@@ -50,6 +23,28 @@ Items that need to be done:
         <!ENTITY Auml '&#196;'>
         <!ENTITY Ouml '&#214;'>]>
   (Harry Evans <hevans@elite.com> is also working on this.)
+
+* Take action on detach() allowing a Doc to have its root removed with an ISE
+  upon later access.  This also removes the need to remove the Document(null)
+  usage by builders.
+
+* Determine if getSerializedForm() should be brought back and implemented
+  to call XMLOutputter.outputString() methods.
+
+* Consider deprecating DOMBuilder.build(File) and company
+  Although I'd like a way to keep them for testing
+
+* Make setAttributes() atomic
+
+* Determine if setMixedContent() should remain atomic on failure or not.
+
+* Make it so elt.getAdditionalNamespaces() returns a mutable list.
+  This means we have to stop using EMPTY_LIST and need to sanity check 
+  additions.
+
+* Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
+  text) prints an extra whitespace line between one closing element and 
+  another.
 
 * Investigate ClassLoader.loadClass() instead of Class.forName() for those
   times when the classes aren't on the system classpath.  (Suggested by Alex
@@ -68,8 +63,6 @@ Items that need to be done:
   reasonable customizations.  The whitespace flag should respect xml:space.  
   It might use an XMLFilter to do the job.
 
-* Investigate a custom singly LinkedList to save memory.  (Jools has code.)
-
 * Change PartialList to drive directly off backing list.  Jools is working on
   this calling it FilterList.  See the temporary "work in progress" jdom-wip 
   module.
@@ -83,9 +76,6 @@ Items that need to be done:
     31 Aug 2000.  Also a follow-on by "Peter V. Gadjokov" <pvg@c-c-s.com> 
     27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
     27 Sep 2000.
-
-* Test SinglyLinkedList vs ArrayList for speed and memory consumption.
-  (With OptimizeIt, Joe Bowbeer may lead this)
 
 * Verify we get good error handling if someone passes null to any add/set
   method.  Consensus is throw an NPE if passing null to a setList-style
