@@ -7,7 +7,7 @@ Items that need to be done:
   except using the public API, to avoid the import node problem.  Do the big
   switchover using javax.xml.jdom as interfaces and default impl, use org.jdom
   for the concretes.  May not need to break existing code (sick and wrong).
-  - read-only?
+  - read-only?  Experimentation happening in jdom-javax module.
 
 * Consider moving JDOMFactory to org.jdom.  Then we can have a FastFactory
   which skips Verification.
