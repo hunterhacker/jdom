@@ -154,6 +154,24 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
+     * <p>
+     * Detaches the text from its parent, or does nothing if the
+     * text has no parent.
+     * </p>
+     *
+     * @return <code>Text</code> - this <code>Text</code> modified.
+     */
+/* Commented out til the parent knows about text, won't compile as is.
+    public Text detach() {
+        if (parent != null) {
+            parent.removeContent(this);
+        }
+        parent = null;
+        return this;
+    }
+*/
+
+    /**
      * <p>This returns a <code>String</code> representation of the 
      *   <code>Text</code> node, suitable for debugging. If the XML
      *   representation of the <code>Text</code> node is desired, 
