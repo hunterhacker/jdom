@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.101 2004/02/06 09:28:32 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.102 2004/02/15 20:05:00 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.101 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.102 $, $Date: 2004/02/15 20:05:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.101 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.102 $ $Date: 2004/02/15 20:05:00 $ $Name:  $";
 
     // For normal output
     protected Format userFormat = Format.getRawFormat();
@@ -216,6 +216,13 @@ public class XMLOutputter implements Cloneable {
     public void setFormat(Format newFormat) {
         this.userFormat = newFormat;
         this.currentFormat = userFormat;
+    }
+
+    /**
+     * Returns the current format object in use by the outputter.
+     */
+    public Format getFormat() {
+        return userFormat;
     }
 
     /**
