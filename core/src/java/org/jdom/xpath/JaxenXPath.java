@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.17 2004/08/25 17:53:08 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.18 2004/08/31 04:50:48 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,13 +67,13 @@ import org.jdom.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.17 $, $Date: 2004/08/25 17:53:08 $
+ * @version $Revision: 1.18 $, $Date: 2004/08/31 04:50:48 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.17 $ $Date: 2004/08/25 17:53:08 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.18 $ $Date: 2004/08/31 04:50:48 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
@@ -179,7 +179,7 @@ class JaxenXPath extends    XPath {             // package protected
       try {
          currentContext = context;
 
-         return xPath.valueOf(context);
+         return xPath.stringValueOf(context);
       }
       catch (JaxenException ex1) {
          throw new JDOMException("XPath error while evaluating \"" +
