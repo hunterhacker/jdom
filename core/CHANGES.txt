@@ -2,6 +2,31 @@
 
 Removed all deprecated methods.
 
+Fixed bug where in "pretty print" output EntityRef instances would erroneously
+print on their own line.
+
+Added character encoding rules to improve whitespace round tripping:
+  http://lists.denveronline.net/lists/jdom-interest/2003-July/013227.html
+
+Added DOMBuilder.getFactory() method to match what we added to SAXBuilder.
+
+Removed Parent.canContain() and the Document and Element implementations.
+Moved the logic directly into ContentList.  No reason to expose a public
+method unless it has a general purpose.
+
+Reduced the visibility on some XMLOutputter internals that we don't want to
+guarantee support for over the long term.  Some people who want custom output
+formatting may need to copy some code blocks.  That's OK since JDOM is open
+source and while it's less than ideal, it's better than our exposing protected
+internal variables and methods that we may have reason to change later.
+  Now marked private:
+    userFormat
+    printString()
+    printContentRange()
+    printTextRange()
+  Now static final:
+    preserveFormat
+
 
 * * * * * * Beta10 (tag: jdom_1_0_b10) from Beta9 * * * * * *
 
@@ -316,7 +341,7 @@ output(Document, Writer).  This allows someone who doesn't want a newline
 after the decl to kludge it away.
 
 Improved the Verifier's checking of Comment contents.  Added logic to ensure
-you can't have two default namespace declarations on the same element. 
+you can't have two default namespace declarations on the same element.
 
 Numerous performance improvements.
 
@@ -336,7 +361,7 @@ Fixed a bug where the JDOMException.printStackTrace(PrintWriter) method would
 print some data to System.err instead of to the writer.
 
 Fixed bug in PI map parse logic which could be confused when there was a lot
-of whitespace surrounding the = signs. 
+of whitespace surrounding the = signs.
 
 Fixed bug where AttributeList.set() would not set parentage in one situation.
 
@@ -603,7 +628,7 @@ to have JDOMAbout as its Main-Class.  This helps applet deployment, but does
 remove the ability to do the cool "java -jar jdom.jar".
 
 Added support for skipped entities in SAXHandler in the event that the parser
-is not resolving external entities. 
+is not resolving external entities.
 
 Added well-formedness checking to ensure there are never duplicate attributes.
 
@@ -621,13 +646,13 @@ tags.
 Fixed SAXBuilder to work better with XML filters.
 
 Fixed SAXHandler bug where attributes that had a namespace were being added to
-the Document, but did not have the Namespace correctly reported. 
+the Document, but did not have the Namespace correctly reported.
 
 Fixed bug where a ProcessingInstruction or DocType removed from a Document did
 not have its parentage set to null.
 
 Fixed bug where SAXBuilder would cache the class name even when using JAXP to
-create the parser, causing problems for parsers without no-arg constructors.  
+create the parser, causing problems for parsers without no-arg constructors.
 
 Fixed bug where Namespace collision checking could generate false positives.
 
@@ -645,7 +670,7 @@ NEW CLASSES
 
 Added JDOMSource and JDOMResult to the org.jdom.transform package.  These
 support XSLT transforms using the JAXP TrAX model.  Added Crimson, JAXP, and
-Xalan JARs to the lib directory to support the transform functionality.  
+Xalan JARs to the lib directory to support the transform functionality.
 
 Added org.jdom.EntityRef to replace org.jdom.Entity.  Changed methods taking
 Entity to take EntityRef.
@@ -685,7 +710,7 @@ should be expanded, or if EntityRef objects should appear within the document.
 Added two new Document constructors to support constructing with a list of
 content:
   Document(List)
-  Document(List, DocType) 
+  Document(List, DocType)
 
 Added elt.removeNamespaceDeclaration(Namespace).  It removes a namespace
 declaration, the counterpart to addNamespaceDeclaration(Namespace).
@@ -779,7 +804,7 @@ Deprecated getMixedContent() and setMixedContent() on Element and Document.
 They're replaced by getContent() and setContent() versions.
 
 Deprecated getSerializedForm() methods on all objects, and moved the logic
-into XMLOutputter.  
+into XMLOutputter.
 
 Deprecated the various xxxProcessingInstruction() methods in Document:
   List getProcessingInstructions()
@@ -865,7 +890,7 @@ with an existing prefix on the element.
 Changed DocType.equals() to check for equivalency and not reference equality.
 Now two DocTypes are equals() if their constituent strings are equals().  This
 makes general sense because if you want to compare the doctypes of two docs
-you want to do an equivalency check. 
+you want to do an equivalency check.
 
 Added a private CVS_ID variable to the core classes containing RCS variables.
 This allows you to examine the compiled class to determine the source from
@@ -884,12 +909,12 @@ do normalization.
 
 Changed Document and Element internal LinkedList implementation to ArrayList.
 This change of list gives us a remarkable reduction in memory sizes for all
-large documents tested, and gives a speed boost too.  
+large documents tested, and gives a speed boost too.
 
 Changed Element parentage so only one variable is used for the parent.  It may
 be of type Element or Document depending on where the elt is placed in the
 tree.  This saves one instance variable's worth of memory for each element in
-the tree.  
+the tree.
 
 Added a new line after the DocType always, for better formatting.
 
@@ -905,9 +930,9 @@ object creation for every element with an empty additional namespace list
 (which is 99.9% of elements).
 
 Refactored SAXBuilder to make it easier to extend.
-* The parser is created in a separate createParser() method, and 
+* The parser is created in a separate createParser() method, and
   configured in a separate configureParser() method.
-* The content handler is created in a separate createContentHandler() 
+* The content handler is created in a separate createContentHandler()
   method, and configured in a separate configureContentHandler() method.
 
 Improved builder exception handling to if anything in the build process throws
@@ -945,7 +970,7 @@ Namespace.getNamespace() calls!
 Fixed bug where elt.clone() would concatenate adjacent strings.
 
 Fixed bug in elt.hasChildren() where the logic could be confused if there was
-a subclass of Element in the tree.  
+a subclass of Element in the tree.
 
 Fixed the Javadoc on Element.getAdditionalNamespaces() to say it returns an
 empty list if empty.  It used to say null.  Empty is consistent with JDOM
@@ -973,13 +998,13 @@ is possible though.  Also fixed behavior of Namespace.hashCode() to depend
 solely on the URI.
 
 Fixed bug where DOMOutputter creates nodes with "" as their
-node.getNamespaceURI() even if the node is not in a namespace.  
+node.getNamespaceURI() even if the node is not in a namespace.
 
 Changed attribute value escaping to not escape single-quotes because it's not
 necessary as attribute values are always surrounded by double-quotes.
 
 Made sure XMLOutputter doesn't print the newline after the decl if the decl is
-suppressed.  
+suppressed.
 
 Fixed SAXOutputter to declare namespaces using start/endPrefixMapping methods.
 Also added optional ability for SAXOutputter to report namespace declarations
@@ -990,13 +1015,13 @@ availableNamespaces list unnecessarily, causing roughly as many entries to be
 added as there were elements with namespaces.  In simple testing, memory usage
 for representing a namespace-intensive file went from 1.4 Megs to 460K.
 
-Fixed addFirst() and addLast() in PartialList to work correctly. 
+Fixed addFirst() and addLast() in PartialList to work correctly.
 
-Fixed a bug in PartialList where addAll() added *before* the last element 
+Fixed a bug in PartialList where addAll() added *before* the last element
 instead of after.
 
 Made PartialList's addAll() method work OK if the backing list is non-empty
-while the PartialList is empty.  
+while the PartialList is empty.
 
 Fixed build scripts to work OK on Windows with spaces in directory paths.
 
@@ -1035,7 +1060,7 @@ values include namespaces, like <xsl:template match="sg:title">.
 Added DOMBuilder.setValidation(boolean) to set the validate flag after
 construction, to match SAXBuilder.
 
-Added DOMOutputter.output(Attribute) methods.  
+Added DOMOutputter.output(Attribute) methods.
 
 Added XMLOutputter.setExpandEmptyElements() to choose between <empty/> and
 <empty></empty>.
@@ -1099,7 +1124,7 @@ if JAXP isn't available.
 Added improved Verifier checks of well-formedness throughout all of JDOM.
 Among the most likely to be noticed:
   - Added Verifier detection of wrongly places "xmlns" attributes.
-  - Added check in Attribute that a namespace with "" prefix must be 
+  - Added check in Attribute that a namespace with "" prefix must be
     NO_NAMESPACE.
   - Added Verifier checks so CDATA text cannot contain ">>]"
 
@@ -1107,14 +1132,14 @@ Upgraded provided parser to Xerces 1.2.
 
 Improved SAXBuilder and DOMBuilder to be *much* smarter about namespaces.
 Most likely to be noticed:
-  - DOMBuilder now keeps xmlns namespaces declaration location, and it now 
-    relies on the parser to handle namespaces (necessary for importing a 
+  - DOMBuilder now keeps xmlns namespaces declaration location, and it now
+    relies on the parser to handle namespaces (necessary for importing a
     document that has nodes moved around).
 
 Made SAXBuilder and DOMBuilder much more specific on error reporting.
 
-Brought DOMOutputter up to DOM Level 2 compliance.  
-  - Added logic to DOMOutputter to add xmlns attributes to the DOM tree 
+Brought DOMOutputter up to DOM Level 2 compliance.
+  - Added logic to DOMOutputter to add xmlns attributes to the DOM tree
     where appropriate.
 
 Added SAXOutputter to generate SAX events.

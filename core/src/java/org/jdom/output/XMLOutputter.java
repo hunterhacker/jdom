@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.104 2004/02/19 05:15:06 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.105 2004/02/19 09:30:25 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.104 $, $Date: 2004/02/19 05:15:06 $
+ * @version $Revision: 1.105 $, $Date: 2004/02/19 09:30:25 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,13 +113,13 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.104 $ $Date: 2004/02/19 05:15:06 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.105 $ $Date: 2004/02/19 09:30:25 $ $Name:  $";
 
     // For normal output
-    protected Format userFormat = Format.getRawFormat();
+    private Format userFormat = Format.getRawFormat();
 
     // For xml:space="preserve"
-    protected Format preserveFormat = Format.getRawFormat();
+    protected static final Format preserveFormat = Format.getRawFormat();
 
     // What's currently in use
     protected Format currentFormat = userFormat;
@@ -308,7 +308,7 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * Get an OutputStreamWriter, using prefered encoding
-     * (see {@link #setEncoding}).
+     * (see {@link Format#setEncoding}).
      */
     private Writer makeWriter(OutputStream out)
                          throws java.io.UnsupportedEncodingException {
@@ -806,7 +806,7 @@ public class XMLOutputter implements Cloneable {
      * This will handle printing a string.  Escapes the element entities,
      * trims interior whitespace, etc. if necessary.
      */
-    protected void printString(Writer out, String str) throws IOException {
+    private void printString(Writer out, String str) throws IOException {
         if (currentFormat.mode == Format.TextMode.NORMALIZE) {
             str = Text.normalizeString(str);
         }
@@ -931,7 +931,7 @@ public class XMLOutputter implements Cloneable {
      * @param level <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    protected void printContentRange(Writer out, List content,
+    private void printContentRange(Writer out, List content,
                                      int start, int end, int level,
                                      NamespaceStack namespaces)
                        throws IOException {
@@ -1000,7 +1000,7 @@ public class XMLOutputter implements Cloneable {
      * @param end index of last content node (exclusive).
      * @param out <code>Writer</code> to use.
      */
-    protected void printTextRange(Writer out, List content, int start, int end
+    private void printTextRange(Writer out, List content, int start, int end
                                   ) throws IOException {
         String previous; // Previous text printed
         Object node;     // Next node to print
