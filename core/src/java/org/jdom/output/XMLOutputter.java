@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.41 2001/03/22 06:35:36 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.42 2001/04/05 05:32:33 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -451,8 +451,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Document doc, OutputStream out)
                                            throws IOException {
         Writer writer = makeWriter(out);
-        output(doc, writer);
-        writer.flush();
+        output(doc, writer);  // output() flushes
     }
 
     /**
@@ -465,25 +464,22 @@ public class XMLOutputter implements Cloneable {
      * encodings other than UTF8, we recommend using the method that
      * takes an OutputStream instead.  </p>
      *
-     * <p>Note: as with all Writers, you may need to flush() yours
-     * after this method returns.</p>
-     *
      * @param doc <code>Document</code> to format.
      * @param out <code>Writer</code> to write to.
      * @throws IOException - if there's any problem writing.
      **/
-    public void output(Document doc, Writer writer) throws IOException {
+    public void output(Document doc, Writer out) throws IOException {
 
-        printDeclaration(doc, writer, encoding);
+        printDeclaration(doc, out, encoding);
 
         // Print new line after decl always, even if no other new lines
         // Helps the output look better and is semantically
         // inconsequential
-        writer.write(lineSeparator);
+        out.write(lineSeparator);
 
         if (doc.getDocType() != null) {
-            printDocType(doc.getDocType(), writer);
-            maybePrintln(writer);
+            printDocType(doc.getDocType(), out);
+            maybePrintln(out);
         }
         
         // Print out root element, as well as any root level
@@ -493,21 +489,22 @@ public class XMLOutputter implements Cloneable {
         while (i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                printElement(doc.getRootElement(), writer, 0,
+                printElement(doc.getRootElement(), out, 0,
                              new NamespaceStack());
             }
             else if (obj instanceof Comment) {
-                printComment((Comment) obj, writer);
+                printComment((Comment) obj, out);
             }
             else if (obj instanceof ProcessingInstruction) {
-                printProcessingInstruction((ProcessingInstruction) obj,
-                                           writer);
+                printProcessingInstruction((ProcessingInstruction) obj, out);
             }
-            maybePrintln(writer);
+            maybePrintln(out);
         }
 
         // Output final line separator
-        writer.write(lineSeparator);
+        out.write(lineSeparator);
+
+        out.flush();
     }
 
     // * * * * * Element * * * * *
@@ -526,6 +523,7 @@ public class XMLOutputter implements Cloneable {
         // If this is the root element we could pre-initialize the 
         // namespace stack with the namespaces
         printElement(element, out, 0, new NamespaceStack());
+        out.flush();
     }
     
     /**
@@ -540,8 +538,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(Element element, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
-        output(element, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(element, writer);  // output() flushes
     }
 
     /**
@@ -559,6 +556,7 @@ public class XMLOutputter implements Cloneable {
         List mixedContent = element.getMixedContent();
         printElementContent(element, out, 0, new NamespaceStack(),
                             mixedContent);
+        out.flush();
     }
     
     // * * * * * CDATA * * * * *
@@ -573,6 +571,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(CDATA cdata, Writer out) throws IOException {
         printCDATASection(cdata, out);
+        out.flush();
     }
     
     /**
@@ -585,8 +584,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(CDATA cdata, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
-        output(cdata, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(cdata, writer);  // output() flushes
     }
 
     // * * * * * Comment * * * * *
@@ -601,6 +599,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(Comment comment, Writer out) throws IOException {
         printComment(comment, out);
+        out.flush();
     }
     
     /**
@@ -613,8 +612,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(Comment comment, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
-        output(comment, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(comment, writer);  // output() flushes
     }
     
 
@@ -629,6 +627,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(String string, Writer out) throws IOException {
         printString(string, out);
+        out.flush();
     }
     
     /**
@@ -642,8 +641,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(String string, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
-        printString(string, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(string, writer);  // output() flushes
     }
     
     // * * * * * Entity * * * * *
@@ -657,6 +655,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(Entity entity, Writer out) throws IOException {
         printEntity(entity, out);
+        out.flush();
     }
     
     /**
@@ -669,8 +668,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public void output(Entity entity, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
-        printEntity(entity, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(entity, writer);  // output() flushes
     }
     
 
@@ -687,6 +685,7 @@ public class XMLOutputter implements Cloneable {
     public void output(ProcessingInstruction pi, Writer out)
                                  throws IOException {
         printProcessingInstruction(pi, out);
+        out.flush();
     }
     
     /**
@@ -701,8 +700,7 @@ public class XMLOutputter implements Cloneable {
     public void output(ProcessingInstruction pi, OutputStream out)
                                  throws IOException {
         Writer writer = makeWriter(out);
-        output(pi, writer);
-        writer.flush();         // flush the output to the underlying stream
+        output(pi, writer);  // output() flushes
     }
     
 
@@ -717,8 +715,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public String outputString(Document doc) throws IOException {
         StringWriter out = new StringWriter();
-        output(doc, out);
-        out.flush();
+        output(doc, out);  // output() flushes
         return out.toString();
     }
 
@@ -731,8 +728,7 @@ public class XMLOutputter implements Cloneable {
      **/
     public String outputString(Element element) throws IOException {
         StringWriter out = new StringWriter();
-        output(element, out);
-        out.flush();
+        output(element, out);  // output() flushes
         return out.toString();
     }
 
@@ -768,7 +764,7 @@ public class XMLOutputter implements Cloneable {
                 }
                 out.write("?>");
             }
-        }        
+        }
     }    
 
     /**
