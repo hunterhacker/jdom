@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.75 2002/02/19 06:46:03 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.76 2002/03/15 05:36:48 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.75 $, $Date: 2002/02/19 06:46:03 $
+ * @version $Revision: 1.76 $, $Date: 2002/03/15 05:36:48 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.75 $ $Date: 2002/02/19 06:46:03 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.76 $ $Date: 2002/03/15 05:36:48 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -214,12 +214,13 @@ public class XMLOutputter implements Cloneable {
       * - default is <code>false</code> */
     private boolean omitEncoding = false;
 
-    class Format implements Cloneable {
-        /** standard value to indent by, if we are indenting */
-        static final String STANDARD_INDENT = "  ";
+    /** standard value to indent by, if we are indenting */
+    private static final String STANDARD_INDENT = "  ";
 
-        /** standard string with which to end a line */
-        static final String STANDARD_LINE_SEPARATOR = "\r\n";
+    /** standard string with which to end a line */
+    private static final String STANDARD_LINE_SEPARATOR = "\r\n";
+
+    class Format implements Cloneable {
 
         /** The default indent is no spaces (as original document) */
         String indent = null;
@@ -527,7 +528,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void setIndent(boolean doIndent) {
         if (doIndent) {
-            defaultFormat.indent = Format.STANDARD_INDENT;
+            defaultFormat.indent = STANDARD_INDENT;
         }
         else {
             defaultFormat.indent = null;

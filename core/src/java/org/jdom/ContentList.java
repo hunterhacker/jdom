@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.7 2002/03/15 05:29:37 jhunter Exp $
+ $Id: ContentList.java,v 1.8 2002/03/15 05:36:48 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,7 +71,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.7 $, $Date: 2002/03/15 05:29:37 $
+ * @version $Revision: 1.8 $, $Date: 2002/03/15 05:36:48 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,9 +83,23 @@ class ContentList extends AbstractList
                          implements List, Cloneable, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.7 $ $Date: 2002/03/15 05:29:37 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.8 $ $Date: 2002/03/15 05:36:48 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
+
+    /**
+     * Used inner class FilterListIterator to help hasNext and
+     * hasPrevious the next index of our cursor (must be here
+     * for JDK1.1).
+     */
+    private static final int CREATE  = 0;
+    private static final int HASPREV = 1;
+    private static final int HASNEXT = 2;
+    private static final int PREV    = 3;
+    private static final int NEXT    = 4;
+    private static final int ADD     = 5;
+    private static final int REMOVE  = 6;
+    private static final int SET     = 7;
 
     /** Our backing list */
     protected ArrayList list;
@@ -893,19 +907,6 @@ class ContentList extends AbstractList
     /* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */
 
     class FilterListIterator implements ListIterator {
-
-        /**
-         * Used to help hasNext and hasPrevious the next
-         * index of our cursor
-         */
-        static final int CREATE  = 0;
-        static final int HASPREV = 1;
-        static final int HASNEXT = 2;
-        static final int PREV    = 3;
-        static final int NEXT    = 4;
-        static final int ADD     = 5;
-        static final int REMOVE  = 6;
-        static final int SET     = 7;
 
         /** The Filter that applies */
         Filter filter;
