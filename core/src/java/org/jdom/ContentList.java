@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.34 2004/02/06 09:28:30 jhunter Exp $
+ $Id: ContentList.java,v 1.35 2004/02/10 21:38:13 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.34 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.35 $, $Date: 2004/02/10 21:38:13 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.34 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.35 $ $Date: 2004/02/10 21:38:13 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -163,8 +163,9 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                 "The Element cannot be added to itself");
         }
 
+        // Detect if we have <a><b><c/></b></a> and c.add(a)
         if ((parent instanceof Element && child instanceof Element) &&
-                ((Element) parent).isAncestor((Element)child)) {
+                ((Element) child).isAncestor((Element)parent)) {
             throw new IllegalAddException(
                 "The Element cannot be added as a descendent of itself");
         }
