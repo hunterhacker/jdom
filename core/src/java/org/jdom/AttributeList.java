@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.19 2004/02/05 09:33:23 jhunter Exp $
+ $Id: AttributeList.java,v 1.20 2004/02/05 09:35:56 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.19 $, $Date: 2004/02/05 09:33:23 $
+ * @version $Revision: 1.20 $, $Date: 2004/02/05 09:35:56 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,7 +78,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.19 $ $Date: 2004/02/05 09:33:23 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.20 $ $Date: 2004/02/05 09:35:56 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -308,10 +308,7 @@ class AttributeList extends AbstractList
      */
     private void ensureCapacity(int minCapacity) {
         if (elementData == null) {
-            int newCapacity = INITIAL_ARRAY_SIZE;
-            if (newCapacity < minCapacity)
-                newCapacity = minCapacity;
-            elementData = new Attribute[newCapacity];
+            elementData = new Attribute[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
         }
         else {
             int oldCapacity = elementData.length;

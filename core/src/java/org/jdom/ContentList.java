@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.30 2004/02/05 09:33:23 jhunter Exp $
+ $Id: ContentList.java,v 1.31 2004/02/05 09:35:56 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.30 $, $Date: 2004/02/05 09:33:23 $
+ * @version $Revision: 1.31 $, $Date: 2004/02/05 09:35:56 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.30 $ $Date: 2004/02/05 09:33:23 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.31 $ $Date: 2004/02/05 09:35:56 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -615,11 +615,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
      */
     void ensureCapacity(int minCapacity) {
         if( elementData==null ) {
-            int newCapacity = INITIAL_ARRAY_SIZE;
-            if (newCapacity < minCapacity) {
-                newCapacity = minCapacity;
-            }
-            elementData = new Object[newCapacity];
+            elementData = new Object[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
         } else {
             int oldCapacity = elementData.length;
             if (minCapacity > oldCapacity) {
