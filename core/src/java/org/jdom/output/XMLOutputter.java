@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.40 2001/03/22 06:34:35 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.41 2001/03/22 06:35:36 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -1360,6 +1360,5 @@ public class XMLOutputter implements Cloneable {
      * @deprecated Deprecated in beta7, because this is better done with a
      *             stacked FilterOutputStream
      */
-     *
     public void setIndentLevel(int indentLevel) { }
 }
