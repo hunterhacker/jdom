@@ -202,12 +202,6 @@ public class TestXMLOutputter {
 
             try {
                 demo.testBuilder(filename, System.out);
-            } catch (JDOMException e) {
-                if (e.getRootCause() != null) {
-                    e.getRootCause().printStackTrace();
-                } else {
-                    e.printStackTrace();
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }    
