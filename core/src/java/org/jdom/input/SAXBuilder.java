@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.45 2001/05/09 07:14:23 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.46 2001/05/09 07:23:24 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -71,6 +71,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * <p><code>SAXBuilder</code> builds a JDOM tree using SAX.</p>
  *
+ * <p>Known issues: Relative paths for a DocType or EntityRef may be
+ * converted by the SAX parser into absolute paths</p>
+ *
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Dan Schaffer
@@ -80,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.45 $ $Date: 2001/05/09 07:14:23 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.46 $ $Date: 2001/05/09 07:23:24 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser

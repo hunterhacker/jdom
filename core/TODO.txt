@@ -5,10 +5,6 @@ Items that need to be done:
 * How about if we add getTextNormalize() for normalized and make getTextTrim()
   only do a trim?
 
-* Investigate Elliotte's bug report at
-  http://lists.denveronline.net/lists/jdom-interest/2001-April/006052.html
-  It's probably a SAX-ism, but we should verify.
-
 * Determine if getSerializedForm() should be brought back and implemented
   to call XMLOutputter.outputString() methods.
 
