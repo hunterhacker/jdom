@@ -1,5 +1,7 @@
 /*-- 
 
+ $Id: NamespaceStack.java,v 1.3 2001/03/15 06:07:19 jhunter Exp $
+
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
  

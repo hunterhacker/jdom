@@ -1,5 +1,7 @@
 /*-- 
 
+ $Id: CrimsonDOMAdapter.java,v 1.5 2001/03/15 06:07:18 jhunter Exp $
+
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
  
