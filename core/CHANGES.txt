@@ -130,6 +130,9 @@ turned off for the rest of the document.
 Made PI's getSerializedForm() smarter about spacing between target and data.
 Now if there is no data, there's no space added.
 
+Guarantee XMLOutputter prints a new line at the end of each document, for
+better formatting, esp when printing to System.out.
+
 Put samples in the "samples" package.
 
 BUG FIXES
