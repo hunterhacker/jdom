@@ -231,6 +231,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - this PI modified.
      */
     public ProcessingInstruction setData(String data) {
+        // XXX Need to validate the data
         this.rawData = data;
         this.mapData = parseData(data);
         return this;
@@ -247,6 +248,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - modified PI.
      */
     public ProcessingInstruction setData(Map data) {
+        // XXX Need to validate the data
         this.rawData = toString(data);
         this.mapData = data;
         return this;
@@ -285,7 +287,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction setValue(String name,
                                           String value) {
-
+        // XXX Need to validate the data
         mapData.put(name, value);
         rawData = toString(mapData);
         return this;
