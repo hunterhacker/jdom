@@ -2,6 +2,10 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Either make DocType immutable, or have it keep track of its parent.  We
+  should avoid the opportunity to have the same DocType on two docs and have
+  one change accidentally change the other.
+
 * Add notes that element content returned by List is ordered.
 
 * Figure out how Namespace.equals() should work.  The issue's been brought up
@@ -17,11 +21,6 @@ Items that need to be done:
 * Investigate ClassLoader.loadClass() instead of Class.forName() for those
   times when the classes aren't on the system classpath.  (Suggested by Alex
   Rosen)
-
-* Fix PI.parseData() to parse the following correctly:
-    <?pi href="http://hi/a=b"?>
-    <?pi href = 'http://hi/a=b' ?>
-  Bug found by Jerome Jacobsen, 2/2/01
 
 * Change elt.addAttribute to elt.setAttribute(), doing an implicit replace if
   necessary.  Consider using LinkedHashMap from JPDA to preserve attrib order.

@@ -71,6 +71,7 @@ import java.util.StringTokenizer;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
+ * @author Steven Gould
  * @version 1.0
  */
 
@@ -363,29 +364,65 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /**
      * <p>
      * This will parse and load the instructions for the PI.
-     *   This is separated to allow it to occur once and then
-     *   be reused.
+     *   This is separated to allow it to occur once and then be reused.
      * </p>
      *
      * @param rawData <code>String</code> PI data to parse
      */
     private Map parseData(String rawData) {
+        // The parsing here is done largely "by hand" which means the code
+        // gets a little tricky/messy.  The following conditions should 
+        // now be handled correctly:
+        //   <?pi href="http://hi/a=b"?>        Reads OK
+        //   <?pi href = 'http://hi/a=b' ?>     Reads OK
+        //   <?pi href\t = \t'http://hi/a-b'?>  Reads OK
+        //   <?pi?>                             Empty Map
+        //   <?pi id=22?>                       Empty Map
+        //   <?pi id='22?>                      Empty Map
+
         Map data = new HashMap();
 
-        // Break up name/value pairs
-        StringTokenizer s =
-            new StringTokenizer(rawData);
+        // System.out.println("rawData: " + rawData);
 
-        // Iterate through the pairs
-        while (s.hasMoreTokens()) {
-            // Now break up pair on the = and (" or ') characters
-            StringTokenizer t =
-                new StringTokenizer(s.nextToken(), "='\"");
+        // The inputData variable holds the part of rawData left to parse
+        String inputData = rawData.trim();
 
-            if (t.countTokens() >= 2) {
-                String name = t.nextToken();
-                String value = t.nextToken();
+        // Iterate through the remaining inputData string
+        while (!inputData.trim().equals("")) {
+            //System.out.println("parseData() looking at: " + inputData);
 
+            // Search for "name =", "name=" or "name1 name2..."
+            String name = "";
+            String value = "";
+            int startName = 0;
+            char previousChar = inputData.charAt(startName);
+            int pos = 1;
+            for (; pos<inputData.length(); pos++) {
+                char currentChar = inputData.charAt(pos);
+                if (currentChar == '=') {
+                    name = inputData.substring(startName, pos).trim();
+                    value = extractQuotedString(
+                                     inputData.substring(pos+1).trim());
+                    pos = inputData.indexOf(value) + value.length() + 1;
+                    break;
+                }
+                else if (Character.isWhitespace(previousChar)
+                          && !Character.isWhitespace(currentChar)) {
+                    startName = pos;
+                }
+
+                previousChar = currentChar;
+            }
+
+            // Remove the first pos characters; they have been processed
+            inputData = inputData.substring(pos);
+
+            // System.out.println("Extracted (name, value) pair: ("
+            //                          + name + ", '" + value+"')");
+
+            // If both a name and a value have been found, then add
+            // them to the data Map
+            if (name.length( )> 0 && value.length() > 0) {
                 data.put(name, value);
             }
         }
@@ -393,6 +430,58 @@ public class ProcessingInstruction implements Serializable, Cloneable {
         return data;
     }
 
+    /**
+     * This is a helper routine, only used by parseData, to extract a
+     * quoted String from the input parameter, rawData. A quoted string
+     * can use either single or double quotes, but they must match up.
+     * A singly quoted string can contain an unbalanced amount of double
+     * quotes, or vice versa. For example, the String "JDOM's the best"
+     * is valid as is 'JDOM"s the best'.
+     *
+     * @param rawData the input string from which a quoted string is to
+     *                be extracted.
+     * @return the first quoted string encountered in the input data. If
+     *         no quoted string is found, then the empty string, "", is
+     *         returned.
+     * @see parseData
+     */
+    private String extractQuotedString(String rawData) {
+        // Remembers whether we're actually in a quoted string yet
+        boolean inQuotes = false;
+
+        // Remembers which type of quoted string we're in
+        char quoteChar = '"';
+
+        // Stores the position of the first character inside
+        //  the quoted string (i.e. the start of the return string)
+        int start = 0;
+
+        // Iterate through the input string looking for the start
+        // and end of the quoted string
+        for (int pos=0; pos < rawData.length(); pos++) {
+            char currentChar = rawData.charAt(pos);
+            if (currentChar=='"' || currentChar=='\'') {
+                if (!inQuotes) {
+                    // We're entering a quoted string
+                    quoteChar = currentChar;
+                    inQuotes = true;
+                    start = pos+1;
+                }
+                else if (quoteChar == currentChar) {
+                    // We're leaving a quoted string
+                    inQuotes = false;
+                    return rawData.substring(start, pos);
+                }
+                // Otherwise we've encountered a quote
+                // inside a quote, so just continue
+            }
+        }
+
+        // Should we throw an exception if no quoted string was found,
+        // or simply return an empty string???
+        return "";
+    }
+    
     /**
      * <p>
      *  This returns a <code>String</code> representation of the
