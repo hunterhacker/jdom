@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XercesDOMAdapter.java,v 1.11 2002/04/09 06:38:42 jhunter Exp $
+ $Id: XercesDOMAdapter.java,v 1.12 2002/04/10 04:51:45 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,8 +68,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import org.jdom.input.BuilderErrorHandler;
 import org.jdom.JDOMException;
+import org.jdom.input.BuilderErrorHandler;
 
 /**
  * <b><code>XercesDOMAdapater</code></b>
@@ -80,12 +80,12 @@ import org.jdom.JDOMException;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.11 $, $Date: 2002/04/09 06:38:42 $
+ * @version $Revision: 1.12 $, $Date: 2002/04/10 04:51:45 $
  */
 public class XercesDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.11 $ $Date: 2002/04/09 06:38:42 $ $Name:  $";
+      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.12 $ $Date: 2002/04/10 04:51:45 $ $Name:  $";
 
     /**
      * <p>
@@ -98,10 +98,11 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
      * @param validate <code>boolean</code> to indicate if validation 
      * should occur.
      * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when errors occur in parsing.
+     * @throws IOException when I/O error occurs.
+     * @throws JDOMException when errors occur in parsing.
      */
     public Document getDocument(InputStream in, boolean validate)
-        throws IOException  {
+        throws IOException, JDOMException  {
 
         try {
             // Load the parser class
@@ -147,16 +148,19 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
             if (targetException instanceof org.xml.sax.SAXParseException) {
                 SAXParseException parseException =
                     (SAXParseException)targetException;
-                throw new IOException("Error on line " +
+                throw new JDOMException("Error on line " +
                                       parseException.getLineNumber() +
                                       " of XML document: " +
-                                      parseException.getMessage());
+                                      parseException.getMessage(), e);
+            } else if (targetException instanceof IOException) {
+                IOException ioException = (IOException) targetException;
+                throw ioException;
             } else {
-                throw new IOException(targetException.getMessage());
+                throw new JDOMException(targetException.getMessage(), e);
             }
         } catch (Exception e) {
-            throw new IOException(e.getClass().getName() + ": " +
-                                  e.getMessage());
+            throw new JDOMException(e.getClass().getName() + ": " +
+                                  e.getMessage(), e);
         }
     }
 
@@ -167,7 +171,7 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
      * </p>
      *
      * @return <code>Document</code> - created DOM Document.
-     * @throws IOException when errors occur.
+     * @throws JDOMException when errors occur.
      */
     public Document createDocument() throws JDOMException {
         try {
@@ -175,7 +179,7 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
                 "org.apache.xerces.dom.DocumentImpl").newInstance();
         } catch (Exception e) {
             throw new JDOMException(e.getClass().getName() + ": " +
-                                    e.getMessage());
+                                  e.getMessage() + " when creating document", e);
         }
     }
 }
