@@ -20,8 +20,6 @@ Items that need to be done:
 
 * Should there be XPath support within Element, Document, etc?
 
-* Add methods to recursively get content and get filtered content.
-
 * Consider moving JDOMFactory to org.jdom.
 
 * Investigate serialization issue raised by Tom Preston

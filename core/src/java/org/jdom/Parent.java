@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.1 2003/05/20 21:53:59 jhunter Exp $
+ $Id: Parent.java,v 1.2 2003/05/21 09:17:45 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,8 +57,7 @@
 package org.jdom;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import org.jdom.filter.Filter;
 
 /**
@@ -67,7 +66,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.1 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.2 $, $Date: 2003/05/21 09:17:45 $
  * @see org.jdom.Child
  * @see org.jdom.Document
  * @see org.jdom.Element
@@ -332,4 +331,21 @@ public interface Parent extends Cloneable, Serializable {
      * @return a deep copy of this parent and it's children.
      */
     Object clone();
+
+    /**
+     * Returns an iterator that walks over all descendants in document order.
+     *
+     * @return an iterator to walk descendants
+     */
+    Iterator getDescendants();
+
+    /**
+     * Returns an iterator that walks over all descendants in document order
+     * applying the Filter to return only elements that match the filter rule.
+     * With filters you can match only Elements, only Comments, Elements or
+     * Comments, only Elements with a given name and/or prefix, and so on.
+     *
+     * @return an iterator to walk descendants within a filter
+     */
+    Iterator getDescendants(Filter filter);
 }

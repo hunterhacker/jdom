@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementFilter.java,v 1.11 2003/05/01 06:18:51 jhunter Exp $
+ $Id: ElementFilter.java,v 1.12 2003/05/21 09:17:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,14 +61,14 @@ import org.jdom.*;
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.11 $, $Date: 2003/05/01 06:18:51 $
+ * @version $Revision: 1.12 $, $Date: 2003/05/21 09:17:45 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
-public class ElementFilter implements Filter {
+public class ElementFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.11 $ $Date: 2003/05/01 06:18:51 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.12 $ $Date: 2003/05/21 09:17:45 $ $Name:  $";
 
     /** The element name */
     protected String name;

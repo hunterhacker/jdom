@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.135 2003/05/20 21:53:59 jhunter Exp $
+ $Id: Element.java,v 1.136 2003/05/21 09:17:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.135 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.136 $, $Date: 2003/05/21 09:17:45 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element implements Parent, Child {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.135 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.136 $ $Date: 2003/05/21 09:17:45 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1549,7 +1549,26 @@ public class Element implements Parent, Child {
         }
     }
 
+    /**
+     * Returns an iterator that walks over all descendants in document order.
+     *
+     * @return an iterator to walk descendants
+     */
+    public Iterator getDescendants() {
+        return new DescendantIterator(this);
+    }
 
+    /**
+     * Returns an iterator that walks over all descendants in document order
+     * applying the Filter to return only elements that match the filter rule.
+     * With filters you can match only Elements, only Comments, Elements or
+     * Comments, only Elements with a given name and/or prefix, and so on.
+     *
+     * @return an iterator to walk descendants within a filter
+     */
+    public Iterator getDescendants(Filter filter) {
+        return new FilterIterator(new DescendantIterator(this), filter);
+    }
 
 
 
