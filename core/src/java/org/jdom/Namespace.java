@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.25 2001/05/08 22:23:56 jhunter Exp $
+ $Id: Namespace.java,v 1.26 2001/05/19 00:07:07 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -86,7 +86,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.25 $ $Date: 2001/05/08 22:23:56 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.26 $ $Date: 2001/05/19 00:07:07 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -150,7 +150,9 @@ public final class Namespace {
         }
 
         // Return existing namespace if found
-        Namespace preexisting = (Namespace) namespaces.get(prefix + "&" + uri);
+        String lookup = new StringBuffer(64)
+            .append(prefix).append('&').append(uri).toString();
+        Namespace preexisting = (Namespace) namespaces.get(lookup);
         if (preexisting != null) {
             return preexisting;
         }
@@ -172,7 +174,7 @@ public final class Namespace {
 
         // Finally, store and return
         Namespace ns = new Namespace(prefix, uri);
-        namespaces.put(prefix + "&" + uri, ns);
+        namespaces.put(lookup, ns);
         return ns;
     }
 
