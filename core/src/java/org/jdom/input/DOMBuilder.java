@@ -305,7 +305,7 @@ public class DOMBuilder {
                     Node att = attributeList.item(i);
 
                     // Distinguish between namespace and attribute
-                    if (att.getNodeName().startsWith("xmlns")) {
+                    if (att.getNodeName().startsWith("xmlns:")) {
                         String prefix;
                         String uri = att.getNodeValue();
                         int colon;

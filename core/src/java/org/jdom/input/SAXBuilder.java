@@ -600,7 +600,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 throw new SAXException("Cannot access Attribute's full name");
             }
 
-            if (attName.startsWith("xmlns")) {
+            if (attName.startsWith("xmlns:")) {
                 int attributeSplit;
                 String prefix = "";
                 String uri = atts.getValue(i);
@@ -640,7 +640,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                 throw new SAXException("Cannot access Attribute's full name");
             }
 
-            if (!attName.startsWith("xmlns")) {
+            if (!attName.startsWith("xmlns:")) {
                 name = attName;
                 int attSplit;
                 prefix = "";
