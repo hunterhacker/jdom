@@ -54,41 +54,69 @@
 
 package org.jdom.test.cases;
 
+import org.jdom.Element;
+import org.jdom.Namespace;
+
+import junit.framework.TestCase;
+
 /**
- * Please put a description of your test here.
+ * <p>
+ * This is a test for the constructor of the <code>Element</code> class which
+ * can take a name and a namespace as its arguments.
+ * </p>
  * 
- * @author unascribed
+ * @author  Jools Enticknap
  * @version 0.1
  */
-public final class TCC_Element__String_OrgJdomNamespace
-extends junit.framework.TestCase
-{
+public final class TCC_Element__String_OrgJdomNamespace extends TestCase {
+
     /**
      *  Construct a new instance. 
      */
-    public TCC_Element__String_OrgJdomNamespace() {
-        super("public org.jdom.Element(java.lang.String,org.jdom.Namespace)");
+    public TCC_Element__String_OrgJdomNamespace(String s) {
+        super(s);
     }
 
     /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * Test code goes here. Replace this comment.
+     * <p>
+	 * This test will ensure that an <code>Element</code> created with a 
+	 * specific name and a <code>Namespace</code> remains as such after
+	 * the Object is created.
+	 * </p>
      */
     public void test() {
-        fail("implement me !");
-    }
+		String prefix = "test-prefix";
+		String uri    = "test-uri";
+		Namespace ns = Namespace.getNamespace(prefix, uri);
+		String name = "test-element";
+		Element e = new Element(name, ns);
 
+		// Check that the name supplied in the argument to the constructor
+		// is the same as the one returned from getName().
+		if (!e.getName().equals("test-element")) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("using the the name(")
+							  .append(name)
+							  .append(") but the following value was ")
+							  .append("returned from getName() (")
+							  .append(e.getName())
+							  .append(")");
+	
+        	fail(sb.toString());
+		}
+
+		// Check that the namespace is the one we supplied in the constructor.
+		if (e.getNamespace() != ns) {
+			StringBuffer sb = new StringBuffer("The Element was constructed ")
+			                  .append("with a namespace, however ")
+							  .append("getNamespace() does not return a ")
+							  .append("reference to Namespace supplied in the ")
+							  .append("constructor instead we have a reference ")
+							  .append("to(")
+							  .append(e.getNamespace())
+							  .append(") instead.");
+
+        	fail(sb.toString());
+		}
+    }
 }
