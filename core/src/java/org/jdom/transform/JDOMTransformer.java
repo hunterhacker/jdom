@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMTransformer.java,v 1.3 2003/05/02 18:59:51 jhunter Exp $
+ $Id: JDOMTransformer.java,v 1.4 2003/05/05 08:10:00 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,6 +57,7 @@
 package org.jdom.transform;
 
 import java.util.*;
+import java.io.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
 import org.jdom.*;
@@ -75,24 +76,52 @@ import org.jdom.*;
  * Document y2 = transformer.transform(y);  // y is a Document
  * </code></pre>
  *
- * @version $Revision: 1.3 $, $Date: 2003/05/02 18:59:51 $
+ *  JDOM relies on TrAX to perform the transformation.
+ *  The <code>javax.xml.transform.TransformerFactory</code> Java system property
+ *  determines which XSLT engine TrAX uses. Its value should be
+ *  the fully qualified name of the implementation of the abstract
+ *  <code>javax.xml.transform.TransformerFactory</code> class.
+ *  Values of this property for popular XSLT processors include:
+ *  </p>
+ *  <ul><li>Saxon 6.x: <code>com.icl.saxon.TransformerFactoryImpl</code></li>
+ *  <li>Saxon 7.x: <code>net.sf.saxon.TransformerFactoryImpl</code></li>
+ *  <li>Xalan: <code>org.apache.xalan.processor.TransformerFactoryImpl</code></li>
+ *  <li>jd.xslt: <code>jd.xml.xslt.trax.TransformerFactoryImpl</code></li>
+ *  <li>Oracle: <code>oracle.xml.jaxp.JXSAXTransformerFactory</code></li>
+ *  </ul>
+ *  <p>
+ *   This property can be set in all the usual ways a Java system property
+ *   can be set. TrAX picks from them in this order:</p>
+ *   <ol>
+ *   <li> Invoking <code>System.setProperty( "javax.xml.transform.TransformerFactory",
+ *     "<i><code>classname</code></i>")</code></li>
+ *   <li>The value specified at the command line using the
+ *      <tt>-Djavax.xml.transform.TransformerFactory=<i><code>classname</code></i></tt>
+ *      option to the <b>java</b> interpreter</li>
+ *    <li>The class named in the  <code>lib/jaxp.properties</code> properties file
+ *         in the JRE directory, in a line like this one:
+ *      <pre>javax.xml.parsers.DocumentBuilderFactory=<i><code>classname</code></i></pre></li>
+ *    <li>The class named in the
+ *   <code>META-INF/services/javax.xml.transform.TransformerFactory</code> file
+ *   in the JAR archives available to the runtime</li>
+ *   <li>Finally, if all of the above options fail,
+ *    a default implementation is chosen. In Sun's JDK 1.4, this is
+ *       Xalan 2.2d10. </li>
+ *    </ol>
+
+ * @version $Revision: 1.4 $, $Date: 2003/05/05 08:10:00 $
  * @author  Jason Hunter
+ * @author  Elliotte Rusty Harold
  */
 public class JDOMTransformer {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.3 $ $Date: 2003/05/02 18:59:51 $ $Name:  $";
+            "@(#) $RCSfile: JDOMTransformer.java,v $ $Revision: 1.4 $ $Date: 2003/05/05 08:10:00 $ $Name:  $";
 
     private Templates templates;
 
-    /**
-     * Creates a transformer for a given {@link javax.xml.transform.Source}
-     * stylesheet.
-     *
-     * @param  stylesheet          source stylesheet as a Source object
-     * @throws JDOMException       if there's a problem in the TrAX back-end
-     */
-    public JDOMTransformer(Source stylesheet) throws JDOMException {
+    // Internal constructor to support the other constructors
+    private JDOMTransformer(Source stylesheet) throws JDOMException {
         try {
             templates = TransformerFactory.newInstance()
                     .newTemplates(stylesheet);
@@ -109,13 +138,67 @@ public class JDOMTransformer {
      * @throws JDOMException       if there's a problem in the TrAX back-end
      */
     public JDOMTransformer(String stylesheetSystemId) throws JDOMException {
-        try {
-            templates = TransformerFactory.newInstance()
-                .newTemplates(new StreamSource(stylesheetSystemId));
-        }
-        catch (TransformerException e) {
-            throw new JDOMException("Could not construct JDOMTransformer", e);
-        }
+        this(new StreamSource(stylesheetSystemId));
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>XSLTransform</code> by
+     *  reading the stylesheet from the specified
+     *   <code>InputStream</code>.
+     * </p>
+     *
+     * @param stylesheet <code>InputStream</code> from which the stylesheet is read.
+     * @throws JDOMException when an IOException, format error, or
+     * something else prevents the stylesheet from being compiled
+     */
+    public JDOMTransformer(InputStream stylesheet) throws JDOMException {
+        this(new StreamSource(stylesheet));
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>XSLTransform</code> by
+     *  reading the stylesheet from the specified
+     *   <code>Reader</code>.
+     * </p>
+     *
+     * @param stylesheet <code>Reader</code> from which the stylesheet is read.
+     * @throws JDOMException when an IOException, format error, or
+     * something else prevents the stylesheet from being compiled
+     */
+    public JDOMTransformer(Reader stylesheet) throws JDOMException {
+        this(new StreamSource(stylesheet));
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>XSLTransform</code> by
+     *  reading the stylesheet from the specified
+     *   <code>File</code>.
+     * </p>
+     *
+     * @param stylesheet <code>File</code> from which the stylesheet is read.
+     * @throws JDOMException when an IOException, format error, or
+     * something else prevents the stylesheet from being compiled
+     */
+    public JDOMTransformer(File stylesheet) throws JDOMException {
+        this(new StreamSource(stylesheet));
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>XSLTransform</code> by
+     *  reading the stylesheet from the specified
+     *   <code>Document</code>.
+     * </p>
+     *
+     * @param stylesheet <code>Document</code> containing the stylesheet.
+     * @throws JDOMException when the supplied <code>Document</code>
+     *  is not syntactically correct XSLT
+     */
+    public JDOMTransformer(Document stylesheet) throws JDOMException {
+        this(new JDOMSource(stylesheet));
     }
 
     /**
