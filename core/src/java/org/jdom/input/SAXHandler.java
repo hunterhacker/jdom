@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.29 2002/01/08 09:17:10 jhunter Exp $
+ $Id: SAXHandler.java,v 1.30 2002/01/26 07:57:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,14 +76,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Jason Hunter
  * @author Philip Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.29 $, $Date: 2002/01/08 09:17:10 $
+ * @author phil@triloggroup.com
+ * @version $Revision: 1.30 $, $Date: 2002/01/26 07:57:37 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.29 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.30 $ $Date: 2002/01/26 07:57:37 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -129,6 +130,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /** Temporary holder for the internal subset */
     private StringBuffer buffer = new StringBuffer();
+
+    /** Temporary holder for Text and CDATA */
+    private StringBuffer textBuffer = new StringBuffer();
 
     /** The external entities defined in this document */
     private Map externalEntities;
@@ -454,6 +458,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     public void processingInstruction(String target, String data)
         throws SAXException {
 
+        flushCharacters();
+
         if (suppress) return;
 
         if (atRoot) {
@@ -533,6 +539,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     public void startElement(String namespaceURI, String localName,
                              String qName, Attributes atts)
                              throws SAXException {
+        flushCharacters();
+
         if (suppress) return;
 
         Element element = null;
@@ -656,15 +664,28 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param ch <code>char[]</code> character array with character data
      * @param start <code>int</code> index in array where data starts.
      * @param length <code>int</code> length of data.
+     */
+    public void characters(char[] ch, int start, int length) {
+        if (suppress || (length == 0))
+            return;
+
+        textBuffer.append( ch, start, length);
+    }
+
+    /**
+     * <p>
+     * This will flush any characters from SAX character calls we've
+     * been buffering.
+     * </p>
+     *
      * @throws SAXException when things go wrong
      */
-    public void characters(char[] ch, int start, int length)
-        throws SAXException {
+    protected void flushCharacters() throws SAXException {
+        if (textBuffer.length() == 0)
+            return;
 
-        if (suppress) return;
-        if (length == 0) return;
-
-        String data = new String(ch, start, length);
+        String data = textBuffer.toString();
+        textBuffer.setLength( 0);
 
 /**
  * This is commented out because of some problems with
@@ -703,9 +724,7 @@ if (!inDTD) {
         if (ignoringWhite) return;
         if (length == 0) return;
 
-        String data = new String(ch, start, length);
-        getCurrentElement().addContent(factory.text(data));
-
+        textBuffer.append( ch, start, length);
     }
 
     /**
@@ -724,6 +743,8 @@ if (!inDTD) {
      */
     public void endElement(String namespaceURI, String localName,
                            String qName) throws SAXException {
+
+        flushCharacters();
 
         if (suppress) return;
 
@@ -761,6 +782,8 @@ if (!inDTD) {
     public void startDTD(String name, String publicId, String systemId)
         throws SAXException {
 
+        flushCharacters();
+
         document.setDocType(
             factory.docType(name, publicId, systemId));
         inDTD = true;
@@ -773,13 +796,15 @@ if (!inDTD) {
      * </p>
      */
     public void endDTD() throws SAXException {
+        flushCharacters();
+
         document.getDocType().setInternalSubset(buffer.toString());
         inDTD = false;
         inInternalSubset = false;
     }
 
-    public void startEntity(String name)
-        throws SAXException {
+    public void startEntity(String name) throws SAXException {
+        flushCharacters();
 
         entityDepth++;
 
@@ -828,6 +853,8 @@ if (!inDTD) {
     }
 
     public void endEntity(String name) throws SAXException {
+        flushCharacters();
+
         entityDepth--;
         if (entityDepth == 0) {
             // No way are we suppressing if not in an entity,
@@ -844,6 +871,8 @@ if (!inDTD) {
      * </p>
      */
     public void startCDATA() throws SAXException {
+        flushCharacters();
+
         if (suppress) return;
 
         inCDATA = true;
@@ -855,6 +884,8 @@ if (!inDTD) {
      * </p>
      */
     public void endCDATA() throws SAXException {
+        flushCharacters();
+
         if (suppress) return;
 
         inCDATA = false;
@@ -874,6 +905,8 @@ if (!inDTD) {
      */
     public void comment(char[] ch, int start, int length)
         throws SAXException {
+
+        flushCharacters();
 
         if (suppress) return;
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.17 2002/01/08 09:17:10 jhunter Exp $
+ $Id: CDATA.java,v 1.18 2002/01/26 07:57:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,20 +70,20 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.17 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.18 $, $Date: 2002/01/26 07:57:37 $
  */
 public class CDATA implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.17 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.18 $ $Date: 2002/01/26 07:57:37 $ $Name:  $";
+
+    private static final String EMPTY_STRING = "";
 
     /** The actual character content */
-    // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8776
-    // from Alex Rosen for a reason why String might be better
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612
     // from elharo for a description of why Java characters may not suffice
     // long term
-    protected StringBuffer value;
+    protected String value;
 
     /** This <code>CDATA</code> node's parent. */
     protected Element parent;
@@ -112,7 +112,7 @@ public class CDATA implements Serializable, Cloneable {
      * @return <code>String</code> - character content of this node.
      */
     public String getText() {
-        return value.toString();
+        return value;
     }
 
     /**
@@ -146,10 +146,17 @@ public class CDATA implements Serializable, Cloneable {
      * @param str value for node's content.
      */
     public CDATA setText(String str) {
-        value = new StringBuffer();          /* Clear old cdata */
-        if (str == null)
+        String reason;
+
+        if (str == null) {
+            value = EMPTY_STRING;
             return this;
-        append(str);        /* so we get the Verifier check */
+        }
+
+        if ((reason = Verifier.checkCDATASection(str)) != null) {
+            throw new IllegalDataException(str, "CDATA section", reason);
+        }
+        value = str;
         return this;
     }
 
@@ -169,7 +176,9 @@ public class CDATA implements Serializable, Cloneable {
             throw new IllegalDataException(str, "CDATA section", reason);
         }
 
-        value.append(str);
+        if (value == EMPTY_STRING)
+             value = str;
+        else value += str;
     }
 
     /**
@@ -182,7 +191,7 @@ public class CDATA implements Serializable, Cloneable {
         if (cdata == null) {
             return;
         }
-        value.append(cdata.getText());
+        value += cdata.getText();
     }
 
     /**
@@ -286,7 +295,7 @@ public class CDATA implements Serializable, Cloneable {
         }
 
         cdata.parent = null;
-        cdata.value = new StringBuffer(value.toString());
+        cdata.value = value;
 
         return cdata;
     }

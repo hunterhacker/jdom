@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.9 2002/01/08 09:17:10 jhunter Exp $
+ $Id: Text.java,v 1.10 2002/01/26 07:57:37 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,20 +68,20 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Bradley S. Huffman
- * @version $Revision: 1.9 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.10 $, $Date: 2002/01/26 07:57:37 $
  */
 public class Text implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.9 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.10 $ $Date: 2002/01/26 07:57:37 $ $Name:  $";
+
+    private static final String EMPTY_STRING = "";
 
     /** The actual character content */
-    // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8776
-    // from Alex Rosen for a reason why String might be better
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612
     // from elharo for a description of why Java characters may not suffice
     // long term
-    protected StringBuffer value;
+    protected String value;
 
     /** This <code>Text</code> node's parent. */
     protected Element parent;
@@ -110,7 +110,7 @@ public class Text implements Serializable, Cloneable {
      * @return <code>String</code> - character content of this node.
      */
     public String getText() {
-        return value.toString();
+        return value;
     }
 
     /**
@@ -153,7 +153,7 @@ public class Text implements Serializable, Cloneable {
      */
     public static String normalizeString(String str) {
         if (str == null)
-            return null; /* XXX or should it return "" */
+            return EMPTY_STRING;
 
         char[] c = str.toCharArray();
         char[] n = new char[c.length];
@@ -183,10 +183,17 @@ public class Text implements Serializable, Cloneable {
      * @param str value for node's content.
      */
     public Text setText(String str) {
-        value = new StringBuffer();          /* Clear old text */
-        if (str == null)
+        String reason;
+
+        if (str == null) {
+            value = EMPTY_STRING;
             return this;
-        append(str);        /* so we get the Verifier check */
+        }
+
+        if ((reason = Verifier.checkCharacterData(str)) != null) {
+            throw new IllegalDataException(str, "character content", reason);
+        }
+        value = str;
         return this;
     }
 
@@ -206,7 +213,9 @@ public class Text implements Serializable, Cloneable {
             throw new IllegalDataException(str, "character content", reason);
         }
 
-        value.append(str);
+        if (str == EMPTY_STRING)
+             value = str;
+        else value += str;
     }
 
     /**
@@ -219,7 +228,7 @@ public class Text implements Serializable, Cloneable {
         if (text == null) {
             return;
         }
-        value.append(text.getText());
+        value += text.getText();
     }
 
     /**
@@ -323,7 +332,7 @@ public class Text implements Serializable, Cloneable {
         }
 
         text.parent = null;
-        text.value = new StringBuffer(value.toString());
+        text.value = value;
 
         return text;
     }
