@@ -66,9 +66,6 @@ Items that need to be done:
   <empty/>, <empty></empty>, and <notempty><a></a></notempty>.
   Changing behavior involves changing XMLOutputter, btw.
 
-* Add method org.jdom.Element DOMBuilder.build(org.w3c.dom.Element)
-* Also add method org.w3c.dom.Element DOMOutputter.output(org.jdom.Element)
-
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
    causes a 20% performance penalty on building docs.)
@@ -97,8 +94,6 @@ Items that need to be done:
         </DOCUMENT>
 
 * Finalize how regular entities are to work
-
-* Consider SAXBuilder.setErrorHandler()
 
 * Consider SAXBuilder.setIgnoreingWhitespace() and similar
   Should save lots of memory.

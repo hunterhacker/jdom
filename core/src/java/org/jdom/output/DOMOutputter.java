@@ -120,6 +120,49 @@ public class DOMOutputter {
 
     /**
      * <p>
+     * This converts the JDOM <code>Element</code> parameter to a
+     * DOM Element, returning the DOM version.  The default DOM adapter class
+     * is used.
+     * </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @return an <code>org.w3c.dom.Element</code> version
+     */
+    public org.w3c.dom.Element output(Element element) {
+        return output(element, DEFAULT_ADAPTER_CLASS);
+    }
+
+    /** 
+     * <p>
+     * This converts the JDOM <code>Element</code> parameter to a 
+     * DOM Element, returning the DOM version.  The specified DOM adapter
+     * class (see org.jdom.adapters.*) is used, as a way to choose the 
+     * DOM implementation.
+     * </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param domAdapterClass DOM adapter class to use
+     * @return an <code>org.w3c.dom.Element</code> version
+     */
+    public org.w3c.dom.Element output(Element element, String domAdapterClass) {
+         LinkedList namespaces = new LinkedList();
+         org.w3c.dom.Document domDoc = null ;
+         try {
+             DOMAdapter adapter =
+                   (DOMAdapter)Class.forName(domAdapterClass).newInstance();
+               
+             domDoc = adapter.createDocument();
+
+             buildDOMTree(element, domDoc, null, true, namespaces);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+       
+         return domDoc.getDocumentElement();       
+    }
+
+    /**
+     * <p>
      * This converts the JDOM <code>Document</code> parameter to a 
      * DOM Document, returning the DOM version.  The specified DOM adapter
      * class (see org.jdom.adapters.*) is used, as a way to choose the 
