@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.61 2001/03/16 23:39:42 jhunter Exp $
+ $Id: Element.java,v 1.62 2001/03/22 20:12:15 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -815,9 +815,7 @@ public class Element implements Serializable, Cloneable {
           
         Iterator i = content.iterator();
         while (i.hasNext()){
-            Object obj = i.next();
-            Class objclass = obj.getClass();
-            if (objclass == Element.class) {
+            if (i.next() instanceof Element) {
                 return true;
             }
         }
