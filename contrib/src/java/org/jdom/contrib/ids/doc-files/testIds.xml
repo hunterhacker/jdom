@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE catalog SYSTEM "testIds.dtd" [
+<!ENTITY nbsp "&#160;">
+]>
+
+<catalog name="Test IdDocument" version="0.4" indexID="t">
+   <entry name="a" price="1.0"  currency="EUR">entry A</entry>
+   <entry name="b" price="1.25" currency="USD">entry B</entry>
+   <entry name="c" price="3.0"  currency="USD">entry C</entry>
+   <entry name="d" price="4.75" currency="USD">entry D</entry>
+   <entry name="e" price="5.0"  currency="EUR">entry E</entry>
+   <entry name="f" price="5.50" currency="USD">entry F</entry>
+   <entry name="g" price="2.75" currency="USD">entry G</entry>
+   <entry name="h" price="7.0"  currency="USD">entry H</entry>
+   <entry name="i" price="2.45" currency="USD">entry I</entry>
+   <entry name="j" price="10.0" currency="EUR">entry J</entry>
+   <entry name="k" price="6.05" currency="USD">entry K</entry>
+   <entry name="l" price="1.33" currency="USD">entry L</entry>
+   <entry name="m" price="4.48" currency="USD">entry M</entry>
+   <entry name="n" price="6.87" currency="USD">entry N</entry>
+   <entry name="o" price="15.0" currency="EUR">entry O</entry>
+   <entry name="p" price="18.0" currency="USD">entry P</entry>
+   <entry name="q" price="12.0" currency="USD">entry Q</entry>
+   <entry name="r" price="1.10" currency="USD">entry R</entry>
+   <entry name="s" price="2.50" currency="USD">entry S</entry>
+   <entry name="t" price="20.0" currency="EUR">entry T</entry>
+   <entry name="u" price="12.0" currency="USD">entry U</entry>
+   <entry name="v" price="1.88" currency="USD">entry V</entry>
+   <entry name="w" price="2.63" currency="USD">entry W</entry>
+   <entry name="x" price="9.0"  currency="USD">entry X</entry>
+   <entry name="y" price="25.0" currency="EUR">entry Y</entry>
+   <entry name="z" price="26.0" currency="EUR">entry Z</entry>
+</catalog>
+

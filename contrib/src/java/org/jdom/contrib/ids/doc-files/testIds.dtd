@@ -1,0 +1,14 @@
+<!ELEMENT catalog (entry*)>
+<!ATTLIST catalog
+    name     CDATA #REQUIRED
+    version  CDATA #REQUIRED
+    indexID  IDREF #IMPLIED
+>
+
+<!ELEMENT entry (#PCDATA)>
+<!ATTLIST entry
+    price    CDATA #REQUIRED
+    currency (USD | EUR) #REQUIRED
+    name     ID #REQUIRED
+>
+
