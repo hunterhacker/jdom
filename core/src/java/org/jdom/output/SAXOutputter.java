@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.35 2004/02/27 11:32:58 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.36 2004/08/31 20:44:34 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.35 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.36 $, $Date: 2004/08/31 20:44:34 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.35 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.36 $ $Date: 2004/08/31 20:44:34 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -638,7 +638,7 @@ public class SAXOutputter {
      * This will output a list of JDOM nodes, firing off the
      * SAX events that have been registered.
      * <p>
-     * <strong>Warning</strong>: This method outputs ill-formed XML
+     * <strong>Warning</strong>: This method may output ill-formed XML
      * documents and should only be used to output document portions
      * towards processors (such as XSLT processors) capable of
      * accepting such ill-formed documents.</p>
@@ -646,6 +646,8 @@ public class SAXOutputter {
      * @param nodes <code>List</code> of JDOM nodes to output.
      *
      * @throws JDOMException if any error occurred.
+     *
+     * @see #output(org.jdom.Document)
      */
     public void output(List nodes) throws JDOMException {
         if ((nodes == null) || (nodes.size() == 0)) {
@@ -666,6 +668,93 @@ public class SAXOutputter {
     }
 
     /**
+     * This will output a single JDOM node, firing off the
+     * SAX events that have been registered.
+     * <p>
+     * <strong>Warning</strong>: This method may output ill-formed XML
+     * documents and should only be used to output document portions
+     * towards processors (such as XSLT processors) capable of
+     * accepting such ill-formed documents.</p>
+     *
+     * @param node the <code>Content</code> node to output.
+     *
+     * @throws JDOMException if any error occurred.
+     *
+     * @see #output(org.jdom.Document)
+     */
+    public void output(Content node) throws JDOMException {
+        if (node == null) {
+            return;
+        }
+
+        // contentHandler.setDocumentLocator()
+        documentLocator(null);
+
+        // contentHandler.startDocument()
+        startDocument();
+
+        // Output node.
+        elementContent(node, new NamespaceStack());
+
+        // contentHandler.endDocument()
+        endDocument();
+    }
+
+    /**
+     * This will output a list of JDOM nodes as a fragment of an XML
+     * document, firing off the SAX events that have been registered.
+     * <p>
+     * <strong>Warning</strong>: This method does not call the
+     * {@link ContentHandler#setDocumentLocator},
+     * {@link ContentHandler#startDocument} and
+     * {@link ContentHandler#endDocument} callbacks on the
+     * {@link #setContentHandler ContentHandler}.  The user shall
+     * invoke these methods directly prior/after outputting the
+     * document fragments.</p>
+     *
+     * @param nodes <code>List</code> of JDOM nodes to output.
+     *
+     * @throws JDOMException if any error occurred.
+     *
+     * @see #outputFragment(org.jdom.Content)
+     */
+    public void outputFragment(List nodes) throws JDOMException {
+        if ((nodes == null) || (nodes.size() == 0)) {
+            return;
+        }
+
+        // Output node list as a document fragment.
+        elementContent(nodes, new NamespaceStack());
+    }
+
+    /**
+     * This will output a single JDOM nodes as a fragment of an XML
+     * document, firing off the SAX events that have been registered.
+     * <p>
+     * <strong>Warning</strong>: This method does not call the
+     * {@link ContentHandler#setDocumentLocator},
+     * {@link ContentHandler#startDocument} and
+     * {@link ContentHandler#endDocument} callbacks on the
+     * {@link #setContentHandler ContentHandler}.  The user shall
+     * invoke these methods directly prior/after outputting the
+     * document fragments.</p>
+     *
+     * @param node the <code>Content</code> node to output.
+     *
+     * @throws JDOMException if any error occurred.
+     *
+     * @see #outputFragment(java.util.List)
+     */
+    public void outputFragment(Content node) throws JDOMException {
+        if (node == null) {
+            return;
+        }
+
+        // Output single node as a document fragment.
+        elementContent(node, new NamespaceStack());
+    }
+
+    /**
      * This parses a DTD declaration to fire the related events towards
      * the registered handlers.
      *
@@ -673,52 +762,50 @@ public class SAXOutputter {
      *                 process.
      */
     private void dtdEvents(Document document) throws JDOMException {
-        DocType docType = document.getDocType();
 
-        if ((docType != null) &&
-            ((dtdHandler != null) || (declHandler != null))) {
             // Fire DTD-related events only if handlers have been registered
-            String publicID  = docType.getPublicID();
-            String systemID  = docType.getSystemID();
-            String intSubset = docType.getInternalSubset();
+        if ((dtdHandler != null) || (declHandler != null)) {
+            DocType docType = document.getDocType();
 
-            if (intSubset != null) {
-                intSubset = intSubset.trim();
-            }
+            if (docType != null) {
+                String publicID = docType.getPublicID();
+                String systemID = docType.getSystemID();
+                String intSubset = docType.getInternalSubset();
 
-            // Build dummy XML document to reference DTD.
-            StringBuffer buf = new StringBuffer(64);
-            buf.append("<!DOCTYPE ").append(docType.getElementName());
-
-            if ((intSubset != null) && (intSubset.length() !=0)) {
-               // Internal subset present => Parse it
-               buf.append(" [\n").append(intSubset).append(']');
-            }
-            else {
-               // No internal subset defined => Try to parse original DTD
-               if ((publicID != null) || (systemID != null)) {
-                    if (publicID != null) {
-                        buf.append(" PUBLIC ");
-                        buf.append('\"').append(publicID).append('\"');
-                    }
-                    else {
-                        buf.append(" SYSTEM ");
-                    }
-                    buf.append('\"').append(systemID).append('\"');
+                if (intSubset != null) {
+                    intSubset = intSubset.trim();
                 }
-                else {
-                    // Doctype is totally empty! => Skip parsing
-                    buf.setLength(0);
-                }
-            }
 
-            if (buf.length() != 0) {
+                StringBuffer buf = new StringBuffer(64);
+                buf.append("<!DOCTYPE ");
+                buf.append(docType.getElementName());
+
+                boolean hasPublic = false;
+                if (publicID != null) {
+                    buf.append(" PUBLIC");
+                    buf.append(" \"");
+                    buf.append(publicID);
+                    buf.append('\"');
+                    hasPublic = true;
+                }
+                if (systemID != null) {
+                    if (!hasPublic) {
+                        buf.append(" SYSTEM");
+                    }
+                    buf.append(" \"");
+                    buf.append(systemID);
+                    buf.append('\"');
+                }
+                if ((intSubset != null) && (!intSubset.equals(""))) {
+                    buf.append(" [\n");
+                    buf.append(intSubset);
+                    buf.append(']');
+                }
+                buf.append('>');
+
                 try {
-                    String dtdDoc = buf.append('>').toString();
-
                     // Parse dummy XML document to fire DTD events.
-                    createDTDParser().parse(new InputSource(
-                                                new StringReader(dtdDoc)));
+                    createDTDParser().parse(new InputSource(new StringReader(buf.toString())));
                 }
                 catch (SAXParseException ex1) {
                     // Expected exception: There's no root element in DTD
@@ -874,7 +961,7 @@ public class SAXOutputter {
         AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
 
         Namespace ns = element.getNamespace();
-        if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
+        if (ns != Namespace.XML_NAMESPACE) {
             String prefix = ns.getPrefix();
             String uri = namespaces.getURI(prefix);
             if (!ns.getURI().equals(uri)) {
@@ -1013,30 +1100,8 @@ public class SAXOutputter {
         while (i.hasNext()) {
             Object obj = i.next();
 
-            // update locator
-            locator.setNode(obj);
-
-            if (obj instanceof Element) {
-                element((Element) obj, namespaces);
-            }
-            else if (obj instanceof CDATA) {
-                cdata(((CDATA) obj).getText());
-            }
-            else if (obj instanceof Text) {
-                // contentHandler.characters()
-                characters(((Text) obj).getText());
-            }
-            else if (obj instanceof ProcessingInstruction) {
-                // contentHandler.processingInstruction()
-                processingInstruction((ProcessingInstruction) obj);
-            }
-            else if (obj instanceof Comment) {
-                // lexicalHandler.comment()
-                comment(((Comment) obj).getText());
-            }
-            else if (obj instanceof EntityRef) {
-                // contentHandler.skippedEntity()
-                entityRef((EntityRef) obj);
+            if (obj instanceof Content) {
+                this.elementContent((Content)obj, namespaces);
             }
             else {
                 // Not a valid element child. This could happen with
@@ -1045,6 +1110,49 @@ public class SAXOutputter {
                 handleError(new JDOMException(
                                         "Invalid element content: " + obj));
             }
+        }
+    }
+
+    /**
+     * <p>
+     * This will invoke the callbacks for the content of an element.
+     * </p>
+     *
+     * @param node a <code>Content</code> node.
+     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     */
+    private void elementContent(Content node, NamespaceStack namespaces)
+            throws JDOMException {
+        // update locator
+        locator.setNode(node);
+
+        if (node instanceof Element) {
+            element((Element) node, namespaces);
+        }
+        else if (node instanceof CDATA) {
+            cdata(((CDATA) node).getText());
+        }
+        else if (node instanceof Text) {
+            // contentHandler.characters()
+            characters(((Text) node).getText());
+        }
+        else if (node instanceof ProcessingInstruction) {
+            // contentHandler.processingInstruction()
+            processingInstruction((ProcessingInstruction) node);
+        }
+        else if (node instanceof Comment) {
+            // lexicalHandler.comment()
+            comment(((Comment) node).getText());
+        }
+        else if (node instanceof EntityRef) {
+            // contentHandler.skippedEntity()
+            entityRef((EntityRef) node);
+        }
+        else {
+            // Not a valid element child. This could happen with
+            // application-provided lists which may contain non
+            // JDOM objects.
+            handleError(new JDOMException("Invalid element content: " + node));
         }
     }
 
@@ -1321,7 +1429,10 @@ public class SAXOutputter {
             }
         }
 
-        return (parser);
+        // Absorb errors as much as possible, per Laurent
+        parser.setErrorHandler(new DefaultHandler());
+
+        return parser;
     }
 
     /**
