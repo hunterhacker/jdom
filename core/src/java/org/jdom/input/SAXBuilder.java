@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.78 2003/05/29 02:51:34 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.79 2003/06/04 17:40:53 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,8 +64,6 @@ import java.util.*;
 import org.jdom.*;
 
 import org.xml.sax.*;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
@@ -81,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.78 $, $Date: 2003/05/29 02:51:34 $
+ * @version $Revision: 1.79 $, $Date: 2003/06/04 17:40:53 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -91,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.78 $ $Date: 2003/05/29 02:51:34 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.79 $ $Date: 2003/06/04 17:40:53 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser

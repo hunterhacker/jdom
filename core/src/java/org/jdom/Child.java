@@ -1,6 +1,6 @@
 /*--
 
- $Id: Child.java,v 1.2 2003/05/24 23:06:18 jhunter Exp $
+ $Id: Child.java,v 1.3 2003/06/04 17:40:52 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,8 +56,7 @@
 
 package org.jdom;
 
-import java.io.Serializable;
-import java.util.Collection;
+import java.io.*;
 
 /**
  * Superclass for JDOM objects which can be legal child content
@@ -73,7 +72,7 @@ import java.util.Collection;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.2 $, $Date: 2003/05/24 23:06:18 $
+ * @version $Revision: 1.3 $, $Date: 2003/06/04 17:40:52 $
  */
 public interface Child extends Cloneable, Serializable {
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: OrFilter.java,v 1.2 2003/05/29 02:51:11 jhunter Exp $
+ $Id: OrFilter.java,v 1.3 2003/06/04 17:40:52 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,19 +56,17 @@
 
 package org.jdom.filter;
 
-import org.jdom.Child;
-
 /**
  * Allow two filters to be chained together with a logical
  * <b>or</b> operation.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.2 $, $Date: 2003/05/29 02:51:11 $
+ * @version $Revision: 1.3 $, $Date: 2003/06/04 17:40:52 $
  */
 final class OrFilter extends AbstractFilter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OrFilter.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:51:11 $";
+      "@(#) $RCSfile: OrFilter.java,v $ $Revision: 1.3 $ $Date: 2003/06/04 17:40:52 $";
 
     /** Filter for left side of logical <b>or</b> */
     private Filter left;

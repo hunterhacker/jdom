@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.52 2003/05/02 01:08:28 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.53 2003/06/04 17:40:53 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,22 +56,17 @@
 
 package org.jdom.input;
 
-import java.io.*;
-import java.net.*;
-
 import org.jdom.*;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.adapters.*;
 import org.w3c.dom.*;
-import org.xml.sax.*;
 
 /**
  * Builds a JDOM {@link org.jdom.Document org.jdom.Document} from a pre-existing
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.52 $, $Date: 2003/05/02 01:08:28 $
+ * @version $Revision: 1.53 $, $Date: 2003/06/04 17:40:53 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -83,7 +78,7 @@ import org.xml.sax.*;
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.52 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.53 $ $Date: 2003/06/04 17:40:53 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: AbstractFilter.java,v 1.2 2003/05/29 02:51:11 jhunter Exp $
+ $Id: AbstractFilter.java,v 1.3 2003/06/04 17:40:52 jhunter Exp $
 
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,18 +56,16 @@
 
 package org.jdom.filter;
 
-import org.jdom.Child;
-
 /**
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.2 $, $Date: 2003/05/29 02:51:11 $
+ * @version $Revision: 1.3 $, $Date: 2003/06/04 17:40:52 $
  */
 public abstract class AbstractFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractFilter.java,v $ $Revision: 1.2 $ $Date: 2003/05/29 02:51:11 $";
+      "@(#) $RCSfile: AbstractFilter.java,v $ $Revision: 1.3 $ $Date: 2003/06/04 17:40:52 $";
 
     public Filter negate() {
         return new NegateFilter(this);

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.15 2003/05/20 21:53:59 jhunter Exp $
+ $Id: EntityRef.java,v 1.16 2003/06/04 17:40:52 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,13 +56,11 @@
 
 package org.jdom;
 
-import java.io.Serializable;
-
 /**
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  * 
- * @version $Revision: 1.15 $, $Date: 2003/05/20 21:53:59 $
+ * @version $Revision: 1.16 $, $Date: 2003/06/04 17:40:52 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -70,7 +68,7 @@ import java.io.Serializable;
 public class EntityRef implements Child {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.15 $ $Date: 2003/05/20 21:53:59 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.16 $ $Date: 2003/06/04 17:40:52 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;
