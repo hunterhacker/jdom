@@ -2,9 +2,8 @@ Items that need to be done:
 
 --- RIGHT AWAY, FOR BETA 8 ---
 
-* Finish implementing the ability to output the same DOCTYPE as was input.  
-  Open issues:  Making DOMOutputter support the model.  If possible.
-  (Mine, asked Brett and Elharo for advice)
+* Should we make "Element parent" of types like EntityRef into "Object parent"
+  to match types like Comment and Element?
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
@@ -13,6 +12,8 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
   (Brad's)
+
+--- AFTER BETA 8 ---
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
@@ -26,11 +27,6 @@ Items that need to be done:
   (Brad's)
 
 * Make public methods like getContent(Filter).
-
-* Should we make "Element parent" of types like EntityRef into "Object parent"
-  to match types like Comment and Element?
-
---- AFTER BETA 8 ---
 
 * Start shipping Xerces 2.0+
   Xerces 2.0.0 bugs found when using DOMBuilder:
