@@ -1,0 +1,72 @@
+The Jaxen libraries included here are based on Jaxen 1.0-FCS.  Jaxen 1.0-FCS
+was written against JDOM Beta 9, and for Jaxen to support JDOM Beta 10+, we
+had to make the following change to org.jaxen.jdom.DocumentNavigator.  The
+jaxen-jdom.jar provided here includes this change, and it's the only
+difference between the JARs here and the Jaxen 1.0-FCS JARs.
+
+
+--- DocumentNavigator.java.orig	Tue Aug 31 16:23:32 2004
++++ DocumentNavigator.java	Tue Aug 31 16:31:43 2004
+@@ -72,6 +72,8 @@
+ 
+ import org.jdom.Document;
+ import org.jdom.Element;
++import org.jdom.Parent;
++import org.jdom.Content;
+ import org.jdom.Comment;
+ import org.jdom.Text;
+ import org.jdom.Attribute;
+@@ -231,7 +233,15 @@
+                     nsMap.put( ns.getPrefix(), new XPathNamespace(elem, ns) );
+             }
+ 
+-            current = current.getParent();
++            Parent par = current.getParent();
++            if (par instanceof Element)
++            {
++                current = (Element) current.getParent();
++            }
++            else
++            {
++                current = null;  // attached to document directly
++            }
+         }
+ 
+         nsMap.put( "xml", new XPathNamespace(elem, Namespace.XML_NAMESPACE) );
+@@ -456,25 +466,25 @@
+         {
+             element = (Element) context;
+         }
+-        else if ( context instanceof Text )
++        else if ( context instanceof Content )
+         {
+-            element = ((Text)context).getParent();
++            Parent par = ((Content)context).getParent();
++            if (par instanceof Element)
++            {
++                element = (Element) par;
++            }
++            else
++            {
++                element = null;  // attached to document directly
++            }
+         }
+         else if ( context instanceof Attribute )
+         {
+-            element = ((Attribute)context).getParent();
++            element = (Element) ((Attribute)context).getParent();
+         }
+         else if ( context instanceof XPathNamespace )
+         {
+             element = ((XPathNamespace)context).getJDOMElement();
+-        }
+-        else if ( context instanceof Comment )
+-        {
+-            element = ((Comment)context).getParent();
+-        }
+-        else if ( context instanceof ProcessingInstruction )
+-        {
+-            element = ((ProcessingInstruction)context).getParent();
+         }
+ 
+         if ( element != null )
