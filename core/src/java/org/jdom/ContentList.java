@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.13 2002/04/05 09:05:46 jhunter Exp $
+ $Id: ContentList.java,v 1.14 2002/04/23 00:58:24 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.13 $, $Date: 2002/04/05 09:05:46 $
+ * @version $Revision: 1.14 $, $Date: 2002/04/23 00:58:24 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -83,7 +83,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.13 $ $Date: 2002/04/05 09:05:46 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.14 $ $Date: 2002/04/23 00:58:24 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -154,9 +154,6 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
         else if (obj instanceof ProcessingInstruction) {
             add(index, (ProcessingInstruction) obj);
-        }
-        else if (obj instanceof CDATA) {
-            add(index, (CDATA) obj);
         }
         else if (obj instanceof EntityRef) {
             add(index, (EntityRef) obj);
@@ -668,10 +665,6 @@ class ContentList extends AbstractList implements java.io.Serializable {
         else if (obj instanceof ProcessingInstruction) {
             ProcessingInstruction pi = (ProcessingInstruction) obj;
             pi.setParent(null);
-        }
-        else if (obj instanceof CDATA) {
-            CDATA cdata = (CDATA) obj;
-            cdata.setParent(null);
         }
         else if (obj instanceof EntityRef) {
             EntityRef entity = (EntityRef) obj;

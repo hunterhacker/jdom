@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.79 2002/04/11 03:04:55 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.80 2002/04/23 00:58:25 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -180,7 +180,7 @@ import org.jdom.output.*;
  * <p>
  * When a element has a xml:space attribute with the value of "preserve",
  * all formating is turned off and reverts back to the default until the
- * element and it's contents have been printed.  If a nested element
+ * element and its contents have been printed.  If a nested element
  * contains another xml:space with the value "default" formatting is turned
  * back on for the child element and then off for the remainder of the
  * parent element.
@@ -195,13 +195,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.79 $, $Date: 2002/04/11 03:04:55 $
+ * @version $Revision: 1.80 $, $Date: 2002/04/23 00:58:25 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.79 $ $Date: 2002/04/11 03:04:55 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.80 $ $Date: 2002/04/23 00:58:25 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -553,7 +553,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * <p>
      * Print out an <code>{@link Element}</code>, including
-     * it's <code>{@link Attribute}</code>s, and all
+     * its <code>{@link Attribute}</code>s, and all
      * contained (child) elements, etc.
      * </p>
      *
@@ -774,7 +774,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * <p>
      * Print out an <code>{@link Element}</code>, including
-     * it's <code>{@link Attribute}</code>s, and all
+     * its <code>{@link Attribute}</code>s, and all
      * contained (child) elements, etc.
      * </p>
      *
@@ -1253,7 +1253,7 @@ public class XMLOutputter implements Cloneable {
     /**
      * <p>
      * This will handle printing of a <code>{@link Element}</code>,
-     * it's <code>{@link Attribute}</code>s, and all contained (child)
+     * its <code>{@link Attribute}</code>s, and all contained (child)
      * elements, etc.
      * </p>
      *
@@ -1385,8 +1385,7 @@ public class XMLOutputter implements Cloneable {
             //
             // Handle consecutive CDATA and Text nodes all at once
             //
-            if ((next instanceof CDATA) ||
-                (next instanceof Text)) {
+            if (next instanceof Text) {
                 first = skipLeadingWhite( content, index);
                 // Set index to next node for loop
                 index = nextNonText( content, first);
@@ -1465,12 +1464,7 @@ public class XMLOutputter implements Cloneable {
 
                 // Get the unmangled version of the text
                 // we are about to print
-                if (node instanceof CDATA) {
-                    next = ((CDATA) node).getText();
-                }
-                else {
-                    next = ((Text) node).getText();
-                }
+                next = ((Text) node).getText();
 
                 // This may save a little time
                 if (next == null || "".equals( next)) {
@@ -1696,8 +1690,7 @@ public class XMLOutputter implements Cloneable {
         int index = start;
         int size = content.size();
         while( index < size) {
-            if ( !((content.get( index) instanceof CDATA) ||
-                   (content.get( index) instanceof Text))) {
+            if ( !(content.get( index) instanceof Text)) {
                 return index;
             }
             index++;
@@ -1711,9 +1704,6 @@ public class XMLOutputter implements Cloneable {
 
         if (obj instanceof String) {
             str = (String) obj;
-        }
-        else if (obj instanceof CDATA) {
-            str = ((CDATA) obj).getText();
         }
         else if (obj instanceof Text) {
             str = ((Text) obj).getText();

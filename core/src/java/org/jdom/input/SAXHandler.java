@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.44 2002/04/12 14:02:43 jhunter Exp $
+ $Id: SAXHandler.java,v 1.45 2002/04/23 00:58:25 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.44 $, $Date: 2002/04/12 14:02:43 $
+ * @version $Revision: 1.45 $, $Date: 2002/04/23 00:58:25 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.44 $ $Date: 2002/04/12 14:02:43 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.45 $ $Date: 2002/04/23 00:58:25 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -159,7 +159,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * <p>
      * <b>Note that all the mappings defined below are compliant with
      * the SAX 2.0 specification exception for "ENUMERATION" with is
-     * specific to Crinsom 1.1.X and Xerces 2.0.0-betaX which report
+     * specific to Crimson 1.1.X and Xerces 2.0.0-betaX which report
      * attributes of enumerated types with a type "ENUMERATION"
      * instead of the expected "NMTOKEN".
      * </p><p>
@@ -1045,7 +1045,7 @@ if (!inDTD) {
                 typeName.charAt(0) == '(') {
                 // Xerces 1.4.X reports attributes of enumerated type with
                 // a type string equals to the enumeration definition, i.e.
-                // starting with an parenthesis.
+                // starting with a parenthesis.
                 return Attribute.ENUMERATED_ATTRIBUTE;
             }
             else {

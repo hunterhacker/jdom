@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.116 2002/03/30 08:25:32 jhunter Exp $
+ $Id: Element.java,v 1.117 2002/04/23 00:58:24 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -80,12 +80,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.116 $, $Date: 2002/03/30 08:25:32 $
+ * @version $Revision: 1.117 $, $Date: 2002/04/23 00:58:24 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.116 $ $Date: 2002/03/30 08:25:32 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.117 $ $Date: 2002/04/23 00:58:24 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -545,8 +545,6 @@ public class Element implements Serializable, Cloneable {
             Object obj = content.get(0);
             if (obj instanceof Text) {
                 return ((Text) obj).getText();
-            } else if (obj instanceof CDATA) {
-                return ((CDATA) obj).getText();
             } else {
                 return "";
             }
@@ -560,9 +558,6 @@ public class Element implements Serializable, Cloneable {
             Object obj = content.get(i);
             if (obj instanceof Text) {
                 textContent.append(((Text) obj).getText());
-                hasText = true;
-            } else if (obj instanceof CDATA) {
-                textContent.append(((CDATA) obj).getText());
                 hasText = true;
             }
         }
@@ -1035,19 +1030,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This adds a CDATA section as content to this element.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to add
-     * @return this element modified
-     */
-    public Element addContent(CDATA cdata) {
-        content.add(cdata);
-        return this;
-    }
-
-    /**
-     * <p>
      * This adds element content to this element.
      * </p>
      *
@@ -1509,20 +1491,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This removes the specified <code>CDATA</code>.
-     * If the specified <code>CDATA</code> is not a child of
-     * this <code>Element</code>, this method does nothing.
-     * </p>
-     *
-     * @param cdata <code>CDATA</code> to delete
-     * @return whether deletion occurred
-     */
-    public boolean removeContent(CDATA cdata) {
-        return content.remove(cdata);
-    }
-
-    /**
-     * <p>
      * This removes the specified <code>Text</code>.
      * If the specified <code>Text</code> is not a child of
      * this <code>Element</code>, this method does nothing.
@@ -1700,5 +1668,38 @@ public class Element implements Serializable, Cloneable {
 
         namespace = Namespace.getNamespace(
             (String)in.readObject(), (String)in.readObject());
+    }
+
+    /**
+     * <p>
+     * This adds a CDATA section as content to this element.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to add
+     * @return this element modified
+     *
+     * @deprecated Deprecated in Beta 9, since addContent(Text) is
+     * equivalent.
+     */
+    public Element addContent(CDATA cdata) {
+        content.add(cdata);
+        return this;
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>CDATA</code>.
+     * If the specified <code>CDATA</code> is not a child of
+     * this <code>Element</code>, this method does nothing.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to delete
+     * @return whether deletion occurred
+     *
+     * @deprecated Deprecated in Beta 9, since addContent(Text) is
+     * equivalent.
+     */
+    public boolean removeContent(CDATA cdata) {
+        return content.remove(cdata);
     }
 }
