@@ -3,6 +3,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
+import org.apache.tools.ant.Path;
 
 import java.io.File;
 
@@ -37,7 +38,7 @@ public class Antlr extends Java
         setJvmargs("-Duser.dir=" + userDir);
 
         String classpath = System.getProperty("java.class.path");
-        setClasspath(classpath);
+        setClasspath(new Path(classpath));
 
         super.execute();
     }
