@@ -117,7 +117,7 @@ public class Document implements Serializable, Cloneable {
         content = new LinkedList();
 
         if (rootElement != null) {
-            rootElement.setIsRootElement(true);
+            rootElement.setDocument(this);
             content.add(rootElement);
         }
     }
@@ -164,13 +164,13 @@ public class Document implements Serializable, Cloneable {
         // and remove it from the content list
         int rootLocation = content.size();  // default add to end
         if (this.rootElement != null) {
-            this.rootElement.setIsRootElement(false);
+            this.rootElement.setDocument(null);
             rootLocation = content.indexOf(this.rootElement);
             content.remove(rootLocation);
         }
 
         if (rootElement != null) {
-            rootElement.setIsRootElement(true);
+            rootElement.setDocument(this);
             content.add(rootLocation, rootElement);
         }
 

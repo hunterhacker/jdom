@@ -91,12 +91,14 @@ public class Element implements Serializable, Cloneable {
     /** The parent of this <code>Element</code> */
     protected Element parent;
 
-    /** Whether this element is the root (Document is the parent) */
-    protected boolean isRootElement;
-
+    // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
+    // for a possible memory optimization here (using a RootElement subclass)
+    /** The Document containing this element, if it is the root element */
+    protected Document document;
+    
     /** The attributes of the <code>Element</code> */
     protected List attributes;
-
+    
     /** The mixed content of the <code>Element</code> */
     protected List content;
     
@@ -151,7 +153,8 @@ public class Element implements Serializable, Cloneable {
         }
 
         this.namespace = namespace;
-        isRootElement = false;
+            
+        document = null;
     }
 
     /**
@@ -348,24 +351,46 @@ public class Element implements Serializable, Cloneable {
      * @return <code>boolean</code> - whether this is a root element.
      */
     public boolean isRootElement() {
-        return isRootElement;
+        return document != null;
     }
 
     /**
      * <p>
-     * This sets if this <code>Element</code> is a root element
-     *   for a JDOM <code>{@link Document}</code>.
+     * This sets the <code>{@link Document}</code> parent of this element
+     *   and makes it the root element.
      * </p>
      *
-     * @param isRootElement <code>boolean</code> indicator
-     * @return <code>Element</code> - this <code>Element</code> modified.
+     * @param document <code>Document</code> parent
+     * @return <code>Document</code> this <code>Element</code> modified
      */
-    protected Element setIsRootElement(boolean isRootElement) {
-        this.isRootElement = isRootElement;
+    protected Element setDocument(Document document) {
+        this.document = document;
 
         return this;
     }
 
+    /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for 
+     *   this Element, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this Element, or null.
+     */
+    public Document getDocument() {
+
+        if (this.isRootElement()) {
+            return this.document;
+        }
+
+        if (this.getParent() != null) {
+            return this.getParent().getDocument();
+        }
+
+        return null;
+    }
+        
     /**
      * <p>
      * This returns the textual content directly held under this
