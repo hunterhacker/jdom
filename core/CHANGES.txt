@@ -1,5 +1,211 @@
+* * * * * * Beta8 (tag: jdom_1_0_b8) from Beta7 (tag: jdom_1_0_b7) * * * * * *
 
-* * * * * * Beta6 (tag: jdom_1_0_b6) to Beta7 (tag: jdom_1_0_b7) * * * * * *
+NEW CLASSES
+-----------
+
+Added a Text class.  This class is primarily for internal use to store String
+data, so strings can now have parentage.  A getText() will still return a
+String.  The Text nodes themselves can be retrieved through a getContent()
+call.
+
+Added the public interface Filter to support the "FilterList" functionality.
+Currently it's not used by any of the core classes.  Later you can expect to
+see new functionality like getContent(Filter).
+
+Added several non-public support classes to support the "FilterList"
+functionality: ContentList, AttributeList, and ElementFilter.
+
+
+NEW METHODS
+-----------
+
+Added to CDATA the methods getTextTrim(), getTextNormalize(), append(String),
+append(CDATA), getParent(), getDocument(), and detach().  This brings CDATA
+close in line with the Text class.  They'll may become the same class with a
+flag differentiator in the next beta.
+
+Added to Element the methods addContent(Text) and removeContent(Text).  These
+methods support the new Text class.
+
+Also added to Element the method removeAttribute(Attribute).  This method was
+simply overlooked before.
+
+Also added to Element the method getChildTextNormalize().  This method is
+similar to getChildTextTrim().
+
+Added to SAXBuilder the methods setFeature() and setProperty().  These methods
+to allow programmers to customize the underlying parser.
+
+Added to SAXOutputter the new method setLexicalHandler(LexicalHandler).  Also
+added a new SAXOutputter constructor that takes a LexicalHandler as its last
+argument.
+
+Added to ProcessingInstruction the method getNames().  This method returns the
+pseudo-attribute names in the PI's data.
+
+Added to DocType the methods setInternalDTDSubset(String) and
+getInternalDTDSubset().  These methods support new functionality where a
+DocType can store and alter the internal DTD subset information.
+
+Also added to DocType the method setElementName().
+
+Added a no-arg SAXOutputter constructor.
+
+Added to SAXOutputter the methods getContentHandler(), getErrorHandler(),
+getDTDHandler(), getEntityResolver(), getLexicalHandler(), setDeclHandler(),
+getDeclHandler(), setFeature(), setProperty(), getFeature(), and
+getProperty().
+
+Added to Attribute the methods getAttributeType() and setAttributeType().
+Also added various constructors that take an int type.  These methods and
+constructors support the new functionality where attributes can record their
+type information.
+
+Added to Document the method detachRootElement().
+
+Added to XMLOutputter the methods outputString(List list), outputString(String
+str), outputString(Text text), output(List list, OutputStream out), and
+output(List list, Writer out).
+
+Added to EntityRef the constructor EntityRef(String name, String systemID).
+This supports building an EntityRef without a public ID.
+
+Added to Verifier the methods checkSystemLiteral() and checkPublicID().
+
+
+NEW CONSTANTS
+-------------
+
+Attribute has new constants for each attribute type:
+  UNDECLARED_ATTRIBUTE, CDATA_ATTRIBUTE, ID_ATTRIBUTE, IDREF_ATTRIBUTE,
+  IDREFS_ATTRIBUTE, ENTITY_ATTRIBUTE, ENTITIES_ATTRIBUTE, NMTOKEN_ATTRIBUTE,
+  NMTOKENS_ATTRIBUTE, NOTATION_ATTRIBUTE, and ENUMERATED_ATTRIBUTE.
+
+
+NEW SIGNATURES
+--------------
+
+The XMLOutputter escape*() methods are now public.
+
+The Verifier checkXMLName() method is now public.
+
+Changed the protected variables for some classes that had both a Document and
+Element parent reference so they are now like Element and have just an Object
+that can serve both duties.  This saves memory by one reference per instance.
+Classes changed are: Comment, EntityRef, and ProcessingInstruction.
+
+
+REMOVED CLASSES
+---------------
+
+None.
+
+
+REMOVED METHODS
+---------------
+
+Removed the methods deprecated in beta7.
+
+
+DEPRECATED METHODS
+------------------
+
+Deprecated the DOMBuilder.build() methods that build from a File, URL, or
+InputStream.  This helps people understand those methods are for testing only.
+DOMBuilder.build(org.w3c.dom.Document) and such are still undeprecated.
+
+
+ENHANCEMENTS
+------------
+
+Added the long-awaited "FilterList" functionality!  This improves the
+reliability and performance of the lists returned by getContent() and
+getChildren() calls.  These lists are now fully live, they fully enforce
+well-formedness constraints, and they don't require in-memory copying before
+returning.  A huge improvement!
+
+Integrated the Text class for wrapping strings behind the scenes and thus
+allowing strings to have parentage.
+
+Added the ability for the DocType to have an internal DTD subset, and changed
+the SAX and DOM builders and outputters to support this change.
+
+Added the ability for a Document to have a detached root to make elt.detach()
+work easily.  There will be an IllegalStateEcxeption thrown in case of read
+from such a Document.
+
+Added support for "attribute types".  Typing is now recorded within the
+attribute object and fully managed during build and output.
+
+Rearchitected the internals of SAXBuilder and SAXHandler to be more extensible
+via subclassing.  Also exposed more of the internals of SAXHandler to make
+subclassing easier.
+
+Made SAXOutputter much more robust, and made JDOMSource (used for
+transformations) more robust along with it.
+
+Changed setContent(null) to now clear the content list and does not throw an
+exception.  Same for setChildren(null).
+
+Improved reporting behavior of build error messages.
+
+Improved how JDOMException reports on nested exceptions.
+
+Updated the Ant build system to version 1.4.
+
+Improved JDOM build versioning so we have versions like "1.0beta8-dev" for
+work after Beta8, and "1.0beta8" will only be the actual Beta8 code.
+
+Changed the Javadocs to use CVS Revision and Date tags for @version.
+
+Many Javadoc clarifications.
+
+Improved the Verifier error message when adding a PI with an "xml" target,
+since parsers and/or people have been trying to add it as a PI.
+
+Added verification of the system and public ID's in both DocType and
+EntityRef, the root element name in DocType, and the entity name in EntityRef.
+
+Added ability for DocType and EntityRef to differentiate a missing ID from the
+empty string ID.
+
+Changed the MANIFEST.MF to no longer list Xerces in the Class-Path entry, nor
+to have JDOMAbout as its Main-Class.  This helps applet deployment, but does
+remove the ability to do the cool "java -jar jdom.jar".
+
+Added support for skipped entities in SAXHandler in the event that the parser
+is not resolving external entities. 
+
+Many, many performance optimizations throughout.
+
+
+BUG FIXES
+---------
+
+Fixed XMLOutputter to no longer add spurious newlines after closing element
+tags.
+
+Fixed SAXBuilder to work better with XML filters.
+
+Fixed SAXHandler bug where attributes that had a namespace were being added to
+the Document, but did not have the Namespace correctly reported. 
+
+Fixed bug where a ProcessingInstruction or DocType removed from a Document did
+not have its parentage set to null.
+
+Fixed bug where SAXBuilder would cache the class name even when using JAXP to
+create the parser, causing problems for parsers without no-arg constructors.  
+
+Fixed bug where Namespace collision checking could generate false positives.
+
+Fixed bug where a document containing a huge number of character entities
+would cause JDOM builds to slow down exponentially.
+
+Fixed the many bugs caused by the old PartialList code, by replacing it with
+FilterList code.
+
+
+* * * * * * Beta7 (tag: jdom_1_0_b7) from Beta6 (tag: jdom_1_0_b6) * * * * * *
 
 NEW CLASSES
 -----------
@@ -197,7 +403,7 @@ For the JDK 1.1 build, added a replace target so @throws is replaced by
 Improved XMLOutputter internals so it no longer uses list.get(i) and instead
 uses an Iterator.  Should lighten the burden on outputting large documents.
 
-Added CVS $Id: CHANGES.txt,v 1.4 2001/06/28 00:30:17 jhunter Exp $ variable to the top of each file for better tracking.
+Added CVS $Id: CHANGES.txt,v 1.5 2002/02/20 08:49:48 jhunter Exp $ variable to the top of each file for better tracking.
 
 Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
@@ -369,7 +575,7 @@ Added new *searchable* mailing list archives at
 http://www.servlets.com/archive/servlet/SummarizeList?listName=jdom-interest
 
 
-* * * * * * * * * * Beta5 to Beta6 * * * * * * * * * *
+* * * * * * * * * * Beta6 from Beta5 * * * * * * * * * *
 
 NEW CLASSES
 -----------
