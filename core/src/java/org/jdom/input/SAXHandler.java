@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.34 2002/02/06 02:11:42 jhunter Exp $
+ $Id: SAXHandler.java,v 1.35 2002/02/07 02:10:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,14 +77,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.34 $, $Date: 2002/02/06 02:11:42 $
+ * @version $Revision: 1.35 $, $Date: 2002/02/07 02:10:21 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.34 $ $Date: 2002/02/06 02:11:42 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.35 $ $Date: 2002/02/07 02:10:21 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -153,7 +153,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * <p>
      * Class initializer: Populate a table to translate SAX attribute
      * type names into JDOM attribute type value (integer).
-     * </p><p>
+     * </p>
+     * <p>
      * <b>Note that all the mappings defined below are compliant with
      * the SAX 2.0 specification exception for "ENUMERATION" with is
      * specific to Crinsom 1.1.X and Xerces 2.0.0-betaX which report
@@ -448,12 +449,13 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /**
      * <p>
-     * This will indicate that a processing instruction (other than
-     *   the XML declaration) has been encountered.
+     * This will indicate that a processing instruction has been encountered.
+     * (The XML declaration is not a processing instruction and will not
+     *  be reported.)
      * </p>
      *
      * @param target <code>String</code> target of PI
-     * @param data <code>String</code containing all data sent to the PI.
+     * @param data <code>String</code> containing all data sent to the PI.
      *             This typically looks like one or more attribute value
      *             pairs.
      * @throws SAXException when things go wrong
@@ -471,6 +473,27 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             getCurrentElement().addContent(
                 factory.processingInstruction(target, data));
         }
+    }
+
+    /**
+     * <p>
+     * This indicates that an unresolvable entity reference has been 
+     * encountered, normally because the external DTD subset has not been
+     * read.
+     * </p>
+     *
+     * @param name <code>String</code> name of entity
+     * @throws SAXException when things go wrong
+     */
+    public void skippedEntity(String name)
+        throws SAXException {
+
+        // We don't handle parameter entity references.
+        if (name.startsWith("%")) return; 
+       
+        flushCharacters();
+
+        getCurrentElement().addContent(factory.entityRef(name));
     }
 
     /**
