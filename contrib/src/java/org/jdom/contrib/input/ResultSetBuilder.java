@@ -213,7 +213,7 @@ public class ResultSetBuilder {
             }
 
             value = getString(rs, col, rsmd.getColumnType(col));
-            if (!attribs.isEmpty() && isAttribute(name)) {
+            if (!attribs.isEmpty() && isAttribute(columnName[col-1])) {
               if (!rs.wasNull()) {
                 entry.setAttribute(name, value);
               }
