@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: PartialList.java,v 1.13 2001/06/22 05:46:00 jhunter Exp $
+ $Id: PartialList.java,v 1.14 2001/10/09 23:26:49 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,10 +56,7 @@
 
 package org.jdom;
 
-import java.util.LinkedList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p><code>PartialList</code> defines a <code>List</code>
@@ -77,7 +74,7 @@ import java.util.List;
 class PartialList extends LinkedList {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.13 $ $Date: 2001/06/22 05:46:00 $ $Name:  $";
+      "@(#) $RCSfile: PartialList.java,v $ $Revision: 1.14 $ $Date: 2001/10/09 23:26:49 $ $Name:  $";
 
     /** The actual backing <code>List</code> */
     protected List backingList;
@@ -399,4 +396,39 @@ class PartialList extends LinkedList {
        return true;
    }
 
+   public Iterator iterator() {
+       return new PartialItr();
+   }
+
+   // Thanks to Noam Tamim <noamt@yahoo.com> for this little class
+   private class PartialItr implements Iterator {
+       Iterator selfIterator = PartialList.super.iterator();
+       Object lastReturned;  // so we can remove it if needed
+                
+       public boolean hasNext() {
+           return selfIterator.hasNext();
+       }
+        
+       public Object next() {
+           lastReturned=selfIterator.next();
+           return lastReturned;
+       }
+        
+       public void remove() {
+           selfIterator.remove();
+           backingList.remove(lastReturned);
+           // Note that selfIterator iterates over the PartialList,
+           // so I can change the backingList as I want.
+       }
+    }               
+
+   public ListIterator listIterator() {
+       throw new UnsupportedOperationException(
+         "PartialList.listIterator() is not yet implemented");
+   }
+
+   public ListIterator listIterator(int index) {
+       throw new UnsupportedOperationException(
+         "PartialList.listIterator() is not yet implemented");
+   }
 }
