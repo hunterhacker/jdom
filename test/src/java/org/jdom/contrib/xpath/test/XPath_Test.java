@@ -96,7 +96,7 @@ public class XPath_Test extends XPathTestCase {
     Element childG = relem(XML1).getChild("g");
     Comment comment = new XPathElement(childG).getComment();
     List matches = match(childG, "child::comment()");
-    assertEquals("size", 1, matches.size());
+    assertEquals("size", (long)1, matches.size());
     assertEquals("match the same object", comment, matches.get(0));
   }
 
@@ -105,7 +105,7 @@ public class XPath_Test extends XPathTestCase {
     Element childG = relem(XML1).getChild("g");
     List piList = new XPathElement(childG).getProcessingInstructions();
     List matches = match(childG, "child::processing-instruction()");
-    assertEquals("size", 2, matches.size());
+    assertEquals("size", (long)2, matches.size());
     assertEquals("match the same object", piList.get(0), matches.get(0));
     assertEquals("match the same object", piList.get(1), matches.get(1));
   }
@@ -115,7 +115,7 @@ public class XPath_Test extends XPathTestCase {
     Element childG = relem(XML1).getChild("g");
     List piList = new XPathElement(childG).getProcessingInstructions("gpi1");
     List matches = match(childG, "child::processing-instruction('gpi1')");
-    assertEquals("size", 1, matches.size());
+    assertEquals("size", (long)1, matches.size());
     assertEquals("match the same object", piList.get(0), matches.get(0));
   }
 
