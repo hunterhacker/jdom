@@ -610,7 +610,7 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
      *                     <code>String</code>
      * @param localName <code>String</code> name of element (with no
      *                  namespace prefix, if one is present)
-     * @param rawName <code>String</code> XML 1.0 version of element name:
+     * @param qName <code>String</code> XML 1.0 version of element name:
      *                [namespace prefix]:[localName]
      * @param atts <code>Attributes</code> list for this element
      * @throws <code>SAXException</code> when things go wrong
