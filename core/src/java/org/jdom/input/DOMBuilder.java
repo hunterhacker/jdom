@@ -276,12 +276,12 @@ public class DOMBuilder implements Builder {
                     Node att = attributeList.item(i);
 
                     // Distinguish between namespace and attribute
-                    if (node.getNodeName().startsWith("xmlns")) {
+                    if (att.getNodeName().startsWith("xmlns")) {
                         String prefix;
-                        String uri = node.getNodeValue();
+                        String uri = att.getNodeValue();
                         int colon;
-                        if ((colon = node.getNodeName().indexOf(":")) != -1) {
-                            prefix = node.getNodeName().substring(colon + 1);
+                        if ((colon = att.getNodeName().indexOf(":")) != -1) {
+                            prefix = att.getNodeName().substring(colon + 1);
                         } else {
                             prefix = "";
                         }
@@ -306,7 +306,7 @@ public class DOMBuilder implements Builder {
                 if ((split = qualifiedName.indexOf(":")) != -1) {
                     String prefix = qualifiedName.substring(0, split);
                     String localName = qualifiedName.substring(split + 1);
-                    String uri = "foo";
+                    String uri = ((Namespace)prefixedNamespaces.get(prefix)).getURI();
                     element = new Element(localName, prefix, uri);
                 } else {
                     element = new Element(qualifiedName);

@@ -138,6 +138,7 @@ public final class Namespace {
         if (!prefix.equals("")) {
             int i = 0;
             String newPrefix = prefix;
+
             while (mappings.containsKey(newPrefix)) {
                 newPrefix = newPrefix + i++;
             }
