@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.17 2001/06/18 16:06:42 jhunter Exp $
+ $Id: SAXHandler.java,v 1.18 2001/06/22 09:00:27 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.17 $ $Date: 2001/06/18 16:06:42 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.18 $ $Date: 2001/06/22 09:00:27 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -420,10 +420,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         Iterator i = declaredNamespaces.iterator();
         while (i.hasNext()) {
             Namespace ns = (Namespace)i.next();
-            i.remove();
             availableNamespaces.addFirst(ns);
             element.addNamespaceDeclaration(ns);
         }
+        declaredNamespaces.clear();
     }
 
     /**
