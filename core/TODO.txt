@@ -92,3 +92,21 @@ Items that need to be done:
 * Finalize the license text we'll use for release.  Update all source files to
   match most current license in jdom/LICENSE.txt.
 
+* Contribute the samples from Elliotte's XML DevCon talk to the samples/
+  directory.
+
+* Ensure EOL is \r\n by default, but settable to be platform specific if need
+  be.  Add justification to the FAQ.
+
+* Eliminate string hardcoding.  Use resource bundles to allow for
+  localization.
+
+* Have all equals() methods not do super.equals() but rather make it clear we
+  mean for == behavior.
+
+* Add Document.getMixedContent(boolean preserveWhitespace)
+
+* Write a guide for contributors
+    Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
+    longer than 80 characters
+
