@@ -10,27 +10,28 @@ import javax.xml.transform.stream.*;
 public class XSLTransform {
 
   public static void main(String[] args) throws Exception {
-    SAXBuilder builder = new SAXBuilder();
-    Document doc = builder.build(args[0]);
-    Document doc2 = transform(doc, args[1]);
-    XMLOutputter out = new XMLOutputter("  ", true);
-    out.setTextNormalize(true);
-    out.output(doc2, System.out);
-  }
+    if (args.length != 2) {
+      System.err.println("Usage: samples.XSLTransform [some.xml] [some.xsl]");
+      return;
+    }
 
-  public static Document transform(Document in, String stylesheet) 
-                              throws JDOMException {
-    try {
-      Transformer transformer = TransformerFactory.newInstance()
-        .newTransformer(new StreamSource(stylesheet));
+    String docname = args[0];
+    String sheetname = args[1];
+    SAXBuilder builder = new SAXBuilder();
+    Document doc = builder.build(docname);
+
+    Transformer transformer = TransformerFactory.newInstance()
+      .newTransformer(new StreamSource(sheetname));
   
-      JDOMResult out = new JDOMResult();
-      transformer.transform(new JDOMSource(in), out);
-      return out.getDocument();
-    }
-    catch (TransformerException e) {
-      throw new JDOMException("XSLT Transformation failed", e);
-    }
+    JDOMSource source = new JDOMSource(doc);
+    JDOMResult result = new JDOMResult();
+    transformer.transform(source, result);
+    Document doc2 = result.getDocument();
+
+    XMLOutputter outp = new XMLOutputter();
+    outp.setTextNormalize(true);
+    outp.setIndent("  ");
+    outp.setNewlines(true);
+    outp.output(doc2, System.out);
   }
 }
-
