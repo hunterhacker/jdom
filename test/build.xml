@@ -30,13 +30,45 @@ These are the meaningful targets for this build file:
 
 -->
 
-<project default="package" basedir=".">
+<project default="test" basedir=".">
 
   <!-- =================================================================== -->
   <!-- Initialization target                                               -->
   <!-- =================================================================== -->
   <target name="init">
     <tstamp/>
+
+    <!--
+      Give user a chance to override without editing this file
+      (and without using -D arguments each time they build).
+      The build properties a user is likely to override include:
+        - jdom.dir           The directory where the JDOM distribution is
+                             installed. Defaults to ../jdom
+        - jdom.lib.dir       The directory where to look for the default JAR
+                             files.  Defaults to ${jdom.dir}/lib
+        - jdom-core.jar      The JAR containing the core JDOM API.
+                             Defaults to ${jdom.lib}/build/jdom.jar
+        - xml-apis.jar       The JAR containing the DOM, SAX and JAXP classes.
+                             Defaults to ${jdom.lib.dir}/xml-apis.jar
+        - parser.jar         The JAR containing the XML parser to use.
+                             Defaults to ${jdom.lib.dir}/xerces.jar
+
+      Note that any build.properties files located in the user home directory
+      (${user.home}) and in the JDOM directory (${jdom.dir}) are also taken
+      into account. Thus, JAR settings defined in these files do not need to
+      be redefined in the local build.properties.
+     -->
+    <property file="${user.home}/jdom.build.properties" />
+    <property file="${basedir}/build.properties" />
+
+    <!-- JDOM home & libraries -->
+    <property name="jdom.dir"           value="../jdom"/>
+    <property name="jdom.lib.dir"       value="${jdom.dir}/lib"/>
+    <property name="jdom.build.dir"     value="${jdom.dir}/build"/>
+
+    <!-- Load custom build configuration from JDOM home too. -->
+    <property file="${jdom.dir}/build.properties" />
+
     <property name="Name" value="JDOM Test"/>
     <property name="name" value="jdom-test"/>
     <property name="version" value="1.0beta10-dev"/>
@@ -44,10 +76,9 @@ These are the meaningful targets for this build file:
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
-    <property name="build.compiler" value="classic"/>
-    <property name="debug" value="on"/>
-    <property name="optimize" value="on"/>
-    <property name="deprecation" value="off"/>
+    <property name="compile.debug"       value="true" />
+    <property name="compile.optimize"    value="true" />
+    <property name="compile.deprecation" value="false" />
 
     <property name="src.dir" value="./src/java"/>
     <property name="lib.dir" value="./lib"/>
@@ -67,26 +98,17 @@ These are the meaningful targets for this build file:
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
 
-
-    <!-- JDOM home & libraries -->
-    <property name="jdom.dir"           value="../jdom"/>
-    <property name="jdom.lib.dir"       value="${jdom.dir}/lib"/>
-    <property name="jdom.build.dir"     value="${jdom.dir}/build"/>
-
     <!-- Default JAR libraries -->
     <property name="xml-apis.jar"       value="${jdom.lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"         value="${jdom.lib.dir}/xerces.jar"/>
-    <property name="xslt.jar"           value="${jdom.lib.dir}/xalan.jar"/>
     <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
-    <property name="jakarta-regexp.jar" value="${lib.dir}/jakarta-regexp-1.1.jar"/>
-    <property name="junit.jar" value="${lib.dir}/junit.jar"/>
+    <property name="junit.jar"          value="${lib.dir}/junit.jar"/>
 
     <!-- Compilation class path -->
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${jdom-core.jar}"/>
-      <pathelement location="${jakarta-regexp.jar}"/>
       <pathelement location="${junit.jar}"/>
 
       <!-- We used to include the CLASSPATH environment variable in
@@ -98,8 +120,6 @@ These are the meaningful targets for this build file:
     </path>
 
     <!-- Tests configuration -->
-    <echo message="Running tests against ${jdom-core.jar} using parser ${parser.jar}"/>
-
     <property name="test.jarFile" value="./build/jdom-test.jar"/>
     <property name="test.outputDir" value="./testOutput"/>
     <property name="test.scratchDir" value="./tmp"/>
@@ -110,7 +130,6 @@ These are the meaningful targets for this build file:
     <path id="test.class.path">
       <path refid="compile.class.path"/>
       <pathelement location="${build.dir}/${name}.jar"/>
-      <pathelement location="${xslt.jar}"/>
     </path>
 
   </target>
@@ -126,13 +145,13 @@ These are the meaningful targets for this build file:
     <echo message=""/>
     <echo message=" available targets are:"/>
     <echo message=""/>
-    <echo message="   package  --> generates the jdom-test.jar file (default)"/>
-    <echo message="   compile  --> compiles the contributed source code"/>
-    <echo message="   javadoc  --> generates the API documentation"/>
-    <echo message="   clean    --> restores the distribution to its clean state"/>
-    <echo message="   test     --> runs JUnit tests for all tests in build"/>
-    <echo message="   testreport   --> build html report from test output"/>
-    <echo message="   testui   --> runs JUnit tests with Swing UI"/>
+    <echo message="   package    --> generates the jdom-test.jar file"/>
+    <echo message="   compile    --> compiles the contributed source code"/>
+    <echo message="   javadoc    --> generates the API documentation"/>
+    <echo message="   clean      --> restores the distribution to its clean state"/>
+    <echo message="   test       --> runs JUnit tests for all tests in build (default)"/>
+    <echo message="   testreport --> build html report from test output"/>
+    <echo message="   testui     --> runs JUnit tests with Swing UI"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
     <echo message="-------------------------------------------------------------"/>
@@ -175,8 +194,9 @@ These are the meaningful targets for this build file:
   <target name="compile" depends="prepare-src">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
-           debug="${debug}"
-           optimize="${optimize}">
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           deprecation="${compile.deprecation}">
         <classpath refid="compile.class.path" />
     </javac>
     <copy toDir="${build.dest}" >
@@ -234,6 +254,8 @@ These are the meaningful targets for this build file:
   </target>
   
   <target name="test" depends="prepare-tests,package">
+    <echo message="Running tests against ${jdom-core.jar} using parser ${parser.jar}"/>
+
     <junit printSummary="yes">
       <classpath refid="test.class.path" />
   
