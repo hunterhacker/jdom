@@ -934,8 +934,15 @@ public class XMLOutputter implements Cloneable {
         out.write("<");
         out.write(element.getQualifiedName());
         int previouslyDeclaredNamespaces = namespaces.size();
+
         Namespace ns = element.getNamespace();
-        if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
+
+        // Add namespace decl only if it's not the XML namespace and it's 
+        // not the NO_NAMESPACE with the prefix "" not yet mapped
+        // (we do output xmlns="" if the "" prefix was already used and we
+        // need to reclaim it for the NO_NAMESPACE)
+        if (ns != Namespace.XML_NAMESPACE &&
+            !(ns == Namespace.NO_NAMESPACE && namespaces.getURI("") == null)) {
             String prefix = ns.getPrefix();        
             String uri = namespaces.getURI(prefix);
             if (!ns.getURI().equals(uri)) { // output a new namespace decl
