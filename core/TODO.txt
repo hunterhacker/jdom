@@ -153,9 +153,6 @@ Items that need to be done:
 
 * Have Jools populate jdom-test
 
-* Consider SAXBuilder.setIgnoreingWhitespace() and similar
-  Should save lots of memory.
-
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions.  See "serialVersionUID" thread especially 
   Peter V. Gadjokov's remarks at
