@@ -564,44 +564,6 @@ public class Attribute implements Serializable, Cloneable {
             throw new DataConversionException(name, "boolean");
         }
     }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>char</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @return <code>char</code> value of attribute.
-     */
-    public char getCharValue(char defaultValue) {
-        try {
-            return value.charAt(0);
-        } catch (Exception e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>char</code> form, and if no conversion
-     *   can occur, throws a
-     *   <code>{@link DataConversionException}</code>
-     * </p>
-     *
-     * @return <code>char</code> value of attribute.
-     * @throws <code>DataConversionException</code> - when conversion fails.
-     */
-    public char getCharValue() throws DataConversionException {
-        try {
-            return value.charAt(0);
-        } catch (Exception e) {
-            throw new DataConversionException(name, "char");
-        }
-    }
-
 }
 
 
