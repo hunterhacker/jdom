@@ -1,36 +1,36 @@
-/*-- 
+/*--
 
- $Id: ElementScanner.java,v 1.7 2003/06/03 18:34:07 jhunter Exp $
+ $Id: ElementScanner.java,v 1.8 2003/06/03 18:41:54 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
     provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management (pm@jdom.org).
- 
- In addition, we request (but do not require) that you include in the 
- end-user documentation provided with the redistribution and/or in the 
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
  software itself an acknowledgement equivalent to the following:
      "This product includes software developed by the
       JDOM Project (http://www.jdom.org/)."
- Alternatively, the acknowledgment may be graphical using the logos 
+ Alternatively, the acknowledgment may be graphical using the logos
  available at http://www.jdom.org/images/logos.
 
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -46,12 +46,12 @@
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
- This software consists of voluntary contributions made by many 
- individuals on behalf of the JDOM Project and was originally 
- created by Brett McLaughlin <brett@jdom.org> and 
- Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Brett McLaughlin <brett@jdom.org> and
+ Jason Hunter <jhunter@jdom.org>.  For more information on the
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom.contrib.input.scanner;
@@ -184,7 +184,7 @@ public class ElementScanner extends XMLFilterImpl {
    /**
     * The <i>SAXHandler</i> instance to build the JDOM Elements.
     */
-   private              ElementBuilder  elementBuilder  = null;
+   private              SAXHandler  saxHandler  = null;
 
    /**
     * The path of the being parsed element.
@@ -431,11 +431,11 @@ public class ElementScanner extends XMLFilterImpl {
     */
    public void parse(InputSource source)  throws IOException, SAXException {
       // Allocate the element builder (SAXHandler subclass).
-      this.elementBuilder = this.parserBuilder.getContentHandler();
+      this.saxHandler = this.parserBuilder.getContentHandler();
 
       // Allocate (if not provided) and configure the parent parser.
       this.setParent(this.parserBuilder.getXMLReader(
-                                this.getParent(), this.elementBuilder));
+                                this.getParent(), this.saxHandler));
 
       // And delegate to superclass now that everything has been set-up.
       // Note: super.parse() forces the registration of this filter as
@@ -460,7 +460,7 @@ public class ElementScanner extends XMLFilterImpl {
       this.activeRules.clear();
 
       // Propagate event.
-      this.elementBuilder.startDocument();
+      this.saxHandler.startDocument();
       super.startDocument();
    }
 
@@ -473,7 +473,7 @@ public class ElementScanner extends XMLFilterImpl {
     */
    public void endDocument()            throws SAXException {
       // Propagate event.
-      this.elementBuilder.endDocument();
+      this.saxHandler.endDocument();
       super.endDocument();
    }
 
@@ -490,7 +490,7 @@ public class ElementScanner extends XMLFilterImpl {
    public void startPrefixMapping(String prefix, String uri)
                                                         throws SAXException {
       // Propagate event.
-      this.elementBuilder.startPrefixMapping(prefix, uri);
+      this.saxHandler.startPrefixMapping(prefix, uri);
       super.startPrefixMapping(prefix, uri);
    }
 
@@ -505,7 +505,7 @@ public class ElementScanner extends XMLFilterImpl {
     */
    public void endPrefixMapping(String prefix)          throws SAXException {
       // Propagate event.
-      this.elementBuilder.endPrefixMapping(prefix);
+      this.saxHandler.endPrefixMapping(prefix);
       super.endPrefixMapping(prefix);
    }
 
@@ -546,7 +546,7 @@ public class ElementScanner extends XMLFilterImpl {
 
       // Propagate event.
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.startElement(nsUri, localName, qName, attrs);
+         this.saxHandler.startElement(nsUri, localName, qName, attrs);
       }
       super.startElement(nsUri, localName, qName, attrs);
    }
@@ -571,12 +571,12 @@ public class ElementScanner extends XMLFilterImpl {
    public void endElement(String nsUri, String localName, String qName)
                                                         throws SAXException {
       // Grab the being-built element.
-      Element elt = this.elementBuilder.getCurrentElement();
+      Element elt = this.saxHandler.getCurrentElement();
 
       // Complete element building before making use of it.
       // (This sets the current element to the parent of elt.)
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.endElement(nsUri, localName, qName);
+         this.saxHandler.endElement(nsUri, localName, qName);
       }
 
       // Get the matching rules for this element (if any).
@@ -621,7 +621,7 @@ public class ElementScanner extends XMLFilterImpl {
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.characters(ch, start, length);
+         this.saxHandler.characters(ch, start, length);
       }
       super.characters(ch, start, length);
    }
@@ -641,7 +641,7 @@ public class ElementScanner extends XMLFilterImpl {
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.ignorableWhitespace(ch, start, length);
+         this.saxHandler.ignorableWhitespace(ch, start, length);
       }
       super.ignorableWhitespace(ch, start, length);
    }
@@ -661,7 +661,7 @@ public class ElementScanner extends XMLFilterImpl {
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.processingInstruction(target, data);
+         this.saxHandler.processingInstruction(target, data);
       }
       super.processingInstruction(target, data);
    }
@@ -678,7 +678,7 @@ public class ElementScanner extends XMLFilterImpl {
    public void skippedEntity(String name)               throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
-         this.elementBuilder.skippedEntity(name);
+         this.saxHandler.skippedEntity(name);
       }
       super.skippedEntity(name);
    }
@@ -708,7 +708,7 @@ public class ElementScanner extends XMLFilterImpl {
       //----------------------------------------------------------------------
 
       protected SAXHandler createContentHandler() {
-         return (new ElementBuilder(new EmptyDocumentFactory(getFactory())));
+         return (new SAXHandler(new EmptyDocumentFactory(getFactory())));
       }
 
       //----------------------------------------------------------------------
@@ -748,17 +748,16 @@ public class ElementScanner extends XMLFilterImpl {
       }
 
       /**
-       * Allocates and configures a new ElementBuilder object.
+       * Allocates and configures a new SAXHandler object.
        *
-       * @return the configured ElementBuilder.
+       * @return the configured SAXHandler.
        *
        * @throws SAXException   any SAX exception, possibly wrapping
        *                        another exception.
        */
-      public ElementBuilder getContentHandler()         throws SAXException {
+      public SAXHandler getContentHandler()         throws SAXException {
          try {
-            ElementBuilder handler =
-                                (ElementBuilder)(this.createContentHandler());
+            SAXHandler handler = this.createContentHandler();
             this.configureContentHandler(handler);
 
             return (handler);
@@ -766,29 +765,6 @@ public class ElementScanner extends XMLFilterImpl {
          catch (Exception ex1) {
             throw (new SAXException(ex1.getMessage(), ex1));
          }
-      }
-   }
-
-   //-------------------------------------------------------------------------
-   // ElementBuilder nested class
-   //-------------------------------------------------------------------------
-
-   /**
-    * ElementBuilder extends SAXHandler to support external access
-    * to the being-built element.
-    */
-   private static class ElementBuilder extends SAXHandler {
-
-      /**
-       * Creates a new ElementBuilder using the specified factory to
-       * to create JDOM objects.
-       *
-       * @param  factory   the factory to use to create JDOM objects
-       *                   or <code>null</code> to use the default
-       *                   JDOM factory.
-       */
-      public ElementBuilder(JDOMFactory factory) {
-         super(factory);
       }
    }
 
