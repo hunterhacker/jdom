@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<!DOCTYPE internalentities SYSTEM "SAXBuilderTestEntity.dtd">
+
+<internalentities test="foo">&simple; &simple2;
+</internalentities>

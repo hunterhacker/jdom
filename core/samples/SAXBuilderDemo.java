@@ -91,15 +91,22 @@ public class SAXBuilderDemo {
         if ((args.length != 1) && (args.length != 2)) {
             System.out.println(
                 "Usage: java samples.SAXBuilderTest " +
-                "[XML document filename] ([SAX Driver Class])");
+                "[XML document filename] ([expandEntities] [SAX Driver Class])");
             return;
         }
+
+        boolean expandEntities = true;
 
         // Load filename and SAX driver class
         String filename = args[0];
         String saxDriverClass = null;
-        if (args.length == 2) {
-            saxDriverClass = args[1];
+        if (args.length > 1) {
+            if (args[1].equalsIgnoreCase("false")) {
+                expandEntities = false;
+            }
+            if (args.length > 2) {
+                saxDriverClass = args[2];
+            }
         }
 
         // Create an instance of the tester and test
@@ -110,6 +117,7 @@ public class SAXBuilderDemo {
             } else {
                 builder = new SAXBuilder(saxDriverClass);
             }
+            builder.setExpandEntities(expandEntities);
             Document doc = builder.build(filename);
             // Create an outputter
             XMLOutputter outputter = new XMLOutputter();

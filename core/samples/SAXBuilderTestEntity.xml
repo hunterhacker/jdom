@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!DOCTYPE internalentities [
+	<!ELEMENT internalentites (#PCDATA)>
+	<!ATTLIST internalentities 
+		test (CDATA) #IMPLIED>
+	<!ATTLIST internalentities a NOTATION (n1|n2) #IMPLIED>
+	<!NOTATION n1 SYSTEM "http://www.w3.org/">
+	<!NOTATION n2 SYSTEM "http://www.w3.org/">
+
+	<!ENTITY simple 'simple entity' >
+	<!ENTITY simple2 'another simple entity'>
+	<!ENTITY anotation SYSTEM "http://www.foo.org/image.gif" NDATA n1 >
+
+]>
+
+<internalentities test="boo">&simple; &simple2;
+</internalentities>
