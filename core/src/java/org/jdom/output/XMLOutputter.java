@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.84 2002/06/18 12:11:20 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.85 2002/07/22 12:22:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -101,9 +101,9 @@ import org.jdom.output.*;
  * </p>
  *
  * <p>
- * Empty elements are by default printed as &lt;empty/&gt, but this can
+ * Empty elements are by default printed as &lt;empty/&gt;, but this can
  * be configured with <code>setExpandEmptyElements</code> to cause them to
- * be expanded to &lt;empty&gt&lt;/empty&gt;.
+ * be expanded to &lt;empty&gt;&lt;/empty&gt;.
  * </p>
  *
  * <p>
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.84 $, $Date: 2002/06/18 12:11:20 $
+ * @version $Revision: 1.85 $, $Date: 2002/07/22 12:22:13 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.84 $ $Date: 2002/06/18 12:11:20 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.85 $ $Date: 2002/07/22 12:22:13 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.40 2002/06/26 01:44:26 jhunter Exp $
+ $Id: Verifier.java,v 1.41 2002/07/22 12:22:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.40 $, $Date: 2002/06/26 01:44:26 $
+ * @version $Revision: 1.41 $, $Date: 2002/07/22 12:22:12 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.40 $ $Date: 2002/06/26 01:44:26 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.41 $ $Date: 2002/07/22 12:22:12 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -289,12 +289,7 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
-                                                       Namespace other) {
-        if (namespace == Namespace.NO_NAMESPACE ||
-            other == Namespace.NO_NAMESPACE) {
-            return null;
-        }
-
+                                                 Namespace other) {
         String p1,p2,u1,u2,reason;
 
         reason = null;
@@ -318,7 +313,7 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Attribute attribute,
-                                                       Element element) {
+                                                 Element element) {
         Namespace namespace = attribute.getNamespace();
         String prefix = namespace.getPrefix();
         if ("".equals(prefix)) {
@@ -338,7 +333,7 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
-                                                       Element element) {
+                                                 Element element) {
         String reason = checkNamespaceCollision(namespace,
                                                 element.getNamespace());
         if (reason != null) {
@@ -369,7 +364,7 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
-                                                       Attribute attribute) {
+                                                 Attribute attribute) {
         String reason = checkNamespaceCollision(namespace,
                                                 attribute.getNamespace());
         if (reason != null) {
@@ -388,7 +383,7 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
-                                                       List list) {
+                                                 List list) {
         if (list == null) {
             return null;
         }

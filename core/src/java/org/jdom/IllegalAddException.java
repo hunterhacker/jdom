@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.20 2002/04/29 13:38:15 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.21 2002/07/22 12:22:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,12 +61,12 @@ package org.jdom;
  * illegal object to a JDOM construct.
  *
  * @author Brett McLaughlin
- * @version $Revision: 1.20 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.21 $, $Date: 2002/07/22 12:22:12 $
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.20 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.21 $ $Date: 2002/07/22 12:22:12 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
@@ -293,7 +293,7 @@ public class IllegalAddException extends IllegalArgumentException {
                                    : ":" + added.getPrefix() + "=")
               .append("\"")
               .append(added.getURI())
-              .append("\" could not be added as content to \"")
+              .append("\" could not be added as a namespace to \"")
               .append(base.getQualifiedName())
               .append("\": ")
               .append(reason)
