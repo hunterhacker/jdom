@@ -2,53 +2,31 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
-* Add a Text class (Brett)
-
-* Locate bug where TestBuildTime hits OOME during rebuild loop.  It doesn't
-  happen with beta6.
-
-* Add setIgnoringAllWhitespace(boolean) method.
-
-* Implement the ability to output the same DOCTYPE as was input.  Store the
-  internal DTD subset as a String variable in DocType.  This means we need 
-  to reconstruct the String based on SAX events of the DTDHandler/DeclHandler.
-  Or if reading from DOM then from the DOM DocumentType.
-        <?xml version='1.0' ?>
-        <!DOCTYPE mydtd[
-        <!ENTITY nbsp '&#160;'>
-        <!ENTITY aring '&#229;'>
-        <!ENTITY auml '&#228;'>
-        <!ENTITY ouml '&#246;'>
-        <!ENTITY Aring '&#197;'>
-        <!ENTITY Auml '&#196;'>
-        <!ENTITY Ouml '&#214;'>]>
-  (Harry Evans <hevans@elite.com> is also working on this.)
+* Make setText() not replace children
 
 * Take action on detach() allowing a Doc to have its root removed with an ISE
   upon later access.  This also removes the need to remove the Document(null)
   usage by builders.
 
-* Determine if getSerializedForm() should be brought back and implemented
-  to call XMLOutputter.outputString() methods.
+* Implement the ability to output the same DOCTYPE as was input.  Store the
+  internal DTD subset as a String variable in DocType.  This means we need 
+  to reconstruct the String based on SAX events of the DTDHandler/DeclHandler.
+  Or if reading from DOM then from the DOM DocumentType.
+  (Harry Evans <hevans@elite.com> and Phil Nelson are working on this.)
 
-* Consider deprecating DOMBuilder.build(File) and company
-  Although I'd like a way to keep them for testing
+* Integrate Alex Chaffee's XMLOutputter rework.  Included in this is a fix 
+  for the minor bug where pretty print (indented, newlines, trim text) prints 
+  an extra whitespace line between one closing element and another.  Also
+  included may be a fix for the unconfirmed bug of unwanted line breaks 
+  occurring between tags.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003241.html
 
-* Make setAttributes() atomic
+* Add setIgnoringAllWhitespace(boolean) method.
 
-* Determine if setMixedContent() should remain atomic on failure or not.
-
-* Make it so elt.getAdditionalNamespaces() returns a mutable list.
-  This means we have to stop using EMPTY_LIST and need to sanity check 
-  additions.
-
-* Fix minor XMLOutputter bug where pretty print (indented, newlines, trim
-  text) prints an extra whitespace line between one closing element and 
-  another.
-
-* Investigate ClassLoader.loadClass() instead of Class.forName() for those
-  times when the classes aren't on the system classpath.  (Suggested by Alex
-  Rosen)
+* Determine if setMixedContent(), setAttributes(), setPIs(), setChildren(),
+  and addAll() should be atomic on failure (such as when an illegal object 
+  is added from the list).  Currently setMixedContent() has been changed to 
+  be atomic.
 
 * Examine if it's worth doing an intern() on element and attribute names,
   or if it's too much to pay since SAX is likely doing it already
@@ -57,25 +35,27 @@ Items that need to be done:
   http://lists.denveronline.net/lists/jdom-interest/2000-October/003289.html
   Regardless, the SAX builder should not assume there's interning!
 
-* Perhaps have builder flags to indicate if surrounding whitespace (not just
-  ignorable whitespace) should be trimmed, if CDATA sections should be 
-  included, and if comment sections should be included.  All seem like 
-  reasonable customizations.  The whitespace flag should respect xml:space.  
+* Perhaps have builder flags to indicate if CDATA sections should be 
+  included and if comment sections should be included.  All seem like 
+  reasonable customizations.  The whitespace flag may respect xml:space.  
   It might use an XMLFilter to do the job.
 
-* Change PartialList to drive directly off backing list.  Jools is working on
-  this calling it FilterList.  See the temporary "work in progress" jdom-wip 
-  module.
-  - Make sure PartialList doesn't let an elt be added as a child (or 
+* Integrate FilterList (currently developed in the jdom-wip CVS module)
+  which replaced PartialList by more efficiently driving directly off the
+  backing list.
+  - Find a way to reuse the FilterList impls returned by getMixedContent().
+    Possible way: store content in a FilterList but give it a pkg prot 
+    accessor method to retrieve the raw list?
+  - Make sure FilterList doesn't let an elt be added as a child (or 
     grandchild, etc) of itself.  See elt.addContent() logic that walks 
     ancestry.
-  - Have PartialList sanity check new object types as legal.
-  - Look at the issue that PartialList.listIterator() may return an Iterator
-    that doesn't have logic to change the backing List and sanity check the
-    change.  See post by "Chris Hamersley" <chris.hamersley@xmlglobal.com>
-    31 Aug 2000.  Also a follow-on by "Peter V. Gadjokov" <pvg@c-c-s.com> 
-    27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
-    27 Sep 2000.
+  - See about reducing the number of classes in org.jdom (perhaps leaving
+    Filter and FilterList in there but moving the others to be inner
+    classes)
+  - Decide what classes/methods should be final
+  - See about a way so matches() can be a fast no-op for pre-filtered lists
+    (as is the case for most calls)
+  - Fix issue where size is kept as an instance var but that's not reliable
 
 * Verify we get good error handling if someone passes null to any add/set
   method.  Consensus is throw an NPE if passing null to a setList-style
@@ -83,16 +63,13 @@ Items that need to be done:
 
 * Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
 
-* Look at where Namespace may need to be synchronized.  See
+* Look again at if XMLOutputter output methods taking a Writer should 
+  auto-flush.  Currently they do, but is that overstepping the contract?
+
+* Look at where Namespace may need to be synchronized or made no longer a
+  flyweight.  See
   http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html
   and follow-ups.
-
-* Fix unconfirmed bug of unwanted line breaks occurring between tags.
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003241.html
-
-* Fix issue where XMLOutputter has protected methods dependent on
-  NamespaceStack, as pointed out by elharo:
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003538.html
 
 * Look into having a flag to turn off DTD loading, since parsers often load
   the DTD even if validation is off.
@@ -101,24 +78,39 @@ Items that need to be done:
 
 * Figure out how to deal with XMLOutputter writing of special characters like
   &#160.  Should it char escape only chars unprintable in the current
-  character set?  Or should there be a fancy API for selecting what's escaped?
+  character set?  Should there be a fancy API for selecting what's escaped?
+  Should this be something where you can subclass?
   http://lists.denveronline.net/lists/jdom-interest/2001-February/004521.html
-
-* Investigate the capabilities of David Megginson's XMLWriter at 
-  http://www.megginson.com/Software/ as a way to output a document.
-  More info: http://xmlhack.com/read.php?item=777
+  http://lists.denveronline.net/lists/jdom-interest/2001-April/005644.html
+  http://lists.denveronline.net/lists/jdom-interest/2001-April/005649.html
+  http://lists.denveronline.net/lists/jdom-interest/2001-April/005669.html
 
 * Consider an XMLOutputter flag or feature to convert characters with well
   known named character entities to their named char entity form instead of
   numeric.
 
+* Determine if there should be a way to output everything on one line
+  (including the decl and doctype)
+
+* Look into elharo's report of DOMBuilder throwing away ignorable whitespace.
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=8313
+
+* Add a Text class (currently stored but unused in org.jdom)
+
+* Performance optimize.  See following thread for test data.
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
+  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
+
+* Look into how the factory builder model could support giving the factory
+  extra knowledge about the context (line number, element stack, etc), and 
+  allow it to report errors or to return a code indicating the element should 
+  be ignored.
+
+--- FOR JDOM 1.0 COMMUNITY REVIEW ---
+
+* Expand class-level Javadocs for inclusion into Frame using the MIF Doclet.
+
 --- FOR JDOM 1.0 ---
-
-* Expand class-level Javadocs.
-
-* Use MIF Doclet to include javadoc output into MIF/Word/Frame/PDF file.
-  http://java.sun.com/j2se/1.3/docs/tooldocs/javadoc/index.html
-  http://java.sun.com/j2se/javadoc/mifdoclet/index.html (mifdoclet_C.zip)
 
 * Create "build dist" for distribution
   Use fixcrlf in dist (instead of package as currently done)
@@ -126,11 +118,6 @@ Items that need to be done:
 
 * Consider changing XMLOutputter to have more set methods like Enhydra's
   DOMFormatter.  Possible good ones:
-   void setJavaEncoding(java.lang.String newJavaEncoding) 
-                       Set the encoding using the Java encoding name.
-   void setLineWidth(int width) 
-                       Set the width at while long lines are split 
-                       when indentation is enabled.
    void setPreserveSpace(boolean preserve) 
                        Set the default space-preservation flag.
    void setXmlEncoding(java.lang.String newXmlEncoding) 
@@ -151,18 +138,17 @@ Items that need to be done:
   IllegalXXXException directly instead of returning null on error,
   and let the caller pass the exception through
 
-* Have Jools populate jdom-test
+* Populate jdom-test.  Jools is leading this but Phil Nelson is currently
+  doing a lot of work.  Hong Zhang <Hong.Zhang@Sun.COM> is helping with the
+  J2EE CTS.
 
 * Make sure we have a plan for supporting obj serialization across current and
   future JDOM versions.  See "serialVersionUID" thread especially 
   Peter V. Gadjokov's remarks at
   http://lists.denveronline.net/lists/jdom-interest/2000-September/subject.html
+  It may be OK to worry about fast short-term serialization only.
 
-* Performance optimize.  See following thread for test data.
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003418.html
-  http://lists.denveronline.net/lists/jdom-interest/2000-October/003472.html
-
-* Consider visitor pattern (again, just to be sure)
+* Consider visitor pattern
   Use cases: count elements, count nodes, translate comments, remove PIs
   Would implement with option to visit depth or breadth first
   Maybe go crazy with pre-order, in-order, and post-order too :-)
@@ -171,11 +157,22 @@ Items that need to be done:
     http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113/
   Joe Bowbeer has ideas at:
   http://lists.denveronline.net/lists/jdom-interest/2000-November/003610.html
+  We may be able to just have doc.iterator() methods
+
+* Ensure JDOM is appropriately tweaked for subclassing, per the threads
+  started by Joe Bowbeer.
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7601 begins it
+
+* Ensure JDOM is flawless regarding clone semantics, per more threads by
+  Joe Bowbeer.
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7602 begins it
+
+* Joe summarizes his issues at
+  http://www.servlets.com/archive/servlet/ReadMsg?msgId=7697
 
 --- FOR JDOM 1.1 ---
 
-* Add XPath support
-  Much work being done by Michael Hinchey
+* Add XPath support, most likely integrating Bob McWhirter's package.
 
 * Figure out XPath interface, current best is this:
     List    XPath.getList(Element e, String xpath)  // or Document param
@@ -227,7 +224,7 @@ Items that need to be done:
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
-* Write a guide for contributors
+* Write a guide for contributors.  Short summary:
     Follow Sun's coding guidelines, use 4-space (no tab) indents, no lines
     longer than 80 characters
 
@@ -242,12 +239,7 @@ Items that need to be done:
 * Figure out if there's a role for a Node interface.  It sounds easy but all 
   attempts so far have hit obstacles.  Amy Lewis talks about it here:
   http://lists.denveronline.net/lists/jdom-interest/2000-December/004016.html
-
-* Consider having element.getChild("foo") use the namespace of the invoked 
-  element.  Currently is would be the default namespace.  With this new
-  approach you'd pass null to use the default.  This would be more convenient,
-  but the downside I see is that it would be inconsistent since 
-  new Element("foo") would only create elements in the default namespace.
+  There were many follow-on threads.
 
 * Think about somewhat crazy idea of using more inheritance in JDOM to allow
   lightweight but not XML 1.0 complete implementations.  For example Element
@@ -268,17 +260,6 @@ Items that need to be done:
   or not.
 
 * Use new Ant regexp task for more efficient JDK 1.1 package renaming.
-
-* Consider methods to return an item's XPath, suggested by 
-    Mores Stanislav <stm@prosoft.sk>
-  /** Return XPath of this node */ 
-  public StringBuffer getXPath(); 
-  /** Return XPath of this node relative to given context node. */ 
-  public StringBuffer getRelativeXPath(Element ancestor);
-
-* Consider having builders construct nodes that know the line number on which
-  they're based.  It's something DOM3 does, and one user requested it.  The
-  cost is a heavy price in memory bloat.
 
 * Consider elt.getTreeText() which would recursively get the text (in order) 
   for the subtree, effectively ripping out interveneing Elements.  (Suggested
@@ -319,12 +300,6 @@ Items that need to be done:
   public String getAttributeValue(String name, String default)
   public String getAttributeValue(String name, Namespace ns, String default)
   http://lists.denveronline.net/lists/jdom-interest/2000-December/004155.html
-
-* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
-  Probably setStandalone(boolean) and getStandalone().  Maybe we need
-  setVersion(String) and getVersion() too.  Perhaps "encoding" should be moved
-  into the Document too?  Joe wants it possible to output ignoring the
-  standalone flag.
 
 * Consider using a List of instance data so elements only use what they really
   need (saving attrib list, namespace list)
