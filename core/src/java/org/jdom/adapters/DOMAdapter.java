@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.12 2001/12/11 07:32:04 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.13 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import org.jdom.DocType;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version 1.0
+ * @version $Revison$, $Date: 2002/01/08 09:17:10 $
  */
 public interface DOMAdapter {
 

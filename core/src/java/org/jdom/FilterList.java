@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: FilterList.java,v 1.2 2001/12/28 14:48:10 jhunter Exp $
+ $Id: FilterList.java,v 1.3 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,7 +76,7 @@ import java.io.Serializable;
  *
  * @author Jools Enticknap
  * @author Alex Rosen
- * @version 1.0
+ * @version $Revision: 1.3 $, $Date: 2002/01/08 09:17:10 $
  */
 public class FilterList implements List, Serializable {
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.4 2001/06/19 20:33:19 jhunter Exp $
+ $Id: JDOMResult.java,v 1.5 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -98,8 +98,9 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @see      org.jdom.transform.JDOMSource
  *
- * @author   Laurent Bihanic
- * @author   Jason Hunter
+ * @author  Laurent Bihanic
+ * @author  Jason Hunter
+ * @version $Revision: 1.5 $, $Date: 2002/01/08 09:17:10 $
  */
 public class JDOMResult extends SAXResult {
 

@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.4 2001/12/11 07:32:05 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.5 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import java.util.Map;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version 1.0
+ * @version $Revision: 1.5 $, $Date: 2002/01/08 09:17:10 $
  */
 public interface JDOMFactory {
 

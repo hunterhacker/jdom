@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.5 2001/10/12 00:40:03 jhunter Exp $
+ $Id: JDOMSource.java,v 1.6 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -98,6 +98,7 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
+ * @version $Revision: 1.6 $, $Date: 2002/01/08 09:17:10 $
  */
 public class JDOMSource extends SAXSource {
 

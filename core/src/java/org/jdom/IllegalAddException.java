@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.14 2001/12/11 07:32:04 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.15 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -64,12 +64,12 @@ package org.jdom;
  * </p>
  *
  * @author Brett McLaughlin
- * @version 1.0
+ * @version $Revision: 1.15 $, $Date: 2002/01/08 09:17:10 $
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.14 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.15 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /**
      * <p>

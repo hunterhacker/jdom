@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AttributeFilter.java,v 1.2 2001/12/19 04:49:36 jhunter Exp $
+ $Id: AttributeFilter.java,v 1.3 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -67,7 +67,7 @@ import java.util.Iterator;
  * </p>
  *
  * @author Jools Enticknap
- * @version 0.01
+ * @version $Revision: 1.3 $, $Date: 2002/01/08 09:17:10 $
  */
 final class AttributeFilter implements Filter {
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.22 2001/12/11 07:32:04 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.23 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,13 +77,13 @@ import java.util.StringTokenizer;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Steven Gould
- * @version 1.0
+ * @version $Revision: 1.23 $, $Date: 2002/01/08 09:17:10 $
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.22 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.23 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.29 2001/12/11 07:32:04 jhunter Exp $
+ $Id: Namespace.java,v 1.30 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.List;
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version 1.0
+ * @version $Revision: 1.30 $, $Date: 2002/01/08 09:17:10 $
  */
 public final class Namespace {
 
@@ -86,7 +86,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.29 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.30 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

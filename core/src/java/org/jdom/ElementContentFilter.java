@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementContentFilter.java,v 1.3 2001/12/11 07:32:04 jhunter Exp $
+ $Id: ElementContentFilter.java,v 1.4 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.List;
  * </p>
  *
  * @author Jools Enticknap
- * @version 0.01
+ * @version $Revision: 1.4 $, $Date: 2002/01/08 09:17:10 $
  */
 final class ElementContentFilter implements Filter {
     

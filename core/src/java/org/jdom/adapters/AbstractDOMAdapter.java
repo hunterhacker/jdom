@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.11 2001/12/11 07:32:04 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.12 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -75,12 +75,12 @@ import org.jdom.*;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version 1.0
+ * @version $Revision: 1.12 $, $Date: 2002/01/08 09:17:10 $
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.11 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.12 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /**
      * <p>

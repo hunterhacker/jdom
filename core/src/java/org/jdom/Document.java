@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.48 2001/12/11 07:32:03 jhunter Exp $
+ $Id: Document.java,v 1.49 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -69,12 +69,12 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Jools Enticknap
- * @version 1.0
+ * @version $Revision: 1.49 $, $Date: 2002/01/08 09:17:10 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.48 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.49 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 

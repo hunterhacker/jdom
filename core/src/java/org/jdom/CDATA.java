@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.16 2001/12/11 07:32:03 jhunter Exp $
+ $Id: CDATA.java,v 1.17 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,12 +70,12 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version 1.0
+ * @version $Revision: 1.17 $, $Date: 2002/01/08 09:17:10 $
  */
 public class CDATA implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.16 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.17 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /** The actual character content */
     // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8776

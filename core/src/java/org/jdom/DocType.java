@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.16 2001/12/11 07:32:03 jhunter Exp $
+ $Id: DocType.java,v 1.17 2002/01/08 09:17:10 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -65,12 +65,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version 1.0
+ * @version $Revision: 1.17 $, $Date: 2002/01/08 09:17:10 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.16 $ $Date: 2001/12/11 07:32:03 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.17 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
