@@ -76,6 +76,7 @@ These are the meaningful targets for this build file:
     <!-- Default JAR libraries -->
     <property name="xml-apis.jar"       value="${jdom.lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"         value="${jdom.lib.dir}/xerces.jar"/>
+    <property name="xslt.jar"           value="${jdom.lib.dir}/xalan.jar"/>
     <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
     <property name="jakarta-regexp.jar" value="${lib.dir}/jakarta-regexp-1.1.jar"/>
 
@@ -114,6 +115,7 @@ These are the meaningful targets for this build file:
     <path id="test.class.path">
       <path refid="compile.class.path"/>
       <pathelement location="${build.dir}/${name}.jar"/>
+      <pathelement location="${xslt.jar}"/>
     </path>
 
   </target>
