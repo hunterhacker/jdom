@@ -684,8 +684,9 @@ public class Element implements Serializable, Cloneable {
      * <p>
      * This returns the full content of the element as a List which
      * may contain objects of type <code>String</code>, <code>Element</code>,
-     * <code>Comment</code>, <code>ProcessingInstruction</code>, and
-     * <code>Entity</code>.  When there is technically no mixed content and
+     * <code>Comment</code>, <code>ProcessingInstruction</code>,
+     * <code>CDATA</code>, and <code>Entity</code>.  
+     * When there is technically no mixed content and
      * all contents are of the same type, then all objects returned in the
      * List will be of the same type.  The List returned is "live" and 
      * modifications to it affect the element's actual contents.  Whitespace
