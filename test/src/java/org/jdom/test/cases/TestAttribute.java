@@ -117,6 +117,39 @@ public static Test suite () {
 		//should have been put in the NO_NAMESPACE namespace
 		assert("incorrect namespace", attr.getNamespace().equals(Namespace.NO_NAMESPACE));
 
+
+		try {
+			attr = new Attribute(null, "value");
+			assert("didn't catch null attribute name", false);
+		} catch (IllegalArgumentException e) {
+			assert(true);
+		} catch (NullPointerException e) {
+			assert("NullPointerException with null attribute name", false);
+		}
+
+		try {
+			attr = new Attribute("test", null);
+			assert("didn't catch null attribute value", false);
+		} catch (IllegalArgumentException e) {
+			assert(true);
+		} catch (NullPointerException e) {
+			assert("NullPointerException with null attribute value", false);
+		}
+
+		try {
+			attr = new Attribute("test" + (char)0x01, "value");
+			assert("didn't catch invalid attribute name", false);
+		} catch (IllegalArgumentException e) {
+			assert(true);
+		}
+
+		try {
+			attr = new Attribute("test", "test" + (char)0x01);
+			assert("didn't catch invalid attribute value", false);
+		} catch (IllegalArgumentException e) {
+			assert(true);
+		}
+
 	}
 
 	/**
@@ -129,6 +162,23 @@ public static Test suite () {
 		assert("incorrect attribute name", attr.getName().equals("test"));
 		assert("incoorect attribute value", attr.getValue().equals("value"));
 		assert("incorrect Namespace", attr.getNamespace().equals(ns));
+
+		//now test that the attribute cannot be created with a namespace
+		//without a prefix
+		ns = Namespace.getNamespace("http://some.other.place");
+
+		try {
+			attr = new Attribute("test", "value", ns);
+			assert("allowed creation of attribute with a default namespace", false);
+		} catch (IllegalNameException e) {
+			assert(true);
+		}
+
+		
+		attr = new Attribute("test", "value", null);
+		assert("expected null attribute namespace", true);
+
+
 
 	}
 
