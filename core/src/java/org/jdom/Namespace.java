@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.20 2001/03/15 06:07:17 jhunter Exp $
+ $Id: Namespace.java,v 1.21 2001/03/20 18:42:47 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -92,9 +92,6 @@ public final class Namespace {
      */
     private static HashMap namespaces;
 
-    /** Factory list of mappings */
-    private static HashMap mappings;
-
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
@@ -112,18 +109,14 @@ public final class Namespace {
      *  This static initializer acts as a factory contructor.
      *  It sets up storage and required initial values.
      * </p>
-     *
-     * XXX: Maybe this should be a singleton? The code would be cleaner (brett)
      */
     static {
         namespaces = new HashMap();
-        mappings = new HashMap();
 
         // Add the "empty" namespace
-        mappings.put("", "");
         namespaces.put("&", NO_NAMESPACE);
-        mappings.put("xml", "http://www.w3.org/XML/1998/namespace");
-        namespaces.put("xml&http://www.w3.org/XML/1998/namespace", XML_NAMESPACE);
+        namespaces.put("xml&http://www.w3.org/XML/1998/namespace",
+                       XML_NAMESPACE);
     }
 
     /**
@@ -173,7 +166,6 @@ public final class Namespace {
         }
 
         // Finally, store and return
-        mappings.put(prefix, uri);
         Namespace ns = new Namespace(prefix, uri);
         namespaces.put(prefix + "&" + uri, ns);
         return ns;
