@@ -57,6 +57,7 @@ package org.jdom.output;
 
 import java.io.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import org.jdom.*;
 import org.jdom.adapters.*;
@@ -88,7 +89,7 @@ public class DOMOutputter {
      * </p>
      */
     public DOMOutputter() {
-        this(DEFAULT_ADAPTER_CLASS);
+        // nothing
     }
 
     /**
@@ -121,9 +122,73 @@ public class DOMOutputter {
         NamespaceStack namespaces = new NamespaceStack();
         org.w3c.dom.Document domDoc = null;
         try {
-            DOMAdapter adapter =
-                (DOMAdapter)Class.forName(adapterClass).newInstance();
-            domDoc = adapter.createDocument();
+            if (adapterClass != null) {
+                // The user knows that they want to use a particular impl
+                try {
+                    DOMAdapter adapter =
+                        (DOMAdapter)Class.forName(adapterClass).newInstance();
+                    domDoc = adapter.createDocument();
+                    // System.out.println("using specific " + adapterClass);
+                }
+                catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                }
+            }
+            else {
+                // Try using JAXP...
+                // Note we need DOM Level 2 and thus JAXP 1.1.
+                // If JAXP 1.0 is all that's available then we skip
+                // to the hard coded default parser
+                try {
+                    // Verify this is JAXP 1.1 (or later)
+                    Class.forName("javax.xml.transform.Transformer");
+
+                    // Try JAXP 1.1 calls to build the document
+                    Class factoryClass =
+                        Class.forName("javax.xml.parsers.DocumentBuilderFactory"
+);
+
+
+                    // factory = DocumentBuilderFactory.newInstance();
+                    Method newParserInstance =
+                        factoryClass.getMethod("newInstance", null);
+                    Object factory = newParserInstance.invoke(null, null);
+
+                    // jaxpParser = factory.newDocumentBuilder();
+                    Method newDocBuilder =
+                        factoryClass.getMethod("newDocumentBuilder", null);
+                    Object jaxpParser  = newDocBuilder.invoke(factory, null);
+
+                    // domDoc = jaxpParser.newDocument();
+                    Class parserClass = jaxpParser.getClass();
+                    Method newDoc = parserClass.getMethod("newDocument", null);
+                    domDoc = (org.w3c.dom.Document)
+                        newDoc.invoke(jaxpParser, null);
+                    // System.out.println("Using jaxp " +
+                    //   domDoc.getClass().getName());
+                } catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    // e.printStackTrace();
+                } catch (InvocationTargetException ite) {
+                    throw ite.getTargetException(); // throw the root cause
+                }
+            }
+
+            // Check to see if we got a domDoc yet, if not, try to use a
+            // hard coded default
+            if (domDoc == null) {
+                try {
+                    DOMAdapter adapter = (DOMAdapter)
+                        Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
+                    domDoc = adapter.createDocument();
+                    // System.out.println("Using default " +
+                    //   DEFAULT_ADAPTER_CLASS);
+                }
+                catch (ClassNotFoundException e) {
+                    // e.printStackTrace();
+                }
+            }
 
             // Assign DOCTYPE
             DocType dt = document.getDocType();
@@ -164,7 +229,7 @@ public class DOMOutputter {
                 }
             }
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             throw new JDOMException("Exception outputting Document", e);
         }
 
@@ -251,9 +316,17 @@ public class DOMOutputter {
                         namespaces.push(ns);
                     }
                 }
-                domElement.setAttributeNS(attribute.getNamespaceURI(),
-                                          attribute.getQualifiedName(),
-                                          attribute.getValue());
+                // Crimson doesn't like setAttributeNS() for non-NS attribs
+                if ("".equals(attribute.getNamespacePrefix())) {
+                    // No namespace, use setAttribute
+                    domElement.setAttribute(attribute.getQualifiedName(),
+                                            attribute.getValue());
+                }
+                else {
+                    domElement.setAttributeNS(attribute.getNamespaceURI(),
+                                              attribute.getQualifiedName(),
+                                              attribute.getValue());
+                }
             }
 
             // Add mixed content to the DOM element
