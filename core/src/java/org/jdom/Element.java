@@ -405,15 +405,16 @@ public class Element implements Serializable, Cloneable {
      * @return text content for this element, or null if none
      */
     public String getText() {
-        // If we hold only a String, return it directly
-        if ((content != null) && (content.size() == 1)) {
-            if (content.get(0) == null) {
-                return null;
-            } else if (content.get(0) instanceof String) {
-                return (String) content.get(0);
-            }
+        if ((content == null) || (content.size() < 1) || (content.get(0) == null)) {
+            return "";
         }
 
+        // If we hold only a String, return it directly
+        if ((content.size() == 1) && (content.get(0) instanceof String)) {
+            return (String)content.get(0);
+        }
+
+        // Else build String up
         StringBuffer textContent = new StringBuffer();
         boolean hasText = false;
 
