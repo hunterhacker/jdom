@@ -4,9 +4,9 @@ accordance with the license below.  For more information, see
 http://jakarta.apache.org
 
 /*
- * $Header: /home/cvspublic/jdom-contrib/lib/jakarta-regexp.readme,v 1.1 2000/09/29 18:27:14 alex Exp $
- * $Revision: 1.1 $
- * $Date: 2000/09/29 18:27:14 $
+ * $Header: /home/cvspublic/jdom-contrib/lib/jakarta-regexp.readme,v 1.2 2001/02/26 07:01:11 jhunter Exp $
+ * $Revision: 1.2 $
+ * $Date: 2001/02/26 07:01:11 $
  *
  * ====================================================================
  * 
@@ -46,8 +46,8 @@ http://jakarta.apache.org
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
  * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
