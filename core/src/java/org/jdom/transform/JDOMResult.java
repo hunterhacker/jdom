@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.2 2001/06/10 22:01:05 jhunter Exp $
+ $Id: JDOMResult.java,v 1.3 2001/06/14 22:07:00 jhunter Exp $
 
  Copyright (C) 2001 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -68,6 +68,7 @@ import org.jdom.input.*;
 import org.jdom.output.*;
 
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.TransformerFactory; // workaround for @link bug
 
 /**
  * Acts as a holder for a transformation result tree, in the form
