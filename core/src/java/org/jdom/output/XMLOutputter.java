@@ -538,7 +538,7 @@ public class XMLOutputter {
         out.write(element.getQualifiedName());
         int previouslyDeclaredNamespaces = namespaces.size();
         Namespace ns = element.getNamespace();
-        if (ns != Namespace.NO_NAMESPACE) {
+        if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
             String prefix = ns.getPrefix();        
             String uri = namespaces.getURI(prefix);
             if (!ns.getURI().equals(uri)) { // output a new namespace declaration
@@ -661,14 +661,14 @@ public class XMLOutputter {
 
         // I do not yet handle the case where the same prefix maps to
         // two different URIs. For attributes on the same element
-        // this is illegal; but as yet we don;t throw an exception
+        // this is illegal; but as yet we don't throw an exception
         // if someone tries to do this
         Set prefixes = new HashSet();
 
         for (int i=0, size=attributes.size(); i < size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
             Namespace ns = attribute.getNamespace();
-            if (ns != Namespace.NO_NAMESPACE) {
+            if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
                 String prefix = ns.getPrefix();           
                 String uri = namespaces.getURI(prefix);
                 if (!ns.getURI().equals(uri)) { // output a new namespace declaration
@@ -708,7 +708,7 @@ public class XMLOutputter {
         for (int i=0, size=attributes.size(); i < size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
             Namespace ns = attribute.getNamespace();
-            if (ns != Namespace.NO_NAMESPACE) {
+            if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
                 if (!prefixes.contains(ns.getPrefix())) {
                     prefixes.add(ns.getPrefix());
                     boolean printedNamespace = false;
@@ -716,6 +716,7 @@ public class XMLOutputter {
                     while (ancestor != null) {
                         Namespace ancestorSpace = ancestor.getNamespace();
                         if (ancestorSpace == Namespace.NO_NAMESPACE) continue;
+                        if (ancestorSpace == Namespace.XML_NAMESPACE) continue;
                         String uri    = ancestorSpace.getURI();
                         String prefix = ancestorSpace.getPrefix();
                         if (uri.equals(ns.getURI())) {
