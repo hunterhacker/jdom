@@ -52,15 +52,19 @@ Items that need to be done:
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
 
-* Add methods/logic to Verifier for all XML spec. constraints
+* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
+
+--- FOR JDOM 1.0 ---
+
+* Add method org.jdom.Element DOMBuilder.build(org.w3c.dom.Element)
+
+* Consider adding methods/logic to Verifier for all XML spec. constraints
+  (Consider specifically a PCDATA check.  Downside is Elliotte says it 
+   causes a 20% performance penalty on building docs.)
 
 * Consider changing the Verifier method signatures to throw the
   IllegalXXXException directly instead of returning null on error,
   and let the caller pass the exception through
-
-* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
-
---- FOR JDOM 1.0 ---
 
 * Have Jools populate jdom-test
 
@@ -98,7 +102,7 @@ Items that need to be done:
 --- FOR JDOM 1.1 ---
 
 * Add XPath support
-  Much work being done by Michael Hinchey <michael.hinchey@inference.com>
+  Much work being done by Michael Hinchey
 
 * Figure out XPath interface, current best is this:
     List    XPath.getList(Element e, String xpath)  // or Document param
