@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.88 2003/04/02 00:46:42 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.89 2003/04/02 02:08:32 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -193,13 +193,13 @@ import org.jdom.output.*;
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @author Bradley S. Huffman
- * @version $Revision: 1.88 $, $Date: 2003/04/02 00:46:42 $
+ * @version $Revision: 1.89 $, $Date: 2003/04/02 02:08:32 $
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.88 $ $Date: 2003/04/02 00:46:42 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.89 $ $Date: 2003/04/02 02:08:32 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */
@@ -1620,11 +1620,11 @@ public class XMLOutputter implements Cloneable {
 
     // Determine if a character is a XML whitespace.
     // XXX should this method be in Verifier
-    private boolean isWhitespace(char ch) {
-        if (" \t\n\r".indexOf(ch) < 0) {
-            return false;
+    private boolean isWhitespace(char c) {
+        if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
