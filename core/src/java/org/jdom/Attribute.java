@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.28 2001/04/13 21:25:21 jhunter Exp $
+ $Id: Attribute.java,v 1.29 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -346,9 +346,7 @@ public class Attribute implements Serializable, Cloneable {
     /**
      * <p>
      *  This returns a <code>String</code> representation of the
-     *    <code>Attribute</code>, suitable for debugging. If the XML
-     *    representation of the <code>Attribute</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>Attribute</code>, suitable for debugging.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -357,26 +355,11 @@ public class Attribute implements Serializable, Cloneable {
     public String toString() {
         return new StringBuffer()
             .append("[Attribute: ")
-            .append(getSerializedForm())
-            .append("]")
-            .toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>Attribute</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Attribute</code>.
-     */
-    public final String getSerializedForm() {
-        return new StringBuffer()
             .append(getQualifiedName())
             .append("=\"")
             .append(value)
             .append("\"")
+            .append("]")
             .toString();
     }
 
@@ -575,6 +558,28 @@ public class Attribute implements Serializable, Cloneable {
      */
     public Attribute(String name, String prefix, String uri, String value) {
         this(name, value, Namespace.getNamespace(prefix, uri));
+    }
+
+    /**
+     * <p>
+     *  This will return the <code>Attribute</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>Attribute</code>.
+     *
+     * @deprecated Deprecated in Beta7, use
+     * XMLOutputter.outputString(Attribute) instead
+     */
+    public final String getSerializedForm() {
+        // This should really escape the strings
+        return new StringBuffer()
+            .append(getQualifiedName())
+            .append("=\"")
+            .append(value)
+            .append("\"")
+            .toString();
     }
 
 }

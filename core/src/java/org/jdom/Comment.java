@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.14 2001/03/16 23:39:42 jhunter Exp $
+ $Id: Comment.java,v 1.15 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -220,7 +220,8 @@ public class Comment implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Comment</code>, suitable for debugging. If the XML
      *    representation of the <code>Comment</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>{@link #XMLOutputter.outputString(Comment)}</code> 
+     *    should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -229,25 +230,8 @@ public class Comment implements Serializable, Cloneable {
     public String toString() {
         return new StringBuffer()
             .append("[Comment: ")
-            .append(getSerializedForm())
+            .append(new org.jdom.output.XMLOutputter().outputString(this))
             .append("]")
-            .toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>Comment</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Comment</code>.
-     */
-    public final String getSerializedForm() {
-        return new StringBuffer()
-            .append("<!--")
-            .append(text)
-            .append("-->")
             .toString();
     }
 
@@ -301,4 +285,25 @@ public class Comment implements Serializable, Cloneable {
         comment.document = null;
         return comment;
     }
+
+    /**
+     * <p>
+     *  This will return the <code>Comment</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>Comment</code>.
+     *
+     * @deprecated Deprecated in beta7, use XMLOutputter.outputString(Comment)
+     * instead
+     */
+    public final String getSerializedForm() {
+        return new StringBuffer()
+            .append("<!--")
+            .append(text)
+            .append("-->")
+            .toString();
+    }
+
 }

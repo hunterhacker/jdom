@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.42 2001/04/05 05:32:33 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.43 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -550,7 +550,6 @@ public class XMLOutputter implements Cloneable {
      *
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
-     * @param indent <code>int</code> level of indention.  */
     public void outputElementContent(Element element, Writer out)
                       throws IOException {
         List mixedContent = element.getMixedContent();
@@ -559,6 +558,21 @@ public class XMLOutputter implements Cloneable {
         out.flush();
     }
     
+    /**
+     * <p> This will handle printing out an <code>{@link
+     * Element}</code>'s content only, not including its tag, and
+     * attributes.  This can be useful for printing the content of an
+     * element that contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".  </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param out <code>OutputStream</code> to write to.
+    public void outputElementContent(Element element, OutputStream out)
+                                         throws IOException {
+        Writer writer = makeWriter(out);
+        outputElementContent(element, writer);  // output() flushes
+    }
+
     // * * * * * CDATA * * * * *
 
     /**
@@ -570,7 +584,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to write to.
      **/
     public void output(CDATA cdata, Writer out) throws IOException {
-        printCDATASection(cdata, out);
+        printCDATA(cdata, out);
         out.flush();
     }
     
@@ -703,6 +717,32 @@ public class XMLOutputter implements Cloneable {
         output(pi, writer);  // output() flushes
     }
     
+    /**
+     * <p>
+     * Print out a <code>{@link DocType}</code>
+     * </p>
+     *
+     * @param doctype <code>DocType</code> to output.
+     * @param out <code>Writer</code> to write to.
+     **/
+    public void output(DocType doctype, Writer out) throws IOException {
+        printDocType(doctype, out);
+        out.flush();
+    }
+    
+    /**
+     * <p>
+     * Print out a <code>{@link DocType}</code>
+     * </p>
+     *
+     * @param doctype <code>DocType</code> to output.
+     * @param out <code>OutputStream</code> to write to.
+     **/
+    public void output(DocType doctype, OutputStream out) throws IOException {
+        Writer writer = makeWriter(out);
+        output(doctype, writer);  // output() flushes
+    }
+    
 
     // * * * * * String * * * * *
     
@@ -713,9 +753,11 @@ public class XMLOutputter implements Cloneable {
      *
      * @param doc <code>Document</code> to format.
      **/
-    public String outputString(Document doc) throws IOException {
+    public String outputString(Document doc) {
         StringWriter out = new StringWriter();
-        output(doc, out);  // output() flushes
+        try {
+            output(doc, out);  // output() flushes
+        } catch (IOException e) { }
         return out.toString();
     }
 
@@ -726,9 +768,71 @@ public class XMLOutputter implements Cloneable {
      *
      * @param doc <code>Element</code> to format.
      **/
-    public String outputString(Element element) throws IOException {
+    public String outputString(Element element) {
         StringWriter out = new StringWriter();
-        output(element, out);  // output() flushes
+        try {
+            output(element, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * Return a string representing a comment. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     *
+     * @param doc <code>Element</code> to format.
+     **/
+    public String outputString(Comment comment) {
+        StringWriter out = new StringWriter();
+        try {
+            output(comment, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * Return a string representing a CDATA section. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     *
+     * @param doc <code>Element</code> to format.
+     **/
+    public String outputString(CDATA cdata) {
+        StringWriter out = new StringWriter();
+        try {
+            output(cdata, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * Return a string representing a PI. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     *
+     * @param doc <code>ProcessingInstruction</code> to format.
+     **/
+    public String outputString(ProcessingInstruction pi) {
+        StringWriter out = new StringWriter();
+        try {
+            output(pi, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+
+    /**
+     * Return a string representing a DocType. Warning: a String is
+     * Unicode, which may not match the outputter's specified
+     * encoding.
+     *
+     * @param doc <code>DocType</code> to format.
+     **/
+    public String outputString(DocType doctype) {
+        StringWriter out = new StringWriter();
+        try {
+            output(doctype, out);  // output() flushes
+        } catch (IOException e) { }
         return out.toString();
     }
 
@@ -814,7 +918,9 @@ public class XMLOutputter implements Cloneable {
      */
     protected void printComment(Comment comment, Writer out)
                                   throws IOException {
-        out.write(comment.getSerializedForm());
+        out.write("<!--");
+        out.write(comment.getText());
+        out.write("-->");
     }
       
     /**
@@ -827,7 +933,22 @@ public class XMLOutputter implements Cloneable {
      */
     protected void printProcessingInstruction(ProcessingInstruction pi,
                                               Writer out) throws IOException {
-        out.write(pi.getSerializedForm());
+        String target = pi.getTarget();
+        String rawData = pi.getData();
+
+        // Write <?target data?> or if no data then just <?target?>
+        if (!"".equals(rawData)) {
+            out.write("<?");
+            out.write(target);
+            out.write(" ");
+            out.write(rawData);
+            out.write("?>");
+        }
+        else {
+            out.write("<?");
+            out.write(target);
+            out.write("?>");
+        }
     }
     
     /**
@@ -839,9 +960,11 @@ public class XMLOutputter implements Cloneable {
      * @param cdata <code>CDATA</code> to output.
      * @param out <code>Writer</code> to write to.
      */
-    protected void printCDATASection(CDATA cdata, Writer out)
+    protected void printCDATA(CDATA cdata, Writer out)
                                        throws IOException {
-        out.write(cdata.getSerializedForm());
+        out.write("<![CDATA[");
+        out.write(cdata.getText());
+        out.write("]]>");
     }
 
     /**
@@ -1008,7 +1131,7 @@ public class XMLOutputter implements Cloneable {
                           endedWithWhite) {
                         out.write(" ");  // padding
                     }
-                    printCDATASection((CDATA)content, out);
+                    printCDATA((CDATA)content, out);
                     justOutput = CDATA.class;
                 }
             }
@@ -1085,7 +1208,7 @@ public class XMLOutputter implements Cloneable {
                         maybePrintln(out);
                         indent(out, indentLevel);
                     }
-                    printCDATASection((CDATA)content, out);
+                    printCDATA((CDATA)content, out);
                     justOutput = CDATA.class;
                 }
                 // Unsupported types are *not* printed, nor should they exist
@@ -1132,7 +1255,6 @@ public class XMLOutputter implements Cloneable {
     protected void printEntity(Entity entity, Writer out) throws IOException {
         out.write(entity.getSerializedForm());
     }
-    
 
     /**
      * <p>

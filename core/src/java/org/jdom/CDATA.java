@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CDATA.java,v 1.12 2001/04/13 03:45:17 jhunter Exp $
+ $Id: CDATA.java,v 1.13 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -117,35 +117,19 @@ public class CDATA implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>CDATA</code>, suitable for debugging. If the XML
      *    representation of the <code>CDATA</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>{@link #XMLOutputter.outputString(CDATA)}</code> 
+     *    should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
      */
     public String toString() {
-	return new StringBuffer()
-	    .append("[CDATA: ")
-	    .append(getSerializedForm())
-	    .append("]")
-	    .toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>CDATA</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>CDATA</code>.
-     */
-    public final String getSerializedForm() {
-	return new StringBuffer()
-	    .append("<![CDATA[")
-	    .append(text)
-	    .append("]]>")
-	    .toString();
+        return new StringBuffer()
+            .append("[CDATA: ")
+            .append(new org.jdom.output.XMLOutputter().outputString(this))
+            .append("]")
+            .toString();
     }
 
     /**
@@ -192,6 +176,26 @@ public class CDATA implements Serializable, Cloneable {
         // so Object.clone() is all we need here
 
         return cdata;
+    }
+
+    /**
+     * <p>
+     *  This will return the <code>CDATA</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>CDATA</code>.
+     *
+     * @deprecated Deprecated in Beta7, use XMLOutputter.outputString(CDATA)
+     * instead
+     */
+    public final String getSerializedForm() {
+	return new StringBuffer()
+	    .append("<![CDATA[")
+	    .append(text)
+	    .append("]]>")
+	    .toString();
     }
 
 }

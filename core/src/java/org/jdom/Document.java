@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.36 2001/04/18 16:13:58 jhunter Exp $
+ $Id: Document.java,v 1.37 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -581,8 +581,9 @@ public class Document implements Serializable, Cloneable {
      * <p>
      *  This returns a <code>String</code> representation of the
      *    <code>Document</code>, suitable for debugging. If the XML
-     *    representation of the <code>Comment</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    representation of the <code>Document</code> is desired,
+     *    <code>{@link #XMLOutputter.outputString(Document)}</code> 
+     *    should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -594,36 +595,22 @@ public class Document implements Serializable, Cloneable {
 
         if (docType != null) {
             stringForm.append(docType.toString())
-                      .append(" ");
+                      .append(", ");
         } else {
-            stringForm.append(" No DOCTYPE declaration. ");
+            stringForm.append(" No DOCTYPE declaration, ");
         }
 
         Element rootElement = getRootElement();
         if (rootElement != null) {
-            stringForm.append("Root - ")
+            stringForm.append("Root is ")
                       .append(rootElement.toString());
         } else {
-            stringForm.append(" No Root Element.");
+            stringForm.append(" No root element"); // shouldn't happen
         }
 
         stringForm.append("]");
 
         return stringForm.toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>Document</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Document</code>.
-     */
-    public final String getSerializedForm() {
-        throw new RuntimeException(
-          "Document.getSerializedForm() is not yet implemented");
     }
 
     /**
@@ -728,4 +715,22 @@ public class Document implements Serializable, Cloneable {
             return false;
         }
     }
+
+    /**
+     * <p>
+     *  This will return the <code>Document</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>Document</code>.
+     *
+     * @deprecated Deprecated in beta7, use
+     * XMLOutputter.outputString(Document) instead
+     */
+    public final String getSerializedForm() {
+        throw new RuntimeException(
+          "Document.getSerializedForm() is not yet implemented");
+    }
+
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.17 2001/03/16 23:39:43 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.18 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -494,7 +494,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>ProcessingInstruction</code>, suitable for debugging. If the XML
      *    representation of the <code>ProcessingInstruction</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>{@link #XMLOutputter.outputString(ProcessingInstruction}</code>
+     *    should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -502,39 +503,10 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public String toString() {
         return new StringBuffer()
-            .append("[Processing Instruction: ")
-            .append(getSerializedForm())
+            .append("[ProcessingInstruction: ")
+            .append(new org.jdom.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>ProcessingInstruction</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Comment</code>.
-     */
-    public final String getSerializedForm() {
-        // Return <?target data?> or if no data then just <?target?>
-        if (!"".equals(rawData)) {
-            return new StringBuffer()
-                .append("<?")
-                .append(target)
-                .append(" ")
-                .append(rawData)
-                .append("?>")
-                .toString();
-        }
-        else {
-            return new StringBuffer()
-                .append("<?")
-                .append(target)
-                .append("?>")
-                .toString();
-        }
     }
 
     /**
@@ -596,6 +568,36 @@ public class ProcessingInstruction implements Serializable, Cloneable {
 
         return pi;
     }
+
+    /**
+     * <p>
+     *  This will return the <code>ProcessingInstruction</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>ProcessingInstruction</code>.
+     *
+     * @deprecated Deprecated in Beta7, use
+     * XMLOutputter.outputString(ProcessingInstruction) instead
+     */
+    public final String getSerializedForm() {
+        // Return <?target data?> or if no data then just <?target?>
+        if (!"".equals(rawData)) {
+            return new StringBuffer()
+                .append("<?")
+                .append(target)
+                .append(" ")
+                .append(rawData)
+                .append("?>")
+                .toString();
+        }
+        else {
+            return new StringBuffer()
+                .append("<?")
+                .append(target)
+                .append("?>")
+                .toString();
+        }
+    }
 }
-
-

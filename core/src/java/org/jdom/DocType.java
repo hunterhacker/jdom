@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.12 2001/04/18 16:13:58 jhunter Exp $
+ $Id: DocType.java,v 1.13 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -240,9 +240,7 @@ public class DocType implements Serializable, Cloneable {
     /**
      * <p>
      *  This returns a <code>String</code> representation of the
-     *    <code>DocType</code>, suitable for debugging. If the XML
-     *    representation of the <code>DocType</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>DocType</code>, suitable for debugging. 
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -251,45 +249,9 @@ public class DocType implements Serializable, Cloneable {
     public String toString() {
         return new StringBuffer()
             .append("[DocType: ")
-            .append(getSerializedForm())
+            .append(new org.jdom.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>DocType</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>DocType</code>.
-     */
-    public final String getSerializedForm() {
-        boolean hasPublic = false;
-
-        StringBuffer serForm = new StringBuffer()
-            .append("<!DOCTYPE ")
-            .append(elementName);
-
-        if ((publicID != null) && (!publicID.equals(""))) {
-            serForm.append(" PUBLIC \"")
-                   .append(publicID)
-                   .append("\"");
-            hasPublic = true;
-        }
-
-        if ((systemID != null) && (!systemID.equals(""))) {
-            if (!hasPublic) {
-                serForm.append(" SYSTEM");
-            }
-            serForm.append(" \"")
-                   .append(systemID)
-                   .append("\"");
-        }
-        serForm.append(">");
-
-        return serForm.toString();
     }
 
     /**
@@ -359,4 +321,44 @@ public class DocType implements Serializable, Cloneable {
         // (Strings) and references are copied by Object.clone()
         return docType;
     }
+
+    /**
+     * <p>
+     *  This will return the <code>DocType</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>DocType</code>.
+     *
+     * @deprecated Deprecated in Beta7, use XMLOutputter.outputString(DocType)
+     * instead
+     */
+    public final String getSerializedForm() {
+        boolean hasPublic = false;
+
+        StringBuffer serForm = new StringBuffer()
+            .append("<!DOCTYPE ")
+            .append(elementName);
+
+        if ((publicID != null) && (!publicID.equals(""))) {
+            serForm.append(" PUBLIC \"")
+                   .append(publicID)
+                   .append("\"");
+            hasPublic = true;
+        }
+
+        if ((systemID != null) && (!systemID.equals(""))) {
+            if (!hasPublic) {
+                serForm.append(" SYSTEM");
+            }
+            serForm.append(" \"")
+                   .append(systemID)
+                   .append("\"");
+        }
+        serForm.append(">");
+
+        return serForm.toString();
+    }
+
 }

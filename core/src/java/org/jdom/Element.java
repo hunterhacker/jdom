@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.70 2001/04/18 17:19:20 jhunter Exp $
+ $Id: Element.java,v 1.71 2001/04/20 07:30:35 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -1644,7 +1644,8 @@ public class Element implements Serializable, Cloneable {
      *  This returns a <code>String</code> representation of the
      *    <code>Element</code>, suitable for debugging. If the XML
      *    representation of the <code>Element</code> is desired,
-     *    <code>{@link #getSerializedForm}</code> should be used.
+     *    <code>{@link #XMLOutputter.outputString(Element)}</code> 
+     *    should be used.
      * </p>
      *
      * @return <code>String</code> - information about the
@@ -1665,20 +1666,6 @@ public class Element implements Serializable, Cloneable {
         stringForm.append("/>]");
 
         return stringForm.toString();
-    }
-
-    /**
-     * <p>
-     *  This will return the <code>Element</code> in XML format,
-     *    usable in an XML document.
-     * </p>
-     *
-     * @return <code>String</code> - the serialized form of the
-     *         <code>Element</code>.
-     */
-    public final String getSerializedForm() {
-        throw new RuntimeException(
-          "Element.getSerializedForm() is not yet implemented");
     }
 
     /**
@@ -1956,6 +1943,23 @@ public class Element implements Serializable, Cloneable {
         attributes.add(attribute);
         attribute.setParent(this);
         return this;
+    }
+
+    /**
+     * <p>
+     *  This will return the <code>Element</code> in XML format,
+     *    usable in an XML document.
+     * </p>
+     *
+     * @return <code>String</code> - the serialized form of the
+     *         <code>Element</code>.
+     *
+     * @deprecated Deprecated in beta7, use XMLOutputter.outputString(Element)
+     * instead
+     */
+    public final String getSerializedForm() {
+        throw new RuntimeException(
+          "Element.getSerializedForm() is not yet implemented");
     }
 
 }

@@ -2,6 +2,12 @@ Items that need to be done:
 
 --- RIGHT AWAY ---
 
+* Determine if getSerializedForm() should be brought back and implemented
+  to call XMLOutputter.outputString() methods.
+
+* Consider deprecating DOMBuilder.build(File) and company
+  Although I'd like a way to keep them for testing
+
 * Make setAttributes() atomic
 
 * Determine if setMixedContent() should remain atomic on failure or not.
@@ -120,8 +126,6 @@ Items that need to be done:
 * Verify we get good error handling if someone passes null to any add/set
   method.  Consensus is throw an NPE if passing null to a setList-style
   method.
-
-* Remove getSerializedForm() calls.  Move logic into XMLOutputter.
 
 * Determine if DOMBuilder and DOMOutputter should transparently support DOM1.
 
