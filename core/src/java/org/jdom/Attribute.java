@@ -112,7 +112,7 @@ public class Attribute implements Serializable, Cloneable {
         }
 
         this.name = name;
-        this.value = value;
+        setValue(value);
         this.namespace = namespace;
     }
 
