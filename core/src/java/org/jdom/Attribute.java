@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.31 2001/05/08 22:23:55 jhunter Exp $
+ $Id: Attribute.java,v 1.32 2001/06/22 05:31:22 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,7 +77,7 @@ import java.io.IOException;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.31 $ $Date: 2001/05/08 22:23:55 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.32 $ $Date: 2001/06/22 05:31:22 $ $Name:  $";
 
     /** The local name of the <code>Attribute</code> */
     protected String name;
@@ -143,6 +143,22 @@ public class Attribute implements Serializable, Cloneable {
      */
     public Element getParent() {
         return parent;
+    }
+
+    /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this Attribute, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this Attribute, or null.
+     */
+    public Document getDocument() {
+        if (parent != null) {
+            return parent.getDocument();
+        }
+        return null;
     }
 
     /**

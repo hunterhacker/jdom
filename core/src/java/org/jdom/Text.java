@@ -140,6 +140,22 @@ public class Text implements Serializable, Cloneable {
     }
 
     /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this Text, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this Text, or null.
+     */
+    public Document getDocument() {
+        if (parent != null) {
+            return parent.getDocument();
+        }
+        return null;
+    }
+
+    /**
      * <p>This will set the parent of the <code>Text</code> node to the supplied
      *   <code>{@link Element}</code>. This method is intentionally left as
      *   <code>protected</code> so that only JDOM internals use it.</p>
