@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.11 2002/03/16 12:15:40 jhunter Exp $
+ $Id: ContentList.java,v 1.12 2002/04/02 09:02:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,6 +57,7 @@
 package org.jdom;
 
 import java.util.*;
+import java.util.NoSuchElementException; // mysteriously helps JDK 1.1.x builds
 
 import org.jdom.filter.Filter;
 
@@ -71,7 +72,7 @@ import org.jdom.filter.Filter;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.11 $, $Date: 2002/03/16 12:15:40 $
+ * @version $Revision: 1.12 $, $Date: 2002/04/02 09:02:17 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -82,7 +83,7 @@ import org.jdom.filter.Filter;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.11 $ $Date: 2002/03/16 12:15:40 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.12 $ $Date: 2002/04/02 09:02:17 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
