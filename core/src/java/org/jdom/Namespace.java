@@ -118,8 +118,8 @@ public final class Namespace {
         mappings = new HashMap();
 
         // Add the "empty" namespace
-        namespaces.put("", NO_NAMESPACE);
         mappings.put("", "");
+        namespaces.put("&", NO_NAMESPACE);
         mappings.put("xml", "http://www.w3.org/XML/1998/namespace");
         namespaces.put("xml&http://www.w3.org/XML/1998/namespace", XML_NAMESPACE);
     }
@@ -128,16 +128,6 @@ public final class Namespace {
      * <p>
      *  This will retrieve (if in existence) or create (if not) a 
      *  <code>Namespace</code> for the supplied prefix and URI.
-     * </p><p>
-     *  <b>Note</b>: Because the prefix of an XML namespace is both 
-     *    non-normative and not an intrinsic part of the 
-     *    <code>Namespace</code>, it is possible that the
-     *    supplied <code>uri</code> is already attached to a 
-     *    <code>Namespace</code>, and a different prefix is used by it. 
-     *    In this case, the existing <code>Namespace</code>
-     *    is returned, <i>with the different prefix</i>, and the supplied 
-     *    <code>prefix</code>
-     *    is ignored. This is perfectly legal XML namespace behavior.
      * </p>
      *
      * @param prefix <code>String</code> prefix to map to 
@@ -160,8 +150,9 @@ public final class Namespace {
         }
 
         // Return existing namespace if found
-        if (namespaces.containsKey(uri)) {
-            return (Namespace)namespaces.get(uri);
+        Namespace preexisting = (Namespace) namespaces.get(prefix + "&" + uri);
+        if (preexisting != null) {
+            return preexisting;
         }
 
         // Ensure proper naming
@@ -177,11 +168,6 @@ public final class Namespace {
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
                 "Namespace URIs must be non-null and non-empty Strings.");
-        }
-
-        // Return existing namespace if found
-        if (namespaces.containsKey(uri)) {
-            return (Namespace)namespaces.get(prefix + "&" + uri);
         }
 
         // Finally, store and return
