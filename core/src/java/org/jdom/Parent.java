@@ -1,6 +1,6 @@
 /*--
 
- $Id: Parent.java,v 1.5 2003/06/18 02:59:44 jhunter Exp $
+ $Id: Parent.java,v 1.6 2004/02/05 10:45:33 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.5 $, $Date: 2003/06/18 02:59:44 $
+ * @version $Revision: 1.6 $, $Date: 2004/02/05 10:45:33 $
  */
 public interface Parent extends Cloneable, Serializable {
 
@@ -351,4 +351,13 @@ public interface Parent extends Cloneable, Serializable {
      * @return an iterator to walk descendants that match a filter
      */
     Iterator getDescendants(Filter filter);
+
+    /**
+     * Return this parent's parent, or null if this parent is currently
+     * not attached to another parent. This is the same method as in Child but
+     * also added to Parent to allow more easy up-the-tree walking.
+     *
+     * @return this parent's parent or null if none
+     */
+    Parent getParent();
 }

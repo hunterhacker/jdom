@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.73 2003/06/18 02:59:44 jhunter Exp $
+ $Id: Document.java,v 1.74 2004/02/05 10:45:33 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.73 $, $Date: 2003/06/18 02:59:44 $
+ * @version $Revision: 1.74 $, $Date: 2004/02/05 10:45:33 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.73 $ $Date: 2003/06/18 02:59:44 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.74 $ $Date: 2004/02/05 10:45:33 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible
@@ -462,9 +462,6 @@ public class Document implements Parent {
      * </p>
      *
      * @param uri the base URI of this document
-     *
-     * @throws MalformedURIException if <code>URI</code> is
-     *     not a legal URI
      */
     public final void setBaseURI(String uri) {
         this.baseURI = uri;  // XXX We don't check the URI
@@ -655,6 +652,10 @@ public class Document implements Parent {
      */
     public Iterator getDescendants(Filter filter) {
         return new FilterIterator(new DescendantIterator(this), filter);
+    }
+
+    public Parent getParent() {
+        return null;  // documents never have parents
     }
 
 
