@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.2 2003/05/05 20:26:26 jhunter Exp $
+ $Id: Format.java,v 1.3 2003/05/29 02:26:50 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -134,13 +134,13 @@ import java.lang.reflect.Method;
  * xml:space with the value "default" formatting is turned back on for the child
  * element and then off for the remainder of the parent element.
  *
- * @version $Revision: 1.2 $, $Date: 2003/05/05 20:26:26 $
+ * @version $Revision: 1.3 $, $Date: 2003/05/29 02:26:50 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.2 $ $Date: 2003/05/05 20:26:26 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.3 $ $Date: 2003/05/29 02:26:50 $ $Name:  $";
 
     /**
      * Returns a Format object that performs no whitespace changes, uses
@@ -241,6 +241,15 @@ public class Format implements Cloneable {
     }
 
     /**
+     * Returns the current escape strategy
+     *
+     * @return the current escape strategy
+     */
+    public EscapeStrategy getEscapeStrategy() {
+        return escapeStrategy;
+    }
+
+    /**
      * This will set the newline separator (<code>lineSeparator</code>).
      * The default is <code>\r\n</code>. Note that if the "newlines"
      * property is false, this value is irrelevant.  To make it output
@@ -273,6 +282,15 @@ public class Format implements Cloneable {
     }
 
     /**
+     * Returns the current line separator.
+     *
+     * @return the current line separator
+     */
+    public String getLineSeparator() {
+        return lineSeparator;
+    }
+
+    /**
      * This will set whether the XML declaration
      * (<code>&lt;&#063;xml version="1&#046;0"
      * encoding="UTF-8"&#063;&gt;</code>)
@@ -286,6 +304,15 @@ public class Format implements Cloneable {
     public Format setOmitEncoding(boolean omitEncoding) {
         this.omitEncoding = omitEncoding;
         return this;
+    }
+
+    /**
+     * Returns whether the XML declaration encoding will be omitted.
+     *
+     * @return whether the XML declaration encoding will be omitted
+     */
+    public boolean getOmitEncoding() {
+        return omitEncoding;
     }
 
     /**
@@ -304,6 +331,15 @@ public class Format implements Cloneable {
     }
 
     /**
+     * Returns whether the XML declaration will be omitted.
+     *
+     * @return whether the XML declaration will be omitted
+     */
+    public boolean getOmitDeclaration() {
+        return omitDeclaration;
+    }
+
+    /**
      * This will set whether empty elements are expanded from
      * <code>&lt;tagName/&gt;</code> to
      * <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
@@ -315,6 +351,15 @@ public class Format implements Cloneable {
     public Format setExpandEmptyElements(boolean expandEmptyElements) {
         this.expandEmptyElements = expandEmptyElements;
         return this;
+    }
+
+    /**
+     * Returns whether empty elements are expanded.
+     *
+     * @return whether empty elements are expanded
+     */
+    public boolean getExpandEmptyElements() {
+        return expandEmptyElements;
     }
 
     /**
@@ -333,6 +378,17 @@ public class Format implements Cloneable {
     }
 
     /**
+     * Returns whether content between tags consisting of all
+     * whitespace is printed or trimmed.
+     *
+     * @return whether content between tags consisting of all
+     * whitespace is printed or trimmed
+     */
+    public boolean getTrimAllWhite() {
+        return trimAllWhite;
+    }
+
+    /**
      * This will set whether the text has leading/trailing whitespace
      * trimmed.
      *
@@ -345,6 +401,15 @@ public class Format implements Cloneable {
     public Format setTextTrim(boolean textTrim) {
         this.textTrim = textTrim;
         return this;
+    }
+
+    /**
+     * Returns whether the text has leading/trailing whitespace trimmed.
+     *
+     * @return whether the text has leading/trailing whitespace trimmed
+     */
+    public boolean getTextTrim() {
+        return textTrim;
     }
 
     /**
@@ -361,6 +426,17 @@ public class Format implements Cloneable {
     public Format setTextNormalize(boolean textNormalize) {
         this.textNormalize = textNormalize;
         return this;
+    }
+
+    /**
+     * Returns whether the text is output verbatim (false)
+     * or with whitespace normalized.
+     *
+     * @return whether the text is output verbatim (false)
+     * or with whitespace normalized
+     */
+    public boolean getTextNormalize() {
+        return textNormalize;
     }
 
     /**
@@ -383,6 +459,14 @@ public class Format implements Cloneable {
         return this;
     }
 
+    /**
+     * Returns the indent string in use.
+     *
+     * @return the indent string in use
+     */
+    public String getIndent() {
+        return indent;
+    }
 
     /**
      * Sets the output encoding.  The name should be an accepted XML
@@ -396,6 +480,15 @@ public class Format implements Cloneable {
         this.encoding = encoding;
         escapeStrategy = new DefaultEscapeStrategy(encoding);
         return this;
+    }
+
+    /**
+     * Returns the configured output encoding.
+     *
+     * @return the output encoding
+     */
+    public String getEncoding() {
+        return encoding;
     }
 
     protected Object clone() {
