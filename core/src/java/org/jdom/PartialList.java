@@ -121,7 +121,6 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
-	
 	if (parent != null) {
             parent.clearContentCache();
 	}
@@ -141,10 +140,10 @@ class PartialList extends LinkedList {
             backingList.add(o);
         }
 
+        if (o instanceof Element) {
+            ((Element)o).setParent(parent);  // null is OK
+        }
         if (parent != null) {
-            if (o instanceof Element) {
-                ((Element)o).setParent(parent);
-            }
 	    parent.clearContentCache();
         }
     }
@@ -163,10 +162,10 @@ class PartialList extends LinkedList {
             backingList.add(o);
         }
 
+        if (o instanceof Element) {
+            ((Element)o).setParent(parent);  // null is OK
+        }
         if (parent != null) {
-            if (o instanceof Element) {
-                ((Element)o).setParent(parent);
-            }
 	    parent.clearContentCache();
         }
     }
@@ -181,10 +180,11 @@ class PartialList extends LinkedList {
     public boolean add(Object o) {
         backingList.add(o);
 
+        if (o instanceof Element) {
+            ((Element)o).setParent(parent);  // null is OK
+        }
+
         if (parent != null) {
-            if (o instanceof Element) {
-                ((Element)o).setParent(parent);
-            }
 	    parent.clearContentCache();
         }
 
@@ -207,7 +207,6 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
-	
 	if (parent != null) {
 	    parent.clearContentCache();
 	}
@@ -239,13 +238,13 @@ class PartialList extends LinkedList {
             backingList.addAll(c);
         }
 
-        if (parent != null) {
-            for (Iterator i = c.iterator(); i.hasNext(); ) {
-                Object o = i.next();
-                if (o instanceof Element) {
-                    ((Element)o).setParent(parent);
-                }
+        for (Iterator i = c.iterator(); i.hasNext(); ) {
+            Object o = i.next();
+            if (o instanceof Element) {
+                ((Element)o).setParent(parent);  // null is OK
             }
+        }
+        if (parent != null) {
 	    parent.clearContentCache();
         }
 
@@ -275,13 +274,13 @@ class PartialList extends LinkedList {
             backingList.addAll(c);
         }
 
-        if (parent != null) {
-            for (Iterator i = c.iterator(); i.hasNext(); ) {
-                Object o = i.next();
-                if (o instanceof Element) {
-                    ((Element)o).setParent(parent);
-                }
+        for (Iterator i = c.iterator(); i.hasNext(); ) {
+            Object o = i.next();
+            if (o instanceof Element) {
+                ((Element)o).setParent(parent);  // null is OK
             }
+        }
+        if (parent != null) {
 	    parent.clearContentCache();
         }
 
@@ -325,11 +324,10 @@ class PartialList extends LinkedList {
         if (old instanceof Element) {
             ((Element)old).setParent(null);
         }
-
+        if (current instanceof Element) {
+            ((Element)current).setParent(parent);  // null is OK
+        }
         if (parent != null) {
-            if (current instanceof Element) {
-                ((Element)current).setParent(parent);
-            }
 	    parent.clearContentCache();
         }
 
@@ -348,15 +346,21 @@ class PartialList extends LinkedList {
      *          range (<tt>index &lt; 0 || index &gt; size()</tt>).
      */
     public void add(int index, Object current) {
-        backingList.add(backingList.indexOf(get(index)), current);
-
-        if (parent != null) {
-            if (current instanceof Element) {
-                ((Element)current).setParent(parent);
-            }
-	    parent.clearContentCache();
+        if (index == size()) {
+            // Adding to "length" spot is special case meaning to our end
+            addLast(current);
         }
-        super.add(index, current);
+        else {
+            backingList.add(backingList.indexOf(get(index)), current);
+
+            if (current instanceof Element) {
+                ((Element)current).setParent(parent);  // null is OK
+            }
+            if (parent != null) {
+	        parent.clearContentCache();
+            }
+            super.add(index, current);
+        }
     }
 
     /**
@@ -410,13 +414,3 @@ class PartialList extends LinkedList {
    }
 
 }
-
-
-
-
-
-
-
-
-
-
