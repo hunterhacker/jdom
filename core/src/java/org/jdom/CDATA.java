@@ -110,18 +110,21 @@ public class CDATA implements Serializable, Cloneable {
 	return text;
     }
 
-//
-//    /**
-//     * <p>
-//     * This will set the value of the <code>CDATA</code>.
-//     * </p>
-//     *
-//     * @param text <code>String</code> text for CDATA.
-//     * @return <code>CDATA</code> - this CDATA modified.
-//     */
-//    public void setText(String text) {
-//	this.text = text; // need above Verifier check!
-//    }
+
+    /**
+     * <p>
+     * This will set the value of the <code>CDATA</code>.
+     * </p>
+     *
+     * @param text <code>String</code> text for CDATA.
+     * @return <code>CDATA</code> - this CDATA modified.
+     * 
+     * @deprecated Deprecated in beta6, because CDATA has no parentage it 
+     * must be immutable
+     */
+    public void setText(String text) {
+	this.text = text; // need above Verifier check!
+    }
 
     /**
      * <p>
