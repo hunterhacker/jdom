@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.11 2001/05/18 22:13:10 jhunter Exp $
+ $Id: SAXHandler.java,v 1.12 2001/05/18 22:34:08 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.11 $ $Date: 2001/05/18 22:13:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.12 $ $Date: 2001/05/18 22:34:08 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -125,30 +125,65 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      *
      * @param document <code>Document</code> being parsed.
      * @throws IOException when errors occur.
+     *
+     * @deprecated Deprecated in beta7, use SAXHandler() instead and let
+     * SAXHandler create the Document, then retrieve it with getDocument()
      */
     public SAXHandler(Document document) throws IOException {
-        // XXX This is the second use of DJF; this should be the only one
-        this(document, new DefaultJDOMFactory());
+        this(new DefaultJDOMFactory());
+        this.document = document;
     }
 
     /**
      * <p>
-     * This will set the <code>Document</code> to use.
+     * This will create a new <code>SAXHandler</code> that listens to SAX
+     * events and creates a JDOM Document.  The objects will be constructed
+     * using the default factory.
      * </p>
      *
-     * @param document <code>Document</code> being parsed.
      * @throws IOException when errors occur.
      */
-    public SAXHandler(Document document, JDOMFactory factory)
-                                             throws IOException {
-        this.document = document;
-        this.factory = factory;
+    public SAXHandler() throws IOException {
+        this((JDOMFactory)null);
+    }
+
+    /**
+     * <p>
+     * This will create a new <code>SAXHandler</code> that listens to SAX
+     * events and creates a JDOM Document.  The objects will be constructed
+     * using the provided factory.
+     * </p>
+     *
+     * @param factory <code>JDOMFactory</code> to be used for constructing
+     * objects
+     * @throws IOException when errors occur.
+     */
+    public SAXHandler(JDOMFactory factory) throws IOException {
+        if (factory != null) {
+            this.factory = factory;
+        } else {
+            this.factory = new DefaultJDOMFactory();
+        }
+
         atRoot = true;
         stack = new Stack();
         declaredNamespaces = new LinkedList();
         availableNamespaces = new LinkedList();
         availableNamespaces.add(Namespace.XML_NAMESPACE);
         externalEntities = new HashMap();
+
+        document = this.factory.document((Element)null);
+    }
+
+    /**
+     * <p>
+     * Returns the document.  Should be called after parsing is complete.
+     * </p>
+     *
+     * @return <code>Document</code> - Document that was built
+     */
+    public Document getDocument() {
+        return document;
     }
 
     /**
@@ -429,8 +464,8 @@ if (!inDTD) {
      * @param length <code>int</code> - length of whitespace after start
      * @throws SAXException when things go wrong
      */
-    public void ignorableWhitespace(char[] ch, int start,int length) throws SAXException {
-         
+    public void ignorableWhitespace(char[] ch, int start, int length) 
+                                                     throws SAXException {
         if (suppress) return;
 
         ((Element)stack.peek()).addContent(new String(ch, start, length));

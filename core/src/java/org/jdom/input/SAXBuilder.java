@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.47 2001/05/18 22:13:10 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.48 2001/05/18 22:34:07 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.47 $ $Date: 2001/05/18 22:13:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.48 $ $Date: 2001/05/18 22:34:07 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -114,7 +114,7 @@ public class SAXBuilder {
     private XMLFilter saxXMLFilter = null;
  
     /** The factory for creating new JDOM objects */
-    private JDOMFactory factory = new DefaultJDOMFactory();
+    private JDOMFactory factory = null;
 
     /**
      * <p>
@@ -240,9 +240,6 @@ public class SAXBuilder {
      */
     protected Document build(InputSource in) throws JDOMException {
 
-        // XXX We should probably let SAXHandler construct the document
-        Document doc = factory.document((Element)null);
-
         try {
             XMLReader parser = null;
             if (saxDriverClass != null) {
@@ -314,7 +311,7 @@ public class SAXBuilder {
                 parser = saxXMLFilter;
             }
 
-            SAXHandler contentHandler = new SAXHandler(doc, factory);
+            SAXHandler contentHandler = new SAXHandler(factory);
             contentHandler.setExpandEntities(expand);  // pass thru behavior
 
             parser.setContentHandler(contentHandler);
@@ -427,7 +424,7 @@ public class SAXBuilder {
             
             parser.parse(in);
 
-            return doc;
+            return contentHandler.getDocument();
         }
         catch (Exception e) {
             if (e instanceof SAXParseException) {
