@@ -70,6 +70,7 @@ import org.jdom.*;
  *
  * @author Jason Hunter
  * @author Jon Baer
+ * @author David Bartle
  * @version 0.5
  */
 public class ResultSetBuilder {
@@ -110,19 +111,37 @@ public class ResultSetBuilder {
         Document doc = new Document(root);
 
         int rowCount = 0;
+
+        // get the column labels for this record set 
+        String[] columnName = new String[colCount]; 
+        for (int index = 0; index < colCount; index++) { 
+          columnName[index] = rsmd.getColumnName(index+1); 
+        } 
+
+        // build the org.jdom.Document out of the result set 
+        String name; 
+        String value; 
+        Element entry; 
+        Element child; 
+        
         while (rs.next() && (rowCount++ < maxRows)) {
-          Element entry = new Element(rowName, ns);
+          entry = new Element(rowName, ns);
           for (int col = 1; col <= colCount; col++) {
-            String origName = rsmd.getColumnName(col);
-            String name = lookupName(origName);
-            String value = rs.getString(col);
-            if (isAttribute(origName)) {
+            if (names.isEmpty()) {
+              name = columnName[col-1];
+            }
+            else {
+              name = lookupName(columnName[col-1]);
+            }
+
+            value = rs.getString(col);
+            if (!attribs.isEmpty() && isAttribute(name)) {
               if (!rs.wasNull()) {
                 entry.addAttribute(name, value);
               }
             }
             else {
-              Element child = new Element(name, ns);
+              child = new Element(name, ns);
               if (!rs.wasNull()) {
                 child.setText(value);
               }
