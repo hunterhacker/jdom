@@ -83,18 +83,23 @@ public abstract class NodeSet {
     List newList = new ArrayList();
     for (Iterator iter = list.iterator(); iter.hasNext(); ) {
       Object each = iter.next();
-
+      
       switch (step.getAxis().getCode()) {
-      case Axis.CHILD: {
-        nodetestChild(each, step, newList);
-        break;
-      }
-
-      // All the other cases are still in xpath.a.JDOMLocator ...
-
-      default: {
-        throw new NotImplementedException("Support for " + step.getAxis() + " is not implemented. ");
-      }
+          case Axis.CHILD: {
+            nodetestChild(each, step, newList);
+            break;
+          }
+          
+          case Axis.ATTRIBUTE: {
+            nodetestAttribute(each, step, newList);
+            break;
+          }
+            
+            // All the other cases are still in xpath.a.JDOMLocator ...
+            
+          default: {
+            throw new NotImplementedException("Support for " + step.getAxis() + " is not implemented. ");
+          }
       } // end-switch
     }
 
@@ -121,10 +126,18 @@ public abstract class NodeSet {
   }
 
   /**
+   * Do nodetest for axis==attribute.
+   */
+  protected abstract void nodetestAttribute(final Object context,
+                                            Step step,
+                                            List list) throws XPathParseException;
+
+  /**
    * Do nodetest for axis==child.
    */
-  protected abstract void nodetestChild(final Object context, final Step step,
-  List list) throws XPathParseException;
+  protected abstract void nodetestChild(final Object context,
+                                        final Step step,
+                                        List list) throws XPathParseException;
 
   /**
    * If both one and two are null return true,

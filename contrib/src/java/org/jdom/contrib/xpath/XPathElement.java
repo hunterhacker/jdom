@@ -320,7 +320,7 @@ public class XPathElement {
    */
   public Attribute getAttribute(String prefix, String localName) {
     Attribute result = element.getAttribute(localName);
-    if (prefix != null) {
+    if ( (result != null) && (prefix != null) ) {
       if (prefix.equals(result.getNamespacePrefix()) == false) {
         result = null;
       }

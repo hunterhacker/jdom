@@ -46,9 +46,10 @@ public class LocationPath extends PathExpr {
     return "[LocationPath: " + _steps + "]";
   }
 
-  public void isAbsolute(boolean isAbsolute) {
+  public void setAbsolute(boolean isAbsolute) {
+    System.err.println("LocationPath.setAbsolute(" + isAbsolute + ")");
     _isAbsolute = isAbsolute;
-    if (_steps.size() == 1) {
+    if (_steps.size() >= 1) {
       // set the first step to be absolute
       ((Step) _steps.get(0)).setAbsolute(isAbsolute);
     }

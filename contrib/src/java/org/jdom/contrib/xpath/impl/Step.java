@@ -58,6 +58,7 @@ public class Step extends XPathExprImpl {
   }
 
   public void setAbsolute(boolean isAbsolute) {
+    System.err.println("Step.setAbsolute(" + isAbsolute + ")");
     this.isAbsolute = isAbsolute;
   }
 

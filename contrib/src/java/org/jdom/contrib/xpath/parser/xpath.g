@@ -73,23 +73,24 @@ absolute_location_path returns [LocationPath path]
 		(	SLASH^
 		|	DOUBLE_SLASH^
 		)
-		(	(STAR|IDENTIFIER)=>
+		(	(AT|STAR|IDENTIFIER)=>
 			path=relative_location_path
-		)?
+			|
+		)
 
 		{
 			if ( path == null ) {
 				path = new LocationPath();
 			}
 
-			path.isAbsolute(true);
+			System.err.println("making absolute");
+			path.setAbsolute(true);
 		}
 	;
 
 relative_location_path returns [LocationPath path]
 	{
 		path = new LocationPath();
-
 		Step step = null;
 	}
 	:
@@ -162,6 +163,9 @@ axis returns [String axisName]
 			}
 		// FIXME
 		|	AT
+			{
+				axisName = "attribute";
+			}
 		)
 	;
 

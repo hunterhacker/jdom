@@ -88,6 +88,35 @@ public class JdomNodeSet extends NodeSet {
     }
   }
 
+  protected void nodetestAttribute(final Object context, Step step, List list)
+    throws XPathParseException {
+
+    if ((context instanceof Element) == false) {
+      return;
+    }
+
+    Element element = (Element) context;
+
+    switch (step.getNodetype().getCode()) {
+
+        case Nodetype.ELEMENT: {
+          
+          if ( "*".equals(step.getLocalName()) ) {
+            list.addAll(element.getAttributes());
+          } else {
+            Object attr = elemext(element).getAttribute(step.getPrefix(), step.getLocalName());
+            if (attr != null) {
+              list.add(attr);
+            }
+          }
+          break;
+        }
+        
+        default:
+          throw new XPathParseException("Cannot have axis=ATTRIBUTE for any other than nodetype=ELEMENT.");
+    }
+  }
+
   /**
    * Do nodetest for axis==child.
    */

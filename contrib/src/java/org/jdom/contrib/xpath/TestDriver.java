@@ -36,7 +36,7 @@ public class TestDriver
     
     try {
 
-      XMLOutputter outputter = new XMLOutputter();
+      XMLOutputter outputter = new XMLOutputter("  ", true);
       outputter.output(doc, System.out);
 
     } catch (IOException ioe) {
@@ -72,17 +72,5 @@ public class TestDriver
       }
       
     }
-
-    try {
-
-      XMLOutputter outputter = new XMLOutputter("  ", true);
-      outputter.output(resultDoc, System.out);
-
-    } catch (IOException ioe) {
-
-      ioe.printStackTrace();
-
-    }
   }
-
 }

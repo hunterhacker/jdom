@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<foo:a xmlns:foo="http://www.foo.org/">
-	<foo:b>
-		<foo:c>
+<a name="toast" cheese="gooey">
+	<b name="goober">
+		<c>
 			I like cheese
-		</foo:c>
-	</foo:b>
-	<foo:b>
-		<foo:c>
+		</c>
+	</b>
+	<b name="toes">
+		<c>
 			Toast is tasty.
-		</foo:c>
-	</foo:b>
-</foo:a>
+		</c>
+	</b>
+</a>
