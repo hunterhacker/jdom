@@ -115,7 +115,7 @@ import org.jdom.ProcessingInstruction;
  * @author Jason Reid
  * @author Wolfgang Werner
  * @author Elliotte Rusty Harold
- * @author David & Will (from Post Tool Design)
+ * @author David &amp; Will (from Post Tool Design)
  * @author Dan Schaffer
  * @author Alex Chaffee (alex@jguru.com)
  * @version 1.0 
@@ -154,6 +154,11 @@ public class XMLOutputter implements Cloneable {
 
     /** should we preserve whitespace or not in text nodes? */
     private boolean trimText = false;
+
+    /** pad string-element boundaries with whitespace **/
+    private boolean padText = false;
+
+    protected String padTextString = " ";
 
     /**
      * <p>
@@ -232,13 +237,17 @@ public class XMLOutputter implements Cloneable {
         this.newlines = that.newlines;
         this.encoding = that.encoding;
         this.lineSeparator = that.lineSeparator;
-        this.trimText = that.trimText;      
+        this.trimText = that.trimText;
+        this.padText = that.padText;
     }
     
     /**
      * <p>This will set the new-line separator. The default is
      * <code>\r\n</code>. Note that if the "newlines" property is
-     * false, this value is irrelevant.  </p>
+     * false, this value is irrelevant.  To make it output the system
+     * default line ending string, call
+     * <code>setLineSeparator(System.getProperty("line.separator"))</code>
+     * </p>
      * 
      * <blockquote>
      *  We could change this to the System default, 
@@ -326,6 +335,26 @@ public class XMLOutputter implements Cloneable {
      **/
     public void setTrimText(boolean trimText) {
         this.trimText = trimText;
+    }
+
+    /**
+     * <p> Ensure that text immediately preceded by or followed by an
+     * element will be "padded" with a single space.  This is used to
+     * allow make browser-friendly HTML, avoiding trimText's
+     * transformation of, e.g., 
+     * <code>The quick &lt;b&gt;brown&lt;/b&gt; fox</code> into
+     * <code>The quick&lt;b&gt;brown&lt;/b&gt;fox</code> (the latter
+     * will run the three separate words together into a single word).
+     *
+     * This setting is not too useful if you haven't also called
+     * {@link setTrimText()}.</p>
+     * 
+     * <p>Default: false </p>
+     *
+     * @param padText <code>boolean</code> if true, pad string-element boundaries
+     **/
+    public void setPadText(boolean padText) {
+        this.padText = padText;
     }
 
     /**
@@ -541,6 +570,25 @@ public class XMLOutputter implements Cloneable {
         writer.flush();         // Flush the output to the underlying stream
     }
 
+    /**
+     * <p> This will handle printing out an <code>{@link
+     * Element}</code>'s content only, not including its tag, and
+     * attributes.  This can be useful for printing the content of an
+     * element that contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".  </p>
+     *
+     * @param element <code>Element</code> to output.
+     * @param out <code>Writer</code> to write to.
+     * @param indent <code>int</code> level of indention.  */
+    public void outputElementContent(Element element, Writer out)
+        throws IOException
+    {
+        List mixedContent = element.getMixedContent();
+        printElementContent(element, out, indentLevel,
+                            new NamespaceStack(),
+                            mixedContent);
+    }
+    
     // output cdata
 
     /**
@@ -972,23 +1020,6 @@ public class XMLOutputter implements Cloneable {
      * @param element <code>Element</code> to output.
      * @param out <code>Writer</code> to write to.
      * @param indent <code>int</code> level of indention.  */
-    public void printElementContent(Element element, Writer out)
-        throws IOException
-    {
-        List mixedContent = element.getMixedContent();
-        printElementContent(element, out, indentLevel,
-                            new NamespaceStack(),
-                            mixedContent);
-    }
-
-    /**
-     * <p> This will handle printing out an <code>{@link
-     * Element}</code>'s content only, not including its tag,
-     * attributes, and namespace info.  </p>
-     *
-     * @param element <code>Element</code> to output.
-     * @param out <code>Writer</code> to write to.
-     * @param indent <code>int</code> level of indention.  */
     protected void printElementContent(Element element, Writer out,
                                        int indentLevel,
                                        NamespaceStack namespaces,
@@ -1021,21 +1052,32 @@ public class XMLOutputter implements Cloneable {
              */
             // Iterate through children
             Object content = null;
+           Class justOutput = null;
             for (int i=0, size=mixedContent.size(); i<size; i++) {
                 content = mixedContent.get(i);
                 // See if text, an element, a processing instruction or a comment
                 if (content instanceof Comment) {
                     printComment((Comment) content, out, indentLevel + 1);
+                   justOutput = Comment.class;
                 } else if (content instanceof String) {
-                    printString((String)content, out);
+                   if (padText && (justOutput == Element.class))
+                       out.write(padTextString);
+                   printString((String)content, out);
+                   justOutput = String.class;
                 } else if (content instanceof Element) {
+                   if (padText && (justOutput == String.class))
+                       out.write(padTextString);
                     printElement((Element) content, out, indentLevel + 1, namespaces);
+                   justOutput = Element.class;
                 } else if (content instanceof Entity) {
                     printEntity((Entity) content, out);
+                   justOutput = Entity.class;
                 } else if (content instanceof ProcessingInstruction) {
                     printProcessingInstruction((ProcessingInstruction) content, out, indentLevel + 1);
+                   justOutput = ProcessingInstruction.class;
                 } else if (content instanceof CDATA) {
                     printCDATASection((CDATA)content, out, indentLevel + 1);
+                   justOutput = CDATA.class;
                 }
                 // Unsupported types are *not* printed
             }
@@ -1275,6 +1317,9 @@ public class XMLOutputter implements Cloneable {
             else if (args[i].equals("-trimText")) {
                 setTrimText(true);
             }
+            else if (args[i].equals("-padText")) {
+                setPadText(true);
+            }
             else {
                 return i;
             }
@@ -1320,3 +1365,4 @@ class NamespaceStack {
     }  
     */
 }
+
