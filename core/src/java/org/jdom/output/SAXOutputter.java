@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.12 2001/08/02 23:56:26 bmclaugh Exp $
+ $Id: SAXOutputter.java,v 1.13 2001/10/12 00:40:02 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -61,6 +61,7 @@ import java.util.*;
 
 import org.xml.sax.*;
 import org.xml.sax.Locator;
+import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.AttributesImpl;
@@ -101,7 +102,36 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.12 $ $Date: 2001/08/02 23:56:26 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.13 $ $Date: 2001/10/12 00:40:02 $ $Name:  $";
+
+    /** Shortcut for SAX namespaces core feature */
+    private static final String NAMESPACES_SAX_FEATURE =
+                        "http://xml.org/sax/features/namespaces";
+
+    /** Shortcut for SAX namespace-prefixes core feature */
+    private static final String NS_PREFIXES_SAX_FEATURE =
+                        "http://xml.org/sax/features/namespace-prefixes";
+
+    /** Shortcut for SAX-ext. lexical handler property */
+    private static final String LEXICAL_HANDLER_SAX_PROPERTY =
+                        "http://xml.org/sax/properties/lexical-handler";
+
+    /** Shortcut for SAX-ext. declaration handler property */
+    private static final String DECL_HANDLER_SAX_PROPERTY =
+                        "http://xml.org/sax/properties/declaration-handler";
+
+    /**
+     * Shortcut for SAX-ext. lexical handler alternate property.
+     * Although this property URI is not the one defined by the SAX
+     * "standard", some parsers use it instead of the official one.
+     */
+    private static final String LEXICAL_HANDLER_ALT_PROPERTY =
+                        "http://xml.org/sax/handlers/LexicalHandler";
+
+    /** Shortcut for SAX-ext. declaration handler alternate property */
+    private static final String DECL_HANDLER_ALT_PROPERTY =
+                        "http://xml.org/sax/handlers/DeclHandler";
+
 
     /** registered <code>ContentHandler</code> */
     private ContentHandler contentHandler;
@@ -117,6 +147,9 @@ public class SAXOutputter {
 
     /** registered <code>LexicalHandler</code> */
     private LexicalHandler lexicalHandler;
+
+    /** registered <code>DeclHandler</code> */
+    private DeclHandler declHandler;
    
     /**
      * Whether to report attribute namespace declarations as xmlns attributes.
@@ -126,6 +159,16 @@ public class SAXOutputter {
      *  SAX namespace specifications</a>
      */
     private boolean declareNamespaces = false;
+
+    /**
+     * <p>
+     * This will create a <code>SAXOutputter</code> without any
+     * registered handler.  The application is then responsible for
+     * registering them using the <code>setXxxHandler()</code> methods.
+     * </p>
+     */
+    public SAXOutputter() {
+    }
 
     /**
      * <p>
@@ -199,6 +242,18 @@ public class SAXOutputter {
     public void setContentHandler(ContentHandler contentHandler) {
         this.contentHandler = contentHandler;
     }
+   
+    /**
+     * <p>
+     * Returns the registered <code>ContentHandler</code>.
+     * </p>
+     *
+     * @return the current <code>ContentHandler</code> or
+     * <code>null</code> if none was registered.
+     */
+    public ContentHandler getContentHandler() {
+        return this.contentHandler;
+    }
 
     /**
      * <p>
@@ -209,6 +264,18 @@ public class SAXOutputter {
      */
     public void setErrorHandler(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
+    }
+
+    /**
+     * <p>
+     * Return the registered <code>ErrorHandler</code>.
+     * </p>
+     *
+     * @return the current <code>ErrorHandler</code> or
+     * <code>null</code> if none was registered.
+     */
+    public ErrorHandler getErrorHandler() {
+        return this.errorHandler;
     }
 
     /**
@@ -224,6 +291,18 @@ public class SAXOutputter {
 
     /**
      * <p>
+     * Return the registered <code>DTDHandler</code>.
+     * </p>
+     *
+     * @return the current <code>DTDHandler</code> or
+     * <code>null</code> if none was registered.
+     */
+    public DTDHandler getDTDHandler() {
+        return this.dtdHandler;
+    }
+
+    /**
+     * <p>
      * This will set the <code>EntityResolver</code>.
      * </p>
      *
@@ -231,6 +310,18 @@ public class SAXOutputter {
      */
     public void setEntityResolver(EntityResolver entityResolver) {
         this.entityResolver = entityResolver;
+    }
+
+    /**
+     * <p>
+     * Return the registered <code>EntityResolver</code>.
+     * </p>
+     *
+     * @return the current <code>EntityResolver</code> or
+     * <code>null</code> if none was registered.
+     */
+    public EntityResolver getEntityResolver() {
+        return this.entityResolver;
     }
 
     /**
@@ -243,7 +334,42 @@ public class SAXOutputter {
     public void setLexicalHandler(LexicalHandler lexicalHandler) {
         this.lexicalHandler = lexicalHandler;
     }
-   
+
+    /**
+     * <p>
+     * Return the registered <code>LexicalHandler</code>.
+     * </p>
+     *
+     * @return the current <code>LexicalHandler</code> or
+     * <code>null</code> if none was registered.
+     */
+    public LexicalHandler getLexicalHandler() {
+        return this.lexicalHandler;
+    }
+
+    /**
+     * <p>
+     *  This will set the <code>DeclHandler</code>.
+     * </p>
+     *
+     * @param declHandler contains declaration callback methods.
+     */
+    public void setDeclHandler(DeclHandler declHandler) {
+        this.declHandler = declHandler;
+    }
+
+    /**
+     * <p>
+     * Return the registered <code>DeclHandler</code>.
+     * </p>
+     *
+     * @return the current <code>DeclHandler</code> or
+     * <code>null</code> if none was registered.
+     */
+    public DeclHandler getDeclHandler() {
+        return this.declHandler;
+    }
+
     /**
      * <p>
      * This will define whether attribute namespace declarations shall be
@@ -257,6 +383,175 @@ public class SAXOutputter {
     public void setReportNamespaceDeclarations(boolean declareNamespaces) {
         this.declareNamespaces = declareNamespaces;
     }
+
+    /**
+     * <p>
+     * This will set the state of a SAX feature.
+     * </p>
+     * <p>
+     * All XMLReaders are required to support setting  to true and  to false.
+     * </p>
+     * <p>
+     * SAXOutputter currently supports the following SAX core features:
+     * <dl>
+     *  <dt><code>http://xml.org/sax/features/namespaces</code></dt>
+     *   <dd><strong>description:</strong> An optional extension handler for
+     *       lexical events like comments.</dd>
+     *   <dd><strong>access:</strong> read/write, but always
+     *       <code>true</code>!</dd>
+     *  <dt><code>http://xml.org/sax/features/namespace-prefixes</code></dt>
+     *   <dd><strong>description:</strong> An optional extension handler
+     *       for DTD-related events other than notations and unparsed
+     *       entities.</dd>
+     *   <dd><strong>access:</strong> read/write</dd>
+     * </dl>
+     * </p>
+     *
+     * @param name  <code>String</code> the feature name, which is a
+     *              fully-qualified URI.
+     * @param value <code>boolean</code> the requested state of the
+     *              feature (true or false).
+     *
+     * @throws SAXNotRecognizedException When SAXOutputter does not
+     *         recognize the feature name.
+     * @throws SAXNotSupportedException  When SAXOutputter recognizes
+     *         the feature name but cannot set the requested value.
+     */
+    public void setFeature(String name, boolean value)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (NS_PREFIXES_SAX_FEATURE.equals(name)) {
+            // Namespace prefix declarations.
+            this.setReportNamespaceDeclarations(value);
+        }
+        else {
+            if (NAMESPACES_SAX_FEATURE.equals(name)) {
+                if (value != true) {
+                    // Namespaces feature always supported by SAXOutputter.
+                    throw new SAXNotSupportedException(name);
+                }
+                // Else: true is OK!
+            }
+            else {
+                // Not a supported feature.
+                throw new SAXNotRecognizedException(name);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * This will look up the value of a SAX feature.
+     * </p>
+     *
+     * @param name <code>String</code> the feature name, which is a
+     *             fully-qualified URI.
+     * @return <code>boolean</code> the current state of the feature
+     *         (true or false).
+     *
+     * @throws SAXNotRecognizedException When SAXOutputter does not
+     *         recognize the feature name.
+     * @throws SAXNotSupportedException  When SAXOutputter recognizes
+     *         the feature name but determine its value at this time.
+     */
+    public boolean getFeature(String name)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (NS_PREFIXES_SAX_FEATURE.equals(name)) {
+            // Namespace prefix declarations.
+            return (this.declareNamespaces);
+        }
+        else {
+            if (NAMESPACES_SAX_FEATURE.equals(name)) {
+                // Namespaces feature always supported by SAXOutputter.
+                return (true);
+            }
+            else {
+                // Not a supported feature.
+                throw new SAXNotRecognizedException(name);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * This will set the value of a SAX property.
+     * This method is also the standard mechanism for setting extended
+     * handlers.
+     * </p>
+     * <p>
+     * SAXOutputter currently supports the following SAX properties:
+     * <dl>
+     *  <dt><code>http://xml.org/sax/properties/lexical-handler</code></dt>
+     *   <dd><strong>data type:</strong>
+     *       <code>org.xml.sax.ext.LexicalHandler</code></dd>
+     *   <dd><strong>description:</strong> An optional extension handler for
+     *       lexical events like comments.</dd>
+     *   <dd><strong>access:</strong> read/write</dd>
+     *  <dt><code>http://xml.org/sax/properties/declaration-handler</code></dt>
+     *   <dd><strong>data type:</strong>
+     *       <code>org.xml.sax.ext.DeclHandler</code></dd>
+     *   <dd><strong>description:</strong> An optional extension handler for
+     *       DTD-related events other than notations and unparsed entities.</dd>
+     *   <dd><strong>access:</strong> read/write</dd>
+     * </dl>
+     * </p>
+     *
+     * @param name  <code>String</code> the property name, which is a
+     *              fully-qualified URI.
+     * @param value <code>Object</code> the requested value for the property.
+     *
+     * @throws SAXNotRecognizedException When SAXOutputter does not recognize
+     *         the property name.
+     * @throws SAXNotSupportedException  When SAXOutputter recognizes the
+     *         property name but cannot set the requested value.
+     */
+    public void setProperty(String name, Object value)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+        if ((LEXICAL_HANDLER_SAX_PROPERTY.equals(name)) ||
+            (LEXICAL_HANDLER_ALT_PROPERTY.equals(name))) {
+            this.setLexicalHandler((LexicalHandler)value);
+        }
+        else {
+            if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
+                (DECL_HANDLER_ALT_PROPERTY.equals(name))) {
+                this.setDeclHandler((DeclHandler)value);
+            }
+            else {
+                throw new SAXNotRecognizedException(name);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * This will look up the value of a SAX property.
+     * </p>
+     *
+     * @param name <code>String</code> the property name, which is a
+     *             fully-qualified URI.
+     * @return <code>Object</code> the current value of the property.
+     *
+     * @throws SAXNotRecognizedException When SAXOutputter does not recognize
+     *         the property name.
+     * @throws SAXNotSupportedException  When SAXOutputter recognizes the
+     *         property name but cannot determine its value at this time.
+     */
+    public Object getProperty(String name)
+                throws SAXNotRecognizedException, SAXNotSupportedException {
+        if ((LEXICAL_HANDLER_SAX_PROPERTY.equals(name)) ||
+            (LEXICAL_HANDLER_ALT_PROPERTY.equals(name))) {
+            return this.getLexicalHandler();
+        }
+        else {
+            if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
+                (DECL_HANDLER_ALT_PROPERTY.equals(name))) {
+                return this.getDeclHandler();
+            }
+            else {
+                throw new SAXNotRecognizedException(name);
+            }
+        }
+    }
+
 
     /**
      * <p>
