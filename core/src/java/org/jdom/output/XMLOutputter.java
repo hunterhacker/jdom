@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.50 2001/05/19 00:43:24 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.51 2001/05/24 01:52:18 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -108,7 +108,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.50 $ $Date: 2001/05/19 00:43:24 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.51 $ $Date: 2001/05/24 01:52:18 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -1329,9 +1329,11 @@ public class XMLOutputter implements Cloneable {
 
     /**
      * <p>
-     * This will take the five pre-defined entities in XML 1.0 and
+     * This will take the pre-defined entities in XML 1.0 and
      *   convert their character representation to the appropriate
-     *   entity reference, suitable for XML attributes.
+     *   entity reference, suitable for XML attributes.  It does
+     *   no converstion for ' because it's not necessary as the outputter 
+     *   writes attributes surrounded by double-quotes.
      * </p>
      *
      * @param st <code>String</code> input to escape.
@@ -1351,9 +1353,11 @@ public class XMLOutputter implements Cloneable {
                 case '>' :
                     stEntity = "&gt;";
                     break;
+/*
                 case '\'' :
                     stEntity = "&apos;";
                     break;
+*/
                 case '\"' :
                     stEntity = "&quot;";
                     break;
