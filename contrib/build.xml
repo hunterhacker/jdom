@@ -29,9 +29,27 @@ These are the meaningful targets for this build file:
 <project default="package" basedir=".">
 
   <!-- =================================================================== -->
+  <!-- TaskDef preperation Target					   -->
+  <!-- =================================================================== -->
+
+  <target name="prepare-taskdef">
+    <property name="taskdef.src" value="./taskdefs"/>
+    <property name="taskdef.dest" value="./taskdefs"/>
+
+
+    <javac srcdir="${taskdef.src}"
+           destdir="${taskdef.dest}"
+           debug="${debug}"
+           optimize="${optimize}"/>
+    <jar jarfile="${taskdef.dest}/taskdefs.jar"
+         basedir="${taskdef.dest}"
+         includes="*.class"/>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Initialization target                                               -->
   <!-- =================================================================== -->
-  <target name="init">
+  <target name="init" depends="prepare-taskdef">
     <tstamp/>
     <property name="Name" value="JDOM Contributions"/>
     <property name="name" value="jdom-contrib"/>
