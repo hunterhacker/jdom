@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.48 2002/04/29 13:38:16 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.49 2003/04/02 00:42:00 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -86,12 +86,12 @@ import org.xml.sax.*;
  * @author Yusuf Goolamabbas
  * @author Dan Schaffer
  * @author Bradley S. Huffman
- * @version $Revision: 1.48 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.49 $, $Date: 2003/04/02 00:42:00 $
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.48 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.49 $ $Date: 2003/04/02 00:42:00 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -179,6 +179,9 @@ public class DOMBuilder {
      *
      * @param validate <code>boolean</code> indicating whether validation
      * should occur.
+     * @deprecated Deprecated in Beta 9, DOMBuilder shouldn't be used for
+     *             building from files and that's the only time validation
+     *             matters
      */
     public void setValidation(boolean validate) {
         this.validate = validate;
