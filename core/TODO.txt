@@ -6,6 +6,8 @@ None!
 
 --- ITEMS TO CONSIDER FOR 1.1 ---
 
+* Path up contrib's IdAttribute.  Laurent has a patch that needs testing.
+
 * Output support for surrogate pairs.
 
 * Integrate the contributed StAXBuilder.
@@ -42,6 +44,9 @@ None!
   escaped characters like &eacute;, etc).
 
 --- FUTURE IDEAS ---
+
+* Utility methods for comparing nodes by content instead of reference.
+  Hopefully base this on whatever standard emerges in this area.
 
 * If doing the JCP, clean up and expand Javadocs for inclusion into Frame
   using the MIF Doclet.
