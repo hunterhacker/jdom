@@ -1,6 +1,10 @@
 Items that need to be done:
 
---- FOR JDOM BETA5 ---
+--- RIGHT AWAY ---
+
+* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
+
+--- FOR JDOM 1.0 ---
 
 * Create "build dist" for distribution
   Use fixcrlf in dist (instead of package as currently done)
@@ -20,12 +24,6 @@ Items that need to be done:
    void setXmlEncoding(java.lang.String newJavaEncoding,
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
-
-* XMLOutputter exceptions should be sent up the stack, not printed out 
-
-* Revise the JavaWorld articles to match the beta5 API (Jason and Brett)
-
---- FOR JDOM 1.0 ---
 
 * Probably change DOMAdapter to take File for a filename.  (Brett's call)
 
@@ -132,7 +130,9 @@ Items that need to be done:
 * Look at the issue that PartialList.listIterator() may return an Iterator
   that doesn't have logic to change the backing List and sanity check the
   change.  See post by "Chris Hamersley" <chris.hamersley@xmlglobal.com>
-  31 Aug 2000.
+  31 Aug 2000.  Also a follow-on by "Peter V. Gadjokov" <pvg@c-c-s.com> 
+  27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
+  27 Sep 2000.
 
 --- FOR JDOM 1.1 ---
 
