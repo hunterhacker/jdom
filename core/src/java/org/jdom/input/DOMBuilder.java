@@ -324,9 +324,10 @@ public class DOMBuilder {
                     else {
                         prefix = att.getPrefix();
                         uri = att.getNamespaceURI();
+                        String localname = att.getLocalName();
                         Namespace attns = Namespace.getNamespace(prefix, uri);
                         Attribute attribute =
-                            new Attribute(attname, attvalue, attns);
+                            new Attribute(localname, attvalue, attns);
                         element.addAttribute(attribute);
                     }
                 }
