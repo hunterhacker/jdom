@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.85 2001/06/15 23:43:28 jhunter Exp $
+ $Id: Element.java,v 1.86 2001/06/18 14:37:10 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.85 $ $Date: 2001/06/15 23:43:28 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.86 $ $Date: 2001/06/18 14:37:10 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1635,6 +1635,7 @@ public class Element implements Serializable, Cloneable {
      * @param name name of the attribute to add
      * @param value value of the attribute to add
      * @return this element modified
+     * @deprecated Deprecated in beta7, use setAttribute(Attribute) instead
      */
     public Element addAttribute(String name, String value) {
         return addAttribute(new Attribute(name, value));
@@ -1649,6 +1650,8 @@ public class Element implements Serializable, Cloneable {
      * @param name name of attribute to remove
      * @param uri namespace URI of attribute to remove
      * @return whether the attribute was removed
+     * @deprecated Deprecated in beta7, use removeAttribute(String, Namespace)
+     *             instead.
      */
     public boolean removeAttribute(String name, String uri) {
         Iterator i = attributes.iterator();
@@ -1914,6 +1917,26 @@ public class Element implements Serializable, Cloneable {
         }
         if (content.remove(comment)) {
             comment.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>
+     * This removes the specified <code>CDATA</code>.
+     * </p>
+     *
+     * @param cdata <code>CDATA</code> to delete
+     * @return whether deletion occurred
+     */
+    public boolean removeCDATA(CDATA cdata) {
+        if (content == null) {
+            return false;
+        }
+        if (content.remove(cdata)) {
+            cdata.setParent(null);
             return true;
         } else {
             return false;
