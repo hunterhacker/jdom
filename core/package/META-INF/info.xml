@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
     <title>JDOM</title>
-    <version>1.0 Beta 7</version>
+    <version>@version@, built @date@</version>
     <description>
         JDOM is a Java-oriented object model which models XML documents.
         It provides a Java-centric means of generating and manipulating
