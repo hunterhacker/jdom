@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.53 2001/06/21 17:06:36 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.54 2001/07/13 19:11:53 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -84,7 +84,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.53 $ $Date: 2001/06/21 17:06:36 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.54 $ $Date: 2001/07/13 19:11:53 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -413,6 +413,19 @@ public class SAXBuilder {
             saxDriverClass = parser.getClass().getName();
         }
 
+        // Install optional filter
+        if (saxXMLFilter != null) {
+            // Connect filter chain to parser
+            XMLFilter root = saxXMLFilter;
+            while (root.getParent() instanceof XMLFilter) {
+                root = (XMLFilter)root.getParent();
+            }
+            root.setParent(parser);
+
+            // Read from filter
+            parser = saxXMLFilter;
+        }
+
         return parser;
     }
 
@@ -431,19 +444,6 @@ public class SAXBuilder {
      */
     protected void configureParser(XMLReader parser, SAXHandler contentHandler)
                     throws Exception {
-
-        // Install optional filter
-        if (saxXMLFilter != null) {
-            // Connect filter chain to parser
-            XMLFilter root = saxXMLFilter;
-            while (root.getParent() instanceof XMLFilter) {
-                root = (XMLFilter)root.getParent();
-            }
-            root.setParent(parser);
-
-            // Read from filter
-            parser = saxXMLFilter;
-        }
 
         // Setup SAX handlers.
 
