@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.36 2001/05/18 22:45:10 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.37 2001/07/25 21:32:19 bmclaugh Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -91,7 +91,7 @@ import org.xml.sax.*;
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.36 $ $Date: 2001/05/18 22:45:10 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.37 $ $Date: 2001/07/25 21:32:19 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -201,6 +201,9 @@ public class DOMBuilder {
      * @param in <code>InputStream</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
+     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
+     *             should be used for building from any input other than a
+     *             DOM tree
      */
     public Document build(InputStream in) throws JDOMException {
         Document doc = factory.document((Element)null);
@@ -293,6 +296,9 @@ public class DOMBuilder {
      * @param file <code>File</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
+     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
+     *             should be used for building from any input other than a
+     *             DOM tree
      */
     public Document build(File file) throws JDOMException {
         try {
@@ -315,6 +321,9 @@ public class DOMBuilder {
      * @param url <code>URL</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
+     * @deprecated Deprecated in Beta 7, <code>{@link SAXBuilder}</code>
+     *             should be used for building from any input other than a
+     *             DOM tree
      */
     public Document build(URL url) throws JDOMException {
         try {
