@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentFilter.java,v 1.13 2004/02/27 11:32:58 jhunter Exp $
+ $Id: ContentFilter.java,v 1.14 2004/08/31 04:56:07 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,13 +79,13 @@ import org.jdom.*;
  * <p>
  * The default is to allow all valid JDOM objects.
  *
- * @version $Revision: 1.13 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.14 $, $Date: 2004/08/31 04:56:07 $
  * @author Bradley S. Huffman
  */
 public class ContentFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.13 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.14 $ $Date: 2004/08/31 04:56:07 $ $Name:  $";
 
     /** Mask for JDOM {@link Element} objects */
     public static final int ELEMENT   = 1;
@@ -331,8 +331,8 @@ public class ContentFilter extends AbstractFilter {
     }
 
     /**
-     * Returns whether the two filters are equivalent (i.e. the matching mask
-     * values are identical).
+     * Returns whether the two filters are equivalent (i&#46;e&#46; the
+     * matching mask values are identical).
      *
      * @param  obj                 the object to compare against
      * @return                     whether the two filters are equal
