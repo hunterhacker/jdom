@@ -30,6 +30,7 @@ or on Unix:
 
 That's it!
 
+
 Building instructions
 =====================
 
@@ -81,4 +82,18 @@ build.sh samples
 
 To learn the details of what each target does, read the build.xml file.  It is
 quite understandable.
+
+
+Bug Reports
+===========
+
+Bug reports go to the jdom-interest list at jdom.org.  But *BEFORE YOU POST*
+make sure you've tested against the LATEST code available from CVS (or the
+daily snapshot).  Odds are good your bug has already been fixed.  If it hasn't
+been fixed in the latest version, then when posting *BE SURE TO SAY* which
+code version you tested against.  For example, "CVS from October 3rd".  Also
+be sure to include enough information to reproduce the bug and full exception
+stack traces.  You might also want to read the FAQ at http://jdom.org to find
+out if your problem is not really a bug and just a common misunderstanding
+about how XML or JDOM works.
 
