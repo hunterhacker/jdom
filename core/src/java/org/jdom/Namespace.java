@@ -289,7 +289,7 @@ public final class Namespace {
      *
      * @param ob <code>Object</code> to compare to this <code>Namespace</code>.
      * @return <code>boolean</code> - whether the supplied object is equal to
-     *         this <code>Namespace<code>.
+     *         this <code>Namespace</code>.
      */
     public boolean equals(Object ob) {
         if (ob == null) {
