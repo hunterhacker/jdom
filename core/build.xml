@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.38 2003/04/02 22:50:31 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.39 2003/04/02 23:34:43 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -47,12 +47,34 @@ For instructions on how to build JDOM, please view the README.txt file.
     <filter token="log" value="true"/>
     <filter token="verbose" value="true"/>
 
+    <!-- Default JAR libraries -->
+    <property name="xml-apis.jar"       value="${lib.dir}/xml-apis.jar"/>
+    <property name="parser.jar"         value="${lib.dir}/xerces.jar"/>
+    <property name="jdom-core"      value="${build.dest}"/>
+    <property name="jaxen-jdom.jar"     value="${lib.dir}/jaxen-jdom.jar"/>
+    <property name="jaxen-core.jar"     value="${lib.dir}/jaxen-core.jar"/>
+    <property name="jaxen-saxpath.jar"  value="${lib.dir}/saxpath.jar"/>
+
+    <!-- Compilation class path -->
+    <path id="compile.class.path">
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${jdom-core}"/>
+      <pathelement location="${jaxen-jdom.jar}"/>
+      <pathelement location="${jaxen-core.jar}"/>
+      <pathelement location="${jaxen-saxpath.jar}"/>
+
+      <!-- Include CLASSPATH environment variable in compilation path as
+           it contains the path to the JDK 1.1 collections when these are
+           to be used.
+       -->
+      <pathelement path="${java.class.path}" />
+    </path>
+
     <!-- JDK1.1 collections -->
     <property name="coll.import" value="com.sun.java.util.collections"/>
-    <available classname="${coll.import}.Collection" property="coll.present"/>
-
-    <!-- jaxen -->
-    <available classname="org.jaxen.JaxenException" property="jaxen.present"/>
+    <available classname="${coll.import}.Collection" property="coll.present"
+               classpathref="compile.class.path"/>
 
   </target>
 
@@ -158,12 +180,21 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
-  <target name="compile" depends="prepare-src,collections">
+  <target name="compile" depends="prepare-src,collections"
+          description="Compiles the source code">
+    <!-- Compile the JaxenXPath adapter only if Jaxen classes are found -->
+    <available property="jaxen.present"
+               classname="org.jaxen.JaxenException"
+               classpathref="compile.class.path"/>
+
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
            optimize="${optimize}">
+
       <exclude name="**/Jaxen*" unless="jaxen.present"/>
+
+      <classpath refid="compile.class.path"/>
     </javac>
   </target>
 
@@ -174,7 +205,9 @@ For instructions on how to build JDOM, please view the README.txt file.
     <javac srcdir="${package.dir}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+           optimize="${optimize}">
+      <classpath refid="compile.class.path"/>
+    </javac>
   </target>
 
   <!-- =================================================================== -->
@@ -184,7 +217,9 @@ For instructions on how to build JDOM, please view the README.txt file.
     <javac srcdir="${samples.dest}"
            destdir="${samples.dest}"
            debug="${debug}"
-           optimize="${optimize}"/>
+           optimize="${optimize}">
+      <classpath refid="compile.class.path"/>
+    </javac>
   </target>
 
   <!-- =================================================================== -->
@@ -222,8 +257,9 @@ For instructions on how to build JDOM, please view the README.txt file.
              noindex="false"
              windowtitle="${Name} API"
              doctitle="${Name}"
-             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved."
-    />
+             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
+      <classpath refid="compile.class.path"/>
+    </javadoc>
   </target>
 
   <!-- =================================================================== -->
@@ -243,8 +279,9 @@ For instructions on how to build JDOM, please view the README.txt file.
              windowtitle="${Name} API"
              doctitle="${Name}"
              link="http://java.sun.com/j2se/1.4/docs/api"
-             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved."
-    />
+             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
+      <classpath refid="compile.class.path"/>
+    </javadoc>
   </target>
 
   <!-- =================================================================== -->
