@@ -77,7 +77,7 @@ import org.xml.sax.InputSource;
  * @author Kevin Regan
  * @version 1.0
  */
-public class DOMBuilder implements Builder {
+public class DOMBuilder {
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =

@@ -82,7 +82,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Jason Hunter
  * @version 1.0
  */
-public class SAXBuilder implements Builder {
+public class SAXBuilder {
 
     /** Default parser class to use */
     private static final String DEFAULT_SAX_DRIVER =
@@ -377,9 +377,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     /** Indicator of whether we are in a CDATA */
     private boolean inCDATA;
 
-    /** Indicator of whether we need to right trim */
-    private boolean needsRTrim;
-
     /** Indicator of whether we are in an <code>Entity</code> */
     private boolean inEntity;
 
@@ -409,7 +406,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
         inEntity = false;
         inDTD = false;
         inCDATA = false;
-        needsRTrim = false;
 
         // Figure out which SAX is being used, so we use the correct method
         //   on Attributes
@@ -604,19 +600,12 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
 
         if (inCDATA) {
             ((Element)stack.peek()).addChild(data);
-            needsRTrim = false;
         } else if ((!inDTD) && (!data.trim().equals(""))) {
             if (inEntity) {
                 ((Entity)stack.peek()).setContent(data);
-                needsRTrim = false;
             } else {
                 Element e = (Element)stack.peek();
-                if (e.getContent().equals("")) {
-                    e.addChild(ltrim(data));
-                } else {
-                    e.addChild(data);
-                }
-                needsRTrim = true;
+                e.addChild(data);
             }
         }
     }
@@ -638,12 +627,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
     public void endElement(String namespaceURI, String localName,
                            String rawName) {
 
-        if (needsRTrim) {
-            Element e = (Element)stack.peek();
-            e.setContent(rtrim(e.getContent()));
-        }
-
-        needsRTrim = false;
         stack.pop();
 
         // Remove the namespaces this Element makes available
@@ -802,46 +785,6 @@ class SAXHandler extends DefaultHandler implements LexicalHandler {
                     new Comment(commentText));
             }
         }
-    }
-
-    /**
-     * <p>
-     *  Trim the right spacing off of a <code>String</code>.
-     * </p>
-     *
-     * @param orig <code>String</code> to rtrim.
-     * @return <code>String</code> - orig with no right spaces
-     */
-    private String rtrim(String orig) {
-        int len = orig.length();
-        int st = 0;
-        int off = 0;
-        char[] val = orig.toCharArray();
-
-        while ((st < len) && (val[off + len - 1] <= ' ')) {
-            len--;
-        }
-        return ((st > 0) || (len < orig.length())) ? orig.substring(st, len) : orig;
-    }
-
-    /**
-     * <p>
-     *  Trim the left spacing off of a <code>String</code>.
-     * </p>
-     *
-     * @param orig <code>String</code> to rtrim.
-     * @return <code>String</code> - orig with no left spaces
-     */
-    private String ltrim(String orig) {
-        int len = orig.length();
-        int st = 0;
-        int off = 0;
-        char[] val = orig.toCharArray();
-
-        while ((st < len) && (val[off + st] <= ' ')) {
-            st++;
-        }
-        return ((st > 0) || (len < orig.length())) ? orig.substring(st, len) : orig;
     }
 
 }

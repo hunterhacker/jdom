@@ -187,7 +187,7 @@ public class XMLOutputter {
      * </p>
      *
      * @param doc <code>Document</code> to format.
-     * @param out <code>PrintWriter</code> to write to.
+     * @param out <code>OutputStream</code> to write to.
      * @param encoding set encoding format.
      * @throws <code>IOException</code> - if there's any problem writing.
      */

@@ -81,6 +81,9 @@ public class Element implements Serializable, Cloneable {
 
     /** The mixed content of the <code>Element</code> */
     protected List content;
+    
+    /** The textual content of this element <em>for optimization</em> */
+    private String textualContent;
 
     /*
      * XXX: We need to build in a "cache" with the child elements -
@@ -122,6 +125,7 @@ public class Element implements Serializable, Cloneable {
         attributes = new LinkedList();
         content = new LinkedList();
         isRootElement = false;
+	textualContent = null;
     }
 
     /**
@@ -376,20 +380,50 @@ public class Element implements Serializable, Cloneable {
      *   <code>Element</code>, an empty <code>String</code> is returned.
      * </p>
      *
+     * @param preserveWhitespace <code>boolean</code> indicating whether
+     *        whitespace should be preserved.
+     * @return <code>String</code> - value for this element.
+     */
+    public String getContent(boolean preserveWhitespace) {
+	// Use "cached" text if available
+	if (textualContent == null) {	
+
+    	    StringBuffer textContent = new StringBuffer();
+
+	    Iterator i = content.iterator();
+	    while (i.hasNext()) {
+		Object obj = i.next();
+		if (obj instanceof String) {
+    		    String text = (String)obj;
+    		    if (preserveWhitespace) {
+    			textContent.append(text);
+    		    } else {
+    			textContent.append(text.trim());
+    		    }
+		}
+	    }
+	    textualContent = textContent.toString();
+	}
+	
+        return textualContent;
+    }
+
+    /**
+     * <p>
+     * This will return the actual textual content of this
+     *   <code>Element</code>.  This will include all text within
+     *   this single element, including <code>CDATA</code> sections
+     *   if they exist.  If no textual value exists for the
+     *   <code>Element</code>, an empty <code>String</code> is returned.
+     * </p>
+     * <p>
+     *  This default version trims whitespace surrounding the content.
+     * </p>
+     *
      * @return <code>String</code> - value for this element.
      */
     public String getContent() {
-        StringBuffer textContent = new StringBuffer();
-
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            if (obj instanceof String) {
-                textContent.append((String)obj);
-            }
-        }
-
-        return textContent.toString();
+	return getContent(false);
     }
 
     /**
@@ -406,6 +440,7 @@ public class Element implements Serializable, Cloneable {
     public Element setContent(String textContent) {
         content.clear();
         content.add(textContent);
+	textualContent = null;
 
         return this;
     }
@@ -417,11 +452,6 @@ public class Element implements Serializable, Cloneable {
      *   element data within it.  When this evaluates to <code>true</code>,
      *   <code>{@link #getMixedContent}</code> should be used for getting
      *   element data.
-     * </p>
-     * <p>
-     * <em>Note:</em>I think there's a better way to do this,
-     *   maybe store a member variable, but I'm too tired
-     *   to really think of what it is... (brett).
      * </p>
      *
      * @return <code>boolean</code> - indicating whether there
@@ -456,15 +486,52 @@ public class Element implements Serializable, Cloneable {
      *   elements are present).
      * </p>
      *
+     * @param preserveWhitespace <code>boolean</code> indicating whether
+     *        whitespace should be preserved around text.
+     * @return <code>List</code> - the mixed content of the
+     *         <code>Element</code>: contains <code>String</code>,
+     *         <code>Element</code>, <code>{@link Comment}</code>,
+     *         and <code>{@link Entity}</code> objects.
+     */
+    public List getMixedContent(boolean preserveWhitespace) {
+        PartialList result = new PartialList(content, this);
+	if (preserveWhitespace) {
+	    result.addAllPartial(content);
+	} else {
+	    for (Iterator i = content.iterator(); i.hasNext(); ) {
+		Object obj = i.next();
+		if (obj instanceof String) {
+		    result.addPartial(((String)obj).trim());
+		} else {
+		    result.addPartial(obj);
+		}
+	    }
+	}
+        return result;
+    }
+
+    /**
+     * <p>
+     * This will return the content of the element.  This should be
+     *   used when the <code>{@link #hasMixedContent}</code>
+     *   evaluates to <code>true</code>.  When there is no mixed
+     *   content, it returns a <code>List</code> with a single
+     *   <code>String</code> (when only data is present) or a
+     *   <code>List</code> with only elements (when only nested
+     *   elements are present).
+     * </p>
+     * <p>
+     *  This default version trims all surrounding whitespace from
+     *    textual content.
+     * </p>
+     *
      * @return <code>List</code> - the mixed content of the
      *         <code>Element</code>: contains <code>String</code>,
      *         <code>Element</code>, <code>{@link Comment}</code>,
      *         and <code>{@link Entity}</code> objects.
      */
     public List getMixedContent() {
-        PartialList result = new PartialList(content, this);
-        result.addAllPartial(content);
-        return result;
+	return getMixedContent(false);
     }
 
     /**
@@ -483,6 +550,7 @@ public class Element implements Serializable, Cloneable {
     public Element setMixedContent(List mixedContent) {
         content.clear();
         content.addAll(mixedContent);
+	textualContent = null;
 
         return this;
     }
@@ -1544,6 +1612,16 @@ public class Element implements Serializable, Cloneable {
         } catch (Exception e) {
             throw new DataConversionException(name, "char");
         }
+    }
+    
+    /**
+     * <p>
+     *  This allows other JDOM classes to "clear" the textual content
+     *    for this <code>Element</code>.
+     * </p>
+     */
+    protected void clearContentCache() {
+	textualContent = null;
     }
 
 }

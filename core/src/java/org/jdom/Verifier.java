@@ -278,6 +278,7 @@ public final class Verifier {
             if ((!Character.isLetterOrDigit(c))
                 && (c != '-')
                 && (c != '$')
+		&& (c != '.')
                 && (c != '_')) {
                 return c + " is not allowed in XML names.";
             }

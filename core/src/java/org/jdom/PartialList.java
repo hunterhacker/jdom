@@ -104,6 +104,9 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
+	if (parent != null) {
+            parent.clearContentCache();
+	}
         return o;
     }
 
@@ -118,6 +121,10 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
+	
+	if (parent != null) {
+            parent.clearContentCache();
+	}
         return o;
     }
 
@@ -138,6 +145,7 @@ class PartialList extends LinkedList {
             if (o instanceof Element) {
                 ((Element)o).setParent(parent);
             }
+	    parent.clearContentCache();
         }
     }
 
@@ -159,6 +167,7 @@ class PartialList extends LinkedList {
             if (o instanceof Element) {
                 ((Element)o).setParent(parent);
             }
+	    parent.clearContentCache();
         }
     }
 
@@ -176,6 +185,7 @@ class PartialList extends LinkedList {
             if (o instanceof Element) {
                 ((Element)o).setParent(parent);
             }
+	    parent.clearContentCache();
         }
 
         return super.add(o);
@@ -197,6 +207,10 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
+	
+	if (parent != null) {
+	    parent.clearContentCache();
+	}
 
         return super.remove(o);
     }
@@ -232,6 +246,7 @@ class PartialList extends LinkedList {
                     ((Element)o).setParent(parent);
                 }
             }
+	    parent.clearContentCache();
         }
 
         return super.addAll(c);
@@ -267,6 +282,7 @@ class PartialList extends LinkedList {
                     ((Element)o).setParent(parent);
                 }
             }
+	    parent.clearContentCache();
         }
 
         return super.addAll(index, c);
@@ -283,6 +299,9 @@ class PartialList extends LinkedList {
                 ((Element)o).setParent(null);
             }
         }
+	if (parent != null) {
+	    parent.clearContentCache();
+	}
         super.clear();
     }
 
@@ -311,6 +330,7 @@ class PartialList extends LinkedList {
             if (current instanceof Element) {
                 ((Element)current).setParent(parent);
             }
+	    parent.clearContentCache();
         }
 
         return super.set(index, current);
@@ -334,6 +354,7 @@ class PartialList extends LinkedList {
             if (current instanceof Element) {
                 ((Element)current).setParent(parent);
             }
+	    parent.clearContentCache();
         }
         super.add(index, current);
     }
@@ -355,6 +376,9 @@ class PartialList extends LinkedList {
         if (o instanceof Element) {
             ((Element)o).setParent(null);
         }
+	if (parent != null) {
+	    parent.clearContentCache();
+	}
         return o;
     }
 
