@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.21 2001/03/20 18:42:47 jhunter Exp $
+ $Id: Namespace.java,v 1.22 2001/04/11 21:50:26 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -162,7 +162,7 @@ public final class Namespace {
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
-                "Namespace URIs must be non-null and non-empty Strings.");
+                "Namespace URIs must be non-null and non-empty Strings");
         }
 
         // Finally, store and return
