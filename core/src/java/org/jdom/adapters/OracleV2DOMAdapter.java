@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: OracleV2DOMAdapter.java,v 1.15 2003/04/06 02:00:44 jhunter Exp $
+ $Id: OracleV2DOMAdapter.java,v 1.16 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,20 +64,16 @@ import org.w3c.dom.Document;
 import org.xml.sax.*;
 
 /**
- * <b><code>OracleV2DOMAdapter</code></b>.
- * <p>
- * This class defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object from the Oracle Version 2 DOM parser.
- * </p>
- *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.15 $, $Date: 2003/04/06 02:00:44 $
+ * An adapter for the Oracle Version 2 DOM parser.
+ * 
+ * @version $Revision: 1.16 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class OracleV2DOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.16 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

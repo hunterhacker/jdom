@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.45 2003/04/06 02:00:44 jhunter Exp $
+ $Id: Attribute.java,v 1.46 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,21 +59,19 @@ package org.jdom;
 import java.io.*;
 
 /**
- * <code>Attribute</code> defines behavior for an XML
- * attribute, modeled in Java.  Methods allow the user
- * to obtain the value of the attribute as well as
- * namespace information.
+ * An XML attribute. Methods allow the user to obtain the value of the attribute
+ * as well as namespace and type information.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Elliotte Rusty Harold
- * @author Wesley Biggs
- * @version $Revision: 1.45 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.46 $, $Date: 2003/04/30 09:55:11 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Elliotte Rusty Harold
+ * @author  Wesley Biggs
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.45 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.46 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type

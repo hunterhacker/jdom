@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: BuilderErrorHandler.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
+ $Id: BuilderErrorHandler.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,14 +59,16 @@ package org.jdom.input;
 import org.xml.sax.*;
 
 /**
+ * The standard JDOM error handler implementation.
+ * 
  * @author  Jason Hunter
- * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
  */
 
 public class BuilderErrorHandler implements ErrorHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This method is called when a warning has occurred; this indicates

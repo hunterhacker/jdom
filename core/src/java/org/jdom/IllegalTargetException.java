@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalTargetException.java,v 1.11 2002/04/29 13:38:15 jhunter Exp $
+ $Id: IllegalTargetException.java,v 1.12 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,18 +57,16 @@
 package org.jdom;
 
 /**
- * <code>IllegalTargetException</code>
- * is thrown when a target is supplied in construction, etc.,
- * of a JDOM <code>{@link ProcessingInstruction}</code>, and that name breaks
- * XML naming conventions.
- *
- * @author Brett McLaughlin
- * @version $Revision: 1.11 $, $Date: 2002/04/29 13:38:15 $
+ * Thrown when a target is supplied in construction of a JDOM {@link
+ * ProcessingInstruction}, and that name breaks XML naming conventions.
+ * 
+ * @version $Revision: 1.12 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
  */
 public class IllegalTargetException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.11 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.12 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.63 2003/04/08 04:14:49 jhunter Exp $
+ $Id: Document.java,v 1.64 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,20 +62,19 @@ import java.util.*;
 import org.jdom.filter.*;
 
 /**
- * <code>Document</code> defines behavior for an XML Document, modeled
- * in Java.  Methods allow access to the root element as well
- * as processing instructions and other document-level information.
+ * An XML document. Methods allow access to the root element as well as the
+ * {@link DocType} and other document-level information.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Jools Enticknap
- * @author Bradley S. Huffman
- * @version $Revision: 1.63 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.64 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Jools Enticknap
+ * @author  Bradley S. Huffman
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.63 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.64 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s

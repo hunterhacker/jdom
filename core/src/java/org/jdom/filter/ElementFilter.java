@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ElementFilter.java,v 1.8 2003/04/02 01:56:58 jhunter Exp $
+ $Id: ElementFilter.java,v 1.9 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,17 +59,16 @@ package org.jdom.filter;
 import org.jdom.*;
 
 /**
- * The <code>ElementFilter</code> when applied to a <code>FilterList</code>
- * will only allow <code>Elements</code> to be visible.
+ * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @author Jools Enticknap
- * @author Bradley S. Huffman
- * @version $Revision: 1.8 $, $Date: 2003/04/02 01:56:58 $
+ * @version $Revision: 1.9 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Jools Enticknap
+ * @author  Bradley S. Huffman
  */
 public class ElementFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.8 $ $Date: 2003/04/02 01:56:58 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.9 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** The element name */
     protected String name;

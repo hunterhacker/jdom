@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.26 2003/04/08 04:14:49 jhunter Exp $
+ $Id: CDATA.java,v 1.27 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,23 +57,22 @@
 package org.jdom;
 
 /**
- * <code><b>CDATA</b></code> represents character-based content within an
- * XML document represented by JDOM. It is intended to provide a modular,
- * printable method of representing CDATA. Additionally,
- * <code>CDATA</code> makes no guarantees about the underlying textual
- * representation of character data, but does expose that data as a Java
- * <code>String</code>.</p>
+ * An XML CDATA section. Represents character-based content within an XML
+ * document that should be output within special CDATA tags. Semantically it's
+ * identical to a simple {@link Text} object, but output behavior is different.
+ * CDATA makes no guarantees about the underlying textual representation of
+ * character data, but does expose that data as a Java String.
  *
- * @author Dan Schaffer
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Bradley S. Huffman
- * @version $Revision: 1.26 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.27 $, $Date: 2003/04/30 09:55:11 $
+ * @author  Dan Schaffer
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Bradley S. Huffman
  */
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.26 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.27 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 

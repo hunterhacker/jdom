@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.21 2003/04/18 04:04:11 jhunter Exp $
+ $Id: ContentList.java,v 1.22 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,26 +61,26 @@ import java.util.*;
 import org.jdom.filter.*;
 
 /**
- * <code>ContentList</code> represents legal JDOM content, including content
- * for <code>Document</code>s or <code>Element</code>s.
- * This class is NOT PUBLIC; users should see it as a simple List
+ * A non-public list implementation holding only legal JDOM content, including
+ * content for Document or Element nodes. Users see this class as a simple List
  * implementation.
  *
- * @author Alex Rosen
- * @author Philippe Riand
- * @author Bradley S. Huffman
- * @version $Revision: 1.21 $, $Date: 2003/04/18 04:04:11 $
- * @see CDATA
- * @see Comment
- * @see Element
- * @see EntityRef
- * @see ProcessingInstruction
- * @see Text
+ * @see     CDATA
+ * @see     Comment
+ * @see     Element
+ * @see     EntityRef
+ * @see     ProcessingInstruction
+ * @see     Text
+ *
+ * @version $Revision: 1.22 $, $Date: 2003/04/30 09:55:11 $
+ * @author  Alex Rosen
+ * @author  Philippe Riand
+ * @author  Bradley S. Huffman
  */
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.21 $ $Date: 2003/04/18 04:04:11 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.22 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 

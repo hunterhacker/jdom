@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JAXPDOMAdapter.java,v 1.10 2003/04/06 02:00:44 jhunter Exp $
+ $Id: JAXPDOMAdapter.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,19 +64,15 @@ import org.jdom.input.*;
 import org.w3c.dom.Document;
 
 /**
- * <b><code>JAXPDOMAdapater</code></b>.
- * <p>
- * This class defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object using the JAXP APIs.
- * </p>
- *
- * @author Jason Hunter
- * @version $Revision: 1.10 $, $Date: 2003/04/06 02:00:44 $
+ * An adapter for any parser supporting the Sun JAXP APIs.
+ * 
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Jason Hunter
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.10 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

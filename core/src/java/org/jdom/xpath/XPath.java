@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.10 2003/04/08 04:57:46 jhunter Exp $
+ $Id: XPath.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,15 +65,17 @@ import org.jdom.*;
 
 
 /**
- * A JDOM-oriented wrapper around XPath engines.
- * 
- * @author Laurent Bihanic
- * @version $Revision: 1.10 $, $Date: 2003/04/08 04:57:46 $
+ * A utility class for performing XPath calls on JDOM nodes, with a factory
+ * interface for obtaining a first XPath instance. Users operate against this
+ * class while XPath vendors can plug-in implementations underneath.
+ *
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.10 $ $Date: 2003/04/08 04:57:46 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Text.java,v 1.15 2002/05/17 15:46:07 jhunter Exp $
+ $Id: Text.java,v 1.16 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,21 +59,19 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <code><b>Text</b></code> represents character-based content within an
- * XML document represented by JDOM. It is intended to provide a modular,
- * parentable method of representing that text. Additionally,
- * <code>Text</code> makes no guarantees about the underlying textual
- * representation of character data, but does expose that data as a Java
- * <code>String</code>.</p>
+ * Character-based XML content. Provides a modular, parentable method of
+ * representing text. Text makes no guarantees about the underlying textual
+ * representation of character data, but does expose that data as a Java String.
  *
- * @author Brett McLaughlin
- * @author Bradley S. Huffman
- * @version $Revision: 1.15 $, $Date: 2002/05/17 15:46:07 $
+ * @version $Revision: 1.16 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Bradley S. Huffman
  */
 public class Text implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.15 $ $Date: 2002/05/17 15:46:07 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.16 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
 

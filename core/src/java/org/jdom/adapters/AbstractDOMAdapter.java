@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.18 2003/04/06 02:00:44 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.19 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,20 +64,16 @@ import org.w3c.dom.*;
 import org.w3c.dom.Document;
 
 /**
- * <b><code>AbstractDOMAdapter</code></b>.
- * <p>
- * This class defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object from a DOM parser.
- * </p>
- *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.18 $, $Date: 2003/04/06 02:00:44 $
+ * A DOMAdapter utility abstract base class.
+ * 
+ * @version $Revision: 1.19 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.18 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.19 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

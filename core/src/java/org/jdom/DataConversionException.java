@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.10 2002/04/29 13:38:15 jhunter Exp $
+ $Id: DataConversionException.java,v 1.11 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,19 +57,17 @@
 package org.jdom;
 
 /**
- * <code>DataConversionException</code>
- * is thrown when a requested XML value
- * is requested to be converted, and conversion
- * fails.
+ * Thrown when a requested XML value is requested to be converted, and
+ * conversion fails.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:11 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class DataConversionException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating

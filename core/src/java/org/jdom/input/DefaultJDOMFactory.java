@@ -1,6 +1,6 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.10 2003/04/06 02:00:44 jhunter Exp $
+ $Id: DefaultJDOMFactory.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,19 +61,18 @@ import java.util.*;
 import org.jdom.*;
 
 /**
- * <code>DefaultJDOMFactory</code> creates the standard
- * top-level JDOM classes (Element, Document, Comment, etc).
- * A subclass of this factory might construct custom classes.
- *
- * @author Ken Rune Holland
- * @author Phil Nelson
- * @author Bradley S. Huffman
- * @version $Revision: 1.10 $, $Date: 2003/04/06 02:00:44 $
+ * Creates the standard top-level JDOM classes (Element, Document, Comment,
+ * etc). A subclass of this factory might construct custom classes.
+ * 
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Ken Rune Holland
+ * @author  Phil Nelson
+ * @author  Bradley S. Huffman
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.10 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     public DefaultJDOMFactory() { }
 

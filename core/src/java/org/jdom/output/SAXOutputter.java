@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.30 2003/04/08 04:57:45 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.31 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,43 +66,32 @@ import org.xml.sax.ext.*;
 import org.xml.sax.helpers.*;
 
 /**
- * <code>SAXOutputter</code> takes a JDOM tree and fires SAX2 events.
- *
+ * Outputs a JDOM document as a stream of SAX2 events.
  * <p>
- * Most <code>ContentHandler</code> callbacks are supported. Both
- * <code>ignorableWhitespace</code> and <code>skippedEntity</code> have
- * not been implemented. The <code>setDocumentLocator</code> callback has
- * been implemented, but the locator object always returns -1 for
- * <code>getColumnNumber</code> and <code>getLineNumber</code>.
- * </p>
- *
- * <p>
- * The <code>EntityResolver</code> callback <code>resolveEntity</code> has
- * been implemented for DTDs.
- * </p>
- *
+ * Most ContentHandler callbacks are supported. Both
+ * <code>ignorableWhitespace()</code> and <code>skippedEntity()</code> have not
+ * been implemented. The <code>{@link JDOMLocator}</code> class returned by
+ * <code>{@link #getLocator}</code> exposes the current node being operated
+ * upon.
  * <p>
  * At this time, it is not possible to access notations and unparsed entity
- * references in a DTD from a JDOM tree. Therefore, <code>DTDHandler</code>
- * callbacks have not been implemented yet.
- * </p>
- *
+ * references in a DTD from JDOM. Therefore, <code>DTDHandler</code> callbacks
+ * have not been implemented yet.
  * <p>
  * The <code>ErrorHandler</code> callbacks have not been implemented, since
- * these are supposed to be invoked when the document is parsed. However, the
- * document has already been parsed in order to create the JDOM tree.
- * </p>
+ * these are supposed to be invoked when the document is parsed and at this
+ * point the document exists in memory and is known to have no errors. </p>
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Fred Trimble
- * @author Bradley S. Huffman
- * @version $Revision: 1.30 $, $Date: 2003/04/08 04:57:45 $
+ * @version $Revision: 1.31 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Fred Trimble
+ * @author  Bradley S. Huffman
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.30 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.31 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =

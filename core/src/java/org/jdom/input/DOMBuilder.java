@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.50 2003/04/06 02:00:44 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.51 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,25 +67,23 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 /**
- * <code>DOMBuilder</code> builds a JDOM tree using DOM.
- * Note that this class should only be used for building from a pre-existing
- * DOM tree.  The class can be used to build from files, streams, etc but
- * other builders like SAXBuilder can perform the task faster because
- * they don't create a DOM tree first.
+ * Builds a JDOM {@link org.jdom.Document org.jdom.Document} from a pre-existing
+ * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
+ * builds from files to sanity check {@link SAXBuilder}.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Philip Nelson
- * @author Kevin Regan
- * @author Yusuf Goolamabbas
- * @author Dan Schaffer
- * @author Bradley S. Huffman
- * @version $Revision: 1.50 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.51 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Philip Nelson
+ * @author  Kevin Regan
+ * @author  Yusuf Goolamabbas
+ * @author  Dan Schaffer
+ * @author  Bradley S. Huffman
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.50 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.51 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 

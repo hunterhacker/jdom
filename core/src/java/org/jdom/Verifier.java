@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.44 2003/04/14 19:24:40 jhunter Exp $
+ $Id: Verifier.java,v 1.45 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,19 +59,19 @@ package org.jdom;
 import java.util.*;
 
 /**
- * <code>Verifier</code> handles XML checks on names, data, and other
- * verification tasks for JDOM.  The class is final and may not be subclassed.
+ * A utility class to handle well-formedness checks on names, data, and other
+ * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @author Brett McLaughlin
- * @author Elliotte Rusty Harold
- * @author Jason Hunter
- * @author Bradley S. Huffman
- * @version $Revision: 1.44 $, $Date: 2003/04/14 19:24:40 $
+ * @version $Revision: 1.45 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Elliotte Rusty Harold
+ * @author  Jason Hunter
+ * @author  Bradley S. Huffman
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.44 $ $Date: 2003/04/14 19:24:40 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.45 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.

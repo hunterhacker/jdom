@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.19 2003/04/06 02:00:44 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.20 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,15 +62,14 @@ import org.jdom.*;
 import org.w3c.dom.Document;
 
 /**
- * <b><code>DOMAdapter</code></b>.
- * <p>
- * This interface defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object from a DOM parser.
- * </p>
+ * Defines a standard set of adapter methods for interfacing with a DOM parser
+ * and obtaining a DOM {@link org.w3c.dom.Document org.w3c.dom.Document} object.
+ * Implementing classes map these calls to DOM parser-specific calls, allowing
+ * any third-party parser to be used with JDOM.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revison$, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.20 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public interface DOMAdapter {
 

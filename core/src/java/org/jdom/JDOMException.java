@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.18 2003/04/06 02:00:44 jhunter Exp $
+ $Id: JDOMException.java,v 1.19 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,24 +64,19 @@ import java.sql.*;
 import org.xml.sax.*;
 
 /**
- * <b><code>JDOMException</code></b>.
- * <p>
- * This <code>Exception</code> subclass is the top level
- * <code>Exception</code> that JDOM classes
- * can throw.  Its subclasses add specificity to the 
- * problems that can occur using JDOM, but this single
- * <code>Exception</code> can be caught to handle all
- * JDOM specific problems.
- * </p>
- * 
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.18 $, $Date: 2003/04/06 02:00:44 $
+ * The top level exception that JDOM classes can throw. Its subclasses add
+ * specificity to the problems that can occur using JDOM. This single exception
+ * can be caught to handle all JDOM specific problems (some methods may throw
+ * {@link java.io.IOException} and such).
+ *
+ * @version $Revision: 1.19 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.18 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.19 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: EntityRef.java,v 1.13 2003/04/08 04:14:49 jhunter Exp $
+ $Id: EntityRef.java,v 1.14 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,17 +59,18 @@ package org.jdom;
 import java.io.Serializable;
 
 /**
- * <code>EntityRef</code> Defines an XML entity reference in Java.
- *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Philip Nelson
- * @version $Revision: 1.13 $, $Date: 2003/04/08 04:14:49 $
+ * An XML entity reference. Methods allow the user to manage its name, public
+ * id, and system id.
+ * 
+ * @version $Revision: 1.14 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Philip Nelson
  */
 public class EntityRef implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.13 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.14 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;

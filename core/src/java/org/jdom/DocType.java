@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.24 2003/04/08 04:14:49 jhunter Exp $
+ $Id: DocType.java,v 1.25 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,16 +59,17 @@ package org.jdom;
 import java.io.*;
 
 /**
- * <code>DocType</code> represents an XML DOCTYPE declaration.
+ * An XML DOCTYPE declaration.  Method allow the user to get and set the
+ * root element name, public id, and system id.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.24 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.25 $, $Date: 2003/04/30 09:55:11 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.24 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.25 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.33 2003/04/06 02:00:44 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.34 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,20 +64,21 @@ import org.jdom.adapters.*;
 
 
 /**
- * Takes a JDOM tree and outputs to a DOM tree.
+ * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
+ * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Matthew Merlo
- * @author Dan Schaffer
- * @author Yusuf Goolamabbas
- * @author Bradley S. Huffman
- * @version $Revision: 1.33 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.34 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Matthew Merlo
+ * @author  Dan Schaffer
+ * @author  Yusuf Goolamabbas
+ * @author  Bradley S. Huffman
  */
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.33 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.34 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =

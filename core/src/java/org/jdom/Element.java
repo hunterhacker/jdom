@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.130 2003/04/10 05:02:40 jhunter Exp $
+ $Id: Element.java,v 1.131 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,28 +62,26 @@ import java.util.*;
 import org.jdom.filter.*;
 
 /**
- * <code>Element</code> defines behavior for an XML
- * element, modeled in Java.  Methods allow the user
- * to obtain the value of the element's textual content,
- * obtain its attributes, and get its children.
- *
- *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Lucas Gonze
- * @author Kevin Regan
- * @author Dan Schaffer
- * @author Yusuf Goolamabbas
- * @author Kent C. Johnson
- * @author Jools Enticknap
- * @author Alex Rosen
- * @author Bradley S. Huffman
- * @version $Revision: 1.130 $, $Date: 2003/04/10 05:02:40 $
+ * An XML element. Methods allow the user to get and manipulate its child
+ * elements and content, directly access the element's textual content,
+ * manipulate its attributes, and manage namespaces.
+ * 
+ * @version $Revision: 1.131 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Lucas Gonze
+ * @author  Kevin Regan
+ * @author  Dan Schaffer
+ * @author  Yusuf Goolamabbas
+ * @author  Kent C. Johnson
+ * @author  Jools Enticknap
+ * @author  Alex Rosen
+ * @author  Bradley S. Huffman
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.130 $ $Date: 2003/04/10 05:02:40 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.131 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 

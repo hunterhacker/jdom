@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XML4JDOMAdapter.java,v 1.15 2003/04/06 02:00:44 jhunter Exp $
+ $Id: XML4JDOMAdapter.java,v 1.16 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,20 +65,16 @@ import org.w3c.dom.Document;
 import org.xml.sax.*;
 
 /**
- * <b><code>XML4JDOMAdapter</code></b>.
- * <p>
- * This class defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object from an IBM XML4J DOM parser.
- * </p>
- *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.15 $, $Date: 2003/04/06 02:00:44 $
+ * An adapter for the IBM XML4J DOM parser.
+ * 
+ * @version $Revision: 1.16 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class XML4JDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.16 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

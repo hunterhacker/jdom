@@ -1,6 +1,6 @@
 /*--
 
- $Id: TextBuffer.java,v 1.5 2003/01/23 02:23:31 jhunter Exp $
+ $Id: TextBuffer.java,v 1.6 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,27 +57,26 @@
 package org.jdom.input;
 
 /**
- * <code>TextBuffer</code> is similar to StringBuffer, but optimized
- * for XML parsing, where the common case is that you get only one chunk
- * of characters per text section. <code>TextBuffer</code> stores the
- * first chunk of characters in a String, which can just be returned
- * directly if no second chunk is received. Subsequent chunks are stored
- * in a supplemental char array (like StringBuffer uses). In this case,
- * the returned text will be the first String chunk, concatenated with
- * the subsequent chunks stored in the char array. This provides optimal
- * performance in the common case, while still providing very good 
- * performance in the uncommon case. Furthermore, avoiding StringBuffer
- * means that no extra unused char array space will be kept around
- * after parsing is through. 
+ * A non-public utility class similar to StringBuffer but optimized for XML
+ * parsing where the common case is that you get only one chunk of characters
+ * per text section. TextBuffer stores the first chunk of characters in a
+ * String, which can just be returned directly if no second chunk is received.
+ * Subsequent chunks are stored in a supplemental char array (like StringBuffer
+ * uses). In this case, the returned text will be the first String chunk,
+ * concatenated with the subsequent chunks stored in the char array. This
+ * provides optimal performance in the common case, while still providing very
+ * good performance in the uncommon case. Furthermore, avoiding StringBuffer
+ * means that no extra unused char array space will be kept around after parsing
+ * is through.
  *
- * @author Bradley S. Huffman
- * @author Alex Rosen
- * @version $Revision: 1.5 $, $Date: 2003/01/23 02:23:31 $
+ * @version $Revision: 1.6 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Bradley S. Huffman
+ * @author  Alex Rosen
  */
 class TextBuffer {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.5 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.6 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.75 2003/04/10 04:38:47 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.76 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -69,26 +69,29 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * <code>SAXBuilder</code> builds a JDOM tree using SAX.
- * Information about SAX can be found at 
- * <a href="http://www.saxproject.org">http://www.saxproject.org</a>.
- *
+ * Builds a JDOM document from files, streams, readers, URLs, or a SAX {@link
+ * org.xml.sax.InputSource} instance using a SAX parser. The builder uses a
+ * third-party SAX parser (chosen by JAXP by default, or you can choose
+ * manually) to handle the parsing duties and simply listens to the SAX events
+ * to construct a document. Details which SAX does not provide, such as
+ * whitespace outside the root element, are not represented in the JDOM
+ * document. Information about SAX can be found at <a
+ * href="http://www.saxproject.org">http://www.saxproject.org</a>.
  * <p>
- * Known issues: Relative paths for a DocType or EntityRef may be
- * converted by the SAX parser into absolute paths.
- * </p>
+ * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
+ * be converted by the SAX parser into absolute paths.
  *
- * @author Jason Hunter
- * @author Brett McLaughlin
- * @author Dan Schaffer
- * @author Philip Nelson
- * @author Alex Rosen
- * @version $Revision: 1.75 $, $Date: 2003/04/10 04:38:47 $
+ * @version $Revision: 1.76 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Jason Hunter
+ * @author  Brett McLaughlin
+ * @author  Dan Schaffer
+ * @author  Philip Nelson
+ * @author  Alex Rosen
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.75 $ $Date: 2003/04/10 04:38:47 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.76 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CrimsonDOMAdapter.java,v 1.13 2003/04/06 02:00:44 jhunter Exp $
+ $Id: CrimsonDOMAdapter.java,v 1.14 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,19 +64,15 @@ import org.w3c.dom.Document;
 import org.xml.sax.*;
 
 /**
- * <b><code>CrimsonDOMAdapater</code></b>.
- * <p>
- * This class defines wrapper behavior for obtaining a DOM
- * <code>Document</code> object from the Apache Crimson DOM parser.
- * </p>
- *
- * @author Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2003/04/06 02:00:44 $
+ * An adapter for the Apache Crimson DOM parser.
+ * 
+ * @version $Revision: 1.14 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Jason Hunter
  */
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.13 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.14 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

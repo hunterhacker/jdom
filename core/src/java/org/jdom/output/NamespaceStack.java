@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.11 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,20 +60,19 @@ import java.util.*;
 import org.jdom.Namespace;
 
 /**
- * <code>NamespaceStack</code> is a helper class used by both
- * <code>{@link XMLOutputter}</code> and 
- * <code>{@link SAXOutputter}</code> to manage namespaces
- * in a JDOM Document during output.
+ * A non-public utility class used by both <code>{@link XMLOutputter}</code> and
+ * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
+ * during output.
  *
- * @author Elliotte Rusty Harolde
- * @author Fred Trimble
- * @author Brett McLaughlin
- * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Elliotte Rusty Harolde
+ * @author  Fred Trimble
+ * @author  Brett McLaughlin
  */
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.37 2002/06/26 01:44:26 jhunter Exp $
+ $Id: Namespace.java,v 1.38 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,23 +59,17 @@ package org.jdom;
 import java.util.*;
 
 /**
- * <code>Namespace</code> defines both a factory for
- * creating XML namespaces, and a namespace itself. This class
- * represents an XML namespace in Java.  
- * <p>
- * Elements and Attributes containing Namespaces <b>can</b> be serialized; 
- * however the Namespace class itself does not implement 
- * <code>java.io.Serializable</code>.  This works because the Element and
- * Attribute classes handle serialization of their Namespaces manually.
- * The classes use the getNamespace() method on deserialization to ensure 
- * there may be only one unique Namespace object for any unique 
- * prefix/uri pair, something needed for efficiency reasons.
- * </p>
+ * An XML namespace representation, as well as a factory for creating XML
+ * namespace objects. Namespaces are not Serializable, however objects that use
+ * namespaces have special logic to handle serialization manually. These classes
+ * call the getNamespace() method on deserialization to ensure there is one
+ * unique Namespace object for any unique prefix/uri pair.
  *
- * @author Brett McLaughlin
- * @author Elliotte Rusty Harold
- * @author Wesley Biggs
- * @version $Revision: 1.37 $, $Date: 2002/06/26 01:44:26 $
+ * @version $Revision: 1.38 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Elliotte Rusty Harold
+ * @author  Jason Hunter
+ * @author  Wesley Biggs
  */
 public final class Namespace {
 
@@ -83,7 +77,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.37 $ $Date: 2002/06/26 01:44:26 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.38 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

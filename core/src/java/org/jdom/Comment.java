@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.26 2003/04/06 02:00:44 jhunter Exp $
+ $Id: Comment.java,v 1.27 2003/04/30 09:55:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,18 +59,17 @@ package org.jdom;
 import java.io.*;
 
 /**
- * <code>Comment</code> defines behavior for an XML
- * comment, modeled in Java.  Methods
- * allow the user to obtain the text of the comment.
+ * An XML comment. Methods allow the user to get and set the text of the
+ * comment.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @version $Revision: 1.26 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.27 $, $Date: 2003/04/30 09:55:11 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.26 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.27 $ $Date: 2003/04/30 09:55:11 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalDataException.java,v 1.10 2002/04/29 13:38:15 jhunter Exp $
+ $Id: IllegalDataException.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,18 +57,16 @@
 package org.jdom;
 
 /**
- * <code>IllegalDataException</code>
- * is thrown when illegal text is supplied to a
- * JDOM construct.
+ * Thrown when illegal text is supplied to a JDOM construct.
  *
- * @author Brett McLaughlin
- * @author Elliotte Rusty Harold
- * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Elliotte Rusty Harold
  */
 public class IllegalDataException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.10 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: IllegalDataException.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating

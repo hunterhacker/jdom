@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ProcessingInstruction.java,v 1.36 2003/04/10 04:22:35 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.37 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -60,23 +60,21 @@ import java.io.*;
 import java.util.*;
 
 /**
- * <code>ProcessingInstruction</code> defines behavior for an
- * XML processing instruction, modeled in Java.  Methods
- * allow the user to obtain the target of the PI as well as its data.
- * The data can always be accessed as a String, and where appropriate
- * can be retrieved as name/value pairs.
- * </p>
+ * An XML processing instruction. Methods allow the user to obtain the target of
+ * the PI as well as its data. The data can always be accessed as a String or,
+ * if the data appears akin to an attribute list, can be retrieved as name/value
+ * pairs.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Steven Gould
- * @version $Revision: 1.36 $, $Date: 2003/04/10 04:22:35 $
+ * @version $Revision: 1.37 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Steven Gould
  */
 
 public class ProcessingInstruction implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.36 $ $Date: 2003/04/10 04:22:35 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.37 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;

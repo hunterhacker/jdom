@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.12 2003/04/08 04:57:45 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.13 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,16 +61,15 @@ import java.util.*;
 import org.jdom.*;
 
 /**
- * <code>JDOMFactory</code> is an interface to be used by builders
- * in constructing JDOM objects.  The <code>DefaultJDOMFactory</code> 
- * creates the standard top-level JDOM classes (Element, Document, 
- * Comment, etc).  Another implementation of this factory could be used
- * to create custom classes.
+ * An interface to be used by builders when constructing JDOM objects. The
+ * <code>DefaultJDOMFactory</code> creates the standard top-level JDOM classes
+ * (Element, Document, Comment, etc). Another implementation of this factory
+ * could be used to create custom classes.
  *
- * @author Ken Rune Holland
- * @author Phil Nelson
- * @author Bradley S. Huffman
- * @version $Revision: 1.12 $, $Date: 2003/04/08 04:57:45 $
+ * @version $Revision: 1.13 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Ken Rune Holland
+ * @author  Phil Nelson
+ * @author  Bradley S. Huffman
  */
 public interface JDOMFactory {
 

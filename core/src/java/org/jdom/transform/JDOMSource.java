@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.14 2003/04/21 06:40:31 jhunter Exp $
+ $Id: JDOMSource.java,v 1.15 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,42 +66,42 @@ import org.jdom.output.*;
 import org.xml.sax.*;
 
 /**
- * Acts as an holder for JDOM document sources.
+ * A holder for an XML Transformation source: a Document, Element, or list of
+ * nodes.
  * <p>
- * This class shall be used to wrap a JDOM Document to provide it
- * as input to a
- * {@link javax.xml.transform.Transformer JAXP TrAX Transformer}.</p>
+ * The is provides input to a
+ * {@link javax.xml.transform.Transformer JAXP TrAX Transformer}.
  * <p>
  * The following example shows how to apply an XSL Transformation
  * to a JDOM document and get the transformation result in the form
- * of a list of JDOM nodes:</p>
- * <blockquote><pre>
- *   public static List transform(Document in, String stylesheet)
+ * of a list of JDOM nodes:
+ * <pre><code>
+ *   public static List transform(Document doc, String stylesheet)
  *                                        throws JDOMException {
  *     try {
  *       Transformer transformer = TransformerFactory.newInstance()
  *                             .newTransformer(new StreamSource(stylesheet));
- *
+ *       JDOMSource in = new JDOMSource(doc);
  *       JDOMResult out = new JDOMResult();
- *       transformer.transform(new JDOMSource(in), out);
+ *       transformer.transform(in, out);
  *       return out.getResult();
  *     }
  *     catch (TransformerException e) {
  *       throw new JDOMException("XSLT Trandformation failed", e);
  *     }
  *   }
- * </pre></blockquote>
+ * </code></pre>
  *
  * @see org.jdom.transform.JDOMResult
  *
+ * @version $Revision: 1.15 $, $Date: 2003/04/30 09:55:13 $
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.14 $, $Date: 2003/04/21 06:40:31 $
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.14 $ $Date: 2003/04/21 06:40:31 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.15 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}

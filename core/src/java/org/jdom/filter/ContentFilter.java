@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: ContentFilter.java,v 1.6 2003/04/02 01:56:58 jhunter Exp $
+ $Id: ContentFilter.java,v 1.7 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,42 +59,33 @@ package org.jdom.filter;
 import org.jdom.*;
 
 /**
- * <code>ContentFilter</code> is a general purpose <code>Filter</code>
- * representing all legal JDOM objects and allows the ability to set
- * and unset the visiblity of these objects.  Filtering is accomplished by
- * way of a filtering mask in which each bit represents whether a JDOM
- * object is visible or not.
- *
- * <p>
+ * A general purpose Filter able to represent all legal JDOM objects or a
+ * specific subset. Filtering is accomplished by way of a filtering mask in
+ * which each bit represents whether a JDOM object is visible or not.
  * For example to view all Text and CDATA nodes in the content of element x.
  * <pre><code>
  *      Filter filter = new ContentFilter(ContentFilter.TEXT |
  *                                        ContentFilter.CDATA);
  *      List content = x.getContent(filter);
  * </code></pre>
- * </p>
- *
  * <p>
- * For those who don't like bit-masking, set methods are provided as an 
+ * For those who don't like bit-masking, set methods are provided as an
  * alternative.  For example to allow everything except Comment nodes.
  * <pre><code>
  *      Filter filter =  new ContentFilter();
  *      filter.setCommentVisible(false);
  *      List content = x.getContent(filter);
  * </code></pre>
- * </p>
- *
  * <p>
  * The default is to allow all valid JDOM objects.
- * </p>
  *
+ * @version $Revision: 1.7 $, $Date: 2003/04/30 09:55:12 $
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2003/04/02 01:56:58 $
  */
 public class ContentFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.6 $ $Date: 2003/04/02 01:56:58 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.7 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /** Mask for JDOM <code>Element</code> objects */
     public static final int ELEMENT   = 1;

@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.91 2003/04/08 04:57:45 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.92 2003/04/30 09:55:13 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,55 +62,43 @@ import java.util.*;
 import org.jdom.*;
 
 /**
- * <code>XMLOutputter</code> takes a JDOM tree and formats it to a
- * stream as XML.  The outputter can manage many styles of document
- * formatting, from untouched to pretty printed.  The default is to
- * output the document content exactly as created, but this can be
- * changed with the various <code>set*()</code> methods.
- *
+ * Outputs a JDOM document as a stream of bytes. The outputter can manage many
+ * styles of document formatting, from untouched to pretty printed. The default
+ * is to output the document content exactly as created, but this can be changed
+ * with various set methods.
  * <p>
- * There are <code>output(&#133;)<code> methods to print any of the
- * standard JDOM classes, including <code>Document</code> and
- * <code>Element</code>, to either a <code>Writer</code> or an
- * <code>OutputStream</code>. <b>Warning</b>: When outputting to a
- * Writer, make sure the writer's encoding matches the encoding setting
- * in the XMLOutputter.  This ensures the encoding in which the content
- * is written (controlled by the Writer configuration) matches the
- * encoding placed in the document's XML declaration (controlled by the
- * XMLOutputter).  Because a Writer cannot be queried for its encoding,
- * the information must be passed to the XMLOutputter manually in its
- * constructor or via the setEncoding() method.  The default XMLOutputter
- * encoding is UTF-8.
- * </p>
- *
+ * There are <code>{@link #output output(...)}</code> methods to print any of
+ * the standard JDOM classes, including Document and Element, to either a Writer
+ * or an OutputStream. <b>Warning</b>: When outputting to a Writer, make sure
+ * the writer's encoding matches the encoding setting in the XMLOutputter. This
+ * ensures the encoding in which the content is written (controlled by the
+ * Writer configuration) matches the encoding placed in the document's XML
+ * declaration (controlled by the XMLOutputter). Because a Writer cannot be
+ * queried for its encoding, the information must be passed to the XMLOutputter
+ * manually in its constructor or via the <code>{@link #setEncoding
+ * setEncoding()}</code> method. The default XMLOutputter encoding is UTF-8.
  * <p>
- * The methods <code>outputString(&#133;)</code> are for convenience
- * only; for top performance you should call one of the
- * <code>output(&#133;)</code> and pass in your own <code>Writer</code> or
- * <code>OutputStream</code> if possible.
- * </p>
- *
+ * The methods <code>{@link #outputString outputString(...)}</code> are for
+ * convenience only; for top performance you should call one of the <code>{@link
+ * #output output(...)}</code> methods and pass in your own Writer or
+ * OutputStream if possible.
  * <p>
- * XML declarations are always printed on their own line followed by a
- * line seperator (this doesn't change the semantics of the document). To
- * omit printing of the declaration use <code>setOmitDeclaration</code>.
- * To omit printing of the encoding in the declaration use
- * <code>setOmitEncoding</code>. Unfortunatly there is currently no way
- * to know the original encoding of the document.
- * </p>
- *
+ * XML declarations are always printed on their own line followed by a line
+ * seperator (this doesn't change the semantics of the document). To omit
+ * printing of the declaration use <code>{@link #setOmitDeclaration
+ * setOmitDeclaration()}</code>. To omit printing of the encoding in the
+ * declaration use <code>{@link #setOmitEncoding setOmitEncoding()}</code>.
+ * Unfortunatly there is currently no way to know the original encoding of the
+ * document.
  * <p>
- * Empty elements are by default printed as &lt;empty/&gt;, but this can
- * be configured with <code>setExpandEmptyElements</code> to cause them to
- * be expanded to &lt;empty&gt;&lt;/empty&gt;.
- * </p>
- *
+ * Empty elements are by default printed as &lt;empty/&gt;, but this can be
+ * configured with <code>{@link #setExpandEmptyElements
+ * setExpandEmptyElements()}</code> to cause them to be expanded to
+ * &lt;empty&gt;&lt;/empty&gt;.
  * <p>
- * Several modes are available to effect the way textual content is printed.
- * All modes are configurable through corresponding set*() methods. 
- * Below is a table which explains the modes and the effect on the
- * resulting output.
- * </p>
+ * Several modes are available to effect the way textual content is printed. All
+ * modes are configurable through corresponding set methods. Below is a table
+ * which explains the modes and the effect on the resulting output. </p>
  *
  * <table>
  *   <tr>
@@ -158,47 +146,46 @@ import org.jdom.*;
  *       TextNormalize
  *     </td>
  *     <td>
- *       Same as TextTrim, in addition interior whitespace is compressed to
+ *       Same as TextTrim, plus addition interior whitespace is compressed to
  *       a single space.
  *     </td>
  *   </tr>
  * </table>
  *
  * <p>
- * For pretty-print output, use <code>setNewlines</code> in conjunction
- * with <code>setIndent</code>. Setting newlines to <code>true</code> causes
- * tags to be aligned and possibly indented. With newlines <code>true</code>,
- * whitespace might be added back to fit alignment needs. In most cases
- * texual content is aligned with the surrounding tags (after the
- * appropriate text mode is applied).  In the case where the only content
- * between the start and end tags is textual, the start tag, text, and end
- * tag are all printed on the same line.
- *
+ * For pretty-print output, use <code>{@link #setNewlines setNewlines()}</code>
+ * in conjunction with <code>{@link #setIndent setIndent()}</code>. Setting
+ * newlines to true causes tags to be aligned and possibly indented. With
+ * newlines true, whitespace might be added back to fit alignment needs. In most
+ * cases textual content is aligned with the surrounding tags (after the
+ * appropriate text mode is applied). In the case where the only content between
+ * the start and end tags is textual, the start tag, text, and end tag are all
+ * printed on the same line. If the document being output already has
+ * whitespace, it's wise to turn on TextTrim so the pre-existing whitespace can
+ * be trimmed before adding new whitespace.
  * <p>
- * When a element has a xml:space attribute with the value of "preserve",
- * all formating is turned off and reverts back to the default until the
- * element and its contents have been printed.  If a nested element
- * contains another xml:space with the value "default" formatting is turned
- * back on for the child element and then off for the remainder of the
- * parent element.
- * </p>
+ * When a element has a xml:space attribute with the value of "preserve", all
+ * formating is turned off and reverts back to the default until the element and
+ * its contents have been printed. If a nested element contains another
+ * xml:space with the value "default" formatting is turned back on for the child
+ * element and then off for the remainder of the parent element.
  *
- * @author Brett McLaughlin
- * @author Jason Hunter
- * @author Jason Reid
- * @author Wolfgang Werner
- * @author Elliotte Rusty Harold
- * @author David &amp; Will (from Post Tool Design)
- * @author Dan Schaffer
- * @author Alex Chaffee (alex@jguru.com)
- * @author Bradley S. Huffman
- * @version $Revision: 1.91 $, $Date: 2003/04/08 04:57:45 $
+ * @version $Revision: 1.92 $, $Date: 2003/04/30 09:55:13 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
+ * @author  Jason Reid
+ * @author  Wolfgang Werner
+ * @author  Elliotte Rusty Harold
+ * @author  David &amp; Will (from Post Tool Design)
+ * @author  Dan Schaffer
+ * @author  Alex Chaffee
+ * @author  Bradley S. Huffman
  */
 
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.91 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.92 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
 
     /** Whether or not to output the XML declaration
       * - default is <code>false</code> */

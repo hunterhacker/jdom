@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.6 2003/04/06 02:00:44 jhunter Exp $
+ $Id: Filter.java,v 1.7 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -58,14 +58,11 @@ package org.jdom.filter;
 
 
 /**
- * Classes which wish to modify the behaviour of the FilterList
- * can implement the list filter interface in order to reduce
- * the visibility of certain items in the list, or to restrict
- * the mutability of the list.
+ * A generalized filter to restrict visibility or mutability on a list.
  *
- * @author Jools Enticknap
- * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.7 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Jools Enticknap
+ * @author  Bradley S. Huffman
  */
 public interface Filter {
     /**

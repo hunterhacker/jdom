@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: IllegalAddException.java,v 1.21 2002/07/22 12:22:12 jhunter Exp $
+ $Id: IllegalAddException.java,v 1.22 2003/04/30 09:55:12 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,16 +57,16 @@
 package org.jdom;
 
 /**
- * <code>IllegalAddException</code> is thrown when trying to add a
- * illegal object to a JDOM construct.
+ * Thrown when trying to add a illegal object to a JDOM construct.
  *
- * @author Brett McLaughlin
- * @version $Revision: 1.21 $, $Date: 2002/07/22 12:22:12 $
+ * @version $Revision: 1.22 $, $Date: 2003/04/30 09:55:12 $
+ * @author  Brett McLaughlin
+ * @author  Jason Hunter
  */
 public class IllegalAddException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.21 $ $Date: 2002/07/22 12:22:12 $ $Name:  $";
+      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.22 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating
