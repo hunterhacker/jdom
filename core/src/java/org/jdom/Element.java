@@ -364,6 +364,25 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     *  This will remove a namespace declarations from this element.
+     *    This should <i>not</i> be used to remove the declaration for
+     *    this element itself; that should be handled in the construction
+     *    of the element. Instead, this is for removing namespace
+     *    declarations on the element not relating directly to itself.
+     *    If the declaration is not present, this method does nothing.
+     * </p>
+     *
+     * @param additionalNamespace <code>Namespace</code> to remove.
+     */
+    public void removeNamespaceDeclaration(Namespace additionalNamespace) {
+        if (additionalNamespaces == null) {
+            return;
+        }
+        additionalNamespaces.remove(additionalNamespace);
+    }
+
+    /**
+     * <p>
      *  This will return any namespace declarations on this element
      *    that exist, <i>excluding</i> the namespace of the element
      *    itself, which can be obtained through
