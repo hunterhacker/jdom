@@ -938,7 +938,7 @@ public final class FilterListRandomizer
 
 		public Element setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (Element) super.setParent(parent);
 		}
 	}
 
@@ -951,7 +951,7 @@ public final class FilterListRandomizer
 
 		public Comment setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (Comment) super.setParent(parent);
 		}
 	}
 
@@ -964,7 +964,7 @@ public final class FilterListRandomizer
 
 		public EntityRef setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (EntityRef) super.setParent(parent);
 		}
 	}
 
@@ -977,7 +977,7 @@ public final class FilterListRandomizer
 
 		public ProcessingInstruction setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (ProcessingInstruction) super.setParent(parent);
 		}
 	}
 
@@ -990,7 +990,7 @@ public final class FilterListRandomizer
 
 		public Text setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (Text) super.setParent(parent);
 		}
 	}
 
@@ -1003,7 +1003,7 @@ public final class FilterListRandomizer
 
 		public Text setParent(Element parent)
 		{
-			return super.setParent(parent);
+			return (Text) super.setParent(parent);
 		}
 	}
 }

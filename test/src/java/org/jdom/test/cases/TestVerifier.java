@@ -302,29 +302,29 @@ public final class TestVerifier extends junit.framework.TestCase {
 		
 		allChars = builder.build(in);
 
-		List els = allChars.getRootElement().getChildElement("prodgroup").getChildElements("prod");
+		List els = allChars.getRootElement().getChild("prodgroup").getChildren("prod");
 
 		Iterator it = els.iterator();
 		while (it.hasNext()) {
 			Element prod = (Element)it.next();
 			if (prod.getAttribute("id").getValue().equals("NT-Char")) {
 				//characters that must be accepted by processor
-				allCharacters =  prod.getChildElement("rhs");
+				allCharacters =  prod.getChild("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-BaseChar")) {
 				//build base characters
-				characters = prod.getChildElement("rhs");
+				characters = prod.getChild("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Ideographic")) {
 				//build Ideographic characters
-				ideochars = prod.getChildElement("rhs");
+				ideochars = prod.getChild("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-CombiningChar")) {
 				//build CombiningChar
-				combiningChars = prod.getChildElement("rhs");
+				combiningChars = prod.getChild("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Digit")) {
 				//build Digits
-				digits = prod.getChildElement("rhs");
+				digits = prod.getChild("rhs");
 			} else if (prod.getAttribute("id").getValue().equals("NT-Extender")) {
 				//build Extenders
-				extenders = prod.getChildElement("rhs");
+				extenders = prod.getChild("rhs");
 			}
 	
 
