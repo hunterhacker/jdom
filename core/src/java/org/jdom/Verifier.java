@@ -144,7 +144,7 @@ public final class Verifier {
      *  This will check the supplied string to see if it only contains
      *  characters allowed by the XML 1.0 specification. The C0 controls
      *  (e.g. null, vertical tab, formfeed, etc.) are specifically excluded
-     *  except for carirage return, linefeed, and the horizontal tab.
+     *  except for carriage return, linefeed, and the horizontal tab.
      *  Surrogates are also excluded. 
      *  </p>
      *  <p>
