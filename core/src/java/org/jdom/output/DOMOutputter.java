@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.39 2004/02/27 11:32:58 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.40 2004/08/31 19:31:11 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.39 $, $Date: 2004/02/27 11:32:58 $
+ * @version $Revision: 1.40 $, $Date: 2004/08/31 19:31:11 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.39 $ $Date: 2004/02/27 11:32:58 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.40 $ $Date: 2004/08/31 19:31:11 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -304,10 +304,10 @@ public class DOMOutputter {
                     (ns1 != Namespace.XML_NAMESPACE)) {
                     String prefix = ns1.getPrefix();
                     String uri = namespaces.getURI(prefix);
-                    if (!ns.getURI().equals(uri)) { // output a new decl
+                    if (!ns1.getURI().equals(uri)) { // output a new decl
                         String attrName = getXmlnsTagFor(ns1);
                         domElement.setAttribute(attrName, ns1.getURI());
-                        namespaces.push(ns);
+                        namespaces.push(ns1);
                     }
                 }
                 // Crimson doesn't like setAttributeNS() for non-NS attribs
