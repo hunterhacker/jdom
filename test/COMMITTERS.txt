@@ -4,7 +4,7 @@ alphabetically by last name.
 DO NOT WRITE THESE PEOPLE FOR TECH SUPPORT.  THEY WILL NOT ANSWER.
 WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
-Jools Enticknap is module captain.
+Jools Enticknap is code captain for this module.
 
 Jools Enticknap <jools@jools.org>
 Elliotte Rusty Harold <elharo@metalab.unc.edu>
