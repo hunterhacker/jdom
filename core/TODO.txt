@@ -4,6 +4,8 @@ Items that need to be done:
 
 * Implement DOMOutputter (Kevin Regan <kevinr@valicert.com> is working on it)
 
+* Troubleshoot SAXBuilder and related demos
+
 * Implement inline entities:
         <?xml version='1.0' ?>
         <!DOCTYPE mydtd[
@@ -18,8 +20,6 @@ Items that need to be done:
         <DOCUMENT>
                 God forts&auml;ttning p&aring; det nya millenniet!
         </DOCUMENT>
-
-* Fix namespace declarations for attributes
 
 * Add methods/logic to Verifier for all XML spec. constraints
 

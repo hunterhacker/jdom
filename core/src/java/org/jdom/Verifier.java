@@ -186,17 +186,6 @@ public final class Verifier {
             return "Namespace URIs cannot begin with a hyphen (-).";
         }
 
-        // Ensure valid content
-        for (int i=0, len = uri.length(); i<len; i++) {
-            char c = uri.charAt(i);
-            if ((!Character.isLetterOrDigit(c))
-                && (c != '-')
-                && (c != '$')
-                && (c != '_')) {
-                return c + " is not allowed in Namespace URIs.";
-            }
-        }
-
         // If we got here, everything is OK
         return null;
     }

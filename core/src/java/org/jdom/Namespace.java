@@ -51,6 +51,7 @@ import java.util.HashMap;
  *
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
+ * @author Wesley Biggs
  * @version 1.0
  */
 public class Namespace {
@@ -216,6 +217,10 @@ public class Namespace {
      *         this <code>Namespace<code>.
      */
     public boolean equals(Object ob) {
+        if (ob == null) {
+            return false;
+        }
+
         if (ob instanceof Namespace) {
             Namespace ns = (Namespace)ob;
             // Compare URIs

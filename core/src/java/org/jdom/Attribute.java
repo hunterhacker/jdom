@@ -53,6 +53,7 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
+ * @author Wesley Biggs
  * @version 1.0
  */
 public class Attribute implements Serializable, Cloneable {
@@ -244,6 +245,18 @@ public class Attribute implements Serializable, Cloneable {
      */
     public String getNamespaceURI() {
         return namespace.getURI();
+    }
+
+    /**
+     * <p>
+     *  This will return this <code>Attribute</code>'s
+     *    <code>{@link Namespace}</code>.
+     * </p>
+     *
+     * @return <code>Namespace</code> - Namespace object for this <code>Attribute</code>
+     */
+    public Namespace getNamespace() {
+        return namespace;
     }
 
     /**

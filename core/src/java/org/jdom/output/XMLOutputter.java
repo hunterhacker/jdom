@@ -77,6 +77,7 @@ import org.jdom.ProcessingInstruction;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Jason Reid
+ * @author Wolfgang Werner
  * @version 1.0
  */
 public class XMLOutputter {
@@ -87,11 +88,11 @@ public class XMLOutputter {
     /** The default new line flag, set to do new lines */
     private boolean newlines = true;
 
+    /** The encoding format */
+    private String encoding = "UTF8";
+
     /** Namespaces on the document */
     private LinkedList namespaces;
-
-    /** Namespace mappings */
-    private Map namespaceMappings;
 
     /**
      * <p>
@@ -101,7 +102,6 @@ public class XMLOutputter {
      */
     public XMLOutputter() {
         namespaces = new LinkedList();
-        namespaceMappings = new HashMap();
     }
 
     /**
@@ -115,7 +115,6 @@ public class XMLOutputter {
     public XMLOutputter(String indent) {
        this.indent = indent;
        namespaces = new LinkedList();
-       namespaceMappings = new HashMap();
     }
 
     /**
@@ -134,7 +133,26 @@ public class XMLOutputter {
        this.indent = indent;
        this.newlines = newlines;
        namespaces = new LinkedList();
-       namespaceMappings = new HashMap();
+    }
+
+    /**
+     * <p>
+     * This will create an <code>XMLOutputter</code> with
+     *   the given indent and new lines printing only if newlines is
+     *   <code>true</code>, and encoding format <code>encoding</code>.
+     * </p>
+     *
+     * @param indent the indent <code>String</code>, usually some number
+     *        of spaces
+     * @param newlines <code>true</code> indicates new lines should be
+     *                 printed, else new lines are ignored (compacted).
+     * @param encoding set encoding format.
+     */
+    public XMLOutputter(String indent, boolean newlines, String encoding) {
+       this.indent = indent;
+       this.newlines = newlines;
+       this.encoding = encoding;
+       namespaces = new LinkedList();
     }
 
     /**
@@ -170,6 +188,23 @@ public class XMLOutputter {
      *
      * @param doc <code>Document</code> to format.
      * @param out <code>PrintWriter</code> to write to.
+     * @param encoding set encoding format.
+     * @throws <code>IOException</code> - if there's any problem writing.
+     */
+    public void output(Document doc, OutputStream out, String encoding)
+                                           throws IOException {
+        this.encoding = encoding;
+        output(doc, out);
+    }
+
+    /**
+     * <p>
+     * This will print the <code>Document</code> to the given output stream.
+     *   The characters are printed using UTF-8 encoding.
+     * </p>
+     *
+     * @param doc <code>Document</code> to format.
+     * @param out <code>PrintWriter</code> to write to.
      * @throws <code>IOException</code> - if there's any problem writing.
      */
     public void output(Document doc, OutputStream out)
@@ -180,7 +215,7 @@ public class XMLOutputter {
          */
         PrintWriter writer = new PrintWriter(
                              new OutputStreamWriter(
-                             new BufferedOutputStream(out), "UTF8"));
+                             new BufferedOutputStream(out), encoding));
 
         // Print out XML declaration
         printDeclaration(doc, writer);
@@ -196,7 +231,8 @@ public class XMLOutputter {
             while (i.hasNext()) {
                 Object obj = i.next();
                 if (obj instanceof Element) {
-                    printElement(doc.getRootElement(), writer, 0);  // 0 is indentation
+                    // 0 is indentation
+                    printElement(doc.getRootElement(), writer, 0);
                 } else if (obj instanceof Comment) {
                     writer.print("<!--" + obj.toString() + "-->");
                 }
@@ -220,7 +256,11 @@ public class XMLOutputter {
      */
     protected void printDeclaration(Document doc, PrintWriter out) {
         // Assume 1.0 version
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        if (encoding.equals("UTF8"))
+            out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        else
+            out.println("<?xml version=\"1.0\" encoding=\"" + encoding +
+                        "\"?>");
     }
 
     /**
@@ -310,21 +350,26 @@ public class XMLOutputter {
         maybePrintln(out);
         indent(out, indentLevel);
 
+        // Print the beginning of the tag plus attributes and any
+        // necessary namespace declarations
+        out.print("<");
+        out.print(element.getQualifiedName());
+        Namespace ns = element.getNamespace();
+        boolean printedNS = false;
+        if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
+            printNamespace(element.getNamespace(), out);
+            printedNS = true;
+            namespaces.add(ns);
+        }
+
+        printAttributes(element.getAttributes(), out);
+
         if (empty) {
-            // Print the tag and attributes, with /> at the end
-            // Example: <tag name="value"/>
-            out.print("<");
-            out.print(element.getQualifiedName());
-            maybePrintNamespace(element, out);
-            printAttributes(element.getAttributes(), out);
+            // Simply close up
             out.print(" />");
         } else if (stringOnly) {
-            // Print the tag and attributes, with String on same line
+            // Print the tag  with String on same line
             // Example: <tag name="value">content</tag>
-            out.print("<");
-            out.print(element.getQualifiedName());
-            maybePrintNamespace(element, out);
-            printAttributes(element.getAttributes(), out);
             out.print(">");
             out.print(escapeElementEntities(element.getContent()));
             out.print("</");
@@ -332,16 +377,12 @@ public class XMLOutputter {
             out.print(">");
         } else {
             /**
-             * Print the tag and attributes, with children on future lines
+             * Print with children on future lines
              * Rather than check for mixed content or not, just print
              * Example: <tag name="value">
              *             <child/>
              *          </tag>
              */
-            out.print("<");
-            out.print(element.getQualifiedName());
-            maybePrintNamespace(element, out);
-            printAttributes(element.getAttributes(), out);
             out.print(">");
 
             // Iterate through children
@@ -385,12 +426,10 @@ public class XMLOutputter {
             out.print(element.getQualifiedName());
             out.print(">");
 
-            // After recursion, remove the namespace defined on the element (if any)
-            String definedOn =
-                (String)namespaceMappings.get(element.getNamespace());
-            if (definedOn != null && definedOn.equals(element.getQualifiedName())) {
-                namespaceMappings.remove(element.getNamespace());
-            }
+           // After recursion, remove the namespace defined on the element (if any)
+          if (printedNS) {
+              namespaces.removeLast();
+           }
         }
     }
 
@@ -400,25 +439,18 @@ public class XMLOutputter {
      *    declarations.
      * </p>
      *
-     * @param element <code>Element</code> to (maybe) print definition on
+     * @param ns <code>Namespace</code> to print definition of
      * @param out <code>PrintWriter</code> to write to.
      */
-    protected void maybePrintNamespace(Element element, PrintWriter out) {
-        Namespace ns = element.getNamespace();
-        if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
-            out.print(" xmlns");
-            if (!ns.getPrefix().equals("")) {
-                out.print(":");
-                out.print(ns.getPrefix());
-            }
-            out.print("=\"");
-            out.print(ns.getURI());
-            out.print("\"");
-
-            // Add to list
-            namespaces.add(ns);
-            namespaceMappings.put(ns, element.getQualifiedName());
+    protected void printNamespace(Namespace ns, PrintWriter out) {
+        out.print(" xmlns");
+        if (!ns.getPrefix().equals("")) {
+            out.print(":");
+            out.print(ns.getPrefix());
         }
+        out.print("=\"");
+        out.print(ns.getURI());
+        out.print("\"");
     }
 
     /**
@@ -432,6 +464,10 @@ public class XMLOutputter {
     protected void printAttributes(List attributes, PrintWriter out) {
         for (int i=0, size=attributes.size(); i<size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
+            Namespace ns = attribute.getNamespace();
+            if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
+                printNamespace(attribute.getNamespace(), out);
+            }
             out.print(" ");
             out.print(attribute.getQualifiedName());
             out.print("=");
