@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.83 2001/06/07 22:41:14 jhunter Exp $
+ $Id: Element.java,v 1.84 2001/06/11 00:05:23 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.83 $ $Date: 2001/06/07 22:41:14 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.84 $ $Date: 2001/06/11 00:05:23 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -92,14 +92,12 @@ public class Element implements Serializable, Cloneable {
         element */
     protected transient ArrayList additionalNamespaces;
 
-    /** Parent element, or null if none */
-    protected Element parent;
-
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
     // for a possible memory optimization here (using a RootElement subclass)
-    /** The Document containing this element, if it is the root element */
-    protected Document document;
     
+    /** Parent element, document, or null if none */
+    protected Object parent;
+
     /** The attributes of the <code>Element</code> */
     protected List attributes;
     
@@ -143,7 +141,6 @@ public class Element implements Serializable, Cloneable {
     public Element(String name, Namespace namespace) {
         setName(name);
         setNamespace(namespace);
-        document = null;
     }
 
     /**
@@ -316,9 +313,8 @@ public class Element implements Serializable, Cloneable {
         }
 
         // If we still don't have a match, ask the parent
-        Element parent = getParent();
-        if (parent != null) {
-            return parent.getNamespace(prefix);
+        if (parent instanceof Element) {
+            return ((Element)parent).getNamespace(prefix);
         }
 
         return null;
@@ -459,12 +455,18 @@ public class Element implements Serializable, Cloneable {
      * @return parent of this <code>Element</code>.
      */
     public Element getParent() {
-        return parent;
+        if (parent instanceof Element) {
+            return (Element) parent;
+        }
+        else {
+            return null;
+        }
     }
 
     /**
      * <p>
      * This will set the parent of this <code>Element</code>.
+     * The caller is responsible for handling pre-existing parentage.
      * </p>
      *
      * @param parent <code>Element</code> to be new parent.
@@ -484,16 +486,15 @@ public class Element implements Serializable, Cloneable {
      * @return <code>Element</code> - this <code>Element</code> modified.
      */
     public Element detach() {
-        Element p = getParent();
-        if (p != null) {
-            p.removeContent(this);
+        if (parent instanceof Element) {
+            ((Element)parent).removeContent(this);
         }
-        else {
-            Document d = getDocument();
-            if (d != null) {
-                d.setRootElement(new Element("root-element-was-detached"));
-            }
+        else if (parent instanceof Document) {
+            ((Document)parent).setRootElement(
+                        new Element("root-element-was-detached"));
         }
+        // A null parent is a no-op
+
         return this;
     }
 
@@ -511,20 +512,21 @@ public class Element implements Serializable, Cloneable {
      * @return <code>boolean</code> - whether this is a root element.
      */
     public boolean isRootElement() {
-        return document != null;
+        return parent instanceof Document;
     }
 
     /**
      * <p>
      * This sets the <code>{@link Document}</code> parent of this element
-     *   and makes it the root element.
+     *   and makes it the root element.  The caller is responsible for
+     *   ensuring the element doesn't have a pre-existing parent.
      * </p>
      *
      * @param document <code>Document</code> parent
      * @return <code>Document</code> this <code>Element</code> modified
      */
     protected Element setDocument(Document document) {
-        this.document = document;
+        this.parent = document;
 
         return this;
     }
@@ -539,13 +541,11 @@ public class Element implements Serializable, Cloneable {
      * @return <code>Document</code> owning this Element, or null.
      */
     public Document getDocument() {
-
-        if (this.isRootElement()) {
-            return this.document;
+        if (parent instanceof Document) {
+            return (Document) parent;
         }
-
-        if (this.getParent() != null) {
-            return this.getParent().getDocument();
+        if (parent instanceof Element) {
+            return (Document) ((Element)parent).getDocument();
         }
 
         return null;
@@ -1191,12 +1191,12 @@ public class Element implements Serializable, Cloneable {
 
     // Scan ancestry looking for an element
     private boolean isAncestor(Element e) {
-        Element parent = getParent();
-        while (parent != null) {
-            if (parent == e) {
+        Object p = parent;
+        while (p instanceof Element) {
+            if (p == e) {
                 return true;
             }
-            parent = parent.getParent();
+            p = ((Element)p).getParent();
         }
         return false;
     }
@@ -1776,10 +1776,9 @@ public class Element implements Serializable, Cloneable {
         // name and namespace are references to imutable objects
         // so super.clone() handles them ok
 
-        // Reference to parent and document are copied by super.clone() 
+        // Reference to parent is copied by super.clone() 
         // (Object.clone()) so we have to remove it
         element.parent = null;
-        element.document = null;
 
         // Reference to content list and attribute lists are copyed by 
         // super.clone() so we set it new lists if the original had lists
