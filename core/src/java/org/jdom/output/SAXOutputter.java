@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.36 2004/08/31 20:44:34 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.37 2004/09/03 06:11:00 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.36 $, $Date: 2004/08/31 20:44:34 $
+ * @version $Revision: 1.37 $, $Date: 2004/09/03 06:11:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.36 $ $Date: 2004/08/31 20:44:34 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.37 $ $Date: 2004/09/03 06:11:00 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -376,8 +376,8 @@ public class SAXOutputter {
      * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
      * and behaves as the "namespace-prefixes" SAX core feature.
      *
-     * @param declareNamespaces whether attribute namespace declarations shall be
-     * reported as "xmlns" attributes.
+     * @param declareNamespaces whether attribute namespace declarations
+     * shall be reported as "xmlns" attributes.
      */
     public void setReportNamespaceDeclarations(boolean declareNamespaces) {
         this.declareNamespaces = declareNamespaces;
@@ -635,13 +635,15 @@ public class SAXOutputter {
     }
 
     /**
-     * This will output a list of JDOM nodes, firing off the
-     * SAX events that have been registered.
+     * This will output a list of JDOM nodes as a document, firing
+     * off the SAX events that have been registered.
      * <p>
      * <strong>Warning</strong>: This method may output ill-formed XML
-     * documents and should only be used to output document portions
-     * towards processors (such as XSLT processors) capable of
-     * accepting such ill-formed documents.</p>
+     * documents if the list contains top-level objects that are not
+     * legal at the document level (e.g. Text or CDATA nodes, multiple
+     * Element nodes, etc.).  Thus, it should only be used to output
+     * document portions towards ContentHandlers capable of accepting
+     * such ill-formed documents (such as XSLT processors).</p>
      *
      * @param nodes <code>List</code> of JDOM nodes to output.
      *
@@ -668,21 +670,14 @@ public class SAXOutputter {
     }
 
     /**
-     * This will output a single JDOM node, firing off the
-     * SAX events that have been registered.
-     * <p>
-     * <strong>Warning</strong>: This method may output ill-formed XML
-     * documents and should only be used to output document portions
-     * towards processors (such as XSLT processors) capable of
-     * accepting such ill-formed documents.</p>
+     * This will output a single JDOM element as a document, firing
+     * off the SAX events that have been registered.
      *
-     * @param node the <code>Content</code> node to output.
+     * @param node the <code>Element</code> node to output.
      *
      * @throws JDOMException if any error occurred.
-     *
-     * @see #output(org.jdom.Document)
      */
-    public void output(Content node) throws JDOMException {
+    public void output(Element node) throws JDOMException {
         if (node == null) {
             return;
         }
@@ -762,62 +757,31 @@ public class SAXOutputter {
      *                 process.
      */
     private void dtdEvents(Document document) throws JDOMException {
+        DocType docType = document.getDocType();
 
-            // Fire DTD-related events only if handlers have been registered
-        if ((dtdHandler != null) || (declHandler != null)) {
-            DocType docType = document.getDocType();
+        // Fire DTD-related events only if handlers have been registered.
+        if ((docType != null) &&
+            ((dtdHandler != null) || (declHandler != null))) {
 
-            if (docType != null) {
-                String publicID = docType.getPublicID();
-                String systemID = docType.getSystemID();
-                String intSubset = docType.getInternalSubset();
+            // Build a dummy XML document that only references the DTD...
+            String dtdDoc = new XMLOutputter().outputString(docType);
 
-                if (intSubset != null) {
-                    intSubset = intSubset.trim();
-                }
+            try {
+                // And parse it to fire DTD events.
+                createDTDParser().parse(new InputSource(
+                                                new StringReader(dtdDoc)));
 
-                StringBuffer buf = new StringBuffer(64);
-                buf.append("<!DOCTYPE ");
-                buf.append(docType.getElementName());
-
-                boolean hasPublic = false;
-                if (publicID != null) {
-                    buf.append(" PUBLIC");
-                    buf.append(" \"");
-                    buf.append(publicID);
-                    buf.append('\"');
-                    hasPublic = true;
-                }
-                if (systemID != null) {
-                    if (!hasPublic) {
-                        buf.append(" SYSTEM");
-                    }
-                    buf.append(" \"");
-                    buf.append(systemID);
-                    buf.append('\"');
-                }
-                if ((intSubset != null) && (!intSubset.equals(""))) {
-                    buf.append(" [\n");
-                    buf.append(intSubset);
-                    buf.append(']');
-                }
-                buf.append('>');
-
-                try {
-                    // Parse dummy XML document to fire DTD events.
-                    createDTDParser().parse(new InputSource(new StringReader(buf.toString())));
-                }
-                catch (SAXParseException ex1) {
-                    // Expected exception: There's no root element in DTD
-                    // so the parser complains!
-                    // ex1.printStackTrace();
-                }
-                catch (SAXException ex2) {
-                    throw new JDOMException("DTD parsing error", ex2);
-                }
-                catch (IOException ex3) {
-                    throw new JDOMException("DTD parsing error", ex3);
-                }
+                // We should never reach this point as the document is
+                // ill-formed; it does not have any root element.
+            }
+            catch (SAXParseException e) {
+                // Expected exception: There's no root element in document.
+            }
+            catch (SAXException e) {
+                throw new JDOMException("DTD parsing error", e);
+            }
+            catch (IOException e) {
+                throw new JDOMException("DTD parsing error", e);
             }
         }
     }
@@ -1096,8 +1060,7 @@ public class SAXOutputter {
      */
     private void elementContent(List content, NamespaceStack namespaces)
                       throws JDOMException {
-        Iterator i = content.iterator();
-        while (i.hasNext()) {
+        for (Iterator i=content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
 
             if (obj instanceof Content) {
@@ -1122,7 +1085,7 @@ public class SAXOutputter {
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
     private void elementContent(Content node, NamespaceStack namespaces)
-            throws JDOMException {
+                      throws JDOMException {
         // update locator
         locator.setNode(node);
 
