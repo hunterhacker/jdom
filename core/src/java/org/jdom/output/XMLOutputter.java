@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.95 2003/05/02 01:08:28 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.96 2003/05/02 03:34:41 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -58,7 +58,6 @@ package org.jdom.output;
 
 import java.io.*;
 import java.util.*;
-import java.lang.reflect.*;
 
 import org.jdom.*;
 
@@ -66,18 +65,21 @@ import org.jdom.*;
  * Outputs a JDOM document as a stream of bytes. The outputter can manage many
  * styles of document formatting, from untouched to pretty printed. The default
  * is to output the document content exactly as created, but this can be changed
- * with various set methods.
+ * by setting a new Format object. For pretty-print output, use
+ * <code>{@link Format#getPrettyFormat()}</code>. For whitespace-normalized
+ * output, use <code>{@link Format#getCompactFormat()}</code>.
  * <p>
  * There are <code>{@link #output output(...)}</code> methods to print any of
  * the standard JDOM classes, including Document and Element, to either a Writer
  * or an OutputStream. <b>Warning</b>: When outputting to a Writer, make sure
- * the writer's encoding matches the encoding setting in the XMLOutputter. This
+ * the writer's encoding matches the encoding setting in the Format object. This
  * ensures the encoding in which the content is written (controlled by the
  * Writer configuration) matches the encoding placed in the document's XML
  * declaration (controlled by the XMLOutputter). Because a Writer cannot be
- * queried for its encoding, the information must be passed to the XMLOutputter
- * manually in its constructor or via the <code>{@link #setEncoding
- * setEncoding()}</code> method. The default XMLOutputter encoding is UTF-8.
+ * queried for its encoding, the information must be passed to the Format
+ * manually in its constructor or via the
+ * <code>{@link Format#setEncoding}</code> method. The default encoding is
+ * UTF-8.
  * <p>
  * The methods <code>{@link #outputString outputString(...)}</code> are for
  * convenience only; for top performance you should call one of the <code>{@link
@@ -86,92 +88,17 @@ import org.jdom.*;
  * <p>
  * XML declarations are always printed on their own line followed by a line
  * seperator (this doesn't change the semantics of the document). To omit
- * printing of the declaration use <code>{@link #setOmitDeclaration
- * setOmitDeclaration()}</code>. To omit printing of the encoding in the
- * declaration use <code>{@link #setOmitEncoding setOmitEncoding()}</code>.
+ * printing of the declaration use
+ * <code>{@link Format#setOmitDeclaration}</code>. To omit printing of the
+ * encoding in the declaration use <code>{@link Format#setOmitEncoding}</code>.
  * Unfortunatly there is currently no way to know the original encoding of the
  * document.
  * <p>
  * Empty elements are by default printed as &lt;empty/&gt;, but this can be
- * configured with <code>{@link #setExpandEmptyElements
- * setExpandEmptyElements()}</code> to cause them to be expanded to
- * &lt;empty&gt;&lt;/empty&gt;.
- * <p>
- * Several modes are available to effect the way textual content is printed. All
- * modes are configurable through corresponding set methods. Below is a table
- * which explains the modes and the effect on the resulting output. </p>
+ * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
+ * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * <table>
- *   <tr>
- *     <th align="left">
- *       Text Mode
- *     </th>
- *     <th>
- *       Resulting behavior.
- *     </th>
- *   </tr>
- *
- *   <tr valign="top">
- *     <td>
- *       <i>Default</i>
- *     </td>
- *     <td>
- *       All content is printed in the format it was created, no whitespace
- *       or line separators are are added or removed.
- *     </td>
- *   </tr>
- *
- *   <tr valign="top">
- *     <td>
- *       TrimAllWhite
- *     </td>
- *     <td>
- *       Content between tags consisting of all whitespace is not printed.
- *       If the content contains even one non-whitespace character, it is
- *       printed verbatim, whitespace and all.
- *     </td>
- *   </tr>
- *
- *   <tr valign="top">
- *     <td>
- *       TextTrim
- *     </td>
- *     <td>
- *       Same as TrimAllWhite, plus leading/trailing whitespace are
- *       trimmed.
- *     </td>
- *   </tr>
- *
- *   <tr valign="top">
- *     <td>
- *       TextNormalize
- *     </td>
- *     <td>
- *       Same as TextTrim, plus addition interior whitespace is compressed to
- *       a single space.
- *     </td>
- *   </tr>
- * </table>
- *
- * <p>
- * For pretty-print output, use <code>{@link #setNewlines setNewlines()}</code>
- * in conjunction with <code>{@link #setIndent setIndent()}</code>. Setting
- * newlines to true causes tags to be aligned and possibly indented. With
- * newlines true, whitespace might be added back to fit alignment needs. In most
- * cases textual content is aligned with the surrounding tags (after the
- * appropriate text mode is applied). In the case where the only content between
- * the start and end tags is textual, the start tag, text, and end tag are all
- * printed on the same line. If the document being output already has
- * whitespace, it's wise to turn on TextTrim so the pre-existing whitespace can
- * be trimmed before adding new whitespace.
- * <p>
- * When a element has a xml:space attribute with the value of "preserve", all
- * formating is turned off and reverts back to the default until the element and
- * its contents have been printed. If a nested element contains another
- * xml:space with the value "default" formatting is turned back on for the child
- * element and then off for the remainder of the parent element.
- *
- * @version $Revision: 1.95 $, $Date: 2003/05/02 01:08:28 $
+ * @version $Revision: 1.96 $, $Date: 2003/05/02 03:34:41 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -186,69 +113,16 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.95 $ $Date: 2003/05/02 01:08:28 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.96 $ $Date: 2003/05/02 03:34:41 $ $Name:  $";
 
-    /** Whether or not to output the XML declaration
-      * - default is <code>false</code> */
-    private boolean omitDeclaration = false;
+    // For normal output
+    private Format userFormat = Format.getRawFormat();
 
-    /** The encoding format */
-    private String encoding = "UTF-8";
+    // For xml:space="preserve"
+    private Format preserveFormat = Format.getRawFormat();
 
-    /** Whether or not to output the encoding in the XML declaration
-      * - default is <code>false</code> */
-    private boolean omitEncoding = false;
-
-    /** standard value to indent by, if we are indenting */
-    private static final String STANDARD_INDENT = "  ";
-
-    /** standard string with which to end a line */
-    private static final String STANDARD_LINE_SEPARATOR = "\r\n";
-
-    class Format implements Cloneable {
-
-        /** The default indent is no spaces (as original document) */
-        String indent = null;
-
-        /** Whether or not to expand empty elements to
-          * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
-        boolean expandEmptyElements = false;
-
-        /** New line separator */
-        String lineSeparator = STANDARD_LINE_SEPARATOR;
-
-        /** Should we trim whitespace only content or not */
-        boolean trimAllWhite = false;
-
-        /** Should we trim leading/trailing whitespace or not in text nodes */
-        boolean textTrim = false;
-
-        /** Should we preserve whitespace or not in text nodes */
-        boolean textNormalize = false;
-
-        /** The default new line flag, set to do new lines only as in
-          * original document */
-        boolean newlines = false;
-
-        /** entity escape logic */
-        EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
-
-        Format() {}
-
-        protected Object clone() {
-            Format format = null;
-
-            try {
-                format = (Format) super.clone();
-            } catch (CloneNotSupportedException ce) { }
-
-            return format;
-        }
-    }
-
-    Format noFormatting = new Format();
-    Format defaultFormat = new Format();
-    Format currentFormat = defaultFormat;
+    // What's currently in use
+    private Format currentFormat = userFormat;
 
     // * * * * * * * * * * Constructors * * * * * * * * * *
     // * * * * * * * * * * Constructors * * * * * * * * * *
@@ -262,14 +136,24 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
+     * This will create an <code>XMLOutputter</code> with the specified
+     * format characteristics.
+     */
+    public XMLOutputter(Format format) {
+        userFormat = format;
+        currentFormat = userFormat;
+    }
+
+    /**
      * This will create an <code>XMLOutputter</code> with the given indent
      * added but no new lines added; all whitespace from the element text
      * content is included as well.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param indent  the indent string, usually some number of spaces
      */
     public XMLOutputter(String indent) {
-       setIndent( indent);
+        userFormat.setIndent(indent);
     }
 
     /**
@@ -278,14 +162,15 @@ public class XMLOutputter implements Cloneable {
      * <code>true</code>; all whitespace from the element text content is
      * included as well.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param indent the indent <code>String</code>, usually some number
      *        of spaces
      * @param newlines <code>true</code> indicates new lines should be
      *                 printed, else new lines are ignored (compacted).
      */
     public XMLOutputter(String indent, boolean newlines) {
-       setIndent( indent);
-       setNewlines( newlines);
+        userFormat.setIndent(indent);
+        if (newlines == false) userFormat.setIndent(null);
     }
 
     /**
@@ -294,6 +179,7 @@ public class XMLOutputter implements Cloneable {
      * <code>newlines</code> is <code>true</code>, and encoding format
      * <code>encoding</code>.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param indent the indent <code>String</code>, usually some number
      *        of spaces
      * @param newlines <code>true</code> indicates new lines should be
@@ -302,9 +188,9 @@ public class XMLOutputter implements Cloneable {
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      */
     public XMLOutputter(String indent, boolean newlines, String encoding) {
-       setEncoding( encoding);
-       setIndent( indent);
-       setNewlines(newlines);
+        userFormat.setIndent(indent);
+        if (newlines == false) userFormat.setIndent(null);
+        userFormat.setEncoding(encoding);
     }
 
     /**
@@ -316,14 +202,22 @@ public class XMLOutputter implements Cloneable {
      * @param that the XMLOutputter to clone
      */
     public XMLOutputter(XMLOutputter that) {
-        this.encoding = that.encoding;
-        this.omitDeclaration = that.omitDeclaration;
-        this.omitEncoding = that.omitEncoding;
-        this.defaultFormat = (Format) that.defaultFormat.clone();
+        this.userFormat = (Format) that.userFormat.clone();
+        currentFormat = userFormat;
     }
 
     // * * * * * * * * * * Set parameters methods * * * * * * * * * *
     // * * * * * * * * * * Set parameters methods * * * * * * * * * *
+
+    /**
+     * Sets the new format logic for the outputter.
+     *
+     * @param newFormat the format to use for output
+     */
+    public void setFormat(Format newFormat) {
+        this.userFormat = newFormat;
+        this.currentFormat = userFormat;
+    }
 
     /**
      * This will set the newline separator (<code>lineSeparator</code>).
@@ -350,10 +244,11 @@ public class XMLOutputter implements Cloneable {
      * @see #setNewlines(boolean)
      * @see #setTextNormalize(boolean)
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param separator <code>String</code> line separator to use.
      */
     public void setLineSeparator(String separator) {
-        defaultFormat.lineSeparator = separator;
+        userFormat.setLineSeparator(separator);
     }
 
     /**
@@ -362,24 +257,26 @@ public class XMLOutputter implements Cloneable {
      * pre-existing whitespace.  Usually called in conjunction with {@link
      * #setIndent}.
      *
+     * @deprecated Deprecated in Beta 10 since newlines will now just be
+     * added if indent is non-null
+     *
      * @see #setLineSeparator(String)
      * @param newlines <code>true</code> indicates new lines should be
      *                 added for beautification.
      */
     public void setNewlines(boolean newlines) {
-        defaultFormat.newlines = newlines;
     }
 
     /**
      * Sets the output encoding.  The name should be an accepted XML
      * encoding.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param encoding the encoding format.  Use XML-style names like
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      */
     public void setEncoding(String encoding) {
-        this.encoding = encoding;
-        defaultFormat.escapeStrategy = new DefaultEscapeStrategy(encoding);
+        userFormat.setEncoding(encoding);
     }
 
     /**
@@ -389,11 +286,12 @@ public class XMLOutputter implements Cloneable {
      * includes the encoding of the document. It is common to omit
      * this in uses such as WML and other wireless device protocols.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param omitEncoding <code>boolean</code> indicating whether or not
      *        the XML declaration should indicate the document encoding.
      */
     public void setOmitEncoding(boolean omitEncoding) {
-        this.omitEncoding = omitEncoding;
+        userFormat.setOmitEncoding(omitEncoding);
     }
 
     /**
@@ -402,11 +300,12 @@ public class XMLOutputter implements Cloneable {
      * will be omitted or not. It is common to omit this in uses such
      * as SOAP and XML-RPC calls.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param omitDeclaration <code>boolean</code> indicating whether or not
      *        the XML declaration should be omitted.
      */
     public void setOmitDeclaration(boolean omitDeclaration) {
-        this.omitDeclaration = omitDeclaration;
+        userFormat.setOmitDeclaration(omitDeclaration);
     }
 
     /**
@@ -414,11 +313,12 @@ public class XMLOutputter implements Cloneable {
      * <code>&lt;tagName/&gt;</code> to
      * <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
      *        empty elements should be expanded.
      */
     public void setExpandEmptyElements(boolean expandEmptyElements) {
-        defaultFormat.expandEmptyElements = expandEmptyElements;
+        userFormat.setExpandEmptyElements(expandEmptyElements);
     }
 
     /**
@@ -427,11 +327,12 @@ public class XMLOutputter implements Cloneable {
      *
      * <p>Default: false </p>
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param trimAllWhite <code>boolean</code> true=>content consisting of
      *                 only whitespace is not print, false=>use text verbatim
      */
     public void setTrimAllWhite(boolean trimAllWhite) {
-        defaultFormat.trimAllWhite = trimAllWhite;
+        userFormat.setTrimAllWhite(trimAllWhite);
     }
 
     /**
@@ -440,11 +341,12 @@ public class XMLOutputter implements Cloneable {
      *
      * <p>Default: false </p>
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param textTrim <code>boolean</code> true=>trim the leading/trailing
      *                 whitespace, false=>use text verbatim
      */
     public void setTextTrim(boolean textTrim) {
-        defaultFormat.textTrim = textTrim;
+        userFormat.setTextTrim(textTrim);
     }
 
     /**
@@ -454,11 +356,12 @@ public class XMLOutputter implements Cloneable {
      *
      * <p>Default: false </p>
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param textNormalize <code>boolean</code> true=>normalize the
      *        whitespace, false=>use text verbatim
      */
     public void setTextNormalize(boolean textNormalize) {
-        defaultFormat.textNormalize = textNormalize;
+        userFormat.setTextNormalize(textNormalize);
     }
 
     /**
@@ -467,16 +370,11 @@ public class XMLOutputter implements Cloneable {
      * null, or the empty string (""), then no indentation will
      * happen.  Default: none (null)
      *
+     * @deprecated Deprecated in Beta 10, use the Format class instead
      * @param indent <code>String</code> to use for indentation.
      */
     public void setIndent(String indent) {
-        // if passed the empty string, change it to null, for marginal
-        // performance gains later (can compare to null first instead
-        // of calling equals())
-        if ("".equals(indent)) {
-            indent = null;
-        }
-        defaultFormat.indent = indent;
+        userFormat.setIndent(indent);
     }
 
     // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
@@ -615,7 +513,7 @@ public class XMLOutputter implements Cloneable {
      */
     protected Writer makeWriter(OutputStream out)
                          throws java.io.UnsupportedEncodingException {
-        return makeWriter(out, this.encoding);
+        return makeWriter(out, userFormat.encoding);
     }
 
     /**
@@ -655,7 +553,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(Document doc, Writer out) throws IOException {
 
-        printDeclaration(doc, out, encoding);
+        printDeclaration(doc, out, userFormat.encoding);
 
         // Print out root element, as well as any root level
         // comments and processing instructions,
@@ -967,10 +865,10 @@ public class XMLOutputter implements Cloneable {
                                     String encoding) throws IOException {
 
         // Only print the declaration if it's not being omitted
-        if (!omitDeclaration) {
+        if (!userFormat.omitDeclaration) {
             // Assume 1.0 version
             out.write("<?xml version=\"1.0\"");
-            if (!omitEncoding) {
+            if (!userFormat.omitEncoding) {
                 out.write(" encoding=\"" + encoding + "\"");
             }
             out.write("?>");
@@ -1146,10 +1044,10 @@ public class XMLOutputter implements Cloneable {
         Format previousFormat = currentFormat;
 
         if ("default".equals( space)) {
-            currentFormat = defaultFormat;
+            currentFormat = userFormat;
         }
         else if ("preserve".equals( space)) {
-            currentFormat = noFormatting;
+            currentFormat = preserveFormat;
         }
 
         // Print the beginning of the tag plus attributes and any
@@ -1460,7 +1358,7 @@ public class XMLOutputter implements Cloneable {
      * @param out <code>Writer</code> to use
      */
     protected void newline(Writer out) throws IOException {
-        if (currentFormat.newlines) {
+        if (currentFormat.indent != null) {
             out.write(currentFormat.lineSeparator);
         }
     }
@@ -1473,15 +1371,13 @@ public class XMLOutputter implements Cloneable {
      * @param level current indent level (number of tabs)
      */
     protected void indent(Writer out, int level) throws IOException {
-        if (currentFormat.newlines) {
-            if (currentFormat.indent == null ||
-                currentFormat.indent.equals("")) {
-                    return;
-            }
+        if (currentFormat.indent == null ||
+            currentFormat.indent.equals("")) {
+            return;
+        }
 
-            for (int i = 0; i < level; i++) {
-                out.write(currentFormat.indent);
-            }
+        for (int i = 0; i < level; i++) {
+            out.write(currentFormat.indent);
         }
     }
 
@@ -1599,15 +1495,6 @@ public class XMLOutputter implements Cloneable {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Sets the EscapeStrategy for handling character entities.
-     *
-     * @param escapeStrategy for handling character entities
-     */
-    public void setEscapeStrategy(EscapeStrategy escapeStrategy) {
-        currentFormat.escapeStrategy = escapeStrategy;
     }
 
     /**
@@ -1747,51 +1634,6 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
-     * Parse command-line arguments of the form <code>-omitEncoding
-     * -indentSize 3 &#133;</code>.
-     *
-     * @return int index of first parameter that we didn't understand
-     */
-    public int parseArgs(String[] args, int i) {
-        for (; i<args.length; ++i) {
-            if (args[i].equals("-omitDeclaration")) {
-                setOmitDeclaration(true);
-            }
-            else if (args[i].equals("-omitEncoding")) {
-                setOmitEncoding(true);
-            }
-            else if (args[i].equals("-indent")) {
-                setIndent(args[++i]);
-            }
-            else if (args[i].startsWith("-expandEmpty")) {
-                setExpandEmptyElements(true);
-            }
-            else if (args[i].equals("-encoding")) {
-                setEncoding(args[++i]);
-            }
-            else if (args[i].equals("-newlines")) {
-                setNewlines(true);
-            }
-            else if (args[i].equals("-lineSeparator")) {
-                setLineSeparator(args[++i]);
-            }
-            else if (args[i].equals("-trimAllWhite")) {
-                setTrimAllWhite(true);
-            }
-            else if (args[i].equals("-textTrim")) {
-                setTextTrim(true);
-            }
-            else if (args[i].equals("-textNormalize")) {
-                setTextNormalize(true);
-            }
-            else {
-                return i;
-            }
-        }
-        return i;
-    }
-
-    /**
      * Returns a copy of this XMLOutputter.
      */
     public Object clone() {
@@ -1820,8 +1662,8 @@ public class XMLOutputter implements Cloneable {
      */
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < defaultFormat.lineSeparator.length(); i++) {
-            char ch = defaultFormat.lineSeparator.charAt( i);
+        for (int i = 0; i < userFormat.lineSeparator.length(); i++) {
+            char ch = userFormat.lineSeparator.charAt( i);
             switch (ch) {
             case '\r': buffer.append("\\r");
                        break;
@@ -1835,16 +1677,15 @@ public class XMLOutputter implements Cloneable {
         }
 
         return (
-            "XMLOutputter[omitDeclaration = " + omitDeclaration + ", " +
-            "encoding = " + encoding + ", " +
-            "omitEncoding = " + omitEncoding + ", " +
-            "indent = '" + defaultFormat.indent + "'" + ", " +
-            "expandEmptyElements = " + defaultFormat.expandEmptyElements + ", " +
-            "newlines = " + defaultFormat.newlines + ", " +
+            "XMLOutputter[omitDeclaration = " + userFormat.omitDeclaration + ", " +
+            "encoding = " + userFormat.encoding + ", " +
+            "omitEncoding = " + userFormat.omitEncoding + ", " +
+            "indent = '" + userFormat.indent + "'" + ", " +
+            "expandEmptyElements = " + userFormat.expandEmptyElements + ", " +
             "lineSeparator = '" + buffer.toString() + "', " +
-            "trimAllWhite = " + defaultFormat.trimAllWhite +
-            "textTrim = " + defaultFormat.textTrim +
-            "textNormalize = " + defaultFormat.textNormalize + "]"
+            "trimAllWhite = " + userFormat.trimAllWhite +
+            "textTrim = " + userFormat.textTrim +
+            "textNormalize = " + userFormat.textNormalize + "]"
         );
     }
 
@@ -1873,70 +1714,4 @@ public class XMLOutputter implements Cloneable {
 
     // * * * * * * * * * * Deprecated methods * * * * * * * * * *
 
-    /**
-     * Handle common charsets quickly and easily.  Use reflection
-     * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
-     * If JDK 1.4 isn't around, default to no special encoding.
-     */
-    class DefaultEscapeStrategy implements EscapeStrategy {
-        private int bits;
-        Object encoder;
-        Method canEncode;
-
-        public DefaultEscapeStrategy(String encoding) {
-            if ("UTF-8".equalsIgnoreCase(encoding) ||
-                "UTF-16".equalsIgnoreCase(encoding)) {
-                bits = 16;
-            }
-            else if ("ISO-8859-1".equalsIgnoreCase(encoding) ||
-                     "Latin1".equalsIgnoreCase(encoding)) {
-                bits = 8;
-            }
-            else if ("US-ASCII".equalsIgnoreCase(encoding) ||
-                     "ASCII".equalsIgnoreCase(encoding)) {
-                bits = 7;
-            }
-            else {
-                bits = 0;
-                //encoder = Charset.forName(encoding).newEncoder();
-                try {
-                    Class charsetClass = Class.forName("java.nio.charset.Charset");
-                    Class encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
-                    Method forName = charsetClass.getMethod("forName", new Class[] {String.class});
-                    Object charsetObj = forName.invoke(null, new Object[] { encoding });
-                    Method newEncoder = charsetClass.getMethod("newEncoder", null);
-                    encoder = newEncoder.invoke(charsetObj, null);
-                    canEncode = encoderClass.getMethod("canEncode", new Class[] {char.class});
-                }
-                catch (Exception ignored) { }
-            }
-        }
-
-        public boolean shouldEscape(char ch) {
-            if (bits == 16) {
-                return false;
-            }
-            if (bits == 8) {
-                if ((int)ch > 255) return true;
-                else return false;
-            }
-            if (bits == 7) {
-                if ((int)ch > 127) return true;
-                else return false;
-            }
-            else {
-                if (canEncode != null && encoder != null) {
-                    try {
-                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[] { new Character(ch) });
-                        return !val.booleanValue();
-                    }
-                    catch (Exception ignored) { }
-                }
-                // Return false if we don't know.  This risks not escaping
-                // things which should be escaped, but also means people won't
-                // start getting loads of unnecessary escapes.
-                return false;
-            }
-        }
-    }
 }
