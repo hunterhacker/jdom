@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.12 2001/05/18 22:34:08 jhunter Exp $
+ $Id: SAXHandler.java,v 1.13 2001/05/19 05:21:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.12 $ $Date: 2001/05/18 22:34:08 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.13 $ $Date: 2001/05/19 05:21:41 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -117,6 +117,9 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /** The JDOMFactory used for JDOM object creation */
     private JDOMFactory factory;
+
+    /** Whether to ignore ignorable whitespace */
+    private boolean ignoringWhite = false;
 
     /**
      * <p>
@@ -199,6 +202,23 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      */
     public void setExpandEntities(boolean expand) {
         this.expand = expand;
+    }
+
+    /**
+     * <p>
+     * Specifies whether or not the parser should elminate whitespace in
+     * element content (sometimes known as "ignorable whitespace") when
+     * building the document.  Only whitespace which is contained within
+     * element content that has an element only content model will be
+     * eliminated (see XML Rec 3.2.1).  For this setting to take effect
+     * requires that validation be turned on.  The default value of this
+     * setting is <code>false</code>.
+     * </p>
+     *
+     * @param ignoringWhite Whether to ignore ignorable whitespace
+     */
+    public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
+        this.ignoringWhite = ignoringWhite;
     }
 
     /**
@@ -456,7 +476,9 @@ if (!inDTD) {
 
     /**
      * <p>
-     * Capture ignorable whitespace as text
+     * Capture ignorable whitespace as text.  If
+     * setIgnoringElementContentWhitespace(true) has been called then this
+     * method does nothing.
      * </p>
      *
      * @param ch <code>[]</code> - char array of ignorable whitespace
@@ -467,6 +489,7 @@ if (!inDTD) {
     public void ignorableWhitespace(char[] ch, int start, int length) 
                                                      throws SAXException {
         if (suppress) return;
+        if (ignoringWhite) return;
 
         ((Element)stack.peek()).addContent(new String(ch, start, length));
 

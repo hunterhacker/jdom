@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.49 2001/05/18 22:45:10 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.50 2001/05/19 05:21:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -83,7 +83,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.49 $ $Date: 2001/05/18 22:45:10 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.50 $ $Date: 2001/05/19 05:21:41 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -115,6 +115,9 @@ public class SAXBuilder {
  
     /** The factory for creating new JDOM objects */
     private JDOMFactory factory = null;
+
+    /** Whether to ignore ignorable whitespace */
+    private boolean ignoringWhite = false;
 
     /**
      * <p>
@@ -239,6 +242,23 @@ public class SAXBuilder {
     public void setXMLFilter(XMLFilter xmlFilter) {
         saxXMLFilter = xmlFilter;
     }
+ 
+    /**
+     * <p>
+     * Specifies whether or not the parser should elminate whitespace in 
+     * element content (sometimes known as "ignorable whitespace") when
+     * building the document.  Only whitespace which is contained within
+     * element content that has an element only content model will be
+     * eliminated (see XML Rec 3.2.1).  For this setting to take effect 
+     * requires that validation be turned on.  The default value of this
+     * setting is <code>false</code>.
+     * </p>
+     *
+     * @param ignoringWhite Whether to ignore ignorable whitespace
+     */
+    public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
+        this.ignoringWhite = ignoringWhite;
+    }
 
     /**
      * <p>
@@ -324,7 +344,10 @@ public class SAXBuilder {
             }
 
             SAXHandler contentHandler = new SAXHandler(factory);
-            contentHandler.setExpandEntities(expand);  // pass thru behavior
+
+            // Pass through behavior
+            contentHandler.setExpandEntities(expand);
+            contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
 
             parser.setContentHandler(contentHandler);
 
