@@ -422,7 +422,7 @@ System.out.println("in addC(E) with root: " + getRootElement());
      *         one Element or objects of illegal types
      */
     public Document setMixedContent(List content) {
-        content.clear();
+        this.content.clear();
         rootElement = null;
 
         for (Iterator i = content.iterator(); i.hasNext(); ) {
