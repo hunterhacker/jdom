@@ -185,12 +185,6 @@ public class WarReader {
         try {
             WarReader reader = new WarReader(saxDriverClass);
             reader.read(filename, System.out);
-        } catch (JDOMException e) {
-            if (e.getRootCause() != null) {
-                e.getRootCause().printStackTrace();
-            } else {
-                e.printStackTrace();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }        
