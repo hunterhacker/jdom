@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.24 2001/12/11 07:32:04 jhunter Exp $
+ $Id: Verifier.java,v 1.25 2001/12/27 15:01:32 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -70,7 +70,7 @@ package org.jdom;
 public final class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.24 $ $Date: 2001/12/11 07:32:04 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.25 $ $Date: 2001/12/27 15:01:32 $ $Name:  $";
 
     /**
      * <p>
@@ -325,7 +325,11 @@ public final class Verifier {
         // Cannot begin with 'xml' in any case
         if (target.equalsIgnoreCase("xml")) {
             return "Processing instructions cannot have a target of " +
-                   "\"xml\" in any combination of case";
+                   "\"xml\" in any combination of case. (Note that the " +
+                   "\"<?xml ... ?>\" declaration at the beginning of a " +
+                   "document is not a processing instruction and should not " + 
+                   "be added as one; it is written automatically during " +
+                   "output, e.g. by XMLOutputter.)";
         }
 
         // If we got here, everything is OK
