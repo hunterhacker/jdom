@@ -1,6 +1,6 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.6 2002/05/15 05:32:35 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.7 2002/10/28 09:40:08 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,16 +57,15 @@
 package org.jdom.xpath;
 
 
-import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Hashtable;
 
-import org.jdom.JDOMException;
+import org.jdom.*;
 
 import org.saxpath.SAXPathException;
-// import org.jaxen.jdom.XPath;
+import org.jaxen.jdom.JDOMXPath;
+import org.jaxen.NamespaceContext;
 import org.jaxen.SimpleVariableContext;
 import org.jaxen.JaxenException;
 
@@ -76,14 +75,24 @@ import org.jaxen.JaxenException;
  *
  * @author Laurent Bihanic
  */
-class JaxenXPath extends XPath {  // package protected
-
+class JaxenXPath extends    XPath               // package protected
+                 implements NamespaceContext {
    /**
     * The compiled XPath object to select nodes.  This attribute can
     * not be made final as it needs to be set upon object
     * deserialization.
     */
-   private transient org.jaxen.jdom.JDOMXPath xPath;
+   private transient JDOMXPath xPath;
+
+   /**
+    * Locally defined namespaces.
+    */
+   private transient Map       namespaces;
+
+   /**
+    * The current context for XPath expression evaluation.
+    */
+   private           Object    currentContext;
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -116,11 +125,16 @@ class JaxenXPath extends XPath {  // package protected
     */
    public List selectNodes(Object context) throws JDOMException {
       try {
+         currentContext = context;
+
          return xPath.selectNodes(context);
       }
       catch (JaxenException ex1) {
          throw new JDOMException("XPath error while evaluating \"" +
                         xPath.toString() + "\": " + ex1.getMessage(), ex1);
+      }
+      finally {
+         currentContext = null;
       }
    }
 
@@ -143,11 +157,16 @@ class JaxenXPath extends XPath {  // package protected
     */
    public Object selectSingleNode(Object context) throws JDOMException {
       try {
+         currentContext = context;
+
          return xPath.selectSingleNode(context);
       }
       catch (JaxenException ex1) {
          throw new JDOMException("XPath error while evaluating \"" +
                         xPath.toString() + "\": " + ex1.getMessage(), ex1);
+      }
+      finally {
+         currentContext = null;
       }
    }
 
@@ -167,11 +186,16 @@ class JaxenXPath extends XPath {  // package protected
     */
    public String valueOf(Object context) throws JDOMException {
       try {
+         currentContext = context;
+
          return xPath.valueOf(context);
       }
       catch (JaxenException ex1) {
          throw new JDOMException("XPath error while evaluating \"" +
                         xPath.toString() + "\": " + ex1.getMessage(), ex1);
+      }
+      finally {
+         currentContext = null;
       }
    }
 
@@ -195,11 +219,16 @@ class JaxenXPath extends XPath {  // package protected
     */
    public Number numberValueOf(Object context) throws JDOMException {
       try {
+         currentContext = context;
+
          return xPath.numberValueOf(context);
       }
       catch (JaxenException ex1) {
          throw new JDOMException("XPath error while evaluating \"" +
                         xPath.toString() + "\": " + ex1.getMessage(), ex1);
+      }
+      finally {
+         currentContext = null;
       }
    }
 
@@ -224,6 +253,23 @@ class JaxenXPath extends XPath {  // package protected
    }
 
    /**
+    * Adds a namespace definition to the list of namespaces known of
+    * this XPath expression.
+    * <p>
+    * <strong>Note</strong>: In XPath, there is no such thing as a
+    * 'default namespace'.  The empty prefix <b>always</b> resolves
+    * to the empty namespace URI.</p>
+    *
+    * @param  namespace   the namespace.
+    */
+   public synchronized void addNamespace(Namespace namespace) {
+      if (namespaces == null) {
+         namespaces = new Hashtable();
+      }
+      namespaces.put(namespace.getPrefix(), namespace.getURI());
+   }
+
+   /**
     * Returns the wrapped XPath expression as a string.
     *
     * @return the wrapped XPath expression as a string.
@@ -241,7 +287,8 @@ class JaxenXPath extends XPath {  // package protected
     */
    private void setXPath(String expr) throws JDOMException {
       try {
-         xPath = new org.jaxen.jdom.JDOMXPath(expr);
+         xPath = new JDOMXPath(expr);
+         xPath.setNamespaceContext(this);
       }
       catch (SAXPathException ex1) {
          throw new JDOMException(
@@ -249,6 +296,57 @@ class JaxenXPath extends XPath {  // package protected
       }
    }
 
+   /**
+    * <i>[Jaxen NamespaceContext interface support]</i> Translates
+    * the provided namespace prefix into the matching bound
+    * namespace URI.
+    * <p>
+    * In XPath, there is no such thing as a 'default namespace'.
+    * The empty prefix <b>always</b> resolves to the empty
+    * namespace URI.</p>
+    *
+    * @param  prefix   the namespace prefix to resolve.
+    *
+    * @return the namespace URI matching the prefix.
+    */
+   public String translateNamespacePrefixToUri(String prefix) {
+      String uri = null;
+
+      if (namespaces != null) {
+         // Try the map prefix using the explicitely defined namespaces
+         uri = (String)(namespaces.get(prefix));
+      }
+
+      Object ctx = currentContext;
+      if ((uri == null) && (ctx != null)) {
+         Element elt = null;
+
+         // Get closer element node
+         if (ctx instanceof Element) {
+            elt = (Element)ctx;
+         } else if (ctx instanceof Attribute) {
+            elt = ((Attribute)ctx).getParent();
+         } else if (ctx instanceof Text) {
+            elt = ((Text)ctx).getParent();
+         } else if (ctx instanceof ProcessingInstruction) {
+            elt = ((ProcessingInstruction)ctx).getParent();
+         } else if (ctx instanceof Comment) {
+            elt = ((Comment)ctx).getParent();
+         } else if (ctx instanceof EntityRef) {
+            elt = ((EntityRef)ctx).getParent();
+         } else if (ctx instanceof Document) {
+            elt = ((Document)ctx).getRootElement();
+         }
+
+         if (elt != null) {
+            Namespace ns = elt.getNamespace(prefix);
+            if (ns != null) {
+               uri = ns.getURI();
+            }
+         }
+      }
+      return (uri);
+   }
 
    public String toString() {
       return (xPath.toString());
@@ -266,36 +364,6 @@ class JaxenXPath extends XPath {  // package protected
 
    public int hashCode() {
       return xPath.hashCode();
-   }
-
-
-   /**
-    * Serializes this object on the specified object stream.
-    *
-    * @param  out   the object stream to write the serialized
-    *               object to.
-    *
-    * @throws IOException   if thrown by the output stream.
-    */
-   private void writeObject(ObjectOutputStream out) throws IOException {
-      out.writeUTF(getXPath());
-   }
-
-   /**
-    * Deserializes this object from the specified object stream.
-    *
-    * @param  in   the object stream to read the serialized
-    *              object from.
-    *
-    * @throws IOException   if thrown by the input stream.
-    */
-   private void readObject(ObjectInputStream in) throws IOException {
-      try {
-         this.setXPath(in.readUTF());
-      }
-      catch (JDOMException ex1) {
-         throw new IOException(ex1.toString());
-      }
    }
 }
 

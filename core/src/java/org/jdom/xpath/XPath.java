@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.6 2002/04/29 13:38:16 jhunter Exp $
+ $Id: XPath.java,v 1.7 2002/10/28 09:40:08 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -58,11 +58,16 @@ package org.jdom.xpath;
 
 
 import java.io.Serializable;
-import java.util.List;
+import java.io.InvalidObjectException;
+import java.io.ObjectStreamException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
+import org.jdom.Namespace;
 import org.jdom.JDOMException;
+import org.jdom.IllegalNameException;
 
 
 /**
@@ -73,9 +78,30 @@ import org.jdom.JDOMException;
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.6 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.7 $ $Date: 2002/10/28 09:40:08 $ $Name:  $";
 
-   private static Constructor jaxen = null;
+   /**
+    * The name of the system property from which to retrieve the
+    * name of the implementation class to use.
+    * <p>
+    * The property name is:
+    * "<code>org.jdom.xpath.class</code>".</p>
+    */
+   private final static String  XPATH_CLASS_PROPERTY = "org.jdom.xpath.class";
+
+   /**
+    * The default implementation class to use if none was configured.
+    */
+   private final static String  DEFAULT_XPATH_CLASS  =
+                                                "org.jdom.xpath.JaxenXPath";
+
+   /**
+    * The constructor to instanciate a new XPath concrete
+    * implementation.
+    *
+    * @see    #newInstance
+    */
+   private static Constructor constructor = null;
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -97,25 +123,73 @@ public abstract class XPath implements Serializable {
     * @throws JDOMException   if the XPath expression is invalid.
     */
    public static XPath newInstance(String path) throws JDOMException {
-      if (jaxen == null) {
-          try {
-              Class clz = Class.forName("org.jdom.xpath.JaxenXPath");
-              jaxen = clz.getConstructor(new Class[] {String.class});
-          } catch (ClassNotFoundException cnfe) {
-              throw new JDOMException(cnfe.toString());
-          } catch (NoSuchMethodException nsme) {
-              throw new JDOMException(nsme.toString());
-          }
+      try {
+         if (constructor == null) {
+            // First call => Determine implementation.
+            String className;
+            try {
+               className = System.getProperty(XPATH_CLASS_PROPERTY,
+                                              DEFAULT_XPATH_CLASS);
+            }
+            catch (SecurityException ex1) {
+               // Access to system property denied. => Use default impl.
+               className = DEFAULT_XPATH_CLASS;
+            }
+            setXPathClass(Class.forName(className));
+         }
+         // Allocate and return new implementation instance.
+         return (XPath)constructor.newInstance(new Object[] { path });
+      }
+      catch (JDOMException ex1) {
+         throw ex1;
+      }
+      catch (InvocationTargetException ex2) {
+         // Constructor threw an error on invocation.
+         Throwable t = ex2.getTargetException();
+
+         throw (t instanceof JDOMException)? (JDOMException)t:
+                                        new JDOMException(t.toString(), t);
+      }
+      catch (Exception ex3) {
+         // Any reflection error (probably due to a configuration mistake).
+         throw new JDOMException(ex3.toString(), ex3);
+      }
+   }
+
+   /**
+    * Sets the concrete XPath subclass to use when allocating XPath
+    * instances.
+    *
+    * @param  aClass   the concrete subclass of XPath.
+    *
+    * @throws IllegalArgumentException   if <code>aClass</code> is
+    *                                    <code>null</code>.
+    * @throws JatoException              if <code>aClass</code> is
+    *                                    not a concrete subclass
+    *                                    of XPath.
+    */
+   public static void setXPathClass(Class aClass) throws JDOMException {
+      if (aClass == null) {
+         throw new IllegalArgumentException("aClass");
       }
 
       try {
-          return (XPath) jaxen.newInstance(new Object[] {path});
-      } catch (IllegalAccessException iae) {
-          throw new JDOMException(iae.toString());
-      } catch (InstantiationException ie) {
-          throw new JDOMException(ie.toString());
-      } catch (InvocationTargetException ite) {
-          throw new JDOMException(ite.toString());
+         if ((XPath.class.isAssignableFrom(aClass)) &&
+             (Modifier.isAbstract(aClass.getModifiers()) == false)) {
+            // Concrete subclass of XPath => Get constructor
+            constructor = aClass.getConstructor(new Class[] { String.class });
+         }
+         else {
+            throw new JDOMException(aClass.getName() +
+                        " is not a concrete JDOM XPath implementation");
+         }
+      }
+      catch (JDOMException ex1) {
+         throw ex1;
+      }
+      catch (Exception ex2) {
+         // Any reflection error (probably due to a configuration mistake).
+         throw new JDOMException(ex2.toString(), ex2);
       }
    }
 
@@ -204,9 +278,38 @@ public abstract class XPath implements Serializable {
     *                                    supported by the underlying
     *                                    implementation
     */
-   abstract public void setVariable(String name, Object value)
-                                        throws IllegalArgumentException;
+   abstract public void setVariable(String name, Object value);
 
+   /**
+    * Adds a namespace definition to the list of namespaces known of
+    * this XPath expression.
+    * <p>
+    * <strong>Note</strong>: In XPath, there is no such thing as a
+    * 'default namespace'.  The empty prefix <b>always</b> resolves
+    * to the empty namespace URI.</p>
+    *
+    * @param  namespace   the namespace.
+    */
+   abstract public void addNamespace(Namespace namespace);
+
+   /**
+    * Adds a namespace definition (prefix and URI) to the list of
+    * namespaces known of this XPath expression.
+    * <p>
+    * <strong>Note</strong>: In XPath, there is no such thing as a
+    * 'default namespace'.  The empty prefix <b>always</b> resolves
+    * to the empty namespace URI.</p>
+    *
+    * @param  prefix   the namespace prefix.
+    * @param  uri      the namespace URI.
+    *
+    * @throws IllegalNameException   if the prefix or uri are null or
+    *                                empty strings or if they contain
+    *                                illegal characters.
+    */
+   public void addNamespace(String prefix, String uri) {
+      addNamespace(Namespace.getNamespace(prefix, uri));
+   }
 
    /**
     * Returns the wrapped XPath expression as a string.
@@ -278,4 +381,79 @@ public abstract class XPath implements Serializable {
                                                         throws JDOMException {
       return newInstance(path).selectSingleNode(context);
    }
+
+
+   //-------------------------------------------------------------------------
+   // Serialization support
+   //-------------------------------------------------------------------------
+
+   /**
+    * <i>[Serialization support]</i> Returns the alternative object
+    * to write to the stream when serializing this object.  This
+    * method returns an instance of a dedicated nested class to
+    * serialize XPath expressions independently of the concrete
+    * implementation being used.
+    * <p>
+    * <strong>Note</strong>: Subclasses are not allowed to override
+    * this method to ensure valid serialization of all
+    * implementations.</p>
+    *
+    * @return an XPathString instance configured with the wrapped
+    *         XPath expression.
+    *
+    * @throws ObjectStreamException   never.
+    */
+   protected final Object writeReplace() throws ObjectStreamException {
+      return new XPathString(this.getXPath());
+   }
+
+   /**
+    * The XPathString is dedicated to serialize instances of
+    * XPathsubclasses in a implementation-independent manner.
+    * <p>
+    * XPathString ensures that only string data are serialized.  Upon
+    * deserialization, XPathString relies on XPath factory method to
+    * to create instances of the concrete XPath wrapper currently
+    * configured.</p>
+    */
+   private final static class XPathString implements Serializable {
+      /**
+       * The XPath expression as a string.
+       */
+      private String xPath = null;
+
+      /**
+       * Creates a new XPathString instance from the specified
+       * XPath expression.
+       *
+       * @param  xpath   the XPath expression.
+       */
+      public XPathString(String xPath) {
+         super();
+
+         this.xPath = xPath;
+      }
+
+      /**
+       * <i>[Serialization support]</i> Resolves the read XPathString
+       * objects into XPath implementations.
+       *
+       * @return an instance of a concrete implementation of
+       *         XPath.
+       *
+       * @throws ObjectStreamException   if no XPath could be built
+       *                                 from the read object.
+       */
+      private Object readResolve() throws ObjectStreamException {
+         try {
+            return XPath.newInstance(this.xPath);
+         }
+         catch (JDOMException ex1) {
+            throw new InvalidObjectException(
+                        "Can't create XPath object for expression \"" +
+                        this.xPath + "\": " + ex1.toString());
+         }
+      }
+   }
 }
+
