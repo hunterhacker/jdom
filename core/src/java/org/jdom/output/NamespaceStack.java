@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.12 2003/05/29 02:51:49 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.13 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm AT jdom DOT org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm AT jdom DOT org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -48,8 +48,8 @@
 
  This software consists of voluntary contributions made by many 
  individuals on behalf of the JDOM Project and was originally 
- created by Jason Hunter <jhunter AT jdom DOT org> and
- Brett McLaughlin <brett AT jdom DOT org>.  For more information
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
  
  */
@@ -64,7 +64,7 @@ import org.jdom.Namespace;
  * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
  * during output.
  *
- * @version $Revision: 1.12 $, $Date: 2003/05/29 02:51:49 $
+ * @version $Revision: 1.13 $, $Date: 2004/02/06 09:28:32 $
  * @author  Elliotte Rusty Harolde
  * @author  Fred Trimble
  * @author  Brett McLaughlin
@@ -72,7 +72,7 @@ import org.jdom.Namespace;
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.12 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;

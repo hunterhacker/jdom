@@ -1,8 +1,8 @@
 /*--
 
- $Id: ContentFilter.java,v 1.11 2003/05/27 19:44:44 jhunter Exp $
+ $Id: ContentFilter.java,v 1.12 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -79,13 +79,13 @@ import org.jdom.*;
  * <p>
  * The default is to allow all valid JDOM objects.
  *
- * @version $Revision: 1.11 $, $Date: 2003/05/27 19:44:44 $
+ * @version $Revision: 1.12 $, $Date: 2004/02/06 09:28:31 $
  * @author Bradley S. Huffman
  */
 public class ContentFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.11 $ $Date: 2003/05/27 19:44:44 $ $Name:  $";
+      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.12 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
 
     /** Mask for JDOM {@link Element} objects */
     public static final int ELEMENT   = 1;

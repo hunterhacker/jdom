@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: Filter.java,v 1.8 2004/02/05 03:56:01 jhunter Exp $
+ $Id: Filter.java,v 1.9 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -36,8 +36,8 @@
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
  USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -60,7 +60,7 @@ package org.jdom.filter;
 /**
  * A generalized filter to restrict visibility or mutability on a list.
  *
- * @version $Revision: 1.8 $, $Date: 2004/02/05 03:56:01 $
+ * @version $Revision: 1.9 $, $Date: 2004/02/06 09:28:31 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */

@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: AbstractDOMAdapter.java,v 1.19 2003/04/30 09:55:12 jhunter Exp $
+ $Id: AbstractDOMAdapter.java,v 1.20 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -66,14 +66,14 @@ import org.w3c.dom.Document;
 /**
  * A DOMAdapter utility abstract base class.
  * 
- * @version $Revision: 1.19 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.20 $, $Date: 2004/02/06 09:28:31 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.19 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: AbstractDOMAdapter.java,v $ $Revision: 1.20 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

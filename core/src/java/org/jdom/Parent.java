@@ -1,8 +1,8 @@
 /*--
 
- $Id: Parent.java,v 1.8 2004/02/06 04:32:54 jhunter Exp $
+ $Id: Parent.java,v 1.9 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -48,9 +48,9 @@
 
  This software consists of voluntary contributions made by many
  individuals on behalf of the JDOM Project and was originally
- created by Brett McLaughlin <brett@jdom.org> and
- Jason Hunter <jhunter@jdom.org>.  For more information on the
- JDOM Project, please see <http://www.jdom.org/>.
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
 
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.8 $, $Date: 2004/02/06 04:32:54 $
+ * @version $Revision: 1.9 $, $Date: 2004/02/06 09:28:30 $
  */
 public interface Parent extends Cloneable, Serializable {
 

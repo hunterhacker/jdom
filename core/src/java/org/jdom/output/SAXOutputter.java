@@ -1,8 +1,8 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.33 2003/05/29 02:51:49 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.34 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm AT jdom DOT org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm AT jdom DOT org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -48,8 +48,8 @@
 
  This software consists of voluntary contributions made by many
  individuals on behalf of the JDOM Project and was originally
- created by Jason Hunter <jhunter AT jdom DOT org> and
- Brett McLaughlin <brett AT jdom DOT org>.  For more information
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.33 $, $Date: 2003/05/29 02:51:49 $
+ * @version $Revision: 1.34 $, $Date: 2004/02/06 09:28:32 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.33 $ $Date: 2003/05/29 02:51:49 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.34 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =

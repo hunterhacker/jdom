@@ -1,8 +1,8 @@
 /*--
 
- $Id: Text.java,v 1.21 2004/02/06 04:32:54 jhunter Exp $
+ $Id: Text.java,v 1.22 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@ package org.jdom;
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.21 $, $Date: 2004/02/06 04:32:54 $
+ * @version $Revision: 1.22 $, $Date: 2004/02/06 09:28:30 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
@@ -69,7 +69,7 @@ package org.jdom;
 public class Text extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.21 $ $Date: 2004/02/06 04:32:54 $ $Name:  $";
+      "@(#) $RCSfile: Text.java,v $ $Revision: 1.22 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
 
     static final String EMPTY_STRING = "";
 

@@ -1,8 +1,8 @@
 /*--
 
- $Id: Format.java,v 1.4 2003/05/30 07:15:49 jhunter Exp $
+ $Id: Format.java,v 1.5 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.4 $, $Date: 2003/05/30 07:15:49 $
+ * @version $Revision: 1.5 $, $Date: 2004/02/06 09:28:32 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.4 $ $Date: 2003/05/30 07:15:49 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.5 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
     /**
      * Returns a Format object that performs no whitespace changes, uses

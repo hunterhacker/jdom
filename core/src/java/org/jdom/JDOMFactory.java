@@ -1,8 +1,8 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.1 2004/02/06 04:51:12 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.2 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -66,7 +66,7 @@ import org.jdom.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.1 $, $Date: 2004/02/06 04:51:12 $
+ * @version $Revision: 1.2 $, $Date: 2004/02/06 09:28:30 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman

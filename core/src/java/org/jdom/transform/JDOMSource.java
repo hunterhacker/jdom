@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.16 2003/05/01 02:23:11 jhunter Exp $
+ $Id: JDOMSource.java,v 1.17 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -94,14 +94,14 @@ import org.xml.sax.*;
  *
  * @see org.jdom.transform.JDOMResult
  *
- * @version $Revision: 1.16 $, $Date: 2003/05/01 02:23:11 $
+ * @version $Revision: 1.17 $, $Date: 2004/02/06 09:28:32 $
  * @author Laurent Bihanic
  * @author Jason Hunter
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.16 $ $Date: 2003/05/01 02:23:11 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.17 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}

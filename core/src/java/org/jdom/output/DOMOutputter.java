@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.36 2003/05/23 20:57:54 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.37 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <pm AT jdom DOT org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
  
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm AT jdom DOT org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
@@ -48,8 +48,8 @@
 
  This software consists of voluntary contributions made by many 
  individuals on behalf of the JDOM Project and was originally 
- created by Jason Hunter <jhunter AT jdom DOT org> and
- Brett McLaughlin <brett AT jdom DOT org>.  For more information
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
  
  */
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.36 $, $Date: 2003/05/23 20:57:54 $
+ * @version $Revision: 1.37 $, $Date: 2004/02/06 09:28:32 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.36 $ $Date: 2003/05/23 20:57:54 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.37 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =

@@ -1,8 +1,8 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.15 2004/02/06 09:03:31 jhunter Exp $
+ $Id: JaxenXPath.java,v 1.16 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -68,13 +68,13 @@ import org.saxpath.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.15 $, $Date: 2004/02/06 09:03:31 $
+ * @version $Revision: 1.16 $, $Date: 2004/02/06 09:28:32 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.15 $ $Date: 2004/02/06 09:03:31 $ $Name:  $";
+    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.16 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
    /**
     * The compiled XPath object to select nodes.  This attribute can

@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: JAXPDOMAdapter.java,v 1.11 2003/04/30 09:55:12 jhunter Exp $
+ $Id: JAXPDOMAdapter.java,v 1.12 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -66,13 +66,13 @@ import org.w3c.dom.Document;
 /**
  * An adapter for any parser supporting the Sun JAXP APIs.
  * 
- * @version $Revision: 1.11 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.12 $, $Date: 2004/02/06 09:28:31 $
  * @author  Jason Hunter
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.11 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.12 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

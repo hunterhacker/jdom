@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: Verifier.java,v 1.48 2003/06/18 06:59:52 jhunter Exp $
+ $Id: Verifier.java,v 1.49 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.48 $, $Date: 2003/06/18 06:59:52 $
+ * @version $Revision: 1.49 $, $Date: 2004/02/06 09:28:30 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.48 $ $Date: 2003/06/18 06:59:52 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.49 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.

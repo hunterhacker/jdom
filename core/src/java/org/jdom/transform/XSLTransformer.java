@@ -1,8 +1,8 @@
 /*--
 
- $Id: XSLTransformer.java,v 1.1 2003/05/05 08:30:23 jhunter Exp $
+ $Id: XSLTransformer.java,v 1.2 2004/02/06 09:28:32 jhunter Exp $
 
- Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -109,14 +109,14 @@ import org.jdom.*;
  *       Xalan 2.2d10. </li>
  *    </ol>
 
- * @version $Revision: 1.1 $, $Date: 2003/05/05 08:30:23 $
+ * @version $Revision: 1.2 $, $Date: 2004/02/06 09:28:32 $
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
  */
 public class XSLTransformer {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.1 $ $Date: 2003/05/05 08:30:23 $ $Name:  $";
+            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.2 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
 
     private Templates templates;
 

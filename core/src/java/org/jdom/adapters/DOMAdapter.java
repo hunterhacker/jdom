@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.20 2003/04/30 09:55:12 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.21 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,7 @@ import org.w3c.dom.Document;
  * Implementing classes map these calls to DOM parser-specific calls, allowing
  * any third-party parser to be used with JDOM.
  *
- * @version $Revision: 1.20 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.21 $, $Date: 2004/02/06 09:28:31 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */

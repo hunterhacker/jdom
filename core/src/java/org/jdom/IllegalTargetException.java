@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: IllegalTargetException.java,v 1.13 2003/05/29 02:47:40 jhunter Exp $
+ $Id: IllegalTargetException.java,v 1.14 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -60,13 +60,13 @@ package org.jdom;
  * Thrown when a target is supplied in construction of a JDOM {@link
  * ProcessingInstruction}, and that name breaks XML naming conventions.
  * 
- * @version $Revision: 1.13 $, $Date: 2003/05/29 02:47:40 $
+ * @version $Revision: 1.14 $, $Date: 2004/02/06 09:28:30 $
  * @author  Brett McLaughlin
  */
 public class IllegalTargetException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.13 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
+      "@(#) $RCSfile: IllegalTargetException.java,v $ $Revision: 1.14 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating

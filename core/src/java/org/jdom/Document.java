@@ -1,8 +1,8 @@
 /*--
 
- $Id: Document.java,v 1.78 2004/02/06 09:12:18 jhunter Exp $
+ $Id: Document.java,v 1.79 2004/02/06 09:28:30 jhunter Exp $
 
- Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,7 @@ import org.jdom.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.78 $, $Date: 2004/02/06 09:12:18 $
+ * @version $Revision: 1.79 $, $Date: 2004/02/06 09:28:30 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
 public class Document implements Parent {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.78 $ $Date: 2004/02/06 09:12:18 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.79 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
 
     /**
      * This document's content including comments, PIs, a possible

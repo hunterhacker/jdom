@@ -1,8 +1,8 @@
 /*--
 
- $Id: AbstractFilter.java,v 1.3 2003/06/04 17:40:52 jhunter Exp $
+ $Id: AbstractFilter.java,v 1.4 2004/02/06 09:28:31 jhunter Exp $
 
- Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -19,11 +19,11 @@
 
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
-    written permission, please contact <license AT jdom DOT org>.
+    written permission, please contact <request_AT_jdom_DOT_org>.
 
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management <pm AT jdom DOT org>.
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
 
  In addition, we request (but do not require) that you include in the
  end-user documentation provided with the redistribution and/or in the
@@ -48,9 +48,9 @@
 
  This software consists of voluntary contributions made by many
  individuals on behalf of the JDOM Project and was originally
- created by Jason Hunter <jhunter AT jdom DOT org> and
- Brett McLaughlin <brett AT jdom DOT org>.  For more information on
- the JDOM Project, please see <http://www.jdom.org/>.
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
 
@@ -60,12 +60,12 @@ package org.jdom.filter;
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2003/06/04 17:40:52 $
+ * @version $Revision: 1.4 $, $Date: 2004/02/06 09:28:31 $
  */
 public abstract class AbstractFilter implements Filter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AbstractFilter.java,v $ $Revision: 1.3 $ $Date: 2003/06/04 17:40:52 $";
+      "@(#) $RCSfile: AbstractFilter.java,v $ $Revision: 1.4 $ $Date: 2004/02/06 09:28:31 $";
 
     public Filter negate() {
         return new NegateFilter(this);
