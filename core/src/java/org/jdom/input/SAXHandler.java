@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.60 2004/01/23 17:59:55 jhunter Exp $
+ $Id: SAXHandler.java,v 1.61 2004/02/06 03:20:19 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.60 $, $Date: 2004/01/23 17:59:55 $
+ * @version $Revision: 1.61 $, $Date: 2004/02/06 03:20:19 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.60 $ $Date: 2004/01/23 17:59:55 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.61 $ $Date: 2004/02/06 03:20:19 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -620,7 +620,12 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         textBuffer.clear();
     }
 
-    private void flushCharacters(String data) throws SAXException {
+    /**
+     * Flush the given string into the document.  This is a protected method
+     * so subclassers can control text handling without knowledge of the
+     * internals of this class.
+     */
+    protected void flushCharacters(String data) throws SAXException {
         if (data.length() == 0) {
             previousCDATA = inCDATA;
             return;
