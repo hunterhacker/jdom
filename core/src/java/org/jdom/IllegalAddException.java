@@ -77,6 +77,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param base <code>Element</code> that <code>Attribute</code>
      *        couldn't be added to
      * @param added <code>Attribute</code> that could not be added
+     * @param reason cause for the problem
      */
     public IllegalAddException(Element base, Attribute added, String reason) {
         super(new StringBuffer()
@@ -99,6 +100,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * @param base <code>Element</code> that the child
      *        couldn't be added to
      * @param added <code>Element</code> that could not be added
+     * @param reason cause for the problem
      */
     public IllegalAddException(Element base, Element added, String reason) {
         super(new StringBuffer()
@@ -124,6 +126,114 @@ public class IllegalAddException extends IllegalArgumentException {
               .append("The element \"")
               .append(added.getQualifiedName())
               .append("\" could not be added as the root of the document: ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link ProcessingInstruction}</code>
+     *   supplied as content to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the PI couldn't be added to
+     * @param added PI that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, ProcessingInstruction added,
+                               String reason) {
+        super(new StringBuffer()
+              .append("The PI \"")
+              .append(added.getTarget())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link ProcessingInstruction}</code>
+     *   supplied as content to the supplied document is not allowed.
+     * </p>
+     *
+     * @param base document that the PI couldn't be added to
+     * @param added PI that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Document base, ProcessingInstruction added,
+                               String reason) {
+        super(new StringBuffer()
+              .append("The PI \"")
+              .append(added.getTarget())
+              .append("\" could not be added to the top level of the document: ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Comment}</code>
+     *   supplied as content to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the comment couldn't be added to
+     * @param added comment that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, Comment added, String reason) {
+        super(new StringBuffer()
+              .append("The comment \"")
+              .append(added.getText())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Comment}</code>
+     *   supplied as content to the supplied document is not allowed.
+     * </p>
+     *
+     * @param base document that the PI couldn't be added to
+     * @param added PI that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Document base, Comment added, String reason) {
+        super(new StringBuffer()
+              .append("The comment \"")
+              .append(added.getText())
+              .append("\" could not be added to the top level of the document: ")
+              .append(reason)
+              .toString());
+    }
+
+    /**
+     * <p>
+     * This will create an <code>Exception</code> indicating
+     *   that the addition of the <code>{@link Entity}</code>
+     *   supplied as content to the supplied element is not allowed.
+     * </p>
+     *
+     * @param base element that the entity couldn't be added to
+     * @param added entity that could not be added
+     * @param reason cause for the problem
+     */
+    public IllegalAddException(Element base, Entity added, String reason) {
+        super(new StringBuffer()
+              .append("The entity \"")
+              .append(added.getName())
+              .append("\" could not be added as content to \"")
+              .append(base.getQualifiedName())
+              .append("\": ")
               .append(reason)
               .toString());
     }

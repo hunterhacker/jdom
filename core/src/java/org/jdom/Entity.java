@@ -74,6 +74,12 @@ public class Entity implements Serializable, Cloneable {
     /** The mixed content of the <code>Entity</code> */
     protected List content;
 
+    /** Parent element, or null if none */
+    protected Element parent;
+
+    /** Containing document node, or null if none */
+    protected Document document;
+
     /**
      * <p>
      * Default, no-args constructor for implementations
@@ -105,6 +111,66 @@ public class Entity implements Serializable, Cloneable {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * <p>
+     * This will return the parent of this <code>Entity</code>.
+     *   If there is no parent, then this returns <code>null</code>.
+     * </p>
+     *
+     * @return parent of this <code>Entity</code>
+     */
+    public Element getParent() {
+        return parent;
+    }
+
+    /**
+     * <p>
+     * This will set the parent of this <code>Entity</code>.
+     * </p>
+     *
+     * @param parent <code>Element</code> to be new parent.
+     * @return this <code>Entity</code> modified.
+     */
+    protected Entity setParent(Element parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this Entity, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this Entity, or null.
+     */
+    public Document getDocument() {
+        if (document != null) {
+            return document;
+        }
+
+        Element p = getParent();
+        if (p != null) {
+            return p.getDocument();
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>
+     * This sets the <code>{@link Document}</code> parent of this entity.
+     * </p>
+     *
+     * @param document <code>Document</code> parent
+     * @return this <code>Entity</code> modified
+     */
+    protected Entity setDocument(Document document) {
+        this.document = document;
+        return this;
     }
 
     /**

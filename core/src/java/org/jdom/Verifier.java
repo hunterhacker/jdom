@@ -458,7 +458,9 @@ public final class Verifier {
      * @return <code>String</code> - true if it's a letter, false otherwise.
      */
     public static boolean isXMLLetter(char c) {
-    
+        // XXX This is about 2% of total JDOM build work
+        // XXX Should sort these so common letters come first
+        // XXX or maybe use a bitmap or array for linear lookup
         if (c >= 0x0041 && c <= 0x005A) return true;
         if (c >= 0x0061 && c <= 0x007A) return true;
         if (c >= 0x00C0 && c <= 0x00D6) return true;

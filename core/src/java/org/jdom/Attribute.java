@@ -83,6 +83,9 @@ public class Attribute implements Serializable, Cloneable {
     /** The value of the <code>Attribute</code> */
     protected String value;
 
+    /** Parent element, or null if none */
+    protected Element parent;
+
     /**
      * <p>
      * Default, no-args constructor for implementations
@@ -106,6 +109,8 @@ public class Attribute implements Serializable, Cloneable {
         if ((reason = Verifier.checkAttributeName(name)) != null) {
             throw new IllegalNameException(name, "attribute", reason);
         }
+
+        // XXX Should also sanity check the *value*
 
         if (namespace == null) {
             namespace = Namespace.NO_NAMESPACE;
@@ -149,6 +154,31 @@ public class Attribute implements Serializable, Cloneable {
      */
     public Attribute(String name, String value) {
         this(name, value, Namespace.NO_NAMESPACE);
+    }
+
+    /**
+     * <p>
+     * This will return the parent of this <code>Attribute</code>.
+     *   If there is no parent, then this returns <code>null</code>.
+     * </p>
+     *
+     * @return parent of this <code>Attribute</code>
+     */
+    public Element getParent() {
+        return parent;
+    }
+
+    /**
+     * <p>
+     * This will set the parent of this <code>Comment</code>.
+     * </p>
+     *
+     * @param parent <code>Element</code> to be new parent.
+     * @return this <code>Comment</code> modified.
+     */
+    protected Attribute setParent(Element parent) {
+        this.parent = parent;
+        return this;
     }
 
     /**

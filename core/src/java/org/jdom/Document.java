@@ -300,7 +300,7 @@ public class Document implements Serializable, Cloneable {
             return false;
         }
         else {
-            return content.remove(pi);
+            return removeContent(pi);
         }
     }
 
@@ -318,13 +318,14 @@ public class Document implements Serializable, Cloneable {
         for (Iterator i = content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
             if (obj instanceof ProcessingInstruction) {
-                if (((ProcessingInstruction)obj).getTarget().equals(target)) {
+                ProcessingInstruction pi = (ProcessingInstruction)obj;
+                if (pi.getTarget().equals(target)) {
                     deletedSome = true;
                     i.remove();
+                    pi.setDocument(null);
                 }
             }
         }
-
         return deletedSome;
     }
 
@@ -338,6 +339,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> - this Document modified.
      */
     public Document setProcessingInstructions(List pis) {
+        // XXX Sanity check List contains only parentless and documentless PIs
 
         List current = getProcessingInstructions();
         for (Iterator i = current.iterator(); i.hasNext(); ) {
@@ -358,8 +360,18 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> this document modified.
      */
     public Document addContent(ProcessingInstruction pi) {
-        content.add(pi);
+        if (pi.getParent() != null) {
+            throw new IllegalAddException(this, pi,
+                "The PI already has an existing parent \"" +
+                pi.getParent().getQualifiedName() + "\"");
+        } else if (pi.getDocument() != null) {
+            throw new IllegalAddException(this, pi,
+                "The PI already has an existing parent " +
+                "(the document root)");
+        }
 
+        content.add(pi);
+        pi.setDocument(this);
         return this;
     }
 
@@ -372,8 +384,18 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> - this object modified.
      */
     public Document addContent(Comment comment) {
-        content.add(comment);
+        if (comment.getParent() != null) {
+            throw new IllegalAddException(this, comment,
+                "The comment already has an existing parent \"" +
+                comment.getParent().getQualifiedName() + "\"");
+        } else if (comment.getDocument() != null) {
+            throw new IllegalAddException(this, comment,
+                "The element already has an existing parent " +
+                "(the document root)");
+        }
 
+        content.add(comment);
+        comment.setDocument(this);
         return this;
     }
 
@@ -403,6 +425,9 @@ public class Document implements Serializable, Cloneable {
      *         one Element or objects of illegal types
      */
     public Document setMixedContent(List content) {
+        // XXX Should sanity check the List here for object type
+        // and complete lack of parentage
+
         this.content.clear();
         rootElement = null;
 
@@ -560,44 +585,14 @@ public class Document implements Serializable, Cloneable {
         if (content == null) {
             return false;
         }
-        return content.remove(comment);
+        if (content.remove(comment)) {
+            comment.setDocument(null);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-
-    /**
-     * @deprecated use addContent(Comment) instead
-     */
-    public Document addComment(Comment c) {
-        return addContent(c);
-    }
-
-    /**
-     * @deprecated use addContent(ProcessingInstruction) instead
-     */
-    public Document addProcessingInstruction(ProcessingInstruction pi) {
-        return addContent(pi);
-    }
-
-    /**
-     * @deprecated use addContent(ProcessingInstruction) instead
-     */
-    public Document addProcessingInstruction(String target, String data) {
-        return addContent(new ProcessingInstruction(target, data));
-    }
-
-    /**
-     * @deprecated use addContent(ProcessingInstruction) instead
-     */
-    public Document addProcessingInstruction(String target, Map data) {
-        return addContent(new ProcessingInstruction(target, data));
-    }
-
-    /**
-     * @deprecated use doc.removeContent(PI) instead
-     */
-    public boolean removeProcessingInstruction(ProcessingInstruction pi) {
-        return getMixedContent().remove(pi);
-    }
 
     /**
      * @deprecated Deprecated in beta6, use setRootElement() instead

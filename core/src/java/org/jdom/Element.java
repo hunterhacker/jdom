@@ -83,9 +83,9 @@ public class Element implements Serializable, Cloneable {
 
     /** Additional <code>{@link Namespace}</code> declarations on this 
         element */
-    protected transient List additionalNamespaces;
+    protected transient LinkedList additionalNamespaces;
 
-    /** The parent of this <code>Element</code> */
+    /** Parent element, or null if none */
     protected Element parent;
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
@@ -348,7 +348,7 @@ public class Element implements Serializable, Cloneable {
      *   to determine this.
      * </p>
      *
-     * @return <code>Element</code> - parent of this <code>Element</code>.
+     * @return parent of this <code>Element</code>.
      */
     public Element getParent() {
         return parent;
@@ -364,7 +364,6 @@ public class Element implements Serializable, Cloneable {
      */
     protected Element setParent(Element parent) {
         this.parent = parent;
-
         return this;
     }
 
@@ -677,6 +676,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setMixedContent(List mixedContent) {
+        // XXX Sanity check content per Document.setMixedContent()
         if (content != null) {
             content.clear();
         } else {
@@ -953,11 +953,22 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(ProcessingInstruction pi) {
+        if (pi.getParent() != null) {
+            throw new IllegalAddException(this, pi,
+                "The PI already has an existing parent \"" +
+                pi.getParent().getQualifiedName() + "\"");
+        } else if (pi.getDocument() != null) {
+            throw new IllegalAddException(this, pi,
+                "The PI already has an existing parent " +
+                "(the document root)");
+        }
+
         if (content == null) {
             content = new LinkedList();
         }
 
         content.add(pi);
+        pi.setParent(this);
         return this;
     }
 
@@ -970,11 +981,18 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Entity entity) {
+        if (entity.getParent() != null) {
+            throw new IllegalAddException(this, entity,
+                "The entity already has an existing parent \"" +
+                entity.getParent().getQualifiedName() + "\"");
+        }
+
         if (content == null) {
             content = new LinkedList();
         }
 
         content.add(entity);
+        entity.setParent(this);
         return this;
     }
 
@@ -1004,11 +1022,22 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addContent(Comment comment) {
+        if (comment.getParent() != null) {
+            throw new IllegalAddException(this, comment,
+                "The comment already has an existing parent \"" +
+                comment.getParent().getQualifiedName() + "\"");
+        } else if (comment.getDocument() != null) {
+            throw new IllegalAddException(this, comment,
+                "The comment already has an existing parent " +
+                "(the document root)");
+        }
+
         if (content == null) {
             content = new LinkedList();
         }
 
         content.add(comment);
+        comment.setParent(this);
         return this;
     }
 
@@ -1241,6 +1270,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setAttributes(List attributes) {
+        // XXX Verify attributes are all parentless first
         this.attributes = attributes;
         return this;
     }
@@ -1256,9 +1286,16 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element addAttribute(Attribute attribute) {
-        if (getAttribute(attribute.getName(), attribute.getNamespace()) != null) {
+        if (getAttribute(attribute.getName(), attribute.getNamespace())
+                 != null) {
             throw new IllegalAddException(
-                this, attribute, "Duplicate attributes are not allowed.");
+                this, attribute, "Duplicate attributes are not allowed");
+        }
+
+        if (attribute.getParent() != null) {
+            throw new IllegalAddException(this, attribute,
+                "The attribute already has an existing parent \"" +
+                attribute.getParent().getQualifiedName() + "\"");
         }
 
         if (attributes == null) {
@@ -1266,6 +1303,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         attributes.add(attribute);
+        attribute.setParent(this);
         return this;
     }
 
@@ -1300,6 +1338,7 @@ public class Element implements Serializable, Cloneable {
             if ((att.getNamespaceURI().equals(uri)) &&
                 (att.getName().equals(name))) {
                 i.remove();
+                att.setParent(null);
                 return true;
             }
         }
@@ -1341,6 +1380,7 @@ public class Element implements Serializable, Cloneable {
             if ((att.getNamespaceURI().equals(uri)) &&
                 (att.getName().equals(name))) {
                 i.remove();
+                att.setParent(null);
                 return true;
             }
         }
@@ -1428,9 +1468,8 @@ public class Element implements Serializable, Cloneable {
         if (attributes != null) {
             List list = new LinkedList();
             for (Iterator i = attributes.iterator(); i.hasNext(); ) {
-                list.add(((Attribute)i.next()).clone());
+                element.addAttribute((Attribute)((Attribute)i.next()).clone());
             }
-            element.attributes = list;
         }
 
         if (content != null) {
@@ -1451,7 +1490,8 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Handle additional namespaces
-        element.additionalNamespaces = additionalNamespaces;
+        element.additionalNamespaces =
+            (LinkedList) additionalNamespaces.clone();
 
         // Remove out the parent
         element.setParent(null);
@@ -1513,7 +1553,12 @@ public class Element implements Serializable, Cloneable {
         if (content == null) {
             return false;
         }
-        return content.remove(pi);
+        if (content.remove(pi)) {
+            pi.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1528,7 +1573,12 @@ public class Element implements Serializable, Cloneable {
         if (content == null) {
             return false;
         }
-        return content.remove(entity);
+        if (content.remove(entity)) {
+            entity.setParent(null);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1543,123 +1593,11 @@ public class Element implements Serializable, Cloneable {
         if (content == null) {
             return false;
         }
-        return content.remove(comment);
-    }
-
-/************************************************************
-     Methods below here are deprecated and will 
-     be removed before final release!
-*************************************************************/
-
-    /**
-     * @deprecated Use getText() and getTextTrim() instead
-     */
-    public String getContent(boolean preserveWhitespace) {
-        if (preserveWhitespace) {
-            return getText();
-        }
-        else {
-            return getTextTrim();
+        if (content.remove(comment)) {
+            comment.setParent(null);
+            return true;
+        } else {
+            return false;
         }
     }
-
-    /**
-     * @deprecated Use getTextTrim() instead
-     */
-    public String getContent() {
-	return getTextTrim();
-    }
-
-    /**
-     * @deprecated Use setText(String) instead
-     */
-    public Element setContent(String text) {
-        return setText(text);
-    }
-
-    /**
-     * @deprecated Use getMixedContent(), with no arguments, instead
-     */
-    public List getMixedContent(boolean preserveWhitespace) {
-        PartialList result = new PartialList(content, this);
-	if (preserveWhitespace) {
-	    result.addAllPartial(content);
-	} else {
-	    for (Iterator i = content.iterator(); i.hasNext(); ) {
-		Object obj = i.next();
-		if (obj instanceof String) {
-		    result.addPartial(((String)obj).trim());
-		} else {
-		    result.addPartial(obj);
-		}
-	    }
-	}
-        return result;
-    }
-
-    /**
-     * @deprecated Use addContent(String) instead
-     */
-    public Element addChild(String text) {
-       return addContent(text);
-    }
-
-    /**
-     * @deprecated Use addContent(Element) instead
-     */
-    public Element addChild(Element element) {
-       return addContent(element);
-    }
-
-    /**
-     * @deprecated Use addContent(ProcessingInstruction) instead
-     */
-    public Element addChild(ProcessingInstruction pi) {
-       return addContent(pi);
-    }
-
-    /**
-     * @deprecated Use addContent(Entity) instead
-     */
-    public Element addChild(Entity entity) {
-       return addContent(entity);
-    }
-
-    /**
-     * @deprecated Use addContent(Comment) instead
-     */
-    public Element addChild(Comment comment) {
-       return addContent(comment);
-    }
-
-    /**
-     * @deprecated Use getMixedContent().remove(element) instead
-     */
-    public boolean removeChild(Element element) {
-       return removeContent(element);
-    }
-
-    /**
-     * @deprecated Use getMixedContent().remove(pi) instead
-     */
-    public boolean removeChild(ProcessingInstruction pi) {
-       return removeContent(pi);
-    }
-
-    /**
-     * @deprecated Use getMixedContent().remove(entity) instead
-     */
-    public boolean removeChild(Entity entity) {
-       return removeContent(entity);
-    }
-
-    /**
-     * @deprecated Use getMixedContent().remove(comment) instead
-     */
-    public boolean removeChild(Comment comment) {
-       return removeContent(comment);
-    }
-
-
-
 }

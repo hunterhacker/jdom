@@ -72,6 +72,14 @@ public class Comment implements Serializable, Cloneable {
     /** Text of the <code>Comment</code> */
     protected String text;
 
+    // XXX parent and document can use the same memory location
+
+    /** Parent node, or null if none */
+    protected Element parent;
+
+    /** Document node if comment is outside the root element, or null if none */
+    protected Document document;
+
     /**
      * <p>
      * Default, no-args constructor for implementations
@@ -90,6 +98,66 @@ public class Comment implements Serializable, Cloneable {
      */
     public Comment(String text) {
         setText(text);
+    }
+
+    /**
+     * <p>
+     * This will return the parent of this <code>Comment</code>.
+     *   If there is no parent, then this returns <code>null</code>.
+     * </p>
+     *
+     * @return parent of this <code>Comment</code>
+     */
+    public Element getParent() {
+        return parent;
+    }
+
+    /**
+     * <p>
+     * This will set the parent of this <code>Comment</code>.
+     * </p>
+     *
+     * @param parent <code>Element</code> to be new parent.
+     * @return this <code>Comment</code> modified.
+     */
+    protected Comment setParent(Element parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this Comment, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this Element, or null.
+     */
+    public Document getDocument() {
+        if (document != null) {
+            return document;
+        }
+
+        Element p = getParent();
+        if (p != null) {
+            return p.getDocument();
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>
+     * This sets the <code>{@link Document}</code> parent of this comment.
+     * </p>
+     *
+     * @param document <code>Document</code> parent
+     * @return this <code>Comment</code> modified
+     */
+    protected Comment setDocument(Document document) {
+        this.document = document;
+        return this;
     }
 
     /**

@@ -85,6 +85,12 @@ public class ProcessingInstruction implements Serializable, Cloneable {
     /** The data for the PI in name/value pairs */
     protected Map mapData;
 
+    /** Parent element, or null if none */
+    protected Element parent;
+
+    /** Document node if PI is outside the root element, or null if none */
+    protected Document document;
+
     /**
      * <p>
      * Default, no-args constructor for implementations
@@ -105,7 +111,8 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction(String target, Map data) {
         String reason;
-        if ((reason = Verifier.checkProcessingInstructionTarget(target)) != null) {
+        if ((reason = Verifier.checkProcessingInstructionTarget(target))
+                                    != null) {
             throw new IllegalTargetException(target, reason);
         }
 
@@ -124,12 +131,73 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      */
     public ProcessingInstruction(String target, String data) {
         String reason;
-        if ((reason = Verifier.checkProcessingInstructionTarget(target)) != null) {
+        if ((reason = Verifier.checkProcessingInstructionTarget(target))
+                                    != null) {
             throw new IllegalTargetException(target, reason);
         }
 
         this.target = target;
         setData(data);
+    }
+
+    /**
+     * <p>
+     * This will return the parent of this <code>ProcessingInstruction</code>.
+     *   If there is no parent, then this returns <code>null</code>.
+     * </p>
+     *
+     * @return parent of this <code>ProcessingInstruction</code>
+     */
+    public Element getParent() {
+        return parent;
+    }
+
+    /**
+     * <p>
+     * This will set the parent of this <code>Element</code>.
+     * </p>
+     *
+     * @param parent <code>Element</code> to be new parent.
+     * @return this <code>ProcessingInstruction</code> modified.
+     */
+    protected ProcessingInstruction setParent(Element parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    /**
+     * <p>
+     * This retrieves the owning <code>{@link Document}</code> for
+     *   this PI, or null if not a currently a member of a
+     *   <code>{@link Document}</code>.
+     * </p>
+     *
+     * @return <code>Document</code> owning this PI, or null.
+     */
+    public Document getDocument() {
+        if (document != null) {
+            return document;
+        }
+
+        Element p = getParent();
+        if (p != null) {
+            return p.getDocument();
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>
+     * This sets the <code>{@link Document}</code> parent of this PI.
+     * </p>
+     *
+     * @param document <code>Document</code> parent
+     * @return this <code>PI</code> modified
+     */
+    protected ProcessingInstruction setDocument(Document document) {
+        this.document = document;
+        return this;
     }
 
     /**
