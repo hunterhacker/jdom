@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.32 2001/04/11 05:17:47 jhunter Exp $
+ $Id: Document.java,v 1.33 2001/04/13 03:16:30 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -57,11 +57,7 @@
 package org.jdom;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -82,13 +78,7 @@ public class Document implements Serializable, Cloneable {
      *   <code>{@link ProcessingInstruction}</code>s and
      *   the root <code>{@link Element}</code>
      */
-    protected List content;
-
-    /**
-     * The root <code>{@link Element}</code>
-     *   of the <code>Document</code>.
-     */
-    protected Element rootElement;
+    protected List content = new LinkedList();
 
     /** The <code>{@link DocType}</code> declaration */
     protected DocType docType;
@@ -99,7 +89,6 @@ public class Document implements Serializable, Cloneable {
      *   to use if needed.
      * </p>
      */
-    // XXX Should this be public, to avoid use of Document(null)?
     protected Document() {}
 
     /**
@@ -114,14 +103,8 @@ public class Document implements Serializable, Cloneable {
      * @param docType <code>DocType</code> declaration.
      */
     public Document(Element rootElement, DocType docType) {
-        this.rootElement = rootElement;
-        this.docType = docType;
-        content = new LinkedList();
-
-        if (rootElement != null) {
-            rootElement.setDocument(this);
-            content.add(rootElement);
-        }
+        setRootElement(rootElement);
+        setDocType(docType);
     }
 
     /**
@@ -151,9 +134,8 @@ public class Document implements Serializable, Cloneable {
      *         one Element or objects of illegal types
      */
     public Document(List content, DocType docType) {
-        this.docType = docType;
-        this.content = new LinkedList();
         setMixedContent(content);
+        setDocType(docType);
     }
 
     /**
@@ -174,15 +156,21 @@ public class Document implements Serializable, Cloneable {
     /**
      * <p>
      * This will return the root <code>Element</code>
-     *   for this <code>Document</code>, or return null in the case the
-     *   root element hasn't been yet set.
+     *   for this <code>Document</code>
      * </p>
      *
-     * @return <code>Element</code> - the document's root element, or
-     *    null if none has been yet set
+     * @return <code>Element</code> - the document's root element
      */
     public Element getRootElement() {
-        return rootElement;
+        Iterator itr = content.iterator();
+        while (itr.hasNext()) {
+            Object obj = itr.next();
+            if (obj instanceof Element) {
+                return (Element) obj;
+            }
+        }
+
+        return null;  // sometimes happens during internal manipulations
     }
 
     /**
@@ -195,21 +183,43 @@ public class Document implements Serializable, Cloneable {
      * @return <code>Document</code> - modified Document.
      */
     public Document setRootElement(Element rootElement) {
-        // If existing root element, tell it that it's no longer root
-        // and remove it from the content list
-        int rootLocation = content.size();  // default add to end
-        if (this.rootElement != null) {
-            this.rootElement.setDocument(null);
-            rootLocation = content.indexOf(this.rootElement);
-            content.remove(rootLocation);
+        // XXX Remove this special case pronto
+        if (rootElement == null) return this;
+
+        // Conduct some sanity checking
+        if (rootElement.isRootElement()) {
+            throw new IllegalAddException(this, rootElement,
+                "The element already has an existing parent " +
+                "(the document root)");
+        }
+        else if (rootElement.getParent() != null) {
+            throw new IllegalAddException(this, rootElement,
+                "The element already has an existing parent \"" +
+                rootElement.getParent().getQualifiedName() + "\"");
         }
 
-        if (rootElement != null) {
-            rootElement.setDocument(this);
-            content.add(rootLocation, rootElement);
+        boolean hadRoot = false;
+
+        // Find the current root and replace it
+        ListIterator itr = content.listIterator();
+        while (itr.hasNext()) {
+            Object obj = itr.next();
+System.out.println("examining obj " + obj);
+            if (obj instanceof Element) {
+                Element departingRoot = (Element) obj;
+                departingRoot.setDocument(null);
+System.out.println("removing doc on " + departingRoot);
+                itr.set(rootElement);  // replaces
+                hadRoot = true;
+            }
         }
 
-        this.rootElement = rootElement;
+        // No current root
+        if (hadRoot == false) {
+            itr.add(rootElement);  // adds at end
+        }
+
+        rootElement.setDocument(this);
 
         return this;
     }
@@ -444,6 +454,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>List</code> - all Document content
      */
     public List getMixedContent() {
+        // XXX This should be a PartialList/FilterList
         return content;
     }
 
@@ -452,7 +463,8 @@ public class Document implements Serializable, Cloneable {
      * This will set all content for the <code>Document</code>.
      * The List may contain only objects of type Element, Comment, and
      * ProcessingInstruction; and only one Element that becomes the root.
-     * In event of an exception the content may be partially added.
+     * In event of an exception the original content will be unchanged
+     * and the items in the added content will be unaltered.
      * </p>
      *
      * @param content the new mixed content
@@ -460,33 +472,99 @@ public class Document implements Serializable, Cloneable {
      * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types
      */
-    public Document setMixedContent(List content) {
-        this.content.clear();
-        rootElement = null;
+    public Document setMixedContent(List mixedContent) {
 
-        for (Iterator i = content.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                if (getRootElement() == null) {
-                    setRootElement((Element)obj);
+        if (mixedContent == null) {
+            return this;
+        }
+
+        // Save original content and create a new list
+        Element oldRoot = getRootElement();
+        List oldContent = content;
+        content = new LinkedList();
+
+        RuntimeException ex = null;
+        boolean didRoot = false;
+        int itemsAdded = 0;
+
+        try {
+            for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
+                Object obj = i.next();
+                if (obj instanceof Element) {
+                    if (didRoot == false) {
+                        setRootElement((Element)obj);
+                        // Manually remove old root's doc ref, because
+                        // setRootElement() can't see the old content list to
+                        // do it for us
+                        oldRoot.setDocument(null);
+                        didRoot = true;
+                    }
+                    else {
+                        throw new IllegalAddException(
+                          "A Document may contain only one root element");
+                    }
+                }
+                else if (obj instanceof Comment) {
+                    addContent((Comment)obj);
+                }
+                else if (obj instanceof ProcessingInstruction) {
+                    addContent((ProcessingInstruction)obj);
                 }
                 else {
                     throw new IllegalAddException(
-                    "A Document may contain only one root element");
+                      "A Document may directly contain only objects of type " +
+                      "Element, Comment, and ProcessingInstruction: " +
+                      (obj == null ? "null" : obj.getClass().getName()) + 
+                      " is not allowed");
                 }
+                itemsAdded++;
+            }
+    
+            // Make sure they set a root element
+            if (didRoot == false) {
+                throw new IllegalAddException(
+                    "A Document must contain a root element");
+            }
+        }
+        catch (RuntimeException e) {
+            ex = e;
+        }
+        finally {
+            if (ex != null) {
+                // Restore the original state and parentage and throw
+                content = oldContent;
+                oldRoot.setDocument(this);
+                // Unmodify all modified elements.  DO NOT change any later
+                // elements tho because they may already have parents!
+                Iterator itr = mixedContent.iterator();
+                while (itemsAdded-- > 0) {
+                    Object obj = itr.next();
+                    if (obj instanceof Element) {
+                        ((Element)obj).setDocument(null);
+                    }
+                    else if (obj instanceof Comment) {
+                        ((Comment)obj).setDocument(null);
+                    }
+                    else if (obj instanceof ProcessingInstruction) {
+                        ((ProcessingInstruction)obj).setDocument(null);
+                    }
+                }
+                throw ex;
+            }
+        }
+
+        // Remove parentage on the old content
+        Iterator itr = oldContent.iterator();
+        while (itr.hasNext()) {
+            Object obj = itr.next();
+            if (obj instanceof Element) {
+                ((Element)obj).setDocument(null);
             }
             else if (obj instanceof Comment) {
-                addContent((Comment)obj);
+                ((Comment)obj).setDocument(null);
             }
             else if (obj instanceof ProcessingInstruction) {
-                addContent((ProcessingInstruction)obj);
-            }
-            else {
-                throw new IllegalAddException(
-                    "A Document may directly contain only objects of type " +
-                    "Element, Comment, and ProcessingInstruction: " +
-                    (obj == null ? "null" : obj.getClass().getName()) + 
-                    " is not allowed");
+                ((ProcessingInstruction)obj).setDocument(null);
             }
         }
 
@@ -515,6 +593,7 @@ public class Document implements Serializable, Cloneable {
             stringForm.append(" No DOCTYPE declaration. ");
         }
 
+        Element rootElement = getRootElement();
         if (rootElement != null) {
             stringForm.append("Root - ")
                       .append(rootElement.toString());
@@ -585,9 +664,6 @@ public class Document implements Serializable, Cloneable {
         // The clone has a reference to this object's content list, so
         // owerwrite with a empty list
         doc.content = new LinkedList();
-
-        // The clone has a reference to the original root, so set to null
-        doc.rootElement = null;
 
         // Add the cloned content to clone
 

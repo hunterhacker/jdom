@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.64 2001/04/11 05:17:47 jhunter Exp $
+ $Id: Element.java,v 1.65 2001/04/13 03:16:30 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -760,49 +760,103 @@ public class Element implements Serializable, Cloneable {
      * <code>Comment</code>, <code>ProcessingInstruction</code>, 
      * <code>CDATA</code>, and <code>Entity</code>.  Passing a null or
      * empty List clears the existing content.  In event of an exception 
-     * the content may be partially added.
+     * the original content will be unchanged and the items in the added
+     * content will be unaltered.
      * </p>
      *
      * @return this element modified
+     * @throws IllegalAddException if the List contains objects of 
+     *         illegal types
      */
     public Element setMixedContent(List mixedContent) {
-        if (content != null) {
-            content.clear();
-        } else {
-            content = new LinkedList();
-        }
 
         if (mixedContent == null) {
             return this;
         }
 
-        for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
-            Object obj = i.next();
-            if (obj instanceof Element) {
-                addContent((Element)obj);
+        // Save list with original content and create a new list
+        LinkedList oldContent = content;
+        content = new LinkedList();
+
+        RuntimeException ex = null;
+        int itemsAdded = 0;
+
+        try {
+            for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
+                Object obj = i.next();
+                if (obj instanceof Element) {
+                    addContent((Element)obj);
+                }
+                else if (obj instanceof String) {
+                    addContent((String)obj);
+                }
+                else if (obj instanceof Comment) {
+                    addContent((Comment)obj);
+                }
+                else if (obj instanceof ProcessingInstruction) {
+                    addContent((ProcessingInstruction)obj);
+                }
+                else if (obj instanceof CDATA) {
+                    addContent((CDATA)obj);
+                }
+                else if (obj instanceof Entity) {
+                    addContent((Entity)obj);
+                }
+                else {
+                    throw new IllegalAddException(
+                      "An Element may directly contain only objects of type " +
+                      "String, Element, Comment, CDATA, Entity, and " + 
+                      "ProcessingInstruction: " +
+                      (obj == null ? "null" : obj.getClass().getName()) + 
+                      " is not allowed");
+                }
+                itemsAdded++;
             }
-            else if (obj instanceof String) {
-                addContent((String)obj);
+        }
+        catch (RuntimeException e) {
+            ex = e;
+        }
+        finally {
+            if (ex != null) {
+                // Restore the original state
+                content = oldContent;
+                // Unmodify all modified elements.  DO NOT change any later 
+                // elements tho because they may already have parents!
+                Iterator i = mixedContent.iterator();
+                while (itemsAdded-- > 0) {
+                    Object obj = i.next();
+                    if (obj instanceof Element) {
+                        ((Element)obj).setParent(null);
+                    }
+                    else if (obj instanceof Comment) {
+                        ((Comment)obj).setParent(null);
+                    }
+                    else if (obj instanceof ProcessingInstruction) {
+                        ((ProcessingInstruction)obj).setParent(null);
+                    }
+                    else if (obj instanceof Entity) {
+                        ((Entity)obj).setParent(null);
+                    }
+                }
+                throw ex;
+            }
+        }
+
+        // Remove parentage on the old content
+        Iterator itr = oldContent.iterator();
+        while (itr.hasNext()) {
+            Object obj = itr.next();
+            if (obj instanceof Element) {
+                ((Element)obj).setParent(null);
             }
             else if (obj instanceof Comment) {
-                addContent((Comment)obj);
+                ((Comment)obj).setParent(null);
             }
             else if (obj instanceof ProcessingInstruction) {
-                addContent((ProcessingInstruction)obj);
-            }
-            else if (obj instanceof CDATA) {
-                addContent((CDATA)obj);
+                ((ProcessingInstruction)obj).setParent(null);
             }
             else if (obj instanceof Entity) {
-                addContent((Entity)obj);
-            }
-            else {
-                throw new IllegalAddException(
-                    "An Element may directly contain only objects of type " +
-                    "String, Element, Comment, CDATA, Entity, and " + 
-                    "ProcessingInstruction: " +
-                    (obj == null ? "null" : obj.getClass().getName()) + 
-                    " is not allowed");
+                ((Entity)obj).setParent(null);
             }
         }
 
