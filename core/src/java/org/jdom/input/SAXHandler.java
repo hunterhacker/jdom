@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.6 2001/04/27 18:21:21 jhunter Exp $
+ $Id: SAXHandler.java,v 1.7 2001/05/01 06:17:48 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -105,7 +105,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXHandler extends DefaultHandler implements LexicalHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.6 $ $Date: 2001/04/27 18:21:21 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.7 $ $Date: 2001/05/01 06:17:48 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -371,6 +371,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler {
             Element e = (Element)stack.peek();
             e.addContent(data);
         }
+    }
+
+    /**
+     * <p>
+     * Capture ignorable whitespace as text.  There will be a flag to turn
+     * this off later.
+     * </p>
+     *
+     * @param ch <code>char[]</code> - char array of ignorable whitespace
+     * @param start <code>int</code> - starting position within array
+     * @param length <code>int</code> - length of whitespace after start
+     * @throws SAXException when things go wrong
+     */
+    public void ignorableWhitespace(char[] ch, int start, int length)
+                                               throws SAXException {
+        ((Element)stack.peek()).addContent(new String(ch, start, length));
     }
 
     /**
