@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.82 2001/06/07 21:14:22 jools Exp $
+ $Id: Element.java,v 1.83 2001/06/07 22:41:14 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.82 $ $Date: 2001/06/07 21:14:22 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.83 $ $Date: 2001/06/07 22:41:14 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -101,10 +101,10 @@ public class Element implements Serializable, Cloneable {
     protected Document document;
     
     /** The attributes of the <code>Element</code> */
-    protected FilterList attributes;
+    protected List attributes;
     
     /** The mixed content of the <code>Element</code> */
-    protected FilterList content;
+    protected ArrayList content;
     
     /**
      * <p>
@@ -749,8 +749,7 @@ public class Element implements Serializable, Cloneable {
         if (content != null) {
             content.clear();
         } else {
-			content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         if (text != null) {
@@ -819,11 +818,12 @@ public class Element implements Serializable, Cloneable {
      */
     public List getMixedContent() {
         if (content == null) {
-			content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
-        return content;
+        PartialList result = new PartialList(content, this);
+        result.addAllPartial(content);
+        return result;
     }
 
     /**
@@ -848,9 +848,9 @@ public class Element implements Serializable, Cloneable {
         }
 
         // Save list with original content and create a new list
-        FilterList oldContent = content;
-		content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 ElementMixedContentFilter.cardinal);
+        ArrayList oldContent = content;
+        content = new ArrayList(INITIAL_ARRAY_SIZE);
+
         RuntimeException ex = null;
         int itemsAdded = 0;
 
@@ -914,11 +914,11 @@ public class Element implements Serializable, Cloneable {
                 throw ex;
             }
         }
-		
-		// There was no old content, so just return.
-		if (oldContent == null) {
-			return this;
-		}
+
+        // There was no old content, so just return
+        if (oldContent == null) {
+            return this;
+        } 
 
         // Remove parentage on the old content
         Iterator itr = oldContent.iterator();
@@ -983,12 +983,20 @@ public class Element implements Serializable, Cloneable {
      */
     public List getChildren() {
         if (content == null) {
-			content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
-
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
- 		
-		return new FilterList(content, new ElementContentFilter());
+ 
+        PartialList elements = new PartialList(content, this);
+
+        Iterator i = content.iterator();
+        while (i.hasNext()) {
+            Object obj = i.next();
+            if (obj instanceof Element) {
+                elements.addPartial(obj);
+            }
+        }
+
+        return elements;
     }
 
     /**
@@ -1048,8 +1056,24 @@ public class Element implements Serializable, Cloneable {
      * @return all matching child elements
      */
     public List getChildren(String name, Namespace ns) {
-		return new FilterList(content, 
-							  new ElementContentFilter(name, ns));
+        PartialList children = new PartialList(getChildren(), this);
+
+        if (content != null) {
+            String uri = ns.getURI();
+            Iterator i = content.iterator();
+            while (i.hasNext()) {
+                Object obj = i.next();
+                if (obj instanceof Element) {
+                    Element element = (Element)obj;
+                    if ((element.getNamespaceURI().equals(uri)) &&
+                        (element.getName().equals(name))) {
+                        children.addPartial(element);
+                    }
+                }
+            }
+        }
+
+        return children;
     }
 
     /**
@@ -1068,7 +1092,7 @@ public class Element implements Serializable, Cloneable {
         if (content == null) {
             return null;
         }
-		
+
         String uri = ns.getURI();
         Iterator i = content.iterator();
         while (i.hasNext()) {
@@ -1112,8 +1136,7 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addContent(String text) {
         if (content == null) {
-          	content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         int size = content.size();
@@ -1158,8 +1181,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-        	content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         element.setParent(this);
@@ -1201,8 +1223,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-			content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(pi);
@@ -1228,8 +1249,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-        	content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-							 		 ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(entity);
@@ -1247,9 +1267,8 @@ public class Element implements Serializable, Cloneable {
      */
     public Element addContent(CDATA cdata) {
         if (content == null) {
-     		content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-							 		 ElementMixedContentFilter.cardinal);
-   		}
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
+        }
 
         content.add(cdata);
         return this;
@@ -1277,8 +1296,7 @@ public class Element implements Serializable, Cloneable {
         }
 
         if (content == null) {
-        	content = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								     ElementMixedContentFilter.cardinal);
+            content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         content.add(comment);
@@ -1421,11 +1439,12 @@ public class Element implements Serializable, Cloneable {
      */
     public List getAttributes() {
         if (attributes == null) {
-           	attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 new AttributeContentFilter());
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
-        return attributes;
+        PartialList atts = new PartialList(attributes, this);
+        atts.addAllPartial(attributes);
+        return atts;
     }
 
     /**
@@ -1515,9 +1534,7 @@ public class Element implements Serializable, Cloneable {
      */
     public Element setAttributes(List attributes) {
         // XXX Verify attributes are all parentless first
-		attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								    new AttributeContentFilter());	
-		this.attributes.addAll(attributes);
+        this.attributes = attributes;
         return this;
     }
 
@@ -1593,8 +1610,7 @@ public class Element implements Serializable, Cloneable {
         }
   
         if (attributes == null) {
-           	attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 		new AttributeContentFilter());
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
         else if (preExisting) {
             // Remove any pre-existing attribute
@@ -1768,12 +1784,9 @@ public class Element implements Serializable, Cloneable {
         // Reference to content list and attribute lists are copyed by 
         // super.clone() so we set it new lists if the original had lists
         element.content = (this.content == null) ? null :
-							new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 		   ElementMixedContentFilter.cardinal);
-
+                                  new ArrayList(INITIAL_ARRAY_SIZE);
         element.attributes = (this.attributes == null) ? null :
-							new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 		   new AttributeContentFilter());
+                                  new ArrayList(INITIAL_ARRAY_SIZE);
 
         // Cloning attributes
         if (attributes != null) {
@@ -1990,8 +2003,7 @@ public class Element implements Serializable, Cloneable {
         // another attribute prefix or this element's prefix
 
         if (attributes == null) {
-            attributes = new FilterList(new ArrayList(INITIAL_ARRAY_SIZE),
-								 		new AttributeContentFilter());
+            attributes = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
         attributes.add(attribute);
