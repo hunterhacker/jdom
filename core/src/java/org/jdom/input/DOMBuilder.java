@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMBuilder.java,v 1.41 2002/02/08 03:51:04 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.42 2002/02/12 06:15:20 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -87,12 +87,12 @@ import org.xml.sax.*;
  * @author Yusuf Goolamabbas
  * @author Dan Schaffer
  * @author Bradley S. Huffman
- * @version $Revision: 1.41 $, $Date: 2002/02/08 03:51:04 $
+ * @version $Revision: 1.42 $, $Date: 2002/02/12 06:15:20 $
  */
 public class DOMBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.41 $ $Date: 2002/02/08 03:51:04 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.42 $ $Date: 2002/02/12 06:15:20 $ $Name:  $";
 
     /** Default adapter class to use. This is used when no other parser
       * is given and JAXP isn't available. 
@@ -389,61 +389,89 @@ public class DOMBuilder {
                 break;
 
             case Node.ELEMENT_NODE:
-                String localName = node.getLocalName();
-                String prefix = node.getPrefix();
-                String uri = node.getNamespaceURI();
-                Element element = null;
+                String nodeName = node.getNodeName();
+                String prefix = "";
+                String localName = nodeName;
+                int colon = nodeName.indexOf(':');
+                if (colon >= 0) {
+                    prefix = nodeName.substring(0, colon);
+                    localName = nodeName.substring(colon + 1);
+                }
+
+                // Get element's namespace
                 Namespace ns = null;
+                String uri = node.getNamespaceURI();
                 if (uri == null) {
-                    if (localName == null) {
-                        // Sometimes localName is null, if so try the tag name
-                        localName = ((org.w3c.dom.Element)node).getTagName();
-                    }
-                    element = factory.element(localName);
+                    ns = (current == null) ? Namespace.NO_NAMESPACE
+                                           : current.getNamespace(prefix);
                 }
                 else {
                     ns = Namespace.getNamespace(prefix, uri);
-                    element = factory.element(localName, ns);
+                }
+
+                Element element = factory.element(localName, ns);
+
+                // Add namespaces
+                NamedNodeMap attributeList = node.getAttributes();
+                int attsize = attributeList.getLength();
+
+                for (int i = 0; i < attsize; i++) {
+                    Attr att = (Attr) attributeList.item(i);
+
+                    String attname = att.getName();
+
+                    if (attname.startsWith("xmlns")) {
+                        String attPrefix = "";
+                        colon = attname.indexOf(':');
+                        if (colon >= 0) {
+                            attPrefix = attname.substring(colon + 1);
+                        }
+
+                        String attvalue = att.getValue();
+
+                        Namespace declaredNS =
+                            Namespace.getNamespace(attPrefix, attvalue);
+
+                        // Add as additional namespaces if it's different
+                        // than this element's namespace (perhaps we should
+                        // also have logic not to mark them as additional if
+                        // it's been done already, but it probably doesn't
+                        // matter)
+                        if (prefix.equals(attPrefix)) {
+                            element.setNamespace(declaredNS);
+                        }
+                        else {
+                            element.addNamespaceDeclaration(declaredNS);
+                        }
+                    }
                 }
 
                 // Add attributes
-                NamedNodeMap attributeList = node.getAttributes();
-                for (int i=0, size=attributeList.getLength(); i<size; i++) {
+                for (int i = 0; i < attsize; i++) {
                     Attr att = (Attr) attributeList.item(i);
 
-                    // Distinguish between namespace and attribute
                     String attname = att.getName();
-                    String attvalue = att.getValue();
 
-                    // Don't add xmlns attributes, but do add them as
-                    // additional namespaces if they're different than this
-                    // element's namespace (perhaps we should also have logic
-                    // not to mark them as additional if it's been done
-                    // already, but it probably doesn't matter)
-                    if (attname.equals("xmlns")) {
-                        Namespace declaredNS =
-                            Namespace.getNamespace("", attvalue);
-                        if (!declaredNS.equals(ns)) {
-                            element.addNamespaceDeclaration(declaredNS);
+                    if ( !attname.startsWith("xmlns")) {
+                        String attPrefix = "";
+                        String attLocalName = attname;
+                        colon = attname.indexOf(':');
+                        if (colon >= 0) {
+                            attPrefix = attname.substring(0, colon);
+                            attLocalName = attname.substring(colon + 1);
                         }
-                    }
-                    else if (attname.startsWith("xmlns:")) {
-                        String attsubname = attname.substring(6);
-                        Namespace declaredNS =
-                            Namespace.getNamespace(attsubname, attvalue);
-                        if (!declaredNS.equals(ns)) {
-                            element.addNamespaceDeclaration(declaredNS);
-                        }
-                    }
-                    else {
-                        prefix = att.getPrefix();
-                        uri = att.getNamespaceURI();
-                        String attLocalName = att.getLocalName();
-                        if (attLocalName == null) {
-                            // Sometimes attLocalName is null, try attname
-                            attLocalName = attname;
-                        }
-                        Namespace attns = Namespace.getNamespace(prefix, uri);
+
+                        String attvalue = att.getValue();
+
+                        // Get attribute's namespace
+                        Namespace attns = null;
+                        if ("".equals(attPrefix)) {
+                            attns = Namespace.NO_NAMESPACE;
+                        } 
+                        else {
+                            attns = element.getNamespace(attPrefix);
+                        } 
+
                         Attribute attribute =
                             factory.attribute(attLocalName, attvalue, attns);
                         element.setAttribute(attribute);
@@ -463,7 +491,8 @@ public class DOMBuilder {
                 // null nodes, but some DOM impls are broken
                 NodeList children = node.getChildNodes();
                 if (children != null) {
-                    for (int i=0, size=children.getLength(); i<size; i++) {
+                    int size = children.getLength();
+                    for (int i = 0; i < size; i++) {
                         Node item = children.item(i);
                         if (item != null) {
                             buildTree(item, doc, element, false);

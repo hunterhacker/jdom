@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.27 2002/01/08 09:17:10 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.28 2002/02/12 06:15:21 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -77,12 +77,12 @@ import org.w3c.dom.DOMImplementation;
  * @author Dan Schaffer
  * @author Yusuf Goolamabbas
  * @author Bradley S. Huffman
- * @version $Revision: 1.27 $, $Date: 2002/01/08 09:17:10 $
+ * @version $Revision: 1.28 $, $Date: 2002/02/12 06:15:21 $
  */
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.27 $ $Date: 2002/01/08 09:17:10 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.28 $ $Date: 2002/02/12 06:15:21 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -270,7 +270,7 @@ public class DOMOutputter {
             int previouslyDeclaredNamespaces = namespaces.size();
 
             org.w3c.dom.Element domElement = null;
-            if ("".equals(element.getNamespacePrefix())) {
+            if (element.getNamespace() == Namespace.NO_NAMESPACE) {
                 // No namespace, use createElement
                 domElement = domDoc.createElement(element.getQualifiedName());
             }
@@ -328,7 +328,7 @@ public class DOMOutputter {
                     }
                 }
                 // Crimson doesn't like setAttributeNS() for non-NS attribs
-                if ("".equals(attribute.getNamespacePrefix())) {
+                if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
                     // No namespace, use setAttribute
                     domElement.setAttribute(attribute.getQualifiedName(),
                                             attribute.getValue());
@@ -431,7 +431,7 @@ public class DOMOutputter {
                                       throws JDOMException {
          org.w3c.dom.Attr domAttr = null;
          try {
-             if ("".equals(attribute.getNamespacePrefix())) {
+             if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
                  // No namespace, use createAttribute
                  domAttr = domDoc.createAttribute(attribute.getQualifiedName());
              }
