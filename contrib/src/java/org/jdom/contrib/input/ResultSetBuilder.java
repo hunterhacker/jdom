@@ -117,7 +117,9 @@ public class ResultSetBuilder {
             String name = lookupName(origName);
             String value = rs.getString(col);
             if (isAttribute(origName)) {
-              entry.addAttribute(name, value);
+              if (!rs.wasNull()) {
+                entry.addAttribute(name, value);
+              }
             }
             else {
               Element child = new Element(name, ns);
