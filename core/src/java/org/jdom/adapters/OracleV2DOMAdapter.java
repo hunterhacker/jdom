@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: OracleV2DOMAdapter.java,v 1.16 2003/04/30 09:55:12 jhunter Exp $
+ $Id: OracleV2DOMAdapter.java,v 1.17 2004/02/06 09:12:18 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,14 +66,14 @@ import org.xml.sax.*;
 /**
  * An adapter for the Oracle Version 2 DOM parser.
  * 
- * @version $Revision: 1.16 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.17 $, $Date: 2004/02/06 09:12:18 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class OracleV2DOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.16 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.17 $ $Date: 2004/02/06 09:12:18 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an
@@ -93,10 +93,6 @@ public class OracleV2DOMAdapter extends AbstractDOMAdapter {
             // Load the parser class
             Class parserClass = Class.forName("oracle.xml.parser.v2.DOMParser");
             Object parser = parserClass.newInstance();
-
-            /*
-             * XXX: Add in validation support for this parser. (brett)
-             */
 
             // Parse the document
             Method parse =

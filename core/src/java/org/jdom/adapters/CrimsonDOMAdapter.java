@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: CrimsonDOMAdapter.java,v 1.14 2003/04/30 09:55:12 jhunter Exp $
+ $Id: CrimsonDOMAdapter.java,v 1.15 2004/02/06 09:12:18 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,13 +66,13 @@ import org.xml.sax.*;
 /**
  * An adapter for the Apache Crimson DOM parser.
  * 
- * @version $Revision: 1.14 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.15 $, $Date: 2004/02/06 09:12:18 $
  * @author  Jason Hunter
  */
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.14 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2004/02/06 09:12:18 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an
@@ -96,10 +96,6 @@ public class CrimsonDOMAdapter extends AbstractDOMAdapter {
             Object[] args = new Object[2];
             args[0] = in;
             args[1] = new Boolean(false);
-
-            /*
-             * XXX: Add in validation support for this parser. (brett)
-             */
 
             // Load the parser class and invoke the parse method
             Class parserClass = Class.forName("org.apache.crimson.tree.XmlDocument");
