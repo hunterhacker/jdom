@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.26 2003/01/23 02:23:31 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.27 2003/04/04 03:48:22 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,10 +62,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import org.xml.sax.*;
-import org.xml.sax.Locator;
 import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -103,12 +101,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.26 $, $Date: 2003/01/23 02:23:31 $
+ * @version $Revision: 1.27 $, $Date: 2003/04/04 03:48:22 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.26 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.27 $ $Date: 2003/04/04 03:48:22 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -192,6 +190,12 @@ public class SAXOutputter {
      * Defaults to <code>true</code>.
      */
     private boolean reportDtdEvents = true;
+
+    /**
+     * A SAX Locator that points at the JDOM node currently being
+     * outputted.
+     */
+    private JDOMLocator locator = null;
 
     /**
      * This will create a <code>SAXOutputter</code> without any
@@ -603,6 +607,10 @@ public class SAXOutputter {
         Iterator i = document.getContent().iterator();
         while (i.hasNext()) {
             Object obj = i.next();
+
+            // update locator
+            locator.setNode(obj);
+
             if (obj instanceof Element) {
                 // process root element and its content
                 element(document.getRootElement(), new NamespaceStack());
@@ -734,7 +742,7 @@ public class SAXOutputter {
      * @param document JDOM <code>Document</code>.
      */
     private void documentLocator(Document document) {
-        LocatorImpl locator = new LocatorImpl();
+        locator = new JDOMLocator();
         String publicID = null;
         String systemID = null;
 
@@ -828,6 +836,9 @@ public class SAXOutputter {
 
         // handle content in the element
         elementContent(element.getContent(), namespaces);
+
+        // update locator
+        locator.setNode(element);
 
         // contentHandler.endElement()
         endElement(element);
@@ -993,6 +1004,9 @@ public class SAXOutputter {
         Iterator i = content.iterator();
         while (i.hasNext()) {
             Object obj = i.next();
+
+            // update locator
+            locator.setNode(obj);
 
             if (obj instanceof Element) {
                 element((Element) obj, namespaces);
