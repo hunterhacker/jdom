@@ -313,7 +313,7 @@ public class Attribute implements Serializable, Cloneable {
      *         equal to the supplied <code>Object</code>.
      */
     public final boolean equals(Object ob) {
-        return super.equals(ob);
+        return (ob == this);
     }
 
     /**
@@ -346,43 +346,6 @@ public class Attribute implements Serializable, Cloneable {
 
     /**
      * <p>
-     * This will return the actual textual value of this
-     *   <code>Attribute</code>.  This will include all text
-     *   within the quotation marks.  If no value exists, the
-     *   supplied default value will be returned.
-     * </p>
-     *
-     * @param defaultValue <code>String</code> default value.
-     * @return <code>String</code> - value for this attribute.
-     */
-    public String getValue(String defaultValue) {
-        if ((value != null) && (!value.equals(""))) {
-            return value;
-        }
-        return defaultValue;
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>int</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>int</code> default.
-     * @return <code>int</code> value of attribute.
-     */
-    public int getIntValue(int defaultValue) {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * <p>
      * This gets the value of the attribute, in
      *   <code>int</code> form, and if no conversion
      *   can occur, throws a
@@ -404,25 +367,6 @@ public class Attribute implements Serializable, Cloneable {
      * <p>
      * This gets the value of the attribute, in
      *   <code>long</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>long</code> default.
-     * @return <code>long</code> value of attribute.
-     */
-    public long getLongValue(long defaultValue) {
-        try {
-            return Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>long</code> form, and if no conversion
      *   can occur, throws a
      *   <code>{@link DataConversionException}</code>
      * </p>
@@ -435,26 +379,6 @@ public class Attribute implements Serializable, Cloneable {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "long");
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>float</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>float</code> default.
-     * @return <code>float</code> value of attribute.
-     */
-    public float getFloatValue(float defaultValue) {
-        try {
-            // Avoid Float.parseFloat() to support JDK 1.1
-            return Float.valueOf(value).floatValue();
-        } catch (NumberFormatException e) {
-            return defaultValue;
         }
     }
 
@@ -482,26 +406,6 @@ public class Attribute implements Serializable, Cloneable {
      * <p>
      * This gets the value of the attribute, in
      *   <code>double</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>double</code> default.
-     * @return <code>double</code> value of attribute.
-     */
-    public double getDoubleValue(double defaultValue) {
-        try {
-            // Avoid Double.parseDouble() to support JDK 1.1
-            return Double.valueOf(value).doubleValue();
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>double</code> form, and if no conversion
      *   can occur, throws a
      *   <code>{@link DataConversionException}</code>
      * </p>
@@ -515,31 +419,6 @@ public class Attribute implements Serializable, Cloneable {
             return Double.valueOf(value).doubleValue();
         } catch (NumberFormatException e) {
             throw new DataConversionException(name, "double");
-        }
-    }
-
-    /**
-     * <p>
-     * This gets the value of the attribute, in
-     *   <code>boolean</code> form, and if no conversion
-     *   can occur, returns the supplied default
-     *   value.
-     * </p>
-     *
-     * @param defaultValue <code>boolean</code> default.
-     * @return <code>boolean</code> value of attribute.
-     */
-    public boolean getBooleanValue(boolean defaultValue) {
-        if ((value.equalsIgnoreCase("true")) ||
-            (value.equalsIgnoreCase("on")) ||
-            (value.equalsIgnoreCase("yes"))) {
-            return true;
-        } else if ((value.equalsIgnoreCase("false")) ||
-                   (value.equalsIgnoreCase("off")) ||
-                   (value.equalsIgnoreCase("no"))) {
-            return false;
-        } else {
-            return defaultValue;
         }
     }
 
@@ -578,8 +457,9 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     private void readObject(ObjectInputStream in)
-                     throws IOException, ClassNotFoundException {
+        throws IOException, ClassNotFoundException {
+        
         namespace = Namespace.getNamespace(
-                      (String)in.readObject(), (String)in.readObject());
+            (String)in.readObject(), (String)in.readObject());
     }
 }

@@ -371,7 +371,7 @@ public class Entity implements Serializable, Cloneable {
      *         equal to the supplied <code>Object</code>.
      */
     public final boolean equals(Object ob) {
-        return super.equals(ob);
+        return (ob == this);
     }
 
     /**

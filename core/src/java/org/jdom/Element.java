@@ -1330,11 +1330,11 @@ public class Element implements Serializable, Cloneable {
      *    <code>Object</code>, explicitly using the == operator.  
      * </p>
      *
-     * @param o <code>Object</code> to compare to
+     * @param ob <code>Object</code> to compare to
      * @return whether the elements are equal
      */
-    public final boolean equals(Object o) {
-        return (this == o);
+    public final boolean equals(Object ob) {
+        return (this == ob);
     }
 
     /**

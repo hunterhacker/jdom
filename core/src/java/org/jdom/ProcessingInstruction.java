@@ -336,7 +336,7 @@ public class ProcessingInstruction implements Serializable, Cloneable {
      *         <code>Object</code>.
      */
     public final boolean equals(Object ob) {
-        return super.equals(ob);
+        return (ob == this);
     }
 
     /**

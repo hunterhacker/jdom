@@ -53,9 +53,6 @@ Items that need to be done:
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
 
-* Have all equals() methods not do super.equals() but rather make it clear we
-  mean for == behavior.
-
 * Add Document.setMixedContent().  Do we ensure it contains only one Element?
 
 * Add methods/logic to Verifier for all XML spec. constraints
