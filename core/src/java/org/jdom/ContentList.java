@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.20 2003/04/06 02:00:44 jhunter Exp $
+ $Id: ContentList.java,v 1.21 2003/04/18 04:04:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -69,7 +69,7 @@ import org.jdom.filter.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.20 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.21 $, $Date: 2003/04/18 04:04:11 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.20 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.21 $ $Date: 2003/04/18 04:04:11 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -480,7 +480,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
         }
         catch (RuntimeException exception) {
             for (int i = 0; i < count; i++) {
-                remove(index + i);
+                remove(index);
             }
             throw exception;
         }
@@ -982,9 +982,9 @@ class ContentList extends AbstractList implements java.io.Serializable {
             checkConcurrentModification();
 
             switch(lastOperation) {
-            case CREATE:  cursor = initialCursor;
+            case CREATE:  cursor = initialCursor - 1;
                           if (cursor >= ContentList.this.size()) {
-                               cursor = moveBackward(initialCursor);
+                               cursor = moveBackward(initialCursor - 1);
                           }
                           break;
             case PREV:
@@ -1074,7 +1074,7 @@ class ContentList extends AbstractList implements java.io.Serializable {
             checkConcurrentModification();
 
             if (filter.matches(obj)) {
-                last++;
+                last = cursor + 1;
                 ContentList.this.add(last, obj);
             }
             else {

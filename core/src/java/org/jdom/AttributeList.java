@@ -1,6 +1,6 @@
 /*--
 
- $Id: AttributeList.java,v 1.15 2003/04/08 04:14:49 jhunter Exp $
+ $Id: AttributeList.java,v 1.16 2003/04/18 04:04:11 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.15 $, $Date: 2003/04/08 04:14:49 $
+ * @version $Revision: 1.16 $, $Date: 2003/04/18 04:04:11 $
  * @see CDATA
  * @see Comment
  * @see Element
@@ -78,7 +78,7 @@ class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.15 $ $Date: 2003/04/08 04:14:49 $ $Name:  $";
+      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.16 $ $Date: 2003/04/18 04:04:11 $ $Name:  $";
 
     /** The backing list */
     private Attribute elementData[];
@@ -238,7 +238,7 @@ class AttributeList extends AbstractList
         }
         catch (RuntimeException exception) {
             for (int i = 0; i < count; i++) {
-                remove(index + i);
+                remove(index);
             }
             throw exception;
         }
