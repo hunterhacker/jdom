@@ -74,6 +74,10 @@ public final class Namespace {
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
+    /** Define a <code>Namespace</code> for "xml" prefix */
+    public static final Namespace XML_NAMESPACE =
+        new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
+
     /** The prefix mapped to this namespace */
     private String prefix;
 
@@ -97,8 +101,9 @@ public final class Namespace {
         mappings.put("", "");
 
         // Add the "xml" namespace
-        namespaces.put("xml", "http://www.w3.org/XML/1998/namespace");
-        mappings.put("", "http://www.w3.org/XML/1998/namespace");
+        namespaces.put("http://www.w3.org/XML/1998/namespace",
+                        XML_NAMESPACE);
+        mappings.put("xml", "http://www.w3.org/XML/1998/namespace");
     }
 
     /**
@@ -123,6 +128,19 @@ public final class Namespace {
      * @return <code>Namespace</code> - ready to use namespace.
      */
     public static Namespace getNamespace(String prefix, String uri) {
+        // Sanity checking
+        if ((prefix == null) || (prefix.trim().equals(""))) {
+            prefix = "";
+        }
+        if ((uri == null) || (uri.trim().equals(""))) {
+            uri = "";
+        }
+
+        // Return existing namespace if found
+        if (namespaces.containsKey(uri)) {
+            return (Namespace)namespaces.get(uri);
+        }
+
         // Ensure proper naming
         String reason;
         if ((reason = Verifier.checkNamespacePrefix(prefix)) != null) {
@@ -132,23 +150,10 @@ public final class Namespace {
             throw new IllegalNameException(uri, "Namespace URI", reason);
         }
 
-        // Housekeeping
-        if ((prefix == null) || (prefix.trim().equals(""))) {
-            prefix = "";
-        }
-        if ((uri == null) || (uri.trim().equals(""))) {
-            uri = "";
-        }
-
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
         if ((!prefix.equals("")) && (uri.equals(""))) {
             throw new IllegalNameException("", "namespace",
                 "Namespace URIs must be non-null and non-empty Strings");
-        }
-
-        // Return existing namespace if found
-        if (namespaces.containsKey(uri)) {
-            return (Namespace)namespaces.get(uri);
         }
 
         // Ensure prefix uniqueness in non-default namespaces

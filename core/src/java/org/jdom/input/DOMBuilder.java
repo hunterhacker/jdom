@@ -108,6 +108,7 @@ public class DOMBuilder {
         this.adapterClass = adapterClass;
         this.validate = validate;
         prefixedNamespaces = new HashMap();
+        prefixedNamespaces.put("xml", Namespace.XML_NAMESPACE);
     }
 
     /**

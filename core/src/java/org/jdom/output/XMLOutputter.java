@@ -382,7 +382,9 @@ public class XMLOutputter {
         out.write(element.getQualifiedName());
         Namespace ns = element.getNamespace();
         boolean printedNS = false;
-        if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
+        if ((ns != Namespace.NO_NAMESPACE) && 
+            (ns != Namespace.XML_NAMESPACE) &&
+            (!namespaces.contains(ns))) {
             printNamespace(element.getNamespace(), out);
             printedNS = true;
             namespaces.add(ns);
@@ -492,7 +494,9 @@ public class XMLOutputter {
         for (int i=0, size=attributes.size(); i<size; i++) {
             Attribute attribute = (Attribute)attributes.get(i);
             Namespace ns = attribute.getNamespace();
-            if ((ns != Namespace.NO_NAMESPACE) && (!namespaces.contains(ns))) {
+            if ((ns != Namespace.NO_NAMESPACE) && 
+                (ns != Namespace.XML_NAMESPACE) &&
+                (!namespaces.contains(ns))) {
                 printNamespace(attribute.getNamespace(), out);
             }
             out.write(" ");
