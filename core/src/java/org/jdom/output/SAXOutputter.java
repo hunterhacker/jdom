@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.29 2003/04/06 02:00:45 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.30 2003/04/08 04:57:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -97,12 +97,12 @@ import org.xml.sax.helpers.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.29 $, $Date: 2003/04/06 02:00:45 $
+ * @version $Revision: 1.30 $, $Date: 2003/04/08 04:57:45 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.29 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.30 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -376,7 +376,7 @@ public class SAXOutputter {
      * reported as "xmlns" attributes.  This flag defaults to <code>false</code>
      * and behaves as the "namespace-prefixes" SAX core feature.
      *
-     * @param reportDecl whether attribute namespace declarations shall be
+     * @param declareNamespaces whether attribute namespace declarations shall be
      * reported as "xmlns" attributes.
      */
     public void setReportNamespaceDeclarations(boolean declareNamespaces) {
@@ -754,7 +754,7 @@ public class SAXOutputter {
         locator.setLineNumber(-1);
         locator.setColumnNumber(-1);
 
-        contentHandler.setDocumentLocator((Locator) locator);
+        contentHandler.setDocumentLocator(locator);
     }
 
     /**
@@ -937,7 +937,7 @@ public class SAXOutputter {
      * </p>
      *
      * @param element <code>Element</code> used in callbacks.
-     * @param eltNamespaces <code>List</code> of namespaces to declare with
+     * @param nsAtts <code>List</code> of namespaces to declare with
      * the element or <code>null</code>.
      */
     private void startElement(Element element, Attributes nsAtts) 
@@ -1331,9 +1331,9 @@ public class SAXOutputter {
      * only be used by objects taking part in the output processing
      * such as <code>ErrorHandler</code>s.
      *
-     * @returns a JDOMLocator object referencing the node currently
-     *          being processed or <code>null</code> if no output
-     *          operation is being performed.
+     * @return a JDOMLocator object referencing the node currently
+     *         being processed or <code>null</code> if no output
+     *         operation is being performed.
      */
     public JDOMLocator getLocator() {
         return (locator != null)? new JDOMLocator(locator): null;

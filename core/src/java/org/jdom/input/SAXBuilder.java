@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.73 2003/04/02 20:40:40 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.74 2003/04/08 04:57:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,12 +83,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.73 $, $Date: 2003/04/02 20:40:40 $
+ * @version $Revision: 1.74 $, $Date: 2003/04/08 04:57:45 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.73 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.74 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -753,7 +753,7 @@ public class SAXBuilder {
      *   to use an InputStream rather than a Reader, if it's available.
      * </p>
      *
-     * @param in <code>Reader</code> to read from.
+     * @param characterStream <code>Reader</code> to read from.
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
      * @throws IOException when an I/O error prevents a document
@@ -772,18 +772,18 @@ public class SAXBuilder {
      *   to use an InputStream rather than a Reader, if it's available.
      * </p>
      *
-     * @param in <code>Reader</code> to read from.
+     * @param characterStream <code>Reader</code> to read from.
      * @param systemId base for resolving relative URIs
      * @return <code>Document</code> - resultant Document object.
      * @throws JDOMException when errors occur in parsing.
      * @throws IOException when an I/O error prevents a document
      *         from being fully parsed.
      */
-    public Document build(Reader characterStream, String SystemId)
+    public Document build(Reader characterStream, String systemId)
         throws JDOMException, IOException {
 
         InputSource src = new InputSource(characterStream);
-        src.setSystemId(SystemId);
+        src.setSystemId(systemId);
         return build(src);
     }
 

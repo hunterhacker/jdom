@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.12 2003/04/06 02:00:45 jhunter Exp $
+ $Id: JDOMSource.java,v 1.13 2003/04/08 04:57:45 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -96,12 +96,12 @@ import org.xml.sax.*;
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.12 $, $Date: 2003/04/06 02:00:45 $
+ * @version $Revision: 1.13 $, $Date: 2003/04/08 04:57:45 $
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.12 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.13 $ $Date: 2003/04/08 04:57:45 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -348,9 +348,7 @@ public class JDOMSource extends SAXSource {
     /**
      * Returns the source.
      *
-     * @return the source as a JDOM document a list of JDOM nodes.
-     *
-     * @see    #setSource
+     * @return the source as a JDOM document or a list of JDOM nodes.
      */
     public Object getSource() {
       return source;
@@ -442,7 +440,7 @@ public class JDOMSource extends SAXSource {
      * <p>
      * This implementation does not support reading XML data from
      * system identifiers, only from JDOM documents.  Hence,
-     * this method always throws a {@SAXNotSupportedException}.
+     * this method always throws a {#SAXNotSupportedException}.
      * </p>
      *
      * @param  systemId   the system identifier (URI).
@@ -461,7 +459,7 @@ public class JDOMSource extends SAXSource {
      * instances as input sources.
      * </p>
      *
-     * @param  source   the input source for the top-level of the
+     * @param  input   the input source for the top-level of the
      *                  XML document.
      *
      * @throws SAXException               any SAX exception,

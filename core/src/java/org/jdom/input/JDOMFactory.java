@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.11 2003/04/06 02:00:44 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.12 2003/04/08 04:57:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -70,7 +70,7 @@ import org.jdom.*;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.11 $, $Date: 2003/04/06 02:00:44 $
+ * @version $Revision: 1.12 $, $Date: 2003/04/08 04:57:45 $
  */
 public interface JDOMFactory {
 
@@ -146,7 +146,7 @@ public interface JDOMFactory {
     /**
      * This creates the Text with the supplied text.
      *
-     * @param data <code>String</code> content of Text.
+     * @param str <code>String</code> content of Text.
      */
     public Text text(String str);
 
@@ -283,7 +283,7 @@ public interface JDOMFactory {
      * with the specified target and data.
      *
      * @param target <code>String</code> target of PI.
-     * @param rawData <code>String</code> data for PI.
+     * @param data <code>String</code> data for PI.
      */
     public ProcessingInstruction processingInstruction(String target, 
                                                        String data);
