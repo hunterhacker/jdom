@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.70 2003/01/24 22:41:45 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.71 2003/02/26 23:53:59 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -83,12 +83,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Dan Schaffer
  * @author Philip Nelson
  * @author Alex Rosen
- * @version $Revision: 1.70 $, $Date: 2003/01/24 22:41:45 $
+ * @version $Revision: 1.71 $, $Date: 2003/02/26 23:53:59 $
  */
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.70 $ $Date: 2003/01/24 22:41:45 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.71 $ $Date: 2003/02/26 23:53:59 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -333,19 +333,20 @@ public class SAXBuilder {
             return contentHandler.getDocument();
         }
         catch (SAXParseException e) {
-          String systemId = e.getSystemId();
-          if (systemId != null) {
-              throw new JDOMException("Error on line " + 
-                e.getLineNumber() + " of document " + systemId, 
-                e);
-          } else {
-              throw new JDOMException("Error on line " +
-                              e.getLineNumber(), e);
-          }
+            String systemId = e.getSystemId();
+            if (systemId != null) {
+                throw new JDOMParseException("Error on line " + 
+                    e.getLineNumber() + " of document " + systemId,
+                    contentHandler.getDocument(), e);
+            } else {
+                throw new JDOMParseException("Error on line " +
+                    e.getLineNumber(),
+                    contentHandler.getDocument(), e);
+            }
         }
         catch (SAXException e) {
-            throw new JDOMException("Error in building: " + 
-                e.getMessage(), e);
+            throw new JDOMParseException("Error in building: " + 
+                e.getMessage(), contentHandler.getDocument(), e);
         }
         finally {
             // Explicitly nullify the handler to encourage GC
