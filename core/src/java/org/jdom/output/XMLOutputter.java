@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.51 2001/05/24 01:52:18 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.52 2001/05/30 01:27:41 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -108,7 +108,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.51 $ $Date: 2001/05/24 01:52:18 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.52 $ $Date: 2001/05/30 01:27:41 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -471,11 +471,6 @@ public class XMLOutputter implements Cloneable {
     public void output(Document doc, Writer out) throws IOException {
 
         printDeclaration(doc, out, encoding);
-
-        // Print new line after decl always, even if no other new lines
-        // Helps the output look better and is semantically
-        // inconsequential
-        out.write(lineSeparator);
 
         if (doc.getDocType() != null) {
             printDocType(doc.getDocType(), out);
@@ -854,7 +849,7 @@ public class XMLOutputter implements Cloneable {
                                     Writer out,
                                     String encoding) throws IOException {
 
-        // Only print of declaration is not suppressed
+        // Only print the declaration if it's not being suppressed
         if (!suppressDeclaration) {
             // Assume 1.0 version
             if (encoding.equals("UTF8")) {
@@ -871,8 +866,13 @@ public class XMLOutputter implements Cloneable {
                 }
                 out.write("?>");
             }
+
+            // Print new line after decl always, even if no other new lines
+            // Helps the output look better and is semantically
+            // inconsequential
+            out.write(lineSeparator);
         }
-    }    
+    }
 
     /**
      * <p>
