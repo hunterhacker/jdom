@@ -73,70 +73,10 @@ import org.jdom.output.XMLOutputter;
  *
  * @author Brett McLaughlin
  * @author Philip Nelson
+ * @author Jason Hunter
  * @version 1.0
  */
 public class DOMBuilderDemo {
-
-    /** Default DOM Adapter class to use */
-    private static final String DEFAULT_DOM_ADAPTER_CLASS =
-        "org.jdom.adapters.XercesDOMAdapter";
-
-    /** DOM Adapter Class to use */
-    private String domAdapterClass;
-
-    /** <code>{@link DOMBuilder}</code> instance to use */
-    private DOMBuilder builder;
-
-    /**
-     * <p>
-     * This will create an instance of <code>{@link DOMBuilder}</code>
-     *   for use in the rest of this program.
-     * </p>
-     *
-     * @param domAdapterClass <code>String</code> name of adapter class to use.
-     */
-    public DOMBuilderDemo(String domAdapterClass) {
-        this.domAdapterClass = domAdapterClass;
-        builder = new DOMBuilder(domAdapterClass);
-    }
-
-    /**
-     * <p>
-     * This will parse the specified filename using DOM and the
-     *   DOM adapter class specified in the constructor.
-     * </p>
-     *
-     * @param filename <code>String</code> name of file to parse.
-     * @param out <code>OutputStream</code> to output to.
-     */
-    public void testBuilder(String filename, OutputStream out)
-        throws IOException, JDOMException {
-
-		//build a DOM tree with the specified or default parser
-		DOMAdapter domAdapter;
-        FileInputStream in = new FileInputStream(filename);
-		try {
-	        Class parserClass = Class.forName(domAdapterClass);
-			domAdapter = (DOMAdapter)parserClass.newInstance();
-        } catch (ClassNotFoundException e) {
-				throw new JDOMException("Parser class " + domAdapterClass +
-                                        " not found");
-		} catch (Exception e) {
-				throw new JDOMException("Parser class " + domAdapterClass +
-                                        " instantiation error");
-		}
-
-
-        // Build the JDOM Document - validating is off by default for this example
-		// because of the document root issue
-        org.w3c.dom.Document w3cdoc =
-            domAdapter.getDocument((InputStream)in, false);
-        Document doc = builder.build(w3cdoc);
-
-        // Create an outputter with default formatting
-        XMLOutputter outputter = new XMLOutputter();
-        outputter.output(doc, out);
-    }
 
     /**
      * <p>
@@ -153,22 +93,29 @@ public class DOMBuilderDemo {
      */
     public static void main(String[] args) {
         if ((args.length < 1) || (args.length > 2)) {
-            System.out.println("Usage: java org.jdom.examples.io.DOMBuilderTest " +
-                               "[XML document filename] ([DOM Adapter Class])");
+            System.out.println(
+                "Usage: java samples.DOMBuilderTest " +
+                "[XML document filename] ([DOM Adapter Class])");
             System.exit(-1);
         }
 
         // Load filename and SAX driver class
         String filename = args[0];
-        String domAdapterClass = DEFAULT_DOM_ADAPTER_CLASS;
+        String domAdapterClass = null;
         if (args.length == 2) {
             domAdapterClass = args[1];
         }
 
-        // Create an instance of the tester and test
         try {
-            DOMBuilderDemo demo = new DOMBuilderDemo(domAdapterClass);
-            demo.testBuilder(filename, System.out);
+            DOMBuilder builder = null;
+            if (domAdapterClass == null) {
+                builder = new DOMBuilder();
+            } else {
+                builder = new DOMBuilder(domAdapterClass);
+            }
+            Document doc = builder.build(new File(filename));
+            XMLOutputter outputter = new XMLOutputter();
+            outputter.output(doc, System.out);
         } catch (JDOMException e) {
             if (e.getRootCause() != null) {
                 e.getRootCause().printStackTrace();

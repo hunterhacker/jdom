@@ -69,54 +69,10 @@ import org.jdom.output.XMLOutputter;
  * </p>
  * 
  * @author Brett McLaughlin
+ * @author Jason Hunter
  * @version 1.0
  */
 public class SAXBuilderDemo {
-
-    /** Default SAX Driver class to use */
-    private static final String DEFAULT_SAX_DRIVER_CLASS =
-        "org.apache.xerces.parsers.SAXParser";
-
-    /** SAX Driver Class to use */
-    private String saxDriverClass;
-
-    /** <code>{@link SAXBuilder}</code> instance to use */
-    private SAXBuilder builder;
-
-    /**
-     * <p>
-     * This will create an instance of <code>{@link SAXBuilder}</code>
-     *   for use in the rest of this program.
-     * </p>
-     *
-     * @param saxDriverClass <code>String</code> name of driver class to use.
-     */
-    public SAXBuilderDemo(String saxDriverClass) {
-        this.saxDriverClass = saxDriverClass;
-        builder = new SAXBuilder(saxDriverClass);
-    }
-
-    /**
-     * <p>
-     * This will parse the specified filename using SAX and the
-     *   SAX driver class specified in the constructor.
-     * </p>
-     *
-     * @param filename <code>String</code> name of file to parse.
-     * @param out <code>OutputStream</code> to output to.
-     */
-    public void testBuilder(String filename, OutputStream out) 
-        throws IOException, JDOMException {
-
-        // Build the JDOM Document
-        Document doc = builder.build(new File(filename));
-
-        // Create an outputter with default formatting
-        XMLOutputter outputter = new XMLOutputter("  ", true);
-        outputter.setTrimText(true);
-        outputter.setExpandEmptyElements(true);
-        outputter.output(doc, out);                
-    }
 
     /**
      * <p>
@@ -133,22 +89,33 @@ public class SAXBuilderDemo {
      */
     public static void main(String[] args) {
         if ((args.length != 1) && (args.length != 2)) {
-            System.out.println("Usage: java org.jdom.examples.io.SAXBuilderTest " +
-                               "[XML document filename] ([SAX Driver Class])");
+            System.out.println(
+                "Usage: java samples.SAXBuilderTest " +
+                "[XML document filename] ([SAX Driver Class])");
             return;
         }
 
         // Load filename and SAX driver class
         String filename = args[0];
-        String saxDriverClass = DEFAULT_SAX_DRIVER_CLASS;
+        String saxDriverClass = null;
         if (args.length == 2) {
             saxDriverClass = args[1];
         }
 
         // Create an instance of the tester and test
         try {
-            SAXBuilderDemo demo = new SAXBuilderDemo(saxDriverClass);
-            demo.testBuilder(filename, System.out);
+            SAXBuilder builder = null;
+            if (saxDriverClass == null) {
+                builder = new SAXBuilder();
+            } else {
+                builder = new SAXBuilder(saxDriverClass);
+            }
+            Document doc = builder.build(filename);
+            // Create an outputter
+            XMLOutputter outputter = new XMLOutputter();
+            //outputter.setTrimText(true);
+            //outputter.setExpandEmptyElements(true);
+            outputter.output(doc, System.out);
         } catch (JDOMException e) {
             if (e.getRootCause() != null) {
                 e.getRootCause().printStackTrace();
