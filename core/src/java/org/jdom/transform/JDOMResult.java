@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.13 2003/01/23 02:23:31 jhunter Exp $
+ $Id: JDOMResult.java,v 1.14 2003/04/02 00:59:39 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -104,12 +104,12 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2003/01/23 02:23:31 $
+ * @version $Revision: 1.14 $, $Date: 2003/04/02 00:59:39 $
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.13 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.14 $ $Date: 2003/04/02 00:59:39 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -246,7 +246,7 @@ public class JDOMResult extends SAXResult {
    * <strong>Warning</strong>: The XSLT 1.0 specification states that
    * the output of an XSL transformation is not a well-formed XML
    * document but a list of nodes. Applications should thus use
-   * {@link getResult} instead of this method or at least expect
+   * {@link #getResult} instead of this method or at least expect
    * <code>null</code> documents to be returned.
    *
    * @return the transformation result as a JDOM document or

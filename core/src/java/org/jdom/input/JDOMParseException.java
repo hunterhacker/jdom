@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMParseException.java,v 1.1 2003/03/07 20:57:11 jhunter Exp $
+ $Id: JDOMParseException.java,v 1.2 2003/04/02 00:59:39 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,12 +65,12 @@ import org.jdom.JDOMException;
  * <b><code>JDOMParseException</code></b>.
  * 
  * @author Laurent Bihanic
- * @version $Revision: 1.1 $, $Date: 2003/03/07 20:57:11 $
+ * @version $Revision: 1.2 $, $Date: 2003/04/02 00:59:39 $
  */
 public class JDOMParseException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.1 $ $Date: 2003/03/07 20:57:11 $ $Name:  $";
+      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.2 $ $Date: 2003/04/02 00:59:39 $ $Name:  $";
 
     /**
      * The portion of the document that was successfully built before
@@ -112,8 +112,8 @@ public class JDOMParseException extends JDOMException {
     }
 
     /**
-     * Returns the partial document, i.e. the portion of document
-     * that was successfully built before the error occurred.
+     * Returns the partial document that was successfully built before 
+     * the error occurred.
      *
      * @return the partial document.
      */
