@@ -128,6 +128,45 @@ public class ResultSetBuilder {
 
     /**
      * <p>
+     *   This sets up a <code>java.sql.ResultSet</code> to be built
+     *   as a <code>Document</code>.
+     * </p>
+     *
+     * @param rs <code>java.sql.ResultSet</code> to build from
+     * @param rootName <code>String</code> name for the root
+     * <code>Element</code> 
+     * of the <code>Document</code>
+     * @param rowName <code>String</code> name for the each immediate child 
+     * <code>Element</code> of the root
+     */
+    public ResultSetBuilder(ResultSet rs, String rootName, String rowName) {
+        this(rs);
+        setRootName(rootName);
+        setRowName(rowName);
+    }
+
+    /**
+     * <p>
+     *   This sets up a <code>java.sql.ResultSet</code> to be built
+     *   as a <code>Document</code>.
+     * </p>
+     *
+     * @param rs <code>java.sql.ResultSet</code> to build from
+     * @param rootName <code>String</code> name for the root
+     * <code>Element</code> 
+     * of the <code>Document</code>
+     * @param rowName <code>String</code> name for the each immediate child 
+     * <code>Element</code> of the root
+     * @param ns <code>Namespace</code> to use for each <code>Element</code>
+     */
+    public ResultSetBuilder(ResultSet rs,
+                            String rootName, String rowName, Namespace ns) {
+        this(rs, rootName, rowName);
+        setNamespace(ns);
+    }
+
+    /**
+     * <p>
      *   This builds a <code>Document</code> from the
      *   <code>java.sql.ResultSet</code>.
      * </p>
