@@ -135,9 +135,10 @@ public static Test suite () {
 		DocType docType = new DocType("element");
 		List list = new ArrayList();
 
+        list.add(docType);
 		list.add(element);
 		list.add(comment);
-		Document doc = new Document(list, docType);
+		Document doc = new Document(list);
                 // Get a live list back
                 list = doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
@@ -177,9 +178,9 @@ public static Test suite () {
 		
 		list = null;
 		try {
-			doc = new Document(list, docType);
-			fail("didn't handle null list");
+			doc = new Document(list);
 		} catch (IllegalAddException e) {
+            fail("didn't handle null list");
 		} catch (NullPointerException e) {
 			fail("didn't handle null list");
 		}
@@ -493,7 +494,7 @@ public void test_TCU__testSerialization() throws IOException, ClassNotFoundExcep
 	element = doc.getRootElement();
 	
 	StringWriter sw = new StringWriter();
-	XMLOutputter op= new XMLOutputter("", false);
+	XMLOutputter op= new XMLOutputter(Format.getRawFormat());
 	op.output(element, sw);
 	//assertEquals("Incorrect data after serialization", sw.toString(), bufWithEmptyNS);
 	assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));

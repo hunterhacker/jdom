@@ -1642,7 +1642,7 @@ public final class TestElement
         String bufWithEmptyNS = "<element xmlns=\"http://foo\"><child1 xmlns=\"\" /><child2 xmlns=\"\" /></element>";
 
         StringWriter sw = new StringWriter();
-        XMLOutputter op = new XMLOutputter("", false);
+        XMLOutputter op = new XMLOutputter();
         op.output(element, sw);
         assertTrue("Incorrect output for NO_NAMESPACE in a default namespace", sw.toString().equals(bufWithNoNS));
 
@@ -1654,7 +1654,7 @@ public final class TestElement
         element.addContent(child1);
         element.addContent(child2);
         sw = new StringWriter();
-        op = new XMLOutputter("", false);
+        op = new XMLOutputter();
         op.output(element, sw);
         assertTrue("Incorrect output for empty default namespace", sw.toString().equals(bufWithEmptyNS));
 
@@ -1708,7 +1708,7 @@ public final class TestElement
         Element elIn = (Element) in.readObject();
 
         StringWriter sw = new StringWriter();
-        XMLOutputter op = new XMLOutputter("", false);
+        XMLOutputter op = new XMLOutputter();
         op.output(elIn, sw);
         assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
 
@@ -1742,7 +1742,7 @@ public final class TestElement
         Element elIn2 = (Element) in2.readObject();
 
         StringWriter sw2 = new StringWriter();
-        XMLOutputter op2 = new XMLOutputter("", false);
+        XMLOutputter op2 = new XMLOutputter();
         op.output(elIn2, sw2);
         assertTrue("Incorrect data after serialization", sw2.toString().equals(bufWithEmptyNS2));
     }
