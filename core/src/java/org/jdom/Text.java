@@ -193,8 +193,8 @@ public class Text implements Serializable, Cloneable {
      *
      * @return <code>int</code> - hash code for this node.
      */
-    public int hashCode() {
-        return value.toString().hashCode();
+    public final int hashCode() {
+        return super.hashCode();
     }
 
     /**
