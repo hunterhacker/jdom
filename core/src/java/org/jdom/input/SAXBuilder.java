@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXBuilder.java,v 1.76 2003/04/30 09:55:13 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.77 2003/04/30 21:58:19 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -81,7 +81,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.76 $, $Date: 2003/04/30 09:55:13 $
+ * @version $Revision: 1.77 $, $Date: 2003/04/30 21:58:19 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.76 $ $Date: 2003/04/30 09:55:13 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.77 $ $Date: 2003/04/30 21:58:19 $ $Name:  $";
 
     /** 
      * Default parser class to use. This is used when no other parser
@@ -265,12 +265,13 @@ public class SAXBuilder {
      * Specifies whether this builder shall reuse the same SAX parser
      * when performing subsequent parses or allocate a new parser for
      * each parse.  The default value of this setting is
-     * <code>false</code> (i.e. no parser reuse).
+     * <code>false</code> (no parser reuse).  Setting the value to
+     * <code>true</code> can result in a performance improvement when parsing
+     * large numbers of files in sequence.
      * <p>
-     * <strong>Note</strong>: As SAX parser instances may not be used
-     * in multiple threads running concurrently, the parser reuse
-     * feature shall not be used with SAXBuilder instances shared
-     * among threads.</p>
+     * <strong>Note</strong>: As SAX parser instances are not thread safe,
+     * the parser reuse feature should not be used with SAXBuilder instances 
+     * shared among threads.</p>
      *
      * @param reuseParser Whether to reuse the SAX parser.
      */
