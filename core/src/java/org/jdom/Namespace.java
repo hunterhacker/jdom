@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.32 2002/03/12 07:57:06 jhunter Exp $
+ $Id: Namespace.java,v 1.33 2002/04/28 02:42:17 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -76,7 +76,7 @@ import java.util.*;
  * @author Brett McLaughlin
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.32 $, $Date: 2002/03/12 07:57:06 $
+ * @version $Revision: 1.33 $, $Date: 2002/04/28 02:42:17 $
  */
 public final class Namespace {
 
@@ -84,7 +84,7 @@ public final class Namespace {
     // large with extended use
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.32 $ $Date: 2002/03/12 07:57:06 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.33 $ $Date: 2002/04/28 02:42:17 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -238,6 +238,9 @@ public final class Namespace {
      *         this <code>Namespace</code>.
      */
     public boolean equals(Object ob) {
+        if (this == ob) {
+            return true;
+        }
         if (ob instanceof Namespace) {  // instanceof returns false if null
             return uri.equals(((Namespace)ob).uri);
         }
