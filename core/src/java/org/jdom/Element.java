@@ -912,6 +912,12 @@ public class Element implements Serializable, Cloneable {
             throw new IllegalAddException(this, element,
                 "The element already has an existing parent \"" +
                 element.getParent().getQualifiedName() + "\"");
+        } else if (element == this) {
+            throw new IllegalAddException(this, element,
+                "The element cannot be added to itself");
+        } else if (isAncestor(element)) {
+            throw new IllegalAddException(this, element,
+                "The element cannot be added as a descendent of itself");
         }
 
         if (content == null) {
@@ -921,6 +927,18 @@ public class Element implements Serializable, Cloneable {
         element.setParent(this);
         content.add(element);
         return this;
+    }
+
+    // Scan ancestry looking for an element
+    private boolean isAncestor(Element e) {
+        Element parent = getParent();
+        while (parent != null) {
+            if (parent == e) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     /**
