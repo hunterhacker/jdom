@@ -51,7 +51,7 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package examples.sax;
+package samples.sax;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

@@ -51,7 +51,7 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package examples;
+package samples;
 
 import org.jdom.*;
 import org.jdom.input.SAXBuilder;

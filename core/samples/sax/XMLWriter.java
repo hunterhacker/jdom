@@ -51,7 +51,7 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package examples.sax;
+package samples.sax;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -129,7 +129,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  *
  * <p>You need to invoke one of the <var>characters</var> methods
  * explicitly to add newlines or indentation.  Alternatively, you
- * can use {@link examples.sax.DataFormatFilter DataFormatFilter}
+ * can use {@link samples.sax.DataFormatFilter DataFormatFilter}
  * add linebreaks and indentation (but does not support mixed content
  * properly).</p>
  *
