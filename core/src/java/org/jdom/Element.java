@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.151 2004/09/03 06:31:27 jhunter Exp $
+ $Id: Element.java,v 1.152 2004/09/03 06:35:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.151 $, $Date: 2004/09/03 06:31:27 $
+ * @version $Revision: 1.152 $, $Date: 2004/09/03 06:35:39 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -81,7 +81,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.151 $ $Date: 2004/09/03 06:31:27 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.152 $ $Date: 2004/09/03 06:35:39 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1555,22 +1555,6 @@ public class Element extends Content implements Parent {
         }
 
         return deletedSome;
-    }
-
-    /**
-     * <p>
-     * A convenience method that returns any parent element for this element,
-     * or null if the element is unattached or is a root element.  This was the
-     * original behavior of getParent() in JDOM Beta 9 which began returning
-     * Parent in Beta 10.  This method provides a convenient upgrade path for
-     * JDOM Beta 10 and 1.0 users.
-     * </p>
-     *
-     * @return the containing Element or null if unattached or a root element
-     */
-    public Element getParentElement() {
-        Parent parent = getParent();
-        return (Element) ((parent instanceof Element) ? parent : null);
     }
 
 }

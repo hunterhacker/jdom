@@ -1,6 +1,6 @@
 /*--
 
- $Id: Content.java,v 1.3 2004/02/11 21:12:43 jhunter Exp $
+ $Id: Content.java,v 1.4 2004/09/03 06:35:39 jhunter Exp $
 
  Copyright (C) 2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import java.io.*;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.3 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.4 $, $Date: 2004/09/03 06:35:39 $
  */
 public abstract class Content implements Cloneable, Serializable {
 
@@ -102,6 +102,20 @@ public abstract class Content implements Cloneable, Serializable {
      */
     public Parent getParent() {
         return parent;
+    }
+
+    /**
+     * A convenience method that returns any parent element for this element,
+     * or null if the element is unattached or is a root element.  This was the
+     * original behavior of getParent() in JDOM Beta 9 which began returning
+     * Parent in Beta 10.  This method provides a convenient upgrade path for
+     * JDOM Beta 10 and 1.0 users.
+     *
+     * @return the containing Element or null if unattached or a root element
+     */
+    public Element getParentElement() {
+        Parent parent = getParent();
+        return (Element) ((parent instanceof Element) ? parent : null);
     }
 
     /**
