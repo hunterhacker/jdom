@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMLocator.java,v 1.1 2003/04/04 04:06:31 jhunter Exp $
+ $Id: JDOMLocator.java,v 1.2 2003/04/06 02:00:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,8 +56,8 @@
 
 package org.jdom.output;
 
-import org.xml.sax.Locator;
-import org.xml.sax.helpers.LocatorImpl;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 /**
  * An implementation of the SAX {@link Locator} interface that
@@ -65,12 +65,12 @@ import org.xml.sax.helpers.LocatorImpl;
  *
  * @author Laurent Bihanic
  *
- * @version $Revision: 1.1 $, $Date: 2003/04/04 04:06:31 $
+ * @version $Revision: 1.2 $, $Date: 2003/04/06 02:00:45 $
  */
 public class JDOMLocator extends LocatorImpl {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMLocator.java,v $ $Revision: 1.1 $ $Date: 2003/04/04 04:06:31 $ $Name:  $";
+      "@(#) $RCSfile: JDOMLocator.java,v $ $Revision: 1.2 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
 
     /** The JDOM node being processed by SAXOutputter. */
     private Object node;

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Filter.java,v 1.5 2003/04/02 01:56:58 jhunter Exp $
+ $Id: Filter.java,v 1.6 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,7 +56,6 @@
 
 package org.jdom.filter;
 
-import org.jdom.*;
 
 /**
  * Classes which wish to modify the behaviour of the FilterList
@@ -66,7 +65,7 @@ import org.jdom.*;
  *
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2003/04/02 01:56:58 $
+ * @version $Revision: 1.6 $, $Date: 2003/04/06 02:00:44 $
  */
 public interface Filter {
     /**

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XML4JDOMAdapter.java,v 1.14 2002/04/29 13:38:16 jhunter Exp $
+ $Id: XML4JDOMAdapter.java,v 1.15 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,20 +56,13 @@
 
 package org.jdom.adapters;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.*;
+import java.lang.reflect.*;
 
+import org.jdom.*;
+import org.jdom.input.*;
 import org.w3c.dom.Document;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import org.jdom.JDOMException;
-import org.jdom.input.BuilderErrorHandler;
+import org.xml.sax.*;
 
 /**
  * <b><code>XML4JDOMAdapter</code></b>.
@@ -80,12 +73,12 @@ import org.jdom.input.BuilderErrorHandler;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.14 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.15 $, $Date: 2003/04/06 02:00:44 $
  */
 public class XML4JDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.14 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: XML4JDOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

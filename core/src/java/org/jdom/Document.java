@@ -1,6 +1,6 @@
 /*--
 
- $Id: Document.java,v 1.61 2002/05/16 16:32:00 jhunter Exp $
+ $Id: Document.java,v 1.62 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,10 +56,10 @@
 
 package org.jdom;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
-import org.jdom.filter.Filter;
+import org.jdom.filter.*;
 
 /**
  * <code>Document</code> defines behavior for an XML Document, modeled
@@ -70,12 +70,12 @@ import org.jdom.filter.Filter;
  * @author Jason Hunter
  * @author Jools Enticknap
  * @author Bradley S. Huffman
- * @version $Revision: 1.61 $, $Date: 2002/05/16 16:32:00 $
+ * @version $Revision: 1.62 $, $Date: 2003/04/06 02:00:44 $
  */
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.61 $ $Date: 2002/05/16 16:32:00 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.62 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * This <code>Document</code>'s

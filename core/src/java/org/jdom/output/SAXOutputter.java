@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.28 2003/04/04 20:18:58 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.29 2003/04/06 02:00:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,17 +57,13 @@
 package org.jdom.output;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.util.*;
 
-import org.xml.sax.*;
-import org.xml.sax.ext.DeclHandler;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import org.jdom.*;
+import org.xml.sax.*;
+import org.xml.sax.ext.*;
+import org.xml.sax.helpers.*;
 
 /**
  * <code>SAXOutputter</code> takes a JDOM tree and fires SAX2 events.
@@ -101,12 +97,12 @@ import org.jdom.*;
  * @author Jason Hunter
  * @author Fred Trimble
  * @author Bradley S. Huffman
- * @version $Revision: 1.28 $, $Date: 2003/04/04 20:18:58 $
+ * @version $Revision: 1.29 $, $Date: 2003/04/06 02:00:45 $
  */
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.28 $ $Date: 2003/04/04 20:18:58 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.29 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =

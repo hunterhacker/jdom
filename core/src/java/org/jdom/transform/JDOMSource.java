@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.11 2003/01/23 02:23:31 jhunter Exp $
+ $Id: JDOMSource.java,v 1.12 2003/04/06 02:00:45 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,15 +59,11 @@ package org.jdom.transform;
 import java.io.*;
 import java.util.*;
 
-import org.xml.sax.*;
-import org.xml.sax.helpers.XMLFilterImpl;
+import javax.xml.transform.sax.*;
 
 import org.jdom.*;
 import org.jdom.output.*;
-
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.Transformer;        // workaround for @link bug
-import javax.xml.transform.TransformerFactory; // workaround for @link bug
+import org.xml.sax.*;
 
 /**
  * Acts as an holder for JDOM document sources.
@@ -100,12 +96,12 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author Laurent Bihanic
  * @author Jason Hunter
- * @version $Revision: 1.11 $, $Date: 2003/01/23 02:23:31 $
+ * @version $Revision: 1.12 $, $Date: 2003/04/06 02:00:45 $
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.11 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.12 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}

@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.127 2003/04/02 10:17:30 jhunter Exp $
+ $Id: Element.java,v 1.128 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -59,8 +59,7 @@ package org.jdom;
 import java.io.*;
 import java.util.*;
 
-import org.jdom.filter.ElementFilter;
-import org.jdom.filter.Filter;
+import org.jdom.filter.*;
 
 /**
  * <code>Element</code> defines behavior for an XML
@@ -79,12 +78,12 @@ import org.jdom.filter.Filter;
  * @author Jools Enticknap
  * @author Alex Rosen
  * @author Bradley S. Huffman
- * @version $Revision: 1.127 $, $Date: 2003/04/02 10:17:30 $
+ * @version $Revision: 1.128 $, $Date: 2003/04/06 02:00:44 $
  */
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.127 $ $Date: 2003/04/02 10:17:30 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.128 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 

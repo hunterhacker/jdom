@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMParseException.java,v 1.2 2003/04/02 00:59:39 jhunter Exp $
+ $Id: JDOMParseException.java,v 1.3 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,21 +56,19 @@
 
 package org.jdom.input;
 
-import org.xml.sax.SAXParseException;
-
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom.*;
+import org.xml.sax.*;
 
 /**
  * <b><code>JDOMParseException</code></b>.
  * 
  * @author Laurent Bihanic
- * @version $Revision: 1.2 $, $Date: 2003/04/02 00:59:39 $
+ * @version $Revision: 1.3 $, $Date: 2003/04/06 02:00:44 $
  */
 public class JDOMParseException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.2 $ $Date: 2003/04/02 00:59:39 $ $Name:  $";
+      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.3 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * The portion of the document that was successfully built before

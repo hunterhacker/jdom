@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JAXPDOMAdapter.java,v 1.9 2002/04/29 13:38:16 jhunter Exp $
+ $Id: JAXPDOMAdapter.java,v 1.10 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,18 +56,12 @@
 
 package org.jdom.adapters;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.*;
+import java.lang.reflect.*;
 
+import org.jdom.*;
+import org.jdom.input.*;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
-
-import org.jdom.JDOMException;
-import org.jdom.input.BuilderErrorHandler;
 
 /**
  * <b><code>JAXPDOMAdapater</code></b>.
@@ -77,12 +71,12 @@ import org.jdom.input.BuilderErrorHandler;
  * </p>
  *
  * @author Jason Hunter
- * @version $Revision: 1.9 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.10 $, $Date: 2003/04/06 02:00:44 $
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.9 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.10 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

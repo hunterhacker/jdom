@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.44 2002/05/16 08:08:25 jhunter Exp $
+ $Id: Attribute.java,v 1.45 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,10 +56,7 @@
 
 package org.jdom;
 
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * <code>Attribute</code> defines behavior for an XML
@@ -71,12 +68,12 @@ import java.io.IOException;
  * @author Jason Hunter
  * @author Elliotte Rusty Harold
  * @author Wesley Biggs
- * @version $Revision: 1.44 $, $Date: 2002/05/16 08:08:25 $
+ * @version $Revision: 1.45 $, $Date: 2003/04/06 02:00:44 $
  */
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.44 $ $Date: 2002/05/16 08:08:25 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.45 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type

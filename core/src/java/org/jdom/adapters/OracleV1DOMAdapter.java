@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: OracleV1DOMAdapter.java,v 1.15 2002/04/29 13:38:16 jhunter Exp $
+ $Id: OracleV1DOMAdapter.java,v 1.16 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,17 +56,12 @@
 
 package org.jdom.adapters;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.*;
+import java.lang.reflect.*;
 
+import org.jdom.*;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
-
-import org.jdom.JDOMException;
+import org.xml.sax.*;
 
 /**
  * <b><code>OracleV1DOMAdapter</code></b>.
@@ -77,12 +72,12 @@ import org.jdom.JDOMException;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.15 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.16 $, $Date: 2003/04/06 02:00:44 $
  */
 public class OracleV1DOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV1DOMAdapter.java,v $ $Revision: 1.15 $ $Date: 2002/04/29 13:38:16 $ $Name:  $";
+      "@(#) $RCSfile: OracleV1DOMAdapter.java,v $ $Revision: 1.16 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

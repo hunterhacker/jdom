@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Comment.java,v 1.25 2002/04/29 13:38:15 jhunter Exp $
+ $Id: Comment.java,v 1.26 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,7 +56,7 @@
 
 package org.jdom;
 
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * <code>Comment</code> defines behavior for an XML
@@ -65,12 +65,12 @@ import java.io.Serializable;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.25 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.26 $, $Date: 2003/04/06 02:00:44 $
  */
 public class Comment implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.25 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.26 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;

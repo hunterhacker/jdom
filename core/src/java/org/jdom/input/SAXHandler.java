@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.49 2003/04/02 20:40:40 jhunter Exp $
+ $Id: SAXHandler.java,v 1.50 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,18 +56,12 @@
 
 package org.jdom.input;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
 
 import org.jdom.*;
-
 import org.xml.sax.*;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.ext.DeclHandler;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.ext.*;
+import org.xml.sax.helpers.*;
 
 /**
  * <code>SAXHandler</code> supports SAXBuilder.
@@ -77,14 +71,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Philip Nelson
  * @author Bradley S. Huffman
  * @author phil@triloggroup.com
- * @version $Revision: 1.49 $, $Date: 2003/04/02 20:40:40 $
+ * @version $Revision: 1.50 $, $Date: 2003/04/06 02:00:44 $
  */
 public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.49 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.50 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);

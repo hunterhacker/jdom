@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMResult.java,v 1.15 2003/04/02 20:40:40 jhunter Exp $
+ $Id: JDOMResult.java,v 1.16 2003/04/06 02:00:45 jhunter Exp $
 
  Copyright (C) 2001 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,19 +56,15 @@
 
 package org.jdom.transform;
 
-import java.io.*;
 import java.util.*;
 
-import org.xml.sax.*;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.XMLFilterImpl;
+import javax.xml.transform.sax.*;
 
 import org.jdom.*;
 import org.jdom.input.*;
-import org.jdom.output.*;
-
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.TransformerFactory; // workaround for @link bug
+import org.xml.sax.*;
+import org.xml.sax.ext.*;
+import org.xml.sax.helpers.*;
 
 /**
  * Acts as a holder for a transformation result tree, in the form
@@ -104,12 +100,12 @@ import javax.xml.transform.TransformerFactory; // workaround for @link bug
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
- * @version $Revision: 1.15 $, $Date: 2003/04/02 20:40:40 $
+ * @version $Revision: 1.16 $, $Date: 2003/04/06 02:00:45 $
  */
 public class JDOMResult extends SAXResult {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.15 $ $Date: 2003/04/02 20:40:40 $ $Name:  $";
+    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.16 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}

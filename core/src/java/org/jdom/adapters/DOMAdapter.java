@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMAdapter.java,v 1.18 2002/05/17 05:49:14 jhunter Exp $
+ $Id: DOMAdapter.java,v 1.19 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,15 +56,10 @@
 
 package org.jdom.adapters;
 
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 
+import org.jdom.*;
 import org.w3c.dom.Document;
-
-import org.jdom.DocType;
-import org.jdom.JDOMException;
 
 /**
  * <b><code>DOMAdapter</code></b>.
@@ -75,7 +70,7 @@ import org.jdom.JDOMException;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revison$, $Date: 2002/05/17 05:49:14 $
+ * @version $Revison$, $Date: 2003/04/06 02:00:44 $
  */
 public interface DOMAdapter {
 

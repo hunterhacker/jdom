@@ -1,6 +1,6 @@
 /*--
 
- $Id: XPath.java,v 1.8 2003/01/23 02:23:31 jhunter Exp $
+ $Id: XPath.java,v 1.9 2003/04/06 02:00:45 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,29 +57,23 @@
 package org.jdom.xpath;
 
 
-import java.io.Serializable;
-import java.io.InvalidObjectException;
-import java.io.ObjectStreamException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.jdom.Namespace;
-import org.jdom.JDOMException;
-import org.jdom.IllegalNameException;
+import org.jdom.*;
 
 
 /**
  * A JDOM-oriented wrapper around XPath engines.
  * 
  * @author Laurent Bihanic
- * @version $Revision: 1.8 $, $Date: 2003/01/23 02:23:31 $
+ * @version $Revision: 1.9 $, $Date: 2003/04/06 02:00:45 $
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.8 $ $Date: 2003/01/23 02:23:31 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.9 $ $Date: 2003/04/06 02:00:45 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the

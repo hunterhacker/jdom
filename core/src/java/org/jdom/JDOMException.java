@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.17 2002/05/13 12:57:09 jhunter Exp $
+ $Id: JDOMException.java,v 1.18 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,14 +56,12 @@
 
 package org.jdom;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.sql.SQLException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.ExceptionInInitializerError;
-import java.rmi.RemoteException;
-import org.xml.sax.SAXException;
+import java.io.*;
+import java.lang.reflect.*;
+import java.rmi.*;
+import java.sql.*;
+
+import org.xml.sax.*;
 
 /**
  * <b><code>JDOMException</code></b>.
@@ -78,12 +76,12 @@ import org.xml.sax.SAXException;
  * 
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.17 $, $Date: 2002/05/13 12:57:09 $
+ * @version $Revision: 1.18 $, $Date: 2003/04/06 02:00:44 $
  */
 public class JDOMException extends Exception {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.17 $ $Date: 2002/05/13 12:57:09 $ $Name:  $";
+      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.18 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /** A wrapped <code>Throwable</code> */
     protected Throwable cause;

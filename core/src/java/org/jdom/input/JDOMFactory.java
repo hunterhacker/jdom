@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.10 2002/04/29 13:38:16 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.11 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,8 +56,9 @@
 
 package org.jdom.input;
 
-import org.jdom.*;
 import java.util.*;
+
+import org.jdom.*;
 
 /**
  * <code>JDOMFactory</code> is an interface to be used by builders
@@ -69,7 +70,7 @@ import java.util.*;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
- * @version $Revision: 1.10 $, $Date: 2002/04/29 13:38:16 $
+ * @version $Revision: 1.11 $, $Date: 2003/04/06 02:00:44 $
  */
 public interface JDOMFactory {
 

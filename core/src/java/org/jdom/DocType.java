@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DocType.java,v 1.22 2002/04/29 13:38:15 jhunter Exp $
+ $Id: DocType.java,v 1.23 2003/04/06 02:00:44 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -56,19 +56,19 @@
 
 package org.jdom;
 
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * <code>DocType</code> represents an XML DOCTYPE declaration.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.22 $, $Date: 2002/04/29 13:38:15 $
+ * @version $Revision: 1.23 $, $Date: 2003/04/06 02:00:44 $
  */
 public class DocType implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.22 $ $Date: 2002/04/29 13:38:15 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.23 $ $Date: 2003/04/06 02:00:44 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;
