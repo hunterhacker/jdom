@@ -13,11 +13,6 @@ Items that need to be done:
 
 --- FOR JDOM 1.0 ---
 
-* Add elt.hasChildren().
-
-* Look at undeprecating elt.removeContent(), because not having it makes
-  moving elements a pain
-
 * Investigate doc.getDescription() to let people add doc descriptions.  It's
   an idea from IBM's parser suggested by andyk.
 
@@ -139,6 +134,8 @@ Items that need to be done:
   27 Sep 2000 and a test case by "Travers Waker" <traversw@innoforge.co.za>
   27 Sep 2000.
 
+* Figure out a way to set "standalone" in the decl, like doc.setStandalone().
+
 --- FOR JDOM 1.1 ---
 
 * Add XPath support
@@ -196,3 +193,5 @@ Items that need to be done:
 * Consider a builder for a read-only document.  It could "intern" objects to
   reduce memory consumption.
 
+* Consider using a List of instance data so elements only use what they really
+  need (saving attrib list, namespace list)
