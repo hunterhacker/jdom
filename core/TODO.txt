@@ -2,8 +2,7 @@ Items that need to be done:
 
 --- FOR JDOM BETA5 ---
 
-* Set up build to automatically handle JDK 1.1 + Collections using an Ant task
-  to handle import statement changes (Joe Bowbeer <joe.bowbeer@go2net.com>)
+* Make JDK 1.1 builds work for jdom-contrib and jdom-test
 
 * Automate build process, using ant tasks to EOL handling
   Consider .zip readable by JAR
@@ -41,9 +40,6 @@ Items that need to be done:
   See http://www.zope.org/Resources/ZPL point #3 for one approach to 
   attribution.
 
-* Contribute the samples from Elliotte's XML DevCon talk to the samples/
-  directory.
-
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
 
@@ -78,6 +74,9 @@ Items that need to be done:
 
 * Consider SAXBuilder.setErrorHandler()
 
+* Consider SAXBuilder.setIgnoreingWhitespace() and similar
+  Should save lots of memory.
+
 * Writing a "Getting started" guide for newbies 
   (Tom Clements <clements@eng.sun.com>)
 
@@ -106,6 +105,9 @@ Items that need to be done:
   http://xmlhack.com/read.php?item=626
 
 --- UNTIED TO A JDOM VERSION ---
+
+* Contribute the samples from Elliotte's XML DevCon talk to the samples/
+  directory.  http://metalab.unc.edu/xml/slides/xmlsig/jdom/JDOM.html
 
 * Add search for jdom.org using Google with site:www.jdom.org, imitating
   http://www.zope.org/SiteIndex/searchForm

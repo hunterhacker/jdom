@@ -16,10 +16,10 @@ fi
 LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:./lib/xerces.jar:./lib/ant.jar:$JAVA_HOME/lib/dev.jar
 ANT_HOME=./lib
 
-echo Building with classpath $CLASSPATH:$LOCALCLASSPATH
+echo Building with classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH
 echo
 
 echo Starting Ant...
 echo
 
-$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH:$CLASSPATH org.apache.tools.ant.Main $*
+$JAVA_HOME/bin/java -Dant.home=$ANT_HOME -classpath $LOCALCLASSPATH:$ADDITIONALCLASSPATH org.apache.tools.ant.Main $*

@@ -44,6 +44,11 @@ will generate a file called "jdom.jar" in the "./build" directory. Note, that
 if you do further development, compilation time is reduced since Ant is able
 to detect which files have changed an to recompile them at need.
 
+If you're compiling for JDK 1.1, then use the build11 scripts:
+
+  ./build11.sh (unix)
+  .\build11.bat (win32)
+
 If something went wrong, go to the FAQ section below.
 
 Also, you'll note that reusing a single JVM instance for each task, increases
