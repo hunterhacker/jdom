@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.38 2003/04/30 09:55:12 jhunter Exp $
+ $Id: Namespace.java,v 1.39 2003/05/02 00:33:28 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.38 $, $Date: 2003/04/30 09:55:12 $
+ * @version $Revision: 1.39 $, $Date: 2003/05/02 00:33:28 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -76,8 +76,15 @@ public final class Namespace {
     // XXX May want to use weak references to keep the maps from growing 
     // large with extended use
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.38 $ $Date: 2003/04/30 09:55:12 $ $Name:  $";
+    // XXX We may need to make the namespaces HashMap synchronized with
+    // reader/writer locks or perhaps make Namespace no longer a flyweight.
+    // As written, multiple put() calls may happen from different threads 
+    // concurrently and cause a ConcurrentModificationException. See
+    // http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html.
+    // No one has ever reported this over the many years, so don't worry yet.
+
+    private static final String CVS_ID =
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.39 $ $Date: 2003/05/02 00:33:28 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
