@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Attribute.java,v 1.26 2001/03/16 23:39:42 jhunter Exp $
+ $Id: Attribute.java,v 1.27 2001/04/13 03:41:12 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -107,27 +107,9 @@ public class Attribute implements Serializable, Cloneable {
      * @param value <code>String</code> value for new attribute.
      */
     public Attribute(String name, String value, Namespace namespace) {
-        String reason;
-        if ((reason = Verifier.checkAttributeName(name)) != null) {
-            throw new IllegalNameException(name, "attribute", reason);
-        }
-
-        if (namespace == null) {
-            namespace = Namespace.NO_NAMESPACE;
-        }
-
-        // Verify the attribute isn't trying to be in a default namespace
-        // Attributes can't be in a default namespace
-        if (namespace != Namespace.NO_NAMESPACE && 
-            namespace.getPrefix().equals("")) {
-            throw new IllegalNameException("", "attribute namespace",
-                "An attribute namespace without a prefix can only be the " +
-                "NO_NAMESPACE namespace");
-        }
-
-        this.name = name;
+        setName(name);
         setValue(value);
-        this.namespace = namespace;
+        setNamespace(namespace);
     }
 
     /**
@@ -215,6 +197,22 @@ public class Attribute implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This sets the local name of the <code>Attribute</code>.
+     * </p>
+     *
+     * @return <code>Attribute</code> - the attribute modified.
+     */
+    public Attribute setName(String name) {
+        String reason;
+        if ((reason = Verifier.checkAttributeName(name)) != null) {
+            throw new IllegalNameException(name, "attribute", reason);
+        }
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * <p>
      * This will retrieve the qualified name of the <code>Attribute</code>.
      *   For any XML attribute whose name is
      *   <code>[namespacePrefix]:[elementName]</code>,
@@ -292,6 +290,31 @@ public class Attribute implements Serializable, Cloneable {
         return namespace;
     }
 
+    /**
+     * <p>
+     *  This sets this <code>Attribute</code>'s <code>{@link Namespace}</code>.
+     *  If the provided namespace is null, the attribute will have no namespace.
+     *  The namespace must have a prefix.
+     * </p>
+     *
+     * @return <code>Element</code> - the element modified.
+     */
+    public Attribute setNamespace(Namespace namespace) {
+        if (namespace == null) {
+            namespace = Namespace.NO_NAMESPACE;
+        }
+
+        // Verify the attribute isn't trying to be in a default namespace
+        // Attributes can't be in a default namespace
+        if (namespace != Namespace.NO_NAMESPACE && 
+            namespace.getPrefix().equals("")) {
+            throw new IllegalNameException("", "attribute namespace",
+                "An attribute namespace without a prefix can only be the " +
+                "NO_NAMESPACE namespace");
+        }
+        this.namespace = namespace;
+        return this;
+    }
     /**
      * <p>
      * This will return the actual textual value of this

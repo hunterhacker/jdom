@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.65 2001/04/13 03:16:30 jhunter Exp $
+ $Id: Element.java,v 1.66 2001/04/13 03:41:12 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -128,25 +128,16 @@ public class Element implements Serializable, Cloneable {
      * This will create a new <code>Element</code>
      *   with the supplied (local) name, and define
      *   the <code>{@link Namespace}</code> to be used.
+     * If the provided namespace is null, the element will have 
+     * no namespace.
      * </p>
      *
      * @param name <code>String</code> name of element.
      * @namespace <code>Namespace</code> to put element in.
      */
     public Element(String name, Namespace namespace) {
-        String reason;
-        if ((reason = Verifier.checkElementName(name)) != null) {
-            throw new IllegalNameException(name, "element", reason);
-        }
-
-        this.name = name;
-
-        if (namespace == null) {
-            namespace = Namespace.NO_NAMESPACE;
-        }
-
-        this.namespace = namespace;
-            
+        setName(name);
+        setNamespace(namespace);
         document = null;
     }
 
@@ -159,7 +150,7 @@ public class Element implements Serializable, Cloneable {
      * @param name <code>String</code> name of element.
      */
     public Element(String name) {
-        this(name, Namespace.NO_NAMESPACE);
+        this(name, (Namespace) null);
     }
 
     /**
@@ -197,36 +188,6 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     *  This creates a copy of this <code>Element</code>, with the new
-     *    name specified, and in the specified <code>{@link Namespace}</code>.
-     * </p>
-     *
-     * @param name <code>String</code> name of new <code>Element</code> copy.
-     * @param ns <code>Namespace</code> to put copy in.
-     * @return <code>Element</code> copy of this <code>Element</code>.
-     */
-    public Element getCopy(String name, Namespace ns) {
-        Element clone = (Element)clone();
-        clone.namespace = ns;
-        clone.name = name;
-
-        return clone;
-    }
-
-    /**
-     * <p>
-     *  This creates a copy of this <code>Element</code>, with the new
-     *    name specified, and in no namespace.
-     * </p>
-     *
-     * @param name <code>String</code> name of new <code>Element</code> copy.
-     */
-    public Element getCopy(String name) {
-        return getCopy(name, Namespace.NO_NAMESPACE);
-    }
-
-    /**
-     * <p>
      * This returns the (local) name of the
      *   <code>Element</code>, without any
      *   namespace prefix, if one exists.
@@ -240,6 +201,22 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
+     * This sets the (local) name of the <code>Element</code>.
+     * </p>
+     *
+     * @return <code>Element</code> - the element modified.
+     */
+    public Element setName(String name) {
+        String reason;
+        if ((reason = Verifier.checkElementName(name)) != null) {
+            throw new IllegalNameException(name, "element", reason);
+        }
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * <p>
      *  This will return this <code>Element</code>'s
      *    <code>{@link Namespace}</code>.
      * </p>
@@ -249,6 +226,23 @@ public class Element implements Serializable, Cloneable {
      */
     public Namespace getNamespace() {
         return namespace;
+    }
+
+    /**
+     * <p>
+     *  This sets this <code>Element</code>'s <code>{@link Namespace}</code>.
+     *  If the provided namespace is null, the element will have no namespace.
+     * </p>
+     *
+     * @return <code>Element</code> - the element modified.
+     */
+    public Element setNamespace(Namespace namespace) {
+        if (namespace == null) {
+            namespace = Namespace.NO_NAMESPACE;
+        }
+
+        this.namespace = namespace;
+        return this;
     }
 
     /**
@@ -1809,4 +1803,40 @@ public class Element implements Serializable, Cloneable {
             return false;
         }
     }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in the specified <code>{@link Namespace}</code>.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     * @param ns <code>Namespace</code> to put copy in.
+     * @return <code>Element</code> copy of this <code>Element</code>.
+     *
+     * @deprecated Deprecated in beta7, use clone(), setName(), and
+     * setNamespace() instead
+     */
+    public Element getCopy(String name, Namespace ns) {
+        Element clone = (Element)clone();
+        clone.namespace = ns;
+        clone.name = name;
+
+        return clone;
+    }
+
+    /**
+     * <p>
+     *  This creates a copy of this <code>Element</code>, with the new
+     *    name specified, and in no namespace.
+     * </p>
+     *
+     * @param name <code>String</code> name of new <code>Element</code> copy.
+     *
+     * @deprecated Deprecated in beta7, use clone() and setName() instead
+     */
+    public Element getCopy(String name) {
+        return getCopy(name, Namespace.NO_NAMESPACE);
+    }
+
 }
