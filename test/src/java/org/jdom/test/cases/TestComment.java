@@ -1,3 +1,5 @@
+package org.jdom.test.cases;
+
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
@@ -8,26 +10,26 @@
  are met:
  
  1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
+	notice, this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+	notice, this list of conditions, and the disclaimer that follows 
+	these conditions in the documentation and/or other materials 
+	provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+	derived from this software without prior written permission.  For
+	written permission, please contact license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+	may "JDOM" appear in their name, without prior written permission
+	from the JDOM Project Management (pm@jdom.org).
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
+	 "This product includes software developed by the
+	  JDOM Project (http://www.jdom.org/)."
  Alternatively, the acknowledgment may be graphical using the logos 
  available at http://www.jdom.org/images/logos.
 
@@ -53,8 +55,6 @@
  */
 
 
-package org.jdom.test.cases;
-
 /**
  * Please put a description of your test here.
  * 
@@ -73,29 +73,6 @@ extends junit.framework.TestCase
 	public TestComment(String name) {
 		super(name);
 	}
-
-	/**
-	 * This method is called before a test is executed.
-	 */
-	public void setUp() {
-		// your code goes here.
-	}
-
-	/**
-	 * This method is called after a test is executed.
-	 */
-	public void tearDown() {
-		// your code goes here.
-	}
-
-	/**
-	 * The suite method runs all the tests
-	 */
-	public static Test suite () {
-		TestSuite suite = new TestSuite(TestComment.class);
-		return suite;
-	}
-
 	/**
 	 * The main method runs all the tests in the text ui
 	 */
@@ -103,7 +80,25 @@ extends junit.framework.TestCase
 	{
 		junit.textui.TestRunner.run(suite());
 	}
-
+	/**
+	 * This method is called before a test is executed.
+	 */
+	public void setUp() {
+		// your code goes here.
+	}
+	/**
+	 * The suite method runs all the tests
+	 */
+	public static Test suite () {
+		TestSuite suite = new TestSuite(TestComment.class);
+		return suite;
+	}
+	/**
+	 * This method is called after a test is executed.
+	 */
+	public void tearDown() {
+		// your code goes here.
+	}
 	/**
 	 * Test the comment constructor with a valid and an invalid string.
 	 */
@@ -122,56 +117,36 @@ extends junit.framework.TestCase
 			assert(true);
 		}
 	}
-
 	/**
-	 * verify that the text of the Comment matches expected value.
+	 * Verify a simple object == object test
 	 */
-	public void test_TCM__String_getText() {
-		Comment theComment = new org.jdom.Comment("this is a comment");
+	public void test_TCM__boolean_equals_Object() {
+	    Comment com = new Comment("test");
 
-		assertEquals(
-				"incorrect Comment constructed", 
-				"this is a comment", 
-				theComment.getText()); 
+	    Object ob = (Object)com;
 
-
+	    assert("object not equal to comment", com.equals(ob));
 	}
-
-
-
-/**
- * check for the expected toString text value of Comment.
- */
-public void test_TCM__String_toString() {
-	Comment theComment= new org.jdom.Comment("this is a comment");
-
-	assertEquals(
-		"incorrect Comment constructed",
-		"[Comment: <!--this is a comment-->]",
-		theComment.toString());
-	try {
-		theComment= new org.jdom.Comment(null);
-		fail("Comment constructor didn't catch invalid comment string");
-	} catch (IllegalDataException e) {
-
-		assert(true);
-	}
-
-}
-
 	/**
-	 * Match the XML fragment this comment produces.
+	 * Test that a real hashcode is returned and that a different one is returned
+	 * for a different comment.
 	 */
-	public void test_TCM__String_getSerializedForm() {
-		Comment theComment = new org.jdom.Comment("this is a comment");
+	public void test_TCM__int_hashCode() {
+	//not sure what to test!
 
-		assertEquals(
-				"incorrect Comment constructed", 
-				"<!--this is a comment-->", 
-				theComment.getSerializedForm()); 
-
+		Comment com = new Comment("test");
+		//only an exception would be a problem
+		int i = com.hashCode();
+		assert("bad hashCode", true);
+		Comment com2 = new Comment("test");
+		//different comments, same text
+		int x = com2.hashCode();
+		assert("Different comments with same value have same hashcode", x != i);
+		Comment com3 = new Comment("test2");
+		//only an exception would be a problem
+		int y = com3.hashCode();
+		assert("Different comments have same hashcode", y != x);
 	}
-
 /**
  * Test setting and resetting the text value of this Comment.
  */
@@ -213,37 +188,51 @@ public void test_TCM__OrgJdomComment_setText_String() {
 	}
 
 }
-
 	/**
-	 * Verify a simple object == object test
+	 * Match the XML fragment this comment produces.
 	 */
-	public void test_TCM__boolean_equals_Object() {
-	    Comment com = new Comment("test");
+	public void test_TCM__String_getSerializedForm() {
 
-	    Object ob = (Object)com;
+		/** No op because the method is deprecated
+		Comment theComment = new org.jdom.Comment("this is a comment");
 
-	    assert("object not equal to comment", com.equals(ob));
+		assertEquals(
+				"incorrect Comment constructed", 
+				"<!--this is a comment-->", 
+				theComment.getSerializedForm());
+		*/
+
 	}
-
 	/**
-	 * Test that a real hashcode is returned and that a different one is returned
-	 * for a different comment.
+	 * verify that the text of the Comment matches expected value.
 	 */
-	public void test_TCM__int_hashCode() {
-	//not sure what to test!
+	public void test_TCM__String_getText() {
+		Comment theComment = new org.jdom.Comment("this is a comment");
 
-		Comment com = new Comment("test");
-		//only an exception would be a problem
-		int i = com.hashCode();
-		assert("bad hashCode", true);
-		Comment com2 = new Comment("test");
-		//different comments, same text
-		int x = com2.hashCode();
-		assert("Different comments with same value have same hashcode", x != i);
-		Comment com3 = new Comment("test2");
-		//only an exception would be a problem
-		int y = com3.hashCode();
-		assert("Different comments have same hashcode", y != x);
+		assertEquals(
+				"incorrect Comment constructed", 
+				"this is a comment", 
+				theComment.getText()); 
+
+
 	}
+/**
+ * check for the expected toString text value of Comment.
+ */
+public void test_TCM__String_toString() {
+    Comment theComment= new org.jdom.Comment("this is a comment");
 
+    assertEquals(
+        "incorrect Comment constructed",
+        "[Comment: <!--this is a comment-->]",
+        theComment.toString());
+    try {
+        theComment= new org.jdom.Comment(null);
+        fail("Comment constructor didn't catch invalid comment string");
+    } catch (IllegalDataException e) {
+
+        assert(true);
+    }
+
+}
 }

@@ -1,6 +1,5 @@
 package org.jdom.test.cases;
 
-
 /*-- 
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
@@ -11,26 +10,26 @@ package org.jdom.test.cases;
  are met:
  
  1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions, and the following disclaimer.
+	notice, this list of conditions, and the following disclaimer.
  
  2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions, and the disclaimer that follows 
-    these conditions in the documentation and/or other materials 
-    provided with the distribution.
+	notice, this list of conditions, and the disclaimer that follows 
+	these conditions in the documentation and/or other materials 
+	provided with the distribution.
 
  3. The name "JDOM" must not be used to endorse or promote products
-    derived from this software without prior written permission.  For
-    written permission, please contact license@jdom.org.
+	derived from this software without prior written permission.  For
+	written permission, please contact license@jdom.org.
  
  4. Products derived from this software may not be called "JDOM", nor
-    may "JDOM" appear in their name, without prior written permission
-    from the JDOM Project Management (pm@jdom.org).
+	may "JDOM" appear in their name, without prior written permission
+	from the JDOM Project Management (pm@jdom.org).
  
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
-     "This product includes software developed by the
-      JDOM Project (http://www.jdom.org/)."
+	 "This product includes software developed by the
+	  JDOM Project (http://www.jdom.org/)."
  Alternatively, the acknowledgment may be graphical using the logos 
  available at http://www.jdom.org/images/logos.
 
@@ -67,13 +66,18 @@ public Alltests(String arg1) {
 	super(arg1);
 }
 /**
- * Insert the method's description here.
- * Creation date: (8/22/00 1:13:57 PM)
+ * Run the all tests method
+ * 
  * @param args java.lang.String[]
  */
 public static void main(String[] args) {
-	
-	junit.textui.TestRunner.run(suite());
+	if (args[0] != null && args[0].equals("-ui") ) {
+		String newargs[] = {"org.jdom.test.cases.Alltests"};
+		junit.swingui.TestRunner.main(newargs);
+	} else {
+		
+		junit.textui.TestRunner.run(suite());
+	}
 }
 /**
  * The suite method kicks off all of the tests
@@ -89,6 +93,7 @@ public static Test suite() {
 		suite.addTest(TestNamespace.suite());
 		suite.addTest(TestDocType.suite());
 		suite.addTest(TestElement.suite());
+		suite.addTest(TestDocument.suite());
 		return suite;
 }
 }

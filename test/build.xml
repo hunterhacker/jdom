@@ -91,6 +91,7 @@ These are the meaningful targets for this build file:
     <echo message="   javadoc  --> generates the API documentation"/>
     <echo message="   clean    --> restores the distribution to its clean state"/>
     <echo message="   test     --> runs JUnit tests for all tests in build"/>
+    <echo message="   testui   --> runs JUnit tests with Swing UI"/>
     <echo message=""/>
     <echo message=" See the comments inside the build.xml file for more details."/>
     <echo message="-------------------------------------------------------------"/>
@@ -231,6 +232,16 @@ These are the meaningful targets for this build file:
         </fileset>
       </batchtest>
 	</junit>
+  </target>
+
+  <target name="testui" depends="init, prepare-tests">
+    <java classname="org.jdom.test.cases.Alltests" fork="true">
+	  <arg value="-ui" />
+	  <classpath>
+        <pathelement location="${test.jarFile}" />
+        <pathelement path="${java.class.path}" />
+      </classpath>
+	</java>
   </target>
 </project>
 

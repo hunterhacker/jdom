@@ -25,3 +25,8 @@ JDOM-TEST - TODO File
 * Need to find out if test cases can be created using a use case, how could this
   be done.
 
+* Need to allow to test for many combinations of default, empty and fully 
+  qualified namespace declarations matching all use cases specified in xml 
+  namespaces rec from w3c
+
+* Integrate combined test suites
