@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.47 2003/05/29 02:47:40 jhunter Exp $
+ $Id: Verifier.java,v 1.48 2003/06/18 06:59:52 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.47 $, $Date: 2003/05/29 02:47:40 $
+ * @version $Revision: 1.48 $, $Date: 2003/06/18 06:59:52 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.47 $ $Date: 2003/05/29 02:47:40 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.48 $ $Date: 2003/06/18 06:59:52 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -697,8 +697,8 @@ final public class Verifier {
         if (c == '=') return true;
         if (c == '+') return true;
         if (c == '$') return true;
-		if (c == ',') return true;
-		if (c == '%') return true;
+        if (c == ',') return true;
+        if (c == '%') return true;
 
         if (c == '_') return true;
         if (c == '!') return true;
@@ -709,15 +709,15 @@ final public class Verifier {
         if (c == ')') return true;
         return false;
     }
-
+    
     /**
      * This is a utility function for determining whether a specified 
      * character is a character according to production 2 of the 
      * XML 1.0 specification.
      *
-     * @param c <code>char</code> to check for XML compliance.
+     * @param c <code>char</code> to check for XML compliance
      * @return <code>boolean</code> true if it's a character, 
-     *                                false otherwise.
+     *                                false otherwise
      */
     private static boolean isXMLCharacter(char c) {
     
@@ -1174,8 +1174,8 @@ final public class Verifier {
      * Unicode character
      * is a digit according to production 88 of the XML 1.0 specification.
      *
-     * @param c <code>char</code> to check for XML digit compliance.
-     * @return <code>boolean</code> true if it's a digit, false otherwise.
+     * @param c <code>char</code> to check for XML digit compliance
+     * @return <code>boolean</code> true if it's a digit, false otherwise
      */
     private static boolean isXMLDigit(char c) {
       
