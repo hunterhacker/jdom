@@ -1,44 +1,57 @@
-/*--
+/*-- 
 
- Copyright 2000 Brett McLaughlin & Jason Hunter. All rights reserved.
+ Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+ 
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows 
+    these conditions in the documentation and/or other materials 
+    provided with the distribution.
 
- Redistribution and use in source and binary forms, with or without modifica-
- tion, are permitted provided that the following conditions are met:
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact license@jdom.org.
+ 
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management (pm@jdom.org).
+ 
+ In addition, we request (but do not require) that you include in the 
+ end-user documentation provided with the redistribution and/or in the 
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos 
+ available at http://www.jdom.org/images/logos.
 
- 1. Redistributions of source code must retain the above copyright notice,
-    this list of conditions, and the following disclaimer.
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
 
- 2. Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions, the disclaimer that follows these conditions,
-    and/or other materials provided with the distribution.
-
- 3. The names "JDOM" and "Java Document Object Model" must not be used to
-    endorse or promote products derived from this software without prior
-    written permission. For written permission, please contact
-    license@jdom.org.
-
- 4. Products derived from this software may not be called "JDOM", nor may
-    "JDOM" appear in their name, without prior written permission from the
-    JDOM Project Management (pm@jdom.org).
-
- THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
- INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- FITNESS  FOR A PARTICULAR  PURPOSE ARE  DISCLAIMED.  IN NO  EVENT SHALL  THE
- JDOM PROJECT  OR ITS CONTRIBUTORS  BE LIABLE FOR  ANY DIRECT, INDIRECT,
- INCIDENTAL, SPECIAL,  EXEMPLARY, OR CONSEQUENTIAL  DAMAGES (INCLUDING, BUT
- NOT LIMITED TO, PROCUREMENT  OF SUBSTITUTE GOODS OR SERVICES; LOSS
- OF USE, DATA, OR  PROFITS; OR BUSINESS  INTERRUPTION)  HOWEVER CAUSED AND ON
- ANY  THEORY OF LIABILITY,  WHETHER  IN CONTRACT,  STRICT LIABILITY,  OR TORT
- (INCLUDING  NEGLIGENCE OR  OTHERWISE) ARISING IN  ANY WAY OUT OF THE  USE OF
- THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- This software  consists of voluntary contributions made  by many individuals
- on  behalf of the Java Document Object Model Project and was originally
- created by Brett McLaughlin <brett@jdom.org> and
- Jason Hunter <jhunter@jdom.org>. For more  information on the JDOM
- Project, please see <http://www.jdom.org/>.
-
+ This software consists of voluntary contributions made by many 
+ individuals on behalf of the JDOM Project and was originally 
+ created by Brett McLaughlin <brett@jdom.org> and 
+ Jason Hunter <jhunter@jdom.org>.  For more information on the 
+ JDOM Project, please see <http://www.jdom.org/>.
+ 
  */
+
 package org.jdom;
 
 import java.util.HashMap;
@@ -130,6 +143,19 @@ public final class Namespace {
      * @return <code>Namespace</code> - ready to use namespace.
      */
     public static Namespace getNamespace(String prefix, String uri) {
+        // Sanity checking
+        if ((prefix == null) || (prefix.trim().equals(""))) {
+            prefix = "";
+        }
+        if ((uri == null) || (uri.trim().equals(""))) {
+            uri = "";
+        }
+
+        // Return existing namespace if found
+        if (namespaces.containsKey(uri)) {
+            return (Namespace)namespaces.get(uri);
+        }
+
         // Ensure proper naming
         String reason;
         if ((reason = Verifier.checkNamespacePrefix(prefix)) != null) {
@@ -137,14 +163,6 @@ public final class Namespace {
         }
         if ((reason = Verifier.checkNamespaceURI(uri)) != null) {
             throw new IllegalNameException(uri, "Namespace URI", reason);
-        }
-
-        // Housekeeping
-        if ((prefix == null) || (prefix.trim().equals(""))) {
-            prefix = "";
-        }
-        if ((uri == null) || (uri.trim().equals(""))) {
-            uri = "";
         }
 
         // Unless the "empty" Namespace (no prefix and no URI), require a URI
