@@ -70,25 +70,51 @@ public static Test suite () {
 	 * Test constructor of Document with a List of content including the root element.
 	 */
 	public void test_TCC___List() {
+                Element bogus = new Element("bogus-root");
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
-		ArrayList list = new ArrayList();
+		List list = new ArrayList();
 
 		list.add(element);
 		list.add(comment);
 		Document doc = new Document(list);
+                // Get a live list back
+                list = doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
 		//no root element
 		list.remove(0);
 		try {
-			doc = new Document(list);
-			assertEquals("incorrect root element returned", element, doc.getRootElement());
-			assert("didn't catch missing root element", false);
-		} catch (IllegalAddException e) {
+                    doc.getRootElement();
+                    assert("didn't catch missing root element", true);
+                } catch (IllegalStateException e) {
 			assert(true);
 		}
-		
+
+                //set root back, then try to add another element to our
+                //live list
+                doc.setRootElement(element);
+                try {
+                    list.add(bogus);
+                    assert("didn't catch duplicate root element", true);
+                } catch (IllegalAddException e) {
+                    assert(true);
+                }
+                assertEquals("incorrect root element returned", element, doc.getRootElement());
+  
+                //how about replacing it in our live list
+                try {
+                    list.set(0,bogus);
+                } catch (Exception e) {
+                    assert("Root replacement shouldn't have throw a exception", true);
+                }
+                //and through the document
+                try {
+                    doc.setRootElement(element);
+                } catch (Exception e) {
+                    assert("Root replacement shouldn't have throw a exception", true);
+                }
+ 	
 		list = null;
 		try {
 			doc = new Document(list);
@@ -103,27 +129,51 @@ public static Test suite () {
 	 * Test constructor of a Document with a List of content and a DocType.
 	 */
 	public void test_TCC___List_OrgJdomDocType() {
+                Element bogus = new Element("bogus-root");
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
 		DocType docType = new DocType("element");
-		ArrayList list = new ArrayList();
+		List list = new ArrayList();
 
 		list.add(element);
 		list.add(comment);
 		Document doc = new Document(list, docType);
+                // Get a live list back
+                list = doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 		assertEquals("incorrect doc type returned", docType, doc.getDocType());
 
-		docType = new DocType("element");
 		list.remove(0);
-		
+                try {
+                        doc.getRootElement();
+                        assert("didn't catch missing root element", true);
+                } catch (IllegalStateException e) {
+                        assert(true);
+                }
+                
+                //set root back, then try to add another element to our
+                //live list
+                doc.setRootElement(element);
 		try {
-			doc = new Document(list, docType);
-			assertEquals("incorrect root element returned", element, doc.getRootElement());
-			assert("didn't catch missing root element", false);
+			list.add(bogus);
 		} catch (IllegalAddException e) {
 			assert(true);
 		}
+                assertEquals("incorrect root element returned", element, doc.getRootElement());
+ 
+                //how about replacing it in our live list
+                try {
+                    list.set(0,bogus);
+                    assert("didn't catch duplicate root element", true);
+                } catch (Exception e) {
+                    assert("Root replacement shouldn't have throw a exception", true);
+                }
+                //and through the document
+                try {
+                    doc.setRootElement(element);
+                } catch (Exception e) {
+                    assert("Root replacement shouldn't have throw a exception", true);
+                }
 		
 		list = null;
 		try {
