@@ -1,1 +1,5 @@
 Location for development of XPath processors.
+
+Note that current development of XPath on JDOM is occurring at
+http://code.werken.com/xpath/
+
