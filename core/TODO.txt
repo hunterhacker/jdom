@@ -32,6 +32,7 @@ Items that need to be done:
                        java.lang.String newXmlEncoding) 
                        Set both the XML and Java encodings.
    void setLineSeparator(String lineSeparator)
+   void setSuppressDeclaration(boolean suppress)
 
 * Ensure EOL is \r\n by default, but settable to be platform specific if need
   be.  Add justification to the FAQ.
@@ -40,16 +41,8 @@ Items that need to be done:
 
 --- FOR JDOM 1.0 ---
 
-* Make JDK 1.1 builds work for jdom-contrib (Antlr doesn't run,
-  which causes needed xpath/parser/*.java files to not be created.  Cause
-  is -Duser.dir flag being ignored in JDK 1.1 so relative classpaths
-  can't be followed and antlr.Tool can't be found.  Fix is to use new Antlr
-  release that doesn't need the special "cd", coming from Terence by Aug 21 
-  per Bob.)
-
-* Make JDK 1.1 builds work for jdom-test (besides problems caused by
-  the XPath bug above, ClassGenerator uses file.createNewFile() from JDK 1.2
-  and some test cases have spurious semi-colons)
+* Work on a potential Cdata class, see if we like it for 1.0
+  (coding being done by Dan Schaffer, Dan.Schaffer@time0.com)
 
 * Add CrimsonDOMAdapter
 
@@ -69,6 +62,7 @@ Items that need to be done:
   Changing behavior involves changing XMLOutputter, btw.
 
 * Add method org.jdom.Element DOMBuilder.build(org.w3c.dom.Element)
+* Also add method org.w3c.dom.Element DOMOutputter.output(org.jdom.Element)
 
 * Consider adding methods/logic to Verifier for all XML spec. constraints
   (Consider specifically a PCDATA check.  Downside is Elliotte says it 
@@ -119,6 +113,9 @@ Items that need to be done:
   could have a superclass "CommonXMLElement" that supported only what Common 
   XML requires.  Builders could build such elements to be faster and lighter 
   than full elements -- perfect for things like reading config files.
+
+* Make sure we have a plan for supporting obj serialization across current and
+  future JDOM versions
 
 --- FOR JDOM 1.1 ---
 
