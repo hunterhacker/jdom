@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.96 2003/05/02 03:34:41 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.97 2003/05/05 20:36:09 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -98,7 +98,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.96 $, $Date: 2003/05/02 03:34:41 $
+ * @version $Revision: 1.97 $, $Date: 2003/05/05 20:36:09 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -113,7 +113,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.96 $ $Date: 2003/05/02 03:34:41 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.97 $ $Date: 2003/05/05 20:36:09 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1500,8 +1500,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This will take the pre-defined entities in XML 1.0 and
      * convert their character representation to the appropriate
-     * entity reference, suitable for XML attributes.  It does
-     * no converstion for ' because it's not necessary as the outputter
+     * entity reference, suitable for XML attributes.  It does not convert
+     * the single quote (') because it's not necessary as the outputter
      * writes attributes surrounded by double-quotes.
      *
      * @param str <code>String</code> input to escape.
