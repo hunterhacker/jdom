@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.20 2002/03/12 07:11:39 jhunter Exp $
+ $Id: CDATA.java,v 1.21 2002/04/06 08:47:57 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,8 +56,6 @@
 
 package org.jdom;
 
-import java.io.Serializable;
-
 /**
  * <p><code><b>CDATA</b></code> represents character-based content within an
  *   XML document represented by JDOM. It is intended to provide a modular,
@@ -70,23 +68,14 @@ import java.io.Serializable;
  * @author Brett McLaughlin
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.20 $, $Date: 2002/03/12 07:11:39 $
+ * @version $Revision: 1.21 $, $Date: 2002/04/06 08:47:57 $
  */
-public class CDATA implements Serializable, Cloneable {
+public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.20 $ $Date: 2002/03/12 07:11:39 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.21 $ $Date: 2002/04/06 08:47:57 $ $Name:  $";
 
     private static final String EMPTY_STRING = "";
-
-    /** The actual character content */
-    // XXX See http://www.servlets.com/archive/servlet/ReadMsg?msgId=8612
-    // from elharo for a description of why Java characters may not suffice
-    // long term
-    protected String value;
-
-    /** This <code>CDATA</code> node's parent. */
-    protected Object parent;
 
     /**
      * <p>This is the protected, no-args constructor standard in all JDOM
@@ -102,42 +91,7 @@ public class CDATA implements Serializable, Cloneable {
      * @param str the node's character content.
      */
     public CDATA(String str) {
-        setText(str);
-    }
-
-    /**
-     * <p>This returns the value of this <code>CDATA</code> node as a Java
-     *   <code>String</code>.</p>
-     *
-     * @return <code>String</code> - character content of this node.
-     */
-    public String getText() {
-        return value;
-    }
-
-    /**
-     * <p>
-     * This returns the textual content with all surrounding whitespace
-     * removed.  If only whitespace exists, the empty string is returned.
-     * </p>
-     *
-     * @return trimmed cdata content or empty string
-     */
-    public String getTextTrim() {
-        return getText().trim();
-    }
-
-    /**
-     * <p>
-     * This returns the textual content with all surrounding whitespace
-     * removed and internal whitespace normalized to a single space.  If
-     * only whitespace exists, the empty string is returned.
-     * </p>
-     *
-     * @return normalized cdata content or empty string
-     */
-    public String getTextNormalize() {
-        return Text.normalizeString(getText());
+        super(str);
     }
 
     /**
@@ -145,7 +99,11 @@ public class CDATA implements Serializable, Cloneable {
      *
      * @param str value for node's content.
      */
-    public CDATA setText(String str) {
+    public Text setText(String str) {
+        // Overrides Text.setText() because this needs to check CDATA
+        // rules are enforced.  We could have a separate Verifier check
+        // for CDATA beyond Text and call that alone before super.setText().
+
         String reason;
 
         if (str == null) {
@@ -167,6 +125,10 @@ public class CDATA implements Serializable, Cloneable {
      * @param str character content to append.
      */
     public void append(String str) {
+        // Overrides Text.setText() because this needs to check CDATA
+        // rules are enforced.  We could have a separate Verifier check
+        // for CDATA beyond Text and call that alone before super.setText().
+
         String reason;
 
         if (str == null) {
@@ -179,77 +141,6 @@ public class CDATA implements Serializable, Cloneable {
         if (value == EMPTY_STRING)
              value = str;
         else value += str;
-    }
-
-    /**
-     * <p>This will append the content of another <code>CDATA</code> node
-     *   to this node.</p>
-     *
-     * @param cdata CDATA node to append.
-     */
-    public void append(CDATA cdata) {
-        if (cdata == null) {
-            return;
-        }
-        value += cdata.getText();
-    }
-
-    /**
-     * <p>This will return the parent of this <code>CDATA</code> node, which
-     *   is always a JDOM <code>{@link Element}</code>.</p>
-     *
-     * @return <code>Element</code> - this node's parent.
-     */
-    public Element getParent() {
-        return (Element) parent;
-    }
-
-    /**
-     * <p>
-     *   This retrieves the owning <code>{@link Document}</code> for
-     *   this <code>CDATA</code>, or null if not a currently a member
-     *   of a <code>{@link Document}</code>.
-     * </p>
-     *
-     * @return <code>Document</code> owning this <code>CDATA</code>, or null.
-     */
-    public Document getDocument() {
-        if (parent != null) {
-            return ((Element)parent).getDocument();
-        }
-        return null;
-    }
-
-    /**
-     * <p>This will set the parent of the <code>CDATA</code> node to the 
-     *   supplied <code>{@link Element}</code>. This method is intentionally 
-     *   left as <code>protected</code> so that only JDOM internals use it.</p>
-     * <p>If you need an instance of this <code>CDATA</code> node with a new
-     *   parent, you should get a copy of this node with
-     *   <code>{@link #clone}</code> and set it on the desired (new) parent
-     *   <code>Element</code>.</p>
-     *
-     * @param parent parent for this node.
-     */
-    protected CDATA setParent(Element parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    /**
-     * <p>
-     * Detaches the <code>CDATA</code> from its parent, or does nothing
-     *  if the <code>CDATA</code> has no parent.
-     * </p>
-     *
-     * @return <code>CDATA</code> - this <code>CDATA</code> modified.
-     */
-    public CDATA detach() {
-        if (parent != null) {
-            ((Element)parent).removeContent(this);
-        }
-        parent = null;
-        return this;
     }
 
     /**
@@ -268,48 +159,5 @@ public class CDATA implements Serializable, Cloneable {
             .append(getText())
             .append("]")
             .toString();
-    }
-
-    /**
-     * <p>This will generate a hash code for this node.</p>
-     *
-     * @return <code>int</code> - hash code for this node.
-     */
-    public final int hashCode() {
-        return super.hashCode();
-    }
-
-    /**
-     * <p>This will return a clone of this <code>CDATA</code> node, with the
-     *   same character content, but no parent.</p>
-     *
-     * @return <code>CDATA</code> - cloned node.
-     */
-    public Object clone() {
-        CDATA cdata = null;
-
-        try {
-            cdata = (CDATA)super.clone();
-        } catch (CloneNotSupportedException ce) {
-            // Can't happen
-        }
-
-        cdata.parent = null;
-        cdata.value = value;
-
-        return cdata;
-    }
-
-    /**
-     * <p>
-     *  This tests for equality of this <code>CDATA</code> to the supplied
-     *    <code>Object</code>, explicitly using the == operator.
-     * </p>
-     *
-     * @param ob <code>Object</code> to compare to
-     * @return whether the <code>CDATA</code> nodes are equal
-     */
-    public final boolean equals(Object ob) {
-        return (this == ob);
     }
 }
