@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.38 2002/05/17 05:53:53 jhunter Exp $
+ $Id: Verifier.java,v 1.39 2002/06/17 13:54:14 jhunter Exp $
 
  Copyright (C) 2000 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,12 +66,12 @@ import java.util.*;
  * @author Elliotte Rusty Harold
  * @author Jason Hunter
  * @author Bradley S. Huffman
- * @version $Revision: 1.38 $, $Date: 2002/05/17 05:53:53 $
+ * @version $Revision: 1.39 $, $Date: 2002/06/17 13:54:14 $
  */
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.38 $ $Date: 2002/05/17 05:53:53 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.39 $ $Date: 2002/06/17 13:54:14 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -471,6 +471,12 @@ final public class Verifier {
 
         if (data.indexOf("--") != -1) {
             return "Comments cannot contain double hyphens (--)";
+        }
+        if (data.startsWith("-")) {
+            return "Comment data cannot start with a hyphen.";
+        }
+        if (data.endsWith("-")) {
+            return "Comment data cannot end with a hyphen.";
         }
 
         // If we got here, everything is OK
