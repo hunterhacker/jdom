@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Element.java,v 1.93 2001/06/27 18:36:46 jhunter Exp $
+ $Id: Element.java,v 1.94 2001/06/28 00:25:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -78,7 +78,7 @@ import java.util.*;
 public class Element implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.93 $ $Date: 2001/06/27 18:36:46 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.94 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -561,7 +561,7 @@ public class Element implements Serializable, Cloneable {
      *   element.  This will include all text within
      *   this single element, including whitespace and CDATA
      *   sections if they exist.  It's essentially the concatenation of
-     *   all String nodes returned by getMixedContent().  The call does not
+     *   all String nodes returned by getContent().  The call does not
      *   recurse into child elements.  If no textual value exists for the 
      *   element, an empty <code>String</code> ("") is returned.
      * </p>
@@ -742,7 +742,7 @@ public class Element implements Serializable, Cloneable {
      * This sets the content of the element to be the text given.
      * All existing text content and non-text context is removed.
      * If this element should have both textual content and nested 
-     * elements, use <code>{@link #setMixedContent}</code> instead.
+     * elements, use <code>{@link #setContent}</code> instead.
      * Setting a null text value is equivalent to setting an empty string
      * value.
      * </p>
@@ -807,11 +807,9 @@ public class Element implements Serializable, Cloneable {
      * may contain objects of type <code>String</code>, <code>Element</code>,
      * <code>Comment</code>, <code>ProcessingInstruction</code>,
      * <code>CDATA</code>, and <code>EntityRef</code>.  
-     * When there is technically no mixed content and
-     * all contents are of the same type, then all objects returned in the
-     * List will be of the same type.  The List returned is "live" in 
-     * document order and modifications to it affect the element's actual 
-     * contents.  Whitespace content is returned in its entirety.
+     * The List returned is "live" in document order and modifications 
+     * to it affect the element's actual contents.  Whitespace content is 
+     * returned in its entirety.
      * </p>
      *
      * @return a <code>List</code> containing the mixed content of the
@@ -821,7 +819,7 @@ public class Element implements Serializable, Cloneable {
      *         <code>{@link CDATA}</code>, and
      *         <code>{@link EntityRef}</code> objects.
      */
-    public List getMixedContent() {
+    public List getContent() {
         if (content == null) {
             content = new ArrayList(INITIAL_ARRAY_SIZE);
         }
@@ -846,9 +844,9 @@ public class Element implements Serializable, Cloneable {
      * @throws IllegalAddException if the List contains objects of 
      *         illegal types.
      */
-    public Element setMixedContent(List mixedContent) {
+    public Element setContent(List newContent) {
 
-        if (mixedContent == null) {
+        if (newContent == null) {
             content = new ArrayList(INITIAL_ARRAY_SIZE);
             return this;
         }
@@ -861,7 +859,7 @@ public class Element implements Serializable, Cloneable {
         int itemsAdded = 0;
 
         try {
-            for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
+            for (Iterator i = newContent.iterator(); i.hasNext(); ) {
                 Object obj = i.next();
                 if (obj instanceof Element) {
                     addContent((Element)obj);
@@ -901,7 +899,7 @@ public class Element implements Serializable, Cloneable {
                 content = oldContent;
                 // Unmodify all modified elements.  DO NOT change any later 
                 // elements tho because they may already have parents!
-                Iterator i = mixedContent.iterator();
+                Iterator i = newContent.iterator();
                 while (itemsAdded-- > 0) {
                     Object obj = i.next();
                     if (obj instanceof Element) {
@@ -1017,7 +1015,7 @@ public class Element implements Serializable, Cloneable {
      * @return this element modified
      */
     public Element setChildren(List children) {
-        return setMixedContent(children);
+        return setContent(children);
     }
 
     /**
@@ -2101,4 +2099,50 @@ public class Element implements Serializable, Cloneable {
           "Element.getSerializedForm() is not yet implemented");
     }
 
+    /**
+     * <p>
+     * This returns the full content of the element as a List which
+     * may contain objects of type <code>String</code>, <code>Element</code>,
+     * <code>Comment</code>, <code>ProcessingInstruction</code>,
+     * <code>CDATA</code>, and <code>EntityRef</code>.  
+     * When there is technically no mixed content and
+     * all contents are of the same type, then all objects returned in the
+     * List will be of the same type.  The List returned is "live" in 
+     * document order and modifications to it affect the element's actual 
+     * contents.  Whitespace content is returned in its entirety.
+     * </p>
+     *
+     * @return a <code>List</code> containing the mixed content of the
+     *         element: may contain <code>String</code>,
+     *         <code>{@link Element}</code>, <code>{@link Comment}</code>,
+     *         <code>{@link ProcessingInstruction}</code>,
+     *         <code>{@link CDATA}</code>, and
+     *         <code>{@link EntityRef}</code> objects.
+     *
+     * @deprected Deprecated in beta7, use getContent() instead
+     */
+    public List getMixedContent() {
+        return getContent();
+    }
+
+    /**
+     * <p>
+     * This sets the content of the element.  The passed in List should
+     * contain only objects of type <code>String</code>, <code>Element</code>,
+     * <code>Comment</code>, <code>ProcessingInstruction</code>, 
+     * <code>CDATA</code>, and <code>EntityRef</code>.  Passing a null or
+     * empty List clears the existing content.  In event of an exception 
+     * the original content will be unchanged and the items in the added
+     * content will be unaltered.
+     * </p>
+     *
+     * @return this element modified
+     * @throws IllegalAddException if the List contains objects of 
+     *         illegal types.
+     *
+     * @deprecated Deprecated in beta7, use setContent(List) instead
+     */
+    public Element setMixedContent(List mixedContent) {
+        return setContent(mixedContent);
+    }
 }

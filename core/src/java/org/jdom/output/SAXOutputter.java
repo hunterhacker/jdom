@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.10 2001/06/11 16:17:56 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.11 2001/06/28 00:25:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.10 $ $Date: 2001/06/11 16:17:56 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.11 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
 
     /** registered <code>ContentHandler</code> */
     private ContentHandler contentHandler;
@@ -246,11 +246,11 @@ public class SAXOutputter {
 
         // Handle root element, as well as any root level
         // processing instructions and CDATA sections
-        Iterator i = document.getMixedContent().iterator();
+        Iterator i = document.getContent().iterator();
         while (i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Element) {
-                // process root element and its mixed content
+                // process root element and its content
                 element(document.getRootElement(), new NamespaceStack());
             }
             else if (obj instanceof ProcessingInstruction) {
@@ -406,7 +406,7 @@ public class SAXOutputter {
         // contentHandler.startElement()
         startElement(element, nsAtts);
 
-        // handle mixed content in the element
+        // handle content in the element
         elementContent(element, namespaces);
 
         // contentHandler.endElement()
@@ -570,13 +570,13 @@ public class SAXOutputter {
      */
     private void elementContent(Element element, NamespaceStack namespaces) 
                       throws JDOMException {
-        List mixedContent = element.getMixedContent();
+        List eltContent = element.getContent();
       
-        boolean empty = mixedContent.size() == 0;
+        boolean empty = eltContent.size() == 0;
         boolean stringOnly =
             !empty &&
-            mixedContent.size() == 1 &&
-            mixedContent.get(0) instanceof String;
+            eltContent.size() == 1 &&
+            eltContent.get(0) instanceof String;
           
         if (stringOnly) {
             // contentHandler.characters()
@@ -584,8 +584,8 @@ public class SAXOutputter {
         }
         else {
             Object content = null;
-            for (int i = 0, size = mixedContent.size(); i < size; i++) {
-                content = mixedContent.get(i);
+            for (int i = 0, size = eltContent.size(); i < size; i++) {
+                content = eltContent.get(i);
                 if (content instanceof Element) {
                     element((Element) content, namespaces);
                 }

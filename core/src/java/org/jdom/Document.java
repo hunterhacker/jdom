@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Document.java,v 1.43 2001/06/26 04:02:13 jhunter Exp $
+ $Id: Document.java,v 1.44 2001/06/28 00:25:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -73,7 +73,7 @@ import java.util.*;
 public class Document implements Serializable, Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.43 $ $Date: 2001/06/26 04:02:13 $ $Name:  $";
+      "@(#) $RCSfile: Document.java,v $ $Revision: 1.44 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -140,7 +140,7 @@ public class Document implements Serializable, Cloneable {
      *         given docType object is already attached to a document.
      */
     public Document(List content, DocType docType) {
-        setMixedContent(content);
+        setContent(content);
         setDocType(docType);
     }
 
@@ -332,7 +332,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @return <code>List</code> - all Document content
      */
-    public List getMixedContent() {
+    public List getContent() {
         // XXX This should be a PartialList/FilterList
         return content;
     }
@@ -346,14 +346,14 @@ public class Document implements Serializable, Cloneable {
      * and the items in the added content will be unaltered.
      * </p>
      *
-     * @param content the new mixed content
+     * @param content the new content
      * @return the modified Document
      * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types.
      */
-    public Document setMixedContent(List mixedContent) {
+    public Document setContent(List newContent) {
 
-        if (mixedContent == null) {
+        if (newContent == null) {
             return this;
         }
 
@@ -367,7 +367,7 @@ public class Document implements Serializable, Cloneable {
         int itemsAdded = 0;
 
         try {
-            for (Iterator i = mixedContent.iterator(); i.hasNext(); ) {
+            for (Iterator i = newContent.iterator(); i.hasNext(); ) {
                 Object obj = i.next();
                 if (obj instanceof Element) {
                     if (didRoot == false) {
@@ -419,7 +419,7 @@ public class Document implements Serializable, Cloneable {
                 }
                 // Unmodify all modified elements.  DO NOT change any later
                 // elements tho because they may already have parents!
-                Iterator itr = mixedContent.iterator();
+                Iterator itr = newContent.iterator();
                 while (itemsAdded-- > 0) {
                     Object obj = itr.next();
                     if (obj instanceof Element) {
@@ -631,7 +631,7 @@ public class Document implements Serializable, Cloneable {
      *
      * @return <code>List</code> - PIs for document.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * @deprecated Deprecated in beta7, use getContent() and examine for
      * PIs manually
      */
     public List getProcessingInstructions() {
@@ -660,7 +660,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>List</code> - all PIs with the specified
      *         target.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * @deprecated Deprecated in beta7, use getContent() and examine for
      * PIs manually
      */
     public List getProcessingInstructions(String target) {
@@ -690,7 +690,7 @@ public class Document implements Serializable, Cloneable {
      * @return <code>ProcessingInstruction</code> - the first PI
      *         with the specified target, or null if no such PI exists.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and examine for
+     * @deprecated Deprecated in beta7, use getContent() and examine for
      * PIs manually
      */
     public ProcessingInstruction getProcessingInstruction(String target) {
@@ -716,7 +716,7 @@ public class Document implements Serializable, Cloneable {
      * @param target <code>String</code> target of PI to remove.
      * @return <code>boolean</code> - whether the requested PI was removed.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and remove
+     * @deprecated Deprecated in beta7, use getContent() and remove
      * PIs manually
      */
     public boolean removeProcessingInstruction(String target) {
@@ -737,7 +737,7 @@ public class Document implements Serializable, Cloneable {
      * @param target <code>String</code> target of PI to remove.
      * @return <code>boolean</code> - whether the requested PIs were removed.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and remove
+     * @deprecated Deprecated in beta7, use getContent() and remove
      * PIs manually
      */
     public boolean removeProcessingInstructions(String target) {
@@ -766,7 +766,7 @@ public class Document implements Serializable, Cloneable {
      * @param pis <code>List</code> of PIs to use.
      * @return <code>Document</code> - this Document modified.
      *
-     * @deprecated Deprecated in beta7, use getMixedContent() and add
+     * @deprecated Deprecated in beta7, use getContent() and add
      * PIs manually
      */
     public Document setProcessingInstructions(List pis) {
@@ -780,5 +780,40 @@ public class Document implements Serializable, Cloneable {
         content.addAll(pis);
 
         return this;
+    }
+
+    /**
+     * <p>
+     * This will return all content for the <code>Document</code>.
+     * The returned list is "live" in document order and changes to it 
+     * affect the document's actual content.
+     * </p>
+     *
+     * @return <code>List</code> - all Document content
+     *
+     * @deprecated Deprecated in beta7, use getContent() instead
+     */
+    public List getMixedContent() {
+        return getContent();
+    }
+
+    /**
+     * <p>
+     * This will set all content for the <code>Document</code>.
+     * The List may contain only objects of type Element, Comment, and
+     * ProcessingInstruction; and only one Element that becomes the root.
+     * In event of an exception the original content will be unchanged
+     * and the items in the added content will be unaltered.
+     * </p>
+     *
+     * @param content the new mixed content
+     * @return the modified Document
+     * @throws IllegalAddException if the List contains more than
+     *         one Element or objects of illegal types.
+     *
+     * @deprecated Deprecated in beta7, use setContent(List) instead
+     */
+    public Document setMixedContent(List mixedContent) {
+        return setContent(mixedContent);
     }
 }

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.24 2001/05/19 03:10:05 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.25 2001/06/28 00:25:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -81,7 +81,7 @@ import org.w3c.dom.DOMImplementation;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.24 $ $Date: 2001/05/19 03:10:05 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.25 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -135,8 +135,8 @@ public class DOMOutputter {
             DocType dt = document.getDocType();
             domDoc = createDOMDocument(dt);
 
-            // Add mixed content
-            Iterator itr = document.getMixedContent().iterator();
+            // Add content
+            Iterator itr = document.getContent().iterator();
             while (itr.hasNext()) {
                 Object node = itr.next();
 
@@ -339,8 +339,8 @@ public class DOMOutputter {
                 }
             }
 
-            // Add mixed content to the DOM element
-            itr = element.getMixedContent().iterator();
+            // Add content to the DOM element
+            itr = element.getContent().iterator();
             while (itr.hasNext()) {
                 Object node = itr.next();
 

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: XMLOutputter.java,v 1.61 2001/06/26 18:06:12 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.62 2001/06/28 00:25:31 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -112,7 +112,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.61 $ $Date: 2001/06/26 18:06:12 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.62 $ $Date: 2001/06/28 00:25:31 $ $Name:  $";
 
     /** standard value to indent by, if we are indenting **/
     protected static final String STANDARD_INDENT = "  ";
@@ -495,7 +495,7 @@ public class XMLOutputter implements Cloneable {
         // Print out root element, as well as any root level
         // comments and processing instructions, 
         // starting with no indentation
-        Iterator i = doc.getMixedContent().iterator();
+        Iterator i = doc.getContent().iterator();
         while (i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Element) {
@@ -563,9 +563,9 @@ public class XMLOutputter implements Cloneable {
      **/
     public void outputElementContent(Element element, Writer out)
                       throws IOException {
-        List mixedContent = element.getMixedContent();
+        List eltContent = element.getContent();
         printElementContent(element, out, 0, createNamespaceStack(),
-                            mixedContent);
+                            eltContent);
         out.flush();
     }
     
@@ -1043,7 +1043,7 @@ public class XMLOutputter implements Cloneable {
         // This method prints from the beginning < to the trailing >.
         // (no leading or trailing whitespace!)
 
-        List mixedContent = element.getMixedContent();
+        List eltContent = element.getContent();
 
         // Print the beginning of the tag plus attributes and any
         // necessary namespace declarations
@@ -1064,7 +1064,7 @@ public class XMLOutputter implements Cloneable {
         // Calculate if the contents are String/CDATA only
         // This helps later with the "empty" check
         boolean stringOnly = true;
-        Iterator itr = mixedContent.iterator();
+        Iterator itr = eltContent.iterator();
         while (itr.hasNext()) {
             Object o = itr.next();
             if (!(o instanceof String) && !(o instanceof CDATA)) {
@@ -1100,7 +1100,7 @@ public class XMLOutputter implements Cloneable {
             // We know it's not null or empty from above
             out.write(">");
             printElementContent(element, out, indentLevel + 1,
-                                namespaces, mixedContent);
+                                namespaces, eltContent);
             out.write("</");
             out.write(element.getQualifiedName());
             out.write(">");
@@ -1123,21 +1123,21 @@ public class XMLOutputter implements Cloneable {
     protected void printElementContent(Element element, Writer out,
                                        int indentLevel,
                                        NamespaceStack namespaces,
-                                       List mixedContent) throws IOException {
+                                       List eltContent) throws IOException {
         // get same local flags as printElement does
         // a little redundant code-wise, but not performance-wise
-        boolean empty = mixedContent.size() == 0;
+        boolean empty = eltContent.size() == 0;
 
         // Calculate if the content is String/CDATA only
         boolean stringOnly = true;
         if (!empty) {
-            stringOnly = isStringOnly(mixedContent);
+            stringOnly = isStringOnly(eltContent);
         }
 
         if (stringOnly) {
             Class justOutput = null;
             boolean endedWithWhite = false;
-            Iterator itr = mixedContent.iterator();
+            Iterator itr = eltContent.iterator();
             while (itr.hasNext()) {
                 Object content = itr.next();
                 if (content instanceof String) {
@@ -1169,7 +1169,7 @@ public class XMLOutputter implements Cloneable {
             Class justOutput = null;
             boolean endedWithWhite = false;
             boolean wasFullyWhite = false;
-            Iterator itr = mixedContent.iterator();
+            Iterator itr = eltContent.iterator();
             while (itr.hasNext()) {
                 content = itr.next();
                 // See if text, an element, a PI or a comment
@@ -1558,14 +1558,14 @@ public class XMLOutputter implements Cloneable {
     private boolean isEmpty(Element element) {
         // Calculate if the content is empty
         // We can handle "" string same as empty (CDATA has no effect here)    
-        List mixedContent = element.getMixedContent();
+        List eltContent = element.getContent();
         // An element with absolutely no content is empty
-        if (mixedContent.size() == 0) {
+        if (eltContent.size() == 0) {
             return true;
         }
         // An element with only string content, whose string content
         // adds up to nothing, is empty
-        if (isStringOnly(mixedContent)) {
+        if (isStringOnly(eltContent)) {
              String elementText = getElementText(element);
              if (elementText == null || elementText.equals("")) {
                 return true;
@@ -1575,11 +1575,11 @@ public class XMLOutputter implements Cloneable {
         return false;
     }
 
-    // Return true if the element's mixedContent list consists only of
+    // Return true if the element's content list consists only of
     // String or CDATA nodes (or is empty)
-    private boolean isStringOnly(List mixedContent) {
+    private boolean isStringOnly(List eltContent) {
         // Calculate if the contents are String/CDATA only
-        Iterator itr = mixedContent.iterator();
+        Iterator itr = eltContent.iterator();
         while (itr.hasNext()) {
             Object o = itr.next();
             if (!(o instanceof String) && !(o instanceof CDATA)) {
