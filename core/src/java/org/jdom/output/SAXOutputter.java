@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXOutputter.java,v 1.8 2001/06/10 22:01:04 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.9 2001/06/11 15:40:59 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -56,27 +56,15 @@
 
 package org.jdom.output;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
+import org.xml.sax.*;
 import org.xml.sax.Locator;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.AttributesImpl;
 
-import org.jdom.Document;
-import org.jdom.DocType;
-import org.jdom.JDOMException;
-import org.jdom.ProcessingInstruction;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.Attribute;
-import org.jdom.CDATA;
+import org.jdom.*;
 
 /**
  * <p>
@@ -112,7 +100,7 @@ import org.jdom.CDATA;
 public class SAXOutputter {
    
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.8 $ $Date: 2001/06/10 22:01:04 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.9 $ $Date: 2001/06/11 15:40:59 $ $Name:  $";
 
    /** registered <code>ContentHandler</code> */
    private ContentHandler contentHandler;
@@ -404,10 +392,10 @@ public class SAXOutputter {
       int previouslyDeclaredNamespaces = namespaces.size();
       
       // contentHandler.startPrefixMapping()
-      startPrefixMapping(element, namespaces);
+      Attributes nsAtts = startPrefixMapping(element, namespaces);
       
       // contentHandler.startElement()
-      startElement(element);
+      startElement(element, nsAtts);
       
       // handle mixed content in the element
       elementContent(element, namespaces);
@@ -427,14 +415,20 @@ public class SAXOutputter {
     *
     * @param element <code>Element</code> used in callbacks.
     * @param namespaces <code>List</code> stack of Namespaces in scope.
+    *
+    * @return <code>Attributes</code> declaring the namespaces local to
+    * <code>element</code> or <code>null</code>.
     */
-   private void startPrefixMapping(Element element, NamespaceStack namespaces) throws JDOMException {
+   private Attributes startPrefixMapping(Element element, NamespaceStack namespaces) throws JDOMException {
+      AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
+
       Namespace ns = element.getNamespace();
       if (ns != Namespace.NO_NAMESPACE && ns != Namespace.XML_NAMESPACE) {
          String prefix = ns.getPrefix();
          String uri = namespaces.getURI(prefix);
          if (!ns.getURI().equals(uri)) {
             namespaces.push(ns);
+            nsAtts = this.addNsAttribute(nsAtts, ns);
             try {
                contentHandler.startPrefixMapping(prefix, ns.getURI());
             }
@@ -454,6 +448,7 @@ public class SAXOutputter {
             String uri = namespaces.getURI(prefix);
             if (!ns.getURI().equals(uri)) {
                namespaces.push(ns);
+               nsAtts = this.addNsAttribute(nsAtts, ns);
                try {
                   contentHandler.startPrefixMapping(prefix, ns.getURI());
                }
@@ -463,6 +458,7 @@ public class SAXOutputter {
             }
          }
       }
+      return nsAtts;
    }
 
    /**
@@ -494,26 +490,17 @@ public class SAXOutputter {
     * </p>
     *
     * @param element <code>Element</code> used in callbacks.
+    * @param eltNamespaces <code>List</code> of namespaces to declare with
+    * the element or <code>null</code>.
     */
-   private void startElement(Element element) throws JDOMException {
+   private void startElement(Element element, Attributes nsAtts) throws JDOMException {
       String namespaceURI = element.getNamespaceURI();
       String localName = element.getName();
       String rawName = element.getQualifiedName();
-      AttributesImpl atts = new AttributesImpl();
 
-      if (this.declareNamespaces) {
-         // Report attribute namespaces as xmlns attributes
-         List namespaces = element.getAdditionalNamespaces();
-         Iterator j = namespaces.iterator();
-         while (j.hasNext()) {
-            Namespace ns = (Namespace) j.next();
-            atts.addAttribute("",                          // namespace
-                              "",                          // local name
-                              "xmlns:" + ns.getPrefix(),   // qualified name
-                              "CDATA",                     // type
-                              ns.getURI());                // value
-         }
-      }
+      // Allocate attribute list.
+      AttributesImpl atts = (nsAtts != null)?
+                            new AttributesImpl(nsAtts): new AttributesImpl();
 
       List attributes = element.getAttributes();
       Iterator i = attributes.iterator();
@@ -614,5 +601,30 @@ public class SAXOutputter {
       catch (SAXException se) {
          throw new JDOMException("SAXException", se);
       }
+   }
+
+   /**
+    * <p>
+    * Appends a namespace declaration in the form of a xmlns attribute to
+    * an attribute list, crerating this latter if needed.
+    * </p>
+    *
+    * @param atts <code>AttributeImpl</code> where to add the attribute.
+    * @param ns <code>Namespace</code> the namespace to declare.
+    *
+    * @return <code>AttributeImpl</code> the updated attribute list.
+    */
+   private AttributesImpl addNsAttribute(AttributesImpl atts, Namespace ns) {
+      if (this.declareNamespaces) {
+         if (atts == null) {
+            atts = new AttributesImpl();
+         }
+         atts.addAttribute("",                          // namespace
+                           "",                          // local name
+                           "xmlns:" + ns.getPrefix(),   // qualified name
+                           "CDATA",                     // type
+                           ns.getURI());                // value
+      }
+      return atts;
    }
 }
