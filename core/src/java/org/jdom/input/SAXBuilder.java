@@ -130,7 +130,7 @@ public class SAXBuilder {
      * <p>
      * This allows the validation features to be turned on/off
      *   in the builder at creation, as well as set the
-     *   DOM Adapter class to use.
+     *   SAX driver class to use.
      * </p>
      *
      * @param saxDriverClass <code>String</code> name of SAX Driver
