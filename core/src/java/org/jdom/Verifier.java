@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.52 2004/11/03 00:49:20 jhunter Exp $
+ $Id: Verifier.java,v 1.53 2004/12/11 00:05:45 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.52 $, $Date: 2004/11/03 00:49:20 $
+ * @version $Revision: 1.53 $, $Date: 2004/12/11 00:05:45 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.52 $ $Date: 2004/11/03 00:49:20 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.53 $ $Date: 2004/12/11 00:05:45 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -668,10 +668,9 @@ final public class Verifier {
 
    /**
      * <p>
-     * <p>
      * This is a utility function for determining whether a specified
      * Unicode character is a hexadecimal digit as defined in RFC 2396;
-     * that is, one of the ASCII characters 0-9, a-f, or A-F
+     * that is, one of the ASCII characters 0-9, a-f, or A-F.
      * </p>
      *
      * @param c  to check for hex digit.
