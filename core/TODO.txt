@@ -5,6 +5,7 @@ Items that need to be done:
 * Automate build process, using ant tasks to EOL handling
   Consider .zip readable by JAR
   Consider releasing source with jdom.jar as sole distribution
+  Write todos/tounix tasks (Alex Chaffee?)
 
 * Implement SAXoutputter
 
@@ -23,12 +24,29 @@ Items that need to be done:
                 God forts&auml;ttning p&aring; det nya millenniet!
         </DOCUMENT>
 
+* Finalize how regular entities are to work
+
 * Add methods/logic to Verifier for all XML spec. constraints
 
 * Fix namespaces to handle disparate prefixes to same URI
+  (Make them unique by prefix/URI)
 
 * Fix sample for JTreeOuputter 
 
 * Add ElementLocator to contrib/ directory (from Alfred Lopez)
 
 * Add ResultSetBuilder (from Jason, based on SQLBuilder from Jon Baer)
+
+* Update MTVJUG slides
+
+* Make Namespace serializable (requires custom hooks)
+
+* Code up the whitespace proposal: getContent(), getContent(true),
+  getMixedContent(), getMixedContent(true)
+
+* Discuss CdataString extends String
+
+* Put www.jdom.org content under CVS
+
+* Consider SAXBuilder.setErrorHandler()
+

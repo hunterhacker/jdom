@@ -93,8 +93,22 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * <p>
-     * Default, no-args constructor for implementations
-     *   to use if needed.
+     * This protected constructor is provided in order to support an Element 
+     * subclass that wants full control over variable initialization.  It 
+     * intentionally leaves all instance variables null, allowing a 
+     * lightweight subclass implementation.  The subclass is responsible for 
+     * ensuring all the get and set methods on Element behave as documented.
+     * </p>
+     *
+     * <p>
+     * When implementing an <code>Element</code> subclass which doesn't
+     * require full control over variable initialization, be aware that
+     * simply calling super() (or letting the compiler add the implicit 
+     * super() call) will not initialize the instance variables which will 
+     * cause many of the methods to throw a 
+     * <code>{@link NullPointerException>}</code>.  Therefor, the 
+     * constructor for these subclasses should call one of the public 
+     * constructors so variable initialization is handled automatically.
      * </p>
      */
     protected Element() { }
