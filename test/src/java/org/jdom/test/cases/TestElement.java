@@ -143,19 +143,17 @@ public final class TestElement
         //must have a name
         try {
             el = new Element("");
-            assertTrue("allowed creation of an element with no name", false);
+            fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //name can't be null
         try {
             el = new Element(null);
-            assertTrue("allowed creation of an element with null name", false);
+            fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -177,19 +175,17 @@ public final class TestElement
         //must have a name
         try {
             el = new Element("", ns);
-            assertTrue("allowed creation of an element with no name", false);
+            fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //name can't be null
         try {
             el = new Element(null, ns);
-            assertTrue("allowed creation of an element with null name", false);
+            fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -210,19 +206,17 @@ public final class TestElement
         //must have a name
         try {
             el = new Element("", "urn:foo");
-            assertTrue("allowed creation of an element with no name", false);
+            fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //name can't be null
         try {
             el = new Element(null, "urn:foo");
-            assertTrue("allowed creation of an element with null name", false);
+            fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -244,19 +238,17 @@ public final class TestElement
         //must have a name
         try {
             el = new Element("", "x", "urn:foo");
-            assertTrue("allowed creation of an element with no name", false);
+            fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //name can't be null
         try {
             el = new Element(null, "x", "urn:foo");
-            assertTrue("allowed creation of an element with null name", false);
+            fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
-            assertTrue(true);
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -375,12 +367,12 @@ public final class TestElement
         element.setAttribute(att);
 
         //make sure it's there
-        assertTrue("attribute not found after add", element.getAttribute("anAttribute") != null);
+        assertNotNull("attribute not found after add", element.getAttribute("anAttribute"));
 
         //and remove it
         assertTrue("attribute not removed", element.removeAttribute("anAttribute"));
         //make sure it's not there
-        assertTrue("attribute found after remove", element.getAttribute("anAttribute") == null);
+        assertNull("attribute found after remove", element.getAttribute("anAttribute"));
     }
 
     /**
@@ -393,11 +385,11 @@ public final class TestElement
         element.setAttribute(att);
 
         //make sure it's there
-        assertTrue("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
+        assertNotNull("attribute not found after add", element.getAttribute("anAttribute", ns));
         //and remove it
         assertTrue("attribute not removed", element.removeAttribute("anAttribute", ns));
         //make sure it's not there
-        assertTrue("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
+        assertNull("attribute found after remove", element.getAttribute("anAttribute", ns));
     }
 
     /**
@@ -412,11 +404,11 @@ public final class TestElement
          element.setAttribute(att);
 
          //make sure it's there
-         assertTrue("attribute not found after add", element.getAttribute("anAttribute", ns) != null);
+         assertNotNull("attribute not found after add", element.getAttribute("anAttribute", ns));
          //and remove it
          assertTrue("attribute not removed", element.removeAttribute("anAttribute", "urn:test"));
          //make sure it's not there
-         assertTrue("attribute found after remove", element.getAttribute("anAttribute", ns) == null);
+         assertNull("attribute found after remove", element.getAttribute("anAttribute", ns));
          */
     }
 
@@ -429,7 +421,7 @@ public final class TestElement
         element.addContent(child);
 
         assertTrue("couldn't remove child content", element.removeChild("child"));
-        assertTrue("child not removed", element.getChild("child") == null);
+        assertNull("child not removed", element.getChild("child"));
     }
 
     /**
@@ -443,12 +435,12 @@ public final class TestElement
         element.addContent(child);
 
         assertTrue("couldn't remove child content", element.removeChild("child", ns));
-        assertTrue("child not removed", element.getChild("child", ns) == null);
+        assertNull("child not removed", element.getChild("child", ns));
         //now test that only the first child is removed
         element.addContent(child);
         element.addContent(child2);
         assertTrue("couldn't remove child content", element.removeChild("child", ns));
-        assertTrue("child not removed", element.getChild("child", ns) != null);
+        assertNotNull("child not removed", element.getChild("child", ns));
 
     }
 
@@ -468,7 +460,7 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("couldn't remove child content", element.removeChildren());
-        assertTrue("child not removed", element.getContent("child", ns) == null);
+        assertNull("child not removed", element.getContent("child", ns));
     }
 */
 
@@ -487,9 +479,9 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("incorrect return on bogus child", !element.removeChildren("test"));
-        assertTrue("child incorrectly removed", element.getContent("child") != null);
+        assertNotNull("child incorrectly removed", element.getContent("child"));
         assertTrue("couldn't remove child content", element.removeChildren("child"));
-        assertTrue("children not removed", element.getContent("child") == null);
+        assertNull("children not removed", element.getContent("child"));
     }
 */
 
@@ -509,9 +501,9 @@ public final class TestElement
         element.addContent(child2);
 
         assertTrue("incorrect return on bogus child", !element.removeChildren("child"));
-        assertTrue("child incorrectly removed", element.getContent("child", ns) != null);
+        assertNotNull("child incorrectly removed", element.getContent("child", ns));
         assertTrue("couldn't remove child content", element.removeChildren("child", ns));
-        assertTrue("children not removed", element.getContent("child", ns) == null);
+        assertNull("children not removed", element.getContent("child", ns));
     }
 */
 
@@ -569,8 +561,13 @@ public final class TestElement
     public void test_TCM__int_hashCode() {
         Element element = new Element("test");
         //only an exception would be a problem
-        int i = element.hashCode();
-        assertTrue("bad hashCode", true);
+        int i = -1;
+        try {
+            i = element.hashCode();
+        }
+        catch(Exception e) {
+            fail("bad hashCode");
+        }
 
 
         Element element2 = new Element("test");
@@ -880,13 +877,12 @@ public final class TestElement
         CDATA cdata = null;
         try {
             element.addContent(cdata);
-            assertTrue("didn't catch null CDATA element", false);
+            fail("didn't catch null CDATA element");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue("NullPointer  Exception", false);
+            fail("NullPointer  Exception");
         }
     }
 
@@ -902,13 +898,11 @@ public final class TestElement
         try {
             comm = null;
             element.addContent(comm);
-            assertTrue("didn't catch null Comment", false);
+            fail("didn't catch null Comment");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
     }
 
@@ -923,13 +917,11 @@ public final class TestElement
         try {
             Element el = null;
             element.addContent(el);
-            assertTrue("didn't catch null Element", false);
+            fail("didn't catch null Element");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
     }
 
@@ -944,13 +936,11 @@ public final class TestElement
         try {
             EntityRef entity = null;
             element.addContent(entity);
-            assertTrue("didn't catch null EntityRef", false);
+            fail("didn't catch null EntityRef");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
     }
 
@@ -965,13 +955,11 @@ public final class TestElement
         try {
             ProcessingInstruction pi = null;
             element.addContent(pi);
-            assertTrue("didn't catch null ProcessingInstruction", false);
+            fail("didn't catch null ProcessingInstruction");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
     }
 
@@ -996,10 +984,9 @@ public final class TestElement
             List content = element.getContent();
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue("didn't handle null String content", true);
+            fail("didn't handle null String content");
         }
 
     }
@@ -1091,14 +1078,11 @@ public final class TestElement
         //test with bad data
         try {
             element.setAttribute(null);
-            assertTrue("didn't catch null attribute", false);
+            fail("didn't catch null attribute");
         }
         catch (IllegalArgumentException e) {
-            assertTrue(true);
-
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
     }
 
@@ -1119,36 +1103,32 @@ public final class TestElement
         //try with null values
         try {
             element.setAttribute(new Attribute(null, "value"));
-            assertTrue("didn't catch null attribute name", false);
+            fail("didn't catch null attribute name");
         }
         catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
 
         try {
             element.setAttribute(new Attribute("name2", null));
-            assertTrue("didn't catch null attribute value", false);
+            fail("didn't catch null attribute value");
         }
         catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
         catch (NullPointerException e) {
-            assertTrue(true);
         }
 
         //try with bad characters
         try {
             element.setAttribute(new Attribute("\n", "value"));
-            assertTrue("didn't catch null attribute name", false);
+            fail("didn't catch null attribute name");
         }
         catch (IllegalArgumentException e) {
         }
         try {
             element.setAttribute(new Attribute("name2", "" + (char) 0x01));
-            assertTrue("didn't catch null attribute value", false);
+            fail("didn't catch null attribute value");
         }
         catch (IllegalArgumentException e) {
         }
@@ -1173,7 +1153,7 @@ public final class TestElement
         assertEquals("attribute not found", one, element.getAttribute("one"));
         assertEquals("attribute not found", two, element.getAttribute("two"));
         assertEquals("attribute not found", three, element.getAttribute("three"));
-        assertTrue("attribute should not have been found", element.getAttribute("type") == null);
+        assertNull("attribute should not have been found", element.getAttribute("type"));
 
 
         //now try to add something that isn't an attribute which should still add those
@@ -1186,10 +1166,9 @@ public final class TestElement
         newList.add(bogus);
         try {
             element.setAttributes(newList);
-            assertTrue("didn't catch bad data in list", false);
+            fail("didn't catch bad data in list");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
         //should be an atomic operation so the original state should be preserved
         assertEquals("wrong number of attributes after failed add", 3, element.getAttributes().size());
@@ -1203,10 +1182,10 @@ public final class TestElement
             assertTrue("null didn't clear attributes", attList.size() == 0);
         }
         catch (IllegalArgumentException e) {
-            assertTrue("didn't handle null String content", true);
+            fail("didn't handle null String content");
         }
         catch (NullPointerException e) {
-            assertTrue("didn't handle null String content", true);
+            fail("didn't handle null String content");
         }
     }
 
@@ -1244,10 +1223,9 @@ public final class TestElement
 
         try {
             element.setChildren(newList);
-            assertTrue("didn't catch a bad object in list", false);
+            fail("didn't catch a bad object in list");
         }
         catch (IllegalArgumentException e) {
-            assertTrue("good", true);
         }
         //should be an atomic operation
         contentList = element.getChildren();
@@ -1311,10 +1289,9 @@ public final class TestElement
 
         try {
             element.setContent(list);
-            assertTrue("didn't catch bad object type in list", false);
+            fail("didn't catch bad object type in list");
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
 
         //should add content up to the point of the bad object in the list
@@ -1362,11 +1339,10 @@ public final class TestElement
 
          try {
          element.setText("test" + (char)0x01);
-         assertTrue("didn't catch text with invalid character", false);
+         fail("didn't catch text with invalid character");
          } catch (IllegalArgumentException e) {
-         assertTrue(true);
          } catch (NullPointerException e) {
-         assertTrue("NullPointerException", false);
+         fail("NullPointerException");
          }
 
          */
@@ -1390,7 +1366,7 @@ public final class TestElement
         Element element = new Element("element", ns);
 
         assertEquals("wrong namespace returned", ns, element.getNamespace("x"));
-        assertTrue("no namespace should have been found", element.getNamespace("bogus") == null);
+        assertNull("no namespace should have been found", element.getNamespace("bogus"));
 
         //now make sure it can return the namespace from the additional namespaces
         Namespace newNs = Namespace.getNamespace("y", "urn:test:new");
@@ -1402,7 +1378,7 @@ public final class TestElement
         element.addContent(child);
 
         assertEquals("wrong namespace returned", ns, child.getNamespace("x"));
-        assertTrue("no namespace should have been found", child.getNamespace("bogus") == null);
+        assertNull("no namespace should have been found", child.getNamespace("bogus"));
         assertEquals("wrong namespace returned", newNs, child.getNamespace("y"));
     }
 
@@ -1513,7 +1489,7 @@ public final class TestElement
      * Test getSerializedForm
      */
     public void test_TCM__String_getSerializedForm() {
-        assertTrue("method not implemented", true);
+//        fail("method not implemented");
     }
 
     /**
@@ -1598,7 +1574,7 @@ public final class TestElement
         Namespace testNS3;
         try {
             testNS3 = Namespace.getNamespace("test", "");
-            assertTrue("didn't catch bad \"\" uri name", false);
+            fail("didn't catch bad \"\" uri name");
         }
         catch (Exception e) {
         }
@@ -1613,7 +1589,6 @@ public final class TestElement
             el.addNamespaceDeclaration(testNS3);
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
 
         att = new Attribute("prefixNS", "test");
@@ -1690,11 +1665,10 @@ public final class TestElement
             el.addNamespaceDeclaration(Namespace.getNamespace("", "foo:bar"));
             el.addNamespaceDeclaration(Namespace.getNamespace("", "foo2:bar"));
             el.addNamespaceDeclaration(Namespace.NO_NAMESPACE);
-            assertTrue("didn't catch multiple default namespaces added to an element", false);
+            fail("didn't catch multiple default namespaces added to an element");
 
         }
         catch (IllegalAddException e) {
-            assertTrue(true);
         }
     }
 

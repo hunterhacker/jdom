@@ -83,12 +83,11 @@ public static Test suite () {
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
 		//no root element
-		list.remove(0);
+                element.detach();
 		try {
                     doc.getRootElement();
-                    assertTrue("didn't catch missing root element", true);
+                    fail("didn't catch missing root element");
                 } catch (IllegalStateException e) {
-			assertTrue(true);
 		}
 
                 //set root back, then try to add another element to our
@@ -96,32 +95,33 @@ public static Test suite () {
                 doc.setRootElement(element);
                 try {
                     list.add(bogus);
-                    assertTrue("didn't catch duplicate root element", true);
+                    fail("didn't catch duplicate root element");
                 } catch (IllegalAddException e) {
-                    assertTrue(true);
                 }
                 assertEquals("incorrect root element returned", element, doc.getRootElement());
   
                 //how about replacing it in our live list
                 try {
-                    list.set(0,bogus);
+                    Element oldRoot = doc.getRootElement();
+                    int i = doc.childIndex(oldRoot);
+                    list.set(i, bogus);
                 } catch (Exception e) {
-                    assertTrue("Root replacement shouldn't have throw a exception", true);
+                    fail("Root replacement shouldn't have throw a exception");
                 }
                 //and through the document
                 try {
                     doc.setRootElement(element);
                 } catch (Exception e) {
-                    assertTrue("Root replacement shouldn't have throw a exception", true);
+                    fail("Root replacement shouldn't have throw a exception");
                 }
  	
 		list = null;
 		try {
 			doc = new Document(list);
 		} catch (IllegalAddException e) {
-			assertTrue("didn't handle null list", true);
+			fail("didn't handle null list");
 		} catch (NullPointerException e) {
-			assertTrue("didn't handle null list", true);
+			fail("didn't handle null list");
 		}
 		
 	}
@@ -143,12 +143,11 @@ public static Test suite () {
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 		assertEquals("incorrect doc type returned", docType, doc.getDocType());
 
-		list.remove(0);
+                element.detach();
                 try {
                         doc.getRootElement();
-                        assertTrue("didn't catch missing root element", true);
+                        fail("didn't catch missing root element");
                 } catch (IllegalStateException e) {
-                        assertTrue(true);
                 }
                 
                 //set root back, then try to add another element to our
@@ -156,32 +155,33 @@ public static Test suite () {
                 doc.setRootElement(element);
 		try {
 			list.add(bogus);
+                        fail("didn't catch duplicate root element");
 		} catch (IllegalAddException e) {
-			assertTrue(true);
 		}
                 assertEquals("incorrect root element returned", element, doc.getRootElement());
  
                 //how about replacing it in our live list
                 try {
-                    list.set(0,bogus);
-                    assertTrue("didn't catch duplicate root element", true);
+                    Element oldRoot = doc.getRootElement();
+                    int i = doc.childIndex(oldRoot);
+                    list.set(i,bogus);
                 } catch (Exception e) {
-                    assertTrue("Root replacement shouldn't have throw a exception", true);
+                    fail("Root replacement shouldn't have throw a exception");
                 }
                 //and through the document
                 try {
                     doc.setRootElement(element);
                 } catch (Exception e) {
-                    assertTrue("Root replacement shouldn't have throw a exception", true);
+                    fail("Root replacement shouldn't have throw a exception");
                 }
 		
 		list = null;
 		try {
 			doc = new Document(list, docType);
+			fail("didn't handle null list");
 		} catch (IllegalAddException e) {
-			assertTrue("didn't handle null list", true);
 		} catch (NullPointerException e) {
-			assertTrue("didn't handle null list", true);
+			fail("didn't handle null list");
 		}
 		
 	}
@@ -198,9 +198,9 @@ public static Test suite () {
 		try {
 			doc = new Document(element);
 		} catch (IllegalAddException e) {
-			assertTrue("didn't handle null element", true);
+			fail("didn't handle null element");
 		} catch (NullPointerException e) {
-			assertTrue("didn't handle null element", true);
+			fail("didn't handle null element");
 		}
 		
 	}
@@ -220,9 +220,9 @@ public static Test suite () {
 		try {
 			doc = new Document(element, docType);
 		} catch (IllegalAddException e) {
-			assertTrue("didn't handle null element", true);
+			fail("didn't handle null element");
 		} catch (NullPointerException e) {
-			assertTrue("didn't handle null element", true);
+			fail("didn't handle null element");
 		}
 		
 	}
@@ -277,8 +277,13 @@ public static Test suite () {
 		Document doc = new Document(element);
 	
 		//only an exception would be a problem
-		int i = doc.hashCode();
-		assertTrue("bad hashCode", true);
+                int i = -1;
+                try {
+        		i = doc.hashCode();
+                }
+                catch(Exception e) {
+        		fail("bad hashCode");
+                }
 
 		
 		Element element2 = new Element("test");
@@ -415,7 +420,7 @@ public static Test suite () {
               Document doc2 = new Document();
                 try {
                     doc2.setRootElement(element);
-                    assertTrue("didn't catch element already attached to anohter document", false);
+                    fail("didn't catch element already attached to anohter document");
                 }
                 catch(IllegalAddException e) {
                 }

@@ -113,34 +113,30 @@ public static Test suite () {
 
 		try {
 			attr = new Attribute(null, "value");
-			assertTrue("didn't catch null attribute name", false);
+			fail("didn't catch null attribute name");
 		} catch (IllegalArgumentException e) {
-			assertTrue(true);
 		} catch (NullPointerException e) {
-			assertTrue("NullPointerException with null attribute name", false);
+			fail("NullPointerException with null attribute name");
 		}
 
 		try {
 			attr = new Attribute("test", null);
-			assertTrue("didn't catch null attribute value", false);
+			fail("didn't catch null attribute value");
 		} catch (IllegalArgumentException e) {
-			assertTrue(true);
 		} catch (NullPointerException e) {
-			assertTrue("NullPointerException with null attribute value", false);
+			fail("NullPointerException with null attribute value");
 		}
 
 		try {
 			attr = new Attribute("test" + (char)0x01, "value");
-			assertTrue("didn't catch invalid attribute name", false);
+			fail("didn't catch invalid attribute name");
 		} catch (IllegalArgumentException e) {
-			assertTrue(true);
 		}
 
 		try {
 			attr = new Attribute("test", "test" + (char)0x01);
-			assertTrue("didn't catch invalid attribute value", false);
+			fail("didn't catch invalid attribute value");
 		} catch (IllegalArgumentException e) {
-			assertTrue(true);
 		}
 
 	}
@@ -161,14 +157,16 @@ public static Test suite () {
 
 		try {
 			attr = new Attribute("test", "value", ns);
-			assertTrue("allowed creation of attribute with a default namespace", false);
+			fail("allowed creation of attribute with a default namespace");
 		} catch (IllegalNameException e) {
-			assertTrue(true);
 		}
 
 		
-		attr = new Attribute("test", "value", null);
-		assertTrue("expected null attribute namespace", true);
+		try {
+        		attr = new Attribute("test", "value", null);
+		} catch (Exception e) {
+        		fail("didn't handle null attribute namespace");
+		}
 
 
 
@@ -201,7 +199,7 @@ public static Test suite () {
 			assertTrue("incorrect boolean FALSE value", !attr.getBooleanValue());
 
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert boolean value", false);
+			fail("couldn't convert boolean value");
 		}
 
 		try {
@@ -209,7 +207,6 @@ public static Test suite () {
 			assertTrue("incorrectly returned boolean from non boolean value", attr.getBooleanValue());
 
 		} catch (DataConversionException e) {
-			assertTrue(true);
 		}
 
 
@@ -232,15 +229,14 @@ public static Test suite () {
 			assertTrue("incorrect double value", attr.getDoubleValue() == java.lang.Double.MIN_VALUE);
 
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert boolean value", false);
+			fail("couldn't convert boolean value");
 		}
 
 		try {
 			attr.setValue("foo");
-			assertTrue("incorrectly returned double from non double value" + attr.getDoubleValue(), false);
+			fail("incorrectly returned double from non double value" + attr.getDoubleValue());
 
 		} catch (DataConversionException e) {
-			assertTrue(true);
 		}
 
 	}
@@ -255,7 +251,7 @@ public void test_TCM__float_getFloatValue() {
     try {
         assertTrue("incorrect float conversion", attr.getFloatValue() == flt);
     } catch (DataConversionException e) {
-        assertTrue("couldn't convert to float", false);
+        fail("couldn't convert to float");
     }
 
     //test an invalid float
@@ -263,9 +259,8 @@ public void test_TCM__float_getFloatValue() {
     attr.setValue("1.00000009999e");
     try {
         attr.getFloatValue();
-        assertTrue("incorrect float conversion from non float", false);
+        fail("incorrect float conversion from non float");
     } catch (DataConversionException e) {
-        assertTrue("couldn't convert to float", true);
     }
 
 }
@@ -279,7 +274,7 @@ public void test_TCM__float_getFloatValue() {
 		try {
 			assertTrue("incorrect int conversion", attr.getIntValue() == intval); 
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert to int", false);
+			fail("couldn't convert to int");
 		}
 
 		//test an invalid int
@@ -287,9 +282,8 @@ public void test_TCM__float_getFloatValue() {
 		attr.setValue("10000000.aq");
 		try {
 			attr.getIntValue();
-			assertTrue("incorrect int conversion from non int", false); 
+			fail("incorrect int conversion from non int"); 
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert to int", true);
 		}
 	}
 	/**
@@ -298,8 +292,13 @@ public void test_TCM__float_getFloatValue() {
 	public void test_TCM__int_hashCode() {
 		Attribute attr = new Attribute("test", "value");
 		//only an exception would be a problem
-		int i = attr.hashCode();
-		assertTrue("bad hashCode", true);
+                int i = -1;
+                try {
+		        i = attr.hashCode();
+                }
+                catch(Exception e) {
+                        fail("bad hashCode");
+                }
 		Attribute attr2 = new Attribute("test", "value");
 		//different Attributes, same text
 		int x = attr2.hashCode();
@@ -318,7 +317,7 @@ public void test_TCM__float_getFloatValue() {
 		try {
 			assertTrue("incorrect long conversion", attr.getLongValue() == longval);
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert to long", false);
+			fail("couldn't convert to long");
 		}
 
 		//test an invalid long
@@ -326,9 +325,8 @@ public void test_TCM__float_getFloatValue() {
 		attr.setValue("100000000000000000000000000");
 		try {
 			attr.getLongValue();
-			assertTrue("incorrect long conversion from non long", false);
+			fail("incorrect long conversion from non long");
 		} catch (DataConversionException e) {
-			assertTrue("couldn't convert to long", true);
 		}
 	}
 	/**
@@ -372,8 +370,6 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		attr.setValue(null);
 		fail("Attribute setValue didn't catch null  string");
 	} catch (IllegalDataException e) {
-
-		assertTrue(true);
 	}
 	try {
 		char c= 0x11;
@@ -382,8 +378,6 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 		attr.setValue(b.toString());
 		fail("Attribute setValue didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
-
-		assertTrue(true);
 	}
 
 }
@@ -395,7 +389,7 @@ public void test_TCM__OrgJdomAttribute_setValue_String() {
 
 		Element el = attr.getParent();
 
-		assertTrue("attribute returned parent when there was none", el == null);
+		assertNull("attribute returned parent when there was none", el);
 
 		Element root = new Element("root");
 		root.setAttribute(attr);

@@ -123,28 +123,34 @@ public static Test suite () {
 	public void test_TCM__int_hashCode() {
 		Namespace ns = Namespace.getNamespace("test", "value");
 		//only an exception would be a problem
-		int i = ns.hashCode();
-		assertTrue("bad hashCode", true);
+                int i = -1;
+                try {
+                        i = ns.hashCode();
+                }
+                catch(Exception e) {
+                        fail("bad hashCode");
+                }
 
 		//make sure a new one doesn't have the same value
 		Namespace ns2 = Namespace.getNamespace("test", "value2");
-		//only an exception would be a problem
 		int x = ns2.hashCode();
 		assertTrue("duplicate hashCode", i!=x );
 
 		//test hashcode for NO_NAMESPACE
-		int y = Namespace.NO_NAMESPACE.hashCode();
 		//only an exception would be a problem
-		assertTrue("bad hashcode" , true);
+                try {
+		        int y = Namespace.NO_NAMESPACE.hashCode();
+                }
+                catch(Exception e) {
+                        fail("bad hashCode");
+                }
 
 		//test hashcode for NO_NAMESPACE
 		//y = Namespace.EMPTY_NAMESPACE.hashCode();
 		//only an exception would be a problem
 		//assertTrue("bad hashcode" , true);
-
-			
-		
 	}
+
 	/**
 	 * Test the URI only Namespace.
 	 */

@@ -400,8 +400,8 @@ public static Test suite () {
 		assertEquals("wrong element", text4, content.get(6));
 
 		// Make sure that parentage was adjusted correctly.
-		assertTrue("parent is not correct", bar.getParent() == null);
-		assertTrue("parent is not correct", baz.getParent() == null);
+		assertNull("parent is not correct", bar.getParent());
+		assertNull("parent is not correct", baz.getParent());
 		assertTrue("parent is not correct", comment.getParent() == foo);
 		assertTrue("parent is not correct", comment2.getParent() == foo);
 		assertTrue("parent is not correct", comment3.getParent() == foo);
@@ -450,7 +450,6 @@ public static Test suite () {
 			iter.hasNext();
 			fail("No concurrent modification exception.");
 		} catch(ConcurrentModificationException ex) {
-			assertTrue(true);
 		}
 
 		// Try to access an already-existing iterator.
@@ -458,7 +457,6 @@ public static Test suite () {
 			iter2.next();
 			fail("No concurrent modification exception.");
 		} catch(ConcurrentModificationException ex) {
-			assertTrue(true);
 		}
 
 		// Try to access a newly-created iterator.
@@ -625,19 +623,19 @@ public static Test suite () {
 		assertTrue("bad clear", content.get(4).equals(text4));
 
 		assertTrue("parent is not correct", comment.getParent() == foo);
-		assertTrue("parent is not correct", bar.getParent() == null);
-		assertTrue("parent is not correct", baz.getParent() == null);
-		assertTrue("parent is not correct", quux.getParent() == null);
+		assertNull("parent is not correct", bar.getParent());
+		assertNull("parent is not correct", baz.getParent());
+		assertNull("parent is not correct", quux.getParent());
 
  		content.clear();
 
 		assertTrue("bad clear", children.size() == 0);
 		assertTrue("bad clear", content.size() == 0);
 
-		assertTrue("parent is not correct", comment.getParent() == null);
-		assertTrue("parent is not correct", bar.getParent() == null);
-		assertTrue("parent is not correct", baz.getParent() == null);
-		assertTrue("parent is not correct", quux.getParent() == null);
+		assertNull("parent is not correct", comment.getParent());
+		assertNull("parent is not correct", bar.getParent());
+		assertNull("parent is not correct", baz.getParent());
+		assertNull("parent is not correct", quux.getParent());
 
    }
 
@@ -661,10 +659,10 @@ public static Test suite () {
 		assertTrue("bad removal", content.get(2) == quux);
 		assertTrue("bad removal", content.get(3).equals(text4));
 
-		assertTrue("parent is not correct", bar.getParent() == null);
+		assertNull("parent is not correct", bar.getParent());
 		assertTrue("parent is not correct", baz.getParent() == foo);
 		assertTrue("parent is not correct", quux.getParent() == foo);
-		assertTrue("parent is not correct", comment.getParent() == null);
+		assertNull("parent is not correct", comment.getParent());
 
 		try {
 			children.remove(48);
@@ -713,10 +711,10 @@ public static Test suite () {
 		assertTrue("bad removal", content.get(2) == quux);
 		assertTrue("bad removal", content.get(3).equals(text4));
 
-		assertTrue("parent is not correct", bar.getParent() == null);
+		assertNull("parent is not correct", bar.getParent());
 		assertTrue("parent is not correct", baz.getParent() == foo);
 		assertTrue("parent is not correct", quux.getParent() == foo);
-		assertTrue("parent is not correct", comment.getParent() == null);
+		assertNull("parent is not correct", comment.getParent());
     }
 
     public void test_TCM__boolean_isEmpty() {
@@ -724,11 +722,11 @@ public static Test suite () {
 		int size = children.size();
 		for (int i = 0; i < size; i++)
 		{
-			assertTrue("bad isEmpty", children.isEmpty() == false);
+			assertFalse("bad isEmpty", children.isEmpty());
 			children.remove(0);
 		}
 
-		assertTrue("bad isEmpty", children.isEmpty() == true);
+		assertTrue("bad isEmpty", children.isEmpty());
     }
 
     public void test_TCM__boolean_containsAll_Collection() {
@@ -745,7 +743,7 @@ public static Test suite () {
 		contentList.add(text4);
 		assertTrue("bad containsAll", content.containsAll(contentList));
 		contentList.add(comment2);
-		assertTrue("bad containsAll", content.containsAll(contentList) == false);
+		assertFalse("bad containsAll", content.containsAll(contentList));
 
 		List children = foo.getChildren();
 		List childrenList = new ArrayList();
@@ -755,7 +753,7 @@ public static Test suite () {
 		childrenList.add(quux);
 		assertTrue("bad containsAll", children.containsAll(childrenList));
 		childrenList.add(comment);
-		assertTrue("bad containsAll", children.containsAll(childrenList) == false);
+		assertFalse("bad containsAll", children.containsAll(childrenList));
     }
 
     public void test_TCM__boolean_addAll_Collection() {
@@ -943,63 +941,63 @@ public static Test suite () {
 		ListIterator iter = children.listIterator(1);
 
 		// next
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
-		assertTrue("hasNext is false", iter.hasNext() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
+		assertTrue("hasNext is false", iter.hasNext());
 		assertEquals("wrong element from get", baz, iter.next());
-		assertTrue("hasNext is false", iter.hasNext() == true);
+		assertTrue("hasNext is false", iter.hasNext());
 		assertEquals("wrong element from get", quux, iter.next());
-		assertTrue("hasNext is true", iter.hasNext() == false);
+		assertFalse("hasNext is true", iter.hasNext());
 
 		// prev
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
 		assertEquals("wrong element from get", quux, iter.previous());
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
 		assertEquals("wrong element from get", baz, iter.previous());
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
 		assertEquals("wrong element from get", bar, iter.previous());
-		assertTrue("hasPrevious is true", iter.hasPrevious() == false);
-		assertTrue("hasNext is false", iter.hasNext() == true);
+		assertFalse("hasPrevious is true", iter.hasPrevious());
+		assertTrue("hasNext is false", iter.hasNext());
 
 		List content = foo.getContent();
 		ListIterator iter2 = content.listIterator(1);
 
 		// next
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", bar, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", text2, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", baz, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", text3, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", comment, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", quux, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", text4, iter2.next());
-		assertTrue("hasNext is true", iter2.hasNext() == false);
+		assertFalse("hasNext is true", iter2.hasNext());
 
 		// prev
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", text4, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", quux, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", comment, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", text3, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", baz, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", text2, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", bar, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", text1, iter2.previous());
-		assertTrue("hasPrevious is true", iter2.hasPrevious() == false);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertFalse("hasPrevious is true", iter2.hasPrevious());
+		assertTrue("hasNext is false", iter2.hasNext());
 
 		try {
 			children.listIterator(48);
@@ -1023,23 +1021,23 @@ public static Test suite () {
 		List children = foo.getChildren();
 		ListIterator iter = children.listIterator(1);
 
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
-		assertTrue("hasNext is false", iter.hasNext() == true);
-		assertTrue("hasNext is false", iter.hasNext() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
+		assertTrue("hasPrevious is false", iter.hasPrevious());
+		assertTrue("hasNext is false", iter.hasNext());
+		assertTrue("hasNext is false", iter.hasNext());
 		assertEquals("wrong element from get", baz, iter.next());
 		assertEquals("wrong element from get", baz, iter.previous());
 		assertEquals("wrong element from get", baz, iter.next());
 		assertEquals("wrong element from get", baz, iter.previous());
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter.hasPrevious());
+		assertTrue("hasPrevious is false", iter.hasPrevious());
 		assertEquals("wrong element from get", bar, iter.previous());
 		assertEquals("wrong element from get", bar, iter.next());
 		assertEquals("wrong element from get", bar, iter.previous());
-		assertTrue("hasPrevious is true", iter.hasPrevious() == false);
-		assertTrue("hasPrevious is true", iter.hasPrevious() == false);
-		assertTrue("hasNext is false", iter.hasNext() == true);
-		assertTrue("hasNext is false", iter.hasNext() == true);
+		assertFalse("hasPrevious is true", iter.hasPrevious());
+		assertFalse("hasPrevious is true", iter.hasPrevious());
+		assertTrue("hasNext is false", iter.hasNext());
+		assertTrue("hasNext is false", iter.hasNext());
 
 		List content = foo.getContent();
 		ListIterator iter2 = content.listIterator(1);
@@ -1047,35 +1045,35 @@ public static Test suite () {
 		// next
 		assertEquals("wrong element from get", bar, iter2.next());
 		assertEquals("wrong element from get", text2, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", baz, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", text3, iter2.next());
 		assertEquals("wrong element from get", comment, iter2.next());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
+		assertTrue("hasNext is false", iter2.hasNext());
 		assertEquals("wrong element from get", quux, iter2.next());
 		assertEquals("wrong element from get", quux, iter2.previous());
 		assertEquals("wrong element from get", comment, iter2.previous());
 		assertEquals("wrong element from get", text3, iter2.previous());
 		assertEquals("wrong element from get", baz, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter2.hasNext() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
+		assertTrue("hasPrevious is false", iter2.hasNext());
 		assertEquals("wrong element from get", text2, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter2.hasNext() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
+		assertTrue("hasPrevious is false", iter2.hasNext());
 		assertEquals("wrong element from get", text2, iter2.next());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter2.hasNext() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
+		assertTrue("hasPrevious is false", iter2.hasNext());
 		assertEquals("wrong element from get", text2, iter2.previous());
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
-		assertTrue("hasPrevious is false", iter2.hasPrevious() == true);
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
+		assertTrue("hasPrevious is false", iter2.hasPrevious());
 		assertEquals("wrong element from get", bar, iter2.previous());
 		assertEquals("wrong element from get", text1, iter2.previous());
-		assertTrue("hasNext is false", iter2.hasNext() == true);
-		assertTrue("hasNext is false", iter2.hasNext() == true);
+		assertTrue("hasNext is false", iter2.hasNext());
+		assertTrue("hasNext is false", iter2.hasNext());
     }
 
 	// When we add the first attribute or child, or when we replace the list of

@@ -342,10 +342,8 @@ extends junit.framework.TestCase
     	
 		EntityRef internal = (EntityRef)doc.getRootElement().getContent().get(0);
 		EntityRef external = (EntityRef)doc.getRootElement().getContent().get(6);
-		assertTrue("didn't get EntityRef for unexpanded internal entity",
-			internal != null);
-		assertTrue("didn't get EntityRef for unexpanded external entity",
-			external != null);
+		assertNotNull("didn't get EntityRef for unexpanded internal entity", internal);
+		assertNotNull("didn't get EntityRef for unexpanded external entity", external);
 		assertTrue("didn't get local entity declaration in internal subset", 
 			doc.getDocType().getInternalSubset().indexOf("internal") > 0);
 		assertTrue("incorrectly got external entity declaration in internal subset", 

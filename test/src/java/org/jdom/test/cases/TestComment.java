@@ -113,8 +113,6 @@ extends junit.framework.TestCase
 			theComment = new org.jdom.Comment(null);
 			fail("Comment constructor didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
-
-			assertTrue(true);
 		}
 	}
 	/**
@@ -136,8 +134,13 @@ extends junit.framework.TestCase
 
 		Comment com = new Comment("test");
 		//only an exception would be a problem
-		int i = com.hashCode();
-		assertTrue("bad hashCode", true);
+                int i = -1;
+                try {
+        		i = com.hashCode();
+                }
+                catch(Exception e) {
+                        fail("bad hashCode");
+                }
 		Comment com2 = new Comment("test");
 		//different comments, same text
 		int x = com2.hashCode();
@@ -173,8 +176,6 @@ public void test_TCM__OrgJdomComment_setText_String() {
 		theComment.setText(null);
 		fail("Comment setText didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
-
-		assertTrue(true);
 	}
 	try {
 		char c= 0x11;
@@ -183,8 +184,6 @@ public void test_TCM__OrgJdomComment_setText_String() {
 		theComment.setText(b.toString());
 		fail("Comment setText didn't catch invalid comment string");
 	} catch (IllegalDataException e) {
-
-		assertTrue(true);
 	}
 
 }
@@ -230,8 +229,6 @@ public void test_TCM__String_toString() {
         theComment= new org.jdom.Comment(null);
         fail("Comment constructor didn't catch invalid comment string");
     } catch (IllegalDataException e) {
-
-        assertTrue(true);
     }
 
 }
