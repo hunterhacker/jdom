@@ -1,7 +1,14 @@
-Introduction
-============
+Introduction to the JDOM project
+================================
 
-See the web site http://jdom.org
+Please see the JDOM web site at http://jdom.org/.
+
+
+How to use JDOM
+===============
+
+Please see the web site http://jdom.org/downloads/docs.html.  It has links to
+numerous articles and books covering JDOM.
 
 
 Installing the build tools
