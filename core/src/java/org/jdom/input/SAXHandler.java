@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: SAXHandler.java,v 1.15 2001/06/14 21:43:18 jhunter Exp $
+ $Id: SAXHandler.java,v 1.16 2001/06/15 23:09:44 jhunter Exp $
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
@@ -79,7 +79,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DeclHandler {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.15 $ $Date: 2001/06/14 21:43:18 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.16 $ $Date: 2001/06/15 23:09:44 $ $Name:  $";
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -379,14 +379,22 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             String attLocalName = atts.getLocalName(i);
             String attQName = atts.getQName(i);
 
+            // Bypass any xmlns attributes which might appear, as we got
+            // them already in startPrefixMapping().
+            // This is sometimes necessary when SAXHandler is used with
+            // another source than SAXBuilder, as with JDOMResult.
+            if (attQName.startsWith("xmlns:") || attQName.equals("xmlns")) {
+                continue;
+            }
+
+            // XXX This is probably an unsafe != unless we set up interning
             if (attLocalName != attQName) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
                 attribute = factory.attribute(attLocalName, atts.getValue(i),
-                                          getNamespace(attPrefix));
+                                              getNamespace(attPrefix));
             } else {
                 attribute = factory.attribute(attLocalName, atts.getValue(i));
             }
-
             element.setAttribute(attribute);
         }
 
