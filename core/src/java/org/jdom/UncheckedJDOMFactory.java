@@ -181,7 +181,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Document Factory
     // =====================================================================
 
-    public Document document(Element rootElement, DocType docType) {
+    public Document document(Element rootElement, DocType docType, String baseURI) {
         Document d = new Document();
         if (docType != null) {
             addContent(d, docType);
@@ -189,11 +189,18 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         if (rootElement != null) {
             addContent(d, rootElement);
         }
+        if (baseURI != null) {
+            d.baseURI = baseURI;
+        }
         return d;
     }
 
+    public Document document(Element rootElement, DocType docType) {
+        return document(rootElement, docType, null);
+    }
+
     public Document document(Element rootElement) {
-        return document(rootElement, null);
+        return document(rootElement, null, null);
     }
 
     // =====================================================================

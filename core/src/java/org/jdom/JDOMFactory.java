@@ -1,6 +1,6 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.7 2004/08/31 21:47:51 jhunter Exp $
+ $Id: JDOMFactory.java,v 1.8 2004/09/01 05:25:38 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -64,7 +64,7 @@ import java.util.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.7 $, $Date: 2004/08/31 21:47:51 $
+ * @version $Revision: 1.8 $, $Date: 2004/09/01 05:25:38 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
@@ -203,9 +203,21 @@ public interface JDOMFactory {
      * <code>{@link org.jdom.DocType}</code> declaration.
      *
      * @param rootElement <code>Element</code> for document root.
-     * @param docType <code>DocType</code> declaration.
+     * @param docType     <code>DocType</code> declaration.
      */
     public Document document(Element rootElement, DocType docType);
+
+    /**
+     * This will create a new <code>Document</code>,
+     * with the supplied <code>{@link org.jdom.Element}</code>
+     * as the root element and the supplied
+     * <code>{@link org.jdom.DocType}</code> declaration.
+     *
+     * @param rootElement <code>Element</code> for document root.
+     * @param docType <code>DocType</code> declaration.
+     * @param baseURI the URI from which this doucment was loaded.
+     */
+    public Document document(Element rootElement, DocType docType, String baseURI);
 
     /**
      * This will create a new <code>Document</code>,
