@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.113 2004/12/11 01:31:50 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.114 2006/08/15 00:53:18 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.113 $, $Date: 2004/12/11 01:31:50 $
+ * @version $Revision: 1.114 $, $Date: 2006/08/15 00:53:18 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -115,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.113 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.114 $ $Date: 2006/08/15 00:53:18 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1118,7 +1118,7 @@ public class XMLOutputter implements Cloneable {
             out.write(prefix);
         }
         out.write("=\"");
-        out.write(uri);
+        out.write(escapeAttributeEntities(uri));
         out.write("\"");
         namespaces.push(ns);
     }
