@@ -67,6 +67,7 @@ import org.jdom.*;
 import java.io.*;
 import java.util.*;
 import org.jdom.output.*;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 public final class TestElement
         extends junit.framework.TestCase {
@@ -1089,29 +1090,22 @@ public final class TestElement
     /**
      * Test addAttribute with a supplied name and value
      */
-    public void test_TCM__OrgJdomElement_setAttribute_String_String() {
-        Element element = new Element("el");
-        element.setAttribute(new Attribute("name", "first"));
-        assertEquals("incorrect Attribute name returned", "name", element.getAttribute("name").getName());
-        assertEquals("incorrect Attribute value returned", "first", element.getAttribute("name").getValue());
+    public void test_TCM__OrgJdomElement_setAttribute_String_String__invalidCharacters() {
+        final Element element = new Element("el");
 
-        //update the value
-        element.setAttribute("name", "replacefirst");
-        assertEquals("incorrect Attribute name returned", "name", element.getAttribute("name").getName());
-        assertEquals("incorrect Attribute value returned", "replacefirst", element.getAttribute("name").getValue());
-
-        //try with null values
-        try {
-            element.setAttribute(new Attribute(null, "value"));
+		//try with null name
+        try { 
+            element.setAttribute(null, "value");
             fail("didn't catch null attribute name");
         }
-        catch (IllegalArgumentException e) {
+        catch (final IllegalArgumentException ignore) {
         }
-        catch (NullPointerException e) {
+        catch (NullPointerException ignore) {
         }
 
+		//try with null value
         try {
-            element.setAttribute(new Attribute("name2", null));
+            element.setAttribute("name2", null);
             fail("didn't catch null attribute value");
         }
         catch (IllegalArgumentException e) {
@@ -1121,17 +1115,139 @@ public final class TestElement
 
         //try with bad characters
         try {
-            element.setAttribute(new Attribute("\n", "value"));
-            fail("didn't catch null attribute name");
+            element.setAttribute("\n", "value");
+            fail("didn't catch bad characters in attribute name");
         }
         catch (IllegalArgumentException e) {
         }
+
         try {
-            element.setAttribute(new Attribute("name2", "" + (char) 0x01));
-            fail("didn't catch null attribute value");
+            element.setAttribute("name2", "" + (char) 0x01);
+            fail("didn't catch bad characters  in attribute value");
         }
         catch (IllegalArgumentException e) {
         }
+    }
+
+    /**
+     * Test addAttribute with a supplied name and value
+     */
+    public void test_setAttribute_String_String__attributeTypes() {
+    	test_setAttribute_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.CDATA_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.ID_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.IDREF_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.IDREFS_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.ENTITY_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.ENTITIES_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.NOTATION_TYPE);    
+    	test_setAttribute_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
+    }
+
+    /**
+     * Test setAttribute with a supplied name and value
+     */
+    private void test_setAttribute_String_String__attributeType(final int attributeType) {
+        final Element element = new Element("el");
+
+        final String attributeName = "name";
+		final String attributeValue = "value";
+        final String attributeNewValue = "newValue";
+
+		final Attribute attribute = new Attribute(attributeName, attributeValue, attributeType);
+
+		// add attribute to element
+		element.setAttribute(attribute);
+
+		final Attribute foundAttribute = element.getAttribute(attributeName);
+        assertNotNull("no Attribute found", foundAttribute);
+        
+        assertEquals("incorrect Attribute name returned", attributeName, foundAttribute.getName());
+        assertEquals("incorrect Attribute value returned", attributeValue, foundAttribute.getValue());
+        assertEquals("incorrect Attribute type returned", attributeType, foundAttribute.getAttributeType());
+
+		//update the value
+        element.setAttribute(attributeName, attributeNewValue);
+
+		final Attribute changedAttribute = element.getAttribute(attributeName);
+        assertNotNull("no Attribute found", changedAttribute);
+        
+        assertEquals("incorrect Attribute name returned", attributeName, changedAttribute.getName());
+        assertEquals("incorrect Attribute value returned", attributeNewValue, changedAttribute.getValue());
+        assertEquals("incorrect Attribute type returned", attributeType, changedAttribute.getAttributeType());
+    }
+
+    /**
+     * Test addAttribute with a supplied name and value
+     */
+    public void test_setAttribute_String_String_String__attributeTypes() {
+        test_setAttribute_String_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.CDATA_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.ID_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.IDREF_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.IDREFS_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.ENTITY_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.ENTITIES_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.NOTATION_TYPE);    
+        test_setAttribute_String_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
+    }
+
+    /**
+     * Test setAttribute with a supplied name and value
+     * 
+     * @author Victor Toni
+     */
+    private void test_setAttribute_String_String_String__attributeType(final int attributeType) {
+        try {
+            final Namespace defaultNamespace = Namespace.getNamespace(null, "http://test.org/default");
+            test_setAttribute_String_String_String__attributeType(defaultNamespace, attributeType);
+            fail("didn't catch empty prefix for attribute ");
+        }
+        catch( final IllegalNameException ignore) {
+            
+        }
+
+        final Namespace testNamespace = Namespace.getNamespace("test", "http://test.org/test");
+        test_setAttribute_String_String_String__attributeType(testNamespace, attributeType);
+    }
+
+    /**
+     * Test setAttribute with a supplied name, namespace and value
+     * 
+     * @author Victor Toni
+     */
+    private void test_setAttribute_String_String_String__attributeType(final Namespace namespace, final int attributeType) {
+        final Element element = new Element("el");
+
+        final String attributeName = "name";
+        final String attributeValue = "value";
+        final String attributeNewValue = "newValue";
+
+        final Attribute attribute = new Attribute(attributeName, attributeValue, attributeType, namespace);
+
+        // add attribute to element
+        element.setAttribute(attribute);
+
+        final Attribute foundAttribute = element.getAttribute(attributeName, namespace);
+        assertNotNull("no Attribute found", foundAttribute);
+        
+        assertEquals("incorrect Attribute name returned", attributeName, foundAttribute.getName());
+        assertEquals("incorrect Attribute value returned", attributeValue, foundAttribute.getValue());
+        assertEquals("incorrect Attribute type returned", attributeType, foundAttribute.getAttributeType());
+
+        //update the value
+        element.setAttribute(attributeName, attributeNewValue, namespace);
+
+        final Attribute changedAttribute = element.getAttribute(attributeName, namespace);
+        assertNotNull("no Attribute found", changedAttribute);
+        
+        assertEquals("incorrect Attribute name returned", attributeName, changedAttribute.getName());
+        assertEquals("incorrect Attribute value returned", attributeNewValue, changedAttribute.getValue());
+        assertEquals("incorrect Attribute type returned", attributeType, changedAttribute.getAttributeType());
     }
 
     /**
