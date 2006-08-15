@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.10 2004/09/07 06:37:20 jhunter Exp $
+ $Id: Format.java,v 1.11 2006/08/15 01:04:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.10 $, $Date: 2004/09/07 06:37:20 $
+ * @version $Revision: 1.11 $, $Date: 2006/08/15 01:04:39 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.10 $ $Date: 2004/09/07 06:37:20 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.11 $ $Date: 2006/08/15 01:04:39 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -189,10 +189,9 @@ public class Format implements Cloneable {
 
     /**
      * This will set the newline separator (<code>lineSeparator</code>).
-     * The default is <code>\r\n</code>. Note that if the "newlines"
-     * property is false, this value is irrelevant.  To make it output
+     * The default is <code>\r\n</code>.  To make it output
      * the system default line ending string, call
-     * <code>setLineSeparator(System.getProperty("line.separator"))</code>
+     * <code>setLineSeparator(System.getProperty("line.separator"))</code>.
      *
      * <p>
      * To output "UNIX-style" documents, call
@@ -207,6 +206,12 @@ public class Format implements Cloneable {
      * embedded inside a text node, and you do not set TextMode.NORMALIZE,
      * then the newlines will be output
      * verbatim, as "\n" which is how parsers normalize them.
+     * </p>
+     *
+     * <p>
+     * If the format's "indent" property is null or "" (as is the default
+     * for the Raw and Compact formats), then this value only effects the
+     * newlines written after the declaration and doctype.
      * </p>
      *
      * @see #setTextMode
