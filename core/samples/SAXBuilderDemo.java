@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilderDemo.java,v 1.17 2004/09/07 06:29:07 jhunter Exp $
+ $Id: SAXBuilderDemo.java,v 1.18 2006/11/16 08:32:39 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -119,10 +119,11 @@ public class SAXBuilderDemo {
                 builder = new SAXBuilder(saxDriverClass);
             }
             builder.setExpandEntities(expandEntities);
+//builder.setIgnoringBoundaryWhitespace(true);
 
             Document doc = builder.build(filename);
 
-            XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+            XMLOutputter outputter = new XMLOutputter();
             //outputter.setExpandEmptyElements(true);
             outputter.output(doc, System.out);
         } catch (JDOMException e) {
