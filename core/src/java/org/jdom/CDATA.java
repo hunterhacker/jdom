@@ -1,6 +1,6 @@
 /*--
 
- $Id: CDATA.java,v 1.30 2004/02/27 11:32:57 jhunter Exp $
+ $Id: CDATA.java,v 1.31 2006/11/16 08:16:35 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -63,16 +63,17 @@ package org.jdom;
  * CDATA makes no guarantees about the underlying textual representation of
  * character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.30 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.31 $, $Date: 2006/11/16 08:16:35 $
  * @author  Dan Schaffer
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
+ * @author  Victor Toni
  */
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.30 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.31 $ $Date: 2006/11/16 08:16:35 $ $Name:  $";
 
     /**
      * This is the protected, no-args constructor standard in all JDOM
@@ -85,14 +86,14 @@ public class CDATA extends Text {
      * This constructor creates a new <code>CDATA</code> node, with the
      * supplied string value as it's character content.
      *
-     * @param str the node's character content.
+     * @param string the node's character content.
      * @throws IllegalDataException if <code>str</code> contains an 
      *         illegal character such as a vertical tab (as determined
      *          by {@link org.jdom.Verifier#checkCharacterData})
      *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
-    public CDATA(String str) {
-        setText(str);
+    public CDATA(final String string) {
+        setText(string);
     }
 
     /**
@@ -105,22 +106,23 @@ public class CDATA extends Text {
      *          by {@link org.jdom.Verifier#checkCharacterData})
      *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
-    public Text setText(String str) {
-        // Overrides Text.setText() because this needs to check CDATA
-        // rules are enforced.  We could have a separate Verifier check
-        // for CDATA beyond Text and call that alone before super.setText().
+    public Text setText(final String str) {
+        // Overrides Text.setText() because this needs to check that CDATA rules
+        // are enforced. We could have a separate Verifier check for CDATA
+        // beyond Text and call that alone before super.setText().
 
-        String reason;
-
-        if (str == null) {
+        if (str == null || "".equals(str)) {
             value = EMPTY_STRING;
             return this;
         }
 
-        if ((reason = Verifier.checkCDATASection(str)) != null) {
+        final String reason = Verifier.checkCDATASection(str);
+        if (reason != null) {
             throw new IllegalDataException(str, "CDATA section", reason);
         }
+
         value = str;
+
         return this;
     }
 
@@ -134,23 +136,53 @@ public class CDATA extends Text {
      *          by {@link org.jdom.Verifier#checkCharacterData})
      *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
-    public void append(String str) {
-        // Overrides Text.setText() because this needs to check CDATA
-        // rules are enforced.  We could have a separate Verifier check
-        // for CDATA beyond Text and call that alone before super.setText().
-
-        String reason;
-
-        if (str == null) {
+    public void append(final String str) {
+        // Overrides Text.append(String) because this needs to check that CDATA
+        // rules are enforced. We could have a separate Verifier check for CDATA
+        // beyond Text and call that alone before super.setText().
+    
+        if (str == null || "".equals(str)) {
             return;
         }
-        if ((reason = Verifier.checkCDATASection(str)) != null) {
+    
+        // we need a temp value to ensure that the value is changed _after_
+        // validation
+        final String tmpValue;
+        if (value == EMPTY_STRING) {
+            tmpValue = str;
+        } else {
+            tmpValue = value + str;
+        }
+    
+        // we have to do late checking since the end of a CDATA section could 
+        // have been created by concating both strings:
+        // "]" + "]>" 
+        // or 
+        // "]]" + ">"
+        // TODO: maybe this could be optimized for this two cases
+        final String reason = Verifier.checkCDATASection(tmpValue);
+        if (reason != null) {
             throw new IllegalDataException(str, "CDATA section", reason);
         }
-
-        if (value == EMPTY_STRING)
-             value = str;
-        else value += str;
+    
+        value = tmpValue;
+    }
+    
+    /**
+     * This will append the content of another <code>Text</code> node
+     * to this node.
+     *
+     * @param text Text node to append.
+     */
+    public void append(final Text text) {
+        // Overrides Text.append(Text) because this needs to check that CDATA
+        // rules are enforced. We could have a separate Verifier check for CDATA
+        // beyond Text and call that alone before super.setText().
+    
+        if (text == null) {
+            return;
+        }
+        append(text.getText());
     }
 
     /**
