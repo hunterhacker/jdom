@@ -1,6 +1,6 @@
 /*--
 
- $Id: Attribute.java,v 1.54 2006/11/16 07:52:19 jhunter Exp $
+ $Id: Attribute.java,v 1.55 2006/11/16 09:15:49 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.54 $, $Date: 2006/11/16 07:52:19 $
+ * @version $Revision: 1.55 $, $Date: 2006/11/16 09:15:49 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -72,7 +72,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.54 $ $Date: 2006/11/16 07:52:19 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.55 $ $Date: 2006/11/16 09:15:49 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -652,6 +652,14 @@ public class Attribute implements Serializable, Cloneable {
             // Avoid Double.parseDouble() to support JDK 1.1
             return Double.valueOf(value.trim()).doubleValue();
         } catch (final NumberFormatException e) {
+            // Specially handle INF and -INF that Double.valueOf doesn't do
+            String v = value.trim();
+            if ("INF".equals(v)) {
+                return Double.POSITIVE_INFINITY;
+            }
+            if ("-INF".equals(v)) {
+                return Double.NEGATIVE_INFINITY;
+            }
             throw new DataConversionException(name, "double");
         }
     }
