@@ -823,4 +823,16 @@ public final class TestAttribute
 
         return null;
     }
+
+    public void testInfinity() throws DataConversionException {
+        Attribute infinity = new Attribute("name", "Infinity");
+        Attribute neginfinity = new Attribute("name", "-Infinity");
+        Attribute inf = new Attribute("name", "INF");
+        Attribute neginf = new Attribute("name", "-INF");
+        assertEquals(infinity.getDoubleValue(), Double.POSITIVE_INFINITY);
+        assertEquals(neginfinity.getDoubleValue(), Double.NEGATIVE_INFINITY);
+        assertEquals(inf.getDoubleValue(), Double.POSITIVE_INFINITY);
+        assertEquals(neginf.getDoubleValue(), Double.NEGATIVE_INFINITY);
+    }
+
 }
