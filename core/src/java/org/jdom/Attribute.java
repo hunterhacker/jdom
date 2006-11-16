@@ -1,6 +1,6 @@
 /*--
 
- $Id: Attribute.java,v 1.53 2006/11/16 07:28:06 jhunter Exp $
+ $Id: Attribute.java,v 1.54 2006/11/16 07:52:19 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.53 $, $Date: 2006/11/16 07:28:06 $
+ * @version $Revision: 1.54 $, $Date: 2006/11/16 07:52:19 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -72,7 +72,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.53 $ $Date: 2006/11/16 07:28:06 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.54 $ $Date: 2006/11/16 07:52:19 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -179,7 +179,7 @@ public class Attribute implements Serializable, Cloneable {
     protected int type = UNDECLARED_TYPE;
 
     /** Parent element, or null if none */
-    protected Object parent;
+    protected Element parent;
 
     /**
      * Default, no-args constructor for implementations to use if needed.
@@ -282,7 +282,7 @@ public class Attribute implements Serializable, Cloneable {
      * @return parent of this <code>Attribute</code>
      */
     public Element getParent() {
-        return (Element) parent;
+        return parent;
     }
 
     /**
