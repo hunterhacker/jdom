@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.39 2004/02/28 03:30:27 jhunter Exp $
+ $Id: ContentList.java,v 1.40 2006/11/16 09:22:49 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.39 $, $Date: 2004/02/28 03:30:27 $
+ * @version $Revision: 1.40 $, $Date: 2006/11/16 09:22:49 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.39 $ $Date: 2004/02/28 03:30:27 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.40 $ $Date: 2006/11/16 09:22:49 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -135,6 +135,9 @@ final class ContentList extends AbstractList implements java.io.Serializable {
     public void add(int index, Object obj) {
         if (obj == null) {
             throw new IllegalAddException("Cannot add null object");
+        }
+        if (obj instanceof String) {  // String is OK to add as special case
+            obj = new Text(obj.toString());  // wrap it as a Content
         }
         if ((obj instanceof Content)) {
             add(index, (Content) obj);
