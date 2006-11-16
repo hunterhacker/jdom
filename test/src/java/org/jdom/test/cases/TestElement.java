@@ -62,6 +62,7 @@ package org.jdom.test.cases;
  */
 
 import junit.framework.*;
+import java.util.*;
 
 import org.jdom.*;
 import java.io.*;
@@ -1862,4 +1863,11 @@ public final class TestElement
         op.output(elIn2, sw2);
         assertTrue("Incorrect data after serialization", sw2.toString().equals(bufWithEmptyNS2));
     }
+
+  public void test_AddingString() {
+    Vector v = new Vector();
+    v.add("one");
+    Element e = new Element("e");
+    e.setContent(v);
+  }
 }
