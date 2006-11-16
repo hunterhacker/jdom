@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.155 2006/08/15 00:42:18 jhunter Exp $
+ $Id: Element.java,v 1.156 2006/11/16 07:28:06 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.155 $, $Date: 2006/08/15 00:42:18 $
+ * @version $Revision: 1.156 $, $Date: 2006/11/16 07:28:06 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -82,7 +82,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.155 $ $Date: 2006/08/15 00:42:18 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.156 $ $Date: 2006/11/16 07:28:06 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -272,7 +272,7 @@ public class Element extends Content implements Parent {
             return null;
         }
 
-        if (prefix.equals("xml")) {
+        if ("xml".equals(prefix)) {
             // Namespace "xml" is always bound.
             return Namespace.XML_NAMESPACE;
         }
@@ -311,7 +311,7 @@ public class Element extends Content implements Parent {
     public String getQualifiedName() {
         // Note: Any changes here should be reflected in
         // XMLOutputter.printQualifiedName()
-        if (namespace.getPrefix().equals("")) {
+        if ("".equals(namespace.getPrefix())) {
             return getName();
         }
 
@@ -329,24 +329,24 @@ public class Element extends Content implements Parent {
      * It's used during output to for stylistic reasons move namespace
      * declarations higher in the tree than they would have to be.
      *
-     * @param  additional          namespace to add
+     * @param  additionalNamespace namespace to add
      * @throws IllegalAddException if the namespace prefix collides with another
      *                             namespace prefix on the element
      */
-    public void addNamespaceDeclaration(final Namespace additional) {
+    public void addNamespaceDeclaration(final Namespace additionalNamespace) {
 
         // Verify the new namespace prefix doesn't collide with another
         // declared namespace, an attribute prefix, or this element's prefix
-        final String reason = Verifier.checkNamespaceCollision(additional, this);
+        final String reason = Verifier.checkNamespaceCollision(additionalNamespace, this);
         if (reason != null) {
-            throw new IllegalAddException(this, additional, reason);
+            throw new IllegalAddException(this, additionalNamespace, reason);
         }
 
         if (additionalNamespaces == null) {
             additionalNamespaces = new ArrayList(INITIAL_ARRAY_SIZE);
         }
 
-        additionalNamespaces.add(additional);
+        additionalNamespaces.add(additionalNamespace);
     }
 
     /**
@@ -359,7 +359,7 @@ public class Element extends Content implements Parent {
      *
      * @param additionalNamespace namespace to remove
      */
-    public void removeNamespaceDeclaration(Namespace additionalNamespace) {
+    public void removeNamespaceDeclaration(final Namespace additionalNamespace) {
         if (additionalNamespaces == null) {
             return;
         }
@@ -397,9 +397,9 @@ public class Element extends Content implements Parent {
     public String getValue() {
         final StringBuffer buffer = new StringBuffer();
 
-        Iterator itr = getContent().iterator();
-        while (itr.hasNext()) {
-            final Content child = (Content) itr.next();
+        final Iterator iter = getContent().iterator();
+        while (iter.hasNext()) {
+            final Content child = (Content) iter.next();
             if (child instanceof Element || child instanceof Text) {
                 buffer.append(child.getValue());
             }
@@ -458,7 +458,8 @@ public class Element extends Content implements Parent {
             final Object obj = content.get(0);
             if (obj instanceof Text) {
                 return ((Text) obj).getText();
-            } else {
+            }
+            else {
                 return "";
             }
         }
@@ -682,7 +683,7 @@ public class Element extends Content implements Parent {
      * @return list of the old children detached from this parent
      */
     public List removeContent() {
-        List old = new ArrayList(content);
+        final List old = new ArrayList(content);
         content.clear();
         return old;
     }
@@ -695,11 +696,11 @@ public class Element extends Content implements Parent {
      */
     public List removeContent(final Filter filter) {
         final List old = new ArrayList();
-        final Iterator itr = content.getView(filter).iterator();
-        while (itr.hasNext()) {
-            final Content child = (Content) itr.next();
+        final Iterator iter = content.getView(filter).iterator();
+        while (iter.hasNext()) {
+            final Content child = (Content) iter.next();
             old.add(child);
-            itr.remove();
+            iter.remove();
         }
         return old;
     }
@@ -734,7 +735,7 @@ public class Element extends Content implements Parent {
      * the objects in the supplied content will be unaltered.
      * </p>
      *
-     * @param newContent <code>List</code> of content to set
+     * @param newContent <code>Collection</code> of content to set
      * @return this element modified
      * @throws IllegalAddException if the List contains objects of
      *         illegal types or with existing parentage.
@@ -773,16 +774,16 @@ public class Element extends Content implements Parent {
      * </p>
      *
      * @param index - index of child to replace.
-     * @param collection - collection of content to add.
+     * @param newContent - <code>Collection</code> of content to replace child.
      * @return object on which this method was invoked
      * @throws IllegalAddException if the collection contains objects of
      *         illegal types.
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Element setContent(final int index, final Collection collection) {
+    public Element setContent(final int index, final Collection newContent) {
         content.remove(index);
-        content.addAll(index, collection);
+        content.addAll(index, newContent);
         return this;
     }
 
@@ -817,13 +818,13 @@ public class Element extends Content implements Parent {
      * original content will be unchanged and the objects in the supplied
      * collection will be unaltered.
      *
-     * @param collection collection to append
+     * @param newContent <code>Collection</code> of content to append
      * @return           the element on which the method was called
      * @throws IllegalAddException if any item in the collection
      *         already has a parent or is of an inappropriate type.
      */
-    public Element addContent(final Collection collection) {
-        content.addAll(collection);
+    public Element addContent(final Collection newContent) {
+        content.addAll(newContent);
         return this;
     }
 
@@ -849,15 +850,15 @@ public class Element extends Content implements Parent {
      * unaltered.
      *
      * @param index location for adding the collection
-     * @param c  collection to insert
+     * @param newContent  <code>Collection</code> of content to insert
      * @return            the parent on which the method was called
      * @throws IndexOutOfBoundsException if index is negative or beyond
      *         the current number of children
      * @throws IllegalAddException if any item in the collection
      *         already has a parent or is of an inappropriate type.
      */
-    public Element addContent(final int index, final Collection c) {
-        content.addAll(index, c);
+    public Element addContent(final int index, final Collection newContent) {
+        content.addAll(index, newContent);
         return this;
     }
 
@@ -1040,7 +1041,11 @@ public class Element extends Content implements Parent {
      */
     public String getAttributeValue(final String name, final Namespace ns, final String def) {
         final Attribute attribute = (Attribute) attributes.get(name, ns);
-        return (attribute == null) ? def : attribute.getValue();
+        if (attribute == null) {
+            return def;
+        }
+
+        return attribute.getValue();
     }
 
     /**
@@ -1079,14 +1084,14 @@ public class Element extends Content implements Parent {
      * the attributes in the supplied attributes will be unaltered.
      * </p>
      *
-     * @param newAttributes <code>List</code> of attributes to set
+     * @param newAttributes <code>Collection</code> of attributes to set
      * @return this element modified
      * @throws IllegalAddException if the List contains objects
      *         that are not instances of <code>Attribute</code>,
      *         or if any of the <code>Attribute</code> objects have
      *         conflicting namespace prefixes.
      */
-    public Element setAttributes(final List newAttributes) {
+    public Element setAttributes(final Collection newAttributes) {
         attributes.clearAndSet(newAttributes);
         return this;
     }
@@ -1114,7 +1119,7 @@ public class Element extends Content implements Parent {
         } else {
             attribute.setValue(value);
         }
-        
+
         return this;
     }
 
@@ -1145,7 +1150,7 @@ public class Element extends Content implements Parent {
         } else {
             attribute.setValue(value);
         }
-        
+
         return this;
     }
 
@@ -1286,7 +1291,7 @@ public class Element extends Content implements Parent {
        }
 
        return element;
-   } 
+   }
 
 
     // Support a custom Namespace serialization so no two namespace
@@ -1304,7 +1309,7 @@ public class Element extends Content implements Parent {
             out.write(0);
         }
         else {
-            int size = additionalNamespaces.size();
+            final int size = additionalNamespaces.size();
             out.write(size);
             for (int i = 0; i < size; i++) {
                 final Namespace additional = (Namespace) additionalNamespaces.get(i);
@@ -1447,9 +1452,9 @@ public class Element extends Content implements Parent {
      */
     public Element getChild(final String name, final Namespace ns) {
         final List elements = content.getView(new ElementFilter(name, ns));
-        final Iterator i = elements.iterator();
-        if (i.hasNext()) {
-            return (Element) i.next();
+        final Iterator iter = elements.iterator();
+        if (iter.hasNext()) {
+            return (Element) iter.next();
         }
         return null;
     }
@@ -1495,10 +1500,10 @@ public class Element extends Content implements Parent {
     public boolean removeChild(final String name, final Namespace ns) {
         final Filter filter = new ElementFilter(name, ns);
         final List old = content.getView(filter);
-        final Iterator i = old.iterator();
-        if (i.hasNext()) {
-            i.next();
-            i.remove();
+        final Iterator iter = old.iterator();
+        if (iter.hasNext()) {
+            iter.next();
+            iter.remove();
             return true;
         }
 
@@ -1535,10 +1540,10 @@ public class Element extends Content implements Parent {
 
         final Filter filter = new ElementFilter(name, ns);
         final List old = content.getView(filter);
-        final Iterator i = old.iterator();
-        while (i.hasNext()) {
-            i.next();
-            i.remove();
+        final Iterator iter = old.iterator();
+        while (iter.hasNext()) {
+            iter.next();
+            iter.remove();
             deletedSome = true;
         }
 
