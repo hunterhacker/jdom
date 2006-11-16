@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.41 2004/09/03 06:03:42 jhunter Exp $
+ $Id: DOMOutputter.java,v 1.42 2006/11/16 08:59:48 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -67,7 +67,7 @@ import org.jdom.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.41 $, $Date: 2004/09/03 06:03:42 $
+ * @version $Revision: 1.42 $, $Date: 2006/11/16 08:59:48 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo
@@ -78,7 +78,7 @@ import org.jdom.adapters.*;
 public class DOMOutputter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.41 $ $Date: 2004/09/03 06:03:42 $ $Name:  $";
+      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.42 $ $Date: 2006/11/16 08:59:48 $ $Name:  $";
 
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
@@ -86,6 +86,9 @@ public class DOMOutputter {
 
     /** Adapter to use for interfacing with the DOM implementation */
     private String adapterClass;
+
+    /** Output a DOM with namespaces but just the empty namespace */
+    private boolean forceNamespaceAware;
 
     /**
      * This creates a new DOMOutputter which will attempt to first locate
@@ -107,6 +110,23 @@ public class DOMOutputter {
         this.adapterClass = adapterClass;
     }
 
+    /**
+     * Controls how NO_NAMESPACE nodes are handeled. If true the outputter
+     * always creates a namespace aware DOM.
+     * @param flag
+     */
+    public void setForceNamespaceAware(boolean flag) {
+        this.forceNamespaceAware = flag;
+    }
+
+    /**
+     * Returns whether DOMs will be constructed with namespaces even when
+     * the source document has elements all in the empty namespace.
+     * @return the forceNamespaceAware flag value
+     */
+    public boolean getForceNamespaceAware() {
+        return forceNamespaceAware;
+    }
 
     /**
      * This converts the JDOM <code>Document</code> parameter to a 
@@ -250,8 +270,9 @@ public class DOMOutputter {
             org.w3c.dom.Element domElement = null;
             if (element.getNamespace() == Namespace.NO_NAMESPACE) {
                 // No namespace, use createElement
-                domElement = domDoc.createElement(element.getQualifiedName());
-            }
+                domElement = forceNamespaceAware ?
+                             domDoc.createElementNS(null, element.getQualifiedName())
+                             : domDoc.createElement(element.getQualifiedName());            }
             else {
                 domElement = domDoc.createElementNS(
                                           element.getNamespaceURI(),
@@ -308,8 +329,14 @@ public class DOMOutputter {
                 // Crimson doesn't like setAttributeNS() for non-NS attribs
                 if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
                     // No namespace, use setAttribute
-                    domElement.setAttribute(attribute.getQualifiedName(),
-                                            attribute.getValue());
+                    if (forceNamespaceAware) {
+                        domElement.setAttributeNS(null,
+                                                  attribute.getQualifiedName(),
+                                                  attribute.getValue());
+                    } else {
+                        domElement.setAttribute(attribute.getQualifiedName(),
+                                                attribute.getValue());
+                    }
                 }
                 else {
                     domElement.setAttributeNS(attribute.getNamespaceURI(),
@@ -392,7 +419,11 @@ public class DOMOutputter {
          try {
              if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
                  // No namespace, use createAttribute
-                 domAttr = domDoc.createAttribute(attribute.getQualifiedName());
+                 if (forceNamespaceAware) {
+                     domAttr = domDoc.createAttributeNS(null, attribute.getQualifiedName());
+                 } else {
+                     domAttr = domDoc.createAttribute(attribute.getQualifiedName());
+                 }
              }
              else {
                  domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
