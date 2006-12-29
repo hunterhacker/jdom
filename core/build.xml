@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.53 2004/12/11 00:49:21 jhunter Exp $ -->
+<!-- $Id: build.xml,v 1.54 2006/12/29 03:31:43 jhunter Exp $ -->
 
 <!-- 
 For instructions on how to build JDOM, please view the README.txt file.
@@ -177,7 +177,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Compiles the "About" code unless JDK1.1 is being used               -->
   <!-- =================================================================== -->
-  <target name="about"
+  <target name="about" depends="init"
           description="Compiles the About code">
     <javac srcdir="${package.dir}"
            destdir="${build.dest}"
