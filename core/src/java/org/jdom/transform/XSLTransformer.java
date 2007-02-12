@@ -1,6 +1,6 @@
 /*--
 
- $Id: XSLTransformer.java,v 1.2 2004/02/06 09:28:32 jhunter Exp $
+ $Id: XSLTransformer.java,v 1.3 2007/02/12 19:36:40 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -61,6 +61,7 @@ import java.io.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
 import org.jdom.*;
+import org.xml.sax.EntityResolver;
 
 /**
  * A convenience class to handle simple transformations. The JAXP TrAX classes
@@ -109,14 +110,14 @@ import org.jdom.*;
  *       Xalan 2.2d10. </li>
  *    </ol>
 
- * @version $Revision: 1.2 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.3 $, $Date: 2007/02/12 19:36:40 $
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
  */
 public class XSLTransformer {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.2 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.3 $ $Date: 2007/02/12 19:36:40 $ $Name:  $";
 
     private Templates templates;
 
@@ -219,7 +220,7 @@ public class XSLTransformer {
             throw new XSLTransformException("Could not perform transformation", e);
         }
     }
-
+    
     /**
      * Transforms the given document to an output document.
      *
@@ -228,7 +229,19 @@ public class XSLTransformer {
      * @throws XSLTransformException       if there's a problem in the transformation
      */
     public Document transform(Document inputDoc) throws XSLTransformException {
-        JDOMSource source = new JDOMSource(inputDoc);
+    	return transform(inputDoc, null);
+    }
+
+    /**
+     * Transforms the given document to an output document.
+     *
+     * @param  inputDoc            input document
+     * @param  resolver			   entity resolver for the input document
+     * @return                     transformed output document
+     * @throws XSLTransformException       if there's a problem in the transformation
+     */
+    public Document transform(Document inputDoc, EntityResolver resolver) throws XSLTransformException {
+        JDOMSource source = new JDOMSource(inputDoc, resolver);
         JDOMResult result = new JDOMResult();
         try {
             templates.newTransformer().transform(source, result);

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.18 2004/08/31 04:43:48 jhunter Exp $
+ $Id: JDOMSource.java,v 1.19 2007/02/12 19:36:40 jhunter Exp $
 
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -94,14 +94,14 @@ import org.xml.sax.*;
  *
  * @see org.jdom.transform.JDOMResult
  *
- * @version $Revision: 1.18 $, $Date: 2004/08/31 04:43:48 $
+ * @version $Revision: 1.19 $, $Date: 2007/02/12 19:36:40 $
  * @author Laurent Bihanic
  * @author Jason Hunter
  */
 public class JDOMSource extends SAXSource {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.18 $ $Date: 2004/08/31 04:43:48 $ $Name:  $";
+    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.19 $ $Date: 2007/02/12 19:36:40 $ $Name:  $";
 
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
@@ -124,6 +124,15 @@ public class JDOMSource extends SAXSource {
    * @see    #getXMLReader
    */
   private XMLReader xmlReader = null;
+  
+  /**
+   * Optional entity resolver associated to the source of
+   * this document or <code>null</code> if no EntityResolver
+   * was supplied with this JDOMSource. 
+   * 
+   * @see #buildDocumentReader()
+   */
+  private EntityResolver resolver = null;
 
   /**
    * Creates a JDOM TrAX source wrapping a JDOM document.
@@ -168,6 +177,24 @@ public class JDOMSource extends SAXSource {
   }
 
   /**
+   * Creates a JDOM TrAX source wrapping a JDOM element with an
+   * associated EntityResolver to resolve external entities.
+   * 
+   * @param source 		The JDOM Element to use as source for the 
+   * 					transformations
+   * 
+   * @param resolver 	Entity resolver to use for the source 
+   * 					transformation
+   * 
+   * @throws IllegalArgumentException	if<code>source</code> is
+   * <code>null</code>
+   */
+  public JDOMSource(Document source, EntityResolver resolver) {
+	setDocument(source);
+	this.resolver = resolver;
+  }
+
+/**
    * Sets the source document used by this TrAX source.
    *
    * @param  source   the JDOM document to use as source for the
@@ -280,7 +307,7 @@ public class JDOMSource extends SAXSource {
       while (filter.getParent() instanceof XMLFilter) {
         filter = (XMLFilter)(filter.getParent());
       }
-      filter.setParent(new DocumentReader());
+      filter.setParent(buildDocumentReader());
 
       // Read XML data from filter chain.
       this.xmlReader = reader;
@@ -302,9 +329,24 @@ public class JDOMSource extends SAXSource {
    */
   public XMLReader getXMLReader() {
     if (this.xmlReader == null) {
-      this.xmlReader = new DocumentReader();
+      this.xmlReader = buildDocumentReader();
     }
     return this.xmlReader;
+  }
+  
+  /**
+   * Build an XMLReader to be used for the source. This will
+   * create a new instance of DocumentReader with an 
+   * EntityResolver instance if available.
+   * 
+   * @return XMLReader reading the XML data from the source
+   * 		JDOM document with an optional EntityResolver
+   */
+  private XMLReader buildDocumentReader() {
+	  DocumentReader reader = new DocumentReader();
+	  if (resolver != null)
+		  reader.setEntityResolver(resolver);
+	  return reader;
   }
 
   //=========================================================================
