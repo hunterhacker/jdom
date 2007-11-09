@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementFilter.java,v 1.18 2004/09/07 06:37:20 jhunter Exp $
+ $Id: ElementFilter.java,v 1.19 2007/11/09 09:31:50 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,14 +62,14 @@ import org.jdom.*;
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.18 $, $Date: 2004/09/07 06:37:20 $
+ * @version $Revision: 1.19 $, $Date: 2007/11/09 09:31:50 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
 public class ElementFilter extends AbstractFilter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.18 $ $Date: 2004/09/07 06:37:20 $ $Name:  $";
+      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.19 $ $Date: 2007/11/09 09:31:50 $ $Name:  $";
 
     /** The element name */
     private String name;
@@ -164,8 +164,14 @@ public class ElementFilter extends AbstractFilter {
 
         // We use writeObject() and not writeUTF() to minimize space
         // This allows for writing pointers to already written strings
-        out.writeObject(namespace.getPrefix());
-        out.writeObject(namespace.getURI());
+        if (namespace != null) {
+            out.writeObject(namespace.getPrefix());
+            out.writeObject(namespace.getURI());
+        }
+        else {
+            out.writeObject(null);
+            out.writeObject(null);
+        }
     }
 
     private void readObject(ObjectInputStream in)
@@ -173,7 +179,11 @@ public class ElementFilter extends AbstractFilter {
 
         in.defaultReadObject();
 
-        namespace = Namespace.getNamespace(
-                (String) in.readObject(), (String) in.readObject());
+        Object prefix = in.readObject();
+        Object uri = in.readObject();
+
+        if (prefix != null) {  // else leave namespace null here
+            namespace = Namespace.getNamespace((String) prefix, (String) uri);
+        }
     }
 }
