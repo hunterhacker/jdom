@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.38 2004/12/11 00:15:24 jhunter Exp $
+ $Id: SAXOutputter.java,v 1.39 2007/11/09 10:33:09 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -82,7 +82,7 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.38 $, $Date: 2004/12/11 00:15:24 $
+ * @version $Revision: 1.39 $, $Date: 2007/11/09 10:33:09 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble
@@ -91,7 +91,7 @@ import org.xml.sax.helpers.*;
 public class SAXOutputter {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.38 $ $Date: 2004/12/11 00:15:24 $ $Name:  $";
+      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.39 $ $Date: 2007/11/09 10:33:09 $ $Name:  $";
 
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
@@ -897,7 +897,9 @@ public class SAXOutputter {
         elementContent(element.getContent(), namespaces);
 
         // update locator
-        locator.setNode(element);
+        if (locator != null) {
+          locator.setNode(element);
+        }
 
         // contentHandler.endElement()
         endElement(element);
@@ -1087,7 +1089,9 @@ public class SAXOutputter {
     private void elementContent(Content node, NamespaceStack namespaces)
                       throws JDOMException {
         // update locator
-        locator.setNode(node);
+        if (locator != null) {
+          locator.setNode(node);
+        }
 
         if (node instanceof Element) {
             element((Element) node, namespaces);
