@@ -1,6 +1,6 @@
 /*--
 
- $Id: ContentList.java,v 1.40 2006/11/16 09:22:49 jhunter Exp $
+ $Id: ContentList.java,v 1.41 2007/11/09 08:53:03 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -72,33 +72,21 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.40 $, $Date: 2006/11/16 09:22:49 $
+ * @version $Revision: 1.41 $, $Date: 2007/11/09 08:53:03 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
  */
 final class ContentList extends AbstractList implements java.io.Serializable {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.40 $ $Date: 2006/11/16 09:22:49 $ $Name:  $";
+	private static final String CVS_ID =
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.41 $ $Date: 2007/11/09 08:53:03 $ $Name:  $";
 
-    private static final int INITIAL_ARRAY_SIZE = 5;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Used inner class FilterListIterator to help hasNext and
-     * hasPrevious the next index of our cursor (must be here
-     * for JDK1.1).
-     */
-    private static final int CREATE  = 0;
-    private static final int HASPREV = 1;
-    private static final int HASNEXT = 2;
-    private static final int PREV    = 3;
-    private static final int NEXT    = 4;
-    private static final int ADD     = 5;
-    private static final int REMOVE  = 6;
+	private static final int INITIAL_ARRAY_SIZE = 5;
 
     /** Our backing list */
-//    protected ArrayList list;
     private Content elementData[];
     private int size;
 
@@ -722,149 +710,141 @@ final class ContentList extends AbstractList implements java.io.Serializable {
         /** The Filter that applies */
         Filter filter;
 
-        /** The last operation performed */
-        int lastOperation;
-
-        /** Initial start index in backing list */
-        int initialCursor;
+        /** Whether this iterator is in forward or reverse. */
+        private boolean forward = false;
+        /** Whether a call to remove() is valid */
+        private boolean canremove = false;
+        /** Whether a call to set() is valid */
+        private boolean canset = false;
 
         /** Index in backing list of next object */
-        int cursor;
-
-        /** Index in backing list of last object returned */
-        int last;
+        private int cursor = -1;
+        /** the backing index to use if we actually DO move */
+        private int tmpcursor = -1;
+        /** Index in ListIterator */
+        private int index = -1;
 
         /** Expected modCount in our backing list */
-        int expected;
+        private int expected = -1;
 
+        /** Number of elements matching the filter. */
+        private int fsize = 0;
+         
         /**
          * Default constructor
          */
         FilterListIterator(Filter filter, int start) {
-            this.filter = filter;
-            initialCursor = initializeCursor(start);
-            last = -1;
-            expected = ContentList.this.getModCount();
-            lastOperation = CREATE;
-        }
+			this.filter = filter;
+			expected = ContentList.this.getModCount();
+			// always start list iterators in backward mode ....
+			// it makes sense... really.
+			forward = false;
+
+			if (start < 0) {
+				throw new IndexOutOfBoundsException("Index: " + start);
+			}
+
+			// the number of matching elements....
+			fsize = 0;
+
+			// go through the list, count the matching elements...
+			for (int i = 0; i < ContentList.this.size(); i++) {
+				if (filter.matches(ContentList.this.get(i))) {
+					if (start == fsize) {
+						// set the back-end cursor to the matching element....
+						cursor = i;
+						// set the front-end cursor too.
+						index = fsize;
+					}
+					fsize++;
+				}
+			}
+
+			if (start > fsize) {
+				throw new IndexOutOfBoundsException("Index: " + start + " Size: " + fsize);
+			}
+			if (cursor == -1) {
+				// implies that start == fsize (i.e. after the last element
+				// put the insertion point at the end of the Underlying
+				// content list ....
+				// i.e. an add() at this point may potentially end up with
+				// filtered content between previous() and next()
+				// the alternative is to put the cursor on the Content after
+				// the last Content that the filter passed
+				// The implications are ambiguous.
+				cursor = ContentList.this.size();
+				index = fsize;
+			}
+
+		}
 
         /**
-         * Returns <code>true</code> if this list iterator has a next element.
-         */
+		 * Returns <code>true</code> if this list iterator has a next element.
+		 */
         public boolean hasNext() {
-            checkConcurrentModification();
-
-            switch(lastOperation) {
-            case CREATE:  cursor = initialCursor;
-                          break;
-            case PREV:    cursor = last;
-                          break;
-            case ADD:
-            case NEXT:    cursor = moveForward(last + 1);
-                          break;
-            case REMOVE:  cursor = moveForward(last);
-                          break;
-            case HASPREV: cursor = moveForward(cursor + 1);
-                          break;
-            case HASNEXT: break;
-            default:      throw new IllegalStateException("Unknown operation");
-            }
-
-            if (lastOperation != CREATE) {
-                lastOperation = HASNEXT;
-            }
-
-            return (cursor < ContentList.this.size()) ? true : false;
+        	return nextIndex() < fsize;
         }
 
         /**
          * Returns the next element in the list.
          */
         public Object next() {
-            checkConcurrentModification();
-
-            if (hasNext()) {
-                last = cursor;
-            }
-            else {
-                last = ContentList.this.size();
-                throw new NoSuchElementException();
-            }
-
-            lastOperation = NEXT;
-            return ContentList.this.get(last);
+        	if (!hasNext())
+				throw new NoSuchElementException("next() is beyond the end of the Iterator");
+			index = nextIndex();
+			cursor = tmpcursor;
+			forward = true;
+			canremove = true;
+			canset = true;
+			return ContentList.this.get(cursor);
         }
 
         /**
-         * Returns <code>true</code> if this list iterator has more
-         * elements when traversing the list in the reverse direction.
-         */
+		 * Returns <code>true</code> if this list iterator has more elements
+		 * when traversing the list in the reverse direction.
+		 */
         public boolean hasPrevious() {
-            checkConcurrentModification();
-
-            switch(lastOperation) {
-            case CREATE:  cursor = initialCursor;
-                          int size = ContentList.this.size();
-                          if (cursor >= size) {
-                              cursor = moveBackward(size - 1);
-                          }
-                          break;
-            case PREV:
-            case REMOVE:  cursor = moveBackward(last - 1);
-                          break;
-            case HASNEXT: cursor = moveBackward(cursor - 1);
-                          break;
-            case ADD:
-            case NEXT:    cursor = last;
-                          break;
-            case HASPREV: break;
-            default:      throw new IllegalStateException("Unknown operation");
-            }
-
-            if (lastOperation != CREATE) {
-                lastOperation = HASPREV;
-            }
-
-            return (cursor < 0) ? false : true;
+        	return previousIndex() >= 0;
         }
 
         /**
          * Returns the previous element in the list.
          */
         public Object previous() {
-            checkConcurrentModification();
-
-            if (hasPrevious()) {
-                last = cursor;
-            }
-            else {
-                last = -1;
-                throw new NoSuchElementException();
-            }
-
-            lastOperation = PREV;
-            return ContentList.this.get(last);
-        }
+			if (!hasPrevious())
+				throw new NoSuchElementException("previous() is before the start of the Iterator");
+			index = previousIndex();
+			cursor = tmpcursor;
+			forward = false;
+			canremove = true;
+			canset = true;
+			return ContentList.this.get(cursor);
+		}
 
         /**
-         * Returns the index of the element that would be returned by a
-         * subsequent call to <code>next</code>.
-         */
+		 * Returns the index of the element that would be returned by a
+		 * subsequent call to <code>next</code>.
+		 */
         public int nextIndex() {
             checkConcurrentModification();
-            hasNext();
+        	if (forward) {
+        		// Starting with next possibility ....
+        		for (int i = cursor + 1; i < ContentList.this.size(); i++) {
+        			if (filter.matches(ContentList.this.get(i))) {
+        				tmpcursor = i;
+        				return index + 1;
+        			}
+        		}
+    			// Never found another match.... put the insertion point at
+    			// the end of the list....
+    			tmpcursor = ContentList.this.size();
+    			return index + 1;
+    		}
 
-            int count = 0;
-            for (int i = 0; i < ContentList.this.size(); i++) {
-                if (filter.matches(ContentList.this.get(i))) {
-                    if (i == cursor) {
-                        return count;
-                    }
-                    count++;
-                }
-            }
-            expected = ContentList.this.getModCount();
-            return count;
+    		// We've been going back... so nextIndex() returns the same
+			// element.
+    		tmpcursor = cursor;
+    		return index;
         }
 
         /**
@@ -873,168 +853,84 @@ final class ContentList extends AbstractList implements java.io.Serializable {
          * list iterator is at the beginning of the list.)
          */
         public int previousIndex() {
-            checkConcurrentModification();
+			checkConcurrentModification();
+			if (!forward) {
+				// starting with next possibility ....
+				for (int i = cursor - 1; i >= 0; i--) {
+					if (filter.matches(ContentList.this.get(i))) {
+						tmpcursor = i;
+						return index - 1;
+					}
+				}
+				// Never found another match.... put the insertion point at
+				// the start of the list....
+				tmpcursor = -1;
+				return index - 1;
+			}
 
-            if (hasPrevious()) {
-                int count = 0;
-                for (int i = 0; i < ContentList.this.size(); i++) {
-                    if (filter.matches(ContentList.this.get(i))) {
-                        if (i == cursor) {
-                            return count;
-                        }
-                        count++;
-                    }
-                }
-            }
-            return -1;
-        }
+			// We've been going forwards... so previousIndex() returns same
+			// element.
+			tmpcursor = cursor;
+			return index;
+		}
 
         /**
-         * Inserts the specified element into the list.
-         */
+		 * Inserts the specified element into the list.
+		 */
         public void add(Object obj) {
-            checkConcurrentModification();
-
-            if (filter.matches(obj)) {
-                last = cursor + 1;
-                ContentList.this.add(last, obj);
-            }
-            else {
-                throw new IllegalAddException("Filter won't allow add of " +
-                                              (obj.getClass()).getName());
-            }
-            expected = ContentList.this.getModCount();
-            lastOperation = ADD;
-        }
+			// Call to nextIndex() will check concurrent.
+			nextIndex();
+			// tmpcursor is the backing cursor of the next element
+			// Remember that List.add(index,obj) is really an insert....
+			ContentList.this.add(tmpcursor, obj);
+			forward = true;
+			expected = ContentList.this.getModCount();
+			canremove = canset = false;
+			index = nextIndex();
+			cursor = tmpcursor;
+			fsize++;
+		}
 
         /**
-         * Removes from the list the last element that was returned by
-         * <code>next</code> or <code>previous</code>.
-         * the last call to <code>next</code> or <code>previous</code>.
-         */
+		 * Removes from the list the last element that was returned by
+		 * the last call to <code>next</code> or <code>previous</code>.
+		 */
         public void remove() {
-            checkConcurrentModification();
+			if (!canremove)
+				throw new IllegalStateException("Can not remove an "
+						+ "element unless either next() or previous() has been called "
+						+ "since the last remove()");
+			nextIndex(); // to get out cursor ...
+			ContentList.this.remove(cursor);
+			cursor = tmpcursor - 1;
+			expected = ContentList.this.getModCount();
 
-            if ((last < 0) || (lastOperation == REMOVE)) {
-                throw new IllegalStateException("no preceeding call to " +
-                                                "prev() or next()");
-            }
-
-            if (lastOperation == ADD) {
-                throw new IllegalStateException("cannot call remove() " +
-                                                "after add()");
-            }
-
-            Object old = ContentList.this.get(last);
-            if (filter.matches(old)) {
-                ContentList.this.remove(last);
-            }
-            else throw new IllegalAddException("Filter won't allow " +
-                                                (old.getClass()).getName() +
-                                                " (index " + last +
-                                                ") to be removed");
-            expected = ContentList.this.getModCount();
-            lastOperation = REMOVE;
-        }
+			forward = false;
+			canremove = false;
+			canset = false;
+			fsize--;
+		}
 
         /**
-         * Replaces the last element returned by <code>next</code> or
-         * <code>previous</code> with the specified element.
-         */
+		 * Replaces the last element returned by <code>next</code> or
+		 * <code>previous</code> with the specified element.
+		 */
         public void set(Object obj) {
-            checkConcurrentModification();
+			if (!canset)
+				throw new IllegalStateException("Can not set an element "
+						+ "unless either next() or previous() has been called since the " 
+						+ "last remove() or set()");
+			checkConcurrentModification();
 
-            if ((lastOperation == ADD) || (lastOperation == REMOVE)) {
-                throw new IllegalStateException("cannot call set() after " +
-                                                "add() or remove()");
-            }
-
-            if (last < 0) {
-                throw new IllegalStateException("no preceeding call to " +
-                                                "prev() or next()");
-            }
-
-            if (filter.matches(obj)) {
-                Object old = ContentList.this.get(last);
-                if (!filter.matches(old)) {
-                    throw new IllegalAddException("Filter won't allow " +
-                                  (old.getClass()).getName() + " (index " +
-                                  last + ") to be removed");
-                }
-                ContentList.this.set(last, obj);
-            }
-            else {
-                throw new IllegalAddException("Filter won't allow index " +
-                                              last + " to be set to " +
-                                              (obj.getClass()).getName());
-            }
-
-            expected = ContentList.this.getModCount();
-            // Don't set lastOperation
-        }
-
-        /**
-         * Returns index in the backing list by moving forward start
-         * objects that match our filter.
-         */
-        private int initializeCursor(int start) {
-            if (start < 0) {
-                throw new IndexOutOfBoundsException("Index: " + start);
-            }
-
-            int count = 0;
-            for (int i = 0; i < ContentList.this.size(); i++) {
-                Object obj = ContentList.this.get(i);
-                if (filter.matches(obj)) {
-                    if (start == count) {
-                        return i;
-                    }
-                    count++;
-                }
-            }
-
-            if (start > count) {
-                throw new IndexOutOfBoundsException("Index: " + start +
-                                                    " Size: " + count);
-            }
-
-            return ContentList.this.size();
-        }
-
-        /**
-         * Returns index in the backing list of the next object matching
-         * our filter, starting at the given index and moving forwards.
-         */
-        private int moveForward(int start) {
-            if (start < 0) {
-                start = 0;
-            }
-            for (int i = start; i < ContentList.this.size(); i++) {
-                Object obj = ContentList.this.get(i);
-                if (filter.matches(obj)) {
-                    return i;
-                }
-            }
-            return ContentList.this.size();
-        }
-
-        /**
-         * Returns index in the backing list of the next object matching
-         * our filter, starting at the given index and moving backwards.
-         */
-        private int moveBackward(int start) {
-            if (start >= ContentList.this.size()) {
-                start = ContentList.this.size() - 1;
-            }
-
-            for (int i = start; i >= 0; --i) {
-                Object obj = ContentList.this.get(i);
-                if (filter.matches(obj)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
+			if (!filter.matches(obj)) {
+				throw new IllegalAddException("Filter won't allow index " + index + " to be set to "
+						+ (obj.getClass()).getName());
+			}
+			
+			ContentList.this.set(cursor, obj);
+			expected = ContentList.this.getModCount();
+			
+		}
 
         /**
          * Check if are backing list is being modified by someone else.
