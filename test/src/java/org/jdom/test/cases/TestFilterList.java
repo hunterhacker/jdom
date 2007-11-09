@@ -1103,6 +1103,42 @@ public static Test suite () {
 		assertEquals("wrong list size after replacing content", 2, content.size());
 	}
 
+    public void test_TCM__ListIterator_listIterator_int3() {
+        try {
+            Element r = new Element("root");
+            Document d = new Document().setRootElement(r);
+            r.addContent(new Element("element").setText("1"));
+            r.addContent(new Element("element").setText("2"));
+            r.addContent(new Element("element").setText("3"));
+
+            Element xxx = new Element("element").setText("xxx");
+            Element yyy = new Element("element").setText("yyy");
+
+            ListIterator i = r.getChildren("element").listIterator();
+            while (i.hasNext()) {
+                Element e = (Element) i.next();
+                i.add(new Element("element").setText(e.getText() + "_x"));
+                i.add(new Element("element").setText(e.getText() + "_y")); // bug1 - double add should work
+            }
+            i.add(xxx); // bug2 - add at end of list....
+            assertEquals("previous() is not recent add()", xxx, i.previous());
+            i.set(yyy);
+            assertEquals("yyy not attached", r, yyy.getParent());
+            assertFalse("xxx is still attached", xxx.isAncestor(r));
+           
+            i.remove();
+           
+        } catch (OutOfMemoryError oom) {
+            System.gc();
+            oom.printStackTrace();
+            fail("ListIterator.add() caused OutOfMemory!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unable to complete ListIterator tests");
+        }
+    }
+
+
 	private void dump(List list) {
 		System.out.println("---");
 		Iterator iter = list.iterator();
