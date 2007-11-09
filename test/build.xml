@@ -80,6 +80,8 @@ These are the meaningful targets for this build file:
 
     <property name="compile.debug"       value="true" />
     <property name="compile.optimize"    value="true" />
+    <property name="compile.target"      value="1.5" />
+    <property name="compile.source"      value="1.5" />
     <property name="compile.deprecation" value="false" />
 
     <property name="src.dir" value="./src/java"/>
@@ -198,6 +200,8 @@ These are the meaningful targets for this build file:
            destdir="${build.dest}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
+           target="${compile.target}"
+           source="${compile.source}"
            deprecation="${compile.deprecation}">
         <classpath refid="compile.class.path" />
     </javac>
