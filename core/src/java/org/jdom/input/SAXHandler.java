@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXHandler.java,v 1.71 2004/12/11 02:18:55 jhunter Exp $
+ $Id: SAXHandler.java,v 1.72 2007/11/09 10:55:21 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.71 $, $Date: 2004/12/11 02:18:55 $
+ * @version $Revision: 1.72 $, $Date: 2007/11/09 10:55:21 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.71 $ $Date: 2004/12/11 02:18:55 $ $Name:  $";
+      "@(#) $RCSfile: SAXHandler.java,v $ $Revision: 1.72 $ $Date: 2007/11/09 10:55:21 $ $Name:  $";
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
     private static final Map attrNameToTypeMap = new HashMap(13);
@@ -560,7 +560,11 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                 continue;
             }
 
-            if (!attQName.equals(attLocalName)) {
+            // First clause per http://markmail.org/message/2p245ggcjst27xe6
+            // patch from Mattias Jiderhamn
+            if ("".equals(attLocalName) && attQName.indexOf(":") == -1) {
+                attribute = factory.attribute(attQName, atts.getValue(i), attType);
+            } else if (!attQName.equals(attLocalName)) {
                 String attPrefix = attQName.substring(0, attQName.indexOf(":"));
                 Namespace attNs = Namespace.getNamespace(attPrefix,
                                                          atts.getURI(i));
