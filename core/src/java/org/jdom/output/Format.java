@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.11 2006/08/15 01:04:39 jhunter Exp $
+ $Id: Format.java,v 1.12 2007/11/09 10:23:46 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -68,13 +68,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.11 $, $Date: 2006/08/15 01:04:39 $
+ * @version $Revision: 1.12 $, $Date: 2007/11/09 10:23:46 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.11 $ $Date: 2006/08/15 01:04:39 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.12 $ $Date: 2007/11/09 10:23:46 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -209,7 +209,7 @@ public class Format implements Cloneable {
      * </p>
      *
      * <p>
-     * If the format's "indent" property is null or "" (as is the default
+     * If the format's "indent" property is null (as is the default
      * for the Raw and Compact formats), then this value only effects the
      * newlines written after the declaration and doctype.
      * </p>
@@ -369,19 +369,14 @@ public class Format implements Cloneable {
     /**
      * This will set the indent <code>String</code> to use; this
      * is usually a <code>String</code> of empty spaces. If you pass
-     * null, or the empty string (""), then no indentation will
-     * happen.  Default: none (null)
+     * the empty string (""), then no indentation will happen but newlines
+     * will still be generated.  Passing null will result in no indentation
+     * and no newlines generated.  Default: none (null)
      *
      * @param indent <code>String</code> to use for indentation.
      * @return a pointer to this Format for chaining
      */
     public Format setIndent(String indent) {
-        // if passed the empty string, change it to null, for marginal
-        // performance gains later (can compare to null first instead
-        // of calling equals())
-        if ("".equals(indent)) {
-            indent = null;
-        }
         this.indent = indent;
         return this;
     }

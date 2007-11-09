@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.114 2006/08/15 00:53:18 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.115 2007/11/09 10:23:46 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.114 $, $Date: 2006/08/15 00:53:18 $
+ * @version $Revision: 1.115 $, $Date: 2007/11/09 10:23:46 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -115,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.114 $ $Date: 2006/08/15 00:53:18 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.115 $ $Date: 2007/11/09 10:23:46 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -178,7 +178,7 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
-     * Returns the current format in use by the outputter.  Note the 
+     * Returns the current format in use by the outputter.  Note the
      * Format object returned is a clone of the one used internally.
      */
     public Format getFormat() {
@@ -1189,8 +1189,7 @@ public class XMLOutputter implements Cloneable {
     // * * * * * * * * * * Support methods * * * * * * * * * *
 
     /**
-     * This will print a new line only if the newlines flag was set to
-     * true.
+     * This will print a newline only if indent is not null.
      *
      * @param out <code>Writer</code> to use
      */
@@ -1201,11 +1200,10 @@ public class XMLOutputter implements Cloneable {
     }
 
     /**
-     * This will print indents (only if the newlines flag was
-     * set to <code>true</code>, and indent is non-null).
+     * This will print indents only if indent is not null or the empty string.
      *
      * @param out <code>Writer</code> to use
-     * @param level current indent level (number of tabs)
+     * @param level current indent level
      */
     private void indent(Writer out, int level) throws IOException {
         if (currentFormat.indent == null ||
