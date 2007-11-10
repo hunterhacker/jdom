@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: XercesDOMAdapter.java,v 1.18 2004/02/06 09:28:31 jhunter Exp $
+ $Id: XercesDOMAdapter.java,v 1.19 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -67,14 +67,14 @@ import org.xml.sax.*;
 /**
  * An adapter for the Apache Xerces DOM parser.
  * 
- * @version $Revision: 1.18 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.19 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class XercesDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.18 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: XercesDOMAdapter.java,v $ $Revision: 1.19 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

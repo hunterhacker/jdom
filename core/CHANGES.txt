@@ -1,4 +1,66 @@
-* * * * * * 1.0 (future tag: jdom_1_0) from Beta10 * * * * * *
+* * * * * * JDOM 1.1 (tag: jdom_1_1) from JDOM 1.0 * * * * * *
+
+Added an additional constructor to JDOMSource with an EntityResolver which is
+passed to the internal DocumentReader allowing the SAXOutputter to properly
+resolve DTDs. 
+
+Added a forceNamespaceAware property to DOMOutputter which specifies you want
+a DOM constructed with namespaces even if the source JDOM document has no
+namespaces.
+
+Added support for attribute "INF" and "-INF" values, to indicate positive and
+negative infinity, as XML Schema allows.
+
+Moved isXMLWhitespace() method from private in XMLOutputter to public in
+Verifier.
+
+Clarified XMLOutputter behavior with newlines and indents:
+  setIndent(" ") means newlines and " " indents
+  setIndent("") means newlines and "" indents
+  setIndent(null) means no newlines and no indents
+
+Added set/getIgnoringBoundaryWhitespace() methods and features to SAXBuilder
+and SAXHandler.
+
+Added a string constant for the JDOM_OBJECT_MODEL_URI used by JAXP 1.3.  It
+deserves being part of the public API. 
+
+Fixed bug in SAXOutputter where default namespaces would be declared as
+xmlns:="" with a spurious colon.
+
+Fixed bug when using attributes without a namespace and outputting to a
+JDOMResult.
+
+Removing check that a comment not start with a hyphen. A careful reading of
+production 15 in the XML 1.0 spec indicates leading hyphens are in fact
+allowed.
+
+Fixed bug where outputFragment() on SAXOutputter could cause a
+NullPointerException because the locator would be null during the call.
+
+Fixed bug where serializing ElementFilter causes a NullPointerException if the
+filter has no assigned namespace
+
+Fixed some subtle bad behaviors in listIterator.add() logic, using brand new
+iterator logic.
+
+Allowed a String to be passed to ContentList.add(int, Object).
+
+Simplified JDOMAbout and renamed info.xml to jdom-info.xml, so
+getResourceAsStream() won't suffer any name collision. 
+
+Fixed tiny issue where CDATA could be set with illegal character content.
+
+Added logic to escape some special characters in namespace URIs.
+
+Fixed bug where the attribute type would change on a setAttribute() call.
+
+Improved performance on Namespace handling.
+
+Improved and clarified Javadocs.
+
+
+* * * * * * JDOM 1.0 (tag: jdom_1_0) from JDOM Beta10 * * * * * *
 
 Added a new lib/jaxen-jdom.jar that solves some XPath ancestry problems
 introduced by the Parent interface.  See the new lib/jaxen.readme for

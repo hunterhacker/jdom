@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.13 2004/02/06 09:28:30 jhunter Exp $
+ $Id: DataConversionException.java,v 1.14 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -60,14 +60,14 @@ package org.jdom;
  * Thrown when a data conversion from a string to value type fails, such as
  * can happen with the {@link Attribute} convenience getter functions.
  *
- * @version $Revision: 1.13 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.14 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class DataConversionException extends JDOMException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /**
      * Constructs an exception where the named construct couldn't be converted

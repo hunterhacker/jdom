@@ -1,8 +1,8 @@
 /*--
 
- $Id: CDATA.java,v 1.31 2006/11/16 08:16:35 jhunter Exp $
+ $Id: CDATA.java,v 1.32 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,7 @@ package org.jdom;
  * CDATA makes no guarantees about the underlying textual representation of
  * character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.31 $, $Date: 2006/11/16 08:16:35 $
+ * @version $Revision: 1.32 $, $Date: 2007/11/10 05:28:58 $
  * @author  Dan Schaffer
  * @author  Brett McLaughlin
  * @author  Jason Hunter
@@ -73,7 +73,7 @@ package org.jdom;
 public class CDATA extends Text {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.31 $ $Date: 2006/11/16 08:16:35 $ $Name:  $";
+      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.32 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /**
      * This is the protected, no-args constructor standard in all JDOM

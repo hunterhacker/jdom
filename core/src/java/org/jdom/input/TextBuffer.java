@@ -1,8 +1,8 @@
 /*--
 
- $Id: TextBuffer.java,v 1.9 2004/12/11 01:31:50 jhunter Exp $
+ $Id: TextBuffer.java,v 1.10 2007/11/10 05:29:00 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -71,14 +71,14 @@ import org.jdom.*;
  * means that no extra unused char array space will be kept around after parsing
  * is through.
  *
- * @version $Revision: 1.9 $, $Date: 2004/12/11 01:31:50 $
+ * @version $Revision: 1.10 $, $Date: 2007/11/10 05:29:00 $
  * @author  Bradley S. Huffman
  * @author  Alex Rosen
  */
 class TextBuffer {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.9 $ $Date: 2004/12/11 01:31:50 $ $Name:  $";
+    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.10 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
 
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */

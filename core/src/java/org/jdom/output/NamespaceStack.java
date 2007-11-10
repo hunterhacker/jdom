@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.13 2004/02/06 09:28:32 jhunter Exp $
+ $Id: NamespaceStack.java,v 1.14 2007/11/10 05:29:01 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,7 @@ import org.jdom.Namespace;
  * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
  * during output.
  *
- * @version $Revision: 1.13 $, $Date: 2004/02/06 09:28:32 $
+ * @version $Revision: 1.14 $, $Date: 2007/11/10 05:29:01 $
  * @author  Elliotte Rusty Harolde
  * @author  Fred Trimble
  * @author  Brett McLaughlin
@@ -72,7 +72,7 @@ import org.jdom.Namespace;
 class NamespaceStack {
  
     private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:32 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
 
     /** The prefixes available */
     private Stack prefixes;

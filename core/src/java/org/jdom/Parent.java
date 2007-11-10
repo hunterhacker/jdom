@@ -1,8 +1,8 @@
 /*--
 
- $Id: Parent.java,v 1.12 2004/08/31 21:47:51 jhunter Exp $
+ $Id: Parent.java,v 1.13 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ import org.jdom.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.12 $, $Date: 2004/08/31 21:47:51 $
+ * @version $Revision: 1.13 $, $Date: 2007/11/10 05:28:59 $
  */
 public interface Parent extends Cloneable, Serializable {
 

@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: Filter.java,v 1.9 2004/02/06 09:28:31 jhunter Exp $
+ $Id: Filter.java,v 1.10 2007/11/10 05:29:00 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -60,7 +60,7 @@ package org.jdom.filter;
 /**
  * A generalized filter to restrict visibility or mutability on a list.
  *
- * @version $Revision: 1.9 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.10 $, $Date: 2007/11/10 05:29:00 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */

@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: IllegalNameException.java,v 1.13 2004/02/06 09:28:30 jhunter Exp $
+ $Id: IllegalNameException.java,v 1.14 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -60,14 +60,14 @@ package org.jdom;
  * Thrown when a name is supplied in construction of a JDOM construct whose
  * where the name breaks XML naming conventions.
  * 
- * @version $Revision: 1.13 $, $Date: 2004/02/06 09:28:30 $
+ * @version $Revision: 1.14 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  */
 public class IllegalNameException extends IllegalArgumentException {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:30 $ $Name:  $";
+      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /**
      * This will create an <code>Exception</code> indicating

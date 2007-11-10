@@ -1,8 +1,8 @@
 /*--
 
- $Id: AndFilter.java,v 1.3 2004/02/06 09:28:31 jhunter Exp $
+ $Id: AndFilter.java,v 1.4 2007/11/10 05:29:00 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,12 +61,12 @@ package org.jdom.filter;
  * <b>and</b> operation.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.3 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.4 $, $Date: 2007/11/10 05:29:00 $
  */
 final class AndFilter extends AbstractFilter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: AndFilter.java,v $ $Revision: 1.3 $ $Date: 2004/02/06 09:28:31 $";
+      "@(#) $RCSfile: AndFilter.java,v $ $Revision: 1.4 $ $Date: 2007/11/10 05:29:00 $";
 
     // Filter for left side of logical <b>and</b>.
     private Filter left;

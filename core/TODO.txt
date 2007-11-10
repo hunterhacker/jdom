@@ -4,7 +4,7 @@ Items that need to be done:
 
 None!
 
---- ITEMS TO CONSIDER FOR 1.1 ---
+--- ITEMS TO CONSIDER FOR 1.2 ---
 
 * Output support for surrogate pairs.
 

@@ -1,8 +1,8 @@
 /*--
 
- $Id: XPath.java,v 1.16 2004/11/03 05:17:17 jhunter Exp $
+ $Id: XPath.java,v 1.17 2007/11/10 05:29:02 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -71,13 +71,13 @@ import org.jdom.*;
  * can choose an implementation using either {@link #setXPathClass} or
  * the system property "org.jdom.xpath.class".
  *
- * @version $Revision: 1.16 $, $Date: 2004/11/03 05:17:17 $
+ * @version $Revision: 1.17 $, $Date: 2007/11/10 05:29:02 $
  * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.16 $ $Date: 2004/11/03 05:17:17 $ $Name:  $";
+    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.17 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
 
    /**
     * The name of the system property from which to retrieve the

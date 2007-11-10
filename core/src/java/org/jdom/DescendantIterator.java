@@ -1,8 +1,8 @@
 /*--
 
- $Id: DescendantIterator.java,v 1.5 2004/02/27 11:32:57 jhunter Exp $
+ $Id: DescendantIterator.java,v 1.6 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,7 @@ import org.jdom.Parent;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.5 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.6 $, $Date: 2007/11/10 05:28:58 $
  */
 class DescendantIterator implements Iterator {
 
@@ -76,7 +76,7 @@ class DescendantIterator implements Iterator {
     private List stack = new ArrayList();
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.5 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.6 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /**
      * Iterator for the descendants of the supplied object.

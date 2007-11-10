@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: CrimsonDOMAdapter.java,v 1.16 2004/02/06 09:28:31 jhunter Exp $
+ $Id: CrimsonDOMAdapter.java,v 1.17 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -66,13 +66,13 @@ import org.xml.sax.*;
 /**
  * An adapter for the Apache Crimson DOM parser.
  * 
- * @version $Revision: 1.16 $, $Date: 2004/02/06 09:28:31 $
+ * @version $Revision: 1.17 $, $Date: 2007/11/10 05:28:59 $
  * @author  Jason Hunter
  */
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.16 $ $Date: 2004/02/06 09:28:31 $ $Name:  $";
+      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.17 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /**
      * This creates a new <code>{@link Document}</code> from an

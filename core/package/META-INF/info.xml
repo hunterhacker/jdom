@@ -13,9 +13,10 @@
         complex and memory-consumptive options that current API
         offerings provide.
     </description>
-    <copyright>2000-2004, Jason Hunter</copyright>
+    <copyright>2000-2007, Jason Hunter</copyright>
     <license>BSD/Apache style, see LICENSE.txt</license>
-    <support>See the jdom-interest mailing list at jdom.org</support>
+    <support>See the jdom-interest mailing list at jdom.org,
+             searchable at http://jdom.markmail.org</support>
     <web-site>http://www.jdom.org/</web-site>
     <!--
     The following list of authors was initially extracted from @author

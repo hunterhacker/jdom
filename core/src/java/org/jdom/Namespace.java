@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: Namespace.java,v 1.42 2004/12/11 00:46:02 jhunter Exp $
+ $Id: Namespace.java,v 1.43 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -65,7 +65,7 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.42 $, $Date: 2004/12/11 00:46:02 $
+ * @version $Revision: 1.43 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -84,7 +84,7 @@ public final class Namespace {
     // No one has ever reported this over the many years, so don't worry yet.
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.42 $ $Date: 2004/12/11 00:46:02 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.43 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 

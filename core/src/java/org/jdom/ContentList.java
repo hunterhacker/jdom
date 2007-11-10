@@ -1,8 +1,8 @@
 /*--
 
- $Id: ContentList.java,v 1.41 2007/11/09 08:53:03 jhunter Exp $
+ $Id: ContentList.java,v 1.42 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -72,7 +72,7 @@ import org.jdom.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.41 $, $Date: 2007/11/09 08:53:03 $
+ * @version $Revision: 1.42 $, $Date: 2007/11/10 05:28:58 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
@@ -80,7 +80,7 @@ import org.jdom.filter.*;
 final class ContentList extends AbstractList implements java.io.Serializable {
 
 	private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.41 $ $Date: 2007/11/09 08:53:03 $ $Name:  $";
+      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.42 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
 	private static final long serialVersionUID = 1L;
 

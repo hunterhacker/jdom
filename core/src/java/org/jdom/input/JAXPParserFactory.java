@@ -1,8 +1,8 @@
 /*--
 
- $Id: JAXPParserFactory.java,v 1.5 2004/02/27 21:08:47 jhunter Exp $
+ $Id: JAXPParserFactory.java,v 1.6 2007/11/10 05:29:00 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -66,13 +66,13 @@ import org.xml.sax.*;
 /**
  * A non-public utility class to allocate JAXP SAX parsers.
  *
- * @version $Revision: 1.5 $, $Date: 2004/02/27 21:08:47 $
+ * @version $Revision: 1.6 $, $Date: 2007/11/10 05:29:00 $
  * @author  Laurent Bihanic
  */
 class JAXPParserFactory {               // package protected
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: JAXPParserFactory.java,v $ $Revision: 1.5 $ $Date: 2004/02/27 21:08:47 $ $Name:  $";
+      "@(#) $RCSfile: JAXPParserFactory.java,v $ $Revision: 1.6 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
 
     /** JAXP 1.2 schema language property id. */
     private static final String JAXP_SCHEMA_LANGUAGE_PROPERTY =

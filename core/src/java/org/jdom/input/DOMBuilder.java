@@ -1,8 +1,8 @@
 /*--
 
- $Id: DOMBuilder.java,v 1.59 2004/09/03 06:03:41 jhunter Exp $
+ $Id: DOMBuilder.java,v 1.60 2007/11/10 05:29:00 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -66,7 +66,7 @@ import org.w3c.dom.*;
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
- * @version $Revision: 1.59 $, $Date: 2004/09/03 06:03:41 $
+ * @version $Revision: 1.60 $, $Date: 2007/11/10 05:29:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -78,7 +78,7 @@ import org.w3c.dom.*;
 public class DOMBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.59 $ $Date: 2004/09/03 06:03:41 $ $Name:  $";
+      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.60 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
 
     /** Adapter class to use */
     private String adapterClass;

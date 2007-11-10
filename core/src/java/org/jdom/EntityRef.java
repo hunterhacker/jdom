@@ -1,8 +1,8 @@
 /*--
 
- $Id: EntityRef.java,v 1.21 2004/02/27 11:32:57 jhunter Exp $
+ $Id: EntityRef.java,v 1.22 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -60,7 +60,7 @@ package org.jdom;
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  *
- * @version $Revision: 1.21 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.22 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
@@ -68,7 +68,7 @@ package org.jdom;
 public class EntityRef extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.21 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.22 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /** The name of the <code>EntityRef</code> */
     protected String name;

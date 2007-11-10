@@ -1,8 +1,8 @@
 /*--
 
- $Id: DocType.java,v 1.31 2004/02/27 11:32:57 jhunter Exp $
+ $Id: DocType.java,v 1.32 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -62,12 +62,12 @@ package org.jdom;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.31 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.32 $, $Date: 2007/11/10 05:28:58 $
  */
 public class DocType extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.31 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.32 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /** The element being constrained */
     protected String elementName;

@@ -1,8 +1,8 @@
 /*--
 
- $Id: Attribute.java,v 1.55 2006/11/16 09:15:49 jhunter Exp $
+ $Id: Attribute.java,v 1.56 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,7 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.55 $, $Date: 2006/11/16 09:15:49 $
+ * @version $Revision: 1.56 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
@@ -72,7 +72,7 @@ import java.io.*;
 public class Attribute implements Serializable, Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.55 $ $Date: 2006/11/16 09:15:49 $ $Name:  $";
+      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.56 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /**
      * Attribute type: the attribute has not been declared or type

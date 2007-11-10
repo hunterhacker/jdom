@@ -1,8 +1,8 @@
 /*--
 
- $Id: Comment.java,v 1.32 2004/02/11 21:12:43 jhunter Exp $
+ $Id: Comment.java,v 1.33 2007/11/10 05:28:58 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -60,14 +60,14 @@ package org.jdom;
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
  *
- * @version $Revision: 1.32 $, $Date: 2004/02/11 21:12:43 $
+ * @version $Revision: 1.33 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public class Comment extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.32 $ $Date: 2004/02/11 21:12:43 $ $Name:  $";
+      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.33 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
 
     /** Text of the <code>Comment</code> */
     protected String text;

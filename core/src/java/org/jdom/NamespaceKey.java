@@ -1,8 +1,8 @@
 /*-- 
 
- $Id: NamespaceKey.java,v 1.1 2004/12/11 00:46:02 jhunter Exp $
+ $Id: NamespaceKey.java,v 1.2 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -61,14 +61,14 @@ import java.util.*;
 /**
  * Key for storing a namespace representation in a map.
  *
- * @version $Revision: 1.1 $, $Date: 2004/12/11 00:46:02 $
+ * @version $Revision: 1.2 $, $Date: 2007/11/10 05:28:59 $
  * @author  Tatu Saloranta
  * @author  Bradley S. Huffman
  */
 final class NamespaceKey {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: NamespaceKey.java,v $ $Revision: 1.1 $ $Date: 2004/12/11 00:46:02 $ $Name:  $";
+      "@(#) $RCSfile: NamespaceKey.java,v $ $Revision: 1.2 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     private String prefix;
     private String uri;

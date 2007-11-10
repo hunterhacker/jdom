@@ -1,8 +1,8 @@
 /*--
 
- $Id: ProcessingInstruction.java,v 1.46 2004/02/27 11:32:57 jhunter Exp $
+ $Id: ProcessingInstruction.java,v 1.47 2007/11/10 05:28:59 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,7 @@ import java.util.*;
  * if the data appears akin to an attribute list, can be retrieved as name/value
  * pairs.
  *
- * @version $Revision: 1.46 $, $Date: 2004/02/27 11:32:57 $
+ * @version $Revision: 1.47 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Steven Gould
@@ -73,7 +73,7 @@ import java.util.*;
 public class ProcessingInstruction extends Content {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.46 $ $Date: 2004/02/27 11:32:57 $ $Name:  $";
+      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.47 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
 
     /** The target of the PI */
     protected String target;
