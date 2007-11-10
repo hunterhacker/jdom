@@ -76,6 +76,8 @@ These are the meaningful targets for this build file:
 
     <property name="compile.debug"       value="true" />
     <property name="compile.optimize"    value="true" />
+    <property name="compile.target"      value="1.2" />
+    <property name="compile.source"      value="1.2" />
     <property name="compile.deprecation" value="true" />
 
     <property name="src.dir" value="./src/java"/>
@@ -206,6 +208,8 @@ These are the meaningful targets for this build file:
            destdir="${build.dest}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
+           target="${compile.target}"
+           source="${compile.source}"
            deprecation="${compile.deprecation}">
       <exclude name="**/*JTree*.java" unless="swing.present" />
       <exclude name="**/schema/*.java" unless="jarv.present" />
@@ -222,6 +226,8 @@ These are the meaningful targets for this build file:
            destdir="${samples.dest}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
+           target="${compile.target}"
+           source="${compile.source}"
            deprecation="${compile.deprecation}">
 
       <classpath refid="run.class.path"/>
