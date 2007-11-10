@@ -1,8 +1,8 @@
 /*--
 
- $Id: SAXBuilderDemo.java,v 1.19 2006/11/16 08:34:18 jhunter Exp $
+ $Id: SAXBuilderDemo.java,v 1.20 2007/11/10 05:36:01 jhunter Exp $
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
