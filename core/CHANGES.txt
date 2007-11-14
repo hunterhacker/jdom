@@ -22,6 +22,9 @@ Clarified XMLOutputter behavior with newlines and indents:
 Added set/getIgnoringBoundaryWhitespace() methods and features to SAXBuilder
 and SAXHandler.
 
+Added a setFactory() method on XSLTransformer to control the object types
+built by the transform.
+
 Added a string constant for the JDOM_OBJECT_MODEL_URI used by JAXP 1.3.  It
 deserves being part of the public API. 
 
