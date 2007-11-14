@@ -1,6 +1,6 @@
 /*--
 
- $Id: Element.java,v 1.158 2007/11/10 05:28:59 jhunter Exp $
+ $Id: Element.java,v 1.159 2007/11/14 05:02:08 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -66,7 +66,7 @@ import org.jdom.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.158 $, $Date: 2007/11/10 05:28:59 $
+ * @version $Revision: 1.159 $, $Date: 2007/11/14 05:02:08 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze
@@ -82,7 +82,7 @@ import org.jdom.filter.*;
 public class Element extends Content implements Parent {
 
     private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.158 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
+    "@(#) $RCSfile: Element.java,v $ $Revision: 1.159 $ $Date: 2007/11/14 05:02:08 $ $Name:  $";
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -1050,7 +1050,7 @@ public class Element extends Content implements Parent {
 
     /**
      * <p>
-     * This sets the attributes of the element.  The supplied List should
+     * This sets the attributes of the element.  The supplied Collection should
      * contain only objects of type <code>Attribute</code>.
      * </p>
      *
@@ -1094,6 +1094,17 @@ public class Element extends Content implements Parent {
     public Element setAttributes(final Collection newAttributes) {
         attributes.clearAndSet(newAttributes);
         return this;
+    }
+
+    /**
+     * <p>
+     * This sets the attributes of the element.  It's an alternate form of
+     * the method, accepting a <code>List</code> instead of a
+     * <code>Collection</code>, for backward compatibility.
+     * </p>
+     */
+    public Element setAttributes(final List newAttributes) {
+        return setAttributes((Collection)newAttributes);
     }
 
     /**
