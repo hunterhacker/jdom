@@ -1,6 +1,6 @@
 /*--
 
- $Id: ElementScanner.java,v 1.13 2004/09/03 06:12:44 jhunter Exp $
+ $Id: ElementScanner.java,v 1.14 2007/11/14 04:12:05 jhunter Exp $
 
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -582,7 +582,13 @@ public class ElementScanner extends XMLFilterImpl {
       String eltPath = this.currentPath.substring(0);
       Collection matchingRules = (Collection)(this.activeRules.remove(eltPath));
       if (matchingRules != null) {
-         // Matching rules exist. => Notify all matching listeners.
+         // Matching rules found.
+         // => Detach the current element if no rules remain active.
+         if (this.activeRules.size() == 0) {
+            elt.detach();
+         }
+
+         // And notify all matching listeners.
          try {
             for (Iterator i=matchingRules.iterator(); i.hasNext(); ) {
                XPathMatcher matcher = (XPathMatcher)(i.next());
@@ -707,7 +713,7 @@ public class ElementScanner extends XMLFilterImpl {
       //----------------------------------------------------------------------
 
       protected SAXHandler createContentHandler() {
-         return (new FragmentHandler(new EmptyDocumentFactory(getFactory())));
+         return (new FragmentHandler(getFactory()));
       }
 
       //----------------------------------------------------------------------
@@ -785,178 +791,10 @@ public class ElementScanner extends XMLFilterImpl {
       public FragmentHandler(JDOMFactory factory) {
          super(factory);
 
-         // Add a dummy root element to the being-built document as XSL
-         // transformation can output node lists instead of well-formed
-         // documents.
+         // Add a dummy root element to the being-built document.
          this.pushElement(new Element("root", null, null));
       }
    }
 
-   //-------------------------------------------------------------------------
-   // EmptyDocumentFactory nested class
-   //-------------------------------------------------------------------------
-
-   /**
-    * EmptyDocumentFactory is an implementation of JDOMFactory that
-    * wraps an application-provided factory and delegates all
-    * method calls to this latter except for document creation calls
-    * it intercepts to return instances of EmptyDocument.
-    */
-   private static class EmptyDocumentFactory implements JDOMFactory {
-
-      /**
-       * The wrapped JDOM factory implementation.
-       */
-      private final JDOMFactory wrapped;
-
-      /**
-       * Creates a new EmptyDocumentFactory wrapping the specified
-       * JDOM factory implementation.
-       *
-       * @param  factory   the JDOM factory implementation to wrap
-       *                   or <code>null</code> to use the default
-       *                   JDOM factory.
-       */
-      public EmptyDocumentFactory(JDOMFactory factory) {
-         this.wrapped = (factory != null)? factory: new DefaultJDOMFactory();
-      }
-
-      //----------------------------------------------------------------------
-      // Redefined JDOMFactory methods
-      //----------------------------------------------------------------------
-
-      public Document document(Element rootElement, DocType docType) {
-         return (new EmptyDocument());
-      }
-
-      public Document document(Element rootElement, DocType docType,
-                               String baseURI) {
-         return (new EmptyDocument());
-      }
-
-      public Document document(Element rootElement) {
-         return (new EmptyDocument());
-      }
-
-      //----------------------------------------------------------------------
-      // Delegated JDOMFactory methods
-      //----------------------------------------------------------------------
-
-      public Attribute attribute(String name, String value,
-                                              Namespace namespace) {
-         return(this.wrapped.attribute(name, value, namespace));
-      }
-      public Attribute attribute(String name, String value, int type,
-                                              Namespace namespace) {
-         return(this.wrapped.attribute(name, value, type, namespace));
-      }
-      public Attribute attribute(String name, String value) {
-         return(this.wrapped.attribute(name, value));
-      }
-      public Attribute attribute(String name, String value, int type) {
-         return(this.wrapped.attribute(name, value, type));
-      }
-      public CDATA cdata(String text) {
-         return(this.wrapped.cdata(text));
-      }
-      public Text text(String text) {
-         return(this.wrapped.text(text));
-      }
-      public Comment comment(String text) {
-         return(this.wrapped.comment(text));
-      }
-      public DocType docType(String elementName,
-                             String publicID, String systemID) {
-         return(this.wrapped.docType(elementName, publicID, systemID));
-      }
-      public DocType docType(String elementName, String systemID) {
-         return(this.wrapped.docType(elementName, systemID));
-      }
-      public DocType docType(String elementName) {
-         return(this.wrapped.docType(elementName));
-      }
-      public Element element(String name, Namespace namespace) {
-         return(this.wrapped.element(name, namespace));
-      }
-      public Element element(String name) {
-         return(this.wrapped.element(name));
-      }
-      public Element element(String name, String uri) {
-         return(this.wrapped.element(name, uri));
-      }
-      public Element element(String name, String prefix, String uri) {
-         return(this.wrapped.element(name, prefix, uri));
-      }
-      public ProcessingInstruction processingInstruction(String target,
-                                                         Map data) {
-         return(this.wrapped.processingInstruction(target, data));
-      }
-      public ProcessingInstruction processingInstruction(String target,
-                                                         String data) {
-         return(this.wrapped.processingInstruction(target, data));
-      }
-      public EntityRef entityRef(String name) {
-         return(this.wrapped.entityRef(name));
-      }
-      public EntityRef entityRef(String name,
-                                 String publicID, String systemID) {
-         return(this.wrapped.entityRef(name, publicID, systemID));
-      }
-      public EntityRef entityRef(String name, String systemID) {
-         return(this.wrapped.entityRef(name, systemID));
-      }
-
-       public void addContent(Parent parent, Content c) {
-           if (parent instanceof Element) {
-               ((Element) parent).addContent(c);
-           }
-           else {
-               ((Document) parent).addContent(c);
-           }
-       }
-
-       public void setAttribute(Element element, Attribute a) {
-           element.setAttribute(a);
-       }
-
-       public void addNamespaceDeclaration(Element element, Namespace additional) {
-           element.addNamespaceDeclaration(additional);
-       }
-
-
-   }
-
-   //-------------------------------------------------------------------------
-   // EmptyDocument nested class
-   //-------------------------------------------------------------------------
-
-   /**
-    * EmptyDocument extends the standard JDOM Document object to
-    * overwrite all methods setting document-level information to
-    * ensure the document always remains empty.
-    * <p>
-    * This implementation is a kludge to prevent SAXHandler to
-    * actually build a document with the matched elements as root
-    * elements (yes there can be several in our case)!</p>
-    */
-   private static class EmptyDocument extends Document {
-
-      /**
-       * Default constructor.
-       */
-      public EmptyDocument() {
-         super();
-      }
-
-      //----------------------------------------------------------------------
-      // Document overwritten methods
-      //----------------------------------------------------------------------
-
-      public Document setRootElement(Element root)         { return(this); }
-      public Document addContent(Comment comment)          { return(this); }
-      public Document addContent(ProcessingInstruction pi) { return(this); }
-      public Document setContent(List newContent)          { return(this); }
-      public Document setDocType(DocType docType)          { return(this); }
-   }
 }
 
