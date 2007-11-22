@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.55 2007/11/10 05:28:59 jhunter Exp $
+ $Id: Verifier.java,v 1.56 2007/11/22 07:00:38 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.55 $, $Date: 2007/11/10 05:28:59 $
+ * @version $Revision: 1.56 $, $Date: 2007/11/22 07:00:38 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.55 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.56 $ $Date: 2007/11/22 07:00:38 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -386,10 +386,13 @@ final public class Verifier {
      */
     public static String checkNamespaceCollision(Namespace namespace,
                                                  Attribute attribute) {
-        String reason = checkNamespaceCollision(namespace,
+        String reason = null;
+        if (!attribute.getNamespace().equals(Namespace.NO_NAMESPACE)) {
+            reason = checkNamespaceCollision(namespace,
                                                 attribute.getNamespace());
-        if (reason != null) {
-            reason += " with an attribute namespace prefix on the element";
+            if (reason != null) {
+                reason += " with an attribute namespace prefix on the element";
+            }
         }
         return reason;
     }
