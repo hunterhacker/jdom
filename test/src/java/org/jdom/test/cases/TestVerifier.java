@@ -785,6 +785,20 @@ public static Test suite () {
 		assertNull("invalidated valid name with 0x0301", Verifier.checkProcessingInstructionTarget("test" + (char)0x0301));
 
 	}
+
+  public void test_Namespace_Attribute_collision() {
+    try {
+      Namespace ns1 = Namespace.getNamespace("aaa", "http://acme.com/aaa");
+      Element e = new Element("aaa", ns1);
+      e.setAttribute("att1", "att1");
+      Namespace defns = Namespace.getNamespace("http://acme.com/default");
+      e.addNamespaceDeclaration(defns);
+			return;  // pass
+    }
+    catch (IllegalAddException e) {
+      fail("Bug http://www.junlu.com/msg/166290.html");
+    }
+  }
 	/**
 	 * This test is a noop.  The method is for development only
 	 * It will remain in the suite until it is removed from the
