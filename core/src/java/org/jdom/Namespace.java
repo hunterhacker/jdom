@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Namespace.java,v 1.43 2007/11/10 05:28:59 jhunter Exp $
+ $Id: Namespace.java,v 1.44 2008/12/17 23:22:48 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -65,7 +65,7 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.43 $, $Date: 2007/11/10 05:28:59 $
+ * @version $Revision: 1.44 $, $Date: 2008/12/17 23:22:48 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -76,15 +76,8 @@ public final class Namespace {
     // XXX May want to use weak references to keep the maps from growing 
     // large with extended use
 
-    // XXX We may need to make the namespaces HashMap synchronized with
-    // reader/writer locks or perhaps make Namespace no longer a flyweight.
-    // As written, multiple put() calls may happen from different threads 
-    // concurrently and cause a ConcurrentModificationException. See
-    // http://lists.denveronline.net/lists/jdom-interest/2000-September/003009.html.
-    // No one has ever reported this over the many years, so don't worry yet.
-
     private static final String CVS_ID =
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.43 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
+      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.44 $ $Date: 2008/12/17 23:22:48 $ $Name:  $";
 
     /** 
      * Factory list of namespaces. 
@@ -147,7 +140,10 @@ public final class Namespace {
         // have been placed in this.  Thus we can do this test before
         // verifying the URI and prefix.
         NamespaceKey lookup = new NamespaceKey(prefix, uri);
-        Namespace preexisting = (Namespace) namespaces.get(lookup);
+        Namespace preexisting;
+        synchronized (namespaces) {
+            preexisting = (Namespace) namespaces.get(lookup);
+        }
         if (preexisting != null) {
             return preexisting;
         }
@@ -189,7 +185,9 @@ public final class Namespace {
 
         // Finally, store and return
         Namespace ns = new Namespace(prefix, uri);
-        namespaces.put(lookup, ns);
+        synchronized (namespaces) {
+            namespaces.put(lookup, ns);
+        }
         return ns;
     }
 
