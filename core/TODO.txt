@@ -1,6 +1,6 @@
 Items that need to be done:
 
---- ITEMS REMAINING BEFORE 1.0 ---
+--- ITEMS REMAINING BEFORE 1.1 ---
 
 None!
 
@@ -35,9 +35,6 @@ None!
 
 * Utility methods for comparing nodes by content instead of reference.
   Hopefully base this on whatever standard emerges in this area.
-
-* If doing the JCP, clean up and expand Javadocs for inclusion into Frame
-  using the MIF Doclet.
 
 * Note in the docs where necessary our multithreading policy.
 
