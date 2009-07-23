@@ -1,3 +1,22 @@
+* * * * * * JDOM 1.1.1 (tag: jdom_1_1_1) from JDOM 1.1 * * * * * *
+
+Fixed a synchronization issue in the Namespace class that could cause a
+hang when doing concurrent builds.
+
+Added output support for Unicode surrogate pairs.
+
+Added a new flag on SAXBuilder named setFastReconfigure() which, when set,
+can speed reconfiguration by skipping repeated attempts to set features that
+are determined not to be present on a parser.  Useful when doing many builds
+per second.
+
+Updated the provided Jaxen library from a modified Jaxen 1.0 to the latest
+which is Jaxen 1.1.1.
+
+Added reflection code in the error reporting system to support Android's
+Dalvik VM which doesn't have the java.rmi.* classes.
+
+
 * * * * * * JDOM 1.1 (tag: jdom_1_1) from JDOM 1.0 * * * * * *
 
 Added an additional constructor to JDOMSource with an EntityResolver which is
