@@ -1,6 +1,6 @@
 /*--
 
- $Id: Format.java,v 1.13 2007/11/10 05:29:01 jhunter Exp $
+ $Id: Format.java,v 1.14 2009/07/23 05:54:23 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -57,6 +57,7 @@
 package org.jdom.output;
 
 import java.lang.reflect.Method;
+import org.jdom.Verifier;
 
 /**
  * Class to encapsulate XMLOutputter format options.
@@ -68,13 +69,13 @@ import java.lang.reflect.Method;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.13 $, $Date: 2007/11/10 05:29:01 $
+ * @version $Revision: 1.14 $, $Date: 2009/07/23 05:54:23 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.13 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
+            "@(#) $RCSfile: Format.java,v $ $Revision: 1.14 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -468,7 +469,10 @@ public class Format implements Cloneable {
 
         public boolean shouldEscape(char ch) {
             if (bits == 16) {
-                return false;
+                if (Verifier.isHighSurrogate(ch))
+                    return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
+                else
+                    return false;
             }
             if (bits == 8) {
                 if ((int) ch > 255)
@@ -483,6 +487,9 @@ public class Format implements Cloneable {
                     return false;
             }
             else {
+                if (Verifier.isHighSurrogate(ch))
+                    return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
+                
                 if (canEncode != null && encoder != null) {
                     try {
                         Boolean val = (Boolean) canEncode.invoke(encoder, new Object[]{new Character(ch)});

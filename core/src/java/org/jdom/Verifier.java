@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: Verifier.java,v 1.56 2007/11/22 07:00:38 jhunter Exp $
+ $Id: Verifier.java,v 1.57 2009/07/23 05:54:23 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -62,7 +62,7 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.56 $, $Date: 2007/11/22 07:00:38 $
+ * @version $Revision: 1.57 $, $Date: 2009/07/23 05:54:23 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
@@ -71,7 +71,7 @@ import java.util.*;
 final public class Verifier {
 
     private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.56 $ $Date: 2007/11/22 07:00:38 $ $Name:  $";
+      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.57 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
 
     /**
      * Ensure instantation cannot occur.
@@ -161,17 +161,17 @@ final public class Verifier {
             int ch = text.charAt(i);
             
             // Check if high part of a surrogate pair
-            if (ch >= 0xD800 && ch <= 0xDBFF) {
+            if (isHighSurrogate((char) ch)) {
                 // Check if next char is the low-surrogate
                 i++;
                 if (i < len) {
                     char low = text.charAt(i);
-                    if (low < 0xDC00 || low > 0xDFFF) {
+                    if (!isLowSurrogate(low)) {
                         return "Illegal Surrogate Pair";
                     }
                     // It's a good pair, calculate the true value of
                     // the character to then fall thru to isXMLCharacter
-                    ch = 0x10000 + (ch - 0xD800) * 0x400 + (low - 0xDC00);
+                    ch = decodeSurrogatePair((char) ch, low);
                 }
                 else {
                     return "Surrogate Pair Truncated";
@@ -515,6 +515,16 @@ final public class Verifier {
         // If we got here, everything is OK
         return null;
     }
+    /**
+     * This is a utility function to decode a non-BMP 
+     * UTF-16 surrogate pair.
+     * @param high high 16 bits
+     * @param low low 16 bits
+     * @return decoded character
+     */
+    public static int decodeSurrogatePair(char high, char low) {
+    	return 0x10000 + (high - 0xD800) * 0x400 + (low - 0xDC00);
+    }
 
     // [13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] |
     // [-'()+,./:=?;*#@$_%]
@@ -691,6 +701,28 @@ final public class Verifier {
         if (c >= 'a' && c <= 'f') return true;
 
         return false;
+    }
+    
+    /**
+     * This is a function for determining whether the
+     * specified character is the high 16 bits in a 
+     * UTF-16 surrogate pair.
+     * @param ch character to check
+     * @return true if the character is a high surrogate, false otherwise
+     */
+    public static boolean isHighSurrogate(char ch) {
+    	return (ch >= 0xD800 && ch <= 0xDBFF);
+    }
+    
+    /**
+     * This is a function for determining whether the 
+     * specified character is the low 16 bits in a 
+     * UTF-16 surrogate pair.
+     * @param ch character to check
+     * @return true if the character is a low surrogate, false otherwise.
+     */
+    public static boolean isLowSurrogate(char ch) {
+    	return (ch >= 0xDC00 && ch <= 0xDFFF);
     }
 
     /**

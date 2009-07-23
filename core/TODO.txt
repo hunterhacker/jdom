@@ -6,8 +6,6 @@ None!
 
 --- ITEMS TO CONSIDER FOR 1.2 ---
 
-* Output support for surrogate pairs.
-
 * Integrate the contributed StAXBuilder.
 
 * Rusty's "base uri" support for Element and the rest.

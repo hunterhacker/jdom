@@ -1,6 +1,6 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.116 2007/11/10 05:29:01 jhunter Exp $
+ $Id: XMLOutputter.java,v 1.117 2009/07/23 05:54:23 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -100,7 +100,7 @@ import org.jdom.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.116 $, $Date: 2007/11/10 05:29:01 $
+ * @version $Revision: 1.117 $, $Date: 2009/07/23 05:54:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid
@@ -115,7 +115,7 @@ import org.jdom.*;
 public class XMLOutputter implements Cloneable {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.116 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
+      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.117 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
 
     // For normal output
     private Format userFormat = Format.getRawFormat();
@@ -1337,16 +1337,18 @@ public class XMLOutputter implements Cloneable {
      *
      * @param str <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
+     * @throws IllegalArgumentException if an entity can not be escaped
      */
     public String escapeAttributeEntities(String str) {
         StringBuffer buffer;
-        char ch;
+        int ch, pos;
         String entity;
         EscapeStrategy strategy = currentFormat.escapeStrategy;
 
         buffer = null;
         for (int i = 0; i < str.length(); i++) {
             ch = str.charAt(i);
+            pos = i;
             switch(ch) {
                 case '<' :
                     entity = "&lt;";
@@ -1375,7 +1377,25 @@ public class XMLOutputter implements Cloneable {
                     entity = "&#xA;";
                     break;
                 default :
-                    if (strategy.shouldEscape(ch)) {
+                	                
+                    if (strategy.shouldEscape((char) ch)) {       
+                    	// Make sure what we are escaping is not the
+                    	// Beginning of a multi-byte character.
+                    	if (Verifier.isHighSurrogate((char) ch)) {
+                    		// This is a the high of a surrogate pair
+                    		i++;                    		
+                    		if (i < str.length()) {
+                    			char low = str.charAt(i);
+                    			if(!Verifier.isLowSurrogate(low)) {
+                    				throw new IllegalDataException("Could not decode surrogate pair 0x" +
+                    						Integer.toHexString(ch) + " / 0x" + Integer.toHexString(low));
+                    			}
+                    			ch = Verifier.decodeSurrogatePair((char) ch, low);
+                    		} else {
+                    			throw new IllegalDataException("Surrogate pair 0x" +
+                						Integer.toHexString(ch) + " truncated");
+                    		}
+                    	}
                         entity = "&#x" + Integer.toHexString(ch) + ";";
                     }
                     else {
@@ -1390,13 +1410,13 @@ public class XMLOutputter implements Cloneable {
                     buffer = new StringBuffer(str.length() + 20);
                     // Copy previous skipped characters and fall through
                     // to pickup current character
-                    buffer.append(str.substring(0, i));
+                    buffer.append(str.substring(0, pos));
                     buffer.append(entity);
                 }
             }
             else {
                 if (entity == null) {
-                    buffer.append(ch);
+                    buffer.append((char) ch);
                 }
                 else {
                     buffer.append(entity);
@@ -1419,18 +1439,20 @@ public class XMLOutputter implements Cloneable {
      *
      * @param str <code>String</code> input to escape.
      * @return <code>String</code> with escaped content.
+     * @throws IllegalArgumentException if an entity can not be escaped
      */
     public String escapeElementEntities(String str) {
         if (escapeOutput == false) return str;
 
         StringBuffer buffer;
-        char ch;
+        int ch, pos;
         String entity;
         EscapeStrategy strategy = currentFormat.escapeStrategy;
 
         buffer = null;
         for (int i = 0; i < str.length(); i++) {
             ch = str.charAt(i);
+            pos = i;
             switch(ch) {
                 case '<' :
                     entity = "&lt;";
@@ -1448,7 +1470,26 @@ public class XMLOutputter implements Cloneable {
                     entity = currentFormat.lineSeparator;
                     break;
                 default :
-                    if (strategy.shouldEscape(ch)) {
+                
+                    if (strategy.shouldEscape((char) ch)) {
+                    	
+                    	//make sure what we are escaping is not the 
+                    	//beginning of a multi-byte character. 
+                    	if(Verifier.isHighSurrogate((char) ch)) {
+                    		//this is a the high of a surrogate pair
+                    		i++;
+                    		if (i < str.length()) {
+                    			char low = str.charAt(i);
+                    			if(!Verifier.isLowSurrogate(low)) {
+                    				throw new IllegalDataException("Could not decode surrogate pair 0x" +
+                    						Integer.toHexString(ch) + " / 0x" + Integer.toHexString(low));
+                    			}
+                    			ch = Verifier.decodeSurrogatePair((char) ch, low);
+                    		} else {
+                    			throw new IllegalDataException("Surrogate pair 0x" +
+                						Integer.toHexString(ch) + " truncated");
+                    		}
+                    	}
                         entity = "&#x" + Integer.toHexString(ch) + ";";
                     }
                     else {
@@ -1463,13 +1504,13 @@ public class XMLOutputter implements Cloneable {
                     buffer = new StringBuffer(str.length() + 20);
                     // Copy previous skipped characters and fall through
                     // to pickup current character
-                    buffer.append(str.substring(0, i));
+                    buffer.append(str.substring(0, pos));
                     buffer.append(entity);
                 }
             }
             else {
                 if (entity == null) {
-                    buffer.append(ch);
+                    buffer.append((char) ch);
                 }
                 else {
                     buffer.append(entity);
