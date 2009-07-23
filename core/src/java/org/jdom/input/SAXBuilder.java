@@ -1,6 +1,6 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.92 2007/11/10 05:29:00 jhunter Exp $
+ $Id: SAXBuilder.java,v 1.93 2009/07/23 06:26:26 jhunter Exp $
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
@@ -79,7 +79,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.92 $, $Date: 2007/11/10 05:29:00 $
+ * @version $Revision: 1.93 $, $Date: 2009/07/23 06:26:26 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
@@ -89,7 +89,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class SAXBuilder {
 
     private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.92 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
+      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.93 $ $Date: 2009/07/23 06:26:26 $ $Name:  $";
 
     /**
      * Default parser class to use. This is used when no other parser
@@ -133,6 +133,15 @@ public class SAXBuilder {
 
     /** User-specified properties to be set on the SAX parser */
     private HashMap properties = new HashMap(5);
+
+    /** Whether to use fast parser reconfiguration */
+    private boolean fastReconfigure = false;
+
+    /** Whether to try lexical reporting in fast parser reconfiguration */
+    private boolean skipNextLexicalReportingConfig = false;
+
+    /** Whether to to try entity expansion in fast parser reconfiguration */
+    private boolean skipNextEntityExpandConfig = false;
 
     /**
      * Whether parser reuse is allowed.
@@ -395,8 +404,28 @@ public class SAXBuilder {
         this.saxParser   = null;
     }
 
+   /**
+     * Specifies whether this builder will do fast reconfiguration of the
+     * underlying SAX parser when reuseParser is true. This improves
+     * performance in cases where SAXBuilders are reused and lots of small
+     * documents are frequently parsed. This avoids attempting to set features
+     * on the SAX parser each time build() is called which result in
+     * SaxNotRecognizedExceptions. This should ONLY be set for builders where
+     * this specific case is an issue. The default value of this setting is
+     * <code>false</code> (no fast reconfiguration). If reuseParser is false,
+     * calling this has no effect.
+     *
+     * @param fastReconfigure Whether to do a fast reconfiguration of the parser
+     */
+    public void setFastReconfigure(boolean fastReconfigure) {
+        if (this.reuseParser) {
+            this.fastReconfigure = fastReconfigure;
+        }
+    }
+
     /**
-     * This sets a feature on the SAX parser. See the SAX documentation for
+     * This sets a feature on the SAX parser. See the SAX documentation for .
+     * more information.
      * </p>
      * <p>
      * NOTE: SAXBuilder requires that some particular features of the SAX parser be
@@ -412,7 +441,7 @@ public class SAXBuilder {
      */
     public void setFeature(String name, boolean value) {
         // Save the specified feature for later.
-        features.put(name, new Boolean(value));
+        features.put(name, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -475,7 +504,7 @@ public class SAXBuilder {
                 // Configure parser
                 configureParser(parser, contentHandler);
 
-                if (reuseParser == true) {
+                if (reuseParser) {
                     this.saxParser = parser;
                 }
             }
@@ -534,6 +563,7 @@ public class SAXBuilder {
      * settings that were set on the SAXBuilder: setExpandEntities() and
      * setIgnoringElementContentWhitespace().
      * </p>
+     * @param contentHandler The SAXHandler to configure
      */
     protected void configureContentHandler(SAXHandler contentHandler) {
         // Setup pass through behavior
@@ -553,6 +583,7 @@ public class SAXBuilder {
      * </p>
      *
      * @return <code>XMLReader</code> - resultant XMLReader object.
+     * @throws org.jdom.JDOMException
      */
     protected XMLReader createParser() throws JDOMException {
         XMLReader parser = null;
@@ -583,7 +614,7 @@ public class SAXBuilder {
 
                 // Create SAX parser.
                 parser = (XMLReader)createParser.invoke(null,
-                                new Object[] { new Boolean(validate),
+                                new Object[] { validate ? Boolean.TRUE : Boolean.FALSE,
                                                features, properties });
 
                 // Configure parser
@@ -633,6 +664,9 @@ public class SAXBuilder {
      *  internals. These features may change in future releases, so change this
      *  behavior at your own risk.
      * </p>
+     * @param parser
+     * @param contentHandler
+     * @throws org.jdom.JDOMException
      */
     protected void configureParser(XMLReader parser, SAXHandler contentHandler)
         throws JDOMException {
@@ -657,42 +691,66 @@ public class SAXBuilder {
              parser.setErrorHandler(new BuilderErrorHandler());
         }
 
-        // Setup lexical reporting.
-        boolean lexicalReporting = false;
-        try {
-            parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
-                               contentHandler);
-            lexicalReporting = true;
-        } catch (SAXNotSupportedException e) {
-            // No lexical reporting available
-        } catch (SAXNotRecognizedException e) {
-            // No lexical reporting available
-        }
+        // If fastReconfigure is enabled and we failed in the previous attempt
+        // in configuring lexical reporting, then we skip this step.  This
+        // saves the work of repeated exception handling on each parse.
+        if (!skipNextLexicalReportingConfig) {
+            boolean success = false;
 
-        // Some parsers use alternate property for lexical handling (grr...)
-        if (!lexicalReporting) {
             try {
-                parser.setProperty(
-                    "http://xml.org/sax/properties/lexical-handler",
-                    contentHandler);
-                lexicalReporting = true;
+                parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
+                                   contentHandler);
+                success = true;
             } catch (SAXNotSupportedException e) {
                 // No lexical reporting available
             } catch (SAXNotRecognizedException e) {
                 // No lexical reporting available
             }
+
+            // Some parsers use alternate property for lexical handling (grr...)
+            if (!success) {
+                try {
+                    parser.setProperty("http://xml.org/sax/properties/lexical-handler",
+                                       contentHandler);
+                    success = true;
+                } catch (SAXNotSupportedException e) {
+                    // No lexical reporting available
+                } catch (SAXNotRecognizedException e) {
+                    // No lexical reporting available
+                }
+            }
+
+            // If unable to configure this property and fastReconfigure is
+            // enabled, then setup to avoid this code path entirely next time.
+            if (!success && fastReconfigure) {
+                skipNextLexicalReportingConfig = true;
+            }
         }
 
-        // Try setting the DeclHandler if entity expansion is off
-        if (!expand) {
-            try {
-                parser.setProperty(
-                    "http://xml.org/sax/properties/declaration-handler",
-                    contentHandler);
-            } catch (SAXNotSupportedException e) {
-                // No lexical reporting available
-            } catch (SAXNotRecognizedException e) {
-                // No lexical reporting available
+        // If fastReconfigure is enabled and we failed in the previous attempt
+        // in configuring entity expansion, then skip this step.  This
+        // saves the work of repeated exception handling on each parse.
+        if (!skipNextEntityExpandConfig) {
+            boolean success = false;
+
+            // Try setting the DeclHandler if entity expansion is off
+            if (!expand) {
+                try {
+                    parser.setProperty("http://xml.org/sax/properties/declaration-handler",
+                                       contentHandler);
+                    success = true;
+                } catch (SAXNotSupportedException e) {
+                    // No lexical reporting available
+                } catch (SAXNotRecognizedException e) {
+                    // No lexical reporting available
+                }
+            }
+
+            /* If unable to configure this property and fastReconfigure is
+             * enabled, then setup to avoid this code path entirely next time.
+             */
+            if (!success && fastReconfigure) {
+                skipNextEntityExpandConfig = true;
             }
         }
     }
