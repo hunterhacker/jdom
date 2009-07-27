@@ -40,11 +40,9 @@ xalan.jar
   the newer Xalan with J2SE 1.4+ see 
   http://xml.apache.org/xalan-j/faq.html#faq-N100CB.
 
-jaxen-core.jar
-jaxen-jdom.jar
-saxpath.jar
-  These JARs support the XPath feature of JDOM.  Put these in your 
-  classpath if you're using XPath.
+jaxen.jar
+  This JAR supports the XPath feature of JDOM.  Put it in your classpath
+  if you're using XPath.
 
 --
 
