@@ -57,14 +57,14 @@
 package org.jdom2.contrib.input.scanner;
 
 
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.xpath.XPath;
 
 import org.xml.sax.Attributes;
-
-import org.apache.regexp.RE;
-import org.apache.regexp.RESyntaxException;
 
 
 /* package */ class JakartaRegExpXPathMatcher extends XPathMatcher {
@@ -72,7 +72,7 @@ import org.apache.regexp.RESyntaxException;
    /**
     * The compiled regular expression this matcher matches.
     */
-   private final RE re;
+   private final Pattern re;
 
    private final XPath test;
 
@@ -94,7 +94,7 @@ import org.apache.regexp.RESyntaxException;
       try {
          String pathPattern = getPathPatternAsRE(expression);
 
-         this.re = new RE(pathPattern);
+         this.re = Pattern.compile(pathPattern);
 
          String testPattern = getTestPattern(expression);
          if (testPattern != null) {
@@ -114,7 +114,7 @@ import org.apache.regexp.RESyntaxException;
                                         " -> XPath = " + testPattern);
          }
       }
-      catch (RESyntaxException ex1) {
+      catch (PatternSyntaxException ex1) {
          throw (new JDOMException(
                         "Illegal XPath expression: " + expression, ex1));
       }
@@ -137,7 +137,7 @@ import org.apache.regexp.RESyntaxException;
     *         expression, <code>false</code> otherwise.
     */
    public boolean match(String path, Attributes attrs) {
-      return (this.re.match(path));
+      return (this.re.matcher(path).matches());
    }
 
    /**

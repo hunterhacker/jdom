@@ -59,7 +59,9 @@
 package org.jdom2.contrib.beans;
 
 import java.util.*;
-import org.apache.regexp.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.text.*;
 import java.io.PrintStream;
 
@@ -165,20 +167,21 @@ public class DateUtils {
 	// e.g. 1997-07-16T19:20:30.45+01:00
 	// additions: "T" can be a space, TZ can be a three-char code, TZ can be missing
 	try {
-	    RE re = new RE(reISO8601);
-	    if (re.match(s)) {
+	    Pattern pat = Pattern.compile(reISO8601);
+	    Matcher re = pat.matcher(s);
+	    if (re.matches()) {
 		if (debug)
 		    showParens(re);
 		
 		ISO8601 iso = new ISO8601();
-		iso.year = toInt(re.getParen(1));
-		iso.month = toInt(re.getParen(3));
-		iso.day = toInt(re.getParen(5));
-		iso.hour = toInt(re.getParen(7));
-		iso.min = toInt(re.getParen(8));
-		iso.sec = toInt(re.getParen(11));
-		iso.frac = toInt(re.getParen(13));
-		iso.tz = re.getParen(14);
+		iso.year = toInt(re.group(1));
+		iso.month = toInt(re.group(3));
+		iso.day = toInt(re.group(5));
+		iso.hour = toInt(re.group(7));
+		iso.min = toInt(re.group(8));
+		iso.sec = toInt(re.group(11));
+		iso.frac = toInt(re.group(13));
+		iso.tz = re.group(14);
 
 		if (debug) {
 		    System.out.println("year='" + iso.year + "'");
@@ -194,7 +197,7 @@ public class DateUtils {
 		return iso;
 	    }
 	} // try
-	catch (RESyntaxException ree) {
+	catch (PatternSyntaxException ree) {
 	    ree.printStackTrace();
 	}
 	return null;
@@ -214,13 +217,13 @@ public class DateUtils {
      * Dump parenthesized subexpressions found by a regular expression matcher object
      * @param r Matcher object with results to show
     */
-    static void showParens(RE r)
+    static void showParens(Matcher r)
     {
         // Loop through each paren
-        for (int i = 0; i < r.getParenCount(); i++)
+        for (int i = 0; i < r.groupCount(); i++)
         {
             // Show paren register
-            System.out.println("$" + i + " = " + r.getParen(i));
+            System.out.println("$" + i + " = " + r.group(i));
         }
     }
 
