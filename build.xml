@@ -34,6 +34,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="version.impl" value="${version}"/>
 		<property name="version.spec" value="2.alpha"/>
 		<property name="year" value="2011"/>
+		
+		<property name="instrument" value="true" />
 
 		<echo message="----------- ${Name} ${version} ------------"/>
 
@@ -61,8 +63,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="contrib.build" value="${build}/contrib" />
 
 		<property name="junit" value="./test" />
-		<property name="junit.src" value="${junit}/src" />
+		<property name="junit.src" value="${junit}/src/java" />
 		<property name="junit.build" value="${build}/junit" />
+		<property name="junit.instrumented" value="${build}/instrumented" />
 
 
 		<property name="samples" value="./core/samples/" />
@@ -92,20 +95,28 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
 
 		<!-- Compilation class path -->
-		<path id="core.class.path">
+		<path id="base.class.path">
 			<pathelement location="${jaxen.jar}" />
 			<pathelement location="${parser.jar}" />
 			<pathelement location="${junit.jar}" />
 			<pathelement location="${isorelax.jar}" />
 		</path>
 
-		<path id="dep.class.path">
-			<path refid="core.class.path"/>
+		<path id="core.class.path">
+			<path refid="base.class.path"/>
 			<pathelement location="${core.build}"/>
+		</path>
+
+		<path id="junit.class.path">
+			<pathelement location="${junit.instrumented}" />
+			<path refid="core.class.path"/>
+			<pathelement location="${junit.build}"/>
+			<fileset dir="${lib.dir}/cobertura" includes="*.jar" />
 		</path>
 
 	</target>
 
+	
 	<!-- =================================================================== -->
 	<!-- Help on usage                                                       -->
 	<!-- =================================================================== -->
@@ -176,7 +187,7 @@ For instructions on how to build JDOM, please view the README.txt file.
            target="${compile.target}"
            source="${compile.source}"
            deprecation="${compile.deprecation}">
-			<classpath refid="core.class.path"/>
+			<classpath refid="base.class.path"/>
 		</javac>
 	</target>
 
@@ -190,7 +201,7 @@ For instructions on how to build JDOM, please view the README.txt file.
            target="${compile.target}"
            source="${compile.source}"
            deprecation="${compile.deprecation}">
-			<classpath refid="dep.class.path"/>
+			<classpath refid="core.class.path"/>
 		</javac>
 	</target>
 
@@ -204,7 +215,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           target="${compile.target}"
 	           source="${compile.source}"
 	           deprecation="${compile.deprecation}">
-			<classpath refid="dep.class.path" />
+			<classpath refid="core.class.path" />
 		</javac>
 	</target>
 
@@ -218,7 +229,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           target="${compile.target}"
 	           source="${compile.source}"
 	           deprecation="${compile.deprecation}">
-			<classpath refid="dep.class.path" />
+			<classpath refid="core.class.path" />
 		</javac>
 	</target>
 
@@ -232,7 +243,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           target="${compile.target}"
 	           source="${compile.source}"
 	           deprecation="${compile.deprecation}">
-			<classpath refid="dep.class.path" />
+			<classpath refid="core.class.path" />
 		</javac>
 	</target>
 	
@@ -290,7 +301,7 @@ For instructions on how to build JDOM, please view the README.txt file.
              doctitle="${Name} v${version}&lt;br&gt;API Specification"
              header="&lt;b&gt;${Name}&lt;br&gt;&lt;font size='-1'&gt;${version}&lt;/font&gt;&lt;/b&gt;"
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
-			<classpath refid="core.class.path"/>
+			<classpath refid="base.class.path"/>
 		</javadoc>
 	</target>
 
@@ -306,6 +317,33 @@ For instructions on how to build JDOM, please view the README.txt file.
           description="Removes the dist files">
 		<delete dir="${dist.root}"/>
 	</target>
+	
+	<target name="coverage.setup" description="Set up code-coverage metrics" depends="compile.core">
+		<taskdef classpathref="junit.class.path" resource="tasks.properties"/>
+
+		<mkdir dir="${junit.instrumented}" />
+		<cobertura-instrument todir="${junit.instrumented}">
+		    <fileset dir="${core.build}">
+		        <include name="**/*.class"/>
+		    </fileset>
+		</cobertura-instrument>
+
+	</target>
+	
+	<target name="junit" depends="compile.core, compile.junit"
+		description="Run all the JUnit tests">
+		<junit fork="true" haltonerror="true" haltonfailure="false"
+			failureproperty="junit.failed" printsummary="true" timeout="10000">
+			<classpath refid="junit.class.path" />
+			<test name="org.jdom2.test.cases.Alltests" />
+		</junit>
+	</target>
+	
+	<target name="coverage" depends="coverage.setup, junit">
+		<mkdir dir="${build}/coverage" />
+		<cobertura-report srcdir="${core.build}" destdir="${build}/coverage"/>
+	</target>
+	
 
 </project>
 
