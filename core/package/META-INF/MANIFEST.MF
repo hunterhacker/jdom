@@ -1,57 +1,57 @@
 Manifest-Version: 1.0
 
-Name: org/jdom/
+Name: org/jdom2/
 Specification-Title: JDOM Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom
+Implementation-Title: org.jdom2
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/input/
+Name: org/jdom2/input/
 Specification-Title: JDOM Input Classes
 Specification-Version: @version.spec@
-Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.input
+Specification-Vendor: jdom.org2
+Implementation-Title: org.jdom2.input
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/output/
+Name: org/jdom2/output/
 Specification-Title: JDOM Output Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.output
+Implementation-Title: org.jdom2.output
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/adapters/
+Name: org/jdom2/adapters/
 Specification-Title: JDOM Adapter Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.adapters
+Implementation-Title: org.jdom2.adapters
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/filter/
+Name: org/jdom2/filter/
 Specification-Title: JDOM Filter Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.filter
+Implementation-Title: org.jdom2.filter
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/transform/
+Name: org/jdom2/transform/
 Specification-Title: JDOM Transformation Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.transform
+Implementation-Title: org.jdom2.transform
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org
 
-Name: org/jdom/xpath/
+Name: org/jdom2/xpath/
 Specification-Title: JDOM XPath Classes
 Specification-Version: @version.spec@
 Specification-Vendor: jdom.org
-Implementation-Title: org.jdom.xpath
+Implementation-Title: org.jdom2.xpath
 Implementation-Version: @version.impl@
 Implementation-Vendor: jdom.org

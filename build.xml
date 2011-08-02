@@ -1,0 +1,312 @@
+<!-- $Id: build.xml,v 1.57 2009/07/23 06:48:27 jhunter Exp $ -->
+
+<!-- 
+For instructions on how to build JDOM, please view the README.txt file.
+-->
+
+<project default="package" basedir=".">
+
+	<!-- =================================================================== -->
+	<!-- Initialization target                                               -->
+	<!-- =================================================================== -->
+	<target name="init">
+		<tstamp/>
+
+		<!--
+      Give user a chance to override without editing this file
+      (and without using -D arguments each time they build).
+      The build properties a user is likely to override include:
+        - lib.dir            The directory where to look for the default JAR
+                             files.  Defaults to ./lib
+        - xml-apis.jar       The JAR containing the DOM, SAX and JAXP classes.
+                             Defaults to ${lib.dir}/xml-apis.jar
+        - parser.jar         The JAR containing the XML parser to use.
+                             Defaults to ${lib.dir}/xerces.jar
+        - jaxen.lib.dir      The directory containing the Jaxen JAR libraries.
+                             Defaults to ${lib.dir}
+     -->
+		<property file="${user.home}/jdom.build.properties" />
+		<property file="${basedir}/build.properties" />
+
+		<property name="Name" value="JDOM"/>
+		<property name="name" value="jdom"/>
+		<property name="version" value="2.alpha"/>
+		<property name="version.impl" value="${version}"/>
+		<property name="version.spec" value="2.alpha"/>
+		<property name="year" value="2011"/>
+
+		<echo message="----------- ${Name} ${version} ------------"/>
+
+		<property name="compile.debug"       value="true" />
+		<property name="compile.optimize"    value="true" />
+		<property name="compile.target"      value="1.6" />
+		<property name="compile.source"      value="1.6" />
+		<property name="compile.deprecation" value="true" />
+
+		<property name="build" value="./build"/>
+
+		<property name="core" value="./core" />
+		<property name="core.src" value="${core}/src/java" />
+		<property name="core.build" value="${build}/core" />
+
+		<property name="about" value="./core/package" />
+		<property name="about.src" value="${about}" />
+		<property name="about.build" value="${build}/about" />
+		
+		<property name="metainf" value="./core/package/META-INF" />
+		<property name="metainf.build" value="${build}/META-INF" />
+
+		<property name="contrib" value="./contrib" />
+		<property name="contrib.src" value="${contrib}/src/java" />
+		<property name="contrib.build" value="${build}/contrib" />
+
+		<property name="junit" value="./test" />
+		<property name="junit.src" value="${junit}/src" />
+		<property name="junit.build" value="${build}/junit" />
+
+
+		<property name="samples" value="./core/samples/" />
+		<property name="samples.src" value="${samples}/" />
+		<property name="samples.build" value="${build}/samples"/>
+
+		<property name="lib.dir" value="./lib"/>
+		<property name="packages" value="org.jdom2.*"/>
+
+		<property name="build.javadocs" value="${build}/apidocs"/>
+
+		<property name="dist.root" value="./dist"/>
+		<property name="dist.dir" value="${dist.root}/${name}-${version}"/>
+
+		<property name="package.dir" value="./package"/>
+
+		<filter token="year" value="${year}"/>
+		<filter token="version" value="${version}"/>
+		<filter token="date" value="${TODAY}"/>
+		<filter token="log" value="true"/>
+		<filter token="verbose" value="true"/>
+
+		<!-- Default JAR libraries -->
+		<property name="parser.jar"        value="${lib.dir}/xercesImpl.jar" />
+		<property name="jaxen.jar"         value="${lib.dir}/jaxen-1.1.3.jar" />
+		<property name="junit.jar"         value="${lib.dir}/junit-4.8.2.jar" />
+		<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
+
+		<!-- Compilation class path -->
+		<path id="core.class.path">
+			<pathelement location="${jaxen.jar}" />
+			<pathelement location="${parser.jar}" />
+			<pathelement location="${junit.jar}" />
+			<pathelement location="${isorelax.jar}" />
+		</path>
+
+		<path id="dep.class.path">
+			<path refid="core.class.path"/>
+			<pathelement location="${core.build}"/>
+		</path>
+
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Help on usage                                                       -->
+	<!-- =================================================================== -->
+	<target name="usage">
+		<echo message=""/>
+		<echo message=""/>
+		<echo message="JDOM Build file"/>
+		<echo message="-------------------------------------------------------------"/>
+		<echo message=""/>
+		<echo message=" available targets are:"/>
+		<echo message=""/>
+		<echo message="   package  --> generates the jdom.jar file (default)"/>
+		<echo message="   compile  --> compiles the source code"/>
+		<echo message="   javadoc  --> generates the API documentation"/>
+		<echo message="   clean    --> cleans up the directory"/>
+		<echo message=""/>
+		<echo message=" See the comments inside the build.xml file for more details."/>
+		<echo message="-------------------------------------------------------------"/>
+		<echo message=""/>
+		<echo message=""/>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares the build directory                                        -->
+	<!-- =================================================================== -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${core.build}"/>
+		<mkdir dir="${about.build}"/>
+		<mkdir dir="${samples.build}"/>
+		<mkdir dir="${junit.build}"/>
+		<mkdir dir="${contrib.build}"/>
+		<mkdir dir="${metainf.build}"/>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares the source code                                            -->
+	<!-- =================================================================== -->
+	<target name="prepare-src" depends="prepare">
+		<!-- copy src files -->
+		<copy todir="${core.build}" filtering="yes">
+			<fileset dir="${core.src}"/>
+		</copy>
+		<copy todir="${about.build}" filtering="yes">
+			<fileset dir="${about.src}"/>
+		</copy>
+		<copy todir="${samples.build}" filtering="yes">
+			<fileset dir="${samples.src}"/>
+		</copy>
+		<copy todir="${contrib.build}" filtering="yes">
+			<fileset dir="${contrib.src}"/>
+		</copy>
+		<copy todir="${junit.build}" filtering="yes">
+			<fileset dir="${junit.src}"/>
+		</copy>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Compiles the source directory                                       -->
+	<!-- =================================================================== -->
+	<target name="compile.core" depends="prepare-src"
+          description="Compiles the core source code">
+
+		<javac srcdir="${core.build}"
+           destdir="${core.build}"
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           target="${compile.target}"
+           source="${compile.source}"
+           deprecation="${compile.deprecation}">
+			<classpath refid="core.class.path"/>
+		</javac>
+	</target>
+
+	<target name="compile.about" depends="prepare-src"
+          description="Compiles the about source code">
+
+		<javac srcdir="${about.build}"
+           destdir="${about.build}"
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           target="${compile.target}"
+           source="${compile.source}"
+           deprecation="${compile.deprecation}">
+			<classpath refid="dep.class.path"/>
+		</javac>
+	</target>
+
+	<target name="compile.samples" depends="compile.core"
+	          description="Compiles the sample source code">
+
+		<javac srcdir="${samples.build}"
+	           destdir="${samples.build}"
+	           debug="${compile.debug}"
+	           optimize="${compile.optimize}"
+	           target="${compile.target}"
+	           source="${compile.source}"
+	           deprecation="${compile.deprecation}">
+			<classpath refid="dep.class.path" />
+		</javac>
+	</target>
+
+	<target name="compile.contrib" depends="compile.core"
+	          description="Compiles the contrib source code">
+
+		<javac srcdir="${contrib.build}"
+	           destdir="${contrib.build}"
+	           debug="${compile.debug}"
+	           optimize="${compile.optimize}"
+	           target="${compile.target}"
+	           source="${compile.source}"
+	           deprecation="${compile.deprecation}">
+			<classpath refid="dep.class.path" />
+		</javac>
+	</target>
+
+	<target name="compile.junit" depends="compile.core"
+	          description="Compiles the junit source code">
+
+		<javac srcdir="${junit.build}"
+	           destdir="${junit.build}"
+	           debug="${compile.debug}"
+	           optimize="${compile.optimize}"
+	           target="${compile.target}"
+	           source="${compile.source}"
+	           deprecation="${compile.deprecation}">
+			<classpath refid="dep.class.path" />
+		</javac>
+	</target>
+	
+	<target name="compile" depends="compile.core, compile.about, compile.junit, compile.contrib, compile.samples"
+	 		description="Compiles all JDOM code (core, samples, junit, contrib)" />
+
+	<!-- =================================================================== -->
+	<!-- Compiles the "About" code                                           -->
+	<!-- =================================================================== -->
+	<target name="about" depends="compile.about"
+          description="Compiles the About code" />
+
+	<!-- =================================================================== -->
+	<!-- Creates the class package                                           -->
+	<!-- =================================================================== -->
+	<target name="package" depends="compile"
+          description="Creates the class package">
+		<fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
+		<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
+
+		<!-- Filters defined specifically for updating the manifest -->
+		<filter token="version.spec" value="${version.spec}"/>
+		<filter token="version.impl" value="${version.impl}"/>
+		<copy todir="${metainf.build}/META-INF" filtering="yes">
+			<fileset dir="${metainf}"/>
+			<fileset dir=".">
+				<include name="LICENSE.txt"/>
+			</fileset>
+		</copy>
+		<jar jarfile="${build}/${name}.jar" manifest="${metainf.build}/META-INF/MANIFEST.MF">
+			<fileset dir="${core.build}" excludes="**/*.java" />
+			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
+		</jar>
+		<jar jarfile="${build}/${name}-contrib.jar" >
+			<fileset dir="${contrib.build}" excludes="**/*.java" />
+			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
+		</jar>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Creates the API documentation                                       -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="prepare-src"
+          description="Creates the API documentation">
+		<mkdir dir="${build.javadocs}"/>
+		<javadoc packagenames="${packages}"
+             sourcepath="${core.build}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${Name} v${version}"
+             doctitle="${Name} v${version}&lt;br&gt;API Specification"
+             header="&lt;b&gt;${Name}&lt;br&gt;&lt;font size='-1'&gt;${version}&lt;/font&gt;&lt;/b&gt;"
+             bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
+			<classpath refid="core.class.path"/>
+		</javadoc>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Clean targets                                                       -->
+	<!-- =================================================================== -->
+	<target name="clean" depends="init"
+          description="Removes build files">
+		<delete dir="${build}"/>
+	</target>
+
+	<target name="distclean" depends="clean"
+          description="Removes the dist files">
+		<delete dir="${dist.root}"/>
+	</target>
+
+</project>
+
+<!-- End of file -->
