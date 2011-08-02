@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.contrib.output;
+package org.jdom2.contrib.output;
 
 /**
  * A JTree outputter.
@@ -71,10 +71,10 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
-import org.jdom.input.SAXBuilder;
-import org.jdom.Document;
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 public class JTreeOutputter {
 

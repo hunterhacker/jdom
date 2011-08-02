@@ -54,10 +54,10 @@
 
  */
 
-package org.jdom.filter;
+package org.jdom2.filter;
 
 import java.io.*;
-import org.jdom.*;
+import org.jdom2.*;
 
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.

@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.util.*;
 
@@ -447,7 +447,7 @@ public class ProcessingInstruction extends Content {
     public String toString() {
         return new StringBuffer()
             .append("[ProcessingInstruction: ")
-            .append(new org.jdom.output.XMLOutputter().outputString(this))
+            .append(new org.jdom2.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
     }

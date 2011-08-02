@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 /**
  * Character-based XML content. Provides a modular, parentable method of

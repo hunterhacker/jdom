@@ -40,7 +40,7 @@
  
  */
 
-package org.jdom.test.generate;
+package org.jdom2.test.generate;
 
 class GeneratorException extends Exception {
     GeneratorException(String msg) {

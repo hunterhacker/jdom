@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.output;
+package org.jdom2.output;
 
 /**
  * Logic to determine which characters should be formatted as character

@@ -1,4 +1,4 @@
-package org.jdom.test.generate;
+package org.jdom2.test.generate;
 
 /*-- 
 

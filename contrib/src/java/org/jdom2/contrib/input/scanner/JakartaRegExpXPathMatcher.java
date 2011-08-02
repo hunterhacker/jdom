@@ -54,12 +54,12 @@
 
  */
 
-package org.jdom.contrib.input.scanner;
+package org.jdom2.contrib.input.scanner;
 
 
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.xpath.XPath;
 
 import org.xml.sax.Attributes;
 

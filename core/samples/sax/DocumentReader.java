@@ -58,9 +58,9 @@ import java.io.IOException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.output.SAXOutputter;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.output.SAXOutputter;
 
 /**
  * An XMLReader wrapper for JDOM documents.

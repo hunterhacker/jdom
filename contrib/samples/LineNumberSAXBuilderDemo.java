@@ -43,11 +43,11 @@
 import java.io.StringReader;
 import java.util.Iterator;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.filter.*;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.filter.*;
 
-import org.jdom.contrib.input.*;
+import org.jdom2.contrib.input.*;
 
 /**
  * @author Per Norrman

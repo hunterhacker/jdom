@@ -54,14 +54,14 @@
  
  */
 
-package org.jdom.transform;
+package org.jdom2.transform;
 
 import java.util.*;
 
 import javax.xml.transform.sax.*;
 
-import org.jdom.*;
-import org.jdom.input.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
 import org.xml.sax.*;
 import org.xml.sax.ext.*;
 import org.xml.sax.helpers.*;

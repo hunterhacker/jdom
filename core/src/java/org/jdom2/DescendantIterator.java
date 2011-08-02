@@ -54,12 +54,12 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.util.*;
-import org.jdom.Content;
-import org.jdom.Element;
-import org.jdom.Parent;
+import org.jdom2.Content;
+import org.jdom2.Element;
+import org.jdom2.Parent;
 
 /**
  * Traverse all a parent's descendants (all children at any level below

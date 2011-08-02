@@ -54,9 +54,9 @@
 
  */
 
-package org.jdom.contrib.helpers;
+package org.jdom2.contrib.helpers;
 
-import org.jdom.*;
+import org.jdom2.*;
 
 /** <p>
  *    This class contains static helper methods. 

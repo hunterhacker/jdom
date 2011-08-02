@@ -54,12 +54,12 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.io.*;
 import java.util.*;
 
-import org.jdom.filter.*;
+import org.jdom2.filter.*;
 
 /**
  * An XML element. Methods allow the user to get and manipulate its child

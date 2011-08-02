@@ -54,15 +54,15 @@
  
  */
 
-package org.jdom.transform;
+package org.jdom2.transform;
 
 import java.io.*;
 import java.util.*;
 
 import javax.xml.transform.sax.*;
 
-import org.jdom.*;
-import org.jdom.output.*;
+import org.jdom2.*;
+import org.jdom2.output.*;
 import org.xml.sax.*;
 
 /**

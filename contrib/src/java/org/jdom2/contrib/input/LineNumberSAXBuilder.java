@@ -54,14 +54,14 @@
 
  */
 
- package org.jdom.contrib.input;
+ package org.jdom2.contrib.input;
 
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.DefaultJDOMFactory;
-import org.jdom.JDOMFactory;
-import org.jdom.input.SAXBuilder;
-import org.jdom.input.SAXHandler;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.JDOMFactory;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.SAXHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;

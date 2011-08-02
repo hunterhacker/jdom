@@ -54,13 +54,13 @@
 
  */
 
-package org.jdom.contrib.ids;
+package org.jdom2.contrib.ids;
 
 import java.util.*;
 
-import org.jdom.Document;
-import org.jdom.DocType;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.DocType;
+import org.jdom2.Element;
 
 
 /**

@@ -54,7 +54,7 @@
  
  */
 
-package org.jdom.output;
+package org.jdom2.output;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;

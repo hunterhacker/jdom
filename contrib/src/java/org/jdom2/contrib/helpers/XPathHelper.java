@@ -54,14 +54,14 @@
 
  */
 
-package org.jdom.contrib.helpers;
+package org.jdom2.contrib.helpers;
 
 
 import java.util.List;
 import java.util.Iterator;
 
-import org.jdom.*;
-import org.jdom.filter.ContentFilter;
+import org.jdom2.*;
+import org.jdom2.filter.ContentFilter;
 
 
 /**

@@ -54,14 +54,14 @@
 
  */
 
-package org.jdom.xpath;
+package org.jdom2.xpath;
 
 
 import java.util.*;
 
 import org.jaxen.*;
 import org.jaxen.jdom.*;
-import org.jdom.*;
+import org.jdom2.*;
 
 
 /**

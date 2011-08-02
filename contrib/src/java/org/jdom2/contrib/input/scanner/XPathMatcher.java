@@ -54,15 +54,15 @@
 
  */
 
-package org.jdom.contrib.input.scanner;
+package org.jdom2.contrib.input.scanner;
 
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 import org.xml.sax.Attributes;
 

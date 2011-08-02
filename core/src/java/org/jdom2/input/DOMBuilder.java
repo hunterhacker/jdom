@@ -54,11 +54,11 @@
 
  */
 
-package org.jdom.input;
+package org.jdom2.input;
 
-import org.jdom.*;
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.*;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.w3c.dom.*;
 
 /**
@@ -142,7 +142,7 @@ public class DOMBuilder {
      * @param domElement <code> org.w3c.dom.Element</code> object
      * @return <code>Element</code> - JDOM Element object
      */
-    public org.jdom.Element build(org.w3c.dom.Element domElement) {
+    public org.jdom2.Element build(org.w3c.dom.Element domElement) {
         Document doc = factory.document(null);
         buildTree(domElement, doc, null, true);
         return doc.getRootElement();

@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.contrib.beans;
+package org.jdom2.contrib.beans;
 
 import java.lang.reflect.*;
 import java.io.File;
@@ -63,13 +63,13 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.*;
 import java.beans.*;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Attribute;
-import org.jdom.Namespace;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Namespace;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * Maps a JavaBean to an XML tree and vice versa.  (Yes, it's yet

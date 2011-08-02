@@ -59,8 +59,8 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.zip.*;
 
-import org.jdom.*;
-import org.jdom.input.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
 
 /**
  * This class is not part of the core JDOM API, but implements a way to show 

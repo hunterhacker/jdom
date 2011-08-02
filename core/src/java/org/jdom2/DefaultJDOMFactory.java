@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.util.*;
 

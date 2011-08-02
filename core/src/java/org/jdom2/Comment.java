@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 /**
  * An XML comment. Methods allow the user to get and set the text of the
@@ -137,7 +137,7 @@ public class Comment extends Content {
     public String toString() {
         return new StringBuffer()
             .append("[Comment: ")
-            .append(new org.jdom.output.XMLOutputter().outputString(this))
+            .append(new org.jdom2.output.XMLOutputter().outputString(this))
             .append("]")
             .toString();
     }

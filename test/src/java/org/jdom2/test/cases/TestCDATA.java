@@ -51,14 +51,14 @@
  JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.jdom.CDATA;
-import org.jdom.IllegalDataException;
-import org.jdom.Text;
+import org.jdom2.CDATA;
+import org.jdom2.IllegalDataException;
+import org.jdom2.Text;
 
 /**
  * Test for {@link CDATA}.

@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*-- 
 
@@ -62,33 +62,33 @@ package org.jdom.test.cases;
  */
 import junit.framework.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 import java.io.*;
 import java.util.*;
-import org.jdom.input.*;
+import org.jdom2.input.*;
 
 public final class TestVerifier extends junit.framework.TestCase {
 
 	/**
 	 * the all characters class that must be accepted by processor
 	 */
-	private org.jdom.Element allCharacters;
+	private org.jdom2.Element allCharacters;
 	/**
 	 * XML Base Characters
 	 */
-	private org.jdom.Element characters;
+	private org.jdom2.Element characters;
 	/**
 	 * XML CombiningCharacters
 	 */
-	private org.jdom.Element combiningChars;
+	private org.jdom2.Element combiningChars;
 	/**
 	 * XML Digits
 	 */
-	private org.jdom.Element digits;
+	private org.jdom2.Element digits;
 	/**
 	 * XML Extender characters
 	 */
-	private org.jdom.Element extenders;
+	private org.jdom2.Element extenders;
 	/**
 	 * XML IdeoCharacters
 	 */
@@ -96,11 +96,11 @@ public final class TestVerifier extends junit.framework.TestCase {
 	/**
 	 * XML Letter characters
 	 */
-	private org.jdom.Element letters;
+	private org.jdom2.Element letters;
 	/**
 	 * Resource Bundle for various testing resources
 	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom.test.Test");
+	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
 	/**
 	 * resourceRoot is the directory relative to running root where
 	 * resources are found

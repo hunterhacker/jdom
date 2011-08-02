@@ -56,7 +56,7 @@
 
 // Based on code Copyright (c) 1998-2000 Alex Chaffee and Purple Technology.
 
-package org.jdom.contrib.beans;
+package org.jdom2.contrib.beans;
 
 import java.util.*;
 import org.apache.regexp.*;

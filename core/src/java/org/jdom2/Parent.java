@@ -54,11 +54,11 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.io.Serializable;
 import java.util.*;
-import org.jdom.filter.Filter;
+import org.jdom2.filter.Filter;
 
 /**
  * Superclass for JDOM objects which are allowed to contain

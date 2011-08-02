@@ -54,13 +54,13 @@
  
  */
 
-package org.jdom.adapters;
+package org.jdom2.adapters;
 
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.jdom.*;
-import org.jdom.input.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
 import org.w3c.dom.Document;
 
 /**

@@ -53,11 +53,11 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
  
  */
-package org.jdom.output;
+package org.jdom2.output;
 
 import java.util.*;
 
-import org.jdom.Namespace;
+import org.jdom2.Namespace;
 
 /**
  * A non-public utility class used by both <code>{@link XMLOutputter}</code> and

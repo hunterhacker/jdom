@@ -55,12 +55,12 @@
  */
 
 
-package org.jdom.output;
+package org.jdom2.output;
 
 import java.util.*;
 
-import org.jdom.*;
-import org.jdom.adapters.*;
+import org.jdom2.*;
+import org.jdom2.adapters.*;
 
 
 /**

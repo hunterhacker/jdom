@@ -54,7 +54,7 @@
  
  */
 
-package org.jdom;
+package org.jdom2;
 
 /**
  * Thrown when a target is supplied in construction of a JDOM {@link

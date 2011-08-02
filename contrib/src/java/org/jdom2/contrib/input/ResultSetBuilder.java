@@ -54,14 +54,14 @@
 
  */
 
-package org.jdom.contrib.input;
+package org.jdom2.contrib.input;
 
 import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 
 /**
  * <p><code>ResultSetBuilder</code> builds a JDOM tree from a 

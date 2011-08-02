@@ -54,7 +54,7 @@
  
  */
 
-package org.jdom.input;
+package org.jdom2.input;
 
 import org.xml.sax.*;
 

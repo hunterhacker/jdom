@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*--
 
@@ -58,7 +58,7 @@ package org.jdom.test.cases;
 import java.io.*;
 import junit.framework.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 
 /**
  * Test the expected behavior of the Attribute class.

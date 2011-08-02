@@ -47,9 +47,9 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.filechooser.*;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.contrib.output.JTreeOutputter;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.contrib.output.JTreeOutputter;
 
 /**
  * <p><code>JTreeOutputterDemo</code> demonstrates how to

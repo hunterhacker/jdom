@@ -54,13 +54,13 @@
 
  */
 
-package org.jdom.input;
+package org.jdom2.input;
 
 import java.util.*;
 
 import javax.xml.parsers.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 import org.xml.sax.*;
 
 /**

@@ -1,11 +1,11 @@
 
 
-import org.jdom.*;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.*;
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.*;
 
-import org.jdom.contrib.ids.IdDocument;
-import org.jdom.contrib.ids.IdFactory;
+import org.jdom2.contrib.ids.IdDocument;
+import org.jdom2.contrib.ids.IdFactory;
 
 
 public class TestIds {

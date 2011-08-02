@@ -54,14 +54,14 @@
 
  */
 
-package org.jdom.output;
+package org.jdom2.output;
 
 import java.io.*;
 import java.util.*;
 
 import javax.xml.transform.Result;
 
-import org.jdom.*;
+import org.jdom2.*;
 
 /**
  * Outputs a JDOM document as a stream of bytes. The outputter can manage many
@@ -1597,7 +1597,7 @@ public class XMLOutputter implements Cloneable {
      * declare the parent NamespaceStack class as public.
      */
     protected class NamespaceStack
-        extends org.jdom.output.NamespaceStack
+        extends org.jdom2.output.NamespaceStack
     {
     }
 

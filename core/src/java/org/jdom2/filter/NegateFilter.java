@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.filter;
+package org.jdom2.filter;
 
 /**
  * Filter that is the logical <b>negation</b> operation of another filter.

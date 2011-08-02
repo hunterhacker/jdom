@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*-- 
 
@@ -63,8 +63,8 @@ package org.jdom.test.cases;
 import java.io.*;
 import junit.framework.*;
 
-import org.jdom.*;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.*;
+import org.jdom2.filter.ElementFilter;
 
 public final class TestSerialization
 extends junit.framework.TestCase

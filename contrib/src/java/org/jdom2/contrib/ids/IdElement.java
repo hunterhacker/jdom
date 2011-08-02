@@ -54,16 +54,16 @@
 
  */
 
-package org.jdom.contrib.ids;
+package org.jdom2.contrib.ids;
 
 import java.util.*;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Parent;
-import org.jdom.Namespace;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Parent;
+import org.jdom2.Namespace;
 
 /**
  * A sub-class of the default JDOM <code>Element</code> to help

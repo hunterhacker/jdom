@@ -54,9 +54,9 @@
 
  */
 
-package org.jdom.input;
+package org.jdom2.input;
 
-import org.jdom.*;
+import org.jdom2.*;
 
 /**
  * A non-public utility class similar to StringBuffer but optimized for XML

@@ -54,10 +54,10 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.util.*;
-import org.jdom.filter.*;
+import org.jdom2.filter.*;
 
 /**
  * Traverse a parent's children that match the supplied filter.

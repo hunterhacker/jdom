@@ -54,7 +54,7 @@
  
  */
 
-package org.jdom;
+package org.jdom2;
 
 /**
  * Thrown when trying to add a illegal object to a JDOM construct.

@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 /**
  * An XML CDATA section. Represents character-based content within an XML

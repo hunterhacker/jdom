@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*-- 
 
@@ -62,7 +62,7 @@ package org.jdom.test.cases;
  * @version 1.0
  */
 import junit.framework.*;
-import org.jdom.*;
+import org.jdom2.*;
 
 public final class TestComment
 extends junit.framework.TestCase
@@ -103,14 +103,14 @@ extends junit.framework.TestCase
 	 * Test the comment constructor with a valid and an invalid string.
 	 */
 	public void test_TCC___String() {
-		Comment theComment = new org.jdom.Comment("this is a comment");
+		Comment theComment = new org.jdom2.Comment("this is a comment");
 
 		assertEquals(
 				"incorrect Comment constructed", 
 				"[Comment: <!--this is a comment-->]", 
 				theComment.toString()); 
 		try {
-			theComment = new org.jdom.Comment(null);
+			theComment = new org.jdom2.Comment(null);
 			fail("Comment constructor didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
 		}
@@ -154,7 +154,7 @@ extends junit.framework.TestCase
  * Test setting and resetting the text value of this Comment.
  */
 public void test_TCM__OrgJdomComment_setText_String() {
-	Comment theComment= new org.jdom.Comment("this is a comment");
+	Comment theComment= new org.jdom2.Comment("this is a comment");
 
 	assertEquals(
 		"incorrect Comment constructed",
@@ -206,7 +206,7 @@ public void test_TCM__OrgJdomComment_setText_String() {
 	 * verify that the text of the Comment matches expected value.
 	 */
 	public void test_TCM__String_getText() {
-		Comment theComment = new org.jdom.Comment("this is a comment");
+		Comment theComment = new org.jdom2.Comment("this is a comment");
 
 		assertEquals(
 				"incorrect Comment constructed", 
@@ -219,14 +219,14 @@ public void test_TCM__OrgJdomComment_setText_String() {
  * check for the expected toString text value of Comment.
  */
 public void test_TCM__String_toString() {
-    Comment theComment= new org.jdom.Comment("this is a comment");
+    Comment theComment= new org.jdom2.Comment("this is a comment");
 
     assertEquals(
         "incorrect Comment constructed",
         "[Comment: <!--this is a comment-->]",
         theComment.toString());
     try {
-        theComment= new org.jdom.Comment(null);
+        theComment= new org.jdom2.Comment(null);
         fail("Comment constructor didn't catch invalid comment string");
     } catch (IllegalDataException e) {
     }

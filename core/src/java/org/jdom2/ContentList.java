@@ -54,11 +54,11 @@
 
  */
 
-package org.jdom;
+package org.jdom2;
 
 import java.util.*;
 
-import org.jdom.filter.*;
+import org.jdom2.filter.*;
 
 /**
  * A non-public list implementation holding only legal JDOM content, including

@@ -1,4 +1,4 @@
-package org.jdom.test.cases.output;
+package org.jdom2.test.cases.output;
 
 /* Please run replic.pl on me ! */
 /**
@@ -9,11 +9,11 @@ package org.jdom.test.cases.output;
  */
 import junit.framework.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 import java.io.*;
 import java.util.*;
-import org.jdom.output.*;
-import org.jdom.input.*;
+import org.jdom2.output.*;
+import org.jdom2.input.*;
 
 public final class TestXMLOutputter
 extends junit.framework.TestCase
@@ -21,7 +21,7 @@ extends junit.framework.TestCase
 	/**
 	 * Resource Bundle for various testing resources
 	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom.test.Test");
+	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
 
 	/**
 	 * the directory where needed resource files will be kept

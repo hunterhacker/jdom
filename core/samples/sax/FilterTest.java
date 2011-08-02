@@ -55,9 +55,9 @@ package sax;
 
 import java.io.InputStream;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * Tests SAXBuilder's XMLFilter feature

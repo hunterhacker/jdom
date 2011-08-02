@@ -54,10 +54,10 @@
 
  */
 
-package org.jdom.output;
+package org.jdom2.output;
 
 import java.lang.reflect.Method;
-import org.jdom.Verifier;
+import org.jdom2.Verifier;
 
 /**
  * Class to encapsulate XMLOutputter format options.

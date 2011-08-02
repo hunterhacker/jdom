@@ -54,7 +54,7 @@
 
  */
 
-package org.jdom.contrib.schema;
+package org.jdom2.contrib.schema;
 
 /**
  * A ValidationError object encapsulates a schema validation error or

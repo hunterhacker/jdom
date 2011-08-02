@@ -54,7 +54,7 @@
  
  */
 
-package org.jdom.filter;
+package org.jdom2.filter;
 
 
 /**

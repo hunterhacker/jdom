@@ -54,10 +54,10 @@
 
  */
 
-import org.jdom.*;
-import org.jdom.input.*;
-import org.jdom.output.*;
-import org.jdom.transform.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
+import org.jdom2.output.*;
+import org.jdom2.transform.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 

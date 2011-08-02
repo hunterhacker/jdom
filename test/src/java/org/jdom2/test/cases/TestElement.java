@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*--
 
@@ -64,10 +64,10 @@ package org.jdom.test.cases;
 import junit.framework.*;
 import java.util.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 import java.io.*;
 import java.util.*;
-import org.jdom.output.*;
+import org.jdom2.output.*;
 import org.omg.PortableInterceptor.SUCCESSFUL;
 
 public final class TestElement
@@ -76,7 +76,7 @@ public final class TestElement
     /**
      * Resource Bundle for various testing resources
      */
-    private ResourceBundle rb = ResourceBundle.getBundle("org.jdom.test.Test");
+    private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
 
     /**
      * the directory where needed resource files will be kept

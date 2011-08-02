@@ -54,13 +54,13 @@
 
  */
 
-package org.jdom.output;
+package org.jdom2.output;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.jdom.*;
+import org.jdom2.*;
 import org.xml.sax.*;
 import org.xml.sax.ext.*;
 import org.xml.sax.helpers.*;

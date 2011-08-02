@@ -1,4 +1,4 @@
-package org.jdom.test.cases;
+package org.jdom2.test.cases;
 
 /*-- 
 
@@ -56,7 +56,7 @@ package org.jdom.test.cases;
 
 
 import junit.framework.*;
-import org.jdom.test.cases.input.*;
+import org.jdom2.test.cases.input.*;
 
 
 public class Alltests extends junit.framework.TestCase {

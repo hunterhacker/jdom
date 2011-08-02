@@ -53,7 +53,7 @@ Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  */
 
 
-package org.jdom.test.cases.input;
+package org.jdom2.test.cases.input;
 
 /**
  * Tests of SAXBuilder functionality.  Since most of these methods are tested in other parts
@@ -66,8 +66,8 @@ import junit.framework.*;
 import java.util.*;
 import java.io.*;
 
-import org.jdom.*;
-import org.jdom.input.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
 
 
 public final class TestSAXBuilder
@@ -76,7 +76,7 @@ extends junit.framework.TestCase
 	/**
 	 * Resource Bundle for various testing resources
 	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom.test.Test");
+	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
 
 	/**
 	 * the directory where needed resource files will be kept

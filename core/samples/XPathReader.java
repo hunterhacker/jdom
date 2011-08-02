@@ -56,10 +56,10 @@
 
 import java.io.*;
 import java.util.*;
-import org.jdom.*;
-import org.jdom.input.*;
-import org.jdom.output.*;
-import org.jdom.xpath.*;
+import org.jdom2.*;
+import org.jdom2.input.*;
+import org.jdom2.output.*;
+import org.jdom2.xpath.*;
 
 /**
  * <p><code>XPathReader</code> demonstrates how to

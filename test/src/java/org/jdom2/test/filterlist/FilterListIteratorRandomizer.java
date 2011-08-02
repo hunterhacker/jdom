@@ -1,6 +1,6 @@
-package org.jdom.test.filterlist;
+package org.jdom2.test.filterlist;
 
-import org.jdom.*;
+import org.jdom2.*;
 import java.util.*;
 
 public final class FilterListIteratorRandomizer
