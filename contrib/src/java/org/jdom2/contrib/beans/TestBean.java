@@ -58,7 +58,6 @@
 
 import org.jdom2.*;
 import org.jdom2.output.*;
-import org.jdom2.input.*;
 import java.util.*;
 
 public class TestBean implements java.io.Serializable {

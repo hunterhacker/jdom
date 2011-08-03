@@ -40,9 +40,7 @@
  
  */
 
-import java.io.*;
 import java.sql.*;
-import java.util.*;
 
 import org.jdom2.*;
 import org.jdom2.output.*;

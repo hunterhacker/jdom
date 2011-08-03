@@ -63,7 +63,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.text.*;
-import java.io.PrintStream;
 
 /**
  * @author Alex Chaffee (alex@jguru.com)

@@ -45,7 +45,6 @@ import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
 import javax.swing.tree.*;
-import javax.swing.filechooser.*;
 
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;

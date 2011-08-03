@@ -67,11 +67,7 @@ package org.jdom2.contrib.output;
  * @author Matthew MacKenzie [matt@xmlglobal.com]
  */
 import java.util.Iterator;
-import java.util.List;
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.Document;
 import org.jdom2.Attribute;
 import org.jdom2.Element;

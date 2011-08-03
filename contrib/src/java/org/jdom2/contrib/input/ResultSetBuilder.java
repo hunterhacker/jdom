@@ -56,7 +56,6 @@
 
 package org.jdom2.contrib.input;
 
-import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;

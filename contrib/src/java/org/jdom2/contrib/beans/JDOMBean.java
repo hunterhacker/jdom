@@ -58,8 +58,6 @@ package org.jdom2.contrib.beans;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.*;
 import org.jdom2.Document;
 import org.jdom2.Element;

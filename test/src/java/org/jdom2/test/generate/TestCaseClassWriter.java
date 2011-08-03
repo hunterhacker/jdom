@@ -2,8 +2,6 @@ package org.jdom2.test.generate;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Constructor;
 
 
 public class TestCaseClassWriter extends IndentWriter {

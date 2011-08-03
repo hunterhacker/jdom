@@ -56,8 +56,6 @@
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.*;
-import java.util.zip.*;
 
 import org.jdom2.*;
 import org.jdom2.input.*;

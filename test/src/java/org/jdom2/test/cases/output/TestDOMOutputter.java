@@ -10,10 +10,8 @@ package org.jdom2.test.cases.output;
 import junit.framework.*;
 
 import org.jdom2.*;
-import java.io.*;
 import java.util.*;
 import org.jdom2.output.*;
-import org.jdom2.input.*;
 
 public final class TestDOMOutputter
 extends junit.framework.TestCase

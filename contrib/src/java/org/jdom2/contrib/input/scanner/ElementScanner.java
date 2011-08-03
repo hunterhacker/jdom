@@ -69,7 +69,6 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import org.jdom2.*;
-import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.JDOMFactory;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.SAXHandler;

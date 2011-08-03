@@ -56,8 +56,6 @@
 
 package org.jdom2;
 
-import java.util.*;
-
 /**
  * Key for storing a namespace representation in a map.
  *

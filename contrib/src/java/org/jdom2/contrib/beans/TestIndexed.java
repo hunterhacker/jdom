@@ -58,11 +58,9 @@ package org.jdom2.contrib.beans;
 
 import org.jdom2.*;
 import org.jdom2.output.*;
-import org.jdom2.input.*;
 import java.util.*;
 import java.util.List;
 import java.beans.*;
-import java.lang.reflect.*;
     
 public class TestIndexed implements java.io.Serializable {
     private String name;
