@@ -88,9 +88,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class SAXBuilder {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: SAXBuilder.java,v $ $Revision: 1.93 $ $Date: 2009/07/23 06:26:26 $ $Name:  $";
-
     /**
      * Default parser class to use. This is used when no other parser
      * is given and JAXP isn't available.

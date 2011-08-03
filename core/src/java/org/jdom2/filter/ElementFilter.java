@@ -68,9 +68,6 @@ import org.jdom2.*;
  */
 public class ElementFilter extends AbstractFilter {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: ElementFilter.java,v $ $Revision: 1.20 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /** The element name */
     private String name;
 

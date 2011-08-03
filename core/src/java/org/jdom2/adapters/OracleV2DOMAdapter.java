@@ -72,9 +72,6 @@ import org.xml.sax.*;
  */
 public class OracleV2DOMAdapter extends AbstractDOMAdapter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: OracleV2DOMAdapter.java,v $ $Revision: 1.19 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /**
      * This creates a new <code>{@link Document}</code> from an
      * existing <code>InputStream</code> by letting a DOM

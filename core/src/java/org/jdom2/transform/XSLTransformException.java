@@ -66,9 +66,6 @@ import org.jdom2.JDOMException;
  */
 public class XSLTransformException extends JDOMException {
 
-    private static final String CVS_ID =
-            "@(#) $RCSfile: XSLTransformException.java,v $ $Revision: 1.4 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
-
     public XSLTransformException() {
     }
 

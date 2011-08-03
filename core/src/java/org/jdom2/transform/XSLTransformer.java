@@ -116,9 +116,6 @@ import org.xml.sax.EntityResolver;
  */
 public class XSLTransformer {
 
-    private static final String CVS_ID =
-            "@(#) $RCSfile: XSLTransformer.java,v $ $Revision: 1.5 $ $Date: 2007/11/14 04:36:54 $ $Name:  $";
-
     private Templates templates;
 
     /**

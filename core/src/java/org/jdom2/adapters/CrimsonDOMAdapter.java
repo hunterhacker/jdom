@@ -71,9 +71,6 @@ import org.xml.sax.*;
  */
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: CrimsonDOMAdapter.java,v $ $Revision: 1.17 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /**
      * This creates a new <code>{@link Document}</code> from an
      * existing <code>InputStream</code> by letting a DOM

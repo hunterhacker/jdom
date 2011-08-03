@@ -77,9 +77,6 @@ import org.w3c.dom.*;
  */
 public class DOMBuilder {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: DOMBuilder.java,v $ $Revision: 1.60 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /** Adapter class to use */
     private String adapterClass;
 

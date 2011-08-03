@@ -67,9 +67,6 @@ package org.jdom2;
  */
 public class EntityRef extends Content {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: EntityRef.java,v $ $Revision: 1.22 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /** The name of the <code>EntityRef</code> */
     protected String name;
 

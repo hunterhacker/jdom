@@ -71,9 +71,6 @@ import org.xml.sax.*;
  */
 class JAXPParserFactory {               // package protected
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: JAXPParserFactory.java,v $ $Revision: 1.6 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /** JAXP 1.2 schema language property id. */
     private static final String JAXP_SCHEMA_LANGUAGE_PROPERTY =
        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";

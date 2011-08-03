@@ -79,9 +79,6 @@ import org.jdom2.filter.*;
  */
 final class ContentList extends AbstractList implements java.io.Serializable {
 
-	private static final String CVS_ID =
-      "@(#) $RCSfile: ContentList.java,v $ $Revision: 1.42 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
 	private static final long serialVersionUID = 1L;
 
 	private static final int INITIAL_ARRAY_SIZE = 5;

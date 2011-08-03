@@ -74,9 +74,6 @@ import org.jdom2.Verifier;
  */
 public class Format implements Cloneable {
 
-    private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.14 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
-
     /**
      * Returns a new Format object that performs no whitespace changes, uses
      * the UTF-8 encoding, doesn't expand empty elements, includes the

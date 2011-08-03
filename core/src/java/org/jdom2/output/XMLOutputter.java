@@ -114,9 +114,6 @@ import org.jdom2.*;
 
 public class XMLOutputter implements Cloneable {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.117 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
-
     // For normal output
     private Format userFormat = Format.getRawFormat();
 

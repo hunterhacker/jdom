@@ -72,9 +72,6 @@ package org.jdom2;
  */
 public class CDATA extends Text {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: CDATA.java,v $ $Revision: 1.32 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /**
      * This is the protected, no-args constructor standard in all JDOM
      * classes. It allows subclassers to get a raw instance with no

@@ -67,9 +67,6 @@ import org.xml.sax.*;
 
 public class BuilderErrorHandler implements ErrorHandler {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: BuilderErrorHandler.java,v $ $Revision: 1.13 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /**
      * This method is called when a warning has occurred; this indicates
      * that while no XML rules were broken, something appears to be

@@ -70,9 +70,6 @@ import java.util.*;
  */
 final public class Verifier {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: Verifier.java,v $ $Revision: 1.57 $ $Date: 2009/07/23 05:54:23 $ $Name:  $";
-
     /**
      * Ensure instantation cannot occur.
      */

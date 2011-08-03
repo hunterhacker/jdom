@@ -69,9 +69,6 @@ import java.util.*;
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: DefaultJDOMFactory.java,v $ $Revision: 1.7 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     public DefaultJDOMFactory() { }
 
     // Allow Javadocs to inherit from JDOMFactory

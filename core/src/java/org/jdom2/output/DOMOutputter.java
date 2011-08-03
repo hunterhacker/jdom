@@ -77,9 +77,6 @@ import org.jdom2.adapters.*;
  */
 public class DOMOutputter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: DOMOutputter.java,v $ $Revision: 1.43 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
-
     /** Default adapter class */
     private static final String DEFAULT_ADAPTER_CLASS =
         "org.jdom.adapters.XercesDOMAdapter";

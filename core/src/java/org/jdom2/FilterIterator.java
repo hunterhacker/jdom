@@ -71,9 +71,6 @@ class FilterIterator implements Iterator {
     private Filter filter;
     private Object nextObject;
 
-    private static final String CVS_ID =
-            "@(#) $RCSfile: FilterIterator.java,v $ $Revision: 1.6 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     public FilterIterator(Iterator iterator, Filter filter) {
         if ((iterator == null) || (filter == null)) {
             throw new IllegalArgumentException("null parameter");

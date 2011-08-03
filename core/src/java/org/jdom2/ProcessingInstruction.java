@@ -72,9 +72,6 @@ import java.util.*;
 
 public class ProcessingInstruction extends Content {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: ProcessingInstruction.java,v $ $Revision: 1.47 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /** The target of the PI */
     protected String target;
 

@@ -71,9 +71,6 @@ import org.jdom2.filter.*;
  */
 public class Document implements Parent {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: Document.java,v $ $Revision: 1.85 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /**
      * This document's content including comments, PIs, a possible
      * DocType, and a root element.

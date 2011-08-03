@@ -71,9 +71,6 @@ import org.jdom2.Namespace;
  */
 class NamespaceStack {
  
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
-
     /** The prefixes available */
     private Stack prefixes;
 

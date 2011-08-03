@@ -77,9 +77,6 @@ import org.jdom2.*;
  */
 class TextBuffer {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: TextBuffer.java,v $ $Revision: 1.10 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /** The first part of the text value (the "prefix"). If null, the
       * text value is the empty string. */
     private String prefixString;

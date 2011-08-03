@@ -76,9 +76,6 @@ public final class Namespace {
     // XXX May want to use weak references to keep the maps from growing 
     // large with extended use
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: Namespace.java,v $ $Revision: 1.44 $ $Date: 2008/12/17 23:22:48 $ $Name:  $";
-
     /** 
      * Factory list of namespaces. 
      * Keys are <i>prefix</i>&amp;<i>URI</i>. 

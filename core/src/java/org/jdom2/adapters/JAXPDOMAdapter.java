@@ -71,9 +71,6 @@ import org.w3c.dom.Document;
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: JAXPDOMAdapter.java,v $ $Revision: 1.13 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /**
      * This creates a new <code>{@link Document}</code> from an
      * existing <code>InputStream</code> by letting a JAXP

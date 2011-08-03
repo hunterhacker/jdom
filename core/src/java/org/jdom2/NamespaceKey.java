@@ -67,9 +67,6 @@ import java.util.*;
  */
 final class NamespaceKey {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: NamespaceKey.java,v $ $Revision: 1.2 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     private String prefix;
     private String uri;
     private int hash;

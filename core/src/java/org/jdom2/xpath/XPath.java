@@ -76,9 +76,6 @@ import org.jdom2.*;
  */
 public abstract class XPath implements Serializable {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: XPath.java,v $ $Revision: 1.17 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
-
    /**
     * The name of the system property from which to retrieve the
     * name of the implementation class to use.

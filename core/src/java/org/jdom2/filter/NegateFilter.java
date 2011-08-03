@@ -65,9 +65,6 @@ package org.jdom2.filter;
  */
 final class NegateFilter extends AbstractFilter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: NegateFilter.java,v $ $Revision: 1.4 $ $Date: 2007/11/10 05:29:00 $";
-
     // Underlying filter.
     private Filter filter;
 

@@ -75,9 +75,6 @@ class DescendantIterator implements Iterator {
     private Iterator nextIterator;
     private List stack = new ArrayList();
 
-    private static final String CVS_ID =
-            "@(#) $RCSfile: DescendantIterator.java,v $ $Revision: 1.6 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /**
      * Iterator for the descendants of the supplied object.
      *

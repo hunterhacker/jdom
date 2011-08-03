@@ -71,9 +71,6 @@ import java.io.*;
  */
 public class Attribute implements Serializable, Cloneable {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: Attribute.java,v $ $Revision: 1.56 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /**
      * Attribute type: the attribute has not been declared or type
      * is unknown.

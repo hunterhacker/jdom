@@ -68,9 +68,6 @@ package org.jdom2;
  */
 public class Text extends Content {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: Text.java,v $ $Revision: 1.25 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     static final String EMPTY_STRING = "";
 
     /** The actual character content */

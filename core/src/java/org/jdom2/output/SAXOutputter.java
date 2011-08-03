@@ -90,9 +90,6 @@ import org.xml.sax.helpers.*;
  */
 public class SAXOutputter {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: SAXOutputter.java,v $ $Revision: 1.40 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
-
     /** Shortcut for SAX namespaces core feature */
     private static final String NAMESPACES_SAX_FEATURE =
                         "http://xml.org/sax/features/namespaces";

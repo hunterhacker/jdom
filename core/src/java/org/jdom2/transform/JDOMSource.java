@@ -100,9 +100,6 @@ import org.xml.sax.*;
  */
 public class JDOMSource extends SAXSource {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMSource.java,v $ $Revision: 1.20 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
-
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
    * returns <code>true</code> when passed this value as an

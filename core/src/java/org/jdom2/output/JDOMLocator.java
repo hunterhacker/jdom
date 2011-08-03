@@ -69,9 +69,6 @@ import org.xml.sax.helpers.*;
  */
 public class JDOMLocator extends LocatorImpl {
    
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMLocator.java,v $ $Revision: 1.4 $ $Date: 2007/11/10 05:29:01 $ $Name:  $";
-
     /** The JDOM node being processed by SAXOutputter. */
     private Object node;
 

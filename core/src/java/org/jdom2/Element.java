@@ -81,9 +81,6 @@ import org.jdom2.filter.*;
  */
 public class Element extends Content implements Parent {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: Element.java,v $ $Revision: 1.159 $ $Date: 2007/11/14 05:02:08 $ $Name:  $";
-
     private static final int INITIAL_ARRAY_SIZE = 5;
 
     /** The local name of the element */

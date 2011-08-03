@@ -68,9 +68,6 @@ import org.xml.sax.*;
  */
 public class JDOMParseException extends JDOMException {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: JDOMParseException.java,v $ $Revision: 1.8 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /**
      * The portion of the document that was successfully built before
      * the parse error occurred.

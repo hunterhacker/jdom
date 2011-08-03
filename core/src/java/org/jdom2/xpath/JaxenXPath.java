@@ -72,9 +72,6 @@ import org.jdom2.*;
  */
 class JaxenXPath extends    XPath {             // package protected
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: JaxenXPath.java,v $ $Revision: 1.20 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
-
    /**
     * The compiled XPath object to select nodes.  This attribute can
     * not be made final as it needs to be set upon object

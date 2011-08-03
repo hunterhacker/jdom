@@ -77,9 +77,6 @@ import java.util.*;
 class AttributeList extends AbstractList
                     implements List, java.io.Serializable {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: AttributeList.java,v $ $Revision: 1.24 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     private static final int INITIAL_ARRAY_SIZE = 5;
 
     /** The backing list */

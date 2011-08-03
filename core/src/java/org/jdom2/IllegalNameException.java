@@ -66,9 +66,6 @@ package org.jdom2;
  */
 public class IllegalNameException extends IllegalArgumentException {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalNameException.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /**
      * This will create an <code>Exception</code> indicating
      * that the specified name is illegal for the construct

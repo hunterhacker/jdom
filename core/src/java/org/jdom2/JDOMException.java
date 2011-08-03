@@ -74,9 +74,6 @@ import org.xml.sax.*;
  */
 public class JDOMException extends Exception {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: JDOMException.java,v $ $Revision: 1.26 $ $Date: 2008/12/10 00:59:51 $ $Name:  $";
-
     /** A wrapped <code>Throwable</code> */
     private Throwable cause;
 

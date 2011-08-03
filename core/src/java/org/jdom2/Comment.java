@@ -66,9 +66,6 @@ package org.jdom2;
  */
 public class Comment extends Content {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: Comment.java,v $ $Revision: 1.33 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /** Text of the <code>Comment</code> */
     protected String text;
 

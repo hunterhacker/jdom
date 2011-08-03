@@ -66,9 +66,6 @@ package org.jdom2;
  */
 public class DocType extends Content {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: DocType.java,v $ $Revision: 1.32 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /** The element being constrained */
     protected String elementName;
 

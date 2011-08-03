@@ -65,9 +65,6 @@ package org.jdom2.filter;
  */
 final class AndFilter extends AbstractFilter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: AndFilter.java,v $ $Revision: 1.4 $ $Date: 2007/11/10 05:29:00 $";
-
     // Filter for left side of logical <b>and</b>.
     private Filter left;
 

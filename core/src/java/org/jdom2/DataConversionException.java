@@ -66,9 +66,6 @@ package org.jdom2;
  */
 public class DataConversionException extends JDOMException {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: DataConversionException.java,v $ $Revision: 1.14 $ $Date: 2007/11/10 05:28:58 $ $Name:  $";
-
     /**
      * Constructs an exception where the named construct couldn't be converted
      * to the named data type.

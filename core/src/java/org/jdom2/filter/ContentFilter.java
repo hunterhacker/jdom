@@ -84,9 +84,6 @@ import org.jdom2.*;
  */
 public class ContentFilter extends AbstractFilter {
 
-    private static final String CVS_ID =
-      "@(#) $RCSfile: ContentFilter.java,v $ $Revision: 1.15 $ $Date: 2007/11/10 05:29:00 $ $Name:  $";
-
     /** Mask for JDOM {@link Element} objects */
     public static final int ELEMENT   = 1;
 

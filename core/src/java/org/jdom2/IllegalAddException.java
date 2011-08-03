@@ -65,9 +65,6 @@ package org.jdom2;
  */
 public class IllegalAddException extends IllegalArgumentException {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: IllegalAddException.java,v $ $Revision: 1.26 $ $Date: 2007/11/10 05:28:59 $ $Name:  $";
-
     /**
      * This will create an <code>Exception</code> indicating
      * that the addition of the <code>{@link Attribute}</code>

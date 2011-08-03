@@ -65,9 +65,6 @@ package org.jdom2.filter;
  */
 final class OrFilter extends AbstractFilter {
 
-    private static final String CVS_ID = 
-      "@(#) $RCSfile: OrFilter.java,v $ $Revision: 1.5 $ $Date: 2007/11/10 05:29:00 $";
-
     /** Filter for left side of logical <b>or</b> */
     private Filter left;
 

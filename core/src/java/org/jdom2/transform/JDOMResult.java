@@ -102,9 +102,6 @@ import org.xml.sax.helpers.*;
  */
 public class JDOMResult extends SAXResult {
 
-    private static final String CVS_ID =
-    "@(#) $RCSfile: JDOMResult.java,v $ $Revision: 1.24 $ $Date: 2007/11/10 05:29:02 $ $Name:  $";
-
   /**
    * If {@link javax.xml.transform.TransformerFactory#getFeature}
    * returns <code>true</code> when passed this value as an
