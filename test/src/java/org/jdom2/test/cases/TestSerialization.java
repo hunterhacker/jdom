@@ -60,8 +60,6 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import java.io.*;
-
 import org.jdom2.*;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.test.util.UnitTestUtil;

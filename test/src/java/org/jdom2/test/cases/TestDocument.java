@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 import org.jdom2.output.*;
+import org.jdom2.test.util.UnitTestUtil;
 
 public final class TestDocument {
 
@@ -475,25 +476,16 @@ public final class TestDocument {
 
 
 		//here is what we expect in these two scenarios
-		String bufWithNoNS = "<element xmlns=\"http://foo\"><child1 /><child2 /></element>";
+		//String bufWithNoNS = "<element xmlns=\"http://foo\"><child1 /><child2 /></element>";
 
 		String bufWithEmptyNS = "<element xmlns=\"http://foo\"><child1 xmlns=\"\" /><child2 xmlns=\"\" /></element>";
 
-		File dir = new File(scratchDir);
-		dir.mkdirs();
-
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(scratchDir + "/object.ser"));
-		out.writeObject(doc);
-
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(scratchDir + "/object.ser"));
-		Document docIn;
-		docIn = (Document) in.readObject();
-		element = doc.getRootElement();
+		Document docIn = UnitTestUtil.deSerialize(doc);
+		element = docIn.getRootElement();
 
 		StringWriter sw = new StringWriter();
 		XMLOutputter op= new XMLOutputter(Format.getRawFormat());
 		op.output(element, sw);
-		//assertEquals("Incorrect data after serialization", sw.toString(), bufWithEmptyNS);
 		assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
 
 	}
