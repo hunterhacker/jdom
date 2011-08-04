@@ -1,7 +1,5 @@
 /*--
 
- $Id: SAXBuilder.java,v 1.93 2009/07/23 06:26:26 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -79,7 +77,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
- * @version $Revision: 1.93 $, $Date: 2009/07/23 06:26:26 $
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer

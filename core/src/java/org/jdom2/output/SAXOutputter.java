@@ -1,7 +1,5 @@
 /*--
 
- $Id: SAXOutputter.java,v 1.40 2007/11/10 05:29:01 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -82,7 +80,6 @@ import org.xml.sax.helpers.*;
  * these are supposed to be invoked when the document is parsed and at this
  * point the document exists in memory and is known to have no errors. </p>
  *
- * @version $Revision: 1.40 $, $Date: 2007/11/10 05:29:01 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Fred Trimble

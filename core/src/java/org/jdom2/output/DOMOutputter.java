@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: DOMOutputter.java,v 1.43 2007/11/10 05:29:01 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -67,7 +65,6 @@ import org.jdom2.adapters.*;
  * Outputs a JDOM {@link org.jdom.Document org.jdom.Document} as a DOM {@link
  * org.w3c.dom.Document org.w3c.dom.Document}.
  *
- * @version $Revision: 1.43 $, $Date: 2007/11/10 05:29:01 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Matthew Merlo

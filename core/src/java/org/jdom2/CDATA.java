@@ -1,7 +1,5 @@
 /*--
 
- $Id: CDATA.java,v 1.32 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -63,7 +61,6 @@ package org.jdom2;
  * CDATA makes no guarantees about the underlying textual representation of
  * character data, but does expose that data as a Java String.
  *
- * @version $Revision: 1.32 $, $Date: 2007/11/10 05:28:58 $
  * @author  Dan Schaffer
  * @author  Brett McLaughlin
  * @author  Jason Hunter

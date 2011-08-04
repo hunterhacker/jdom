@@ -1,7 +1,5 @@
 /*--
 
- $Id: AbstractFilter.java,v 1.6 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -60,7 +58,6 @@ package org.jdom2.filter;
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.6 $, $Date: 2007/11/10 05:29:00 $
  */
 public abstract class AbstractFilter implements Filter {
 

@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: IllegalTargetException.java,v 1.15 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -60,7 +58,6 @@ package org.jdom2;
  * Thrown when a target is supplied in construction of a JDOM {@link
  * ProcessingInstruction}, and that name breaks XML naming conventions.
  * 
- * @version $Revision: 1.15 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  */
 public class IllegalTargetException extends IllegalArgumentException {

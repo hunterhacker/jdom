@@ -1,7 +1,5 @@
 /*--
 
- $Id: ContentFilter.java,v 1.15 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -79,7 +77,6 @@ import org.jdom2.*;
  * <p>
  * The default is to allow all valid JDOM objects.
  *
- * @version $Revision: 1.15 $, $Date: 2007/11/10 05:29:00 $
  * @author Bradley S. Huffman
  */
 public class ContentFilter extends AbstractFilter {

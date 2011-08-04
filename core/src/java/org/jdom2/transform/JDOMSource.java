@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: JDOMSource.java,v 1.20 2007/11/10 05:29:02 jhunter Exp $
-
  Copyright (C) 2001-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -94,7 +92,6 @@ import org.xml.sax.*;
  *
  * @see org.jdom.transform.JDOMResult
  *
- * @version $Revision: 1.20 $, $Date: 2007/11/10 05:29:02 $
  * @author Laurent Bihanic
  * @author Jason Hunter
  */

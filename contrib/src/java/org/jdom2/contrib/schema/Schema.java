@@ -1,7 +1,5 @@
 /*--
 
- $Id: Schema.java,v 1.4 2004/09/07 06:39:46 jhunter Exp $
-
  Copyright (C) 2003-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

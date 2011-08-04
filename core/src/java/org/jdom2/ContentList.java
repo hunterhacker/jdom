@@ -1,7 +1,5 @@
 /*--
 
- $Id: ContentList.java,v 1.42 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -72,7 +70,6 @@ import org.jdom2.filter.*;
  * @see     ProcessingInstruction
  * @see     Text
  *
- * @version $Revision: 1.42 $, $Date: 2007/11/10 05:28:58 $
  * @author  Alex Rosen
  * @author  Philippe Riand
  * @author  Bradley S. Huffman

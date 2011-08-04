@@ -1,7 +1,5 @@
 /*--
 
- $Id: OrFilter.java,v 1.5 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -61,7 +59,6 @@ package org.jdom2.filter;
  * <b>or</b> operation.
  *
  * @author Bradley S. Huffman
- * @version $Revision: 1.5 $, $Date: 2007/11/10 05:29:00 $
  */
 final class OrFilter extends AbstractFilter {
 

@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: Namespace.java,v 1.44 2008/12/17 23:22:48 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -65,7 +63,6 @@ import java.util.*;
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
  *
- * @version $Revision: 1.44 $, $Date: 2008/12/17 23:22:48 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter

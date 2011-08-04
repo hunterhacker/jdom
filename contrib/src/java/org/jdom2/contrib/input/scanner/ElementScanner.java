@@ -1,7 +1,5 @@
 /*--
 
- $Id: ElementScanner.java,v 1.14 2007/11/14 04:12:05 jhunter Exp $
-
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: UncheckedJDOMFactory.java,v 1.4 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  

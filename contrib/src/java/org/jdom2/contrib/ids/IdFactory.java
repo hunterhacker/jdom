@@ -1,7 +1,5 @@
 /*--
 
- $Id: IdFactory.java,v 1.4 2004/12/11 00:01:54 jhunter Exp $
-
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

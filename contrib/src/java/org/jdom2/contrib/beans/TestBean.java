@@ -1,7 +1,5 @@
 /*--
 
- $Id: TestBean.java,v 1.3 2004/02/17 02:29:57 jhunter Exp $
-
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

@@ -1,7 +1,5 @@
 /*--
 
- $Id: DefaultJDOMFactory.java,v 1.7 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -62,7 +60,6 @@ import java.util.*;
  * Creates the standard top-level JDOM classes (Element, Document, Comment,
  * etc). A subclass of this factory might construct custom classes.
  *
- * @version $Revision: 1.7 $, $Date: 2007/11/10 05:28:58 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman

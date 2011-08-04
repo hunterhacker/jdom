@@ -1,7 +1,5 @@
 /*--
 
- $Id: Parent.java,v 1.13 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -70,7 +68,6 @@ import org.jdom2.filter.Filter;
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2007/11/10 05:28:59 $
  */
 public interface Parent extends Cloneable, Serializable {
 

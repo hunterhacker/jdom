@@ -1,7 +1,5 @@
 /*--
 
- $Id: JAXPParserFactory.java,v 1.6 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -66,7 +64,6 @@ import org.xml.sax.*;
 /**
  * A non-public utility class to allocate JAXP SAX parsers.
  *
- * @version $Revision: 1.6 $, $Date: 2007/11/10 05:29:00 $
  * @author  Laurent Bihanic
  */
 class JAXPParserFactory {               // package protected

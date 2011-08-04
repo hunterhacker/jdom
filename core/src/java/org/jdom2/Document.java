@@ -1,7 +1,5 @@
 /*--
 
- $Id: Document.java,v 1.85 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -63,7 +61,6 @@ import org.jdom2.filter.*;
  * An XML document. Methods allow access to the root element as well as the
  * {@link DocType} and other document-level information.
  *
- * @version $Revision: 1.85 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jools Enticknap

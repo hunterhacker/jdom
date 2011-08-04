@@ -1,7 +1,5 @@
 /*--
 
- $Id: JTreeOutputter.java,v 1.5 2004/02/06 09:57:49 jhunter Exp $
-
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

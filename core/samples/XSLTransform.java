@@ -1,7 +1,5 @@
 /*--
 
- $Id: XSLTransform.java,v 1.9 2007/11/10 05:36:01 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

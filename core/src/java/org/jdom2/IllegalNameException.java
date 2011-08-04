@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: IllegalNameException.java,v 1.14 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -60,7 +58,6 @@ package org.jdom2;
  * Thrown when a name is supplied in construction of a JDOM construct whose
  * where the name breaks XML naming conventions.
  * 
- * @version $Revision: 1.14 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  */

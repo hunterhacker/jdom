@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: CrimsonDOMAdapter.java,v 1.17 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -66,7 +64,6 @@ import org.xml.sax.*;
 /**
  * An adapter for the Apache Crimson DOM parser.
  * 
- * @version $Revision: 1.17 $, $Date: 2007/11/10 05:28:59 $
  * @author  Jason Hunter
  */
 public class CrimsonDOMAdapter extends AbstractDOMAdapter {

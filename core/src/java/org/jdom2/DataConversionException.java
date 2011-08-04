@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: DataConversionException.java,v 1.14 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -60,7 +58,6 @@ package org.jdom2;
  * Thrown when a data conversion from a string to value type fails, such as
  * can happen with the {@link Attribute} convenience getter functions.
  *
- * @version $Revision: 1.14 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */

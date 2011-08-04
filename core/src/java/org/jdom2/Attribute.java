@@ -1,7 +1,5 @@
 /*--
 
- $Id: Attribute.java,v 1.56 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -62,7 +60,6 @@ import java.io.*;
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
  *
- * @version $Revision: 1.56 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold

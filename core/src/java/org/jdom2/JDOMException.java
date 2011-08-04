@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: JDOMException.java,v 1.26 2008/12/10 00:59:51 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -68,7 +66,6 @@ import org.xml.sax.*;
  * can be caught to handle all JDOM specific problems (some methods may throw
  * {@link java.io.IOException} and such).
  *
- * @version $Revision: 1.26 $, $Date: 2008/12/10 00:59:51 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */

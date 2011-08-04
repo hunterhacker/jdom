@@ -1,7 +1,5 @@
 /*--
 
- $Id: ElementFilter.java,v 1.20 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -62,7 +60,6 @@ import org.jdom2.*;
 /**
  * A Filter that only matches {@link org.jdom.Element} objects.
  *
- * @version $Revision: 1.20 $, $Date: 2007/11/10 05:29:00 $
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */

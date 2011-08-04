@@ -1,7 +1,5 @@
 /*--
 
- $Id: JaxenXPath.java,v 1.20 2007/11/10 05:29:02 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -67,7 +65,6 @@ import org.jdom2.*;
 /**
  * A non-public concrete XPath implementation for Jaxen.
  *
- * @version $Revision: 1.20 $, $Date: 2007/11/10 05:29:02 $
  * @author  Laurent Bihanic
  */
 class JaxenXPath extends    XPath {             // package protected

@@ -1,7 +1,5 @@
 /*--
 
- $Id: SAXHandler.java,v 1.73 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -66,7 +64,6 @@ import org.xml.sax.helpers.*;
 /**
  * A support class for {@link SAXBuilder}.
  *
- * @version $Revision: 1.73 $, $Date: 2007/11/10 05:29:00 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson

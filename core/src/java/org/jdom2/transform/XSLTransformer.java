@@ -1,7 +1,5 @@
 /*--
 
- $Id: XSLTransformer.java,v 1.5 2007/11/14 04:36:54 jhunter Exp $
-
  Copyright (C) 2001-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -110,7 +108,6 @@ import org.xml.sax.EntityResolver;
  *       Xalan 2.2d10. </li>
  *    </ol>
 
- * @version $Revision: 1.5 $, $Date: 2007/11/14 04:36:54 $
  * @author  Jason Hunter
  * @author  Elliotte Rusty Harold
  */

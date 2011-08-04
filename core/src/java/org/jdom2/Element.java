@@ -1,7 +1,5 @@
 /*--
 
- $Id: Element.java,v 1.159 2007/11/14 05:02:08 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -66,7 +64,6 @@ import org.jdom2.filter.*;
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
  *
- * @version $Revision: 1.159 $, $Date: 2007/11/14 05:02:08 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Lucas Gonze

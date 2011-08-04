@@ -1,7 +1,5 @@
 /*--
 
- $Id: DocType.java,v 1.32 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -62,7 +60,6 @@ package org.jdom2;
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
- * @version $Revision: 1.32 $, $Date: 2007/11/10 05:28:58 $
  */
 public class DocType extends Content {
 

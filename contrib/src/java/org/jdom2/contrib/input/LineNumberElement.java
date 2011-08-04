@@ -1,7 +1,5 @@
 /*--
 
- $Id: LineNumberElement.java,v 1.2 2004/02/06 09:57:48 jhunter Exp $
-
  Copyright (C) 2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

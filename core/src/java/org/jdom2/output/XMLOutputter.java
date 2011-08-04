@@ -1,7 +1,5 @@
 /*--
 
- $Id: XMLOutputter.java,v 1.117 2009/07/23 05:54:23 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -100,7 +98,6 @@ import org.jdom2.*;
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
  * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
  *
- * @version $Revision: 1.117 $, $Date: 2009/07/23 05:54:23 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Jason Reid

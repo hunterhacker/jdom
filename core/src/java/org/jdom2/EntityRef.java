@@ -1,7 +1,5 @@
 /*--
 
- $Id: EntityRef.java,v 1.22 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -60,7 +58,6 @@ package org.jdom2;
  * An XML entity reference. Methods allow the user to manage its name, public
  * id, and system id.
  *
- * @version $Revision: 1.22 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson

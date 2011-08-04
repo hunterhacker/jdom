@@ -1,7 +1,5 @@
 /*--
 
- $Id: XSLTransformException.java,v 1.4 2007/11/10 05:29:02 jhunter Exp $
-
  Copyright (C) 2003-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -61,7 +59,6 @@ import org.jdom2.JDOMException;
 /**
  * Thrown when an XSL stylesheet fails to compile or an XSL transform fails
  *
- * @version $Revision: 1.4 $, $Date: 2007/11/10 05:29:02 $
  * @author  Jason Hunter
  */
 public class XSLTransformException extends JDOMException {

@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: JDOMLocator.java,v 1.4 2007/11/10 05:29:01 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -65,7 +63,6 @@ import org.xml.sax.helpers.*;
  *
  * @author Laurent Bihanic
  *
- * @version $Revision: 1.4 $, $Date: 2007/11/10 05:29:01 $
  */
 public class JDOMLocator extends LocatorImpl {
    

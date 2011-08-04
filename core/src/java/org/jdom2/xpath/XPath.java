@@ -1,7 +1,5 @@
 /*--
 
- $Id: XPath.java,v 1.17 2007/11/10 05:29:02 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -71,7 +69,6 @@ import org.jdom2.*;
  * can choose an implementation using either {@link #setXPathClass} or
  * the system property "org.jdom.xpath.class".
  *
- * @version $Revision: 1.17 $, $Date: 2007/11/10 05:29:02 $
  * @author  Laurent Bihanic
  */
 public abstract class XPath implements Serializable {

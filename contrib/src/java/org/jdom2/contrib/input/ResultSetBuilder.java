@@ -1,7 +1,5 @@
 /*--
 
- $Id: ResultSetBuilder.java,v 1.12 2004/12/11 00:06:40 jhunter Exp $
-
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

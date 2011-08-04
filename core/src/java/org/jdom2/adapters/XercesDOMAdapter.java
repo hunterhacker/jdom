@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: XercesDOMAdapter.java,v 1.19 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -67,7 +65,6 @@ import org.xml.sax.*;
 /**
  * An adapter for the Apache Xerces DOM parser.
  * 
- * @version $Revision: 1.19 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */

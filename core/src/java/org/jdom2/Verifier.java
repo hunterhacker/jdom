@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: Verifier.java,v 1.57 2009/07/23 05:54:23 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -62,7 +60,6 @@ import java.util.*;
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
- * @version $Revision: 1.57 $, $Date: 2009/07/23 05:54:23 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter

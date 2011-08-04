@@ -1,7 +1,5 @@
 /*--
 
- $Id: Comment.java,v 1.33 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -60,7 +58,6 @@ package org.jdom2;
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
  *
- * @version $Revision: 1.33 $, $Date: 2007/11/10 05:28:58 $
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */

@@ -1,7 +1,5 @@
 /*--
 
- $Id: Format.java,v 1.14 2009/07/23 05:54:23 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -69,7 +67,6 @@ import org.jdom2.Verifier;
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.14 $, $Date: 2009/07/23 05:54:23 $
  * @author Jason Hunter
  */
 public class Format implements Cloneable {

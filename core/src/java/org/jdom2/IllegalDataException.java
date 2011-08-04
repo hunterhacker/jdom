@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: IllegalDataException.java,v 1.14 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -59,7 +57,6 @@ package org.jdom2;
 /**
  * Thrown when illegal text is supplied to a JDOM construct.
  *
- * @version $Revision: 1.14 $, $Date: 2007/11/10 05:28:59 $
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  */

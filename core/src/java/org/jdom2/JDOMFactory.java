@@ -1,7 +1,5 @@
 /*--
 
- $Id: JDOMFactory.java,v 1.9 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -64,7 +62,6 @@ import java.util.*;
  * (Element, Document, Comment, etc). Another implementation of this factory
  * could be used to create custom classes.
  *
- * @version $Revision: 1.9 $, $Date: 2007/11/10 05:28:59 $
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman

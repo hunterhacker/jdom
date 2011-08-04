@@ -1,7 +1,5 @@
 /*--
 
- $Id: TextBuffer.java,v 1.10 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -71,7 +69,6 @@ import org.jdom2.*;
  * means that no extra unused char array space will be kept around after parsing
  * is through.
  *
- * @version $Revision: 1.10 $, $Date: 2007/11/10 05:29:00 $
  * @author  Bradley S. Huffman
  * @author  Alex Rosen
  */

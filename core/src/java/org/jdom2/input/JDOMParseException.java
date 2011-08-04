@@ -1,7 +1,5 @@
 /*--
 
- $Id: JDOMParseException.java,v 1.8 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -63,7 +61,6 @@ import org.xml.sax.*;
  * Thrown during parse errors, with information about where the parse error
  * occurred as well as access to the partially built document.
  *
- * @version $Revision: 1.8 $, $Date: 2007/11/10 05:29:00 $
  * @author  Laurent Bihanic
  */
 public class JDOMParseException extends JDOMException {

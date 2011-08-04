@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: NamespaceStack.java,v 1.14 2007/11/10 05:29:01 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -64,7 +62,6 @@ import org.jdom2.Namespace;
  * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
  * during output.
  *
- * @version $Revision: 1.14 $, $Date: 2007/11/10 05:29:01 $
  * @author  Elliotte Rusty Harolde
  * @author  Fred Trimble
  * @author  Brett McLaughlin

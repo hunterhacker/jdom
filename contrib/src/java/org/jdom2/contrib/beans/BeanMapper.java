@@ -1,7 +1,5 @@
 /*--
 
- $Id: BeanMapper.java,v 1.5 2004/12/11 00:06:40 jhunter Exp $
-
  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin & Alex Chaffee.
  All rights reserved.
 

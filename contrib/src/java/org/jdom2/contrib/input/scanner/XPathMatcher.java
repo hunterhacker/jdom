@@ -1,7 +1,5 @@
 /*--
 
- $Id: XPathMatcher.java,v 1.3 2004/09/07 06:39:46 jhunter Exp $
-
  Copyright (C) 2001-2004 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 

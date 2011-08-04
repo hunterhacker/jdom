@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: BuilderErrorHandler.java,v 1.13 2007/11/10 05:29:00 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -62,7 +60,6 @@ import org.xml.sax.*;
  * The standard JDOM error handler implementation.
  * 
  * @author  Jason Hunter
- * @version $Revision: 1.13 $, $Date: 2007/11/10 05:29:00 $
  */
 
 public class BuilderErrorHandler implements ErrorHandler {

@@ -1,7 +1,5 @@
 /*--
 
- $Id: AttributeList.java,v 1.24 2007/11/10 05:28:58 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
@@ -66,7 +64,6 @@ import java.util.*;
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @version $Revision: 1.24 $, $Date: 2007/11/10 05:28:58 $
  * @see CDATA
  * @see Comment
  * @see Element

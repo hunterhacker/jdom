@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: NamespaceKey.java,v 1.2 2007/11/10 05:28:59 jhunter Exp $
-
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -59,7 +57,6 @@ package org.jdom2;
 /**
  * Key for storing a namespace representation in a map.
  *
- * @version $Revision: 1.2 $, $Date: 2007/11/10 05:28:59 $
  * @author  Tatu Saloranta
  * @author  Bradley S. Huffman
  */
