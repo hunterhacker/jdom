@@ -7,67 +7,36 @@ package org.jdom2.test.cases.output;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import org.jdom2.*;
-import java.io.*;
-import java.util.*;
-import org.jdom2.output.*;
-import org.jdom2.input.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 
-public final class TestXMLOutputter
-extends junit.framework.TestCase
-{
-	/**
-	 * Resource Bundle for various testing resources
-	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
+import org.jdom2.Document;
+import org.jdom2.IllegalDataException;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.UncheckedJDOMFactory;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
-	/**
-	 * the directory where needed resource files will be kept
-	 */
-	private String resourceDir = "";
+public final class TestXMLOutputter {
 
-	/**
-	 *  a directory for temporary storage of files
-	 */
-	private String scratchDir = "";
-    /**
-     *  Construct a new instance. 
-     */
-    public TestXMLOutputter(String name) {
-        super(name);
-    }
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
-    }
-	/**
-	 * This method is called before a test is executed.
-	 */
-	public void setUp() {
-		resourceDir = rb.getString("test.resourceRoot");
-		scratchDir = rb.getString("test.scratchDirectory");
-
-	}
-    /**
-     * The suite method runs all the tests
-     */
-public static Test suite () {
-        TestSuite suite = new TestSuite(TestXMLOutputter.class);
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+        JUnitCore.runClasses(TestXMLOutputter.class);
     }
 
 
+    @Test
     public void test_HighSurrogatePair() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -81,6 +50,7 @@ public static Test suite () {
                    "<root>&#x10000; &#x10000;</root>" + format.getLineSeparator(), xml);
     }
 
+    @Test
     public void test_HighSurrogatePairDecimal() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -95,6 +65,7 @@ public static Test suite () {
     }
 
     // Construct a raw surrogate pair character and confirm it outputs hex escaped
+    @Test
     public void test_RawSurrogatePair() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -109,6 +80,7 @@ public static Test suite () {
     }
 
     // Construct a raw surrogate pair character and confirm it outputs hex escaped, when UTF-8 too
+    @Test
     public void test_RawSurrogatePairUTF8() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -123,6 +95,7 @@ public static Test suite () {
     }
 
     // Construct illegal XML and check if the parser notices
+    @Test
     public void test_ErrorSurrogatePair() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -136,6 +109,7 @@ public static Test suite () {
     }
 
     // Manually construct illegal XML and make sure the outputter notices
+    @Test
     public void test_ErrorSurrogatePairOutput() throws JDOMException, IOException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
