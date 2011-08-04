@@ -60,48 +60,25 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
-
 import org.jdom2.*;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestNamespace
-extends junit.framework.TestCase
-{
-    /**
-     *  Construct a new instance. 
-     */
-    public TestNamespace(String name) {
-        super(name);
-    }
+public final class TestNamespace {
+
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
+        JUnitCore.runClasses(TestNamespace.class);
     }
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-    /**
-     * The suite method runs all the tests
-     */
-public static Test suite () {
-        TestSuite suite = new TestSuite(TestNamespace.class);
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
+
 	/**
 	 * Test the object comparison method.
 	 */
+    @Test
 	public void test_TCM__boolean_equals_Object() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		Object ob = (Object)ns;
@@ -117,9 +94,11 @@ public static Test suite () {
 	    
 	    
 	}
-	/**
+
+    /**
 	 * Verify that a namespace will produce a hashcode.
 	 */
+    @Test
 	public void test_TCM__int_hashCode() {
 		Namespace ns = Namespace.getNamespace("test", "value");
 		//only an exception would be a problem
@@ -154,6 +133,7 @@ public static Test suite () {
 	/**
 	 * Test the URI only Namespace.
 	 */
+    @Test
 	public void test_TCM__OrgJdomNamespace_getNamespace_String() {
 		Namespace ns = Namespace.getNamespace("http://some.new.place");
 		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));
@@ -162,17 +142,21 @@ public static Test suite () {
 		assertTrue("Incorrect no namespace namespace created", ns2.toString().equals("[Namespace: prefix \"\" is mapped to URI \"\"]"));
 
 	}
-	/**
+
+    /**
 	 * Test the prefix, uri version of getNamespace.
 	 */
+    @Test
 	public void test_TCM__OrgJdomNamespace_getNamespace_String_String() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://some.other.place\"]"));
 
 	}
-	/**
+
+    /**
 	 * Test getPrefix()
 	 */
+    @Test
 	public void test_TCM__String_getPrefix() {
 		Namespace ns = Namespace.getNamespace("prefx","http://foo");
 		assertTrue("Incorrect namespace prefix", ns.getPrefix().equals("prefx"));
@@ -184,17 +168,21 @@ public static Test suite () {
 		assertTrue("Incorrect empty namespace prefix", ns.getPrefix().equals(""));
 
 	}
-	/**
+
+    /**
 	 * Test than a namespace returns the correct URI
 	 */
+    @Test
 	public void test_TCM__String_getURI() {
 		Namespace ns = Namespace.getNamespace("prefx","http://foo");
 		assertTrue("Incorrect namespace prefix", ns.getURI().equals("http://foo"));
 
 	}
-	/**
+
+    /**
 	 * Test that toString() operates according to JDOM specs
 	 */
+    @Test
 	public void test_TCM__String_toString() {
 		Namespace ns = Namespace.getNamespace("http://some.new.place");
 		assertTrue("Incorrect namespace created", ns.toString().equals("[Namespace: prefix \"\" is mapped to URI \"http://some.new.place\"]"));

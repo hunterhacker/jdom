@@ -55,71 +55,50 @@ package org.jdom2.test.cases;
  */
 
 
-import java.io.*;
-import junit.framework.*;
-
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.IllegalDataException;
+import org.jdom2.IllegalNameException;
+import org.jdom2.Namespace;
+import org.jdom2.test.util.UnitTestUtil;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
 /**
- * Test the expected behavior of the Attribute class.
+ * Test the expected behaviour of the Attribute class.
  *
  * @author unascribed
  * @version 0.1
  */
-public final class TestAttribute
-    extends junit.framework.TestCase
-{
-
-    /**
-     *  Construct a new instance.
-     */
-    public TestAttribute(final String name) {
-        super(name);
-    }
+public final class TestAttribute {
 
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (final String args[]) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-    /**
-     * The suite method runs all the tests
-     */
-    public static Test suite () {
-        final TestSuite suite = new TestSuite(TestAttribute.class);
-        return suite;
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+    	JUnitCore.runClasses(TestAttribute.class);
     }
 
     /**
      * Test the simple case of constructing an attribute without name, value,
      * namespace or prefix
      */
+    @Test
     public void test_TCC() {
         final Attribute attribute = new Attribute(){
             // anonymous class
         };
+        assertTrue(null == attribute.getName());
     }
 
     /**
 	 * Test the simple case of constructing an attribute without
 	 * namespace or prefix
 	 */
+    @Test
 	public void test_TCC___String_String() {
 		final Attribute attribute = new Attribute("test", "value");
 		assertTrue("incorrect attribute name", attribute.getName().equals("test"));
@@ -131,7 +110,7 @@ public final class TestAttribute
 
 
 		try {
-			final Attribute nullNameAttribute = new Attribute(null, "value");
+			new Attribute(null, "value");
 			fail("didn't catch null attribute name");
 		} catch (final IllegalArgumentException e) {
 		} catch (final NullPointerException e) {
@@ -139,7 +118,7 @@ public final class TestAttribute
 		}
 
 		try {
-            final Attribute nullValueAttribute  = new Attribute("test", null);
+            new Attribute("test", null);
 			fail("didn't catch null attribute value");
 		} catch (final IllegalArgumentException e) {
 		} catch (final NullPointerException e) {
@@ -147,13 +126,13 @@ public final class TestAttribute
 		}
 
 		try {
-            final Attribute invalidNameAttribute = new Attribute("test" + (char)0x01, "value");
+            new Attribute("test" + (char)0x01, "value");
 			fail("didn't catch invalid attribute name");
 		} catch (final IllegalArgumentException e) {
 		}
 
 		try {
-            final Attribute invalidValueAttribute = new Attribute("test", "test" + (char)0x01);
+            new Attribute("test", "test" + (char)0x01);
 			fail("didn't catch invalid attribute value");
 		} catch (final IllegalArgumentException e) {
 		}
@@ -163,6 +142,7 @@ public final class TestAttribute
     /**
 	 * Test the constructor with name, value and namespace
 	 */
+    @Test
 	public void test_TCC___String_String_OrgJdomNamespace() {
         {
     		final Namespace namespace = Namespace.getNamespace("prefx", "http://some.other.place");
@@ -179,14 +159,14 @@ public final class TestAttribute
 		//without a prefix
         final Namespace defaultNamespace = Namespace.getNamespace("http://some.other.place");
 		try {
-            final Attribute attribute = new Attribute("test", "value", defaultNamespace);
+            new Attribute("test", "value", defaultNamespace);
 			fail("allowed creation of attribute with a default namespace");
 		} catch (final IllegalNameException e) {
 		}
 
 
 		try {
-            final Attribute attribute = new Attribute("test", "value", null);
+            new Attribute("test", "value", null);
 		} catch (final Exception e) {
         		fail("didn't handle null attribute namespace");
 		}
@@ -196,6 +176,7 @@ public final class TestAttribute
     /**
      * Test possible attribute values
      */
+    @Test
     public void test_TCM__Attribute_setAttributeType_int() {
         final Attribute attribute = new Attribute("test", "value");
 
@@ -222,6 +203,7 @@ public final class TestAttribute
     /**
 	 * Test a simple object comparison
 	 */
+    @Test
 	public void test_TCM__boolean_equals_Object() {
 		final Attribute attribute = new Attribute("test", "value");
 
@@ -240,6 +222,7 @@ public final class TestAttribute
     /**
 	 * test the convienience method getBooleanValue();
 	 */
+    @Test
 	public void test_TCM__boolean_getBooleanValue() {
 		final Attribute attribute = new Attribute("test", "true");
 		try {
@@ -270,6 +253,7 @@ public final class TestAttribute
 	/**
 	 * Test convience method for getting doubles from an Attribute
 	 */
+    @Test
 	public void test_TCM__double_getDoubleValue() {
 		Attribute attr = new Attribute("test", "11111111111111");
 		try {
@@ -302,6 +286,7 @@ public final class TestAttribute
      * formatted (java style) and incorrectly formatted float strings are
      * returned or raise a DataConversionException
      */
+    @Test
     public void test_TCM__float_getFloatValue() {
         Attribute attr = new Attribute("test", "1.00000009999e+10f");
         float flt = 1.00000009999e+10f;
@@ -327,6 +312,7 @@ public final class TestAttribute
  	 * Tests that Attribute can convert value strings to ints and
  	 * that is raises DataConversionException if it is not an int.
 	 */
+    @Test
 	public void test_TCM__int_getIntValue() {
         final Attribute attribute = new Attribute("test", "");
         int summand = 3;
@@ -362,6 +348,7 @@ public final class TestAttribute
     /**
 	 * Test that Attribute returns a valid hashcode.
 	 */
+    @Test
 	public void test_TCM__int_hashCode() {
 	    final Attribute attr = new Attribute("test", "value");
 		//only an exception would be a problem
@@ -387,6 +374,7 @@ public final class TestAttribute
     /**
 	 * Test the convienience method for returning a long from an Attribute
 	 */
+    @Test
 	public void test_TCM__long_getLongValue() {
         final Attribute attribute = new Attribute("test", "");
         long summand = 3;
@@ -416,6 +404,7 @@ public final class TestAttribute
  	 * covers the simple case and with the attribute using a namespace
  	 * and prefix.
 	 */
+    @Test
 	public void test_TCM__Object_clone() {
         TCM__Object_clone__default();
 
@@ -532,6 +521,7 @@ public final class TestAttribute
     /**
      * Test that setting an Attribute's value works correctly.
      */
+    @Test
     public void test_TCM__OrgJdomAttribute_setValue_String() {
     	final Namespace namespace = Namespace.getNamespace("prefx", "http://some.other.place");
 
@@ -563,6 +553,7 @@ public final class TestAttribute
     /**
 	 * check that the attribute can return the correct parent element
 	 */
+    @Test
 	public void test_TCM__OrgJdomElement_getParent() {
 		final Attribute attribute = new Attribute("test", "value");
 		assertNull("attribute returned parent when there was none", attribute.getParent());
@@ -578,6 +569,7 @@ public final class TestAttribute
     /**
      * check that the attribute can return the correct document
      */
+    @Test
     public void test_TCM__OrgJdomDocument_getDocument() {
         final Attribute attribute = new Attribute("test", "value");
         assertNull("attribute returned document when there was none", attribute.getDocument());
@@ -596,6 +588,7 @@ public final class TestAttribute
   	 * retrieved from an Attribute create with the same namespace
  	 * parameters are the same namespace.
 	 */
+    @Test
 	public void test_TCM__OrgJdomNamespace_getNamespace() {
 		final Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 
@@ -609,6 +602,7 @@ public final class TestAttribute
     /**
  	 * Test that an Attribute returns it's correct name.
 	 */
+    @Test
 	public void test_TCM__String_getName() {
 		final Attribute attr = new Attribute("test", "value");
 		assertTrue("incorrect attribute name", attr.getName().equals("test"));
@@ -618,6 +612,7 @@ public final class TestAttribute
     /**
  	 * Test that an Attribute returns the correct Namespace prefix.
 	 */
+    @Test
 	public void test_TCM__String_getNamespacePrefix() {
 		final Namespace namespace = Namespace.getNamespace("prefx", "http://some.other.place");
 
@@ -628,6 +623,7 @@ public final class TestAttribute
     /**
 	 * Test that an Attribute returns the correct Namespace URI.
 	 */
+    @Test
 	public void test_TCM__String_getNamespaceURI() {
 		final Namespace namespace = Namespace.getNamespace("prefx", "http://some.other.place");
 
@@ -639,6 +635,7 @@ public final class TestAttribute
     /**
 	 * Tests that an Attribute returns the correct Qualified Name.
 	 */
+    @Test
 	public void test_TCM__String_getQualifiedName() {
         final String prefix = "prefx";
         final String uri = "http://some.other.place";
@@ -659,6 +656,7 @@ public final class TestAttribute
 	/**
 	 * Test that Attribute returns the correct serialized form.
 	 */
+    @Test
 	public void test_TCM__String_getSerializedForm() {
 		/* noop because the method is deprecated
 
@@ -673,6 +671,7 @@ public final class TestAttribute
     /**
 	 * Test that an Attribute returns the correct value.
 	 */
+    @Test
 	public void test_TCM__String_getValue() {
 		final Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
 		final Attribute attr = new Attribute("test", "value", ns);
@@ -684,6 +683,7 @@ public final class TestAttribute
  	 * Test that the toString function works according to the
  	 * JDOM spec.
 	 */
+    @Test
 	public void test_TCM__String_toString() {
 		//expected value
 		final Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
@@ -698,6 +698,7 @@ public final class TestAttribute
      *
      * @see Attribute#detach()
      */
+    @Test
     public void test_TCM___detach() {
         final Element element = new Element("element");
         element.setAttribute("name", "value");
@@ -715,17 +716,16 @@ public final class TestAttribute
         assertNull("attribute has still a parent", attribute.getParent());
     }
 
-    public void testSerialization() {
-        serialization_default();
-    }
-
-    private void serialization_default() {
+    @Test
+    public void serialization_default() {
         final String attributeName = "test";
         final String attributeValue = "value";
 
         final Attribute attribute = new Attribute(attributeName, attributeValue);
 
-        final Attribute serializedAttribute = deSerialize(attribute);
+        final Attribute serializedAttribute = UnitTestUtil.deSerialize(attribute);
+        
+        assertTrue(attribute != serializedAttribute);
 
         assertTrue("incorrect name in serialized attribute", serializedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in serialized attribute", serializedAttribute.getValue().equals(attributeValue));
@@ -734,7 +734,8 @@ public final class TestAttribute
         assertEquals("incorrect Namespace in serialized attribute", serializedAttribute.getNamespace(), Namespace.NO_NAMESPACE);
     }
 
-    private void serialization_Namespace() {
+    @Test
+    public void serialization_Namespace() {
         final String prefix = "prefx";
         final String uri = "http://some.other.place";
 
@@ -745,7 +746,7 @@ public final class TestAttribute
 
         final Attribute attribute = new Attribute(attributeName, attributeValue, namespace);
 
-        final Attribute serializedAttribute = deSerialize(attribute);
+        final Attribute serializedAttribute = UnitTestUtil.deSerialize(attribute);
 
         assertTrue("incorrect name in serialized attribute", serializedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in serialized attribute", serializedAttribute.getValue().equals(attributeValue));
@@ -758,81 +759,16 @@ public final class TestAttribute
         assertEquals("incorrect Namespace in serialized attribute", serializedAttribute.getNamespace(), namespace);
     }
 
-    private Attribute deSerialize(final Attribute attribute) {
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            try {
-                objectOutputStream.writeObject(attribute);
-            }
-            catch(final IOException ioException) {
-                fail("unable to serialize object" + ioException);
-            }
-            finally {
-                try {
-                    objectOutputStream.close();
-                }
-                catch(final IOException ioException) {
-                    fail("failed to close object stream while serializing object" + ioException);
-                }
-            }
-        }
-        catch(final IOException ioException) {
-            fail("unable to serialize object" + ioException);
-        }
-        finally {
-            try {
-                outputStream.close();
-            }
-            catch(final IOException ioException) {
-                fail("failed to close output stream while serializing object" + ioException);
-            }
-        }
-
-        final byte[] bytes = outputStream.toByteArray();
-
-        final InputStream inputStream = new ByteArrayInputStream(bytes);
-        try {
-            final ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            try {
-                return (Attribute) objectInputStream.readObject();
-            }
-            finally {
-                try {
-                    objectInputStream.close();
-                }
-                catch(final IOException ioException) {
-                    fail("failed to close object stream while deserializing object" + ioException);
-                }
-            }
-        }
-        catch(final IOException ioException) {
-            fail("unable to deserialize object" + ioException);
-        }
-        catch(final ClassNotFoundException classNotFoundException) {
-            fail("unable to deserialize object" + classNotFoundException);
-        }
-        finally {
-            try{
-                inputStream.close();
-            }
-            catch(final IOException ioException) {
-                fail("failed to close output stream while serializing object" + ioException);
-            }
-        }
-
-        return null;
-    }
-
+    @Test
     public void testInfinity() throws DataConversionException {
         Attribute infinity = new Attribute("name", "Infinity");
         Attribute neginfinity = new Attribute("name", "-Infinity");
         Attribute inf = new Attribute("name", "INF");
         Attribute neginf = new Attribute("name", "-INF");
-        assertEquals(infinity.getDoubleValue(), Double.POSITIVE_INFINITY);
-        assertEquals(neginfinity.getDoubleValue(), Double.NEGATIVE_INFINITY);
-        assertEquals(inf.getDoubleValue(), Double.POSITIVE_INFINITY);
-        assertEquals(neginf.getDoubleValue(), Double.NEGATIVE_INFINITY);
+        assertEquals(infinity.getDoubleValue(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(neginfinity.getDoubleValue(), Double.NEGATIVE_INFINITY, 0.0);
+        assertEquals(inf.getDoubleValue(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(neginf.getDoubleValue(), Double.NEGATIVE_INFINITY, 0.0);
     }
 
 }

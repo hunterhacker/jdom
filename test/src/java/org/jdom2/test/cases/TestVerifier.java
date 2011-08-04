@@ -60,14 +60,16 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
-
 import org.jdom2.*;
 import java.io.*;
 import java.util.*;
 import org.jdom2.input.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestVerifier extends junit.framework.TestCase {
+public final class TestVerifier {
 
 	/**
 	 * the all characters class that must be accepted by processor
@@ -276,22 +278,19 @@ public final class TestVerifier extends junit.framework.TestCase {
 		}
 
 	}
-    /**
-     *  Construct a new instance. 
-     */
-    public TestVerifier(String name) {
-        super(name);
-    }
+
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
+        JUnitCore.runClasses(TestVerifier.class);
     }
+    
 	/**
 	 * This method is called before a test is executed.
 	 */
+    @Before
 	public void setUp() throws IOException, JDOMException {
 		
 		// get the ranges of valid characters from the xmlchars.xml resource
@@ -330,21 +329,7 @@ public final class TestVerifier extends junit.framework.TestCase {
 
 		}
 	}
-	/**
-	 * The suite method runs all the tests
-	 */
-public static Test suite () {
-		TestSuite suite = new TestSuite(TestVerifier.class);
-		//TestSuite suite = new TestSuite();
-		//suite.addTest(new TestVerifier("test_TCM__boolean_isXMLDigit_char"));
-		return suite;
-	}
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
+
 //	/**
 //	 * Test the screen for invalid xml characters, IE, non Unicode characters
 //	 */
@@ -530,6 +515,7 @@ public static Test suite () {
 	 * allowed.  No ':' are allowed since prefixes are defined with
 	 * Namespace objects.  The name must not be "xmlns"
 	 */
+    @Test
 	public void test_TCM__String_checkAttributeName_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkAttributeName(null));
@@ -558,10 +544,12 @@ public static Test suite () {
 		assertNull("invalidated valid name with 0x0301", Verifier.checkAttributeName("test" + (char)0x0301));
 
 	}
+    
 	/**
 	 * Test that checkCDATASection verifies CDATA excluding
 	 * the closing delimiter.
 	 */
+    @Test
 	public void test_TCM__String_checkCDATASection_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkCDATASection(null));
@@ -587,11 +575,13 @@ public static Test suite () {
 		assertNull("invalidated valid string with 0x4E01", Verifier.checkCDATASection("test" + (char)0x4E01));
 
 	}
+    
 	/**
 	 * Test that a String contains only xml characters.  The method under
 	 * only checks for null values and then character by character scans
 	 * the string so this test is not exhaustive
 	 */
+    @Test
 	public void test_TCM__String_checkCharacterData_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkCharacterData(null));
@@ -614,11 +604,13 @@ public static Test suite () {
 		assertNull("invalidated valid string with 0x4E01", Verifier.checkCharacterData("test" + (char)0x4E01));
 
 	}
+    
 	/**
 	 * Test checkCommentData such that a comment is validated as an
 	 * xml comment consisting of xml characters with the following caveats.
 	 * The comment must not contain a double hyphen.
 	 */
+    @Test
 	public void test_TCM__String_checkCommentData_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkCommentData(null));
@@ -642,11 +634,13 @@ public static Test suite () {
 		assertNull("invalidated valid string with 0x4E01", Verifier.checkCommentData("test" + (char)0x4E01));
 
 	}
+    
 	/**
 	 * Test checkElementName such that a name is validated as an
 	 * xml name with the following caveats.
 	 * The name must not start with "-" or ":".
 	 */
+    @Test
 	public void test_TCM__String_checkElementName_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkElementName(null));
@@ -672,12 +666,14 @@ public static Test suite () {
 		assertNull("invalidated valid name with 0x0301", Verifier.checkElementName("test" + (char)0x0301));
 
 	}
+    
 	/**
 	 * Test that checkNamespacePrefix validates against xml names
 	 * with the following exceptions.  Prefix names must not start
 	 * with "-", "xmlns", digits, "$", or "." and must not contain
 	 * ":"
 	 */
+    @Test
 	public void test_TCM__String_checkNamespacePrefix_String() {
 		//check out of range values
 		assertNotNull("validated invalid name with null", Verifier.checkNamespacePrefix("test" + (char)0x0));
@@ -708,7 +704,8 @@ public static Test suite () {
 		assertNull("invalidated valid name with 0x0301", Verifier.checkNamespacePrefix("test" + (char)0x0301));
 
 	}
-	/**
+
+    /**
 	 * Tests that checkNamespaceURI validates xml uri's.
 	 * A valid URI is alphanumeric characters and the reserved characters:
 	 * ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |  "$" | ","
@@ -718,6 +715,7 @@ public static Test suite () {
 	 *
 	 * XXX:TODO make this match the eventual specs for the Verifier class which is incomplete
 	 */
+    @Test
 	public void test_TCM__String_checkNamespaceURI_String() {
 		//invalid start characters
 		assertNotNull("validated invalid URI with startin -", Verifier.checkNamespaceURI('-' + "test"));
@@ -749,14 +747,14 @@ public static Test suite () {
 		assertNull("validated invalid URI with 0xD800", Verifier.checkNamespaceURI("test" + (char)0xD800 + "ing"));
 		assertNull("validated invalid URI with 0xD800", Verifier.checkNamespaceURI((char)0xD800 + "test"));
 		*/
-
-
 	}
-	/**
+
+    /**
 	 * Test that checkProcessintInstructionTarget validates the name
 	 * of a processing instruction.  This name must be a normal xml
 	 * and cannot have ":" or "xml" in the name.
 	 */
+    @Test
 	public void test_TCM__String_checkProcessingInstructionTarget_String() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkProcessingInstructionTarget(null));
@@ -786,24 +784,27 @@ public static Test suite () {
 
 	}
 
-  public void test_Namespace_Attribute_collision() {
-    try {
-      Namespace ns1 = Namespace.getNamespace("aaa", "http://acme.com/aaa");
-      Element e = new Element("aaa", ns1);
-      e.setAttribute("att1", "att1");
-      Namespace defns = Namespace.getNamespace("http://acme.com/default");
-      e.addNamespaceDeclaration(defns);
-			return;  // pass
+    @Test
+    public void test_Namespace_Attribute_collision() {
+    	try {
+    		Namespace ns1 = Namespace.getNamespace("aaa", "http://acme.com/aaa");
+    		Element e = new Element("aaa", ns1);
+    		e.setAttribute("att1", "att1");
+    		Namespace defns = Namespace.getNamespace("http://acme.com/default");
+    		e.addNamespaceDeclaration(defns);
+    		return;  // pass
+    	}
+    	catch (IllegalAddException e) {
+    		fail("Bug http://www.junlu.com/msg/166290.html");
+    	}
     }
-    catch (IllegalAddException e) {
-      fail("Bug http://www.junlu.com/msg/166290.html");
-    }
-  }
-	/**
+
+    /**
 	 * This test is a noop.  The method is for development only
 	 * It will remain in the suite until it is removed from the
 	 * Verifier class
 	 */
+    @Test
 	public void test_TCM__void_main_ArrayString() {
 		//this test is a noop.  The method is for development only
 	}

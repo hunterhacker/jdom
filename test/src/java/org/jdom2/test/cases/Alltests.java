@@ -56,6 +56,7 @@ package org.jdom2.test.cases;
 
 
 import junit.framework.*;
+
 import org.jdom2.test.cases.input.*;
 
 
@@ -90,15 +91,17 @@ public static void main(String[] args) {
 public static Test suite() {
 		TestSuite suite= new TestSuite();
 
-		suite.addTest(TestComment.suite());
-		suite.addTest(TestVerifier.suite());
-		suite.addTest(TestAttribute.suite());
-		suite.addTest(TestNamespace.suite());
-		suite.addTest(TestDocType.suite());
-		suite.addTest(TestElement.suite());
-		suite.addTest(TestDocument.suite());
-		suite.addTest(TestFilterList.suite());
-		suite.addTest(TestSAXBuilder.suite());
+		suite.addTest(new JUnit4TestAdapter(TestComment.class));
+		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
+		suite.addTest(new JUnit4TestAdapter(TestAttribute.class));
+		suite.addTest(new JUnit4TestAdapter(TestCDATA.class));
+		suite.addTest(new JUnit4TestAdapter(TestNamespace.class));
+		suite.addTest(new JUnit4TestAdapter(TestDocType.class));
+		suite.addTest(new JUnit4TestAdapter(TestElement.class));
+		suite.addTest(new JUnit4TestAdapter(TestDocument.class));
+		suite.addTest(new JUnit4TestAdapter(TestFilterList.class));
+		suite.addTest(new JUnit4TestAdapter(TestSerialization.class));
+		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
 		return suite;
 }
 }

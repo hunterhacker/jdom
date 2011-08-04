@@ -61,76 +61,31 @@ package org.jdom2.test.cases;
  * @version 0.1
  */
 
-import junit.framework.*;
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 import org.jdom2.*;
-import java.io.*;
-import org.jdom2.output.*;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.UnitTestUtil;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
-public final class TestElement
-        extends junit.framework.TestCase {
-
-    /**
-     * Resource Bundle for various testing resources
-     */
-    private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
-
-    /**
-     * the directory where needed resource files will be kept
-     */
-    private String resourceDir = "";
-
-    /**
-     *  a directory for temporary storage of files
-     */
-    private String scratchDir = "";
-
-    /**
-     *  Construct a new instance.
-     */
-    public TestElement(String name) {
-        super(name);
-    }
+public final class TestElement {
 
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main(String args[]) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        resourceDir = rb.getString("test.resourceRoot");
-        scratchDir = rb.getString("test.scratchDirectory");
-    }
-
-    /**
-     * The suite method runs all the tests
-     */
-    public static Test suite() {
-        TestSuite suite = new TestSuite(TestElement.class);
-        /*TestSuite suite = new TestSuite();
-        suite.addTest(new TestElement("test_TCU__testAttributeNamespaces"));
-        suite.addTest(new TestElement("test_TCU__testDefaultNamespaces"));
-        suite.addTest(new TestElement("test_TCU__testSerialization"));
-        */
-        return suite;
-    }
-
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+        JUnitCore.runClasses(TestElement.class);
     }
 
     /**
      * Test the constructor for an empty element
      */
+    @Test
     public void test_TCC___String() {
 
         //create a new empty element
@@ -162,6 +117,7 @@ public final class TestElement
     /**
      * Test the Element constructor with an name and namespace
      */
+    @Test
     public void test_TCC___String_OrgJdomNamespace() {
         //create a new empty element with a namespace
 
@@ -194,6 +150,7 @@ public final class TestElement
     /**
      * Test the Element constructor with a string default namespace
      */
+    @Test
     public void test_TCC___String_String() {
         //create a new empty element with a namespace
 
@@ -225,6 +182,7 @@ public final class TestElement
     /**
      * Test the Element constructor with a namespace uri and prefix
      */
+    @Test
     public void test_TCC___String_String_String() {
         //create a new empty element with a namespace
 
@@ -258,6 +216,7 @@ public final class TestElement
     /**
      * Test the equals compares only object instances
      */
+    @Test
     public void test_TCM__boolean_equals_Object() {
         Element el = new Element("theElement", "x", "urn:foo");
         Element el2 = new Element("theElement", "x", "urn:foo");
@@ -306,6 +265,7 @@ public final class TestElement
      * Test that hasMixedContent works for varying types of possible
      * child and other content
      */
+    @Test
     public void test_TCM__boolean_hasMixedContent() {
         /** No op because the method is deprecated
 
@@ -350,6 +310,7 @@ public final class TestElement
     /**
      * Test that an Element can determine if it is a root element
      */
+    @Test
     public void test_TCM__boolean_isRootElement() {
         Element element = new Element("element");
         assertTrue("incorrectly identified element as root", !element.isRootElement());
@@ -361,6 +322,7 @@ public final class TestElement
     /**
      * Test than an Element can remove an Attribute by name
      */
+    @Test
     public void test_TCM__boolean_removeAttribute_String() {
         Element element = new Element("test");
         Attribute att = new Attribute("anAttribute", "test");
@@ -378,6 +340,7 @@ public final class TestElement
     /**
      * Test removeAttribute with a namespace
      */
+    @Test
     public void test_TCM__boolean_removeAttribute_String_OrgJdomNamespace() {
         Element element = new Element("test");
         Namespace ns = Namespace.getNamespace("x", "urn:test");
@@ -395,6 +358,7 @@ public final class TestElement
     /**
      * Test removeAtttribute with a namespace uri.
      */
+    @Test
     public void test_TCM__boolean_removeAttribute_String_String() {
         /** No op because the method is deprecated
 
@@ -415,6 +379,7 @@ public final class TestElement
     /**
      * Test removeChild by name
      */
+    @Test
     public void test_TCM__boolean_removeChild_String() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -427,6 +392,7 @@ public final class TestElement
     /**
      * Test removeChild by name and namespace
      */
+    @Test
     public void test_TCM__boolean_removeChild_String_OrgJdomNamespace() {
         Namespace ns = Namespace.getNamespace("x", "urn:fudge");
         Element element = new Element("element");
@@ -510,6 +476,7 @@ public final class TestElement
     /**
      * Test removeContent for a Comment
      */
+    @Test
     public void test_TCM__boolean_removeContent_OrgJdomComment() {
         Element element = new Element("element");
         Comment comm = new Comment("a comment");
@@ -522,6 +489,7 @@ public final class TestElement
     /**
      * Test removeContent for an Element.
      */
+    @Test
     public void test_TCM__boolean_removeContent_OrgJdomElement() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -534,6 +502,7 @@ public final class TestElement
     /**
      * Test removeContent for entities.
      */
+    @Test
     public void test_TCM__boolean_removeContent_OrgJdomEntity() {
         Element element = new Element("element");
         EntityRef ent = new EntityRef("anEntity");
@@ -546,6 +515,7 @@ public final class TestElement
     /**
      * Test removeContent for processing instructions.
      */
+    @Test
     public void test_TCM__boolean_removeContent_OrgJdomProcessingInstruction() {
         Element element = new Element("element");
         ProcessingInstruction pi = new ProcessingInstruction("aPi", "something");
@@ -558,6 +528,7 @@ public final class TestElement
     /**
      * Test hashcode functions.
      */
+    @Test
     public void test_TCM__int_hashCode() {
         Element element = new Element("test");
         //only an exception would be a problem
@@ -584,6 +555,7 @@ public final class TestElement
     /**
      * Test that additionalNamespaces are returned.
      */
+    @Test
     public void test_TCM__List_getAdditionalNamespaces() {
         Element element = new Element("element");
         element.addNamespaceDeclaration(Namespace.getNamespace("x", "urn:foo"));
@@ -603,6 +575,7 @@ public final class TestElement
     /**
      * Test that getAttribute returns all attributes of this element.
      */
+    @Test
     public void test_TCM__List_getAttributes() {
         Element element = new Element("test");
         Attribute att = new Attribute("anAttribute", "test");
@@ -622,6 +595,7 @@ public final class TestElement
     /**
      * Test getChildren to return all children from all namespaces.
      */
+    @Test
     public void test_TCM__List_getChildren() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getChildren("child"));
@@ -647,6 +621,7 @@ public final class TestElement
     /**
      * Test that Element returns a List of children by name
      */
+    @Test
     public void test_TCM__List_getChildren_String() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getChildren("child"));
@@ -671,6 +646,7 @@ public final class TestElement
     /**
      * Test that Element returns a List of children by name and namespace
      */
+    @Test
     public void test_TCM__List_getChildren_String_OrgJdomNamespace() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getChildren("child"));
@@ -696,6 +672,7 @@ public final class TestElement
     /**
      * Test that getContent returns all the content for the element
      */
+    @Test
     public void test_TCM__List_getContent() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getContent());
@@ -739,6 +716,7 @@ public final class TestElement
      * Test that clone returns a disconnected copy of the original element.
      * Since clone is a deep copy, that must be tested also
      */
+    @Test
     public void test_TCM__Object_clone() {
 
         //first the simple case
@@ -827,6 +805,7 @@ public final class TestElement
     /**
      * Test getAttribute by name
      */
+    @Test
     public void test_TCM__OrgJdomAttribute_getAttribute_String() {
         Element element = new Element("el");
         Attribute att = new Attribute("name", "first");
@@ -837,6 +816,7 @@ public final class TestElement
     /**
      * Test getAttribute by name and namespace
      */
+    @Test
     public void test_TCM__OrgJdomAttribute_getAttribute_String_OrgJdomNamespace() {
         Element element = new Element("el");
         Namespace ns = Namespace.getNamespace("x", "urn:foo");
@@ -850,6 +830,7 @@ public final class TestElement
     /**
      * Test that an element returns the reference to it's enclosing document
      */
+    @Test
     public void test_TCM__OrgJdomDocument_getDocument() {
         Element element = new Element("element");
 
@@ -869,6 +850,7 @@ public final class TestElement
     /**
      * Test addContent for CDATA.
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_OrgJdomCDATA() {
         //positive test is covered in test__List_getContent()
 
@@ -889,6 +871,7 @@ public final class TestElement
     /**
      * Test adding comment content.
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_OrgJdomComment() {
         Element element = new Element("element");
         Comment comm = new Comment("a comment");
@@ -909,6 +892,7 @@ public final class TestElement
     /**
      * Test addContent for Element.
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_OrgJdomElement() {
         //positive test is covered in test__List_getContent()
 
@@ -928,6 +912,7 @@ public final class TestElement
     /**
      * Test addContent for Entity
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_OrgJdomEntityRef() {
         //positive test is covered in test__List_getContent()
 
@@ -947,6 +932,7 @@ public final class TestElement
     /**
      * Test addContent for ProcessingInstruction.
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_OrgJdomProcessingInstruction() {
         //positive test is covered in test__List_getContent()
 
@@ -966,6 +952,7 @@ public final class TestElement
     /**
      * Test that string based content is added correctly to an Element.
      */
+    @Test
     public void test_TCM__OrgJdomElement_addContent_String() {
         Element element = new Element("element");
         element.addContent("the first part");
@@ -994,6 +981,7 @@ public final class TestElement
     /**
      * Test getContent by child name.
      */
+    @Test
     public void test_TCM__OrgJdomElement_getChild_String() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -1005,6 +993,7 @@ public final class TestElement
     /**
      * Test getContent by child name and namespace.
      */
+    @Test
     public void test_TCM__OrgJdomElement_getChild_String_OrgJdomNamespace() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -1019,6 +1008,7 @@ public final class TestElement
      * Test getCopy with only the name argument. Since the copy is just a clone,
      * the clone test covers most of the testing.
      */
+    @Test
     public void test_TCM__OrgJdomElement_getCopy_String() {
         /** No op because the method is deprecated
 
@@ -1037,6 +1027,7 @@ public final class TestElement
      * Since the copy is just a clone, the clone test
      * covers most of the testing.
      */
+    @Test
     public void test_TCM__OrgJdomElement_getCopy_String_OrgJdomNamespace() {
         /** No op because the method is deprecated
 
@@ -1053,6 +1044,7 @@ public final class TestElement
     /**
      * Test test that a child element can return it's parent.
      */
+    @Test
     public void test_TCM__OrgJdomElement_getParent() {
         Element element = new Element("el");
         Element child = new Element("child");
@@ -1064,6 +1056,7 @@ public final class TestElement
     /**
      * Test addAttribute with an Attribute
      */
+    @Test
     public void test_TCM__OrgJdomElement_setAttribute_OrgJdomAttribute() {
         Element element = new Element("el");
         Attribute att = new Attribute("name", "first");
@@ -1089,6 +1082,7 @@ public final class TestElement
     /**
      * Test addAttribute with a supplied name and value
      */
+    @Test
     public void test_TCM__OrgJdomElement_setAttribute_String_String__invalidCharacters() {
         final Element element = new Element("el");
 
@@ -1131,24 +1125,25 @@ public final class TestElement
     /**
      * Test addAttribute with a supplied name and value
      */
+    @Test
     public void test_setAttribute_String_String__attributeTypes() {
-    	test_setAttribute_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.CDATA_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.ID_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.IDREF_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.IDREFS_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.ENTITY_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.ENTITIES_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.NOTATION_TYPE);    
-    	test_setAttribute_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.CDATA_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.ID_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.IDREF_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.IDREFS_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.ENTITY_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.ENTITIES_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.NOTATION_TYPE);    
+    	helper_setAttribute_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
     }
 
     /**
      * Test setAttribute with a supplied name and value
      */
-    private void test_setAttribute_String_String__attributeType(final int attributeType) {
+    private void helper_setAttribute_String_String__attributeType(final int attributeType) {
         final Element element = new Element("el");
 
         final String attributeName = "name";
@@ -1181,18 +1176,19 @@ public final class TestElement
     /**
      * Test addAttribute with a supplied name and value
      */
+    @Test
     public void test_setAttribute_String_String_String__attributeTypes() {
-        test_setAttribute_String_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.CDATA_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.ID_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.IDREF_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.IDREFS_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.ENTITY_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.ENTITIES_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.NOTATION_TYPE);    
-        test_setAttribute_String_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.UNDECLARED_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.CDATA_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.ID_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.IDREF_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.IDREFS_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.ENTITY_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.ENTITIES_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.NMTOKEN_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.NMTOKENS_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.NOTATION_TYPE);    
+        helper_setAttribute_String_String_String__attributeType(Attribute.ENUMERATED_TYPE);    
     }
 
     /**
@@ -1200,10 +1196,10 @@ public final class TestElement
      * 
      * @author Victor Toni
      */
-    private void test_setAttribute_String_String_String__attributeType(final int attributeType) {
+    private void helper_setAttribute_String_String_String__attributeType(final int attributeType) {
         try {
             final Namespace defaultNamespace = Namespace.getNamespace(null, "http://test.org/default");
-            test_setAttribute_String_String_String__attributeType(defaultNamespace, attributeType);
+            helper_setAttribute_String_String_String__attributeType(defaultNamespace, attributeType);
             fail("didn't catch empty prefix for attribute ");
         }
         catch( final IllegalNameException ignore) {
@@ -1211,7 +1207,7 @@ public final class TestElement
         }
 
         final Namespace testNamespace = Namespace.getNamespace("test", "http://test.org/test");
-        test_setAttribute_String_String_String__attributeType(testNamespace, attributeType);
+        helper_setAttribute_String_String_String__attributeType(testNamespace, attributeType);
     }
 
     /**
@@ -1219,7 +1215,7 @@ public final class TestElement
      * 
      * @author Victor Toni
      */
-    private void test_setAttribute_String_String_String__attributeType(final Namespace namespace, final int attributeType) {
+    private void helper_setAttribute_String_String_String__attributeType(final Namespace namespace, final int attributeType) {
         final Element element = new Element("el");
 
         final String attributeName = "name";
@@ -1252,6 +1248,7 @@ public final class TestElement
     /**
      * Test that attributes are added correctly as a list
      */
+    @Test
     public void test_TCM__OrgJdomElement_setAttributes_List() {
         Element element = new Element("element");
         Attribute one = new Attribute("one", "value");
@@ -1359,6 +1356,7 @@ public final class TestElement
     /**
      * Test adding mixed content in a List
      */
+    @Test
     public void test_TCM__OrgJdomElement_setContent_List() {
         Element element = new Element("el");
         assertEquals("did not return Collections.EMPTY_LIST on empty element", Collections.EMPTY_LIST, element.getContent());
@@ -1430,6 +1428,7 @@ public final class TestElement
      * Test setting the content of the Element with just a string
      * This should wipe out all other content the element has
      */
+    @Test
     public void test_TCM__OrgJdomElement_setText_String() {
         Element element = new Element("el");
         Element child = new Element("child");
@@ -1466,6 +1465,7 @@ public final class TestElement
     /**
      * Test that the Element returns it's primary namespace
      */
+    @Test
     public void test_TCM__OrgJdomNamespace_getNamespace() {
         Namespace ns = Namespace.getNamespace("urn:test:foo");
         Element element = new Element("element", ns);
@@ -1476,6 +1476,7 @@ public final class TestElement
     /**
      * Test that Element can return a namespace given a uri
      */
+    @Test
     public void test_TCM__OrgJdomNamespace_getNamespace_String() {
         Namespace ns = Namespace.getNamespace("x", "urn:test:foo");
         Element element = new Element("element", ns);
@@ -1500,6 +1501,7 @@ public final class TestElement
     /**
      * Test getAttributeValue by attribute name.
      */
+    @Test
     public void test_TCM__String_getAttributeValue_String() {
         Element element = new Element("el");
         element.setAttribute(new Attribute("name", "first"));
@@ -1509,6 +1511,7 @@ public final class TestElement
     /**
      * Test getAttributeValue with name and namespace
      */
+    @Test
     public void test_TCM__String_getAttributeValue_String_OrgJdomNamespace() {
         Element element = new Element("el");
         element.setAttribute(new Attribute("name", "first", Namespace.getNamespace("x", "urn:WombatsRUS")));
@@ -1518,6 +1521,7 @@ public final class TestElement
     /**
      * Test the convience method for retrieving child text.
      */
+    @Test
     public void test_TCM__String_getChildText_String() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -1531,6 +1535,7 @@ public final class TestElement
      * Test the convience method for retrieving child text for a child
      * retrieved by name and namespace
      */
+    @Test
     public void test_TCM__String_getChildText_String_OrgJdomNamespace() {
         Element element = new Element("element");
         Namespace ns = Namespace.getNamespace("urn:test:foo");
@@ -1545,6 +1550,7 @@ public final class TestElement
     /**
      * Test the convience method for retrieving trimmed child text.
      */
+    @Test
     public void test_TCM__String_getChildTextTrim_String() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -1558,6 +1564,7 @@ public final class TestElement
      * Test the convience method for retrieving trimmed child text for the
      * child in the given namespace
      */
+    @Test
     public void test_TCM__String_getChildTextTrim_String_OrgJdomNamespace() {
         Element element = new Element("element");
         Namespace ns = Namespace.getNamespace("urn:test:foo");
@@ -1571,6 +1578,7 @@ public final class TestElement
     /**
      * Test getName.
      */
+    @Test
     public void test_TCM__String_getName() {
         Element element = new Element("element", Namespace.getNamespace("x", "ftp://wombat.stew"));
         assertEquals("incorrect name", element.getName(), "element");
@@ -1579,6 +1587,7 @@ public final class TestElement
     /**
      * Test getNamespacePrefix.
      */
+    @Test
     public void test_TCM__String_getNamespacePrefix() {
         Element element = new Element("element", Namespace.getNamespace("x", "ftp://wombat.stew"));
         assertEquals("incorrect namespace prefix", element.getNamespacePrefix(), "x");
@@ -1587,6 +1596,7 @@ public final class TestElement
     /**
      * Test code goes here. Replace this comment.
      */
+    @Test
     public void test_TCM__String_getNamespaceURI() {
         Element element = new Element("element", Namespace.getNamespace("x", "ftp://wombat.stew"));
         assertEquals("incorrect uri", element.getNamespaceURI(), "ftp://wombat.stew");
@@ -1595,6 +1605,7 @@ public final class TestElement
     /**
      * Test that Element returns the correct qualified name.
      */
+    @Test
     public void test_TCM__String_getQualifiedName() {
         Element element = new Element("element", Namespace.getNamespace("x", "ftp://wombat.stew"));
         assertEquals("incorrect qualified name", element.getQualifiedName(), "x:element");
@@ -1603,6 +1614,7 @@ public final class TestElement
     /**
      * Test getSerializedForm
      */
+    @Test
     public void test_TCM__String_getSerializedForm() {
 //        fail("method not implemented");
     }
@@ -1610,6 +1622,7 @@ public final class TestElement
     /**
      * Test getText returns that full text of the element
      */
+    @Test
     public void test_TCM__String_getText() {
         Element element = new Element("element");
         Element child = new Element("child");
@@ -1621,6 +1634,7 @@ public final class TestElement
     /**
      * Test getTextTrim.
      */
+    @Test
     public void test_TCM__String_getTextTrim() {
         Element element = new Element("element");
         element.addContent("  some text  \n ");
@@ -1632,6 +1646,7 @@ public final class TestElement
      * Test the toString method which should return a useful string
      * for debugging purposes only
      */
+    @Test
     public void test_TCM__String_toString() {
         Element element = new Element("element", Namespace.getNamespace("urn:foo"));
         element.setAttribute(new Attribute("name", "aName"));
@@ -1642,6 +1657,7 @@ public final class TestElement
     /**
      * Test addNamespaceDeclaration for prefix and uri.
      */
+    @Test
     public void test_TCM__void_addNamespaceDeclaration_OrgJdomNamespace() {
         Element element = new Element("element");
         element.addNamespaceDeclaration(Namespace.getNamespace("x", "urn:foo"));
@@ -1657,6 +1673,7 @@ public final class TestElement
      * to specs. with namespaces and prefixes intact
      *
      */
+    @Test
     public void test_TCU__testAttributeNamespaces() {
 
         //set up an element and namespaces to test with
@@ -1741,6 +1758,7 @@ public final class TestElement
      * Test that an Element properly handles default namespaces
      *
      */
+    @Test
     public void test_TCU__testDefaultNamespaces() throws IOException {
 
         //set up an element to test with
@@ -1789,9 +1807,11 @@ public final class TestElement
 
     /**
      * Test that Element serialization works, including with namespaces
+     * @throws IOException 
      *
      */
-    public void test_TCU__testSerialization() throws IOException, ClassNotFoundException {
+    @Test
+    public void test_TCU__testSerialization() throws IOException {
 
         //set up an element to test with
         Element element = new Element("element", Namespace.getNamespace("http://foo"));
@@ -1812,15 +1832,7 @@ public final class TestElement
         String bufWithEmptyNS =
                 "<element xmlns=\"http://foo\"><child1 xmlns=\"\" anAttribute=\"no namespace\" /><child2 xmlns=\"\" xmlns:x=\"http://foo\" x:anAttribute=\"with namespace\"><descendent /></child2></element>";
 
-        File dir = new File(scratchDir);
-        dir.mkdirs();
-
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(scratchDir + "/object.ser"));
-        out.writeObject(element);
-
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(scratchDir + "/object.ser"));
-
-        Element elIn = (Element) in.readObject();
+        Element elIn = UnitTestUtil.deSerialize(element);
 
         StringWriter sw = new StringWriter();
         XMLOutputter op = new XMLOutputter();
@@ -1846,15 +1858,7 @@ public final class TestElement
         String bufWithEmptyNS2 =
                 "<element xmlns=\"http://foo\" xmlns:foo=\"http://test1\" xmlns:bar=\"http://test2\"><child1 xmlns=\"\" anAttribute=\"no namespace\" /><child2 xmlns=\"\" xmlns:x=\"http://foo\" x:anAttribute=\"with namespace\"><descendent /></child2></element>";
 
-        File dir2 = new File(scratchDir);
-        dir2.mkdirs();
-
-        ObjectOutputStream out2 = new ObjectOutputStream(new FileOutputStream(scratchDir + "/object.ser"));
-        out2.writeObject(element2);
-
-        ObjectInputStream in2 = new ObjectInputStream(new FileInputStream(scratchDir + "/object.ser"));
-
-        Element elIn2 = (Element) in2.readObject();
+        Element elIn2 = UnitTestUtil.deSerialize(element2);
 
         StringWriter sw2 = new StringWriter();
         XMLOutputter op2 = new XMLOutputter();
@@ -1862,10 +1866,11 @@ public final class TestElement
         assertTrue("Incorrect data after serialization", sw2.toString().equals(bufWithEmptyNS2));
     }
 
-  public void test_AddingString() {
-    Vector v = new Vector();
-    v.add("one");
-    Element e = new Element("e");
-    e.setContent(v);
-  }
+    @Test
+    public void test_AddingString() {
+    	Vector v = new Vector();
+    	v.add("one");
+    	Element e = new Element("e");
+    	e.setContent(v);
+    }
 }

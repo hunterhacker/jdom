@@ -53,12 +53,12 @@
  */
 package org.jdom2.test.cases;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.jdom2.CDATA;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
 /**
  * Test for {@link CDATA}.
@@ -66,48 +66,19 @@ import org.jdom2.Text;
  * @author Victor Toni
  * @version 1.0.0
  */
-public final class TestCDATA
-    extends junit.framework.TestCase {
+public final class TestCDATA {
 
     /**
 	 * The main method runs all the tests in the text ui
 	 */
 	public static void main (final String args[]) {
-		junit.textui.TestRunner.run(suite());
-	}
-
-    /**
-	 * The suite method runs all the tests
-	 */
-	public static Test suite () {
-		final TestSuite suite = new TestSuite(TestCDATA.class);
-		return suite;
-	}
-
-    /**
-     *  Construct a new instance. 
-     */
-    public TestCDATA(final String name) {
-        super(name);
-    }
-
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-
-	/**
-	 * This method is called after a test is executed.
-	 */
-	public void tearDown() {
-		// your code goes here.
+		JUnitCore.runClasses(TestCDATA.class);
 	}
 
     /**
      * Test the protected CDATA constructor.
      */
+	@Test
     public void test_TCC() {
         new CDATA() {
             // check protected constructor via anonymous class
@@ -117,6 +88,7 @@ public final class TestCDATA
     /**
 	 * Test the CDATA constructor with a valid and an invalid string.
 	 */
+	@Test
 	public void test_TCC___String() {
         final String text = "this is a CDATA section";        
 
@@ -149,6 +121,7 @@ public final class TestCDATA
     /**
 	 * Verify a simple object == object test
 	 */
+	@Test
 	public void test_TCM__boolean_equals_Object() {
         final String text = "this is a CDATA section";
 	    final CDATA cdata = new CDATA(text);
@@ -163,6 +136,7 @@ public final class TestCDATA
 	 * Test that a real hashcode is returned and that a different one is returned
 	 * for a different CDATA.
 	 */
+	@Test
 	public void test_TCM__int_hashCode() {
         final String text = "this is a CDATA section";
         final CDATA cdata = new CDATA(text);
@@ -176,7 +150,7 @@ public final class TestCDATA
             fail("bad hashCode");
         }
 
-        // same text but created out of parts to avoid object resusal
+        // same text but created out of parts to avoid object re-usage
 		final CDATA similarCDATA = new CDATA("this"+ " is" +" a" + " CDATA" + " section");
 
         //different CDATA sections, same text
@@ -194,6 +168,7 @@ public final class TestCDATA
     /**
      * Test setting and resetting the text value of this CDATA.
      */
+	@Test
     public void test_TCM__orgJdomText_setText_String() {
         // simple text in CDATA section
         final String text = "this is a CDATA section";        
@@ -211,7 +186,7 @@ public final class TestCDATA
         assertEquals("incorrect CDATA text", otherString, cdata.getText());
 
         // set it to the null (after it was set to another string so that we 
-        // are sure comething has changed)
+        // are sure something has changed)
         cdata.setText(null);
         assertEquals("incorrect CDATA text", emptyString, cdata.getText());
 
@@ -250,6 +225,7 @@ public final class TestCDATA
     /**
      * Test appending text values to this CDATA.
      */
+	@Test
     public void test_TCM___append_String() {
         final String emptyString = "";
         final String nullString = null;
@@ -320,7 +296,7 @@ public final class TestCDATA
         
         {
             // set it to the null (after it was set to another string so that we 
-            // are sure comething has changed)
+            // are sure something has changed)
             final CDATA cdata = new CDATA(nullString);
             assertEquals("incorrect CDATA text", "", cdata.getText());
             cdata.append(specialCharactersText);
@@ -344,7 +320,7 @@ public final class TestCDATA
 
         {
             // set it to the null (after it was set to another string so that we 
-            // are sure comething has changed)
+            // are sure something has changed)
             final CDATA cdata = new CDATA(null);
             assertEquals("incorrect CDATA text", "", cdata.getText());
             cdata.append((String) null);
@@ -358,7 +334,7 @@ public final class TestCDATA
 
         {
             // set it to the null (after it was set to another string so that we 
-            // are sure comething has changed)
+            // are sure something has changed)
             final CDATA cdata = new CDATA(null);
             assertEquals("incorrect CDATA text", "", cdata.getText());
             cdata.append((Text) null);
@@ -385,7 +361,7 @@ public final class TestCDATA
         
         
         try {
-            // set text with some special characters which sould result into an exception
+            // set text with some special characters which should result into an exception
             final CDATA cdata = new CDATA(specialText);
             assertEquals("incorrect CDATA text", specialText, cdata.getText());
             cdata.append(specialText);
@@ -398,6 +374,7 @@ public final class TestCDATA
     /**
      * Test appending text values to this CDATA.
      */
+	@Test
     public void test_TCM___append_Text() {
         final String emptyString = "";
         final String nullString = null;
@@ -468,7 +445,7 @@ public final class TestCDATA
         
         {
             // set it to the null (after it was set to another string so that we 
-            // are sure comething has changed)
+            // are sure something has changed)
             final CDATA cdata = new CDATA(nullString);
             assertEquals("incorrect CDATA text", "", cdata.getText());
             cdata.append(new Text(specialCharactersText));
@@ -506,7 +483,7 @@ public final class TestCDATA
 
         {
             // set it to the null (after it was set to another string so that we 
-            // are sure comething has changed)
+            // are sure something has changed)
             final CDATA cdata = new CDATA(null);
             assertEquals("incorrect CDATA text", "", cdata.getText());
             cdata.append((Text) null);
@@ -545,8 +522,9 @@ public final class TestCDATA
 
 	/**
 	 * Verify that the text of the CDATA matches expected value.
-     * It assumes that the contrutor is working correctly
+     * It assumes that the constructor is working correctly
 	 */
+	@Test
 	public void test_TCM__String_getText() {
         {
             final String text = "this is a CDATA section";        
@@ -579,7 +557,8 @@ public final class TestCDATA
     /**
      * check for the expected toString text value of Comment.
      */
-    public void test_TCM__String_toString() {
+	@Test
+	public void test_TCM__String_toString() {
         {
             final String text = "this is a simple CDATA section";        
             final CDATA cdata = new CDATA(text);

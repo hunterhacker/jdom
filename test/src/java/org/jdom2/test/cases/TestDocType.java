@@ -60,56 +60,35 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
-
 import org.jdom2.*;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestDocType
-extends junit.framework.TestCase
-{
-    /**
-     *  Construct a new instance. 
-     */
-    public TestDocType(String name) {
-        super(name);
-    }
+public final class TestDocType {
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
+        JUnitCore.runClasses(TestDocType.class);
     }
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-    /**
-     * The suite method runs all the tests
-     */
-public static Test suite () {
-        TestSuite suite = new TestSuite(TestDocType.class);
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
+
+
 	/**
 	 * Test a simple DocType with a name.
 	 */
+    @Test
 	public void test_TCC___String() {
 		DocType theDocType = new DocType("anElement");
 
 		assertEquals("incorrect element name", "anElement", theDocType.getElementName());
 	}
+	
 	/**
 	 * test both the setting of the element name and systemID.
 	 */
+    @Test
 	public void test_TCC___String_String() {
 		String systemID = "FILE://temp/test.dtd";
 		DocType theDocType = new DocType("anElement", systemID);
@@ -117,9 +96,11 @@ public static Test suite () {
 		assertEquals("incorrect element name", "anElement", theDocType.getElementName());
 		assertEquals("incorrect system ID", systemID, theDocType.getSystemID());
 	}
-	/**
+
+    /**
 	 * test with element name, public and systemIDs.
 	 */
+    @Test
 	public void test_TCC___String_String_String() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";
@@ -130,9 +111,11 @@ public static Test suite () {
 		assertEquals("incorrect system ID", systemID, theDocType.getSystemID());
 
 	}
-	/**
+
+    /**
 	 * Do an object comparison with itself to confirm boolean equals works.
 	 */
+    @Test
 	public void test_TCM__boolean_equals_Object() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";
@@ -141,19 +124,23 @@ public static Test suite () {
 		Object ob = (Object)theDocType;
 		assertEquals(theDocType, ob);
 	}
-	/**
+
+    /**
 	 * look for a integer hashCode
 	 */
+    @Test
 	public void test_TCM__int_hashCode() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";
 		DocType theDocType = new DocType("anElement", publicID, systemID);
-		int i = theDocType.hashCode();
+		assertTrue(theDocType.hashCode() == theDocType.hashCode());
 		// assuming no exception was thrown, an integer was created.
 	}
-	/**
+
+    /**
 	 * use toString to test the clone.
 	 */
+    @Test
 	public void test_TCM__Object_clone() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";
@@ -165,9 +152,11 @@ public static Test suite () {
 		
 		assertEquals(theDocType.toString(), theDocType2.toString());
 	}
+    
 	/**
 	 * Test the setter for publicID.
 	 */
+    @Test
 	public void test_TCM__OrgJdomDocType_setPublicID_String() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		
@@ -177,9 +166,11 @@ public static Test suite () {
 
 		assertEquals(publicID, theDocType.getPublicID());
 	}
-	/**
+
+    /**
 	 * Test the setter for SystemID
 	 */
+    @Test
 	public void test_TCM__OrgJdomDocType_setSystemID_String() {
 		String systemID = "FILE://temp/doodah.dtd";
 		
@@ -189,17 +180,21 @@ public static Test suite () {
 
 		assertEquals(systemID, theDocType.getSystemID());
 	}
-	/**
+
+    /**
 	 * Test getElementName.
 	 */
+    @Test
 	public void test_TCM__String_getElementName() {
 		DocType theDocType = new DocType("anElement");
 
 		assertEquals("incorrect element name", "anElement", theDocType.getElementName());
 	}
-	/**
+
+    /**
 	 * Test that getPublicID matches the value from the constructor.
 	 */
+    @Test
 	public void test_TCM__String_getPublicID() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		
@@ -207,9 +202,11 @@ public static Test suite () {
 
 		assertEquals(publicID, theDocType.getPublicID());
 	}
-	/**
+
+    /**
 	 * Test that getSerializedForm works as expected.
 	 */
+    @Test
 	public void test_TCM__String_getSerializedForm() {
 		/** No op because the method is deprecated
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
@@ -224,18 +221,22 @@ public static Test suite () {
 		assertEquals("incorrect serialized form", result, compareTo);
 		*/
 	}
-	/**
+
+    /**
 	 * Test that getSystemID returns the same value as set in the constructor.
 	 */
+    @Test
 	public void test_TCM__String_getSystemID() {
 		String systemID = "FILE://temp/doodah.dtd";
 		DocType theDocType = new DocType("anElement", systemID);
 
 		assertEquals(systemID, theDocType.getSystemID());
 	}
-	/**
+
+    /**
 	 * Test toString returns the expected string.
 	 */
+    @Test
 	public void test_TCM__String_toString() {
 		String publicID = "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
 		String systemID = "FILE://temp/test.dtd";

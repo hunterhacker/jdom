@@ -60,13 +60,16 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
+import static org.junit.Assert.*;
+
 import org.jdom2.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+
 import java.util.*;
 
-public final class TestFilterList
-extends junit.framework.TestCase
-{
+public final class TestFilterList {
 		Element foo;
 		Element bar;
 		Element baz;
@@ -80,15 +83,9 @@ extends junit.framework.TestCase
         Text text4;
 
     /**
-     *  Construct a new instance. 
-     */
-    public TestFilterList(String name) {
-        super(name);
-    }
-
-    /**
      * This method is called before a test is executed.
      */
+    @Before
     public void setUp() {
 		foo = new Element("foo");
 		bar = new Element("bar");
@@ -116,28 +113,14 @@ extends junit.framework.TestCase
     }
 
     /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
-
-    /**
-     * The suite method runs all the tests
-     */
-public static Test suite () {
-        TestSuite suite = new TestSuite(TestFilterList.class);
-        return suite;
-    }
-
-    /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
+        JUnitCore.runClasses(TestFilterList.class);
     }
 
+    @Test
     public void test_TCM__int_hashCode() {
 		List content = foo.getContent();
 		List content2 = new ArrayList();
@@ -145,6 +128,7 @@ public static Test suite () {
 		assertEquals("bad hashcode", content2.hashCode(), content.hashCode());
     }
 
+    @Test
     public void test_TCM__boolean_equals_Object() {
 		List content = foo.getContent();
 		List content2 = new ArrayList();
@@ -156,6 +140,7 @@ public static Test suite () {
 		assertTrue("bad equals", children.equals(children2));
     }
 
+    @Test
     public void test_TCM__int_indexOf_Object() {
 		List children = foo.getChildren();
 		assertEquals("wrong result from indexOf", 0, children.indexOf(bar));
@@ -177,6 +162,7 @@ public static Test suite () {
 		assertEquals("wrong result from indexOf", -1, content.indexOf(new Integer(17)));
     }
 
+    @Test
     public void test_TCM__int_lastIndexOf_Object() {
 		List children = foo.getChildren();
 		assertEquals("wrong result from lastIndexOf", 0, children.lastIndexOf(bar));
@@ -198,6 +184,7 @@ public static Test suite () {
 		assertEquals("wrong result from lastIndexOf", -1, content.lastIndexOf(new Integer(17)));
     }
 
+    @Test
     public void test_TCM__Object_get_int() {
 		List children = foo.getChildren();
 		assertEquals("wrong element from get", bar, children.get(0));
@@ -232,6 +219,7 @@ public static Test suite () {
 		} catch(IndexOutOfBoundsException ex) {}
     }
 
+    @Test
     public void test_TCM__Object_set_int_Object() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -283,6 +271,7 @@ public static Test suite () {
 		} catch(IllegalArgumentException ex) {}
     }
 
+    @Test
     public void test_TCM__void_add_int_Object() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -338,6 +327,7 @@ public static Test suite () {
 		} catch(IllegalArgumentException ex) {}
     }
 
+    @Test
     public void test_TCM__boolean_add_Object() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -378,6 +368,7 @@ public static Test suite () {
 		} catch(IllegalArgumentException ex) {}
     }
 
+    @Test
 	public void testModification() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -409,6 +400,7 @@ public static Test suite () {
 	}
 		
 
+    @Test
     public void test_TCM__int_size() {
 		// Test size on lists.
 		List children = foo.getChildren();
@@ -434,6 +426,7 @@ public static Test suite () {
 		
     }
 
+    @Test
 	public void testConcurrentModification() {
 		// Get lists.
 		List children = foo.getChildren();
@@ -519,6 +512,7 @@ public static Test suite () {
 		// \n, comment2, comment3, \n, comment, quux, \n
 	}
 
+    @Test
     public void test_TCM__ArrayObject_toArray() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -533,6 +527,7 @@ public static Test suite () {
 		assertArrays(childrenArray, contentArray);
     }
 
+    @Test
     public void test_TCM__ArrayObject_toArray_ArrayObject() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -579,6 +574,7 @@ public static Test suite () {
 		assertEquals("bad toArray", text4, contentArray[7]);
     }
 
+    @Test
     public void test_TCM__boolean_contains_Object() {
 		List content = foo.getContent();
 		List children = foo.getChildren();
@@ -608,6 +604,7 @@ public static Test suite () {
 		assertTrue("bad contains", !children.contains(new Integer(17)));
     }
 
+    @Test
     public void test_TCM__void_clear() {
 		List content = foo.getContent();
 		List children = foo.getChildren();
@@ -639,6 +636,7 @@ public static Test suite () {
 
    }
 
+    @Test
     public void test_TCM__Object_remove_int() {
 		List content = foo.getContent();
 		List children = foo.getChildren();
@@ -682,6 +680,7 @@ public static Test suite () {
 		} catch(IndexOutOfBoundsException ex) {}
     }
 
+    @Test
     public void test_TCM__boolean_remove_Object() {
 		List content = foo.getContent();
 		List children = foo.getChildren();
@@ -717,6 +716,7 @@ public static Test suite () {
 		assertNull("parent is not correct", comment.getParent());
     }
 
+    @Test
     public void test_TCM__boolean_isEmpty() {
 		List children = foo.getChildren();
 		int size = children.size();
@@ -729,6 +729,7 @@ public static Test suite () {
 		assertTrue("bad isEmpty", children.isEmpty());
     }
 
+    @Test
     public void test_TCM__boolean_containsAll_Collection() {
 		List content = foo.getContent();
 		List contentList = new ArrayList();
@@ -756,6 +757,7 @@ public static Test suite () {
 		assertFalse("bad containsAll", children.containsAll(childrenList));
     }
 
+    @Test
     public void test_TCM__boolean_addAll_Collection() {
 		List content = foo.getContent();
 		List addList = new ArrayList();
@@ -801,6 +803,7 @@ public static Test suite () {
 		} catch(IllegalArgumentException ex) {}
     }
 
+    @Test
     public void test_TCM__boolean_addAll_int_Collection() {
 		List content = foo.getContent();
 		List addList = new ArrayList();
@@ -846,6 +849,7 @@ public static Test suite () {
 		} catch(IllegalArgumentException ex) {}
     }
 
+    @Test
     public void test_TCM__boolean_removeAll_Collection() {
 		List content = foo.getContent();
 		List removeList = new ArrayList();
@@ -875,6 +879,7 @@ public static Test suite () {
 		assertEquals("bad removeAll", null, quux.getParent());
     }
 
+    @Test
     public void test_TCM__boolean_retainAll_Collection() {
 		List content = foo.getContent();
 		List retainList = new ArrayList();
@@ -902,6 +907,7 @@ public static Test suite () {
 		assertEquals("bad retainAll", null, quux.getParent());
     }
 
+    @Test
     public void test_TCM__List_subList_int_int() {
 		List children = foo.getChildren();
 		List content = foo.getContent();
@@ -936,6 +942,7 @@ public static Test suite () {
 
 	// We'll assume that this is a decent test of iterator(), 
 	// listIterator(), and listIterator(int).
+    @Test
     public void test_TCM__ListIterator_listIterator_int() {
 		List children = foo.getChildren();
 		ListIterator iter = children.listIterator(1);
@@ -1017,6 +1024,7 @@ public static Test suite () {
 		} catch(IndexOutOfBoundsException ex) {}
     }
 
+    @Test
     public void test_TCM__ListIterator_listIterator_int2() {
 		List children = foo.getChildren();
 		ListIterator iter = children.listIterator(1);
@@ -1080,6 +1088,7 @@ public static Test suite () {
 	// attributes or children, we may replace the underlying list reference 
 	// in the Element. We need to make sure that any previously-created FilterLists
 	// somehow get updated.
+    @Test
     public void test_list_replacement() {
 		Element el = new Element("parent");
 
@@ -1103,6 +1112,7 @@ public static Test suite () {
 		assertEquals("wrong list size after replacing content", 2, content.size());
 	}
 
+    @Test
     public void test_TCM__ListIterator_listIterator_int3() {
         try {
             Element r = new Element("root");

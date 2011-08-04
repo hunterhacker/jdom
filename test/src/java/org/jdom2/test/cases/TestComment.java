@@ -4,14 +4,14 @@ package org.jdom2.test.cases;
 
  Copyright (C) 2000 Brett McLaughlin & Jason Hunter.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
 	notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
 	notice, this list of conditions, and the disclaimer that follows 
 	these conditions in the documentation and/or other materials 
@@ -20,11 +20,11 @@ package org.jdom2.test.cases;
  3. The name "JDOM" must not be used to endorse or promote products
 	derived from this software without prior written permission.  For
 	written permission, please contact license@jdom.org.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
 	may "JDOM" appear in their name, without prior written permission
 	from the JDOM Project Management (pm@jdom.org).
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -51,7 +51,7 @@ package org.jdom2.test.cases;
  created by Brett McLaughlin <brett@jdom.org> and 
  Jason Hunter <jhunter@jdom.org>.  For more information on the 
  JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 
@@ -61,47 +61,26 @@ package org.jdom2.test.cases;
  * @author Philip Nelson
  * @version 1.0
  */
-import junit.framework.*;
-import org.jdom2.*;
+import org.jdom2.Comment;
+import org.jdom2.IllegalDataException;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestComment
-extends junit.framework.TestCase
-{
-	/**
-	 *  Construct a new instance. 
-	 */
-	public TestComment(String name) {
-		super(name);
-	}
+public final class TestComment {
+
 	/**
 	 * The main method runs all the tests in the text ui
 	 */
 	public static void main (String args[]) 
 	{
-		junit.textui.TestRunner.run(suite());
+		JUnitCore.runClasses(TestComment.class);
 	}
-	/**
-	 * This method is called before a test is executed.
-	 */
-	public void setUp() {
-		// your code goes here.
-	}
-	/**
-	 * The suite method runs all the tests
-	 */
-	public static Test suite () {
-		TestSuite suite = new TestSuite(TestComment.class);
-		return suite;
-	}
-	/**
-	 * This method is called after a test is executed.
-	 */
-	public void tearDown() {
-		// your code goes here.
-	}
+
 	/**
 	 * Test the comment constructor with a valid and an invalid string.
 	 */
+	@Test
 	public void test_TCC___String() {
 		Comment theComment = new org.jdom2.Comment("this is a comment");
 
@@ -118,29 +97,31 @@ extends junit.framework.TestCase
 	/**
 	 * Verify a simple object == object test
 	 */
+	@Test
 	public void test_TCM__boolean_equals_Object() {
-	    Comment com = new Comment("test");
+		Comment com = new Comment("test");
 
-	    Object ob = (Object)com;
+		Object ob = (Object)com;
 
-	    assertTrue("object not equal to comment", com.equals(ob));
+		assertTrue("object not equal to comment", com.equals(ob));
 	}
 	/**
 	 * Test that a real hashcode is returned and that a different one is returned
 	 * for a different comment.
 	 */
+	@Test
 	public void test_TCM__int_hashCode() {
-	//not sure what to test!
+		//not sure what to test!
 
 		Comment com = new Comment("test");
 		//only an exception would be a problem
-                int i = -1;
-                try {
-        		i = com.hashCode();
-                }
-                catch(Exception e) {
-                        fail("bad hashCode");
-                }
+		int i = -1;
+		try {
+			i = com.hashCode();
+		}
+		catch(Exception e) {
+			fail("bad hashCode");
+		}
 		Comment com2 = new Comment("test");
 		//different comments, same text
 		int x = com2.hashCode();
@@ -150,46 +131,50 @@ extends junit.framework.TestCase
 		int y = com3.hashCode();
 		assertTrue("Different comments have same hashcode", y != x);
 	}
-/**
- * Test setting and resetting the text value of this Comment.
- */
-public void test_TCM__OrgJdomComment_setText_String() {
-	Comment theComment= new org.jdom2.Comment("this is a comment");
+	
+	/**
+	 * Test setting and resetting the text value of this Comment.
+	 */
+	@Test
+	public void test_TCM__OrgJdomComment_setText_String() {
+		Comment theComment= new org.jdom2.Comment("this is a comment");
 
-	assertEquals(
-		"incorrect Comment constructed",
-		"[Comment: <!--this is a comment-->]",
-		theComment.toString());
+		assertEquals(
+				"incorrect Comment constructed",
+				"[Comment: <!--this is a comment-->]",
+				theComment.toString());
 
-	//set it to the empty string
-	theComment.setText("");
+		//set it to the empty string
+		theComment.setText("");
 
-	assertEquals("incorrect Comment text", "", theComment.getText());
-	//set it to a new string
-	theComment.setText("12345qwerty");
+		assertEquals("incorrect Comment text", "", theComment.getText());
+		//set it to a new string
+		theComment.setText("12345qwerty");
 
-	assertEquals("incorrect Comment text", "12345qwerty", theComment.getText());
+		assertEquals("incorrect Comment text", "12345qwerty", theComment.getText());
 
-	//tests for invalid data but setText doesn't
+		//tests for invalid data but setText doesn't
 
-	try {
-		theComment.setText(null);
-		fail("Comment setText didn't catch invalid comment string");
-	} catch (IllegalDataException e) {
+		try {
+			theComment.setText(null);
+			fail("Comment setText didn't catch invalid comment string");
+		} catch (IllegalDataException e) {
+		}
+		try {
+			char c= 0x11;
+			StringBuffer b= new StringBuffer("hhhh");
+			b.setCharAt(2, c);
+			theComment.setText(b.toString());
+			fail("Comment setText didn't catch invalid comment string");
+		} catch (IllegalDataException e) {
+		}
+
 	}
-	try {
-		char c= 0x11;
-		StringBuffer b= new StringBuffer("hhhh");
-		b.setCharAt(2, c);
-		theComment.setText(b.toString());
-		fail("Comment setText didn't catch invalid comment string");
-	} catch (IllegalDataException e) {
-	}
-
-}
+	
 	/**
 	 * Match the XML fragment this comment produces.
 	 */
+	@Test
 	public void test_TCM__String_getSerializedForm() {
 
 		/** No op because the method is deprecated
@@ -199,12 +184,14 @@ public void test_TCM__OrgJdomComment_setText_String() {
 				"incorrect Comment constructed", 
 				"<!--this is a comment-->", 
 				theComment.getSerializedForm());
-		*/
+		 */
 
 	}
+	
 	/**
 	 * verify that the text of the Comment matches expected value.
 	 */
+	@Test
 	public void test_TCM__String_getText() {
 		Comment theComment = new org.jdom2.Comment("this is a comment");
 
@@ -215,21 +202,22 @@ public void test_TCM__OrgJdomComment_setText_String() {
 
 
 	}
-/**
- * check for the expected toString text value of Comment.
- */
-public void test_TCM__String_toString() {
-    Comment theComment= new org.jdom2.Comment("this is a comment");
+	/**
+	 * check for the expected toString text value of Comment.
+	 */
+	@Test
+	public void test_TCM__String_toString() {
+		Comment theComment= new org.jdom2.Comment("this is a comment");
 
-    assertEquals(
-        "incorrect Comment constructed",
-        "[Comment: <!--this is a comment-->]",
-        theComment.toString());
-    try {
-        theComment= new org.jdom2.Comment(null);
-        fail("Comment constructor didn't catch invalid comment string");
-    } catch (IllegalDataException e) {
-    }
-
-}
+		assertEquals(
+				"incorrect Comment constructed",
+				"[Comment: <!--this is a comment-->]",
+				theComment.toString());
+		try {
+			theComment= new org.jdom2.Comment(null);
+			fail("Comment constructor didn't catch invalid comment string");
+		} catch (IllegalDataException e) {
+		}
+	}
+	
 }

@@ -62,72 +62,34 @@ package org.jdom2.test.cases.input;
  * @author Philip Nelson
  * @version 0.5
  */
-import junit.framework.*;
 import java.util.*;
 import java.io.*;
 
 import org.jdom2.*;
 import org.jdom2.input.*;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
 
-public final class TestSAXBuilder
-extends junit.framework.TestCase
-{
-	/**
-	 * Resource Bundle for various testing resources
-	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
+public final class TestSAXBuilder {
 
 	/**
 	 * the directory where needed resource files will be kept
 	 */
-	private String resourceDir = "";
+	private final String resourceDir = 
+			ResourceBundle.getBundle("org.jdom2.test.Test")
+				.getString("test.resourceRoot");
 
-	/**
-	 *  a directory for temporary storage of files
-	 */
-	private String scratchDir = "";
-    /**
-     *  Construct a new instance. 
-     */
-    public TestSAXBuilder(String name) {
-        super(name);
-    }
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
-    }
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-	    
- 		resourceDir = rb.getString("test.resourceRoot");
-		scratchDir = rb.getString("test.scratchDirectory");
+        JUnitCore.runClasses(TestSAXBuilder.class);
+    }	
 
-    }
-	
-    /**
-     * The suite method runs all the tests
-     */
-    public static Test suite () {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new TestSAXBuilder("test_TCU__DTDComments"));
-        suite.addTest(new TestSAXBuilder("test_TCM__void_setExpandEntities_boolean"));
-    	suite.addTest(new TestSAXBuilder("test_TCU__InternalAndExternalEntities"));
-    	//suite.addTest(new TestSAXBuilder("test_TCU__InternalSubset"));
-        
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
-    }
     /**
      * Test code goes here. Replace this comment.
      */
@@ -217,6 +179,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
+    @Test
     public void test_TCM__void_setExpandEntities_boolean() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
@@ -292,6 +255,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
+    @Test
     public void test_TCU__DTDComments() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
@@ -316,6 +280,7 @@ extends junit.framework.TestCase
      * always expanded and when false, entities declarations
      * are added to the DocType
      */
+    @Test
     public void test_TCU__InternalAndExternalEntities() throws JDOMException, IOException {
         //test entity exansion on internal entity
 
@@ -352,6 +317,8 @@ extends junit.framework.TestCase
 			doc.getDocType().getInternalSubset().indexOf("ldquo") < 0);
     }
     
+    @Ignore
+    @Test
     public void test_TCU__InternalSubset() throws JDOMException, IOException {
     
         SAXBuilder builder = new SAXBuilder();
@@ -368,8 +335,11 @@ extends junit.framework.TestCase
         builder.setExpandEntities(false);
         doc = builder.build(file);
         String subset2 = doc.getDocType().getInternalSubset();
-        assertEquals("didn't get correct internal subset when expand entities was off"
-            , "<!NOTATION n2 SYSTEM \"http://www.w3.org/\">\n  <!ENTITY anotation SYSTEM \"http://www.foo.org/image.gif\" NDATA n1>\n", subset2);    
-        	
+        final String expect = "<!NOTATION n2 SYSTEM \"http://www.w3.org/\">\n  <!ENTITY anotation SYSTEM \"http://www.foo.org/image.gif\" NDATA n1>\n";
+        if (!expect.equals(subset2)) {
+        	fail("didn't get correct internal subset when expand entities was off.\n" +
+        			"Expect: " + expect + "\n" +
+        			"Got:    " + subset2);
+        }
     }
 }

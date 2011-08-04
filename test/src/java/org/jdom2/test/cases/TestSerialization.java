@@ -61,88 +61,45 @@ package org.jdom2.test.cases;
  * @version 0.1
  */
 import java.io.*;
-import junit.framework.*;
 
 import org.jdom2.*;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.test.util.UnitTestUtil;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestSerialization
-extends junit.framework.TestCase
-{
-    /**
-     *  Construct a new instance. 
-     */
-    public TestSerialization(String name) {
-        super(name);
-    }
-    /**
+public final class TestSerialization {
+
+   /**
      * The main method runs all the tests in the text ui
      */
     public static void main(String args[]) {
-        junit.textui.TestRunner.run(suite());
-    }
-    /**
-     * This method is called before a test is executed.
-     */
-    public void setUp() {
-        // your code goes here.
-    }
-    /**
-     * The suite method runs all the tests
-     */
-	public static Test suite () {
-        TestSuite suite = new TestSuite(TestSerialization.class);
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+        JUnitCore.runClasses(TestSerialization.class);
     }
 
-    private ByteArrayOutputStream serialize(Object o) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oout = new ObjectOutputStream(baos);
-            oout.writeObject(o);
-            return baos;
-        }
-        catch (Exception e) {
-            fail("Exception on serializing: " + e);
-            return null;
-        }
-    }
-
-    private Object deserialize(ByteArrayOutputStream baos) {
-        try {
-            ObjectInputStream oin = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-            return oin.readObject();
-        }
-        catch (Exception e) {
-            fail("Exception on deserializing: " + e);
-            return null;
-        }
-    }
 
     private void outAndBack(ElementFilter filter) {
-        ByteArrayOutputStream bytes = serialize(filter);
-        ElementFilter filter2 = (ElementFilter) deserialize(bytes);
+        ElementFilter filter2 = UnitTestUtil.deSerialize(filter);
         assertTrue(filter.equals(filter2));
     }
 
+    @Test
     public void test_ElementFilterName() {
         outAndBack(new ElementFilter("name"));
     }
 
+    @Test
     public void test_ElementFilterNameNamespace() {
         outAndBack(new ElementFilter("name", Namespace.XML_NAMESPACE));
     }
 
+    @Test
     public void test_ElementFilterNamespace() {
         outAndBack(new ElementFilter(Namespace.XML_NAMESPACE));
     }
 
+    @Test
     public void test_ElementFilterEmpty() {
         outAndBack(new ElementFilter());
     }
