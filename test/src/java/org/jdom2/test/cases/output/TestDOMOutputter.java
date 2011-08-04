@@ -7,65 +7,25 @@ package org.jdom2.test.cases.output;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
 
 import org.jdom2.*;
 import java.util.*;
 import org.jdom2.output.*;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import static org.junit.Assert.*;
 
-public final class TestDOMOutputter
-extends junit.framework.TestCase
-{
-	/**
-	 * Resource Bundle for various testing resources
-	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
+public final class TestDOMOutputter {
 
-	/**
-	 * the directory where needed resource files will be kept
-	 */
-	private String resourceDir = "";
-
-	/**
-	 *  a directory for temporary storage of files
-	 */
-	private String scratchDir = "";
-    /**
-     *  Construct a new instance. 
-     */
-    public TestDOMOutputter(String name) {
-        super(name);
-    }
     /**
      * The main method runs all the tests in the text ui
      */
     public static void main (String args[]) 
      {
-        junit.textui.TestRunner.run(suite());
-    }
-	/**
-	 * This method is called before a test is executed.
-	 */
-	public void setUp() {
-		resourceDir = rb.getString("test.resourceRoot");
-		scratchDir = rb.getString("test.scratchDirectory");
-
-	}
-    /**
-     * The suite method runs all the tests
-     */
-public static Test suite () {
-        TestSuite suite = new TestSuite(TestDOMOutputter.class);
-        return suite;
-    }
-    /**
-     * This method is called after a test is executed.
-     */
-    public void tearDown() {
-        // your code goes here.
+        JUnitCore.runClasses(TestDOMOutputter.class);
     }
 
-
+    @Test
     public void test_ForceNamespaces() throws JDOMException {
          Document doc = new Document();
          Element root = new Element("root");

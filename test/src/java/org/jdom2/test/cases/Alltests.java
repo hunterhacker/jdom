@@ -58,6 +58,7 @@ package org.jdom2.test.cases;
 import junit.framework.*;
 
 import org.jdom2.test.cases.input.*;
+import org.jdom2.test.cases.output.TestDOMOutputter;
 import org.jdom2.test.cases.output.TestXMLOutputter;
 
 
@@ -104,6 +105,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestSerialization.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
 		suite.addTest(new JUnit4TestAdapter(TestXMLOutputter.class));
+		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
 		return suite;
 }
 }

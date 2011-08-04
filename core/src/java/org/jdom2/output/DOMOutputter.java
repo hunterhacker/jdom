@@ -217,7 +217,7 @@ public class DOMOutputter {
             try {
                 DOMAdapter adapter =
                     (DOMAdapter)Class.forName(
-                    "org.jdom.adapters.JAXPDOMAdapter").newInstance();
+                    "org.jdom2.adapters.JAXPDOMAdapter").newInstance();
                 // System.out.println("using JAXP");
                 return adapter.createDocument(dt);
             }
