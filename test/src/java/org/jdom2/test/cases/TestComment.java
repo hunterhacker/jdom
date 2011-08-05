@@ -178,7 +178,7 @@ public final class TestComment {
 	public void test_TCM__String_getSerializedForm() {
 
 		/** No op because the method is deprecated
-		Comment theComment = new org.jdom.Comment("this is a comment");
+		Comment theComment = new org.jdom2.Comment("this is a comment");
 
 		assertEquals(
 				"incorrect Comment constructed", 

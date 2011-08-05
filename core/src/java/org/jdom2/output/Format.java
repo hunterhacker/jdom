@@ -585,7 +585,7 @@ public class Format implements Cloneable {
         /**
          * Mode for text normalization (left and right trim plus internal
          * whitespace is normalized to a single space.
-         * @see org.jdom.Element#getTextNormalize
+         * @see org.jdom2.Element#getTextNormalize
          */
         public static final TextMode NORMALIZE = new TextMode("NORMALIZE");
 

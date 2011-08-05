@@ -121,7 +121,7 @@ public class TestIndexed implements java.io.Serializable {
 
     public static void main(String[] args) throws java.beans.IntrospectionException, java.io.IOException, BeanMapperException {
         BeanMapper mapper = new BeanMapper();
-        mapper.setBeanPackage("org.jdom.contrib.beans");
+        mapper.setBeanPackage("org.jdom2.contrib.beans");
 
         TestIndexed pizza = new TestIndexed();
         pizza.setName("Abominable");

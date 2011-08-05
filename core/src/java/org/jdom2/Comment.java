@@ -122,7 +122,7 @@ public class Comment extends Content {
      * This returns a <code>String</code> representation of the
      * <code>Comment</code>, suitable for debugging. If the XML
      * representation of the <code>Comment</code> is desired,
-     * {@link org.jdom.output.XMLOutputter#outputString(Comment)}
+     * {@link org.jdom2.output.XMLOutputter#outputString(Comment)}
      * should be used.
      *
      * @return <code>String</code> - information about the

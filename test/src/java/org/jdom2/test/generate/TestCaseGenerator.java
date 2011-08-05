@@ -69,7 +69,7 @@ final class TestCaseGenerator {
 	private  String caseDir = "/src/java/org/jdom/test/cases/";
 
 	/** The name of the test case package */
-	private String casePackage = "org.jdom.test.cases";
+	private String casePackage = "org.jdom2.test.cases";
 
 	/** Reference to the properties used to create the test cases */
 	private Properties props;    

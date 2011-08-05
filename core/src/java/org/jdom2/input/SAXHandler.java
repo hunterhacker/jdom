@@ -238,7 +238,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @return <code>JDOMFactory</code> - the factory used for
      * constructing objects.
      *
-     * @see #SAXHandler(org.jdom.JDOMFactory)
+     * @see #SAXHandler(org.jdom2.JDOMFactory)
      */
     public JDOMFactory getFactory() {
         return factory;
@@ -987,7 +987,7 @@ if (!inDTD) {
      * Receives an object for locating the origin of SAX document
      * events.  This method is invoked by the SAX parser.
      * <p>
-     * {@link org.jdom.JDOMFactory} implementations can use the
+     * {@link org.jdom2.JDOMFactory} implementations can use the
      * {@link #getDocumentLocator} method to get access to the
      * {@link Locator} during parse.
      * </p>

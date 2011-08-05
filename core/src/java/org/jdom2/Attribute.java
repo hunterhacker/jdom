@@ -193,7 +193,7 @@ public class Attribute implements Serializable, Cloneable {
      *         namespace. Attributes cannot be in a default namespace.
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
-     *         {@link org.jdom.Verifier#checkCharacterData}).
+     *         {@link org.jdom2.Verifier#checkCharacterData}).
      */
     public Attribute(final String name, final String value, final Namespace namespace) {
         this(name, value, UNDECLARED_TYPE, namespace);
@@ -213,7 +213,7 @@ public class Attribute implements Serializable, Cloneable {
      *         namespace. Attributes cannot be in a default namespace.
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
-     *         {@link org.jdom.Verifier#checkCharacterData}) or
+     *         {@link org.jdom2.Verifier#checkCharacterData}) or
      *         if the given attribute type is not one of the
      *         supported types.
      */
@@ -239,7 +239,7 @@ public class Attribute implements Serializable, Cloneable {
      *         attribute name.
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
-     *         {@link org.jdom.Verifier#checkCharacterData}).
+     *         {@link org.jdom2.Verifier#checkCharacterData}).
      */
     public Attribute(final String name, final String value) {
         this(name, value, UNDECLARED_TYPE, Namespace.NO_NAMESPACE);
@@ -261,7 +261,7 @@ public class Attribute implements Serializable, Cloneable {
      *         attribute name.
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
-     *         {@link org.jdom.Verifier#checkCharacterData}) or
+     *         {@link org.jdom2.Verifier#checkCharacterData}) or
      *         if the given attribute type is not one of the
      *         supported types.
      */
@@ -477,7 +477,7 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>Attribute</code> - this Attribute modified.
      * @throws IllegalDataException if the given attribute value is
      *         illegal character data (as determined by
-     *         {@link org.jdom.Verifier#checkCharacterData}).
+     *         {@link org.jdom2.Verifier#checkCharacterData}).
      */
     public Attribute setValue(final String value) {
         final String reason = Verifier.checkCharacterData(value);

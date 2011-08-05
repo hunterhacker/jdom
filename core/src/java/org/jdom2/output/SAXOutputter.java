@@ -643,7 +643,7 @@ public class SAXOutputter {
      *
      * @throws JDOMException if any error occurred.
      *
-     * @see #output(org.jdom.Document)
+     * @see #output(org.jdom2.Document)
      */
     public void output(List nodes) throws JDOMException {
         if ((nodes == null) || (nodes.size() == 0)) {
@@ -705,7 +705,7 @@ public class SAXOutputter {
      *
      * @throws JDOMException if any error occurred.
      *
-     * @see #outputFragment(org.jdom.Content)
+     * @see #outputFragment(org.jdom2.Content)
      */
     public void outputFragment(List nodes) throws JDOMException {
         if ((nodes == null) || (nodes.size() == 0)) {
@@ -1243,7 +1243,7 @@ public class SAXOutputter {
      *
      * @return <code>String</code> the SAX 2.0 attribute type string.
      *
-     * @see org.jdom.Attribute#getAttributeType
+     * @see org.jdom2.Attribute#getAttributeType
      * @see org.xml.sax.Attributes#getType
      */
     private static String getAttributeTypeName(int type) {

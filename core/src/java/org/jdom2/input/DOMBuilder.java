@@ -60,7 +60,7 @@ import org.jdom2.Element;
 import org.w3c.dom.*;
 
 /**
- * Builds a JDOM {@link org.jdom.Document org.jdom.Document} from a pre-existing
+ * Builds a JDOM {@link org.jdom2.Document org.jdom2.Document} from a pre-existing
  * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
  * builds from files to sanity check {@link SAXBuilder}.
  *
@@ -111,7 +111,7 @@ public class DOMBuilder {
     }
 
     /**
-     * Returns the current {@link org.jdom.JDOMFactory} in use.
+     * Returns the current {@link org.jdom2.JDOMFactory} in use.
      * @return the factory in use
      */
     public JDOMFactory getFactory() {

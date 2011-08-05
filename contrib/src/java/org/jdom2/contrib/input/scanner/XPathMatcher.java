@@ -71,7 +71,7 @@ import org.xml.sax.Attributes;
  * <p>
  * This class also plays the role of factory for concrete
  * implementations: The system property
- * "<code>org.jdom.XPathMatcher.class</code>" shall contain the
+ * "<code>org.jdom2.XPathMatcher.class</code>" shall contain the
  * fully-qualified name of a concrete subclass of XPatchMatcher with
  * a public {@link #XPathMatcher two argument constructor}.  If this
  * property is not defined, the default concrete implementation
@@ -91,16 +91,16 @@ public abstract class XPathMatcher {
     * name of the implementation class to use.
     * <p>
     * The property name is:
-    * "<code>org.jdom.XPathMatcher.class</code>".</p>
+    * "<code>org.jdom2.XPathMatcher.class</code>".</p>
     */
    private final static String  IMPLEMENTATION_CLASS_PROPERTY   =
-                                        "org.jdom.XPathMatcher.class";
+                                        "org.jdom2.XPathMatcher.class";
 
    /**
     * The default implementation class to use if none was configured.
     */
    private final static String  DEFAULT_IMPLEMENTATION_CLASS    =
-                "org.jdom.contrib.input.scanner.JakartaRegExpXPathMatcher";
+                "org.jdom2.contrib.input.scanner.JakartaRegExpXPathMatcher";
 
    /**
     * The constructor to instanciate a new XPathMatcher concrete

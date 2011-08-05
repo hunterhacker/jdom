@@ -58,15 +58,15 @@ import java.io.*;
 
 /**
  * Superclass for JDOM objects which can be legal child content
- * of {@link org.jdom.Parent} nodes.
+ * of {@link org.jdom2.Parent} nodes.
  *
- * @see org.jdom.Comment
- * @see org.jdom.DocType
- * @see org.jdom.Element
- * @see org.jdom.EntityRef
- * @see org.jdom.Parent
- * @see org.jdom.ProcessingInstruction
- * @see org.jdom.Text
+ * @see org.jdom2.Comment
+ * @see org.jdom2.DocType
+ * @see org.jdom2.Element
+ * @see org.jdom2.EntityRef
+ * @see org.jdom2.Parent
+ * @see org.jdom2.ProcessingInstruction
+ * @see org.jdom2.Text
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter

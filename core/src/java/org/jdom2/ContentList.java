@@ -131,7 +131,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
     }
 
     /**
-     * @see org.jdom.ContentList#add(int, org.jdom.Content)
+     * @see org.jdom2.ContentList#add(int, org.jdom2.Content)
      */
     private void documentCanContain(int index, Content child) throws IllegalAddException {
         if (child instanceof Element) {

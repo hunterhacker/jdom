@@ -92,7 +92,7 @@ import org.xml.sax.helpers.*;
  *   }
  * </code></pre>
  *
- * @see      org.jdom.transform.JDOMSource
+ * @see      org.jdom2.transform.JDOMSource
  *
  * @author  Laurent Bihanic
  * @author  Jason Hunter
@@ -110,7 +110,7 @@ public class JDOMResult extends SAXResult {
    * not natively supporting JDOM.</p>
    */
   public final static String JDOM_FEATURE =
-                      "http://org.jdom.transform.JDOMResult/feature";
+                      "http://org.jdom2.transform.JDOMResult/feature";
 
   /**
    * The result of a transformation, as set by Transformer

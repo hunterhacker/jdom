@@ -104,7 +104,7 @@ public class TestBean implements java.io.Serializable {
 	    mapper.addMapping("birthdate", "dob");	// element mapping
 	    mapper.addMapping("age", "dob", "age");	// attribute mapping
 
-	    mapper.setBeanPackage("org.jdom.contrib.beans");
+	    mapper.setBeanPackage("org.jdom2.contrib.beans");
 	
 	    // test bean->jdom
 

@@ -204,7 +204,7 @@ public class SAXBuilder {
     }
 
     /**
-     * Returns the current {@link org.jdom.JDOMFactory} in use.
+     * Returns the current {@link org.jdom2.JDOMFactory} in use.
      * @return the factory in use
      */
     public JDOMFactory getFactory() {
@@ -577,7 +577,7 @@ public class SAXBuilder {
      * </p>
      *
      * @return <code>XMLReader</code> - resultant XMLReader object.
-     * @throws org.jdom.JDOMException
+     * @throws org.jdom2.JDOMException
      */
     protected XMLReader createParser() throws JDOMException {
         XMLReader parser = null;
@@ -600,7 +600,7 @@ public class SAXBuilder {
             try {
                 // Get factory class and method.
                 Class factoryClass =
-                    Class.forName("org.jdom.input.JAXPParserFactory");
+                    Class.forName("org.jdom2.input.JAXPParserFactory");
 
                 Method createParser =
                     factoryClass.getMethod("createParser",
@@ -619,7 +619,7 @@ public class SAXBuilder {
             }
             catch (NoClassDefFoundError e) {
                 // The class loader failed to resolve the dependencies
-                // of org.jdom.input.JAXPParserFactory. This probably means
+                // of org.jdom2.input.JAXPParserFactory. This probably means
                 // that no JAXP parser is present in its class path.
                 // => Ignore and try allocating default SAX parser instance.
             }
@@ -660,7 +660,7 @@ public class SAXBuilder {
      * </p>
      * @param parser
      * @param contentHandler
-     * @throws org.jdom.JDOMException
+     * @throws org.jdom2.JDOMException
      */
     protected void configureParser(XMLReader parser, SAXHandler contentHandler)
         throws JDOMException {

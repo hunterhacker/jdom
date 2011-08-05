@@ -432,7 +432,7 @@ public class ProcessingInstruction extends Content {
      * This returns a <code>String</code> representation of the
      * <code>ProcessingInstruction</code>, suitable for debugging. If the XML
      * representation of the <code>ProcessingInstruction</code> is desired,
-     * {@link org.jdom.output.XMLOutputter#outputString(ProcessingInstruction)}
+     * {@link org.jdom2.output.XMLOutputter#outputString(ProcessingInstruction)}
      * should be used.
      *
      * @return <code>String</code> - information about the

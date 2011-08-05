@@ -143,7 +143,7 @@ public final class Main {
 		System.out.println("");
 		
 		System.out.println("-ui       <Run swing based GUI (1.2 only)>");
-		System.out.println("-source   <Source class e.g. org.jdom.Element>");
+		System.out.println("-source   <Source class e.g. org.jdom2.Element>");
 		System.out.println("-rootdir  <Root directory for output files>");
 		System.out.println("-report   <Check that -source class is upto date>");
 		System.out.println("-outputFile <User specified appended output class>");

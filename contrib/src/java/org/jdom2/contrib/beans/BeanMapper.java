@@ -153,7 +153,7 @@ import org.jdom2.Namespace;
  * <pre> BeanMapper mapper = new BeanMapper();
  * mapper.addMapping("birthdate", "dob");        // element mapping
  * mapper.addMapping("age", "dob", "age");        // attribute mapping
- * mapper.setBeanPackage("org.jdom.contrib.beans");
+ * mapper.setBeanPackage("org.jdom2.contrib.beans");
  * </pre>
  * <h3>Converting Bean to JDOM</h3>
  * <pre>Document doc = mapper.toDocument(alex);</pre>

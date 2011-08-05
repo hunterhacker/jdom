@@ -215,7 +215,7 @@ public class ResultSetBuilder {
           columnName[index] = rsmd.getColumnName(index+1); 
         } 
 
-        // build the org.jdom.Document out of the result set 
+        // build the org.jdom2.Document out of the result set 
         String name; 
         String value; 
         Element entry; 

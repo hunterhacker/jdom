@@ -185,7 +185,7 @@ public class JDOMBean {
     }
     
     /**
-     * Load a file, parse it with JDOM, return a org.jdom.Document.
+     * Load a file, parse it with JDOM, return a org.jdom2.Document.
      * If the file has already been parsed, return the previously
      * cached object.  If the file has changed, ignore the previously
      * parsed version and reload.  <p>

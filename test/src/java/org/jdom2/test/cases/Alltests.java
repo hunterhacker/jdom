@@ -77,7 +77,7 @@ public Alltests(String arg1) {
  */
 public static void main(String[] args) {
 	if (args.length > 0 && args[0] != null && args[0].equals("-ui") ) {
-		String newargs[] = {"org.jdom.test.cases.Alltests"};
+		String newargs[] = {"org.jdom2.test.cases.Alltests"};
 		// junit 4 does not contain the swingui. default back to textui.
 		junit.textui.TestRunner.main(newargs);
 	} else {

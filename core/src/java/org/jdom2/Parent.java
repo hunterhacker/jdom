@@ -62,9 +62,9 @@ import org.jdom2.filter.Filter;
  * Superclass for JDOM objects which are allowed to contain
  * {@link Content} content.
  *
- * @see org.jdom.Content
- * @see org.jdom.Document
- * @see org.jdom.Element
+ * @see org.jdom2.Content
+ * @see org.jdom2.Document
+ * @see org.jdom2.Element
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter

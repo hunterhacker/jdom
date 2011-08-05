@@ -58,7 +58,7 @@ import java.io.*;
 import org.jdom2.*;
 
 /**
- * A Filter that only matches {@link org.jdom.Element} objects.
+ * A Filter that only matches {@link org.jdom2.Element} objects.
  *
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
