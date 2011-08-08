@@ -1,7 +1,8 @@
 Introduction to the JDOM project
 ================================
 
-Please see the JDOM web site at http://jdom.org/.
+Please see the JDOM web site at http://jdom.org/
+and GitHub repository at https://github.com/hunterhacker/jdom/
 
 
 How to use JDOM
@@ -14,20 +15,22 @@ numerous articles and books covering JDOM.
 Installing the build tools
 ==========================
 
-The JDOM build system is based on Jakarta Ant, which is a Java building tool
-originally developed for the Jakarta Tomcat project but now used in many other
-Apache projects and extended by many developers.
-
-Ant is a little but very handy tool that uses a build file written in XML
-(build.xml) as building instructions. For more information refer to
-"http://ant.apache.org".
+The JDOM build system is based on Apache Ant.  Ant is a little but very
+handy tool that uses a build file written in XML (build.xml) as building
+instructions. For more information refer to "http://ant.apache.org".
 
 The only thing that you have to make sure of is that the "JAVA_HOME"
 environment property is set to match the top level directory containing the
 JVM you want to use. For example:
 
-C:\> set JAVA_HOME=C:\jdk1.2.2
-  (or jdk1.3.1, etc.)
+C:\> set JAVA_HOME=C:\jdk1.6
+
+or on Mac:
+
+% setenv JAVA_HOME /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
+  (csh)
+> JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home; export JAVA_HOME
+  (ksh, bash)
 
 or on Unix:
 
@@ -43,20 +46,12 @@ Building instructions
 =====================
 
 Ok, let's build the code. First, make sure your current working directory is
-where the build.xml file is located. Then type
+where the build.xml file is located. Then run "ant".
 
-  ./build.sh (unix)
-  .\build.bat (win32)
-
-if everything is right and all the required packages are visible, this action
-will generate a file called "jdom.jar" in the "./build" directory. Note, that
+If everything is right and all the required packages are visible, this action
+will generate a file called "jdom2.jar" in the "./build" directory. Note, that
 if you do further development, compilation time is reduced since Ant is able
 to detect which files have changed and recompile them as needed.
-
-If for some crazy reason you're still using JDK 1.1, please note that JDOM no
-longer supports JDK 1.1 compiles.  If you're despreate for JDK 1.1 support,
-you can retrieve the CVS code from April 2nd, 2003, (use the -D flag).  This
-was the last day JDK 1.1 was supported.  Then run the "build11" scripts.
 
 If something went wrong, go to the FAQ at http://www.jdom.org/docs/faq.html.
 
@@ -70,19 +65,13 @@ javadocs.
 
 These are the meaningful targets for this build file:
 
- - package [default] -> creates ./build/jdom.jar
+ - package [default] -> generates ./build/jdom2.jar and other supporting files
  - compile -> compiles the source code
- - samples -> compiles example code
  - javadoc -> generates the API documentation in ./build/javadocs
+ - junit -> runs the JUnit tests
+ - coverage -> generates test coverage metrics
+ - eclipse -> generates an Eclipse project (source folders, jars, etc)
  - clean -> restores the distribution to its original and clean state
-
-For example, to build the samples, type
-
-build samples
-(Windows)
-
-build.sh samples
-(Unix)
 
 To learn the details of what each target does, read the build.xml file.  It is
 quite understandable.
@@ -92,10 +81,10 @@ Bug Reports
 ===========
 
 Bug reports go to the jdom-interest list at jdom.org.  But *BEFORE YOU POST*
-make sure you've tested against the LATEST code available from CVS (or the
+make sure you've tested against the LATEST code available from GitHub (or the
 daily snapshot).  Odds are good your bug has already been fixed.  If it hasn't
 been fixed in the latest version, then when posting *BE SURE TO SAY* which
-code version you tested against.  For example, "CVS from October 3rd".  Also
+code version you tested against.  For example, "GitHub from October 3rd".  Also
 be sure to include enough information to reproduce the bug and full exception
 stack traces.  You might also want to read the FAQ at http://jdom.org to find
 out if your problem is not really a bug and just a common misunderstanding

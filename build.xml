@@ -130,10 +130,13 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<echo message=""/>
 		<echo message=" available targets are:"/>
 		<echo message=""/>
-		<echo message="   package  --> generates the jdom.jar file (default)"/>
-		<echo message="   compile  --> compiles the source code"/>
-		<echo message="   javadoc  --> generates the API documentation"/>
-		<echo message="   clean    --> cleans up the directory"/>
+		<echo message=" - package [default] -> generates ./build/jdom2.jar and other supporting files"/>
+		<echo message=" - compile -> compiles the source code"/>
+		<echo message=" - javadoc -> generates the API documentation in ./build/javadocs"/>
+		<echo message=" - junit -> runs the JUnit tests"/>
+		<echo message=" - coverage -> generates test coverage metrics"/>
+		<echo message=" - eclipse -> generates an Eclipse project (source folders, jars, etc)"/>
+		<echo message=" - clean -> restores the distribution to its original and clean state"/>
 		<echo message=""/>
 		<echo message=" See the comments inside the build.xml file for more details."/>
 		<echo message="-------------------------------------------------------------"/>
