@@ -1,10 +1,9 @@
-The following people are committers on the "jdom" core module, listed
-alphabetically by last name.
+The following people are committers on the "jdom" repo.
 
 DO NOT WRITE THESE PEOPLE FOR TECH SUPPORT.  THEY WILL NOT ANSWER.
 WRITE THE jdom-interest MAILING LIST AT http://jdom.org.
 
-Jason Hunter is code captains for this module.
+Jason Hunter <jhunter_AT_jdom_DOT_org> is project maintainer.
 
-Jason Hunter <jhunter_AT_jdom_DOT_org>
+Rolf Lear <jdom_AT_tuis_DOT_net> is leading the JDOM 2.0 work.
 

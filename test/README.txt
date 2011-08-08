@@ -11,9 +11,3 @@ will be fleshed out and run with the third party JUnit library.  Your help in
 fleshing out the test cases is most welcome.  Send patches to the
 jdom-interest list.
 
-Building instructions
-=====================
-
-Building jdom-test is the same as building jdom.  See the README.txt in the
-jdom module.
-
