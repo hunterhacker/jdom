@@ -29,7 +29,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property file="${basedir}/build.properties" />
 
 		<property name="Name" value="JDOM"/>
-		<property name="name" value="jdom"/>
+		<property name="name" value="jdom2"/>
 		<property name="version" value="2.alpha"/>
 		<property name="version.impl" value="${version}"/>
 		<property name="version.spec" value="2.alpha"/>
