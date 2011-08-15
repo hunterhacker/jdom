@@ -861,10 +861,12 @@ public final class TestElement {
             element.addContent(cdata);
             fail("didn't catch null CDATA element");
         }
-        catch (IllegalAddException e) {
-        }
         catch (NullPointerException e) {
-            fail("NullPointer  Exception");
+        	// this is what List interface expects
+        }
+        catch (Exception e) {
+            fail("Expect NPE, not Exception " + e.getClass().getName() 
+            		+ ": " + e.getMessage());
         }
     }
 
@@ -1873,4 +1875,19 @@ public final class TestElement {
     	Element e = new Element("e");
     	e.setContent(v);
     }
+    
+	@Test
+	public void testElementAddDocType() {
+		try {
+			List<Content> list = (List<Content>)(new Element("tag").getContent());
+			list.add(new DocType("elementname"));
+			fail ("Should not be able to add DocType to an Element");
+		} catch (IllegalAddException iae) {
+			// good!
+		} catch (Exception e) {
+			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
+		}
+	}
+	
+
 }

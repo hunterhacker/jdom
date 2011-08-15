@@ -116,7 +116,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      */
     public void add(int index, Object obj) {
         if (obj == null) {
-            throw new IllegalAddException("Cannot add null object");
+            throw new NullPointerException("Cannot add null object");
         }
         if (obj instanceof String) {  // String is OK to add as special case
             obj = new Text(obj.toString());  // wrap it as a Content
@@ -124,7 +124,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
         if ((obj instanceof Content)) {
             add(index, (Content) obj);
         } else {
-            throw new IllegalAddException("Class " +
+            throw new ClassCastException("Class " +
                          obj.getClass().getName() +
                          " is of unrecognized type and cannot be added");
         }
@@ -184,7 +184,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
      */
     void add(int index, Content child) {
         if (child == null) {
-            throw new IllegalAddException("Cannot add null object");
+            throw new NullPointerException("Cannot add null object");
         }
         if (parent instanceof Document) {
           documentCanContain(index, child);
@@ -264,7 +264,11 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                                                 " Size: " + size());
         }
 
-        if ((collection == null) || (collection.size() == 0)) {
+        if ((collection == null)) {
+        	throw new NullPointerException(
+        			"Can not add a null collection to the ContentList");
+        }
+        if (collection.size() == 0) {
             return false;
         }
         ensureCapacity(size() + collection.size());
@@ -461,6 +465,10 @@ final class ContentList extends AbstractList implements java.io.Serializable {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                  " Size: " + size());
 
+        if (obj == null) {
+        	throw new NullPointerException("Can not set a Content entry to null");
+        }
+        
         if ((obj instanceof Element) && (parent instanceof Document)) {
             int root = indexOfFirstElement();
             if ((root >= 0) && (root != index)) {
@@ -476,7 +484,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                         "Cannot add a second doctype, only one is allowed");
             }
         }
-
+        
         Object old = remove(index);
         try {
             add(index, obj);
@@ -560,7 +568,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                 expected++;
                 count++;
             }
-            else throw new IllegalAddException("Filter won't allow the " +
+            else throw new ClassCastException("Filter won't allow the " +
                                 obj.getClass().getName() +
                                 " '" + obj + "' to be added to the list");
         }
@@ -635,7 +643,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                 expected += 2;
             }
             else {
-                throw new IllegalAddException("Filter won't allow index " +
+                throw new ClassCastException("Filter won't allow index " +
                                               index + " to be set to " +
                                               (obj.getClass()).getName());
             }
@@ -872,17 +880,27 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 		 * Inserts the specified element into the list.
 		 */
         public void add(Object obj) {
+			if (!filter.matches(obj)) {
+				throw new ClassCastException("Filter won't allow the " +
+                        obj.getClass().getName() +
+                        " '" + obj + "' to be added to the list");
+			}
+			
 			// Call to nextIndex() will check concurrent.
 			nextIndex();
 			// tmpcursor is the backing cursor of the next element
 			// Remember that List.add(index,obj) is really an insert....
 			ContentList.this.add(tmpcursor, obj);
-			forward = true;
 			expected = ContentList.this.getModCount();
 			canremove = canset = false;
-			index = nextIndex();
-			cursor = tmpcursor;
+			
+			if (forward) {
+				index++;
+			} else {
+				forward = true;
+			}
 			fsize++;
+			cursor = tmpcursor;
 		}
 
         /**
@@ -894,8 +912,19 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 				throw new IllegalStateException("Can not remove an "
 						+ "element unless either next() or previous() has been called "
 						+ "since the last remove()");
-			nextIndex(); // to get out cursor ...
-			ContentList.this.remove(cursor);
+			// we are removing the last entry reuned by either next() or previous().
+			// the idea is to remove it, and pretend that we used to be at the
+			// entry that happened *after* the removed entry.
+			// so, get what would be the next entry (set at tmpcursor).
+			// so call nextIndex to set tmpcursor to what would come after.
+			boolean dir = forward;
+			forward = true;
+			try {
+				nextIndex();
+				ContentList.this.remove(cursor);
+			} finally {
+				forward = dir;
+			}
 			cursor = tmpcursor - 1;
 			expected = ContentList.this.getModCount();
 
@@ -917,7 +946,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 			checkConcurrentModification();
 
 			if (!filter.matches(obj)) {
-				throw new IllegalAddException("Filter won't allow index " + index + " to be set to "
+				throw new ClassCastException("Filter won't allow index " + index + " to be set to "
 						+ (obj.getClass()).getName());
 			}
 			

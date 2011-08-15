@@ -255,8 +255,8 @@ public final class TestFilterList {
 		} catch(IndexOutOfBoundsException ex) {}
 		try {
 			children.set(1, new Comment("test"));
-			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+			fail("Should have thrown an ClassCastException");
+		} catch(ClassCastException ex) {}
 		try {
 			content.set(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
@@ -268,7 +268,7 @@ public final class TestFilterList {
 		try {
 			content.set(1, new Integer(17));
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+		} catch(ClassCastException ex) {}
     }
 
     @Test
@@ -311,8 +311,8 @@ public final class TestFilterList {
 		} catch(IndexOutOfBoundsException ex) {}
 		try {
 			children.add(1, new Comment("test"));
-			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+			fail("Should have thrown an ClassCastException");
+		} catch(ClassCastException ex) {}
 		try {
 			content.add(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
@@ -323,8 +323,8 @@ public final class TestFilterList {
 		} catch(IndexOutOfBoundsException ex) {}
 		try {
 			content.add(1, new Integer(17));
-			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+			fail("Should have thrown an ClassCastException");
+		} catch(ClassCastException ex) {}
     }
 
     @Test
@@ -360,12 +360,12 @@ public final class TestFilterList {
 
 		try {
 			children.add(new Comment("test"));
-			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+			fail("Should have thrown a ClassCastException");
+		} catch(ClassCastException ex) {}
 		try {
 			content.add(new Integer(17));
-			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+			fail("Should have thrown an ClassCastException");
+		} catch(ClassCastException ex) {}
     }
 
     @Test

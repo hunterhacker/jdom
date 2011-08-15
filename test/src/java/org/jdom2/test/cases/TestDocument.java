@@ -11,8 +11,10 @@ import org.jdom2.*;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
+
 import java.io.*;
 import java.util.*;
+
 import org.jdom2.output.*;
 import org.jdom2.test.util.UnitTestUtil;
 
@@ -529,4 +531,21 @@ public final class TestDocument {
 		assertEquals("missing comment", comment, doc.getContent().get(1));
 		assertEquals("missing pi", pi, doc.getContent().get(2));
 	}
+    
+	@Test
+	public void testDocumentAddDocType() {
+		try {
+			Document doc = new Document();
+			doc.addContent(new Element("tag"));
+			List<Content> list = (List<Content>)doc.getContent();
+			list.add(new DocType("elementname"));
+			fail ("Should not be able to add DocType to a document after an Element");
+		} catch (IllegalAddException iae) {
+			// good!
+		} catch (Exception e) {
+			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
+		}
+	}
+
+
 }
