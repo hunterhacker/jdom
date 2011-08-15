@@ -1282,7 +1282,7 @@ public final class TestElement {
             element.setAttributes(newList);
             fail("didn't catch bad data in list");
         }
-        catch (IllegalAddException e) {
+        catch (ClassCastException e) {
         }
         //should be an atomic operation so the original state should be preserved
         assertEquals("wrong number of attributes after failed add", 3, element.getAttributes().size());

@@ -129,10 +129,10 @@ class AttributeList extends AbstractList
             }
         }
         else if (obj == null) {
-            throw new IllegalAddException("Cannot add null attribute");
+            throw new NullPointerException("Cannot add null attribute");
         }
         else {
-            throw new IllegalAddException("Class " +
+            throw new ClassCastException("Class " +
                                           obj.getClass().getName() +
                                           " is not an attribute");
         }
@@ -158,10 +158,10 @@ class AttributeList extends AbstractList
             add(index, attribute);
         }
         else if (obj == null) {
-            throw new IllegalAddException("Cannot add null attribute");
+            throw new NullPointerException("Cannot add null attribute");
         }
         else {
-            throw new IllegalAddException("Class " +
+            throw new ClassCastException("Class " +
                                           obj.getClass().getName() +
                                           " is not an attribute");
         }
@@ -234,7 +234,10 @@ class AttributeList extends AbstractList
                                                 " Size: " + size());
         }
 
-        if ((collection == null) || (collection.size() == 0)) {
+        if (collection == null) {
+        	throw new NullPointerException("Can not add a null Collection to AttributeList");
+        }
+        if (collection.size() == 0) {
             return false;
         }
         ensureCapacity(size() + collection.size());
@@ -440,10 +443,10 @@ class AttributeList extends AbstractList
             return set(index, attribute);
         }
         else if (obj == null) {
-            throw new IllegalAddException("Cannot add null attribute");
+            throw new NullPointerException("Cannot add null attribute");
         }
         else {
-            throw new IllegalAddException("Class " +
+            throw new ClassCastException("Class " +
                                           obj.getClass().getName() +
                                           " is not an attribute");
         }

@@ -109,6 +109,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
 		suite.addTest(new JUnit4TestAdapter(TestContentList.class));
 		suite.addTest(new JUnit4TestAdapter(TestElementFilterList.class));
+		suite.addTest(new JUnit4TestAdapter(TestAttributeList.class));
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		return suite;
