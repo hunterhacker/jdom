@@ -204,6 +204,7 @@ public abstract class AbstractTestList<T> {
 		assertTrue("List is null", list != null);
 		assertTrue("Content is null", content != null);
 		assertTrue(content.length == list.size());
+		assertTrue(list.toString() != null);
 		if (content.length == 0) {
 			assertTrue(list.size() == 0);
 			assertTrue(list.isEmpty());
@@ -672,6 +673,12 @@ public abstract class AbstractTestList<T> {
 	/* *********************************
 	 * The actual tests to run.
 	 * ********************************* */
+	
+	@Test
+	public void testToString() {
+		// basic run
+		assertTrue(buildEmptyList().toString() != null);
+	}
 	
 	@Test
 	public void testEmpty() {
