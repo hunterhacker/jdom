@@ -1,6 +1,8 @@
 package org.jdom2.test.util;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +11,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class UnitTestUtil {
 	
@@ -91,6 +95,25 @@ public class UnitTestUtil {
 		T t = (T)tclass.cast(o);
         return t;
 
+    }
+    
+    public static void testReadIterator(Iterator<?> it, Object ... values) {
+    	assertTrue(it != null);
+    	assertTrue(values != null);
+    	for (int i = 0; i < values.length; i++) {
+    		assertTrue(it.hasNext());
+    		assertTrue(values[i] == it.next());
+    	}
+    	assertFalse("Not enough values in the test set.", it.hasNext());
+    	try {
+    		it.next();
+    		fail("Should not be able to have next after values have run out.");
+    	} catch (NoSuchElementException nsee) {
+    		// the way it should be
+    	} catch (Exception e) {
+    		fail("next() should fail with NoSuchElementException, not " + e.getClass().getName());
+    	}
+    	
     }
 
 }

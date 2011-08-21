@@ -6,7 +6,6 @@ import org.jdom2.Namespace;
 import org.jdom2.filter.ElementFilter;
 import org.junit.Test;
 
-@SuppressWarnings("unchecked")
 public class TestElementFilter extends AbstractTestFilter {
 	
 	@Test
@@ -18,8 +17,8 @@ public class TestElementFilter extends AbstractTestFilter {
 				return c != null && c instanceof Element;
 			}
 		};
-		exercise(ef, getRoot().getContent(), cb);
-		exercise(ef, getDocument().getContent(), cb);
+		exercise(ef, getRoot(), cb);
+		exercise(ef, getDocument(), cb);
 	}
 
 	@Test
@@ -33,8 +32,8 @@ public class TestElementFilter extends AbstractTestFilter {
 						name.equals(((Element)c).getName());
 			}
 		};
-		exercise(ef, getRoot().getContent(), cb);
-		exercise(ef, getDocument().getContent(), cb);
+		exercise(ef, getRoot(), cb);
+		exercise(ef, getDocument(), cb);
 	}
 
 	@Test
@@ -47,8 +46,8 @@ public class TestElementFilter extends AbstractTestFilter {
 						Namespace.NO_NAMESPACE.equals(((Element)c).getNamespace());
 			}
 		};
-		exercise(efa, getRoot().getContent(), cba);
-		exercise(efa, getDocument().getContent(), cba);
+		exercise(efa, getRoot(), cba);
+		exercise(efa, getDocument(), cba);
 
 		ElementFilter efb = new ElementFilter(getTestNamespace());
 		CallBack cbb = new CallBack() {
@@ -58,8 +57,8 @@ public class TestElementFilter extends AbstractTestFilter {
 						getTestNamespace().equals(((Element)c).getNamespace());
 			}
 		};
-		exercise(efb, getRoot().getContent(), cbb);
-		exercise(efb, getDocument().getContent(), cbb);
+		exercise(efb, getRoot(), cbb);
+		exercise(efb, getDocument(), cbb);
 	
 		
 	}
@@ -76,8 +75,8 @@ public class TestElementFilter extends AbstractTestFilter {
 						Namespace.NO_NAMESPACE.equals(((Element)c).getNamespace());
 			}
 		};
-		exercise(efa, getRoot().getContent(), cba);
-		exercise(efa, getDocument().getContent(), cba);
+		exercise(efa, getRoot(), cba);
+		exercise(efa, getDocument(), cba);
 
 		final String nameb = "three";
 		ElementFilter efb = new ElementFilter(nameb, getTestNamespace());
@@ -89,8 +88,8 @@ public class TestElementFilter extends AbstractTestFilter {
 						getTestNamespace().equals(((Element)c).getNamespace());
 			}
 		};
-		exercise(efb, getRoot().getContent(), cbb);
-		exercise(efb, getDocument().getContent(), cbb);
+		exercise(efb, getRoot(), cbb);
+		exercise(efb, getDocument(), cbb);
 	
 	}
 

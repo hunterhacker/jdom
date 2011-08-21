@@ -17,7 +17,6 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
-@SuppressWarnings("unchecked")
 public class TestContentFilter extends AbstractTestFilter {
 	
 	private final int[] allContent = new int[] {
@@ -252,12 +251,12 @@ public class TestContentFilter extends AbstractTestFilter {
 				break;
 			}
 		}
-		exercise(cfa, getRoot().getContent(), cb);
-		exercise(cfa, getDocument().getContent(), cb);
+		exercise(cfa, getRoot(), cb);
+		exercise(cfa, getDocument(), cb);
 		
 		ContentFilter cf = new ContentFilter(mask);
-		exercise(cf, getRoot().getContent(), cb);
-		exercise(cf, getDocument().getContent(), cb);
+		exercise(cf, getRoot(), cb);
+		exercise(cf, getDocument(), cb);
 
 		assertFilterEquals(cf, cfa);
 	}

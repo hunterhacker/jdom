@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jdom2.CDATA;
@@ -15,6 +16,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
+import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.filter.AbstractFilter;
@@ -222,12 +224,12 @@ public class AbstractTestFilter {
 	}
 	
 	
-	protected void exercise(Filter ef, List<? extends Content> list, CallBack callback) {
+	protected void exercise(Filter ef, Parent parent, CallBack callback) {
 		assertTrue("filter is null", ef != null);
-		assertTrue("list is null", list != null);
+		assertTrue("list is null", parent != null);
 		assertTrue("callback is null", callback != null);
 		assertTrue(ef.toString() != null); // basic test to ensure toString is run.
-		exerciseCore(ef, list, callback);
+		exerciseCore(ef, parent, callback);
 		if (ef instanceof AbstractFilter) {
 			AbstractFilter af = (AbstractFilter)ef;
 			
@@ -249,17 +251,17 @@ public class AbstractTestFilter {
 				fail ("Expected a RuntimeException.");
 			}
 			
-			exerciseCore(af.negate(), list, new NegateCallBack(callback));
-			exerciseCore(af.or(af.negate()), list, new TrueCallBack());
-			exerciseCore(af.or(UnitTestUtil.deSerialize(af)), list, callback);
-			exerciseCore(af.and(af.negate()), list, new FalseCallBack());
-			exerciseCore(af.and(af), list, callback);
-			exerciseCore(af.and(UnitTestUtil.deSerialize(af)), list, callback);
+			exerciseCore(af.negate(), parent, new NegateCallBack(callback));
+			exerciseCore(af.or(af.negate()), parent, new TrueCallBack());
+			exerciseCore(af.or(UnitTestUtil.deSerialize(af)), parent, callback);
+			exerciseCore(af.and(af.negate()), parent, new FalseCallBack());
+			exerciseCore(af.and(af), parent, callback);
+			exerciseCore(af.and(UnitTestUtil.deSerialize(af)), parent, callback);
 			
 			AbstractFilter nf = (AbstractFilter)af.negate();
-			exerciseCore(nf.negate(), list, callback);
-			exerciseCore(nf.or(nf.negate()), list, new TrueCallBack());
-			exerciseCore(nf.and(nf.negate()), list, new FalseCallBack());
+			exerciseCore(nf.negate(), parent, callback);
+			exerciseCore(nf.or(nf.negate()), parent, new TrueCallBack());
+			exerciseCore(nf.and(nf.negate()), parent, new FalseCallBack());
 			
 			/*
 			 * Fix Issue #19 before enabling the following!
@@ -276,10 +278,12 @@ public class AbstractTestFilter {
 		}
 	}
 	
-	private final void exerciseCore(Filter ef, List<? extends Content> list, CallBack callback) {
+	@SuppressWarnings("unchecked")
+	private final void exerciseCore(Filter ef, Parent parent, CallBack callback) {
 		// exercise the toString()
 		assertTrue(ef.toString() != null);
-		for (Content c : list) {
+		List<Content> cont = (List<Content>)parent.getContent();
+		for (Content c : cont) {
 			boolean mat = ef.matches(c);
 			boolean cbv = callback.isValid(c);
 			if (mat != cbv) {
@@ -294,6 +298,25 @@ public class AbstractTestFilter {
 		if (ef instanceof AbstractFilter) {
 			assertFilterNotEquals(ef, ((AbstractFilter)ef).negate());
 		}
+		List<Content> depth = new ArrayList<Content>();
+		depth.addAll(cont);
+		int sz = depth.size();
+		for (int i = 0; i < sz; i++) {
+			if (depth.get(i) instanceof Element) {
+				List<Content> kdata = ((Element)depth.get(i)).getContent();
+				depth.addAll(i+1, kdata);
+				sz += kdata.size();
+			}
+		}
+		Iterator<Content> di = (Iterator<Content>)parent.getDescendants();
+		UnitTestUtil.testReadIterator(di, depth.toArray());
+		for (Iterator<Content> it = depth.iterator(); it.hasNext(); ) {
+			if (!callback.isValid(it.next())) {
+				it.remove();
+			}
+		}
+		di = (Iterator<Content>)parent.getDescendants(ef);
+		UnitTestUtil.testReadIterator(di, depth.toArray());
 	}
 	
 }
