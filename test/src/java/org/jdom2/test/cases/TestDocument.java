@@ -21,12 +21,6 @@ import org.jdom2.test.util.UnitTestUtil;
 public final class TestDocument {
 
 	/**
-	 *  a directory for temporary storage of files
-	 */
-	private String scratchDir = ResourceBundle.getBundle("org.jdom2.test.Test")
-			.getString("test.scratchDirectory");
-
-	/**
 	 * The main method runs all the tests in the text ui
 	 */
 	public static void main (String args[]) 
