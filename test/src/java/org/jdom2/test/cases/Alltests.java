@@ -57,6 +57,8 @@ package org.jdom2.test.cases;
 
 import junit.framework.*;
 
+import org.jdom2.test.cases.filter.TestContentFilter;
+import org.jdom2.test.cases.filter.TestElementFilter;
 import org.jdom2.test.cases.input.*;
 import org.jdom2.test.cases.output.TestDOMOutputter;
 import org.jdom2.test.cases.output.TestXMLOutputter;
@@ -110,6 +112,8 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestContentList.class));
 		suite.addTest(new JUnit4TestAdapter(TestElementFilterList.class));
 		suite.addTest(new JUnit4TestAdapter(TestAttributeList.class));
+		suite.addTest(new JUnit4TestAdapter(TestElementFilter.class));
+		suite.addTest(new JUnit4TestAdapter(TestContentFilter.class));
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		return suite;
