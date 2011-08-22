@@ -212,7 +212,7 @@ public class ProcessingInstruction extends Content {
         }
 
         this.rawData = temp;
-        this.mapData = data;
+        this.mapData = new LinkedHashMap(data);
         return this;
     }
 
@@ -314,7 +314,7 @@ public class ProcessingInstruction extends Content {
         //   <?pi id=22?>                       Empty Map
         //   <?pi id='22?>                      Empty Map
 
-        Map data = new HashMap();
+        Map data = new LinkedHashMap();
 
         // System.out.println("rawData: " + rawData);
 

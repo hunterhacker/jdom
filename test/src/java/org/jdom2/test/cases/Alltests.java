@@ -100,6 +100,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
 		suite.addTest(new JUnit4TestAdapter(TestAttribute.class));
 		suite.addTest(new JUnit4TestAdapter(TestCDATA.class));
+		suite.addTest(new JUnit4TestAdapter(TestProcessingInstruction.class));
 		suite.addTest(new JUnit4TestAdapter(TestNamespace.class));
 		suite.addTest(new JUnit4TestAdapter(TestDocType.class));
 		suite.addTest(new JUnit4TestAdapter(TestElement.class));

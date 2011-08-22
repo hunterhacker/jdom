@@ -97,7 +97,39 @@ public class UnitTestUtil {
 
     }
     
-    public static void testReadIterator(Iterator<?> it, Object ... values) {
+    /**
+     * Test whether two values are equals, in addition, check the hashCode() values
+     * This method will pass if both values are null.
+     * @param a The first value to check
+     * @param b The other value
+     */
+    public static final void checkEquals(Object a, Object b) {
+    	if (a == null) {
+    		if (b != null) {
+    			fail("Second value is not null like the first: " + b.toString());
+    		}
+    		return;
+    	}
+    	if (b == null) {
+    		fail ("First value is not null like the second: " + a.toString());
+    	}
+    	assertTrue(a.equals(a));
+    	assertTrue(b.equals(b));
+    	if (!a.equals(b)) {
+    		fail("First value '" + a + "' does not equals() second value '" + b + "'.");
+    	}
+    	if (!b.equals(a)) {
+    		fail("Second value '" + b + "' does not equals() first value '" + a + "'.");
+    	}
+    	if (a.hashCode() != b.hashCode()) {
+    		fail("Hashcodes of equals() values are different. " +
+    				"First value '" + a + "' (hashcode=" + a.hashCode() + ") " +
+    				"not same as " +
+    				"second value '" + b + "' (hashcode=" + b.hashCode() + ").");
+    	}
+    }
+    
+    public static final void testReadIterator(Iterator<?> it, Object ... values) {
     	assertTrue(it != null);
     	assertTrue(values != null);
     	for (int i = 0; i < values.length; i++) {
@@ -114,6 +146,21 @@ public class UnitTestUtil {
     		fail("next() should fail with NoSuchElementException, not " + e.getClass().getName());
     	}
     	
+    }
+    
+    /**
+     * Create a new String instance based on an input String.
+     * The String class tends to have these fancy ways of re-using internal
+     * data structures when creating one string from another. This method
+     * circumvents those optimisations.
+     * @param value The value to clone
+     * @return The cloned version of the input value.
+     */
+    public static final String cloneString(String value) {
+    	char[] chars = value.toCharArray();
+    	char[] ret = new char[chars.length];
+    	System.arraycopy(chars, 0, ret, 0, chars.length);
+    	return new String(ret);
     }
 
 }
