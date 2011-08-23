@@ -15,6 +15,8 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.jdom2.filter.ContentFilter;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.output.*;
 import org.jdom2.test.util.UnitTestUtil;
 
@@ -31,18 +33,19 @@ public final class TestDocument {
 	/**
 	 * Test constructor of Document with a List of content including the root element.
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_TCC___List() {
 		Element bogus = new Element("bogus-root");
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
-		List list = new ArrayList();
+		List<Content> list = new ArrayList<Content>();
 
 		list.add(element);
 		list.add(comment);
 		Document doc = new Document(list);
 		// Get a live list back
-		list = doc.getContent();
+		list = (List<Content>)doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
 		//no root element
@@ -92,20 +95,21 @@ public final class TestDocument {
 	/**
 	 * Test constructor of a Document with a List of content and a DocType.
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_TCC___List_OrgJdomDocType() {
 		Element bogus = new Element("bogus-root");
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
 		DocType docType = new DocType("element");
-		List list = new ArrayList();
+		List<Content> list = new ArrayList<Content>();
 
 		list.add(docType);
 		list.add(element);
 		list.add(comment);
 		Document doc = new Document(list);
 		// Get a live list back
-		list = doc.getContent();
+		list = (List<Content>)doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 		assertEquals("incorrect doc type returned", docType, doc.getDocType());
 
@@ -198,6 +202,108 @@ public final class TestDocument {
 	}
 
 	/**
+	 * Test constructor of Document with and Element and Doctype
+	 */
+	@Test
+	public void test_TCC___OrgJdomElement_OrgJdomDocType_JavaLangString() {
+		Element element = new Element("element");
+		DocType docType = new DocType("element");
+		String baseuri = "BaseURI";
+
+		Document doc = new Document(element, docType, baseuri);
+		assertTrue(doc.hasRootElement());
+		assertEquals("incorrect root element returned", element, doc.getRootElement());
+		assertEquals("incorrect doc type returned", docType, doc.getDocType());
+		assertEquals("incorrect BaseURI returned", "BaseURI", doc.getBaseURI());
+
+		try {
+			element.detach();
+			docType.detach();
+			doc = new Document(null, docType, baseuri);
+			assertFalse(doc.hasRootElement());
+			assertEquals("incorrect doc type returned", docType, doc.getDocType());
+			assertEquals("incorrect BaseURI returned", "BaseURI", doc.getBaseURI());
+			try {
+				assertEquals("incorrect root element returned", null, doc.getRootElement());
+				fail ("Should not be ableto query the root element if it is not set...");
+			} catch (IllegalStateException ise) {
+				// OK, Root Element not set.
+			}
+		} catch (IllegalAddException e) {
+			fail("didn't handle null element");
+		} catch (NullPointerException e) {
+			fail("didn't handle null element");
+		}
+
+		try {
+			element.detach();
+			docType.detach();
+			doc = new Document(element, null, baseuri);
+			assertTrue(doc.hasRootElement());
+			assertEquals("incorrect root element returned", element, doc.getRootElement());
+			assertEquals("incorrect doc type returned", null, doc.getDocType());
+			assertEquals("incorrect BaseURI returned", "BaseURI", doc.getBaseURI());
+		} catch (IllegalAddException e) {
+			fail("didn't handle null docType");
+		} catch (NullPointerException e) {
+			fail("didn't handle null docType");
+		}
+
+		try {
+			element.detach();
+			docType.detach();
+			doc = new Document(element, docType, null);
+			assertTrue(doc.hasRootElement());
+			assertEquals("incorrect root element returned", element, doc.getRootElement());
+			assertEquals("incorrect doc type returned", docType, doc.getDocType());
+			assertEquals("incorrect BaseURI returned", null, doc.getBaseURI());
+		} catch (IllegalAddException e) {
+			fail("didn't handle null baseuri");
+		} catch (NullPointerException e) {
+			fail("didn't handle null baseuri");
+		}
+
+		try {
+			element.detach();
+			docType.detach();
+			doc = new Document(null, docType, null);
+			assertFalse(doc.hasRootElement());
+			try {
+				assertEquals("incorrect root element returned", null, doc.getRootElement());
+				fail ("Should not be ableto query the root element if it is not set...");
+			} catch (IllegalStateException ise) {
+				// OK, Root Element not set.
+			}
+			assertEquals("incorrect doc type returned", docType, doc.getDocType());
+			assertEquals("incorrect BaseURI returned", null, doc.getBaseURI());
+		} catch (IllegalAddException e) {
+			fail("didn't handle null element and baseuri");
+		} catch (NullPointerException e) {
+			fail("didn't handle null element and baseuri");
+		}
+
+		try {
+			element.detach();
+			docType.detach();
+			doc = new Document(null, null, null);
+			assertFalse(doc.hasRootElement());
+			try {
+				assertEquals("incorrect root element returned", null, doc.getRootElement());
+				fail ("Should not be ableto query the root element if it is not set...");
+			} catch (IllegalStateException ise) {
+				// OK, Root Element not set.
+			}
+			assertEquals("incorrect doc type returned", null, doc.getDocType());
+			assertEquals("incorrect BaseURI returned", null, doc.getBaseURI());
+		} catch (IllegalAddException e) {
+			fail("didn't handle null parameters");
+		} catch (NullPointerException e) {
+			fail("didn't handle null parameters");
+		}
+
+	}
+
+	/**
 	 * Test object equality.
 	 */
 	@Test
@@ -216,7 +322,7 @@ public final class TestDocument {
 	public void test_TCM__boolean_removeContent_OrgJdomComment() {
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
-		ArrayList list = new ArrayList();
+		ArrayList<Content> list = new ArrayList<Content>();
 
 		list.add(element);
 		list.add(comment);
@@ -234,7 +340,7 @@ public final class TestDocument {
 	public void test_TCM__boolean_removeContent_OrgJdomProcessingInstruction() {
 		Element element = new Element("element");
 		ProcessingInstruction pi = new ProcessingInstruction("test", "comment");
-		ArrayList list = new ArrayList();
+		ArrayList<Content> list = new ArrayList<Content>();
 
 		list.add(element);
 		list.add(pi);
@@ -314,7 +420,8 @@ public final class TestDocument {
 		child2 = null;
 		child1 = null;
 
-		List list = docClone.getRootElement().getContent();
+		@SuppressWarnings("unchecked")
+		List<Content> list = (List<Content>)docClone.getRootElement().getContent();
 
 		//finally the test
 		assertEquals("wrong comment", ((Comment)docClone.getContent().get(1)).getText(), "some comment");
@@ -370,7 +477,8 @@ public final class TestDocument {
 		Document doc = new Document(element);
 		doc.addContent(comment);
 		doc.addContent(comment2);
-		List content = doc.getContent();
+		@SuppressWarnings("unchecked")
+		List<Content> content = (List<Content>)doc.getContent();
 
 		assertEquals("wrong number of comments in List", 3, content.size());
 		assertEquals("wrong comment", comment, content.get(1));
@@ -389,7 +497,8 @@ public final class TestDocument {
 		Document doc = new Document(element);
 		doc.addContent(pi);
 		doc.addContent(pi2);
-		List content = doc.getContent();
+		@SuppressWarnings("unchecked")
+		List<Content> content = (List<Content>)doc.getContent();
 
 		assertEquals("wrong number of PI's in List", 3, content.size());
 		assertEquals("wrong PI", pi, content.get(1));
@@ -493,7 +602,7 @@ public final class TestDocument {
 	public void test_TCM__List_getContent() {
 		Element element = new Element("element");
 		Comment comment = new Comment("comment");
-		ArrayList list = new ArrayList();
+		ArrayList<Content> list = new ArrayList<Content>();
 
 		list.add(element);
 		list.add(comment);
@@ -511,7 +620,7 @@ public final class TestDocument {
 		Element newElement = new Element("newEl");
 		Comment comment = new Comment("comment");
 		ProcessingInstruction pi = new ProcessingInstruction("foo", "bar");
-		ArrayList list = new ArrayList();
+		ArrayList<Content> list = new ArrayList<Content>();
 
 		list.add(newElement);
 		list.add(comment);
@@ -531,6 +640,7 @@ public final class TestDocument {
 		try {
 			Document doc = new Document();
 			doc.addContent(new Element("tag"));
+			@SuppressWarnings("unchecked")
 			List<Content> list = (List<Content>)doc.getContent();
 			list.add(new DocType("elementname"));
 			fail ("Should not be able to add DocType to a document after an Element");
@@ -541,5 +651,233 @@ public final class TestDocument {
 		}
 	}
 
+	@Test
+	public void testDocType() {
+		Document doc = new Document();
+		assertTrue(doc == doc.setDocType(null));
+		DocType dta = new DocType("DocTypeA");
+		DocType dtb = new DocType("DocTypeB");
+		doc.setDocType(dta);
+		assertTrue(doc.getDocType() == dta);
+		assertTrue(dta.getParent() == doc);
+		assertTrue(dtb.getParent() == null);
+		doc.setDocType(dtb);
+		assertTrue(doc.getDocType() == dtb);
+		assertTrue(dta.getParent() == null);
+		assertTrue(dtb.getParent() == doc);
+		try {
+			doc.setDocType(dtb);
+			fail("Should not be able to add an already attached DocType");
+		} catch (IllegalAddException iae) {
+			// good.
+		}
+		assertTrue(doc.getDocType() == dtb);
+		assertTrue(dta.getParent() == null);
+		assertTrue(dtb.getParent() == doc);
+		doc.setDocType(null);
+		assertTrue(doc.getDocType() == null);
+		assertTrue(dta.getParent() == null);
+		assertTrue(dtb.getParent() == null);
 
+	}
+	
+	@Test
+	public void testDocumentProperties() {
+		Document doc = new Document();
+		assertTrue(doc.getProperty("one") == null);
+		doc.setProperty("one", "one1");
+		assertTrue("one1" == doc.getProperty("one"));
+		doc.setProperty("two", "two2");
+		assertTrue("one1" == doc.getProperty("one"));
+		assertTrue("two2" == doc.getProperty("two"));
+	}
+	
+	@Test
+	public void testDocumentContent() {
+		Document doc = new Document();
+		assertTrue(doc.getContentSize() == 0);
+		assertTrue(doc.getDocType() == null);
+		assertFalse(doc.hasRootElement());
+		assertTrue(doc.cloneContent().size() == 0);
+		
+		final DocType doctype = new DocType("element");
+		final Comment comment1 = new Comment("comment1");
+		final Comment comment2 = new Comment("comment2");
+		final Element root = new Element("root");
+		
+		doc.setDocType(doctype);
+		assertTrue(doc.getContentSize() == 1);
+		assertTrue(doc.getDocType() == doctype);
+		assertFalse(doc.hasRootElement());
+		assertTrue(doc.cloneContent().size() == 1);
+		assertTrue(doc.cloneContent().get(0) instanceof DocType);
+		assertTrue(doc.indexOf(doctype) == 0);
+		
+		assertTrue(doctype.getParent() == doc);
+		assertTrue(doc.removeContent().get(0) == doctype);
+		
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 0);
+		assertTrue(doc.getDocType() == null);
+		assertFalse(doc.hasRootElement());
+		assertTrue(doc.cloneContent().size() == 0);
+		
+		doc.addContent(comment1);
+		doc.addContent(comment2);
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 2);
+		doc.setContent(1, doctype);
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == null);
+		assertTrue(doctype.getParent() == doc);
+		assertTrue(doc.getContentSize() == 2);
+		
+		doc.setContent(comment2);
+		assertTrue(comment1.getParent() == null);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 1);
+		assertTrue(comment2 == doc.removeContent(0));
+		
+		doc.addContent(Collections.singleton(comment2));
+		assertTrue(comment1.getParent() == null);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 1);
+		
+		doc.addContent(0, Collections.singleton(comment1));
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 2);
+		
+		doc.addContent(2, Collections.singleton(doctype));
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == doc);
+		assertTrue(doc.getContentSize() == 3);
+		assertTrue(doc.indexOf(comment1) == 0);
+		assertTrue(doc.indexOf(comment2) == 1);
+		assertTrue(doc.indexOf(doctype) == 2);
+		
+		doc.setContent(2, Collections.singleton(doctype));
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == doc);
+		assertTrue(doc.getContentSize() == 3);
+		assertTrue(doc.indexOf(comment1) == 0);
+		assertTrue(doc.indexOf(comment2) == 1);
+		assertTrue(doc.indexOf(doctype) == 2);
+		
+		doc.setContent(2, Collections.emptySet());
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == null);
+		assertTrue(doc.getContentSize() == 2);
+		assertTrue(doc.indexOf(comment1) == 0);
+		assertTrue(doc.indexOf(comment2) == 1);
+		assertTrue(doc.indexOf(doctype) == -1);
+		
+		doc.addContent(2, doctype);
+		assertTrue(comment1.getParent() == doc);
+		assertTrue(comment2.getParent() == doc);
+		assertTrue(doctype.getParent() == doc);
+		assertTrue(doc.getContentSize() == 3);
+		assertTrue(doc.indexOf(comment1) == 0);
+		assertTrue(doc.indexOf(comment2) == 1);
+		assertTrue(doc.indexOf(doctype) == 2);
+		
+		doc.addContent(root);
+		assertTrue(doc.indexOf(root) == 3);
+		assertTrue(doc.getContentSize() == 4);
+		assertTrue(doc.getRootElement() == root);
+		assertTrue(root.getParent() == doc);
+		assertTrue(doc.getContent().size() == 4);
+		assertTrue(doc.getContent(new ElementFilter()).size() == 1);
+		assertTrue(doc.getContent(new ContentFilter(ContentFilter.COMMENT)).size() == 2);
+		assertTrue(root == doc.detachRootElement());
+		assertTrue(null == doc.detachRootElement());
+
+		try {
+			doc.getContent();
+			fail("Should not be able to get content when there's no root element");
+		} catch (IllegalStateException ise) {
+			// good
+		}
+		
+		try {
+			doc.getContent(new ElementFilter());
+			fail("Should not be able to get content when there's no root element");
+		} catch (IllegalStateException ise) {
+			// good
+		}
+		
+		assertTrue(doc.removeContent(new ContentFilter(ContentFilter.COMMENT)).size() == 2);
+		
+	}
+	
+	@Test
+	public void testClone() {
+		Document doc = new Document();
+		final DocType doctype = new DocType("element");
+		final Comment comment1 = new Comment("comment1");
+		final Comment comment2 = new Comment("comment2");
+		final ProcessingInstruction pi = new ProcessingInstruction("tstpi", "pidata");
+		final Element root = new Element("root");
+		
+		doc.setDocType(doctype);
+		doc.addContent(comment1);
+		doc.addContent(comment2);
+		doc.addContent(pi);
+		doc.addContent(root);
+		
+		Document clone = (Document)doc.clone();
+		assertTrue(doc.equals(doc));
+		assertTrue(clone.equals(clone));
+		assertFalse(clone.equals(doc));
+		assertFalse(doc.equals(clone));
+		
+		assertTrue(doc.getContent().get(0) instanceof DocType);
+		assertTrue(doc.getContent().get(1) instanceof Comment);
+		assertTrue(doc.getContent().get(2) instanceof Comment);
+		assertTrue(doc.getContent().get(3) instanceof ProcessingInstruction);
+		assertTrue(doc.getContent().get(4) instanceof Element);
+		
+		
+	}
+
+	@Test
+	public void testParent() {
+		Document doc = new Document();
+		assertTrue(null == doc.getParent());
+		doc.addContent(new Element("root"));
+		assertTrue(null == doc.getParent());
+	}
+	
+	@Test
+	public void testToString() {
+		Document doc = new Document();
+		assertTrue(doc.toString() != null);
+		assertTrue(doc.toString().indexOf("Document") >= 0);
+		assertTrue(doc.toString().indexOf("root") >= 0);
+
+		doc.addContent(new Comment("tstcomment"));
+		assertTrue(doc.toString().indexOf("tstcomment") < 0);
+		assertTrue(doc.toString().indexOf("root") >= 0);
+
+		doc.addContent(new DocType("tstdoctype"));
+		assertTrue(doc.toString().indexOf("Document") >= 0);
+		assertTrue(doc.toString().indexOf("tstcomment") < 0);
+		assertTrue(doc.toString().indexOf("tstdoctype") >= 0);
+		assertTrue(doc.toString().indexOf("root") >= 0);
+		
+		doc.addContent(new Element("tstelement"));
+		assertTrue(doc.toString().indexOf("Document") >= 0);
+		assertTrue(doc.toString().indexOf("tstcomment") < 0);
+		assertTrue(doc.toString().indexOf("tstdoctype") >= 0);
+		assertTrue(doc.toString().indexOf("root") < 0);
+		assertTrue(doc.toString().indexOf("tstelement") >= 0);
+	}
 }

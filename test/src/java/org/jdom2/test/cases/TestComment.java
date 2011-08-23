@@ -148,10 +148,12 @@ public final class TestComment {
 		theComment.setText("");
 
 		assertEquals("incorrect Comment text", "", theComment.getText());
+		assertEquals(theComment.getText(), theComment.getValue());
 		//set it to a new string
 		theComment.setText("12345qwerty");
 
 		assertEquals("incorrect Comment text", "12345qwerty", theComment.getText());
+		assertEquals(theComment.getText(), theComment.getValue());
 
 		//tests for invalid data but setText doesn't
 
