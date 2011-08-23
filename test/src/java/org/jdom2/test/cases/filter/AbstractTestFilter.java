@@ -284,6 +284,12 @@ public class AbstractTestFilter {
 		assertTrue(ef.toString() != null);
 		List<Content> cont = (List<Content>)parent.getContent();
 		for (Content c : cont) {
+			assertTrue(parent == c.getParent());
+			if (parent instanceof Document) {
+				assertTrue(null == c.getParentElement());
+			} else {
+				assertTrue(parent == c.getParentElement());
+			}
 			boolean mat = ef.matches(c);
 			boolean cbv = callback.isValid(c);
 			if (mat != cbv) {
