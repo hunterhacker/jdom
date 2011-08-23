@@ -201,6 +201,7 @@ public final class TestDocType {
 		DocType theDocType = new DocType("anElement", publicID, "");
 
 		assertEquals(publicID, theDocType.getPublicID());
+		assertTrue("".equals(theDocType.getValue()));
 	}
 
     /**
@@ -231,6 +232,7 @@ public final class TestDocType {
 		DocType theDocType = new DocType("anElement", systemID);
 
 		assertEquals(systemID, theDocType.getSystemID());
+		assertTrue("".equals(theDocType.getValue()));
 	}
 
     /**
@@ -247,5 +249,58 @@ public final class TestDocType {
 		" \"FILE://temp/test.dtd\">]";
 
 		assertEquals("incorrect toString form", compareTo, result);
+		assertTrue("".equals(theDocType.getValue()));
 	}
+    
+    @Test (expected=IllegalNameException.class)
+    public void testIllegalNameA() {
+    	new DocType("f0$0");
+    }
+    
+    @Test (expected=IllegalNameException.class)
+    public void testIllegalNameB() {
+    	new DocType("f0$0", "systemid");
+    }
+    
+    @Test (expected=IllegalNameException.class)
+    public void testIllegalNameC() {
+    	new DocType("f0$0", "publicid", "systemid");
+    }
+    
+    @Test (expected=IllegalNameException.class)
+    public void testIllegalNameD() {
+    	DocType dt = new DocType("foo", "publicid", "systemid");
+    	dt.setElementName("f0$0");
+    }
+    
+    @Test (expected=IllegalDataException.class)
+    public void testIllegalPublicA() {
+    	new DocType("foo", "pub~id", null);
+    }
+    
+    @Test (expected=IllegalDataException.class)
+    public void testIllegalPublicB() {
+    	DocType dt = new DocType("foo", "pubid", null);
+    	dt.setPublicID("pub~id");
+    }
+    
+    @Test (expected=IllegalDataException.class)
+    public void testIllegalSystemA() {
+    	char illegal = 0x0B;
+    	new DocType("foo", "pubid", "sys" + illegal + "id");
+    }
+    
+    @Test (expected=IllegalDataException.class)
+    public void testIllegalSystemB() {
+    	DocType dt = new DocType("foo", "pubid", "sysid");
+    	char illegal = 0x0B;
+    	dt.setSystemID("sys" + illegal + "id");
+    }
+    
+    @Test (expected=IllegalDataException.class)
+    public void testIllegalSystemC() {
+    	DocType dt = new DocType("foo", "pubid", "sysid");
+    	dt.setSystemID("sys'id \" with quote");
+    }
+    
 }
