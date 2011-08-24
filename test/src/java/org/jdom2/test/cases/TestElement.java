@@ -68,6 +68,8 @@ import java.io.StringWriter;
 import java.util.*;
 
 import org.jdom2.*;
+import org.jdom2.filter.ContentFilter;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
@@ -349,6 +351,8 @@ public final class TestElement {
 
         //make sure it's there
         assertNotNull("attribute not found after add", element.getAttribute("anAttribute", ns));
+        //make sure we check namespaces - a different namespace
+        assertFalse("wrong attribute removed", element.removeAttribute("anAttribute", Namespace.NO_NAMESPACE));
         //and remove it
         assertTrue("attribute not removed", element.removeAttribute("anAttribute", ns));
         //make sure it's not there
@@ -1079,6 +1083,18 @@ public final class TestElement {
         }
         catch (NullPointerException e) {
         }
+        
+        try {
+        	Element emt = new Element("dummy");
+        	Attribute ma = new Attribute("hi", "there");
+        	emt.setAttribute(ma);
+        	element.setAttribute(ma);
+        	fail("Should not be able to add already added Attribute.");
+        } catch (IllegalAddException iae) {
+        	// good
+        } catch (Exception e) {
+        	fail("Expect IllegalAddException, not " + e.getClass().getName());
+        }
     }
 
     /**
@@ -1256,7 +1272,7 @@ public final class TestElement {
         Attribute one = new Attribute("one", "value");
         Attribute two = new Attribute("two", "value");
         Attribute three = new Attribute("three", "value");
-        ArrayList list = new ArrayList();
+        ArrayList<Attribute> list = new ArrayList<Attribute>();
         list.add(one);
         list.add(two);
         list.add(three);
@@ -1275,7 +1291,7 @@ public final class TestElement {
         Element bogus = new Element("bogus");
         Attribute four = new Attribute("four", "value");
 
-        ArrayList newList = new ArrayList();
+        ArrayList<Object> newList = new ArrayList<Object>();
         newList.add(four);
         newList.add(bogus);
         try {
@@ -1292,7 +1308,7 @@ public final class TestElement {
 
         try {
             element.setAttributes(null);
-            List attList = element.getAttributes();
+            List<?> attList = element.getAttributes();
             assertTrue("null didn't clear attributes", attList.size() == 0);
         }
         catch (IllegalArgumentException e) {
@@ -1887,6 +1903,287 @@ public final class TestElement {
 		} catch (Exception e) {
 			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
 		}
+	}
+	
+	@Test
+	public void testGetNamespace() {
+		Element emt = new Element("mine");
+		assertTrue(Namespace.NO_NAMESPACE == emt.getNamespace());
+		assertTrue(emt.getNamespace(null) == null);
+		assertTrue(emt.getNamespace("none") == null);
+		assertTrue(emt.getNamespace("xml") == Namespace.XML_NAMESPACE);
+	}
+	
+	@Test
+	public void testRemoveNamespace() {
+		Element emt = new Element("mine");
+		Namespace myuri = Namespace.getNamespace("pfx", "myuri");
+		assertTrue(emt.getNamespace("pfx") == null);
+		emt.removeNamespaceDeclaration(myuri);
+		emt.addNamespaceDeclaration(myuri);
+		assertTrue(emt.getNamespace("pfx") == myuri);
+		emt.removeNamespaceDeclaration(myuri);
+		assertTrue(emt.getNamespace("pfx") == null);
+	}
+
+	@Test
+	public void testGetValue() {
+		Element emt = new Element("root");
+		emt.addContent("See ");
+		assertTrue("See ".equals(emt.getValue()));
+		emt.addContent(new Element("k1").addContent("Spot "));
+		assertTrue("See Spot ".equals(emt.getValue()));
+		emt.addContent(new Comment("skip "));
+		assertTrue("See Spot ".equals(emt.getValue()));
+		emt.addContent(new CDATA("run!"));
+		assertTrue("See Spot run!".equals(emt.getValue()));
+	}
+
+	@Test
+	public void testGetText() {
+		Element emt = new Element("root");
+		assertTrue("".equals(emt.getText()));
+		emt.addContent(new Comment("skip "));
+		assertTrue("".equals(emt.getText()));
+		emt.addContent(new ProcessingInstruction("dummy", "nodata"));
+		assertTrue("".equals(emt.getText()));
+		emt.removeContent();
+		assertTrue("".equals(emt.getText()));
+		emt.addContent(" See   ");
+		assertTrue(" See   ".equals(emt.getText()));
+		emt.addContent(new Element("k1").addContent(" Spot  the \n dog  "));
+		assertTrue(" See   ".equals(emt.getText()));
+		emt.addContent(new CDATA(" run!   "));
+		assertTrue(" See    run!   ".equals(emt.getText()));
+		assertTrue("See    run!".equals(emt.getTextTrim()));
+		assertTrue("See run!".equals(emt.getTextNormalize()));
+		
+		assertTrue(" Spot  the \n dog  ".equals(emt.getChildText("k1")));
+		assertTrue("Spot  the \n dog".equals(emt.getChildTextTrim("k1")));
+		assertTrue("Spot the dog".equals(emt.getChildTextNormalize("k1")));
+		
+		assertTrue(" Spot  the \n dog  ".equals(emt.getChildText("k1", Namespace.NO_NAMESPACE)));
+		assertTrue("Spot  the \n dog".equals(emt.getChildTextTrim("k1", Namespace.NO_NAMESPACE)));
+		assertTrue("Spot the dog".equals(emt.getChildTextNormalize("k1", Namespace.NO_NAMESPACE)));
+
+		assertTrue(null == emt.getChildText("x1"));
+		assertTrue(null == emt.getChildTextTrim("x1"));
+		assertTrue(null == emt.getChildTextNormalize("x1"));
+		
+		assertTrue(null == emt.getChildText("x1", Namespace.NO_NAMESPACE));
+		assertTrue(null == emt.getChildTextTrim("x1", Namespace.NO_NAMESPACE));
+		assertTrue(null == emt.getChildTextNormalize("x1", Namespace.NO_NAMESPACE));
+
+		Namespace xx = Namespace.getNamespace("nouri");
+		assertTrue(null == emt.getChildText("k1", xx));
+		assertTrue(null == emt.getChildTextTrim("k1", xx));
+		assertTrue(null == emt.getChildTextNormalize("k1", xx));
+	}
+
+	@Test
+	public void testElementContent() {
+		Document doc = new Document();
+		Element root = new Element("root");
+		assertTrue(root.getContentSize() == 0);
+		assertFalse(root.isRootElement());
+		doc.addContent(root);
+		assertTrue(root.isRootElement());
+		
+		assertTrue(root.cloneContent().size() == 0);
+		
+		final Text text = new Text("text");
+		final Comment comment1 = new Comment("comment1");
+		final Comment comment2 = new Comment("comment2");
+		final Element child = new Element("child");
+		
+		root.addContent(text);
+		assertTrue(root.getContentSize() == 1);
+		assertTrue(root.getText().equals(text.getText()));
+		assertTrue(root.cloneContent().size() == 1);
+		assertTrue(root.cloneContent().get(0) instanceof Text);
+		assertTrue(root.indexOf(text) == 0);
+		
+		assertTrue(text.getParent() == root);
+		assertTrue(root.removeContent().get(0) == text);
+		
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 0);
+		assertTrue(root.cloneContent().size() == 0);
+		
+		root.addContent(comment1);
+		root.addContent(comment2);
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 2);
+		root.setContent(1, text);
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == null);
+		assertTrue(text.getParent() == root);
+		assertTrue(root.getContentSize() == 2);
+		
+		root.setContent(comment2);
+		assertTrue(comment1.getParent() == null);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 1);
+		assertTrue(comment2 == root.removeContent(0));
+		
+		root.addContent(Collections.singleton(comment2));
+		assertTrue(comment1.getParent() == null);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 1);
+		
+		root.addContent(0, Collections.singleton(comment1));
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 2);
+		
+		root.addContent(2, Collections.singleton(text));
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == root);
+		assertTrue(root.getContentSize() == 3);
+		assertTrue(root.indexOf(comment1) == 0);
+		assertTrue(root.indexOf(comment2) == 1);
+		assertTrue(root.indexOf(text) == 2);
+		
+		root.setContent(2, Collections.singleton(text));
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == root);
+		assertTrue(root.getContentSize() == 3);
+		assertTrue(root.indexOf(comment1) == 0);
+		assertTrue(root.indexOf(comment2) == 1);
+		assertTrue(root.indexOf(text) == 2);
+		
+		root.setContent(2, Collections.emptySet());
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == null);
+		assertTrue(root.getContentSize() == 2);
+		assertTrue(root.indexOf(comment1) == 0);
+		assertTrue(root.indexOf(comment2) == 1);
+		assertTrue(root.indexOf(text) == -1);
+		
+		root.addContent(2, text);
+		assertTrue(comment1.getParent() == root);
+		assertTrue(comment2.getParent() == root);
+		assertTrue(text.getParent() == root);
+		assertTrue(root.getContentSize() == 3);
+		assertTrue(root.indexOf(comment1) == 0);
+		assertTrue(root.indexOf(comment2) == 1);
+		assertTrue(root.indexOf(text) == 2);
+		
+		root.addContent(child);
+		assertTrue(root.indexOf(child) == 3);
+		assertTrue(root.getContentSize() == 4);
+		assertTrue(child.getParent() == root);
+		assertTrue(child.getParentElement() == root);
+		assertTrue(root.getContent().size() == 4);
+		assertTrue(root.getContent(new ElementFilter()).size() == 1);
+		assertTrue(root.getContent(new ContentFilter(ContentFilter.COMMENT)).size() == 2);
+		assertFalse(root.removeChild("child", Namespace.XML_NAMESPACE));
+		assertTrue(root.removeChild("child", Namespace.NO_NAMESPACE));
+
+		assertTrue(root.getContentSize() == 3);
+		assertTrue(root.getContent(new ElementFilter()).isEmpty());
+		
+		assertTrue(root.removeContent(new ContentFilter(ContentFilter.COMMENT)).size() == 2);
+		
+		assertTrue(root.getContentSize() == 1);
+		assertTrue(root == root.addContent(child));
+		assertTrue(root.getContentSize() == 2);
+		assertFalse(root.removeChildren("nothing"));
+		assertFalse(root.removeChildren("child", Namespace.getNamespace("nothing")));
+		assertTrue(root.removeChildren("child"));
+		assertTrue(root.getContentSize() == 1);
+		
+	}
+	
+	@Test
+	public void testAttributes() {
+		Element emt = new Element("element");
+		Namespace myns = Namespace.getNamespace("pfxa", "attns");
+		Namespace mynsz = Namespace.getNamespace("pfxz", "attns");
+		assertTrue(emt.getAttributes().isEmpty());
+		assertTrue(emt.getAttribute("att") == null);
+		assertTrue(emt.getAttributeValue("att") == null);
+		assertTrue(emt.getAttributeValue("att", Namespace.NO_NAMESPACE) == null);
+		assertTrue(emt.getAttributeValue("att", myns) == null);
+		assertTrue("def".equals(emt.getAttributeValue("att", "def")));
+		assertTrue("def".equals(emt.getAttributeValue("att", myns, "def")));
+		assertTrue(emt.getAdditionalNamespaces().isEmpty());
+		
+		emt.setAttribute(new Attribute("att", "val"));
+		assertFalse(emt.getAttributes().isEmpty());
+		assertTrue(emt.getAttribute("att") != null);
+		assertTrue("val".equals(emt.getAttributeValue("att")));
+		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE)));
+		assertTrue(emt.getAttributeValue("att", myns) == null);
+		assertTrue("val".equals(emt.getAttributeValue("att", "def")));
+		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE, "def")));
+		assertTrue("def".equals(emt.getAttributeValue("att", myns, "def")));
+		assertTrue(emt.getAdditionalNamespaces().isEmpty());
+		
+		emt.setAttribute(new Attribute("att", "nsval", myns));
+		assertFalse(emt.getAttributes().isEmpty());
+		assertTrue(emt.getAttribute("att") != null);
+		assertTrue(emt.getAttribute("att", myns) != null);
+		assertTrue(emt.getAttribute("att") != emt.getAttribute("att", myns));
+		assertTrue("val".equals(emt.getAttributeValue("att")));
+		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE)));
+		assertTrue("nsval".equals(emt.getAttributeValue("att", myns)));
+		assertTrue("nsval".equals(emt.getAttributeValue("att", mynsz)));
+		assertTrue("val".equals(emt.getAttributeValue("att", "def")));
+		assertTrue("nsval".equals(emt.getAttributeValue("att", myns, "def")));
+		assertTrue("def".equals(emt.getAttributeValue("att", Namespace.XML_NAMESPACE, "def")));
+		// TODO should this be true?
+		assertTrue(emt.getAdditionalNamespaces().isEmpty());
+		
+		Attribute att = emt.getAttribute("att");
+		Attribute na = new Attribute("xx", "xval");
+		assertFalse(emt.removeAttribute(na));
+		assertTrue(emt.removeAttribute(att));
+		assertTrue(att.getParent() == null);
+		emt.setAttribute(att);
+		assertTrue(att.getParent() == emt);
+		assertTrue(emt.setAttribute("att", "nval") == emt);
+		assertTrue(att.getParent() == emt);
+		assertTrue("nval".equals(att.getValue()));
+		assertTrue("nval".equals(emt.getAttributeValue("att")));
+		assertTrue(emt.setAttribute(new Attribute("att", "zval")) == emt);
+		assertTrue(att.getParent() == null);
+		assertTrue("nval".equals(att.getValue()));
+		assertTrue("zval".equals(emt.getAttributeValue("att")));
+		assertTrue(emt.setAttribute(att) == emt);
+		assertTrue(att.getParent() == emt);
+		
+
+		att = emt.getAttribute("att", myns);
+		na = new Attribute("xx", "xval", myns);
+		assertFalse(emt.removeAttribute(na));
+		assertTrue(emt.removeAttribute(att));
+		assertTrue(emt.setAttribute("att", "aval", myns) == emt);
+		assertTrue("nsval".equals(att.getValue()));
+		assertTrue("aval".equals(emt.getAttributeValue("att", myns)));
+		assertTrue(att.getParent() == null);
+		emt.setAttribute(att);
+		assertTrue(att.getParent() == emt);
+		assertTrue(emt.setAttribute("att", "nval", myns) == emt);
+		assertTrue(att.getParent() == emt);
+		assertTrue("nval".equals(att.getValue()));
+		assertTrue("nval".equals(emt.getAttributeValue("att", myns)));
+		assertTrue(emt.setAttribute(new Attribute("att", "zval", myns)) == emt);
+		assertTrue(att.getParent() == null);
+		assertTrue("nval".equals(att.getValue()));
+		assertTrue("zval".equals(emt.getAttributeValue("att", myns)));
+		assertTrue(emt.setAttribute(att) == emt);
+		assertTrue(att.getParent() == emt);
+		assertTrue("nval".equals(emt.getAttributeValue("att", myns)));
+	
 	}
 	
 

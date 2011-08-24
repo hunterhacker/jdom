@@ -805,6 +805,8 @@ public final class TestDocument {
 			fail("Should not be able to get content when there's no root element");
 		} catch (IllegalStateException ise) {
 			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalStateException , not " + e.getClass().getName());
 		}
 		
 		try {
@@ -812,9 +814,105 @@ public final class TestDocument {
 			fail("Should not be able to get content when there's no root element");
 		} catch (IllegalStateException ise) {
 			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalStateException , not " + e.getClass().getName());
 		}
 		
 		assertTrue(doc.removeContent(new ContentFilter(ContentFilter.COMMENT)).size() == 2);
+		
+		// at this point, all the Document has is a doctype
+		assertTrue(doc.getContentSize() == 1);
+		assertTrue(doc.getDocType() == doctype);
+		
+		// time for more broken content.
+		try {
+			doc.addContent(0, root);
+			fail("Should not be able to put root element before the doctype");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		doc.addContent(1, root);
+		doc.setDocType(null);
+		try {
+			doc.addContent(1, doctype);
+			fail("Should not be able to put doctype after the root");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		doc.setDocType(doctype);
+		
+		try {
+			doc.addContent(doc.indexOf(doctype) + 1, new DocType("anotherdup"));
+			fail("Should not be able to add second doctype");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		doc.addContent(1, comment1);
+		
+		try {
+			doc.setContent(1, new DocType("anotherdup"));
+			fail("Should not be able to set second doctype");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		try {
+			doc.setContent(1, new Element("anotherdup"));
+			fail("Should not be able to set second root element");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		// but you should be able to replace the root element
+		assertTrue(doc == doc.setContent(doc.indexOf(root), new Element("root2")));
+		// and you should be able to replace the doctype
+		assertTrue(doc == doc.setContent(doc.indexOf(doctype), new DocType("doctype2")));
+		// and you should be able to set the root element if there's no other root element.
+		assertTrue(doc.removeContent(doc.getRootElement()));
+		assertTrue(doc == doc.setContent(doc.indexOf(comment1), root));
+		
+		
+		try {
+			doc.addContent(new EntityRef("myref"));
+			fail("Should not be able to add EntityRef");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		try {
+			doc.addContent(new CDATA("mycdata"));
+			fail("Should not be able to add CDATA");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		try {
+			doc.addContent(new Text("text"));
+			fail("Should not be able to add Text");
+		} catch (IllegalAddException ise) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected IllegalAddException , not " + e.getClass().getName());
+		}
+		
+		
 		
 	}
 	

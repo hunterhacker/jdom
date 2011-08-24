@@ -884,11 +884,12 @@ public abstract class AbstractTestList<T> {
 	}
 	
 	@Test
-	public void testIllegalIndexAdd() {
+	public void testIllegalIndex() {
 		T[] data = buildSampleContent();
 		try {
 			List<T> list = buildEmptyList();
 			list.add(-10, data[0]);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -898,6 +899,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.add(1, data[0]);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -907,6 +909,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.addAll(-10, Arrays.asList(data));
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -916,6 +919,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.addAll(1, Arrays.asList(data));
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -925,6 +929,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.set(-1, data[0]);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -934,6 +939,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.set(1, data[0]);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -943,6 +949,7 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.get(-1);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {
@@ -952,6 +959,28 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.get(1);
+			fail("List should throw IndexOutOfBounds");
+		} catch (IndexOutOfBoundsException ioobe) {
+			// This is what we expect for lists are accessed beyond their bounds.
+		} catch (Exception e) {
+			fail ("Lists should throw IndexOutOfBoundsException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+
+		try {
+			List<T> list = buildEmptyList();
+			list.remove(-10);
+			fail("List should throw IndexOutOfBounds");
+		} catch (IndexOutOfBoundsException ioobe) {
+			// This is what we expect for lists are accessed beyond their bounds.
+		} catch (Exception e) {
+			fail ("Lists should throw IndexOutOfBoundsException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+		try {
+			List<T> list = buildEmptyList();
+			list.remove(1);
+			fail("List should throw IndexOutOfBounds");
 		} catch (IndexOutOfBoundsException ioobe) {
 			// This is what we expect for lists are accessed beyond their bounds.
 		} catch (Exception e) {

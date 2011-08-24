@@ -139,7 +139,7 @@ final class ContentList extends AbstractList implements java.io.Serializable {
                 throw new IllegalAddException(
                         "Cannot add a second root element, only one is allowed");
             }
-            if (indexOfDocType() > index) {
+            if (indexOfDocType() >= index) {
                 throw new IllegalAddException(
                         "A root element cannot be added before the DocType");
             }

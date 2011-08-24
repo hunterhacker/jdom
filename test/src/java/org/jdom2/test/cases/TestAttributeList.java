@@ -5,9 +5,14 @@ import java.util.List;
 import org.jdom2.Attribute;
 import org.jdom2.Comment;
 import org.jdom2.Element;
+import org.jdom2.IllegalAddException;
+import org.jdom2.Namespace;
 import org.jdom2.Text;
 import org.jdom2.test.util.AbstractTestList;
 import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class TestAttributeList extends AbstractTestList<Attribute> {
 	
@@ -53,6 +58,90 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		for (Attribute c : buildSampleContent()) {
 			c.detach();
 		}
+	}
+	
+	@Test
+	public void testDuplicateAttribute() {
+		Element emt = new Element("mine");
+		@SuppressWarnings("unchecked")
+		List<Attribute> attlist = (List<Attribute>)emt.getAttributes();
+		Attribute att = new Attribute("hi", "there");
+		Attribute frodo = new Attribute("hi", "frodo");
+		Attribute bilbo = new Attribute("boo", "bilbo");
+		attlist.add(att);
+		try {
+			Element e2 = new Element("gandalph");
+			e2.setAttribute(frodo);
+			attlist.add(frodo);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - attribute already has parent.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+		frodo.detach();
+		
+		// adding one 'hi' attribute should displace the other.
+		assertTrue(att.getParent() == emt);
+		assertTrue(attlist.add(frodo));
+		assertTrue(att.getParent() == null);
+		assertTrue(attlist.add(att));
+		assertTrue(att.getParent() == emt);
+		
+		try {
+			attlist.add(attlist.size(), frodo);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - can not have two 'hi' attributes.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+		try {
+			attlist.add(attlist.size(), frodo);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - can not have two 'hi' attributes.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+		try {
+			attlist.add(attlist.size(), bilbo);
+			attlist.set(1, frodo);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - can not have two 'hi' attributes.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+	}
+	
+	@Test
+	public void testAttributeNamspaceCollision() {
+		Element emt = new Element("mine");
+		@SuppressWarnings("unchecked")
+		List<Attribute> attlist = (List<Attribute>)emt.getAttributes();
+		Attribute atta = new Attribute("hi", "there", Namespace.getNamespace("mypfx", "nsa"));
+		Attribute attb = new Attribute("hi", "there", Namespace.getNamespace("mypfx", "nsb"));
+		attlist.add(atta);
+		try {
+			attlist.add(attb);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - attribute already has parent.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+		Attribute attc = new Attribute("bilbo", "baggins", Namespace.getNamespace("mypfc", "nsc"));
+		attlist.add(attc);
+		try {
+			attlist.set(1, attb);
+			fail ("expect exception");
+		} catch (IllegalAddException iae) {
+			// good - attribute already has parent.
+		} catch (Exception e) {
+			fail ("Wrong exception");
+		}
+		
 	}
 	
 }
