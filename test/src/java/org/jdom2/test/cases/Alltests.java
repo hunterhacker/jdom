@@ -105,6 +105,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestDocType.class));
 		suite.addTest(new JUnit4TestAdapter(TestElement.class));
 		suite.addTest(new JUnit4TestAdapter(TestDocument.class));
+		suite.addTest(new JUnit4TestAdapter(TestEntityRef.class));
 		suite.addTest(new JUnit4TestAdapter(TestFilterList.class));
 		suite.addTest(new JUnit4TestAdapter(TestSerialization.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
