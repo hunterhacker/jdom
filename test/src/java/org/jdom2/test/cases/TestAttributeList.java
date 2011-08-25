@@ -87,6 +87,13 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		assertTrue(att.getParent() == null);
 		assertTrue(attlist.add(att));
 		assertTrue(att.getParent() == emt);
+		assertTrue(att == att.detach());
+		
+		// list is now empty.
+		assertTrue(attlist.isEmpty());
+		assertTrue(attlist.add(frodo));
+		assertTrue(attlist.add(bilbo));
+		assertTrue(frodo == attlist.set(0, att));
 		
 		try {
 			attlist.add(attlist.size(), frodo);
@@ -97,15 +104,6 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 			fail ("Wrong exception");
 		}
 		try {
-			attlist.add(attlist.size(), frodo);
-			fail ("expect exception");
-		} catch (IllegalAddException iae) {
-			// good - can not have two 'hi' attributes.
-		} catch (Exception e) {
-			fail ("Wrong exception");
-		}
-		try {
-			attlist.add(attlist.size(), bilbo);
 			attlist.set(1, frodo);
 			fail ("expect exception");
 		} catch (IllegalAddException iae) {
