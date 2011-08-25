@@ -85,6 +85,17 @@ public final class TestElement {
     }
 
     /**
+     * Test the constructor for a subclass element
+     */
+    @Test
+    public void test_TCC() {
+    	Element emt = new Element() {
+    		
+    	};
+    	assertNull(emt.getName());
+    }
+
+    /**
      * Test the constructor for an empty element
      */
     @Test
