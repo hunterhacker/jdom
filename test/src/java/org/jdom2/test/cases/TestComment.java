@@ -77,6 +77,14 @@ public final class TestComment {
 		JUnitCore.runClasses(TestComment.class);
 	}
 
+	@Test
+	public void test_TCC() {
+		// test creating a subclass with an anonymous instance
+		final Comment theComment = new Comment() {
+			
+		};
+		assertTrue(null == theComment.getText());
+	}
 	/**
 	 * Test the comment constructor with a valid and an invalid string.
 	 */
