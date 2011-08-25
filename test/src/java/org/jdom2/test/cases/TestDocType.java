@@ -79,6 +79,18 @@ public final class TestDocType {
 	 * Test a simple DocType with a name.
 	 */
     @Test
+	public void test_TCC() {
+		DocType theDocType = new DocType() {
+			
+		};
+
+		assertNull("incorrect element name", theDocType.getElementName());
+	}
+	
+	/**
+	 * Test a simple DocType with a name.
+	 */
+    @Test
 	public void test_TCC___String() {
 		DocType theDocType = new DocType("anElement");
 
