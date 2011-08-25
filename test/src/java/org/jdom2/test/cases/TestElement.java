@@ -2101,6 +2101,41 @@ public final class TestElement {
 		assertTrue(root.removeChildren("child"));
 		assertTrue(root.getContentSize() == 1);
 		
+		// some negative cases not yet covered....
+		try {
+			Element n = null;
+			root.addContent(0, n);
+			fail("Should not be able to add null Element content.");
+		} catch (NullPointerException npe) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NullPointerException, but got " + e.getClass().getName());
+		}
+		
+		try {
+			// try to add ourself.
+			child.addContent(0, child);
+			fail("Should not be able to add ourself as Element content.");
+		} catch (IllegalAddException npe) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NullPointerException, but got " + e.getClass().getName());
+		}
+		
+		root.detach();
+		root.addContent(child);
+		
+		try {
+			// try to add ourself.
+			child.addContent(0, root);
+			fail("Should not be able to add circular Element content.");
+		} catch (IllegalAddException npe) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NullPointerException, but got " + e.getClass().getName());
+		}
+		
+		
 	}
 	
 	@Test
