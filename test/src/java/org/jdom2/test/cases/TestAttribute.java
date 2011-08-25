@@ -237,6 +237,24 @@ public final class TestAttribute {
             attribute.setValue("FALSE");
 			assertTrue("incorrect boolean FALSE value", !attribute.getBooleanValue());
 
+            attribute.setValue("On");
+			assertTrue("incorrect boolean TRUE value", attribute.getBooleanValue());
+
+            attribute.setValue("Yes");
+			assertTrue("incorrect boolean TRUE value", attribute.getBooleanValue());
+
+            attribute.setValue("1");
+			assertTrue("incorrect boolean TRUE value", attribute.getBooleanValue());
+
+            attribute.setValue("OfF");
+			assertTrue("incorrect boolean FALSE value", !attribute.getBooleanValue());
+
+            attribute.setValue("0");
+			assertTrue("incorrect boolean FALSE value", !attribute.getBooleanValue());
+
+            attribute.setValue("No");
+			assertTrue("incorrect boolean FALSE value", !attribute.getBooleanValue());
+
 		} catch (DataConversionException e) {
 			fail("couldn't convert boolean value");
 		}
@@ -246,6 +264,9 @@ public final class TestAttribute {
 			assertTrue("incorrectly returned boolean from non boolean value", attribute.getBooleanValue());
 
 		} catch (DataConversionException e) {
+			// good
+		} catch (Exception e) {
+			fail("Expected DataConversionException, but got " + e.getClass().getName());
 		}
 
 
