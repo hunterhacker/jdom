@@ -60,224 +60,29 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import org.jdom2.*;
-import java.io.*;
-import java.util.*;
-import org.jdom2.input.*;
-import org.junit.Before;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.Verifier;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import static org.junit.Assert.*;
 
 public final class TestVerifier {
-
-	/**
-	 * the all characters class that must be accepted by processor
-	 */
-	private org.jdom2.Element allCharacters;
-	/**
-	 * XML Base Characters
-	 */
-	private org.jdom2.Element characters;
-	/**
-	 * XML CombiningCharacters
-	 */
-	private org.jdom2.Element combiningChars;
-	/**
-	 * XML Digits
-	 */
-	private org.jdom2.Element digits;
-	/**
-	 * XML Extender characters
-	 */
-	private org.jdom2.Element extenders;
-	/**
-	 * XML IdeoCharacters
-	 */
-	private Element ideochars;
-	/**
-	 * XML Letter characters
-	 */
-	private org.jdom2.Element letters;
-	/**
-	 * Resource Bundle for various testing resources
-	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom2.test.Test");
-	/**
-	 * resourceRoot is the directory relative to running root where
-	 * resources are found
-	 */
-
-	private String resourceRoot;
-
-	/**
-	 * AntiRangeIterator is the opposite of RangeIterator
-	 * it iterates up to and between all the valid values
-	 * for the JDOM Element passed in the constructor and
-	 * returns invalid xml char values for the specified
-	 * type
-	 */
-	class AntiRangeIterator {
-		int start= 0;
-		int code= 0;
-		RangeIterator it;
-
-		public AntiRangeIterator(Element el) {
-			super();
-			it= new RangeIterator(el);
-			code= (int) ((Character) it.next()).charValue();
-		}
-
-		/**
-		 * return the next invalid char
-		 */
-		public char next() {
-
-			//have we caught up to the current valid code?
-			if (code - start > 1) {
-				++start;
-				return (char) start;
-			}
-			//must have been a sequential number so loop until we get
-			//past this range
-			while (code - start == 1 && it.hasNext()) {
-
-				start= code;
-
-				code= (int) ((Character) it.next()).charValue();
-			}
-			if (it.hasNext()) {
-				return (char) ++start;
-			} else {
-				//all done! return a value above the highest in the range
-				return (char) (code + 2);
-			}
-
-		}
-
-		/**
-		 * is there another invalid char
-		 */
-		public boolean hasNext() {
-			//first pass
-
-			if (it.hasNext())
-				return true;
-			//all the ranges have been read so now we just iterate
-			//to the last invalid char
-			return (code > start && start != code - 1);
-		}
-		/**
-		 * iterator candy - unimplemented
-		 */
-		public void remove() {
-		}
-	}
-
-	/**
-	 * RangeIterator iterates over the ranges of valid
-	 * xml characters based on the type passed in as
-	 * a JDOM Element.  The xml was originally part of the xml
-	 * spec..
-	 */
-	class RangeIterator implements Iterator {
-
-		StringTokenizer ranges;
-
-		/**
-		 * the code for the current char
-		 */
-		int current= 0;
-
-		/**
-		 * the code for the starting char in the current range
-		 */
-		int start= 0;
-
-		/**
-		 * the code for the last char in the current range
-		 */
-		int end= 0;
-
-		public RangeIterator(Element el) {
-			String content= el.getText();
-
-			ranges= new StringTokenizer(content, "|");
-
-		}
-		/**
-		 * is the next valid char available
-		 */
-		public boolean hasNext() {
-
-			if (current +1 >= 0x10000) {
-				//java can't handle 32 bit unicode chars
-				return false;
-			} else if (ranges.hasMoreElements()) {
-				return true;
-			} else if (end - current > 1) {
-				return true;
-			} else {
-				return false;
-			}
-
-		}
-
-		/**
-		 * return the next valid char
-		 */
-		public Object next() {
-			if (current == end) {
-				//get the next token and load a new range
-				String range= ranges.nextToken();
-				if (range == null) {
-					return null;
-                                }
-
-				//now parse the ranges into hex strings
-				if (range.indexOf('[') >= 0) {
-					String startText=
-						"0x" + range.substring(range.indexOf('[') + 3, range.indexOf('-'));
-					String endText=
-						"0x" + range.substring(range.indexOf('-') + 3, range.indexOf(']'));
-					//was there a range?
-					if (endText.equals("0x")) {
-						start= Integer.decode(startText).intValue();
-						end= start;
-						current= start;
-					} else {
-						start= Integer.decode(startText).intValue();
-						end= Integer.decode(endText).intValue();
-						current= start;
-
-					}
-
-					return new Character((char) start);
-				} else {
-					//character is not in a range
-					String startText= range.trim();
-					startText= startText.replace('#', '0');
-					start= Integer.decode(startText).intValue();
-					end= start;
-					current= start;
-					return new Character((char) current);
-
-				}
-
-			} else {
-				// just increment withing the range
-				current++;
-				return new Character((char) current);
-			}
-		}
-
-		/**
-		 * iterator candy - unimplemented
-		 */
-		public void remove() {
-		}
-
-	}
+	
+	private final char BADCHAR = (char)0x0b;
 
     /**
      * The main method runs all the tests in the text ui
@@ -288,226 +93,37 @@ public final class TestVerifier {
     }
     
 	/**
-	 * This method is called before a test is executed.
+	 * Test checkElementName such that a name is validated as an
+	 * xml name with the following caveats.
+	 * The name must not start with "-" or ":".
 	 */
-    @Before
-	public void setUp() throws IOException, JDOMException {
-		
-		// get the ranges of valid characters from the xmlchars.xml resource
-		resourceRoot = rb.getString("test.resourceRoot");
-		Document allChars;
-		SAXBuilder builder = new SAXBuilder();
-		InputStream in = new FileInputStream(resourceRoot + "/xmlchars.xml");
-		
-		allChars = builder.build(in);
+    @Test
+	public void testCheckElementName() {
+		//check out of range values
+		assertNotNull("validated invalid null", Verifier.checkElementName(null));
+		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0));
+		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0 + "ing"));
+		assertNotNull("validated invalid name with null", Verifier.checkElementName((char)0x0 + "test"));
+		assertNotNull("validated invalid name with 0x01", Verifier.checkElementName((char)0x01 + "test"));
+		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800));
+		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800 + "ing"));
+		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName((char)0xD800 + "test"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName("test" + ':' + "local"));
 
-		List els = allChars.getRootElement().getChild("prodgroup").getChildren("prod");
+		//invalid start characters
+		assertNotNull("validated invalid name with startin -", Verifier.checkElementName('-' + "test"));
+		assertNotNull("validated invalid name with startin :", Verifier.checkElementName(':' + "test"));
 
-		Iterator it = els.iterator();
-		while (it.hasNext()) {
-			Element prod = (Element)it.next();
-			if (prod.getAttribute("id").getValue().equals("NT-Char")) {
-				//characters that must be accepted by processor
-				allCharacters =  prod.getChild("rhs");
-			} else if (prod.getAttribute("id").getValue().equals("NT-BaseChar")) {
-				//build base characters
-				characters = prod.getChild("rhs");
-			} else if (prod.getAttribute("id").getValue().equals("NT-Ideographic")) {
-				//build Ideographic characters
-				ideochars = prod.getChild("rhs");
-			} else if (prod.getAttribute("id").getValue().equals("NT-CombiningChar")) {
-				//build CombiningChar
-				combiningChars = prod.getChild("rhs");
-			} else if (prod.getAttribute("id").getValue().equals("NT-Digit")) {
-				//build Digits
-				digits = prod.getChild("rhs");
-			} else if (prod.getAttribute("id").getValue().equals("NT-Extender")) {
-				//build Extenders
-				extenders = prod.getChild("rhs");
-			}
-	
+		//valid tests
+		assertNull("invalidated valid name with starting _", Verifier.checkElementName('_' + "test"));
+		assertNull("invalidated valid name with _", Verifier.checkElementName("test" + '_'));
+		assertNull("invalidated valid name with .", Verifier.checkElementName("test" + '.' + "name"));
+		assertNull("invalidated valid name with 0x00B7", Verifier.checkElementName("test" + (char)0x00B7));
+		assertNull("invalidated valid name with 0x4E01", Verifier.checkElementName("test" + (char)0x4E01));
+		assertNull("invalidated valid name with 0x0301", Verifier.checkElementName("test" + (char)0x0301));
 
-		}
 	}
-
-//	/**
-//	 * Test the screen for invalid xml characters, IE, non Unicode characters
-//	 */
-//	public void test_TCM__boolean_isXMLCharacter_char() {
-//		RangeIterator it = new RangeIterator(allCharacters);
-//		char c;
-//		while (it.hasNext()) {
-//			c = ((Character) it.next()).charValue();
-//			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
-//				continue;
-//			assertTrue("failed on valid xml character: 0x" + Integer.toHexString(c), Verifier.isXMLCharacter(c));
-//		}
-//		AntiRangeIterator ait = new AntiRangeIterator(allCharacters);
-//		while (ait.hasNext()) {
-//			c =ait.next();
-//			if (Character.getNumericValue(c) < 0) //xml characters can be 32 bit so c may = -1
-//				continue;
-//			assertTrue("didn't catch invalid XML Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLCharacter(c));
-//		}
-//	}
-//	/**
-//	 * Test code goes here. Replace this comment.
-//	 */
-//	public void test_TCM__boolean_isXMLCombiningChar_char() {
-//		RangeIterator it = new RangeIterator(combiningChars);
-//
-//		while (it.hasNext()) {
-//			char c = ((Character) it.next()).charValue();
-//			assertTrue("failed on valid xml combining character", Verifier.isXMLCombiningChar(c));
-//		}
-//
-//		AntiRangeIterator ait = new AntiRangeIterator(combiningChars);
-//		while (ait.hasNext()) {
-//			char c =ait.next();
-//			assertTrue("didn't catch invalid XMLCombiningChar: 0x" + Integer.toHexString(c), ! Verifier.isXMLCombiningChar(c));
-//		}
-//	}
-//	/**
-//	 * Test that the Verifier accepts all valid and rejects
-//	 * all invalid XML digits
-//	 */
-//	public void test_TCM__boolean_isXMLDigit_char() {
-//		RangeIterator it = new RangeIterator(digits);
-//
-//		while (it.hasNext()) {
-//			char c = ((Character) it.next()).charValue();
-//			assertTrue("failed on valid xml digit", Verifier.isXMLDigit(c));
-//		}
-//
-//		AntiRangeIterator ait = new AntiRangeIterator(digits);
-//		while (ait.hasNext()) {
-//			char c =ait.next();
-//			assertTrue("didn't catch invalid XMLDigit: 0x" + Integer.toHexString(c), ! Verifier.isXMLDigit(c));
-//		}
-//	}
-//	/**
-//	 * Test code goes here. Replace this comment.
-//	 */
-//	public void test_TCM__boolean_isXMLExtender_char() {
-//		RangeIterator it = new RangeIterator(extenders);
-//
-//		while (it.hasNext()) {
-//			char c = ((Character) it.next()).charValue();
-//			assertTrue("failed on valid xml extender", Verifier.isXMLExtender(c));
-//		}
-//
-//		it = new RangeIterator(extenders);
-//		int start = 0;
-//		int code = 0;
-//		while (it.hasNext()) {
-//			start = code;
-//			code = (int)((Character) it.next()).charValue();
-//
-//			while (code > start && start != code - 1) {
-//				start ++;
-//				assertTrue("didnt' catch bad xml extender: 0x" + Integer.toHexString(start), ! Verifier.isXMLExtender((char) start));
-//
-//			}
-//		}
-//
-//	}
-//	/**
-//	 * Test that a character is a valid xml letter.
-//	 */
-//	public void test_TCM__boolean_isXMLLetter_char() {
-//		RangeIterator it = new RangeIterator(characters);
-//
-//		while (it.hasNext()) {
-//			char c = ((Character) it.next()).charValue();
-//			assertTrue("failed on valid xml character", Verifier.isXMLCharacter(c));
-//		}
-//		AntiRangeIterator ait = new AntiRangeIterator(characters);
-//		while (ait.hasNext()) {
-//			char c =ait.next();
-//			if (c == '\u3007'
-//				|| (c >= '\u3021' && c <= '\u3029')
-//				|| (c >= '\u4E00' && c <= '\u9FA5'))
-//				continue; // ideographic characters accepted
-//
-//			assertTrue("didn't catch invalid XML Base Characters: 0x" + Integer.toHexString(c), ! Verifier.isXMLLetter(c));
-//		}
-//	}
-//	/**
-//	 * Test that a char is either a letter or digit according to
-//	 * xml specs
-//	 */
-//	public void test_TCM__boolean_isXMLLetterOrDigit_char() {
-//		//this test can be simple because the underlying code
-//		//for letters and digits has already been tested.
-//
-//		//valid
-//		assertTrue("didn't accept valid letter: 0x0041", Verifier.isXMLLetterOrDigit('\u0041'));
-//		assertTrue("didn't accept valid digit: 0x0030", Verifier.isXMLLetterOrDigit('\u0030'));
-//		assertTrue("accepted invalid letter: 0x0040", Verifier.isXMLLetterOrDigit('\u0041'));
-//		assertTrue("accepted invalid digit: 0x0029", Verifier.isXMLLetterOrDigit('\u0030'));
-//
-//
-//	}
-//	/**
-//	 * Test the test for valid xml name characters.  This test only checks
-//	 * that the method dispatches correctly to other checks which have already
-//	 * been tested for completeness except where specific name characters are
-//	 * allowed such as '-'. '_', ':' and '.'.  The other valid name characters are
-//	 * xml letters, digits, extenders and combining characters.
-//	 */
-//	public void test_TCM__boolean_isXMLNameCharacter_char() {
-//
-//		//check in the low ascii range
-//		assertTrue("validated invalid char 0x20", Verifier.isXMLNameCharacter(' '));
-//		assertTrue("validated invalid char \t", Verifier.isXMLNameCharacter('\t'));
-//		assertTrue("validated invalid char null", Verifier.isXMLNameCharacter((char)0x0));
-//		assertTrue("validated invalid char \n", Verifier.isXMLNameCharacter('\n'));
-//		assertTrue("validated invalid char 0x29", Verifier.isXMLNameCharacter((char)0x29));
-//		//a few higher values
-//		assertTrue("validated invalid char 0x00B8", Verifier.isXMLNameCharacter((char)0x00B8));
-//		assertTrue("validated invalid char 0x02FF", Verifier.isXMLNameCharacter((char)0x02FF));
-//		assertTrue("validated invalid char 0x04DFF", Verifier.isXMLNameCharacter((char)0x4DFF));
-//
-//		//exceptional characters for names
-//		assertTrue("invalidated valid char :", Verifier.isXMLNameCharacter(':'));
-//		assertTrue("invalidated valid char -", Verifier.isXMLNameCharacter('-'));
-//		assertTrue("invalidated valid char _", Verifier.isXMLNameCharacter('_'));
-//		assertTrue("invalidated valid char .", Verifier.isXMLNameCharacter('.'));
-//		//xml letter
-//		assertTrue("invalidated valid char 0x42", Verifier.isXMLNameCharacter((char)0x42));
-//		assertTrue("invalidated valid char 0x4E01", Verifier.isXMLNameCharacter((char)0x4E01));
-//		//xml digit
-//		assertTrue("invalidated valid char 0x0031", Verifier.isXMLNameCharacter((char)0x0031));
-//		//xml combining character
-//		assertTrue("invalidated valid char 0x0301", Verifier.isXMLNameCharacter((char)0x0301));
-//		//xml extender
-//		assertTrue("invalidated valid char 0x00B7", Verifier.isXMLNameCharacter((char)0x00B7));
-//	}
-//	/**
-//	 * Test that this character is a valid name start character.
-//	 * Valid name start characters are xml letters, ':' and '_'
-//	 */
-//	public void test_TCM__boolean_isXMLNameStartCharacter_char() {
-//		//check in the low ascii range
-//		assertTrue("validated invalid char 0x20", Verifier.isXMLNameCharacter(' '));
-//		assertTrue("validated invalid char \t", Verifier.isXMLNameCharacter('\t'));
-//		assertTrue("validated invalid char null", Verifier.isXMLNameCharacter((char)0x0));
-//		assertTrue("validated invalid char \n", Verifier.isXMLNameCharacter('\n'));
-//		assertTrue("validated invalid char 0x29", Verifier.isXMLNameCharacter((char)0x29));
-//		//a few higher values
-//		assertTrue("validated invalid char 0x00B8", Verifier.isXMLNameCharacter((char)0x00B8));
-//		assertTrue("validated invalid char 0x02FF", Verifier.isXMLNameCharacter((char)0x02FF));
-//		assertTrue("validated invalid char 0x04DFF", Verifier.isXMLNameCharacter((char)0x4DFF));
-//
-//		//exceptional characters for names
-//		assertTrue("invalidated valid char :", Verifier.isXMLNameCharacter(':'));
-//		assertTrue("invalidated valid char _", Verifier.isXMLNameCharacter('_'));
-//		//xml letter
-//		assertTrue("invalidated valid char 0x42", Verifier.isXMLNameCharacter((char)0x42));
-//		assertTrue("invalidated valid char 0x4E01", Verifier.isXMLNameCharacter((char)0x4E01));
-//
-//	}
-
+    
 	/**
 	 * Test for a valid Attribute name.  A valid Attribute name is
 	 * an xml name (xml start character + xml name characters) with
@@ -516,7 +132,7 @@ public final class TestVerifier {
 	 * Namespace objects.  The name must not be "xmlns"
 	 */
     @Test
-	public void test_TCM__String_checkAttributeName_String() {
+	public void testCheckAttributeName() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkAttributeName(null));
 		assertNotNull("validated invalid name with null", Verifier.checkAttributeName("test" + (char)0x0));
@@ -546,11 +162,40 @@ public final class TestVerifier {
 	}
     
 	/**
+	 * Test that a String contains only xml characters.  The method under
+	 * only checks for null values and then character by character scans
+	 * the string so this test is not exhaustive
+	 */
+    @Test
+	public void testCheckCharacterData() {
+		//check out of range values
+		assertNotNull("validated invalid null", Verifier.checkCharacterData(null));
+		assertNotNull("validated invalid string with null", Verifier.checkCharacterData("test" + (char)0x0));
+		assertNotNull("validated invalid string with null", Verifier.checkCharacterData("test" + (char)0x0 + "ing"));
+		assertNotNull("validated invalid string with null", Verifier.checkCharacterData((char)0x0 + "test"));
+		assertNotNull("validated invalid string with 0x01", Verifier.checkCharacterData((char)0x01 + "test"));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData("test" + (char)0xD800));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData("test" + (char)0xD800 + "ing"));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData((char)0xD800 + "test"));
+
+		//various valid strings
+		assertNull("invalidated valid string with \n", Verifier.checkCharacterData("test" + '\n' + "ing"));
+		assertNull("invalidated valid string with 0x29", Verifier.checkCharacterData("test" +(char)0x29));
+		//a few higher values
+		assertNull("invalidated valid string with 0x0B08", Verifier.checkCharacterData("test" + (char)0x0B08));
+		assertNull("invalidated valid string with \t", Verifier.checkCharacterData("test" + '\t'));
+		//xml letter
+		assertNull("invalidated valid string with 0x42", Verifier.checkCharacterData("test" + (char)0x42));
+		assertNull("invalidated valid string with 0x4E01", Verifier.checkCharacterData("test" + (char)0x4E01));
+
+	}
+    
+	/**
 	 * Test that checkCDATASection verifies CDATA excluding
 	 * the closing delimiter.
 	 */
     @Test
-	public void test_TCM__String_checkCDATASection_String() {
+	public void testCheckCDATASection() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkCDATASection(null));
 		assertNotNull("validated invalid string with null", Verifier.checkCDATASection("test" + (char)0x0));
@@ -577,104 +222,13 @@ public final class TestVerifier {
 	}
     
 	/**
-	 * Test that a String contains only xml characters.  The method under
-	 * only checks for null values and then character by character scans
-	 * the string so this test is not exhaustive
-	 */
-    @Test
-	public void test_TCM__String_checkCharacterData_String() {
-		//check out of range values
-		assertNotNull("validated invalid null", Verifier.checkCharacterData(null));
-		assertNotNull("validated invalid string with null", Verifier.checkCharacterData("test" + (char)0x0));
-		assertNotNull("validated invalid string with null", Verifier.checkCharacterData("test" + (char)0x0 + "ing"));
-		assertNotNull("validated invalid string with null", Verifier.checkCharacterData((char)0x0 + "test"));
-		assertNotNull("validated invalid string with 0x01", Verifier.checkCharacterData((char)0x01 + "test"));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData("test" + (char)0xD800));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData("test" + (char)0xD800 + "ing"));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCharacterData((char)0xD800 + "test"));
-
-		//various valid strings
-		assertNull("invalidated valid string with \n", Verifier.checkCharacterData("test" + '\n' + "ing"));
-		assertNull("invalidated valid string with 0x29", Verifier.checkCharacterData("test" +(char)0x29));
-		//a few higher values
-		assertNull("invalidated valid string with 0x0B08", Verifier.checkCharacterData("test" + (char)0x0B08));
-		assertNull("invalidated valid string with \t", Verifier.checkCharacterData("test" + '\t'));
-		//xml letter
-		assertNull("invalidated valid string with 0x42", Verifier.checkCharacterData("test" + (char)0x42));
-		assertNull("invalidated valid string with 0x4E01", Verifier.checkCharacterData("test" + (char)0x4E01));
-
-	}
-    
-	/**
-	 * Test checkCommentData such that a comment is validated as an
-	 * xml comment consisting of xml characters with the following caveats.
-	 * The comment must not contain a double hyphen.
-	 */
-    @Test
-	public void test_TCM__String_checkCommentData_String() {
-		//check out of range values
-		assertNotNull("validated invalid null", Verifier.checkCommentData(null));
-		assertNotNull("validated invalid string with null", Verifier.checkCommentData("test" + (char)0x0));
-		assertNotNull("validated invalid string with null", Verifier.checkCommentData("test" + (char)0x0 + "ing"));
-		assertNotNull("validated invalid string with null", Verifier.checkCommentData((char)0x0 + "test"));
-		assertNotNull("validated invalid string with 0x01", Verifier.checkCommentData((char)0x01 + "test"));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData("test" + (char)0xD800));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData("test" + (char)0xD800 + "ing"));
-		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData((char)0xD800 + "test"));
-		assertNotNull("validated invalid string with --", Verifier.checkCommentData("--test"));
-
-		//various valid strings
-		assertNull("invalidated valid string with \n", Verifier.checkCommentData("test" + '\n' + "ing"));
-		assertNull("invalidated valid string with 0x29", Verifier.checkCommentData("test" +(char)0x29));
-		//a few higher values
-		assertNull("invalidated valid string with 0x0B08", Verifier.checkCommentData("test" + (char)0x0B08));
-		assertNull("invalidated valid string with \t", Verifier.checkCommentData("test" + '\t'));
-		//xml letter
-		assertNull("invalidated valid string with 0x42", Verifier.checkCommentData("test" + (char)0x42));
-		assertNull("invalidated valid string with 0x4E01", Verifier.checkCommentData("test" + (char)0x4E01));
-
-	}
-    
-	/**
-	 * Test checkElementName such that a name is validated as an
-	 * xml name with the following caveats.
-	 * The name must not start with "-" or ":".
-	 */
-    @Test
-	public void test_TCM__String_checkElementName_String() {
-		//check out of range values
-		assertNotNull("validated invalid null", Verifier.checkElementName(null));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0 + "ing"));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName((char)0x0 + "test"));
-		assertNotNull("validated invalid name with 0x01", Verifier.checkElementName((char)0x01 + "test"));
-		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800));
-		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800 + "ing"));
-		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName((char)0xD800 + "test"));
-		assertNotNull("validated invalid name with :", Verifier.checkElementName("test" + ':' + "local"));
-
-		//invalid start characters
-		assertNotNull("validated invalid name with startin -", Verifier.checkElementName('-' + "test"));
-		assertNotNull("validated invalid name with startin :", Verifier.checkElementName(':' + "test"));
-
-		//valid tests
-		assertNull("invalidated valid name with starting _", Verifier.checkElementName('_' + "test"));
-		assertNull("invalidated valid name with _", Verifier.checkElementName("test" + '_'));
-		assertNull("invalidated valid name with .", Verifier.checkElementName("test" + '.' + "name"));
-		assertNull("invalidated valid name with 0x00B7", Verifier.checkElementName("test" + (char)0x00B7));
-		assertNull("invalidated valid name with 0x4E01", Verifier.checkElementName("test" + (char)0x4E01));
-		assertNull("invalidated valid name with 0x0301", Verifier.checkElementName("test" + (char)0x0301));
-
-	}
-    
-	/**
 	 * Test that checkNamespacePrefix validates against xml names
 	 * with the following exceptions.  Prefix names must not start
 	 * with "-", "xmlns", digits, "$", or "." and must not contain
 	 * ":"
 	 */
     @Test
-	public void test_TCM__String_checkNamespacePrefix_String() {
+	public void testCheckNamespacePrefix() {
 		//check out of range values
 		assertNotNull("validated invalid name with null", Verifier.checkNamespacePrefix("test" + (char)0x0));
 		assertNotNull("validated invalid name with null", Verifier.checkNamespacePrefix("test" + (char)0x0 + "ing"));
@@ -716,7 +270,7 @@ public final class TestVerifier {
 	 * XXX:TODO make this match the eventual specs for the Verifier class which is incomplete
 	 */
     @Test
-	public void test_TCM__String_checkNamespaceURI_String() {
+	public void testCheckNamespaceURI() {
 		//invalid start characters
 		assertNotNull("validated invalid URI with startin -", Verifier.checkNamespaceURI('-' + "test"));
 		assertNotNull("validated invalid URI with starting digit", Verifier.checkNamespaceURI("9"));
@@ -755,7 +309,7 @@ public final class TestVerifier {
 	 * and cannot have ":" or "xml" in the name.
 	 */
     @Test
-	public void test_TCM__String_checkProcessingInstructionTarget_String() {
+	public void testCheckProcessingInstructionTarget() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkProcessingInstructionTarget(null));
 		assertNotNull("validated invalid name with null", Verifier.checkProcessingInstructionTarget("test" + (char)0x0));
@@ -783,29 +337,264 @@ public final class TestVerifier {
 		assertNull("invalidated valid name with 0x0301", Verifier.checkProcessingInstructionTarget("test" + (char)0x0301));
 
 	}
-
+    
     @Test
-    public void test_Namespace_Attribute_collision() {
+    public void testCheckProcessingInstructionData() {
+    	assertNull(Verifier.checkProcessingInstructionData(""));
+    	assertNull(Verifier.checkProcessingInstructionData("  "));
+    	assertNull(Verifier.checkProcessingInstructionData("hi"));
+    	assertNull(Verifier.checkProcessingInstructionData(" h i "));
+    	
+    	assertNotNull(Verifier.checkProcessingInstructionData(null));
+    	assertNotNull(Verifier.checkProcessingInstructionData("hi" + (char)0x0b + " there"));
+    	assertNotNull(Verifier.checkProcessingInstructionData("can't have '?>' in text."));
+    }
+
+	/**
+	 * Test checkCommentData such that a comment is validated as an
+	 * xml comment consisting of xml characters with the following caveats.
+	 * The comment must not contain a double hyphen.
+	 */
+    @Test
+	public void testCheckCommentData() {
+		//check out of range values
+		assertNotNull("validated invalid null", Verifier.checkCommentData(null));
+		assertNotNull("validated invalid string with null", Verifier.checkCommentData("test" + (char)0x0));
+		assertNotNull("validated invalid string with null", Verifier.checkCommentData("test" + (char)0x0 + "ing"));
+		assertNotNull("validated invalid string with null", Verifier.checkCommentData((char)0x0 + "test"));
+		assertNotNull("validated invalid string with 0x01", Verifier.checkCommentData((char)0x01 + "test"));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData("test" + (char)0xD800));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData("test" + (char)0xD800 + "ing"));
+		assertNotNull("validated invalid string with 0xD800", Verifier.checkCommentData((char)0xD800 + "test"));
+		assertNotNull("validated invalid string with --", Verifier.checkCommentData("--test"));
+		assertNotNull("validated invalid string ending with -", Verifier.checkCommentData("test-"));
+
+		//various valid strings
+		assertNull("invalidated valid string with \n", Verifier.checkCommentData("test" + '\n' + "ing"));
+		assertNull("invalidated valid string with 0x29", Verifier.checkCommentData("test" +(char)0x29));
+		//a few higher values
+		assertNull("invalidated valid string with 0x0B08", Verifier.checkCommentData("test" + (char)0x0B08));
+		assertNull("invalidated valid string with \t", Verifier.checkCommentData("test" + '\t'));
+		//xml letter
+		assertNull("invalidated valid string with 0x42", Verifier.checkCommentData("test" + (char)0x42));
+		assertNull("invalidated valid string with 0x4E01", Verifier.checkCommentData("test" + (char)0x4E01));
+
+	}
+    
+    @Test
+    public void testCheckNamespaceCollision() {
     	try {
     		Namespace ns1 = Namespace.getNamespace("aaa", "http://acme.com/aaa");
     		Element e = new Element("aaa", ns1);
     		e.setAttribute("att1", "att1");
     		Namespace defns = Namespace.getNamespace("http://acme.com/default");
     		e.addNamespaceDeclaration(defns);
-    		return;  // pass
-    	}
-    	catch (IllegalAddException e) {
+    		// pass
+    	} catch (Exception e) {
+    		// also see http://markmail.org/message/hvzz73em7ztt5i5k
     		fail("Bug http://www.junlu.com/msg/166290.html");
     	}
+    	
+    	Namespace nsnp = Namespace.getNamespace("rootns");
+    	Namespace nswp = Namespace.getNamespace("p", nsnp.getURI());
+    	Namespace mscp = Namespace.getNamespace("p", "childns");
+    	Namespace ans  = Namespace.getNamespace("a", "attns");
+    	
+    	// no collision between Namespace and itself
+    	assertNull(Verifier.checkNamespaceCollision(nsnp, nsnp));
+    	
+    	// no collision between Namespace and other namespace with different prefix
+    	assertNull(Verifier.checkNamespaceCollision(nsnp, nswp));
+    	
+    	// but collision between same prefix, but different URI
+    	assertNotNull(Verifier.checkNamespaceCollision(nswp, mscp));
+    	
+    	Element root = new Element("root", nsnp);
+    	root.addNamespaceDeclaration(nswp);
+    	Attribute att = new Attribute("att", "val", nswp);
+    	
+    	// should be able to add 
+    	assertNull(Verifier.checkNamespaceCollision(att, root));
+    	root.setAttribute(att);
+    	
+    	root.setAttribute(new Attribute("ans", "v", ans));
+    	
+    	// cnns is child no namespace
+    	Element cnns = new Element ("cnns");
+    	root.addContent(cnns);
+    	// cwns is child with namespace
+    	Element cwns = new Element ("cwns", nsnp);
+    	root.addContent(cwns);
+    	// cpns is child prefixed namespace
+    	Element cpns = new Element ("cpns", nswp);
+    	root.addContent(cpns);
+    	// cpms is child prefixed different namespace
+    	Element cpms = new Element ("cpms", mscp);
+    	root.addContent(cpms);
+    	
+    	printlement(root);
+    	
+    	// Check Namespace against elements.
+    	assertNull   (Verifier.checkNamespaceCollision(att, root));
+    	assertNull   (Verifier.checkNamespaceCollision(att, cnns));
+    	assertNull   (Verifier.checkNamespaceCollision(att, cwns));
+    	assertNull   (Verifier.checkNamespaceCollision(att, cpns));
+    	
+    	// now, check it against the child that redefines the 'p' prefix.
+    	assertNotNull(Verifier.checkNamespaceCollision(nswp, cpms));
+    	// root has an attribute with the namspace a->ans, cannot then have a->dummy
+    	assertNotNull(Verifier.checkNamespaceCollision(Namespace.getNamespace("a", "dummy"), root));
+    	// root has an additional namespace p->rootns, can't then have a different 'p'
+    	assertNotNull(Verifier.checkNamespaceCollision(Namespace.getNamespace("p", "dummy"), root));
+    	
+    	// Check Namespace against Attributes
+    	// we do the same tests as above, only we wrap it in an Attribute
+    	// first, one that passes.
+    	assertNull(Verifier.checkNamespaceCollision(att, cwns));
+    	// now, check it against the child that redefines the 'p' prefix.
+    	assertNotNull(Verifier.checkNamespaceCollision(att, cpms));
+    	// root has an attribute with the namspace a->ans, cannot then have a->dummy
+    	assertNotNull(Verifier.checkNamespaceCollision(
+    			new Attribute("ax", "v", Namespace.getNamespace("a", "dummy")), root));
+    	// root has an additional namespace p->rootns, can't then have a different 'p'
+    	assertNotNull(Verifier.checkNamespaceCollision(
+    			new Attribute("ax", "v", Namespace.getNamespace("p", "dummy")), root));
+    	
+    	
+    	// now we need to check the namespaces against Attributes not Elements
+    	// first, one that works
+    	assertNull(Verifier.checkNamespaceCollision(nswp, new Attribute("foo", "bar")));
+    	// now, check it against the child that redefines the 'p' prefix.
+    	assertNotNull(Verifier.checkNamespaceCollision(nswp, new Attribute("foo", "bar", mscp)));
+    	
+    	// Now test some List structures.
+    	// first, one that passes.
+    	assertNull(Verifier.checkNamespaceCollision(nswp, root.getAdditionalNamespaces()));
+    	// then, a passing one... with junk...
+    	List<Object> c = null;
+    	assertNull(Verifier.checkNamespaceCollision(nswp, c));
+    	c = new ArrayList<Object>();
+    	c.addAll(Arrays.asList(root.getAdditionalNamespaces().toArray()));
+    	c.add(Integer.valueOf(1));
+    	c.add(0, "dummy");
+    	assertNull(Verifier.checkNamespaceCollision(nswp, c));
+    	
+    	// now, check something that will conflict... check against a conflicting attribute.
+    	// which is already in there.
+    	assertNotNull(Verifier.checkNamespaceCollision(mscp, c));
+    	
+    	// now check against an Element.
+    	// replace prefixed namespace with prefixed Element
+    	c.set(c.indexOf(nswp), cpns);
+    	assertNotNull(Verifier.checkNamespaceCollision(mscp, c));
+    	
+    	// now replace prefixed Element with prefixed Attribute
+    	c.set(c.indexOf(cpns), new Attribute("a", "b", nswp));
+    	assertNotNull(Verifier.checkNamespaceCollision(mscp, c));
+    	
+    	
+    	// some basic namespace/attribute tests similar to the ones done for the bug test up top.
+    	// attributes with no prefix can never collide... because attributes are always
+    	// in the NO_NAMESPACE unless prefixed.
+    	assertNull(Verifier.checkNamespaceCollision(new Attribute("a", "b"), root));
+    	// att is already on root, can't fail.
+    	assertNull(Verifier.checkNamespaceCollision(att, root));
+    	// but, we can fail an attribute on the child with changed p prefix
+    	assertNotNull(Verifier.checkNamespaceCollision(new Attribute("a", "b", mscp), root));
+    	
+    }
+    
+    @Test
+    public void testCheckPublicID() {
+    	assertNull("invalidated valid publicid: null", Verifier.checkPublicID(null));
+    	assertNull("invalidated valid publicid: ''",   Verifier.checkPublicID(""));
+    	assertNull("invalidated valid publicid: '  '", Verifier.checkPublicID("  "));
+    	assertNull("invalidated valid publicid: contains \"'\"", 
+    			Verifier.checkPublicID("shroedinger's cat was here"));
+    	
+    	assertNotNull(Verifier.checkPublicID("cannot have " + BADCHAR + " characters here"));
+    	
     }
 
-    /**
-	 * This test is a noop.  The method is for development only
-	 * It will remain in the suite until it is removed from the
-	 * Verifier class
-	 */
     @Test
-	public void test_TCM__void_main_ArrayString() {
-		//this test is a noop.  The method is for development only
-	}
+    public void testCheckXMLName() {
+    	assertNull(Verifier.checkAttributeName("hi"));
+    	assertNull(Verifier.checkAttributeName("hi2you"));
+    	assertNull(Verifier.checkAttributeName("hi_you"));
+    	
+    	assertNotNull(Verifier.checkAttributeName(null));
+    	assertNotNull(Verifier.checkAttributeName(""));
+    	assertNotNull(Verifier.checkAttributeName("   "));
+    	assertNotNull(Verifier.checkAttributeName("  hi  "));
+    	assertNotNull(Verifier.checkAttributeName("hi "));
+    	assertNotNull(Verifier.checkAttributeName(" hi"));
+    	assertNotNull(Verifier.checkAttributeName("2bad"));
+    }
+    
+    @Test
+    public void testCheckSystemLiteral() {
+    	assertNull(Verifier.checkSystemLiteral(null));
+    	assertNull(Verifier.checkSystemLiteral(""));
+    	assertNull(Verifier.checkSystemLiteral("  "));
+    	assertNull(Verifier.checkSystemLiteral("frodo's theme "));
+    	assertNull(Verifier.checkSystemLiteral("frodo has a \"theme\" "));
+    	
+    	assertNotNull(Verifier.checkSystemLiteral("frodo's \"theme\" "));
+    	
+    }
+
+
+    @Test
+    public void testCheckURI() {
+    	assertNull(Verifier.checkURI(null));
+    	assertNull(Verifier.checkURI(""));
+    	assertNull(Verifier.checkURI("http://www.jdom.org/index.html"));
+    	assertNull(Verifier.checkURI("http://www.jdom.org:321/index.html"));
+    	assertNull(Verifier.checkURI("http://www.jdom.org%32%01/index.html?%ab"));
+    	assertNull(Verifier.checkURI("http://www.jdom.org/index.html%31"));
+    	
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org/ index.html"));
+    	assertNotNull(Verifier.checkURI("  http://www.jdom.org/index.html  "));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org%3.21/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org%.21/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org%3g21/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org%3/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org" + BADCHAR + "/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org" + (char)0x05 + "/index.html"));
+    	assertNotNull(Verifier.checkURI("http://www.jdom.org/index.html%3"));
+    }
+    
+    @Test
+    public void testIsXMLCharacter() {
+    	// this test is not part of the automatic tests because it takes an int
+    	// as an argument, instead of a char.
+    	// cherry-pick some tests.
+    	assertTrue(Verifier.isXMLCharacter('\n'));
+    	assertTrue(Verifier.isXMLCharacter('\r'));
+    	assertTrue(Verifier.isXMLCharacter('\t'));
+    	assertTrue(Verifier.isXMLCharacter(' '));
+    	assertTrue(Verifier.isXMLCharacter(0xd7ff));
+    	assertTrue(Verifier.isXMLCharacter(0xe000));
+    	assertTrue(Verifier.isXMLCharacter(0x10000));
+    	
+    	//cherry-pick values we know will fill out the coverage report.
+    	assertFalse(Verifier.isXMLCharacter(0));
+    	assertFalse(Verifier.isXMLCharacter(0x19));
+    	assertFalse(Verifier.isXMLCharacter(0xd800));
+    	assertFalse(Verifier.isXMLCharacter(0xffff));
+    	assertFalse(Verifier.isXMLCharacter(0x110000));
+    	
+    }
+
+    private static final void printlement(Element emt) {
+    	XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+    	try {
+			out.output(emt, System.out);
+			System.out.println();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
 }

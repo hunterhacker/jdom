@@ -98,6 +98,7 @@ public static Test suite() {
 
 		suite.addTest(new JUnit4TestAdapter(TestComment.class));
 		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
+		suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
 		suite.addTest(new JUnit4TestAdapter(TestAttribute.class));
 		suite.addTest(new JUnit4TestAdapter(TestCDATA.class));
 		suite.addTest(new JUnit4TestAdapter(TestProcessingInstruction.class));
