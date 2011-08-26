@@ -2,6 +2,7 @@ package org.jdom2.test.cases;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.jdom2.IllegalDataException;
@@ -26,6 +27,21 @@ public class TestText {
 		assertTrue("  frodo  baggins  ".equals(txt.getText()));
 		assertTrue("frodo baggins".equals(txt.getTextNormalize()));
 		assertTrue("frodo  baggins".equals(txt.getTextTrim()));
+	}
+	
+	@Test
+	public void testNormalizeString() {
+		assertEquals("", Text.normalizeString(null));
+		assertEquals("", Text.normalizeString(""));
+		assertEquals("boo", Text.normalizeString("boo"));
+		assertEquals("boo", Text.normalizeString(" boo"));
+		assertEquals("boo", Text.normalizeString("boo "));
+		assertEquals("boo", Text.normalizeString("  boo  "));
+		assertEquals("boo hoo", Text.normalizeString("boo hoo"));
+		assertEquals("boo hoo", Text.normalizeString("boo\nhoo"));
+		assertEquals("boo hoo", Text.normalizeString("boo \n hoo"));
+		assertEquals("boo hoo", Text.normalizeString("boo \n hoo"));
+		assertEquals("boo hoo", Text.normalizeString("\rboo\thoo\n"));
 	}
 
 	@Test
