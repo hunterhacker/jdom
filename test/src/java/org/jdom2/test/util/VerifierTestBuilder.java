@@ -5,8 +5,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jdom2.Verifier;
 
@@ -28,8 +26,7 @@ public class VerifierTestBuilder {
 	 */
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		Class<Verifier> vclass = Verifier.class;
-		Map<String, int[]> sequence = new LinkedHashMap<String, int[]>();
-		
+
 		// Hunt for all Verifier methods that are of the form static boolean ...(char)
 		for (Method meth : vclass.getMethods()) {
 			if (meth.getReturnType() != Boolean.TYPE) {
@@ -64,48 +61,64 @@ public class VerifierTestBuilder {
 				}
 			}
 			
-			sequence.put(mname, Arrays.copyOf(flips, flen));
+			buildTest(mname, Arrays.copyOf(flips, flen));
 		}
+	}
+	
+	private static final void buildTest(final String mname, int[] flips) {
 		
-		for (Map.Entry<String, int[]> me : sequence.entrySet()) {
-			print("", "\t// Automated test built by VerifierTestBuilder", "\t@Test");
-			String mname = me.getKey();
-			String tname = mname;
-			tname = "test" + tname.substring(0, 1).toUpperCase() + tname.substring(1);
-			print("\tpublic void " + tname + "() {");
-			print("\t\tint c = 0;");
-			print("\t\tlong ms = System.currentTimeMillis();");
-			boolean valid = false;
-			
-			for (int c : me.getValue()) {
-				writeLoop(c, mname, valid);
-				valid = !valid;
+		final String tname = "test" + mname.substring(0, 1).toUpperCase() + mname.substring(1);
+
+		StringBuilder sb = new StringBuilder();
+		appendLine(0, sb, "");
+		appendLine(1, sb, "// Automated test built by VerifierTestBuilder");
+		appendLine(1, sb, "@Test");
+				
+		appendLine(1, sb, "public void ", tname ,"() {");
+		appendLine(2, sb,   "final int[] flips = new int[] {");
+		for (int i = 0; i < flips.length; i++) {
+			if ((i & 0x0f) == 0) {
+				sb.append("\n\t\t\t\t");
 			}
-			writeLoop(Character.MAX_VALUE + 1, mname, valid);
-			print("\t\tSystem.out.printf(\"Completed test " + tname + " in %dms\\n\", System.currentTimeMillis() - ms);");
-			
-			print("\t}");
+			sb.append(String.format(" 0x%04x,", flips[i]));
 		}
+		sb.setCharAt(sb.length() - 1, '\n');
+		appendLine(2, sb,   "};");
+		appendLine(2, sb,   "int c = 0;");
+		appendLine(2, sb,   "int fcnt = 0;");
+		appendLine(2, sb,   "boolean valid = false;");
+		appendLine(2, sb,   "final long ms = System.currentTimeMillis();");
+		
+		appendLine(2, sb,     "while (c <= Character.MAX_VALUE) {");
+		appendLine(3, sb,     "if (fcnt < flips.length && flips[fcnt] == c) {");
+		appendLine(4, sb,       "valid = !valid;");
+		appendLine(4, sb,       "fcnt++;");
+		appendLine(3, sb,     "}");
+		appendLine(3, sb,      "if (valid) {");
+		appendLine(4, sb,       "if (!Verifier." + mname + "((char)c)) {");
+		appendLine(5, sb,         "fail(\"Expected char 0x\" + Integer.toHexString(c) + \" to pass " + mname + " but it failed.\");");
+		appendLine(4, sb, 		"}");
+		appendLine(3, sb, 	   "} else {");
+		appendLine(4, sb,       "if (Verifier." + mname + "((char)c)) {");
+		appendLine(5, sb,         "fail(\"Expected char 0x\" + Integer.toHexString(c) + \" to fail " + mname + " but it passed.\");");
+		appendLine(4, sb, 		"}");
+		appendLine(3, sb, 	   "}");
+		appendLine(3, sb, 	   "c++;");
+		appendLine(2, sb,    "}");
+		appendLine(2, sb,   "System.out.printf(\"Completed test", tname, "in %dms\\n\", System.currentTimeMillis() - ms);");
+		
+		appendLine(1, sb, "}");
+		System.out.println(sb);
 	}
 	
-	private static final void writeLoop(int c, String mname, boolean valid) {
-		print(String.format("\t\twhile (c < 0x%04x) {", c));
-		if (valid) {
-			print(String.format("\t\t\tif (!Verifier.%s((char)c)) {", mname));
-			print(String.format("\t\t\t\tfail(\"Expected char 0x\" + Integer.toHexString(c) + \" to pass %s but it did not.\");", mname));
-			print(String.format("\t\t\t}", mname));
-		} else {
-			print(String.format("\t\t\tif (Verifier.%s((char)c)) {", mname));
-			print(String.format("\t\t\t\tfail(\"Expected char 0x\" + Integer.toHexString(c) + \" to fail %s but it did not.\");", mname));
-			print(String.format("\t\t\t}", mname));
+	private static final void appendLine(int indent, StringBuilder sb, String...vals) {
+		while (--indent >= 0) {
+			sb.append("\t");
 		}
-		print("\t\t\tc++;", "\t\t}", "");
-	}
-	
-	private static final void print(String...vals) {
-		for (String v : vals) {
-			System.out.println(v);
+		for (String s : vals) {
+			sb.append(s).append(" ");
 		}
+		sb.setCharAt(sb.length() - 1, '\n');
 	}
 
 }
