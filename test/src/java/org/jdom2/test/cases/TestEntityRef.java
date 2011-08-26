@@ -10,6 +10,16 @@ import org.junit.Test;
 public class TestEntityRef {
 
 	@Test
+	public void testEntityRef() {
+		EntityRef er = new EntityRef() {
+			// nothing
+		};
+		assertTrue(null == er.getPublicID());
+		assertTrue(null == er.getSystemID());
+		assertTrue(null == er.getName());
+	}
+	
+	@Test
 	public void testEntityRefString() {
 		EntityRef er = new EntityRef("name");
 		assertTrue("name".equals(er.getName()));
