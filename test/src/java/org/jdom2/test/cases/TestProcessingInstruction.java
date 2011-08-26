@@ -20,6 +20,15 @@ import org.junit.Test;
 public class TestProcessingInstruction {
 
 	@Test
+	public void testProcessingInstruction() {
+		ProcessingInstruction pi = new ProcessingInstruction() {
+			// nothing
+		};
+		assertTrue(null == pi.getTarget());
+		assertTrue(null == pi.getValue());
+	}
+
+	@Test
 	public void testProcessingInstructionStringString() {
 		ProcessingInstruction pi = new ProcessingInstruction("test", "key='value'");
 		checkEquals(pi.getTarget(), "test");
