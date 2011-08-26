@@ -56,6 +56,8 @@ public class TestText {
 		String app = null;
 		txt.append(app);
 		assertTrue("frodo baggins from the shire".equals(txt.getText()));
+		txt.append("");
+		assertTrue("frodo baggins from the shire".equals(txt.getText()));
 		try {
 			txt.append("New char data " + (char)0x05 + " with bad characters.");
 		} catch (IllegalDataException iae) {
