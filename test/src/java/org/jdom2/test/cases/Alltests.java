@@ -118,6 +118,8 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestAttributeList.class));
 		suite.addTest(new JUnit4TestAdapter(TestElementFilter.class));
 		suite.addTest(new JUnit4TestAdapter(TestContentFilter.class));
+		suite.addTest(new JUnit4TestAdapter(TestDefaultJDOMFactory.class));
+		suite.addTest(new JUnit4TestAdapter(TestUncheckedJDOMFactory.class));
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		return suite;
