@@ -57,6 +57,9 @@ package org.jdom2.test.cases;
 
 import junit.framework.*;
 
+import org.jdom2.TestIllegalAddException;
+import org.jdom2.TestIllegalNameException;
+import org.jdom2.TestIllegalTargetException;
 import org.jdom2.test.cases.filter.TestContentFilter;
 import org.jdom2.test.cases.filter.TestElementFilter;
 import org.jdom2.test.cases.input.*;
@@ -123,6 +126,9 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestDescendantIterator.class));
 		suite.addTest(new JUnit4TestAdapter(TestDescendantFilterIterator.class));
 		suite.addTest(new JUnit4TestAdapter(TestJDOMException.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalAddException.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalNameException.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalTargetException.class));
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		return suite;
