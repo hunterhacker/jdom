@@ -122,6 +122,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestUncheckedJDOMFactory.class));
 		suite.addTest(new JUnit4TestAdapter(TestDescendantIterator.class));
 		suite.addTest(new JUnit4TestAdapter(TestDescendantFilterIterator.class));
+		suite.addTest(new JUnit4TestAdapter(TestJDOMException.class));
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		return suite;
