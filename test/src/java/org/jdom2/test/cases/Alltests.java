@@ -99,38 +99,51 @@ public static void main(String[] args) {
 public static Test suite() {
 		TestSuite suite= new TestSuite();
 
-		suite.addTest(new JUnit4TestAdapter(TestComment.class));
 		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
 		suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
-		suite.addTest(new JUnit4TestAdapter(TestAttribute.class));
-		suite.addTest(new JUnit4TestAdapter(TestCDATA.class));
-		suite.addTest(new JUnit4TestAdapter(TestProcessingInstruction.class));
-		suite.addTest(new JUnit4TestAdapter(TestNamespace.class));
-		suite.addTest(new JUnit4TestAdapter(TestDocType.class));
-		suite.addTest(new JUnit4TestAdapter(TestElement.class));
-		suite.addTest(new JUnit4TestAdapter(TestDocument.class));
+		
+		suite.addTest(new JUnit4TestAdapter(TestComment.class));
 		suite.addTest(new JUnit4TestAdapter(TestEntityRef.class));
 		suite.addTest(new JUnit4TestAdapter(TestText.class));
+		suite.addTest(new JUnit4TestAdapter(TestCDATA.class));
+		suite.addTest(new JUnit4TestAdapter(TestProcessingInstruction.class));
+		suite.addTest(new JUnit4TestAdapter(TestDocType.class));
+		suite.addTest(new JUnit4TestAdapter(TestNamespace.class));
+		suite.addTest(new JUnit4TestAdapter(TestAttribute.class));
+		suite.addTest(new JUnit4TestAdapter(TestElement.class));
+		suite.addTest(new JUnit4TestAdapter(TestDocument.class));
+		
 		suite.addTest(new JUnit4TestAdapter(TestFilterList.class));
 		suite.addTest(new JUnit4TestAdapter(TestSerialization.class));
-		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
-		suite.addTest(new JUnit4TestAdapter(TestXMLOutputter.class));
-		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
 		suite.addTest(new JUnit4TestAdapter(TestContentList.class));
 		suite.addTest(new JUnit4TestAdapter(TestElementFilterList.class));
 		suite.addTest(new JUnit4TestAdapter(TestAttributeList.class));
 		suite.addTest(new JUnit4TestAdapter(TestElementFilter.class));
 		suite.addTest(new JUnit4TestAdapter(TestContentFilter.class));
-		suite.addTest(new JUnit4TestAdapter(TestDefaultJDOMFactory.class));
-		suite.addTest(new JUnit4TestAdapter(TestUncheckedJDOMFactory.class));
+
 		suite.addTest(new JUnit4TestAdapter(TestDescendantIterator.class));
 		suite.addTest(new JUnit4TestAdapter(TestDescendantFilterIterator.class));
+
+		suite.addTest(new JUnit4TestAdapter(TestDefaultJDOMFactory.class));
+		suite.addTest(new JUnit4TestAdapter(TestUncheckedJDOMFactory.class));
+		
 		suite.addTest(new JUnit4TestAdapter(TestJDOMException.class));
 		suite.addTest(new JUnit4TestAdapter(TestIllegalAddException.class));
 		suite.addTest(new JUnit4TestAdapter(TestIllegalNameException.class));
 		suite.addTest(new JUnit4TestAdapter(TestIllegalTargetException.class));
+
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
+		// Input Tests
+		suite.addTest(new JUnit4TestAdapter(TestSAXHandler.class));
+		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
+		suite.addTest(new JUnit4TestAdapter(TestSAXComplexSchema.class));
+		
+		
+		// Output Tests
+		suite.addTest(new JUnit4TestAdapter(TestXMLOutputter.class));
+		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
+
 		return suite;
 }
 }

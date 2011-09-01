@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.jdom.org/tests/default"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jdom.org/tests/default"
+        xmlns:imp="http://www.jdom.org/tests/imp" 
+        elementFormDefault="qualified">
+
+  <!--          xmlns:tns="http://www.jdom.org/tests/default"
+       -->
+  <xs:import namespace="http://www.jdom.org/tests/imp" schemaLocation="./SAXTestComplexImport.xsd" />
+  
+  <xs:element name="test">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="data" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="type"/>
+            <xs:attributeGroup ref="imp:simpleAG"/>
+            <xs:attribute name="mainxs" default="mainval" form="qualified"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
