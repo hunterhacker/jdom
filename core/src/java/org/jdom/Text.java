@@ -210,9 +210,9 @@ public class Text extends Content {
             throw new IllegalDataException(str, "character content", reason);
         }
 
-        if (str == EMPTY_STRING)
-             value = str;
-        else value += str;
+        if (str.length() > 0) {
+             value += str;
+        }
     }
 
     /**
