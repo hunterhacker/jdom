@@ -10,8 +10,8 @@ See the build targets for the tasks this ant build file supports
 Installing the build tools
 ==========================
 
-For instructions on JDOM use of Ant see the build.xml find in the "jdom"
-module (../jdom).
+For instructions on JDOM use of Ant see the build.xml find in the "core"
+module (../core).
 
 Build targets
 =============
@@ -45,7 +45,7 @@ These are the meaningful targets for this build file:
       (and without using -D arguments each time they build).
       The build properties a user is likely to override include:
         - jdom.dir           The directory where the JDOM distribution is
-                             installed. Defaults to ../jdom
+                             installed. Defaults to ../core
         - jdom.lib.dir       The directory where to look for the default JAR
                              files.  Defaults to ${jdom.dir}/lib
         - jdom-core.jar      The JAR containing the core JDOM API.
@@ -64,7 +64,7 @@ These are the meaningful targets for this build file:
     <property file="${basedir}/build.properties" />
 
     <!-- JDOM home & libraries -->
-    <property name="jdom.dir"           value="../jdom"/>
+    <property name="jdom.dir"           value="../core"/>
     <property name="jdom.lib.dir"       value="${jdom.dir}/lib"/>
     <property name="jdom.build.dir"     value="${jdom.dir}/build"/>
 
