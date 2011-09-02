@@ -878,6 +878,12 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 		 * Inserts the specified element into the list.
 		 */
         public void add(Object obj) {
+            if (!filter.matches(obj)) {
+                throw new IllegalAddException("Filter won't allow the " +
+                        obj.getClass().getName() +
+                        " '" + obj + "' to be added to the list");
+            }
+
 			// Call to nextIndex() will check concurrent.
 			nextIndex();
 			// tmpcursor is the backing cursor of the next element
