@@ -883,12 +883,16 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 			// tmpcursor is the backing cursor of the next element
 			// Remember that List.add(index,obj) is really an insert....
 			ContentList.this.add(tmpcursor, obj);
-			forward = true;
 			expected = ContentList.this.getModCount();
 			canremove = canset = false;
-			index = nextIndex();
-			cursor = tmpcursor;
+
+			if (forward) {
+			  index++;
+			} else {
+			  forward = true;
+			}
 			fsize++;
+			cursor = tmpcursor;
 		}
 
         /**
@@ -900,8 +904,19 @@ final class ContentList extends AbstractList implements java.io.Serializable {
 				throw new IllegalStateException("Can not remove an "
 						+ "element unless either next() or previous() has been called "
 						+ "since the last remove()");
-			nextIndex(); // to get out cursor ...
-			ContentList.this.remove(cursor);
+			// we are removing the last entry reuned by either next() or previous().
+			// the idea is to remove it, and pretend that we used to be at the
+			// entry that happened *after* the removed entry.
+			// so, get what would be the next entry (set at tmpcursor).
+			// so call nextIndex to set tmpcursor to what would come after.
+			boolean dir = forward;
+			forward = true;
+			try {
+				nextIndex();
+				ContentList.this.remove(cursor);
+			} finally {
+				forward = dir;
+			}
 			cursor = tmpcursor - 1;
 			expected = ContentList.this.getModCount();
 
