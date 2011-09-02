@@ -624,10 +624,9 @@ public class Document implements Parent {
             stringForm.append(" No DOCTYPE declaration, ");
         }
 
-        Element rootElement = getRootElement();
-        if (rootElement != null) {
+		if (hasRootElement()) {
             stringForm.append("Root is ")
-                      .append(rootElement.toString());
+                      .append(getRootElement().toString());
         } else {
             stringForm.append(" No root element"); // shouldn't happen
         }
