@@ -135,6 +135,8 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		// Input Tests
+		suite.addTest(new JUnit4TestAdapter(TestBuilderErrorHandler.class));
+		suite.addTest(new JUnit4TestAdapter(TestJDOMParseException.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXHandler.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXComplexSchema.class));

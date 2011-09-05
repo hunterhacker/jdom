@@ -1,0 +1,54 @@
+package org.jdom2.test.cases.input;
+
+import static org.junit.Assert.*;
+
+import org.jdom2.Document;
+import org.jdom2.input.JDOMParseException;
+import org.junit.Test;
+import org.xml.sax.SAXParseException;
+
+public class TestJDOMParseException {
+	
+	private final SAXParseException spe = new SAXParseException("message", "publicID", "systemID", 5, 10);
+
+	@Test
+	public void testJDOMParseExceptionStringThrowable() {
+		JDOMParseException e = new JDOMParseException("test", spe);
+		assertTrue(e.getPartialDocument() == null);
+	}
+
+	@Test
+	public void testJDOMParseExceptionStringThrowableDocument() {
+		Document doc = new Document();
+		JDOMParseException e = new JDOMParseException("test", spe, doc);
+		assertTrue(e.getPartialDocument() == doc);
+	}
+
+	@Test
+	public void testGetPartialDocument() {
+		Document doc = new Document();
+		JDOMParseException e = new JDOMParseException("test", spe, doc);
+		assertTrue(e.getPartialDocument() == doc);
+	}
+
+	@Test
+	public void testGetPublicId() {
+		assertEquals("publicID", new JDOMParseException("test", spe).getPublicId());
+	}
+
+	@Test
+	public void testGetSystemId() {
+		assertEquals("systemID", new JDOMParseException("test", spe).getSystemId());
+	}
+
+	@Test
+	public void testGetLineNumber() {
+		assertEquals(5, new JDOMParseException("test", spe).getLineNumber());
+	}
+
+	@Test
+	public void testGetColumnNumber() {
+		assertEquals(10, new JDOMParseException("test", spe).getColumnNumber());
+	}
+
+}
