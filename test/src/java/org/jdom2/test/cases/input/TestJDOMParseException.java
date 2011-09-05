@@ -34,21 +34,25 @@ public class TestJDOMParseException {
 	@Test
 	public void testGetPublicId() {
 		assertEquals("publicID", new JDOMParseException("test", spe).getPublicId());
+		assertTrue(null== new JDOMParseException("test", new Exception()).getPublicId());
 	}
 
 	@Test
 	public void testGetSystemId() {
 		assertEquals("systemID", new JDOMParseException("test", spe).getSystemId());
+		assertTrue(null== new JDOMParseException("test", new Exception()).getSystemId());
 	}
 
 	@Test
 	public void testGetLineNumber() {
 		assertEquals(5, new JDOMParseException("test", spe).getLineNumber());
+		assertTrue(-1 == new JDOMParseException("test", new Exception()).getLineNumber());
 	}
 
 	@Test
 	public void testGetColumnNumber() {
 		assertEquals(10, new JDOMParseException("test", spe).getColumnNumber());
+		assertTrue(-1 == new JDOMParseException("test", new Exception()).getColumnNumber());
 	}
 
 }
