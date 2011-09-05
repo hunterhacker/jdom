@@ -373,6 +373,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="src" path="contrib/src/java/org/jdom2/contrib/input/scanner/doc-files"/>
 	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="ebuild"/>
