@@ -65,16 +65,49 @@ package org.jdom2.test.cases.input;
 import java.util.*;
 import java.io.*;
 
+import javax.xml.XMLConstants;
+
 import org.jdom2.*;
 import org.jdom2.input.*;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.xml.sax.Attributes;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.XMLFilterImpl;
+
 import static org.junit.Assert.*;
 
 
 public final class TestSAXBuilder {
+	
+	private static final String testxml = "<?xml version=\"1.0\"?><root/>";
+	private static final String testpattern = "\\s*<\\?xml\\s+version=\"1.0\"\\s+encoding=\"UTF-8\"\\s*\\?>\\s*<root\\s*/>\\s*";
 
+	private class MySAXBuilder extends SAXBuilder {
+		public MySAXBuilder() {
+			super();
+		}
+		
+		public MySAXBuilder(String driver) {
+			super(driver);
+		}
+		
+		@Override
+		public XMLReader createParser() throws JDOMException {
+			return super.createParser();
+		}
+	}
+	
 	/**
 	 * the directory where needed resource files will be kept
 	 */
@@ -90,90 +123,385 @@ public final class TestSAXBuilder {
         JUnitCore.runClasses(TestSAXBuilder.class);
     }	
 
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCC__() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCC___boolean() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCC___String() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCC___String_boolean() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_File() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_InputStream() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_InputStream_String() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_Reader() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_Reader_String() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_String() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__OrgJdomDocument_build_URL() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setDTDHandler_OrgXmlSaxDTDHandler() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setEntityResolver_OrgXmlSaxEntityResolver() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setErrorHandler_OrgXmlSaxErrorHandler() {
-        fail("implement me !");
-    }
+	@Test
+	public void testSAXBuilder() {
+		SAXBuilder sb = new SAXBuilder();
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.getValidation());
+		assertTrue(sb.getExpandEntities());		
+	}
+
+	@Test
+	public void testSAXBuilderBooleanFalse() {
+		SAXBuilder sb = new SAXBuilder(false);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+	}
+
+	@Test
+	public void testSAXBuilderBooleanTrue() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+	}
+
+	@Test
+	public void testSAXBuilderString() {
+		MySAXBuilder sb = new MySAXBuilder("org.apache.xerces.parsers.SAXParser");
+		assertEquals("org.apache.xerces.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		try {
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof org.apache.xerces.parsers.SAXParser);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+
+		sb = new MySAXBuilder("com.sun.org.apache.xerces.internal.parsers.SAXParser");
+		assertEquals("com.sun.org.apache.xerces.internal.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		try {
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof com.sun.org.apache.xerces.internal.parsers.SAXParser);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testSAXBuilderStringTrue() {
+		SAXBuilder sb = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
+		assertEquals("org.apache.xerces.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+	}
+
+	@Test
+	public void testSAXBuilderStringFalse() {
+		SAXBuilder sb = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
+		assertEquals("org.apache.xerces.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+	}
+
+	@Test
+	public void testGetFactory() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.getFactory() instanceof DefaultJDOMFactory);
+	}
+
+	@Test
+	public void testSetFactory() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		UncheckedJDOMFactory udf = new UncheckedJDOMFactory();
+		assertTrue(sb.getFactory() instanceof DefaultJDOMFactory);
+		sb.setFactory(udf);
+		assertTrue(sb.getFactory() == udf);
+	}
+
+	@Test
+	public void testSetValidation() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		
+		sb.setValidation(false);
+		assertFalse(sb.getValidation());
+		
+		sb.setValidation(true);
+		assertTrue(sb.getValidation());
+
+	}
+
+	@Test
+	public void testGetErrorHandler() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		
+		ErrorHandler handler = new BuilderErrorHandler();
+		
+		sb.setErrorHandler(handler);
+		assertTrue(handler == sb.getErrorHandler());		
+	}
+
+	@Test
+	public void testGetEntityResolver() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+
+		EntityResolver er = new EntityResolver() {
+			@Override
+			public InputSource resolveEntity(String arg0, String arg1) {
+				return null;
+			}
+		};
+		
+		sb.setEntityResolver(er);
+		assertTrue(er == sb.getEntityResolver());		
+	}
+
+	@Test
+	public void testGetDTDHandler() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+
+		DTDHandler dtd = new DTDHandler() {
+			@Override
+			public void notationDecl(String arg0, String arg1, String arg2)
+					throws SAXException {
+			}
+			@Override
+			public void unparsedEntityDecl(String arg0, String arg1,
+					String arg2, String arg3) throws SAXException {
+			}
+		};
+		
+		sb.setDTDHandler(dtd);
+		assertTrue(dtd == sb.getDTDHandler());		
+	}
+
+	@Test
+	public void testXMLFilter() {
+		MySAXBuilder sb = new MySAXBuilder();
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getExpandEntities());
+
+		XMLFilter filter = new XMLFilterImpl() {
+			@Override
+			public void startElement(String arg0, String arg1, String arg2,
+					Attributes arg3) throws SAXException {
+				super.startElement(arg0, "f" + arg1, arg2, arg3);
+			}
+			@Override
+			public void endElement(String arg0, String arg1, String arg2) throws SAXException {
+				super.endElement(arg0, "f" + arg1, arg2);
+			}
+		};
+		
+		XMLFilter gilter = new XMLFilterImpl() {
+			@Override
+			public void startElement(String arg0, String arg1, String arg2,
+					Attributes arg3) throws SAXException {
+				super.startElement(arg0, "g" + arg1, arg2, arg3);
+			}
+			@Override
+			public void endElement(String arg0, String arg1, String arg2) throws SAXException {
+				super.endElement(arg0, "g" + arg1, arg2);
+			}
+		};
+		
+		filter.setParent(gilter);
+		sb.setXMLFilter(filter);
+		assertTrue(filter == sb.getXMLFilter());
+		
+		try {
+			Document doc = sb.build(new CharArrayReader(testxml.toCharArray()));
+			assertTrue(doc.hasRootElement());
+			assertEquals("fgroot", doc.getRootElement().getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not parse XML " + testxml + ": " + e.getMessage());
+		}
+		
+	}
+
+	@Test
+	public void testGetIgnoringElementContentWhitespace() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		sb.setIgnoringElementContentWhitespace(true);
+		assertTrue(sb.getIgnoringElementContentWhitespace());		
+		sb.setIgnoringElementContentWhitespace(false);
+		assertFalse(sb.getIgnoringElementContentWhitespace());		
+	}
+
+	@Test
+	public void testGetIgnoringBoundaryWhitespace() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		sb.setIgnoringBoundaryWhitespace(true);
+		assertTrue(sb.getIgnoringBoundaryWhitespace());		
+		sb.setIgnoringBoundaryWhitespace(false);
+		assertFalse(sb.getIgnoringBoundaryWhitespace());		
+	}
+
+	@Test
+	public void testGetReuseParser() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		
+		sb.setReuseParser(true);
+		assertTrue(sb.getReuseParser());		
+		sb.setReuseParser(false);
+		assertFalse(sb.getReuseParser());		
+	}
+
+	@Test
+	public void testCreateParser() {
+		MySAXBuilder sb = new MySAXBuilder();
+		try {
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof XMLReader);
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testSetFeature() {
+		String feature = XMLConstants.FEATURE_SECURE_PROCESSING;
+		MySAXBuilder sb = new MySAXBuilder();
+		try {
+			sb.setFeature(feature, true);
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof XMLReader);
+			assertTrue(reader.getFeature(feature));
+			sb.setFeature(feature, false);
+			reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof XMLReader);
+			assertFalse(reader.getFeature(feature));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testSetProperty() {
+		LexicalHandler lh = new LexicalHandler() {
+			@Override
+			public void startEntity(String arg0) throws SAXException {
+			}
+			@Override
+			public void startDTD(String arg0, String arg1, String arg2)
+					throws SAXException {
+			}
+			@Override
+			public void startCDATA() throws SAXException {
+			}
+			@Override
+			public void endEntity(String arg0) throws SAXException {
+			}
+			
+			@Override
+			public void endDTD() throws SAXException {
+			}
+			
+			@Override
+			public void endCDATA() throws SAXException {
+			}
+			
+			@Override
+			public void comment(char[] arg0, int arg1, int arg2) throws SAXException {
+			}
+		};
+		
+		MySAXBuilder sb = new MySAXBuilder();
+		String propname = "http://xml.org/sax/properties/lexical-handler";
+		try {
+			sb.setProperty(propname, lh);
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader instanceof XMLReader);
+			assertTrue(lh == reader.getProperty(propname));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+	}
+
     /**
      * Test that when setExpandEntities is true, enties are
      * always expanded and when false, entities declarations
@@ -187,6 +515,8 @@ public final class TestSAXBuilder {
         File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
 
         builder.setExpandEntities(true);
+        assertTrue(builder.getExpandEntities());
+        
         Document doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("another simple entity") > 1);        	
@@ -194,6 +524,8 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with internal entity
         builder.setExpandEntities(false);
+        assertFalse(builder.getExpandEntities());
+
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
@@ -207,6 +539,8 @@ public final class TestSAXBuilder {
         file = new File(resourceDir + "/SAXBuilderTestEntity2.xml");
 
         builder.setExpandEntities(true);
+        assertTrue(builder.getExpandEntities());
+
         doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("another simple entity") > 1);        	
@@ -214,6 +548,7 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with external entity
         builder.setExpandEntities(false);
+        assertFalse(builder.getExpandEntities());
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
@@ -226,30 +561,7 @@ public final class TestSAXBuilder {
 
 
     }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setFactory_OrgJdomInputJDOMFactory() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setIgnoringElementContentWhitespace_boolean() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setValidation_boolean() {
-        fail("implement me !");
-    }
-    /**
-     * Test code goes here. Replace this comment.
-     */
-    public void test_TCM__void_setXMLFilter_OrgXmlSaxXMLFilter() {
-        fail("implement me !");
-    }
+
     /**
      * Test that when setExpandEntities is true, enties are
      * always expanded and when false, entities declarations
@@ -275,6 +587,7 @@ public final class TestSAXBuilder {
 
 
     }
+
     /**
      * Test that when setExpandEntities is true, enties are
      * always expanded and when false, entities declarations
@@ -342,4 +655,164 @@ public final class TestSAXBuilder {
         			"Got:    " + subset2);
         }
     }
+
+	@Test
+	public void testSetFastReconfigure() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getErrorHandler() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.getValidation());
+		assertTrue(sb.getExpandEntities());
+		
+		sb.setFastReconfigure(true);
+		
+		// TODO - Now what?
+	}
+	
+	private void assertXMLMatches(String baseuri, Document doc) {
+		XMLOutputter out = new XMLOutputter(Format.getCompactFormat());
+		try {
+			CharArrayWriter caw = new CharArrayWriter();
+			out.output(doc, caw);
+			String output = caw.toString();
+			if (!output.matches(testpattern)) {
+				fail ("Failed to match output:\n  " + output + "\nwith pattern:\n  " + testpattern);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Failed to write Document " + doc + " to CharArrayWriter.");
+		}
+		if (baseuri == null) {
+			assertNull(doc.getBaseURI());
+		} else {
+			if (!baseuri.equals(doc.getBaseURI())) {
+				String moduri = baseuri.replaceFirst(":/", ":///");
+				if (!moduri.equals(doc.getBaseURI())) {
+					fail("Neither " + baseuri + " nor " + moduri + " matches base URI " + doc.getBaseURI());
+				}
+			}
+		}
+	}
+
+	@Test
+	public void testBuildInputSource() {
+		InputSource is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+		try {
+			assertXMLMatches(null, new SAXBuilder().build(is));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to parse document: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testBuildInputStream() {
+		InputStream is = new ByteArrayInputStream(testxml.getBytes());
+		try {
+			assertXMLMatches(null, new SAXBuilder().build(is));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to parse document: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testBuildFile() {
+		File tmp = null;
+		try {
+			tmp = File.createTempFile("tst", ".xml");
+			tmp.deleteOnExit();
+			FileWriter fw = new FileWriter(tmp);
+			fw.write(testxml.toCharArray());
+			fw.flush();
+			fw.close();
+			assertXMLMatches(tmp.toURI().toString(), new SAXBuilder().build(tmp));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
+		} finally {
+			if (tmp != null) {
+				tmp.delete();
+			}
+		}
+	}
+
+	@Test
+	public void testBuildURL() {
+		File tmp = null;
+		try {
+			tmp = File.createTempFile("tst", ".xml");
+			tmp.deleteOnExit();
+			FileWriter fw = new FileWriter(tmp);
+			fw.write(testxml.toCharArray());
+			fw.flush();
+			fw.close();
+			assertXMLMatches(tmp.toURI().toString(), new SAXBuilder().build(tmp.toURI().toURL()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
+		} finally {
+			if (tmp != null) {
+				tmp.delete();
+			}
+		}
+	}
+
+	@Test
+	public void testBuildInputStreamString() {
+		InputStream is = new ByteArrayInputStream(testxml.getBytes());
+		try {
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(), new SAXBuilder().build(is, "baseID"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to parse document: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testBuildReader() {
+		Reader is = new CharArrayReader(testxml.toCharArray());
+		try {
+			assertXMLMatches(null, new SAXBuilder().build(is));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to parse document: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testBuildReaderString() {
+		Reader is = new CharArrayReader(testxml.toCharArray());
+		try {
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(), new SAXBuilder().build(is, "baseID"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to parse document: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testBuildString() {
+		File tmp = null;
+		try {
+			tmp = File.createTempFile("tst", ".xml");
+			tmp.deleteOnExit();
+			FileWriter fw = new FileWriter(tmp);
+			fw.write(testxml.toCharArray());
+			fw.flush();
+			fw.close();
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), new SAXBuilder().build(tmp.toString()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
+		} finally {
+			if (tmp != null) {
+				tmp.delete();
+			}
+		}
+	}
+
 }
