@@ -1,0 +1,7 @@
+<root att1="val1" att2="val2" >
+	<child att="child1" />
+	<child att="child2" />
+	<child att="child3" />
+	<child att="child4" />
+	<child att="child5" />
+</root>

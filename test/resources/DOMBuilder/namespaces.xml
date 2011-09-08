@@ -1,0 +1,7 @@
+<root xmlns="rootns" xmlns:ans="attns" xmlns:cns="childns" att1="val1" ans:att2="val2" >
+	<child xmlns="" att="child1" />
+	<child att="child2" />
+	<cns:child att="child3" />
+	<child ans:att="child4" />
+	<child att="child5" />
+</root>

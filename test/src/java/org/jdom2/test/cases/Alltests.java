@@ -100,7 +100,7 @@ public static Test suite() {
 		TestSuite suite= new TestSuite();
 
 		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
-		suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
+		//suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
 		
 		suite.addTest(new JUnit4TestAdapter(TestComment.class));
 		suite.addTest(new JUnit4TestAdapter(TestEntityRef.class));
@@ -140,6 +140,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestSAXHandler.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXComplexSchema.class));
+		suite.addTest(new JUnit4TestAdapter(TestDOMBuilder.class));
 		
 		
 		// Output Tests

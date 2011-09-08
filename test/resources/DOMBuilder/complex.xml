@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- root comment -->
+<?jdomtest root level ?>
+<root att1="val1" att2="val2" >
+  text
+	<child att="child1" xml:space="preserve"> hello Frodo Baggins! </child>
+	<child att="child2" />
+	<?jdomtest processing instruction ?>
+	<child att="child3" />
+	<!-- comment  -->
+	<child att="child4" unresolved="&amp;"/>
+	<child att="child5" > <![CDATA[some cdata text ]]> </child>
+</root>
