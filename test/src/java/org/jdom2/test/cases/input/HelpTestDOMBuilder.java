@@ -2,6 +2,7 @@ package org.jdom2.test.cases.input;
 
 import java.io.IOException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,11 +21,15 @@ import org.xml.sax.SAXException;
  */
 public class HelpTestDOMBuilder {
 
-	public static final Document getDocument(String filename) throws ParserConfigurationException, SAXException, IOException {
+	public static final Document getDocument(String filename, boolean xsdvalidate) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
-		dbf.setValidating(false);
+		dbf.setValidating(xsdvalidate);
 		dbf.setExpandEntityReferences(false);
+		
+		if (xsdvalidate) {
+			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		}
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		return db.parse(filename);
 	}

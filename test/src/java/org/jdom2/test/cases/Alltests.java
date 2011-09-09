@@ -100,7 +100,7 @@ public static Test suite() {
 		TestSuite suite= new TestSuite();
 
 		suite.addTest(new JUnit4TestAdapter(TestVerifier.class));
-		//suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
+		suite.addTest(new JUnit4TestAdapter(TestVerifierCharacters.class));
 		
 		suite.addTest(new JUnit4TestAdapter(TestComment.class));
 		suite.addTest(new JUnit4TestAdapter(TestEntityRef.class));

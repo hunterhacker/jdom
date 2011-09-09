@@ -45,43 +45,52 @@ public class TestDOMBuilder {
 	
 	@Test
 	public void testSimpleDocument() {
-		checkDOM("test/resources/DOMBuilder/simple.xml");
+		checkDOM("test/resources/DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkDOM("test/resources/DOMBuilder/attributes.xml");
+		checkDOM("test/resources/DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkDOM("test/resources/DOMBuilder/namespaces.xml");
+		checkDOM("test/resources/DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkDOM("test/resources/DOMBuilder/doctype.xml");
+		checkDOM("test/resources/DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkDOM("test/resources/DOMBuilder/complex.xml");
+		checkDOM("test/resources/DOMBuilder/complex.xml", false);
 	}
 	
-	private void checkDOM(String filename) {
+	@Test
+	public void testXSDDocument() {
+		checkDOM("test/resources/xsdcomplex/input.xml", true);
+	}
+	
+	private void checkDOM(String filename, boolean xsdvalidate) {
 		try {
+			org.w3c.dom.Document domdoc = HelpTestDOMBuilder.getDocument(filename, xsdvalidate);
 			DOMBuilder db = new DOMBuilder();
-			org.w3c.dom.Document domdoc = HelpTestDOMBuilder.getDocument(filename);
 			Document dombuild = db.build(domdoc);
 			Element domroot = db.build(HelpTestDOMBuilder.getRoot(domdoc));
 			
 			SAXBuilder sb = new SAXBuilder(false);
 			sb.setExpandEntities(false);
+			sb.setFeature("http://xml.org/sax/features/namespaces", true);
+			sb.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
+			sb.setFeature("http://apache.org/xml/features/validation/schema", xsdvalidate);
+			
 			Document saxbuild = sb.build(filename);
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
-			assertEquals(toString(dombuild), toString(saxbuild));
-			assertEquals(toString(domroot), toString(saxroot));
+			assertEquals(toString(saxbuild), toString(dombuild));
+			assertEquals(toString(saxroot), toString(domroot));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
