@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
-import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 
 public class TestFormat {
@@ -160,8 +159,7 @@ public class TestFormat {
 	@Test
 	public void testClone() {
 		Format mine = Format.getRawFormat();
-		XMLOutputter out = new XMLOutputter(mine);
-		Format clone = out.getFormat();
+		Format clone = (Format)mine.clone();
 		assertFalse(mine == clone);
 		checkEquals(mine, clone);
 	}
