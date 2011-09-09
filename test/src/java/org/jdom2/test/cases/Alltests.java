@@ -64,6 +64,7 @@ import org.jdom2.test.cases.filter.TestContentFilter;
 import org.jdom2.test.cases.filter.TestElementFilter;
 import org.jdom2.test.cases.input.*;
 import org.jdom2.test.cases.output.TestDOMOutputter;
+import org.jdom2.test.cases.output.TestFormat;
 import org.jdom2.test.cases.output.TestXMLOutputter;
 import org.jdom2.test.util.ListTest;
 
@@ -146,6 +147,7 @@ public static Test suite() {
 		// Output Tests
 		suite.addTest(new JUnit4TestAdapter(TestXMLOutputter.class));
 		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
+		suite.addTest(new JUnit4TestAdapter(TestFormat.class));
 
 		return suite;
 }
