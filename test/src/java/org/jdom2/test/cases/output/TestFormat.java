@@ -14,8 +14,8 @@ public class TestFormat {
 	public static final void checkEquals(Format a, Format b) {
 		assertEquals("Expect formatters to have the same Encoding", 
 				a.getEncoding(), b.getEncoding());
-		assertEquals("Expect formatters to have the same EscapeStrategy", 
-				a.getEscapeStrategy(), b.getEscapeStrategy());
+		//assertEquals("Expect formatters to have the same EscapeStrategy", 
+		//		a.getEscapeStrategy(), b.getEscapeStrategy());
 		assertEquals("Expect formatters to have the same ExpandEmptyElements", 
 				a.getExpandEmptyElements(), b.getExpandEmptyElements());
 		assertEquals("Expect formatters to have the same TrAXEscapingPIs", 

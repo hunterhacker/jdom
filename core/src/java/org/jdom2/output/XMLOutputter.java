@@ -658,6 +658,23 @@ public class XMLOutputter implements Cloneable {
         return out.toString();
     }
 
+    /**
+     * This will handle printing out an <code>{@link
+     * Element}</code>'s content only, not including its tag, and
+     * attributes.  This can be useful for printing the content of an
+     * element that contains HTML, like "&lt;description&gt;JDOM is
+     * &lt;b&gt;fun&gt;!&lt;/description&gt;".
+     *
+     * @param element <code>Element</code> to output.
+     */
+    public String outputElementContentString(Element element) {
+        StringWriter out = new StringWriter();
+        try {
+            outputElementContent(element, out);  // output() flushes
+        } catch (IOException e) { }
+        return out.toString();
+    }
+    
     // * * * * * * * * * * Internal printing methods * * * * * * * * * *
     // * * * * * * * * * * Internal printing methods * * * * * * * * * *
 
