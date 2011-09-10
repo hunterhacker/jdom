@@ -329,6 +329,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<target name="coverage.setup" description="Set up code-coverage metrics" depends="compile.core">
 		<taskdef classpathref="junit.class.path" resource="tasks.properties"/>
 
+		<deltree dir="${junit.instrumented}"/>
 		<mkdir dir="${junit.instrumented}" />
 		<property name="cobertura.datafile" value="${junit.instrumented}/cobertura.ser"/>
 		<cobertura-instrument todir="${junit.instrumented}" datafile="${cobertura.datafile}">
@@ -353,6 +354,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	
 	<target name="coverage" depends="coverage.setup, junit"
 		description="Run the code coverage tool.">
+		<deltree dir="${coverage.out}"/>
 		<mkdir dir="${coverage.out}" />
 		<cobertura-report srcdir="${core.build}" destdir="${coverage.out}" datafile="${cobertura.datafile}"/>
 		<echo message="See ${coverage.out}/index.html for results." />
