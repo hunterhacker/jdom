@@ -9,8 +9,12 @@ package org.jdom2.test.cases.output;
  */
 
 import org.jdom2.*;
+
 import java.util.*;
+
+import org.jdom2.input.DOMBuilder;
 import org.jdom2.output.*;
+import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
@@ -41,4 +45,78 @@ public final class TestDOMOutputter {
          //System.out.println("Dom impl: "+ domel.getClass().getName());
          assertNotNull(domel.getLocalName()); 
     }
+    
+    
+    private void roundTrip(Document doc) {
+    	XMLOutputter xout = new XMLOutputter(Format.getRawFormat());
+    	// create a String representation of the input.
+    	if (doc.hasRootElement()) {
+    		UnitTestUtil.normalizeAttributes(doc.getRootElement());
+    	}
+    	String expect = xout.outputString(doc);
+    	
+    	String actual = null;
+    	try {
+    		// convert the input to a DOM document
+        	DOMOutputter domout = new DOMOutputter();
+			org.w3c.dom.Document outonce = domout.output(doc);
+			
+			// convert the DOM document back again.
+			DOMBuilder builder = new DOMBuilder();
+			Document backagain = builder.build(outonce);
+			
+			// get a String representation of the round-trip.
+	    	if (backagain.hasRootElement()) {
+	    		UnitTestUtil.normalizeAttributes(backagain.getRootElement());
+	    	}
+			actual = xout.outputString(backagain);
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			fail("Failed to round-trip the document with exception: " 
+					+ e.getMessage() + "\n" + expect);
+		}
+    	assertEquals(expect, actual);
+    }
+    
+    
+    @Test
+    public void testOutputDocumentSimple() {
+    	Document doc = new Document();
+    	doc.addContent(new Element("root"));
+    	roundTrip(doc);
+    }
+    
+    @Test
+    public void testOutputDocumentFull() {
+    	Document doc = new Document();
+    	doc.addContent(new DocType("root"));
+    	doc.addContent(new Comment("This is a document"));
+    	doc.addContent(new ProcessingInstruction("jdomtest", ""));
+    	doc.addContent(new Element("root"));
+    	roundTrip(doc);
+    }
+    
+    @Test
+    public void testOutputElementNamespaces() {
+		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
+		Namespace ans = Namespace.getNamespace("ans", "attributens");
+		emt.addNamespaceDeclaration(ans);
+		emt.addNamespaceDeclaration(Namespace.getNamespace("two", "two"));
+		emt.setAttribute(new Attribute("att", "val", ans));
+		Document doc = new Document(emt);
+		roundTrip(doc);
+    }
+    
+    @Test
+    public void testOutputElementFull() {
+		Element emt = new Element("root");
+		emt.addContent(new Comment("comment"));
+		emt.addContent(new Text("txt"));
+		emt.addContent(new ProcessingInstruction("jdomtest", ""));
+		emt.addContent(new Element("child"));
+		emt.addContent(new CDATA("cdata"));
+		Document doc = new Document(emt);
+		roundTrip(doc);
+    }
+    
 }
