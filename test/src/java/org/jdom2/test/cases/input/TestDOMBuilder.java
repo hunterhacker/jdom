@@ -16,6 +16,7 @@ import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
 public class TestDOMBuilder {
@@ -98,22 +99,6 @@ public class TestDOMBuilder {
 		}
 	}
 	
-	private void normalizeAttributes(Element emt) {
-		TreeMap<String,Attribute> sorted = new TreeMap<String, Attribute>();
-		List<?> atts = emt.getAttributes();
-		for (Object o : atts.toArray()) {
-			Attribute a = (Attribute)o;
-			sorted.put(a.getQualifiedName(), a);
-			a.detach();
-		}
-		for (Attribute a : sorted.values()) {
-			emt.setAttribute(a);
-		}
-		for (Object o : emt.getChildren()) {
-			normalizeAttributes((Element)o);
-		}
-	}
-	
 	private void normalizeDTD(DocType dt) {
 		if (dt == null) {
 			return;
@@ -134,7 +119,7 @@ public class TestDOMBuilder {
 	}
 	
 	private String toString(Document doc) {
-		normalizeAttributes(doc.getRootElement());
+		UnitTestUtil.normalizeAttributes(doc.getRootElement());
 		normalizeDTD(doc.getDocType());
 		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 		CharArrayWriter caw = new CharArrayWriter();
@@ -148,7 +133,7 @@ public class TestDOMBuilder {
 	}
 
 	private String toString(Element emt) {
-		normalizeAttributes(emt);
+		UnitTestUtil.normalizeAttributes(emt);
 		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 		CharArrayWriter caw = new CharArrayWriter();
 		try {

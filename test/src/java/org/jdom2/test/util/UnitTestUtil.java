@@ -12,7 +12,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.TreeMap;
+
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 public class UnitTestUtil {
 	
@@ -96,6 +101,30 @@ public class UnitTestUtil {
         return t;
 
     }
+
+    /**
+     * Attribute order is not significant in XML documents.
+     * This method re-arranges the order of the Attributes (in somewhat
+     * alphabetical order, but that's not important) so that you can easily
+     * compare the attribute content of two different elements.
+     * @param emt The element who's Attributes we should rearrange.
+     */
+	public static final void normalizeAttributes(Element emt) {
+		TreeMap<String,Attribute> sorted = new TreeMap<String, Attribute>();
+		List<?> atts = emt.getAttributes();
+		for (Object o : atts.toArray()) {
+			Attribute a = (Attribute)o;
+			sorted.put(a.getQualifiedName(), a);
+			a.detach();
+		}
+		for (Attribute a : sorted.values()) {
+			emt.setAttribute(a);
+		}
+		for (Object o : emt.getChildren()) {
+			normalizeAttributes((Element)o);
+		}
+	}
+	
     
     /**
      * Test whether two values are equals, in addition, check the hashCode() values
