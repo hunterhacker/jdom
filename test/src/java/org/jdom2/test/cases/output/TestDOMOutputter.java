@@ -12,6 +12,7 @@ import org.jdom2.*;
 
 import java.util.*;
 
+import org.jdom2.adapters.XercesDOMAdapter;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.output.*;
 import org.jdom2.test.util.UnitTestUtil;
@@ -28,6 +29,10 @@ public final class TestDOMOutputter {
      {
         JUnitCore.runClasses(TestDOMOutputter.class);
     }
+    
+    private interface DOMSetup {
+    	public DOMOutputter buildOutputter();
+    }
 
     @Test
     public void test_ForceNamespaces() throws JDOMException {
@@ -39,15 +44,20 @@ public final class TestDOMOutputter {
          doc.setRootElement(root);
 
          DOMOutputter out = new DOMOutputter();
+         assertFalse(out.getForceNamespaceAware());
          out.setForceNamespaceAware(true);
+         assertTrue(out.getForceNamespaceAware());
          org.w3c.dom.Document dom = out.output(doc);
          org.w3c.dom.Element domel = dom.getDocumentElement();
          //System.out.println("Dom impl: "+ domel.getClass().getName());
          assertNotNull(domel.getLocalName()); 
     }
     
-    
     private void roundTrip(Document doc) {
+    	roundTrip(null, doc);
+    }
+    
+    private void roundTrip(DOMSetup setup, Document doc) {
     	XMLOutputter xout = new XMLOutputter(Format.getRawFormat());
     	// create a String representation of the input.
     	if (doc.hasRootElement()) {
@@ -58,7 +68,7 @@ public final class TestDOMOutputter {
     	String actual = null;
     	try {
     		// convert the input to a DOM document
-        	DOMOutputter domout = new DOMOutputter();
+        	DOMOutputter domout = setup == null ? new DOMOutputter() : setup.buildOutputter();
 			org.w3c.dom.Document outonce = domout.output(doc);
 			
 			// convert the DOM document back again.
@@ -78,6 +88,17 @@ public final class TestDOMOutputter {
     	assertEquals(expect, actual);
     }
     
+    @Test
+    public void testDOMAdapter() {
+    	Document doc = new Document(new Element("root"));
+    	DOMSetup setup = new DOMSetup() {
+			@Override
+			public DOMOutputter buildOutputter() {
+				return new DOMOutputter(XercesDOMAdapter.class.getName());
+			}
+		};
+		roundTrip(setup, doc);
+    }
     
     @Test
     public void testOutputDocumentSimple() {
@@ -97,6 +118,14 @@ public final class TestDOMOutputter {
     }
     
     @Test
+    public void testOutputElementAttributes() {
+    	Element emt = new Element("root");
+    	emt.setAttribute("att", "val");
+		Document doc = new Document(emt);
+		roundTrip(doc);
+    }
+    
+    @Test
     public void testOutputElementNamespaces() {
 		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
 		Namespace ans = Namespace.getNamespace("ans", "attributens");
@@ -108,15 +137,71 @@ public final class TestDOMOutputter {
     }
     
     @Test
+    public void testOutputElementNamespaceNoPrefix() {
+		Element emt = new Element("root", Namespace.getNamespace("", "myns"));
+		Namespace ans = Namespace.getNamespace("ans", "attributens");
+		emt.addNamespaceDeclaration(ans);
+		emt.addNamespaceDeclaration(Namespace.getNamespace("two", "two"));
+		emt.setAttribute(new Attribute("att", "val", ans));
+		Document doc = new Document(emt);
+		roundTrip(doc);
+    }
+    
+    @Test
+    public void testOutputElementNamespacesForceNS() {
+		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
+		Namespace ans = Namespace.getNamespace("ans", "attributens");
+		emt.addNamespaceDeclaration(ans);
+		emt.addNamespaceDeclaration(Namespace.getNamespace("two", "two"));
+		emt.setAttribute(new Attribute("att", "val", ans));
+		Document doc = new Document(emt);
+		DOMSetup setup = new DOMSetup() {
+			@Override
+			public DOMOutputter buildOutputter() {
+				DOMOutputter dom = new DOMOutputter();
+				dom.setForceNamespaceAware(true);
+				return dom;
+			}
+		};
+		roundTrip(setup, doc);
+    }
+    
+    @Test
     public void testOutputElementFull() {
 		Element emt = new Element("root");
+		emt.setAttribute("att1", "val1");
+		emt.setAttribute("att2", "val2");
 		emt.addContent(new Comment("comment"));
 		emt.addContent(new Text("txt"));
 		emt.addContent(new ProcessingInstruction("jdomtest", ""));
 		emt.addContent(new Element("child"));
+		emt.addContent(new EntityRef("ref"));
 		emt.addContent(new CDATA("cdata"));
 		Document doc = new Document(emt);
 		roundTrip(doc);
+    }
+    
+    @Test
+    public void testOutputElementFullForceNS() {
+		Element emt = new Element("root");
+		emt.setAttribute("att1", "val1");
+		emt.setAttribute("att2", "val2");
+		emt.addContent(new Comment("comment"));
+		emt.addContent(new Text("txt"));
+		emt.addContent(new ProcessingInstruction("jdomtest", ""));
+		emt.addContent(new Element("child"));
+		emt.addContent(new EntityRef("ref"));
+		emt.addContent(new CDATA("cdata"));
+		Document doc = new Document(emt);
+		DOMSetup setup = new DOMSetup() {
+			@Override
+			public DOMOutputter buildOutputter() {
+				DOMOutputter dom = new DOMOutputter();
+				dom.setForceNamespaceAware(true);
+				return dom;
+			}
+		};
+		roundTrip(setup, doc);
     }
     
 }
