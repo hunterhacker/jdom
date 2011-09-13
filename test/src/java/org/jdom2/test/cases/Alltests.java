@@ -55,18 +55,26 @@ package org.jdom2.test.cases;
  */
 
 
-import junit.framework.*;
+import junit.framework.JUnit4TestAdapter;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.jdom2.TestIllegalAddException;
 import org.jdom2.TestIllegalNameException;
 import org.jdom2.TestIllegalTargetException;
 import org.jdom2.test.cases.filter.TestContentFilter;
 import org.jdom2.test.cases.filter.TestElementFilter;
-import org.jdom2.test.cases.input.*;
+import org.jdom2.test.cases.input.TestBuilderErrorHandler;
+import org.jdom2.test.cases.input.TestDOMBuilder;
+import org.jdom2.test.cases.input.TestJDOMParseException;
+import org.jdom2.test.cases.input.TestSAXBuilder;
+import org.jdom2.test.cases.input.TestSAXComplexSchema;
+import org.jdom2.test.cases.input.TestSAXHandler;
 import org.jdom2.test.cases.output.TestDOMOutputter;
 import org.jdom2.test.cases.output.TestFormat;
 import org.jdom2.test.cases.output.TestSAXOutputter;
 import org.jdom2.test.cases.output.TestXMLOutputter;
+import org.jdom2.test.cases.transform.TestJDOMSource;
 import org.jdom2.test.util.ListTest;
 
 
@@ -150,6 +158,13 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestXMLOutputter.class));
 		suite.addTest(new JUnit4TestAdapter(TestDOMOutputter.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXOutputter.class));
+		
+		// Transformer Tests
+		suite.addTest(new JUnit4TestAdapter(TestJDOMSource.class));		
+		// suite.addTest(new JUnit4TestAdapter(TestJDOMTransform.class));		
+		
+		// XPath tests.
+		//suite.addTest(new JUnit4TestAdapter(TestJaxenXPath.class));
 
 		return suite;
 	}
