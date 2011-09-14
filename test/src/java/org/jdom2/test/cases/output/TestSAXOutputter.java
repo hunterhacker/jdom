@@ -568,6 +568,15 @@ public class TestSAXOutputter {
     }
     
     @Test
+    public void testOutputDocumentRootAttNS() {
+    	Document doc = new Document();
+    	Element e = new Element("root");
+    	e.setAttribute(new Attribute("att", "val", Namespace.getNamespace("ans", "mynamespace")));
+    	doc.addContent(e);
+    	roundTrip(doc);
+    }
+    
+    @Test
     public void testOutputDocumentFullNoLexical() throws JDOMException {
     	Document doc = new Document();
     	doc.addContent(new ProcessingInstruction("jdomtest", ""));

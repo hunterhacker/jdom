@@ -267,6 +267,7 @@ public class JDOMResult extends SAXResult {
         catch (RuntimeException ex1) {
           // Some of the result nodes are not valid children of a
           // Document node. => return null.
+        	return null;
         }
       }
     }
