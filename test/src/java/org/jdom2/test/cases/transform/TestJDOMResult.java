@@ -163,13 +163,5 @@ public class TestJDOMResult {
 	}
 
 	
-	/* *************************************************
-	 * These are the more challenging tests.           *
-	 * part of this file because we actually need      *
-	 * to fire the various events through the system   *
-	 * in order to test the Transformation results     *
-	 * *************************************************/
-	
-
 	
 }
