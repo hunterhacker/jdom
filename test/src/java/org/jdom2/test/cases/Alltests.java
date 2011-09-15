@@ -78,6 +78,7 @@ import org.jdom2.test.cases.transform.TestJDOMResult;
 import org.jdom2.test.cases.transform.TestJDOMSource;
 import org.jdom2.test.cases.transform.TestJDOMTransform;
 import org.jdom2.test.cases.transform.TestXSLTransformException;
+import org.jdom2.test.cases.transform.TestXSLTransformer;
 import org.jdom2.test.util.ListTest;
 
 
@@ -167,6 +168,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestJDOMResult.class));		
 		suite.addTest(new JUnit4TestAdapter(TestJDOMTransform.class));		
 		suite.addTest(new JUnit4TestAdapter(TestXSLTransformException.class));		
+		suite.addTest(new JUnit4TestAdapter(TestXSLTransformer.class));		
 		
 		// XPath tests.
 		//suite.addTest(new JUnit4TestAdapter(TestJaxenXPath.class));
