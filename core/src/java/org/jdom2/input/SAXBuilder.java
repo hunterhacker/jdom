@@ -604,12 +604,11 @@ public class SAXBuilder {
 
                 Method createParser =
                     factoryClass.getMethod("createParser",
-                        new Class[] { boolean.class, Map.class, Map.class });
+                        boolean.class, Map.class, Map.class );
 
                 // Create SAX parser.
                 parser = (XMLReader)createParser.invoke(null,
-                                new Object[] { validate ? Boolean.TRUE : Boolean.FALSE,
-                                               features, properties });
+                                Boolean.valueOf(validate), features, properties);
 
                 // Configure parser
                 setFeaturesAndProperties(parser, false);

@@ -90,13 +90,12 @@ public class OracleV2DOMAdapter extends AbstractDOMAdapter {
 
             // Parse the document
             Method parse =
-                parserClass.getMethod("parse",
-                                      new Class[] {org.xml.sax.InputSource.class});
-            parse.invoke(parser, new Object[] {new InputSource(in)});
+                parserClass.getMethod("parse", org.xml.sax.InputSource.class);
+            parse.invoke(parser, new InputSource(in));
 
             // Get the Document object
-            Method getDocument = parserClass.getMethod("getDocument", null);
-            Document doc = (Document)getDocument.invoke(parser, null);
+            Method getDocument = parserClass.getMethod("getDocument");
+            Document doc = (Document)getDocument.invoke(parser);
 
             return doc;
         } catch (InvocationTargetException e) {

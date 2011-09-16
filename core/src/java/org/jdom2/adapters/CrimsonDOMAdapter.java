@@ -83,20 +83,13 @@ public class CrimsonDOMAdapter extends AbstractDOMAdapter {
         throws IOException, JDOMException  {
 
         try {
-            Class[] parameterTypes = new Class[2];
-            parameterTypes[0] = Class.forName("java.io.InputStream");
-            parameterTypes[1] = boolean.class;
-
-            Object[] args = new Object[2];
-            args[0] = in;
-            args[1] = new Boolean(false);
 
             // Load the parser class and invoke the parse method
             Class parserClass = Class.forName("org.apache.crimson.tree.XmlDocument");
             Method createXmlDocument =
-                parserClass.getMethod("createXmlDocument", parameterTypes);
+                parserClass.getMethod("createXmlDocument", Class.forName("java.io.InputStream"), boolean.class);
             Document doc =
-                (Document)createXmlDocument.invoke(null, args);
+                (Document)createXmlDocument.invoke(null, in, Boolean.valueOf(false));
 
             return doc;
 

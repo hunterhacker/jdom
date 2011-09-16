@@ -92,36 +92,30 @@ public class XercesDOMAdapter extends AbstractDOMAdapter {
             Object parser = parserClass.newInstance();
 
             // Set validation
-            Method setFeature = parserClass.getMethod(
-                "setFeature",
-                new Class[] {java.lang.String.class, boolean.class});
+            Method setFeature = parserClass.getMethod("setFeature", 
+            		String.class, boolean.class);
             setFeature.invoke(parser, 
-                new Object[] {"http://xml.org/sax/features/validation",
-                new Boolean(validate)});
+                "http://xml.org/sax/features/validation", Boolean.valueOf(validate));
 
             // Set namespaces true
-            setFeature.invoke(parser,
-                new Object[] {"http://xml.org/sax/features/namespaces",
-                new Boolean(true)});
+            setFeature.invoke(parser, 
+            		"http://xml.org/sax/features/namespaces", Boolean.valueOf(true));
 
             // Set the error handler
             if (validate) {
                 Method setErrorHandler = parserClass.getMethod(
-                    "setErrorHandler",
-                    new Class[] {ErrorHandler.class});
-                setErrorHandler.invoke(parser,
-                    new Object[] {new BuilderErrorHandler()});
+                    "setErrorHandler", ErrorHandler.class);
+                setErrorHandler.invoke(parser, new BuilderErrorHandler());
             }
 
             // Parse the document
             Method parse = parserClass.getMethod(
-                "parse",
-                new Class[] {org.xml.sax.InputSource.class});
-            parse.invoke(parser, new Object[]{new InputSource(in)});
+                "parse", org.xml.sax.InputSource.class);
+            parse.invoke(parser, new InputSource(in));
 
             // Get the Document object
-            Method getDocument = parserClass.getMethod("getDocument", null);
-            Document doc = (Document)getDocument.invoke(parser, null);
+            Method getDocument = parserClass.getMethod("getDocument");
+            Document doc = (Document)getDocument.invoke(parser);
 
             return doc;
         } catch (InvocationTargetException e) {

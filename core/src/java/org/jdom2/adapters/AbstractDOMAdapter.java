@@ -156,8 +156,8 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
         try {
             Class dtclass = dt.getClass();
             Method setInternalSubset = dtclass.getMethod(
-                "setInternalSubset", new Class[] {java.lang.String.class});
-            setInternalSubset.invoke(dt, new Object[] {s});
+                "setInternalSubset", String.class);
+            setInternalSubset.invoke(dt, s);
         }
         catch (Exception e) {
             // ignore

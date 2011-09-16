@@ -96,33 +96,29 @@ public class XML4JDOMAdapter extends AbstractDOMAdapter {
 
             // Set validation
             Method setFeature =
-                parserClass.getMethod("setFeature",
-                                      new Class[] {java.lang.String.class,
-                                                   boolean.class});
-            setFeature.invoke(parser, new Object[] {"http://xml.org/sax/features/validation",
-                                                    new Boolean(validate)});
+                parserClass.getMethod("setFeature", String.class, boolean.class);
+            setFeature.invoke(parser, "http://xml.org/sax/features/validation",
+                                                    Boolean.valueOf(validate));
 
             // Set namespaces
-            setFeature.invoke(parser, new Object[] {"http://xml.org/sax/features/namespaces",
-                                                    new Boolean(false)});
+            setFeature.invoke(parser, "http://xml.org/sax/features/namespaces",
+                                                    Boolean.valueOf(false));
 
             // Set the error handler
             if (validate) {
                 Method setErrorHandler =
-                    parserClass.getMethod("setErrorHandler",
-                        new Class[] {ErrorHandler.class});
-                setErrorHandler.invoke(parser, new Object[] {new BuilderErrorHandler()});
+                    parserClass.getMethod("setErrorHandler", ErrorHandler.class);
+                setErrorHandler.invoke(parser, new BuilderErrorHandler());
             }
 
             // Parse the document
             Method parse =
-                parserClass.getMethod("parse",
-                                      new Class[] {org.xml.sax.InputSource.class});
-            parse.invoke(parser, new Object[]{new InputSource(in)});
+                parserClass.getMethod("parse", org.xml.sax.InputSource.class);
+            parse.invoke(parser, new InputSource(in));
 
             // Get the Document object
-            Method getDocument = parserClass.getMethod("getDocument", null);
-            Document doc = (Document)getDocument.invoke(parser, null);
+            Method getDocument = parserClass.getMethod("getDocument");
+            Document doc = (Document)getDocument.invoke(parser);
 
             return doc;
         } catch (InvocationTargetException e) {

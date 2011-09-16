@@ -450,11 +450,11 @@ public class Format implements Cloneable {
                 try {
                     Class charsetClass = Class.forName("java.nio.charset.Charset");
                     Class encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
-                    Method forName = charsetClass.getMethod("forName", new Class[]{String.class});
-                    Object charsetObj = forName.invoke(null, new Object[]{encoding});
-                    Method newEncoder = charsetClass.getMethod("newEncoder", null);
-                    encoder = newEncoder.invoke(charsetObj, null);
-                    canEncode = encoderClass.getMethod("canEncode", new Class[]{char.class});
+                    Method forName = charsetClass.getMethod("forName", String.class);
+                    Object charsetObj = forName.invoke(null, encoding);
+                    Method newEncoder = charsetClass.getMethod("newEncoder");
+                    encoder = newEncoder.invoke(charsetObj);
+                    canEncode = encoderClass.getMethod("canEncode", char.class);
                 }
                 catch (Exception ignored) {
                 }

@@ -94,41 +94,34 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
             // factory = DocumentBuilderFactory.newInstance();
             Method newParserInstance =
-                factoryClass.getMethod("newInstance", null);
-            Object factory = newParserInstance.invoke(null, null);
+                factoryClass.getMethod("newInstance");
+            Object factory = newParserInstance.invoke(null);
 
             // factory.setValidating(validate);
             Method setValidating =
-                factoryClass.getMethod("setValidating",
-                                   new Class[]{boolean.class});
-            setValidating.invoke(factory,
-                                 new Object[]{new Boolean(validate)});
+                factoryClass.getMethod("setValidating", boolean.class);
+            setValidating.invoke(factory, Boolean.valueOf(validate));
 
             // factory.setNamespaceAware(true);
             Method setNamespaceAware =
-                factoryClass.getMethod("setNamespaceAware",
-                                       new Class[]{boolean.class});
-            setNamespaceAware.invoke(factory,
-                                 new Object[]{Boolean.TRUE});
+                factoryClass.getMethod("setNamespaceAware", boolean.class);
+            setNamespaceAware.invoke(factory, Boolean.TRUE);
     
             // jaxpParser = factory.newDocumentBuilder();
             Method newDocBuilder =
-                factoryClass.getMethod("newDocumentBuilder", null);
-            Object jaxpParser  = newDocBuilder.invoke(factory, null);
+                factoryClass.getMethod("newDocumentBuilder");
+            Object jaxpParser  = newDocBuilder.invoke(factory);
 
             // jaxpParser.setErrorHandler(null);
             Class parserClass = jaxpParser.getClass();
             Method setErrorHandler =
-                parserClass.getMethod("setErrorHandler",
-                                 new Class[]{org.xml.sax.ErrorHandler.class});
-            setErrorHandler.invoke(jaxpParser,
-                                 new Object[]{new BuilderErrorHandler()});
+                parserClass.getMethod("setErrorHandler", org.xml.sax.ErrorHandler.class);
+            setErrorHandler.invoke(jaxpParser, new BuilderErrorHandler());
 
             // domDoc = jaxpParser.parse(in);
-            Method parse = parserClass.getMethod(
-                "parse", new Class[]{InputStream.class});
+            Method parse = parserClass.getMethod("parse", InputStream.class);
             org.w3c.dom.Document domDoc = (org.w3c.dom.Document)
-                parse.invoke(jaxpParser, new Object[]{in});
+                parse.invoke(jaxpParser, in);
 
             return domDoc;
         } catch (InvocationTargetException e) {
@@ -166,19 +159,19 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
             // factory = DocumentBuilderFactory.newInstance();
             Method newParserInstance =
-                factoryClass.getMethod("newInstance", null);
-            Object factory = newParserInstance.invoke(null, null);
+                factoryClass.getMethod("newInstance");
+            Object factory = newParserInstance.invoke(null);
 
             // jaxpParser = factory.newDocumentBuilder();
             Method newDocBuilder =
-                factoryClass.getMethod("newDocumentBuilder", null);
-            Object jaxpParser  = newDocBuilder.invoke(factory, null);
+                factoryClass.getMethod("newDocumentBuilder");
+            Object jaxpParser  = newDocBuilder.invoke(factory);
 
             // domDoc = jaxpParser.newDocument();
             Class parserClass = jaxpParser.getClass();
-            Method newDoc = parserClass.getMethod("newDocument", null);
+            Method newDoc = parserClass.getMethod("newDocument");
             org.w3c.dom.Document domDoc =
-                (org.w3c.dom.Document) newDoc.invoke(jaxpParser, null);
+                (org.w3c.dom.Document) newDoc.invoke(jaxpParser);
 
             return domDoc;
         } catch (Exception e) {

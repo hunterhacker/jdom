@@ -1334,18 +1334,18 @@ public class SAXOutputter {
 
             // factory = SAXParserFactory.newInstance();
             Method newParserInstance =
-                    factoryClass.getMethod("newInstance", null);
-            Object factory = newParserInstance.invoke(null, null);
+                    factoryClass.getMethod("newInstance");
+            Object factory = newParserInstance.invoke(null);
 
             // jaxpParser = factory.newSAXParser();
-            Method newSAXParser = factoryClass.getMethod("newSAXParser", null);
-            Object jaxpParser   = newSAXParser.invoke(factory, null);
+            Method newSAXParser = factoryClass.getMethod("newSAXParser");
+            Object jaxpParser   = newSAXParser.invoke(factory);
 
             // parser = jaxpParser.getXMLReader();
             Class parserClass = jaxpParser.getClass();
             Method getXMLReader =
-                    parserClass.getMethod("getXMLReader", null);
-            parser = (XMLReader)getXMLReader.invoke(jaxpParser, null);
+                    parserClass.getMethod("getXMLReader");
+            parser = (XMLReader)getXMLReader.invoke(jaxpParser);
         } catch (ClassNotFoundException e) {
             //e.printStackTrace();
         } catch (InvocationTargetException e) {

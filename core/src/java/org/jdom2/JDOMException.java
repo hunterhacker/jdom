@@ -316,10 +316,8 @@ public class JDOMException extends Exception {
             Class objectClass = parent.getClass();
             if (testClass.isAssignableFrom(objectClass)) {
                 // Use reflection to call the specified method.
-                Class[] argClasses = new Class[0];
-                Method method = testClass.getMethod(methodName, argClasses);
-                Object[] args = new Object[0];
-                return (Throwable)method.invoke(parent, args);
+                Method method = testClass.getMethod(methodName);
+                return (Throwable)method.invoke(parent);
             }
         }
         catch(Exception ex) {

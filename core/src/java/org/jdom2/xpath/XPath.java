@@ -128,7 +128,7 @@ public abstract class XPath implements Serializable {
             setXPathClass(Class.forName(className));
          }
          // Allocate and return new implementation instance.
-         return (XPath)constructor.newInstance(new Object[] { path });
+         return (XPath)constructor.newInstance(path);
       }
       catch (JDOMException ex1) {
          throw ex1;
@@ -167,7 +167,7 @@ public abstract class XPath implements Serializable {
          if ((XPath.class.isAssignableFrom(aClass)) &&
              (Modifier.isAbstract(aClass.getModifiers()) == false)) {
             // Concrete subclass of XPath => Get constructor
-            constructor = aClass.getConstructor(new Class[] { String.class });
+            constructor = aClass.getConstructor(String.class);
          }
          else {
             throw new JDOMException(aClass.getName() +
