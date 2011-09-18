@@ -1525,7 +1525,15 @@ public final class TestElement {
         assertEquals("wrong namespace returned", ns, child.getNamespace("x"));
         assertNull("no namespace should have been found", child.getNamespace("bogus"));
         assertEquals("wrong namespace returned", newNs, child.getNamespace("y"));
-    }
+        
+        //Now make sure we can pick up namespaces on attributes too that are not
+        //explicitly added with addAdditionalNamespace()
+        assertNull(child.getNamespace("attns"));
+        child.setAttribute("att", "value", Namespace.getNamespace("attns", "atturi"));
+        assertEquals("atturi", child.getNamespace("attns").getURI());
+
+        assertNull(element.getNamespace("attns"));
+}
 
     /**
      * Test getAttributeValue by attribute name.
