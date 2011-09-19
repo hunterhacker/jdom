@@ -212,10 +212,13 @@ public abstract class AbstractTestXPath {
 
 	@Test
 	public void testSerialization() throws JDOMException {
-		XPath xpath = XPath.newInstance("//main");
+		XPath xpath = setupXPath("//main", null);
 		XPath xser  = UnitTestUtil.deSerialize(xpath);
 		assertTrue(xpath != xser);
 		// TODO JaxenXPath has useless equals(). See issue #43
+		// Additionally, all XPath deserialization is done on the default
+		// factory... will never be equals() if the factory used to create
+		// the xpath is different.
 		// UnitTestUtil.checkEquals(xpath, xser);
 		assertEquals(xpath.toString(), xser.toString());
 	}
@@ -314,12 +317,20 @@ public abstract class AbstractTestXPath {
 		checkComplexXPath("//c3nsa:child", doc, null, Collections.singleton(child3nsa),
 				child3emt.getValue(), null, child3emt);
 	}
+	
+	@Test
+	public void testGetALLNamespaces() {
+		//Namespace.NO_NAMESPACE is declared earlier in documentOrder.
+		// so it comes first.
+		checkXPath("//c3nsa:child/namespace::*", child3emt, "", 
+				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE, child3nsa, child3nsb);
+	}
 
 	@Test
 	// This fails the Jaxen Builder because the returned attributes are not in document order.
 	public void testAttributesNamespace() {
 		checkComplexXPath("//@*[namespace-uri() = 'jdom:c3nsb']", doc, null, null, 
-				"-123", Integer.valueOf(-123), child3emt.getAttributes().toArray());
+				"-123", Double.valueOf(-123), child3emt.getAttributes().toArray());
 	}
 	
 	@Test
@@ -337,7 +348,7 @@ public abstract class AbstractTestXPath {
 		// available because it is in scope on the 'context' element.
 		// so, there should be no need to re-declare it for the xpath.
 		checkComplexXPath("//@c3nsb:*[string() = '-123']", child3attdoub, null, null, 
-				"-123", Integer.valueOf(-123), child3attint);
+				"-123", Double.valueOf(-123), child3attint);
 	}
 	
 	@Test
@@ -346,7 +357,7 @@ public abstract class AbstractTestXPath {
 		// available because it is in scope on the 'context' element.
 		// so, there should be no need to re-declare it for the xpath.
 		checkComplexXPath("//@c3nsb:*[string() = '-123']", child3txt, null, null, 
-				"-123", Integer.valueOf(-123), child3attint);
+				"-123", Double.valueOf(-123), child3attint);
 	}
 	
 	/* *******************************

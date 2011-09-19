@@ -86,7 +86,7 @@ public abstract class XPath implements Serializable {
     * The default implementation class to use if none was configured.
     */
    private final static String  DEFAULT_XPATH_CLASS  =
-                                                "org.jdom2.xpath.JaxenXPath";
+                                                "org.jdom2.xpath.jaxen.JDOMXPath";
 
    /**
     * The string passable to the JAXP 1.3 XPathFactory isObjectModelSupported()

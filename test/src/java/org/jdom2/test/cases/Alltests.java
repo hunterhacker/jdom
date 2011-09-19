@@ -81,6 +81,7 @@ import org.jdom2.test.cases.transform.TestXSLTransformException;
 import org.jdom2.test.cases.transform.TestXSLTransformer;
 import org.jdom2.test.cases.xpath.AbstractTestXPath;
 import org.jdom2.test.cases.xpath.TestJaxenXPath;
+import org.jdom2.test.cases.xpath.TestLocalJaxenXPath;
 import org.jdom2.test.cases.xpath.TestXpath;
 import org.jdom2.test.util.ListTest;
 
@@ -176,6 +177,7 @@ public static Test suite() {
 		// XPath tests.
 		suite.addTest(new JUnit4TestAdapter(TestXpath.class));
 		suite.addTest(new JUnit4TestAdapter(TestJaxenXPath.class));
+		suite.addTest(new JUnit4TestAdapter(TestLocalJaxenXPath.class));
 
 		return suite;
 	}
