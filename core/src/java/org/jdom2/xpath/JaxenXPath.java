@@ -67,7 +67,7 @@ import org.jdom2.*;
  *
  * @author  Laurent Bihanic
  */
-class JaxenXPath extends    XPath {             // package protected
+public class JaxenXPath extends    XPath {             // package protected
 
    /**
     * The compiled XPath object to select nodes.  This attribute can
