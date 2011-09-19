@@ -112,9 +112,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</path>
 
 		<path id="junit.class.path">
+			<pathelement location="${junit.build}"/>
 			<pathelement location="${junit.instrumented}" />
 			<path refid="core.class.path"/>
-			<pathelement location="${junit.build}"/>
 			<fileset dir="${lib.dir}/cobertura" includes="*.jar" />
 		</path>
 
@@ -335,6 +335,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<cobertura-instrument todir="${junit.instrumented}" datafile="${cobertura.datafile}">
 		    <fileset dir="${core.build}">
 		        <include name="**/*.class"/>
+		        <exclude name="**/**/jaxen/**/*.class"/>
 		    </fileset>
 		</cobertura-instrument>
 
