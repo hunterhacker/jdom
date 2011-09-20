@@ -204,7 +204,10 @@ final class JDOMNavigator extends DefaultNavigator {
 		if (contextNode instanceof NamespaceContainer) {
 			return ((NamespaceContainer)contextNode).getParentElement();
 		}
-		return ((Content)contextNode).getParent();
+		if (contextNode instanceof Content) {
+			return ((Content)contextNode).getParent();
+		}
+		return null;
 	}
 
 	@Override
@@ -267,10 +270,12 @@ final class JDOMNavigator extends DefaultNavigator {
 	public Iterator<?> getParentAxisIterator(Object contextNode) throws UnsupportedAxisException {
 		
 		Parent p = null;
-		if (contextNode instanceof Attribute) {
-			p = ((Attribute)contextNode).getParent();
-		} else if (contextNode instanceof Content) {
+		if (contextNode instanceof Content) {
 			p = ((Content)contextNode).getParent();
+		} else if (contextNode instanceof Attribute) {
+			p = ((Attribute)contextNode).getParent();
+		} else if (contextNode instanceof NamespaceContainer) {
+			p = ((NamespaceContainer)contextNode).getParentElement();
 		}
 		if (p != null) {
 			return new SingleObjectIterator(p);

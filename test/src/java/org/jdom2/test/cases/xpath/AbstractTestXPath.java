@@ -123,7 +123,7 @@ public abstract class AbstractTestXPath {
 				(" Also Different Sizes: expect=" + expect.length + " actual=" + result.size());
 			int pos = 0;
 			for (Object o : result) {
-				if (pos > expect.length) {
+				if (pos >= expect.length) {
 					fail ("Results contained additional content at position " + 
 							pos + " for xpath '" + xpath + "': " + o + sze);
 				}
@@ -150,8 +150,9 @@ public abstract class AbstractTestXPath {
 						"have returned " + expect[0] + sze);
 			}
 			if (expect.length > 0 && o != expect[0]) {
-				fail("XPath.selectSingleNode() was expected to return " + 
-						expect[0] + "' but instead it returned '" + o + "'" + sze);
+				assertEquals("XPath.selectSingleNode() was expected to return " + 
+						expect[0] + "' but instead it returned '" + o + "'" + sze,
+						expect[0], o);
 			}
 			
 			// Check the getValue() operation
@@ -179,18 +180,18 @@ public abstract class AbstractTestXPath {
 				}
 			}
 			
-			if (expect.length == 0 && o != null) {
-				fail("Expected XPath.selectSingleNode() to return nothing, " +
-						"but it returned " + o);
-			}
-			if (expect.length > 0 && o == null) {
-				fail("XPath.selectSingleNode() returned nothing, but it should " +
-						"have returned " + expect[0]);
-			}
-			if (expect.length > 0 && o != expect[0]) {
-				fail("XPath.selectSingleNode() was expected to return " + 
-						expect[0] + "' but instead it returned '" + o + "'");
-			}
+//			if (expect.length == 0 && o != null) {
+//				fail("Expected XPath.selectSingleNode() to return nothing, " +
+//						"but it returned " + o);
+//			}
+//			if (expect.length > 0 && o == null) {
+//				fail("XPath.selectSingleNode() returned nothing, but it should " +
+//						"have returned " + expect[0]);
+//			}
+//			if (expect.length > 0 && o != expect[0]) {
+//				fail("XPath.selectSingleNode() was expected to return " + 
+//						expect[0] + "' but instead it returned '" + o + "'");
+//			}
 			
 		} catch (JDOMException e) {
 			e.printStackTrace();
@@ -284,11 +285,93 @@ public abstract class AbstractTestXPath {
 	}
 
 	@Test
+	public void testAncestorOrSelfFromMainAttribute() throws JDOMException {
+		checkXPath("ancestor-or-self::node()", mainatt, mainvalue, doc, main, mainatt);
+	}
+
+	@Test
+	public void testAncestorOrSelfFromNamespace() throws JDOMException {
+		checkXPath("ancestor-or-self::node()", child3nsa, null, child3nsa);
+	}
+
+	@Test
 	public void testAncestorOrSelfFromChild() throws JDOMException {
 		checkXPath("ancestor-or-self::node()", child1emt, mainvalue, doc, main, child1emt);
 	}
+
+		
+	/* *************************************
+	 * Boolean/Double/String tests.
+	 * ************************************* */
 	
+	@Test
+	public void getXPathDouble() {
+		checkXPath("count( //* )", doc, null, Double.valueOf(4));
+	}
+
+	@Test
+	public void getXPathString() {
+		checkXPath("string( . )", child1emt, null, child1text.getText());
+	}
+
+	@Test
+	public void getXPathBoolean() {
+		checkXPath("count (//*) > 1", child1emt, null, Boolean.TRUE);
+	}
+
+	/* *************************************
+	 * Element tests.
+	 * ************************************* */
 	
+	@Test
+	public void getXPathElementName() {
+		checkXPath("//*[name() = 'main']", doc, null, main);
+	}
+
+	@Test
+	public void getXPathElementText() {
+		checkXPath("//*[string() = 'child1text']", doc, null, child1emt);
+	}
+
+	
+	/* *************************************
+	 * Processing Instruction tests.
+	 * ************************************* */
+	
+	@Test
+	public void getXPathProcessingInstructionAll() {
+		checkXPath("//processing-instruction()", doc, null, docpi, mainpi);
+	}
+
+	@Test
+	public void getXPathProcessingInstructionByTarget() {
+		checkXPath("//processing-instruction()[name() = 'jdomtest']", doc, null, docpi, mainpi);
+	}
+
+	@Test
+	public void getXPathProcessingInstructionByData() {
+		checkXPath("//processing-instruction()[string() = 'doc']", doc, null, docpi);
+	}
+
+	/* *************************************
+	 * Attribute tests.
+	 * ************************************* */
+	
+	@Test
+	public void getXPathAttributeAll() {
+		checkXPath("//@*", doc, null, mainatt, child3attint, child3attdoub);
+	}
+
+	@Test
+	public void getXPathAttributeByName() {
+		checkXPath("//@*[name() = 'atta']", doc, null, mainatt);
+	}
+
+	@Test
+	public void getXPathAttributeByValue() {
+		checkXPath("//@*[string() = '-123']", doc, null, child3attint);
+	}
+
 	/* *************************************
 	 * XPath Variable tests.
 	 * ************************************* */
@@ -325,7 +408,7 @@ public abstract class AbstractTestXPath {
 		checkXPath("//c3nsa:child/namespace::*", child3emt, "", 
 				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE, child3nsa, child3nsb);
 	}
-
+	
 	@Test
 	// This fails the Jaxen Builder because the returned attributes are not in document order.
 	public void testAttributesNamespace() {
@@ -359,6 +442,133 @@ public abstract class AbstractTestXPath {
 		checkComplexXPath("//@c3nsb:*[string() = '-123']", child3txt, null, null, 
 				"-123", Double.valueOf(-123), child3attint);
 	}
+	
+	/* *******************************
+	 * Axis TestCases
+	 * ******************************* */
+	
+	@Test
+	public void testXPathAncestor() {
+		checkXPath("ancestor::*", child3txt, null, main, child3emt);
+	}
+	
+	@Test
+	public void testXPathAncestorOrSelf() {
+		checkXPath("ancestor-or-self::*", child3txt, null, main, child3emt);
+	}
+	
+	@Test
+	public void testXPathAncestorNodes() {
+		checkXPath("ancestor::node()", child3txt, null, doc, main, child3emt);
+	}
+	
+	@Test
+	public void testXPathAncestorOrSelfNodes() {
+		checkXPath("ancestor-or-self::node()", child3txt, null, doc, main, child3emt, child3txt);
+	}
+	
+	@Test
+	public void testXPathAncestorOrSelfNodesFromAtt() {
+		checkXPath("ancestor-or-self::node()", child3attint, null, doc, main, child3emt, child3attint);
+	}
+	
+	@Test
+	public void testXPathAttributes() {
+		checkXPath("attribute::*", child3emt, null, child3attint, child3attdoub);
+	}
+	
+	@Test
+	public void testXPathChild() {
+		checkXPath("child::*", main, null, child1emt, child2emt, child3emt);
+	}
+	
+	@Test
+	public void testXPathDescendant() {
+		checkXPath("descendant::*", doc, null, main, child1emt, child2emt, child3emt);
+	}
+	
+	@Test
+	public void testXPathDescendantNode() {
+		checkXPath("descendant::node()", doc, null, doccomment, docpi, main,
+				maincomment, mainpi, maintext1, child1emt, child1text,
+				maintext2, child2emt, child3emt, child3txt);
+	}
+	
+	@Test
+	public void testXPathDescendantOrSelf() {
+		checkXPath("descendant-or-self::*", doc, null, main, child1emt, child2emt, child3emt);
+	}
+	
+	@Test
+	public void testXPathFollowing() {
+		checkXPath("following::*", child2emt, null, child3emt);
+	}
+	
+	@Test
+	public void testXPathFollowingNode() {
+		checkXPath("following::node()", child2emt, null, child3emt, child3txt);
+	}
+	
+	@Test
+	public void testXPathFollowingSibling() {
+		checkXPath("following-sibling::*", child1emt, null, child2emt, child3emt);
+	}
+	
+	@Test
+	public void testXPathFollowingSiblingNode() {
+		checkXPath("following-sibling::node()", child1emt, null, maintext2, child2emt, child3emt);
+	}
+	
+	@Test
+	public void testXPathNamespaces() {
+		checkXPath("namespace::*", child3emt, null, Namespace.XML_NAMESPACE, child3nsa, child3nsb, Namespace.NO_NAMESPACE);
+	}
+	
+	@Test
+	public void testXPathNamespacesForText() {
+		checkXPath("namespace::*", maintext1, null);
+	}
+	
+	
+	@Test
+	public void testXPathParent() {
+		checkXPath("parent::*", child3emt, null, main);
+	}
+	
+	@Test
+	public void testXPathParentNode() {
+		checkXPath("parent::node()", child3emt, null, main);
+	}
+	
+	@Test
+	public void testXPathPreceding() {
+		checkXPath("preceding::*", child2emt, null, child1emt);
+	}
+	
+	@Test
+	public void testXPathPrecedingNode() {
+		checkXPath("preceding::node()", child2emt, null, doccomment, docpi,
+				maincomment, mainpi, maintext1, child1emt, child1text, maintext2);
+	}
+	
+	@Test
+	public void testXPathPrecedingSibling() {
+		checkXPath("preceding-sibling::*", child3emt, null, child1emt, child2emt);
+	}
+	
+	@Test
+	public void testXPathPrecedingSiblingNode() {
+		checkXPath("preceding-sibling::node()", child3emt, null, maincomment, 
+				mainpi, maintext1, child1emt, maintext2, child2emt);
+	}
+	
+	@Test
+	public void testXPathSelf() {
+		checkXPath("self::*", child3emt, null, child3emt);
+	}
+	
+	
+	
 	
 	/* *******************************
 	 * Negative TestCases
