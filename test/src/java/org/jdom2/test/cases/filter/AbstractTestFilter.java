@@ -35,7 +35,7 @@ public class AbstractTestFilter {
 					a.toString() + " and " + b.toString());
 		}
 		if (a.hashCode() == b.hashCode()) {
-			System.err.println("Two different (not equals() ) Filters have " +
+			System.out.println("Two different (not equals() ) Filters have " +
 					"the same hashCode(): " + a.hashCode() + "\n   " + 
 					a.toString() + " \n   " + b.toString());
 		}

@@ -60,13 +60,12 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,8 +74,6 @@ import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.Verifier;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
@@ -432,7 +429,15 @@ public final class TestVerifier {
     	Element cpms = new Element ("cpms", mscp);
     	root.addContent(cpms);
     	
-    	printlement(root);
+    	//printlement(root);
+//    	XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+//    	try {
+//    		CharArrayWriter  w = new CharArrayWriter();
+//			out.output(root, w);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
     	
     	// Check Namespace against elements.
     	assertNull   (Verifier.checkNamespaceCollision(att, root));
@@ -584,17 +589,6 @@ public final class TestVerifier {
     	assertFalse(Verifier.isXMLCharacter(0xffff));
     	assertFalse(Verifier.isXMLCharacter(0x110000));
     	
-    }
-
-    private static final void printlement(Element emt) {
-    	XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-    	try {
-			out.output(emt, System.out);
-			System.out.println();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
 }

@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import org.jdom2.JDOMException;
 import org.junit.Test;
 
-public class TestJDOMException {
+public class TestJDOMExceptn {
 
 	@Test
 	public void testJDOMException() {

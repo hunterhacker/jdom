@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.jdom2.transform.XSLTransformException;
 import org.junit.Test;
 
-public class TestXSLTransformException {
+public class TestXSLTransformExceptn {
 
 	@Test
 	public void testXSLTransformException() {

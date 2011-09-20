@@ -59,14 +59,14 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.jdom2.TestIllegalAddException;
-import org.jdom2.TestIllegalNameException;
-import org.jdom2.TestIllegalTargetException;
+import org.jdom2.TestIllegalAddExceptn;
+import org.jdom2.TestIllegalNameExceptn;
+import org.jdom2.TestIllegalTargetExceptn;
 import org.jdom2.test.cases.filter.TestContentFilter;
 import org.jdom2.test.cases.filter.TestElementFilter;
 import org.jdom2.test.cases.input.TestBuilderErrorHandler;
 import org.jdom2.test.cases.input.TestDOMBuilder;
-import org.jdom2.test.cases.input.TestJDOMParseException;
+import org.jdom2.test.cases.input.TestJDOMParseExceptn;
 import org.jdom2.test.cases.input.TestSAXBuilder;
 import org.jdom2.test.cases.input.TestSAXComplexSchema;
 import org.jdom2.test.cases.input.TestSAXHandler;
@@ -77,7 +77,7 @@ import org.jdom2.test.cases.output.TestXMLOutputter;
 import org.jdom2.test.cases.transform.TestJDOMResult;
 import org.jdom2.test.cases.transform.TestJDOMSource;
 import org.jdom2.test.cases.transform.TestJDOMTransform;
-import org.jdom2.test.cases.transform.TestXSLTransformException;
+import org.jdom2.test.cases.transform.TestXSLTransformExceptn;
 import org.jdom2.test.cases.transform.TestXSLTransformer;
 import org.jdom2.test.cases.xpath.AbstractTestXPath;
 import org.jdom2.test.cases.xpath.TestJaxenXPath;
@@ -145,16 +145,16 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestDefaultJDOMFactory.class));
 		suite.addTest(new JUnit4TestAdapter(TestUncheckedJDOMFactory.class));
 		
-		suite.addTest(new JUnit4TestAdapter(TestJDOMException.class));
-		suite.addTest(new JUnit4TestAdapter(TestIllegalAddException.class));
-		suite.addTest(new JUnit4TestAdapter(TestIllegalNameException.class));
-		suite.addTest(new JUnit4TestAdapter(TestIllegalTargetException.class));
+		suite.addTest(new JUnit4TestAdapter(TestJDOMExceptn.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalAddExceptn.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalNameExceptn.class));
+		suite.addTest(new JUnit4TestAdapter(TestIllegalTargetExceptn.class));
 
 		suite.addTest(new JUnit4TestAdapter(ListTest.class));
 		
 		// Input Tests
 		suite.addTest(new JUnit4TestAdapter(TestBuilderErrorHandler.class));
-		suite.addTest(new JUnit4TestAdapter(TestJDOMParseException.class));
+		suite.addTest(new JUnit4TestAdapter(TestJDOMParseExceptn.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXHandler.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXBuilder.class));
 		suite.addTest(new JUnit4TestAdapter(TestSAXComplexSchema.class));
@@ -171,7 +171,7 @@ public static Test suite() {
 		suite.addTest(new JUnit4TestAdapter(TestJDOMSource.class));		
 		suite.addTest(new JUnit4TestAdapter(TestJDOMResult.class));		
 		suite.addTest(new JUnit4TestAdapter(TestJDOMTransform.class));		
-		suite.addTest(new JUnit4TestAdapter(TestXSLTransformException.class));		
+		suite.addTest(new JUnit4TestAdapter(TestXSLTransformExceptn.class));		
 		suite.addTest(new JUnit4TestAdapter(TestXSLTransformer.class));		
 		
 		// XPath tests.

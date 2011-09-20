@@ -7,7 +7,8 @@ import org.jdom2.input.JDOMParseException;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
-public class TestJDOMParseException {
+// Do not use name ending in Exception.
+public class TestJDOMParseExceptn {
 	
 	private final SAXParseException spe = new SAXParseException("message", "publicID", "systemID", 5, 10);
 

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class TestIllegalNameException {
+public class TestIllegalNameExceptn {
 
 	@Test
 	public void testIllegalNameExceptionStringStringString() {

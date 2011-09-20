@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class TestIllegalTargetException {
+public class TestIllegalTargetExceptn {
 
 	@Test
 	public void testIllegalTargetExceptionStringString() {

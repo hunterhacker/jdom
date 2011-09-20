@@ -6,7 +6,7 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.IllegalAddException;
 import org.junit.Test;
 
-public class TestIllegalAddException {
+public class TestIllegalAddExceptn {
 	
 	@Test
 	public void testIllegalAddExceptionElementAttributeString() {

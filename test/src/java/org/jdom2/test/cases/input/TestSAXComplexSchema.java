@@ -61,7 +61,7 @@ public class TestSAXComplexSchema extends TestCase {
 			StringWriter sw = new StringWriter();
 			out.output(doc, sw);
 			String xml = sw.toString();
-			System.out.println("Document parsed. Content:\n" + xml + "\n");
+			//System.out.println("Document parsed. Content:\n" + xml + "\n");
 			
 			Namespace defns = Namespace.getNamespace("http://www.jdom.org/tests/default");
 			Namespace impns = Namespace.getNamespace("http://www.jdom.org/tests/imp");
