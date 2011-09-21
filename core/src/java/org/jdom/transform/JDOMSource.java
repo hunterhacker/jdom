@@ -450,6 +450,24 @@ public class JDOMSource extends SAXSource {
       }
       return reader;
     }
+    /**
+     * Sets the byte stream for this input source.
+     * <p>
+     * This implementation always throws an
+     * {@link UnsupportedOperationException} as the only source
+     * stream supported is the source JDOM document.
+     * </p>
+     *
+     * @param  byteStream   a byte stream containing
+     *                           an XML document.
+     *
+     * @throws UnsupportedOperationException  always!
+     */
+    public void setByteStream(InputStream byteStream)
+                                      throws UnsupportedOperationException {
+      throw new UnsupportedOperationException();
+    }
+
   }
 
   //=========================================================================
