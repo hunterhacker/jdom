@@ -414,7 +414,7 @@ public class Format implements Cloneable {
         return encoding;
     }
 
-    protected Object clone() {
+    public Object clone() {
         Format format = null;
 
         try {
