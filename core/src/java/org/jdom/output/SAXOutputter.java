@@ -964,6 +964,29 @@ public class SAXOutputter {
                 }
             }
         }
+        
+        // Fire any namespace on Attributes that were not explicity added as additionals.
+        List attributes = element.getAttributes();
+        if (attributes != null) {
+            Iterator itr = attributes.iterator();
+            while (itr.hasNext()) {
+                Attribute att = (Attribute)itr.next();
+                ns = att.getNamespace();
+                String prefix = ns.getPrefix();
+                String uri = namespaces.getURI(prefix);
+                if (!ns.getURI().equals(uri)) {
+                    namespaces.push(ns);
+                    nsAtts = this.addNsAttribute(nsAtts, ns);
+                    try {
+                        contentHandler.startPrefixMapping(prefix, ns.getURI());
+                    }
+                    catch (SAXException se) {
+                        throw new JDOMException(
+                            "Exception in startPrefixMapping", se);
+                    }
+                }
+            }
+        }
         return nsAtts;
     }
 
