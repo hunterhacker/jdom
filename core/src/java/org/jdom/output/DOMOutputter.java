@@ -146,26 +146,26 @@ public class DOMOutputter {
             DocType dt = document.getDocType();
             domDoc = createDOMDocument(dt);
 
+            // Check for existing root element which may have been
+            // automatically added by the DOM Document construction
+            // (if there is a DocType)
+            org.w3c.dom.Element autoroot = domDoc.getDocumentElement();
+            if (autoroot != null) {
+            	// remove the automatically added root element.
+                // If we leave this attached it will/may mess up the order
+            	// of content on the DOM Document node.
+            	domDoc.removeChild(autoroot);
+            }
+            
             // Add content
             Iterator itr = document.getContent().iterator();
             while (itr.hasNext()) {
                 Object node = itr.next();
 
                 if (node instanceof Element) {
-                    Element element = (Element) node;
                     org.w3c.dom.Element domElement =
-                        output(element, domDoc, namespaces);
-                        // Add the root element, first check for existing root
-                        org.w3c.dom.Element root = domDoc.getDocumentElement();
-                        if (root == null) {
-                            // Normal case
-                            domDoc.appendChild(domElement); // normal case
-                        }
-                        else {
-                            // Xerces 1.3 creates new docs with a <root />
-                            // XXX: Need to address DOCTYPE mismatch still
-                            domDoc.replaceChild(domElement, root);
-                        }
+                    		output((Element) node, domDoc, namespaces);
+                    domDoc.appendChild(domElement); // normal case
                 }
                 else if (node instanceof Comment) {
                     Comment comment = (Comment) node;
