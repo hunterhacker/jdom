@@ -56,6 +56,9 @@
 
 package org.jdom.input;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import org.jdom.*;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -223,11 +226,15 @@ public class DOMBuilder {
                             Namespace.getNamespace(attPrefix, attvalue);
 
                         // Add as additional namespaces if it's different
-                        // than this element's namespace (perhaps we should
+                        // to this element's namespace (perhaps we should
                         // also have logic not to mark them as additional if
                         // it's been done already, but it probably doesn't
                         // matter)
                         if (prefix.equals(attPrefix)) {
+                        	// RL: note, it should also be true that uri.equals(attvalue)
+                        	// if not, then the parser is boken.
+                        	// further, declaredNS should be exactly the same as ns
+                        	// so the following should in fact do nothing.
                             element.setNamespace(declaredNS);
                         }
                         else {
@@ -254,16 +261,89 @@ public class DOMBuilder {
                         String attvalue = att.getValue();
 
                         // Get attribute's namespace
-                        Namespace attns = null;
-                        if ("".equals(attPrefix)) {
-                            attns = Namespace.NO_NAMESPACE;
-                        }
-                        else {
-                            attns = element.getNamespace(attPrefix);
+                        Namespace attNS = null;
+                        String attURI = att.getNamespaceURI(); 
+                        if (attURI == null || "".equals(attURI)) {
+                        	attNS = Namespace.NO_NAMESPACE;
+                        } else {
+                        	// various conditions can lead here.
+                        	// the logical one is that we have a prefix for the
+                        	// attribute, and also a namespace URI.
+                        	// The alternative to that is in some conditions,
+                        	// the parser could have a 'default' or 'fixed'
+                        	// attribute that comes from an XSD used for
+                        	// validation. In that case there may not be a prefix
+                        	// There's also the possibility the DOM contains
+                        	// garbage.
+                        	if (attPrefix.length() > 0) {
+	                        	// If the att has a prefix, we can assume that
+	                        	// the DOM is valid, and we can just use the prefix.
+                        		// if this prefix conflicts with some other namespace
+                        		// then we re-declare it. If redeclaring it screws up
+                        		// other attributes in this Element, then the DOM
+                        		// was broken to start with.
+                        		attNS = Namespace.getNamespace(attPrefix, attURI);
+                        	} else {
+                        		// OK, no prefix.
+                        		// must be a defaulted value from an XSD.
+                        		// perhaps we can find the namespace in our
+                        		// element's ancestry, and use the prefix from that.
+                                // We need to ensure that a particular prefix has not been
+                                // overridden at a lower level than what we are expecting.
+                                // track all prefixes to ensure they are not changed lower
+                                // down.
+                                HashSet overrides = new HashSet();
+                                Element p = element;
+                                uploop: do {
+                                    // Search up the Element tree looking for a prefixed namespace
+                                    // matching our attURI
+                                    if (p.getNamespace().getURI().equals(attURI)
+                                            && !overrides.contains(p.getNamespacePrefix())
+                                            && !"".equals(element.getNamespace().getPrefix())) {
+                                        // we need a prefix. It's impossible to have a namespaced
+                                        // attribute if there is no prefix for that attribute.
+                                        attNS = p.getNamespace();
+                                        break uploop;
+                                    }
+                                    overrides.add(p.getNamespacePrefix());
+                                    for (Iterator it = p.getAdditionalNamespaces().iterator();
+                                            it.hasNext(); ) {
+                                        Namespace tns = (Namespace)it.next();
+                                        if (!overrides.contains(tns.getPrefix())
+                                                 && attURI.equals(tns.getURI())) {
+                                            attNS = tns;
+                                            break uploop;
+                                        }
+                                        overrides.add(tns.getPrefix());
+                                    }
+                                    p = p.getParentElement();
+                                } while (p != null);
+                                if (attNS == null) {
+                                    // we cannot find a 'prevailing' namespace that has a prefix
+                                    // that is for this namespace.
+                                    // This basically means that there's an XMLSchema, for the
+                                    // DEFAULT namespace, and there's a defaulted/fixed
+                                    // attribute definition in the XMLSchema that's targeted
+                                    // for this namespace,... but, the user has either not
+                                    // declared a prefixed version of the namespace, or has
+                                    // re-declared the same prefix at a lower level with a
+                                    // different namespace.
+                                    // All of these things are possible.
+                                    // Create some sort of default prefix.
+                                    int cnt = 0;
+                                    String base = "attns";
+                                    String pfx = base + cnt;
+                                    while (overrides.contains(pfx)) {
+                                        cnt++;
+                                        pfx = base + cnt;
+                                    }
+                                    attNS = Namespace.getNamespace(pfx, attURI);
+                                }
+                        	}
                         }
 
                         Attribute attribute =
-                            factory.attribute(attLocalName, attvalue, attns);
+                            factory.attribute(attLocalName, attvalue, attNS);
                         factory.setAttribute(element, attribute);
                     }
                 }
