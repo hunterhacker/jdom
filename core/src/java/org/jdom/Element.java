@@ -291,6 +291,15 @@ public class Element extends Content implements Parent {
                 }
             }
         }
+        
+        if (attributes != null) {
+        	for (Iterator it = attributes.iterator(); it.hasNext();) {
+        		Attribute a = (Attribute)it.next();
+        		if (prefix.equals(a.getNamespacePrefix())) {
+        			return a.getNamespace();
+        		}
+        	}
+        }
 
         // If we still don't have a match, ask the parent
         if (parent instanceof Element) {
