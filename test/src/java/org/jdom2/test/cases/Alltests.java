@@ -79,13 +79,13 @@ import org.jdom2.test.cases.transform.TestJDOMSource;
 import org.jdom2.test.cases.transform.TestJDOMTransform;
 import org.jdom2.test.cases.transform.TestXSLTransformExceptn;
 import org.jdom2.test.cases.transform.TestXSLTransformer;
-import org.jdom2.test.cases.xpath.AbstractTestXPath;
 import org.jdom2.test.cases.xpath.TestJaxenXPath;
 import org.jdom2.test.cases.xpath.TestLocalJaxenXPath;
 import org.jdom2.test.cases.xpath.TestXpath;
 import org.jdom2.test.util.ListTest;
+import org.junit.Ignore;
 
-
+@Ignore
 public class Alltests extends junit.framework.TestCase {
 /**
  * TestFiletaxesAlltests constructor comment.
