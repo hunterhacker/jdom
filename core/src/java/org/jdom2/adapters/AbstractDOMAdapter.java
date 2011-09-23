@@ -70,37 +70,6 @@ import org.w3c.dom.Document;
 public abstract class AbstractDOMAdapter implements DOMAdapter {
 
     /**
-     * This creates a new <code>{@link Document}</code> from an
-     * existing <code>InputStream</code> by letting a DOM
-     * parser handle parsing using the supplied stream.
-     *
-     * @param filename file to parse.
-     * @param validate <code>boolean</code> to indicate if validation should occur.
-     * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when I/O error occurs.
-     * @throws JDOMException when errors occur in parsing.
-     */
-    public Document getDocument(File filename, boolean validate)
-        throws IOException, JDOMException {
-
-        return getDocument(new FileInputStream(filename), validate);
-    }
-
-    /**
-     * This creates a new <code>{@link Document}</code> from an
-     * existing <code>InputStream</code> by letting a DOM
-     * parser handle parsing using the supplied stream.
-     *
-     * @param in <code>InputStream</code> to parse.
-     * @param validate <code>boolean</code> to indicate if validation should occur.
-     * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when I/O error occurs.
-     * @throws JDOMException when errors occur in parsing.
-     */
-    public abstract Document getDocument(InputStream in, boolean validate)
-        throws IOException, JDOMException;
-
-    /**
      * This creates an empty <code>Document</code> object based
      * on a specific parser implementation.
      *
