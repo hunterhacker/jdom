@@ -77,9 +77,6 @@ import org.w3c.dom.*;
  */
 public class DOMBuilder {
 
-    /** Adapter class to use */
-    private String adapterClass;
-
     /** The factory for creating new JDOM objects */
     private JDOMFactory factory = new DefaultJDOMFactory();
 
@@ -89,20 +86,6 @@ public class DOMBuilder {
      * The underlying parser will not validate.
      */
     public DOMBuilder() {
-    }
-
-    /**
-     * This creates a new DOMBuilder using the specified DOMAdapter
-     * implementation as a way to choose the underlying parser.
-     * The underlying parser will not validate.
-     *
-     * @param adapterClass <code>String</code> name of class
-     *                     to use for DOM building.
-     * @deprecated
-     */
-    @Deprecated
-    public DOMBuilder(String adapterClass) {
-        this.adapterClass = adapterClass;
     }
 
     /*

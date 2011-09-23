@@ -1607,7 +1607,7 @@ public class XMLOutputter implements Cloneable {
      * declare a NamespaceStack parameter, but we don't want to
      * declare the parent NamespaceStack class as public.
      */
-    protected class NamespaceStack
+    protected static class NamespaceStack
         extends org.jdom2.output.NamespaceStack
     {
     }

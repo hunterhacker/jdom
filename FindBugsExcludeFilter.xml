@@ -1,0 +1,13 @@
+<FindBugsFilter>
+
+     <Match>
+       <Package name="~org\.jdom2\.test\..*" />
+     </Match>
+     <Match>
+       <Class name="~Test.*" />
+     </Match>
+     <Match>
+       <Package name="~.*\.contrib\..*" />
+     </Match>
+
+</FindBugsFilter>

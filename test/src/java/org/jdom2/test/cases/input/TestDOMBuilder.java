@@ -1,13 +1,14 @@
 package org.jdom2.test.cases.input;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.TreeMap;
 
-import org.jdom2.Attribute;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -24,13 +25,6 @@ public class TestDOMBuilder {
 	@Test
 	public void testDOMBuilder() {
 		DOMBuilder db = new DOMBuilder();
-		assertNotNull(db);
-	}
-
-	@Test
-	public void testDOMBuilderString() {
-		@SuppressWarnings("deprecation")
-		DOMBuilder db = new DOMBuilder("doesnothing");
 		assertNotNull(db);
 	}
 

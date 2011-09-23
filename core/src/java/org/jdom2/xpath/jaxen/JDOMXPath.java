@@ -250,7 +250,9 @@ public class JDOMXPath extends    org.jdom2.xpath.XPath {             // package
       try {
          xPath.addNamespace(namespace.getPrefix(), namespace.getURI());
       }
-      catch (JaxenException ex1) { /* Can't happen here. */ }
+      catch (JaxenException ex1) { 
+    	  /* Can't happen here. */ 
+      }
    }
 
    /**
