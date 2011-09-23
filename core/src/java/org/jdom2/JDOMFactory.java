@@ -294,6 +294,14 @@ public interface JDOMFactory {
     public ProcessingInstruction processingInstruction(String target,
                                                        String data);
 
+    /**
+     * This will create a new <code>ProcessingInstruction</code>
+     * with the specified target and no data.
+     *
+     * @param target <code>String</code> target of PI.
+     */
+    public ProcessingInstruction processingInstruction(String target);
+
     // **** constructing EntityRef ****
 
     /**

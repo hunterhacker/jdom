@@ -186,6 +186,13 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return p;
     }
 
+    public ProcessingInstruction processingInstruction(String target) {
+        ProcessingInstruction p = new ProcessingInstruction();
+        p.target = target;
+        p.rawData = "";
+        return p;
+    }
+
     // =====================================================================
     // Entity Ref Factory
     // =====================================================================

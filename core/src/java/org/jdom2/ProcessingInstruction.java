@@ -86,6 +86,19 @@ public class ProcessingInstruction extends Content {
 
     /**
      * This will create a new <code>ProcessingInstruction</code>
+     * with the specified target.
+     *
+     * @param target <code>String</code> target of PI.
+     * @throws IllegalTargetException if the given target is illegal
+     *         as a processing instruction name.
+     */
+    public ProcessingInstruction(String target) {
+        setTarget(target);
+        setData("");
+    }
+
+    /**
+     * This will create a new <code>ProcessingInstruction</code>
      * with the specified target and data.
      *
      * @param target <code>String</code> target of PI.

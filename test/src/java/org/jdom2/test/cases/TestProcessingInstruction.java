@@ -29,6 +29,13 @@ public class TestProcessingInstruction {
 	}
 
 	@Test
+	public void testProcessingInstructionString() {
+		ProcessingInstruction pi = new ProcessingInstruction("test");
+		checkEquals(pi.getTarget(), "test");
+		checkEquals(pi.getValue(), "");
+	}
+
+	@Test
 	public void testProcessingInstructionStringString() {
 		ProcessingInstruction pi = new ProcessingInstruction("test", "key='value'");
 		checkEquals(pi.getTarget(), "test");

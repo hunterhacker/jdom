@@ -140,6 +140,10 @@ public class DefaultJDOMFactory implements JDOMFactory {
         return new Element(name, prefix, uri);
     }
 
+    public ProcessingInstruction processingInstruction(String target) {
+    	return new ProcessingInstruction(target);
+    }
+
     public ProcessingInstruction processingInstruction(String target,
                                                        Map data) {
         return new ProcessingInstruction(target, data);

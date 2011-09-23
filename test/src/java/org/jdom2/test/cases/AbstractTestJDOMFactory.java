@@ -150,6 +150,13 @@ public abstract class AbstractTestJDOMFactory {
 	}
 
 	@Test
+	public void testProcessingInstructionString() {
+		ProcessingInstruction pi = buildFactory().processingInstruction("target");
+		assertEquals("target", pi.getTarget());
+		assertEquals("", pi.getData());
+	}
+
+	@Test
 	public void testProcessingInstructionStringMap() {
 		Map<String,String> data = new HashMap<String, String>();
 		data.put("key", "val");
