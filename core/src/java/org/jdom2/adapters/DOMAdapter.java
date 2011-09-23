@@ -54,9 +54,8 @@
 
 package org.jdom2.adapters;
 
-import java.io.*;
-
-import org.jdom2.*;
+import org.jdom2.DocType;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 
 /**
@@ -69,35 +68,6 @@ import org.w3c.dom.Document;
  * @author  Jason Hunter
  */
 public interface DOMAdapter {
-
-    /**
-     * This creates a new <code>Document</code> from a
-     * given filename by letting a DOM parser handle parsing from the file.
-     *
-     * @param filename file to parse.
-     * @param validate <code>boolean</code> to indicate if validation 
-     * should occur.
-     * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when I/O error occurs.
-     * @throws JDOMException when errors occur in parsing.
-     */
-    public Document getDocument(File filename, boolean validate)
-        throws IOException, JDOMException;
-
-    /**
-     * This creates a new <code>Document</code> from an
-     * existing <code>InputStream</code> by letting a DOM
-     * parser handle parsing using the supplied stream.
-     *
-     * @param in <code>InputStream</code> to parse.
-     * @param validate <code>boolean</code> to indicate if validation 
-     * should occur.
-     * @return <code>Document</code> - instance ready for use.
-     * @throws IOException when I/O error occurs.
-     * @throws JDOMException when errors occur in parsing.
-     */
-    public Document getDocument(InputStream in, boolean validate)
-        throws IOException, JDOMException;
 
     /**
      * This creates an empty <code>Document</code> object based

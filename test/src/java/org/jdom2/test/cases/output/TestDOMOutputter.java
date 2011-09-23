@@ -8,17 +8,30 @@ package org.jdom2.test.cases.output;
  * @version 0.1
  */
 
-import org.jdom2.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.util.*;
-
-import org.jdom2.adapters.XercesDOMAdapter;
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
 import org.jdom2.input.DOMBuilder;
-import org.jdom2.output.*;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import static org.junit.Assert.*;
 
 public final class TestDOMOutputter {
 
@@ -94,7 +107,7 @@ public final class TestDOMOutputter {
     	DOMSetup setup = new DOMSetup() {
 			@Override
 			public DOMOutputter buildOutputter() {
-				return new DOMOutputter(XercesDOMAdapter.class.getName());
+				return new DOMOutputter();
 			}
 		};
 		roundTrip(setup, doc);
