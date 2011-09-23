@@ -71,8 +71,8 @@ import java.util.*;
  * @see ProcessingInstruction
  * @see Text
  */
-class AttributeList extends AbstractList
-                    implements List, java.io.Serializable {
+class AttributeList extends AbstractList<Attribute>
+                    implements java.io.Serializable {
 
     private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -82,9 +82,6 @@ class AttributeList extends AbstractList
 
     /** The parent Element */
     private Element parent;
-
-    /** Force an Element parent */
-    private AttributeList() {}
 
     /**
      * Create a new instance of the AttributeList representing
@@ -117,70 +114,34 @@ class AttributeList extends AbstractList
      * @return true (as per the general contract of Collection.add).
      * @throws IndexOutOfBoundsException if index < 0 || index > size()
      */
-    public boolean add(Object obj) {
-        if (obj instanceof Attribute) {
-            Attribute attribute = (Attribute) obj;
-            int duplicate = indexOfDuplicate(attribute);
-            if (duplicate < 0) {
-                add(size(), attribute);
-            }
-            else {
-                set(duplicate, attribute);
-            }
-        }
-        else if (obj == null) {
-            throw new NullPointerException("Cannot add null attribute");
+    public boolean add(Attribute obj) {
+        Attribute attribute = (Attribute) obj;
+        int duplicate = indexOfDuplicate(attribute);
+        if (duplicate < 0) {
+            add(size(), attribute);
         }
         else {
-            throw new ClassCastException("Class " +
-                                          obj.getClass().getName() +
-                                          " is not an attribute");
+            set(duplicate, attribute);
         }
         return true;
     }
 
     /**
-     * Inserts the specified attribute at the specified position in this list.
-     * Shifts the attribute currently at that position (if any) and any
-     * subsequent attributes to the right (adds one to their indices).
-     *
-     * @param index The location to set the value to.
-     * @param obj The object to insert into the list.
-     * throws IndexOutOfBoundsException if index < 0 || index > size()
-     */
-    public void add(int index, Object obj) {
-        if (obj instanceof Attribute) {
-            Attribute attribute = (Attribute) obj;
-            int duplicate = indexOfDuplicate(attribute);
-            if (duplicate >= 0) {
-                throw new IllegalAddException("Cannot add duplicate attribute");
-            }
-            add(index, attribute);
-        }
-        else if (obj == null) {
-            throw new NullPointerException("Cannot add null attribute");
-        }
-        else {
-            throw new ClassCastException("Class " +
-                                          obj.getClass().getName() +
-                                          " is not an attribute");
-        }
-        modCount++;
-    }
-
-    /**
      * Check and add the <code>Attribute</code> to this list at
-     * the given index. Note: does not check for duplicate
-     * attributes.
+     * the given index.
      *
      * @param index index where to add <code>Attribute</code>
      * @param attribute <code>Attribute</code> to add
      */
-    void add(int index, Attribute attribute) {
+    public void add(int index, Attribute attribute) {
         if (attribute.getParent() != null) {
             throw new IllegalAddException(
                           "The attribute already has an existing parent \"" +
                           attribute.getParent().getQualifiedName() + "\"");
+        }
+        int duplicate = indexOfDuplicate(attribute);
+        if (duplicate >= 0) {
+            throw new IllegalAddException("Cannot add duplicate attribute");
         }
 
         String reason = Verifier.checkNamespaceCollision(attribute, parent);
@@ -213,7 +174,7 @@ class AttributeList extends AbstractList
      * @return <code>true</code> if the list was modified as a result of
      * the add.
      */
-    public boolean addAll(Collection collection) {
+    public boolean addAll(Collection<? extends Attribute> collection) {
         return addAll(size(), collection);
     }
 
@@ -228,7 +189,7 @@ class AttributeList extends AbstractList
      *                           the add.
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
-    public boolean addAll(int index, Collection collection) {
+    public boolean addAll(int index, Collection<? extends Attribute> collection) {
         if (index<0 || index>size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -245,9 +206,9 @@ class AttributeList extends AbstractList
         int count = 0;
 
         try {
-            Iterator i = collection.iterator();
+            Iterator<? extends Attribute> i = collection.iterator();
             while (i.hasNext()) {
-                Object obj = i.next();
+                Attribute obj = i.next();
                 add(index + count, obj);
                 count++;
             }
@@ -284,7 +245,7 @@ class AttributeList extends AbstractList
      *
      * @param collection The collection to use.
      */
-    void clearAndSet(Collection collection) {
+    void clearAndSet(Collection<? extends Attribute> collection) {
         Attribute[] old = elementData;
         int oldSize = size;
 
@@ -342,7 +303,7 @@ class AttributeList extends AbstractList
      * @param index The offset of the object.
      * @return The Object which was returned.
      */
-    public Object get(int index) {
+    public Attribute get(int index) {
         if (index<0 || index>=size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -392,7 +353,7 @@ class AttributeList extends AbstractList
      * @param index The offset of the object.
      * @return The Object which was removed.
      */
-    public Object remove(int index) {
+    public Attribute remove(int index) {
         if (index<0 || index>=size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -426,34 +387,6 @@ class AttributeList extends AbstractList
 
     /**
      * Set the object at the specified location to the supplied
-     * object.
-     *
-     * @param index The location to set the value to.
-     * @param obj The location to set the value to.
-     * @return The object which was replaced.
-     * throws IndexOutOfBoundsException if index < 0 || index >= size()
-     */
-    public Object set(int index, Object obj) {
-        if (obj instanceof Attribute) {
-            Attribute attribute = (Attribute) obj;
-            int duplicate = indexOfDuplicate(attribute);
-            if ((duplicate >= 0) && (duplicate != index)) {
-                throw new IllegalAddException("Cannot set duplicate attribute");
-            }
-            return set(index, attribute);
-        }
-        else if (obj == null) {
-            throw new NullPointerException("Cannot add null attribute");
-        }
-        else {
-            throw new ClassCastException("Class " +
-                                          obj.getClass().getName() +
-                                          " is not an attribute");
-        }
-    }
-
-    /**
-     * Set the object at the specified location to the supplied
      * object. Note: does not check for duplicate attributes.
      *
      * @param index The location to set the value to.
@@ -461,7 +394,7 @@ class AttributeList extends AbstractList
      * @return The object which was replaced.
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
-    Object set(int index, Attribute attribute) {
+    public Attribute set(int index, Attribute attribute) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -472,6 +405,11 @@ class AttributeList extends AbstractList
                           attribute.getParent().getQualifiedName() + "\"");
         }
 
+        int duplicate = indexOfDuplicate(attribute);
+        if ((duplicate >= 0) && (duplicate != index)) {
+            throw new IllegalAddException("Cannot set duplicate attribute");
+        }
+        
         String reason = Verifier.checkNamespaceCollision(attribute, parent);
         if (reason != null) {
             throw new IllegalAddException(parent, attribute, reason);

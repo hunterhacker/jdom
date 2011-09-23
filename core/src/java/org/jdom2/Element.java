@@ -88,7 +88,7 @@ public class Element extends Content implements Parent {
 
     /** Additional namespace declarations to store on this element; useful
      * during output */
-    protected transient List additionalNamespaces;
+    protected transient List<Namespace> additionalNamespaces;
 
     // See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
     // for a possible memory optimization here (using a RootElement subclass)
@@ -279,7 +279,7 @@ public class Element extends Content implements Parent {
         // Scan the additional namespaces
         if (additionalNamespaces != null) {
             for (int i = 0; i < additionalNamespaces.size(); i++) {
-                final Namespace ns = (Namespace) additionalNamespaces.get(i);
+                final Namespace ns = additionalNamespaces.get(i);
                 if (prefix.equals(ns.getPrefix())) {
                     return ns;
                 }
@@ -287,8 +287,8 @@ public class Element extends Content implements Parent {
         }
         
         if (attributes != null) {
-        	for (Iterator it = attributes.iterator(); it.hasNext();) {
-        		Attribute a = (Attribute)it.next();
+        	for (Iterator<Attribute> it = attributes.iterator(); it.hasNext();) {
+        		Attribute a = it.next();
         		if (prefix.equals(a.getNamespacePrefix())) {
         			return a.getNamespace();
         		}
@@ -346,7 +346,7 @@ public class Element extends Content implements Parent {
         }
 
         if (additionalNamespaces == null) {
-            additionalNamespaces = new ArrayList(INITIAL_ARRAY_SIZE);
+            additionalNamespaces = new ArrayList<Namespace>(INITIAL_ARRAY_SIZE);
         }
 
         additionalNamespaces.add(additionalNamespace);
@@ -379,12 +379,12 @@ public class Element extends Content implements Parent {
      * @return                     a List of the additional namespace
      *                             declarations
      */
-    public List getAdditionalNamespaces() {
+    public List<Namespace> getAdditionalNamespaces() {
         // Not having the returned list be live allows us to avoid creating a
         // new list object when XMLOutputter calls this method on an element
         // with an empty list.
         if (additionalNamespaces == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return Collections.unmodifiableList(additionalNamespaces);
     }
@@ -955,7 +955,7 @@ public class Element extends Content implements Parent {
      *
      * @return attributes for the element
      */
-    public List getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
 
@@ -1287,7 +1287,7 @@ public class Element extends Content implements Parent {
        if (attributes != null) {
            for(int i = 0; i < attributes.size(); i++) {
                final Attribute attribute = (Attribute) attributes.get(i);
-               element.attributes.add(attribute.clone());
+               element.attributes.add((Attribute)attribute.clone());
            }
        }
 
@@ -1563,5 +1563,97 @@ public class Element extends Content implements Parent {
 
         return deletedSome;
     }
+
+	@Override
+	public List<Namespace> getNamespacesInScope() {
+		// The assumption here is that all namespaces are valid,
+		// that there are no namespace collisions on this element
+		
+		// This method is also the 'anchor' of the three getNamespaces*() methods
+		// It does not make reference to this Element instance's other
+		// getNamespace*() methods
+		
+		TreeMap<String,Namespace> namespaces = new TreeMap<String, Namespace>();
+		namespaces.put("xml", Namespace.XML_NAMESPACE);
+		namespaces.put(getNamespacePrefix(), getNamespace());
+		for (Namespace ns : getAdditionalNamespaces()) {
+			if (!namespaces.containsKey(ns.getPrefix())) {
+				namespaces.put(ns.getPrefix(), ns);
+			}
+		}
+		for (Attribute att : getAttributes()) {
+			Namespace ns = att.getNamespace();
+			if (!namespaces.containsKey(ns.getPrefix())) {
+				namespaces.put(ns.getPrefix(), ns);
+			}
+		}
+		// Right, we now have all the namespaces that are current on this ELement.
+		// Include any other namespaces that are inherited.
+		Element parent = getParentElement();
+		if (parent != null) {
+			for (Namespace ns : parent.getNamespacesInScope()) {
+				if (!namespaces.containsKey(ns.getPrefix())) {
+					namespaces.put(ns.getPrefix(), ns);
+				}
+			}
+		}
+		ArrayList<Namespace> al = new ArrayList<Namespace>(namespaces.size());
+		al.add(getNamespace());
+		namespaces.remove(getNamespacePrefix());
+		al.addAll(namespaces.values());
+		
+		return Collections.unmodifiableList(al);
+	}
+
+	@Override
+	public List<Namespace> getNamespacesInherited() {
+		if (getParentElement() == null) {
+			return Collections.emptyList();
+		}
+		
+		// OK, the things we inherit are the prefixes we have in scope that
+		// are also in our parent's scope.
+		HashMap<String,Namespace> parents = new HashMap<String, Namespace>();
+		for (Namespace ns : getParentElement().getNamespacesInScope()) {
+			parents.put(ns.getPrefix(), ns);
+		}
+		
+		ArrayList<Namespace> al = new ArrayList<Namespace>();
+		for (Namespace ns : getNamespacesInScope()) {
+			if (ns == parents.get(ns.getPrefix())) {
+				// inherited
+				al.add(ns);
+			}
+		}
+		
+		return Collections.unmodifiableList(al);
+	}
+    
+	@Override
+	public List<Namespace> getNamespacesIntroduced() {
+		if (getParentElement() == null) {
+			// we introduce everything
+			return getNamespacesInScope();
+		}
+		
+		// OK, the things we introduce are the prefixes we have in scope that
+		// are *not* in our parent's scope.
+		HashMap<String,Namespace> parents = new HashMap<String, Namespace>();
+		for (Namespace ns : getParentElement().getNamespacesInScope()) {
+			parents.put(ns.getPrefix(), ns);
+		}
+		
+		ArrayList<Namespace> al = new ArrayList<Namespace>();
+		for (Namespace ns : getNamespacesInScope()) {
+			if (!parents.containsKey(ns.getPrefix()) || ns != parents.get(ns.getPrefix())) {
+				// introduced
+				al.add(ns);
+			}
+		}
+		
+		return Collections.unmodifiableList(al);
+	}
+
+    
 
 }
