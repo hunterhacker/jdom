@@ -76,7 +76,8 @@ final class NamespaceKey {
         this(namespace.getPrefix(), namespace.getURI());
     }
 
-    public boolean equals(Object ob) {
+    @Override
+	public boolean equals(Object ob) {
         if (this == ob) {
             return true;
         }
@@ -89,11 +90,13 @@ final class NamespaceKey {
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return hash;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "[NamespaceKey: prefix \"" + prefix +
                "\" is mapped to URI \"" + uri + "\"]";
     }
