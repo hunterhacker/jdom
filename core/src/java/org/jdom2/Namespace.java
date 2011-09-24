@@ -78,7 +78,7 @@ public final class Namespace {
      * Keys are <i>prefix</i>&amp;<i>URI</i>. 
      * Values are Namespace objects 
      */
-    private static HashMap namespaces;
+    private static HashMap<NamespaceKey, Namespace> namespaces;
 
     /** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
     public static final Namespace NO_NAMESPACE = new Namespace("", "");
@@ -98,7 +98,7 @@ public final class Namespace {
      * It sets up storage and required initial values.
      */
     static {
-        namespaces = new HashMap(16);
+        namespaces = new HashMap<NamespaceKey, Namespace>(16);
 
         // Add the "empty" namespace
         namespaces.put(new NamespaceKey(NO_NAMESPACE), NO_NAMESPACE);
@@ -136,7 +136,7 @@ public final class Namespace {
         NamespaceKey lookup = new NamespaceKey(prefix, uri);
         Namespace preexisting;
         synchronized (namespaces) {
-            preexisting = (Namespace) namespaces.get(lookup);
+            preexisting = namespaces.get(lookup);
         }
         if (preexisting != null) {
             return preexisting;
@@ -236,7 +236,8 @@ public final class Namespace {
      * @return <code>boolean</code> - whether the supplied object is equal to
      *         this <code>Namespace</code>.
      */
-    public boolean equals(Object ob) {
+    @Override
+	public boolean equals(Object ob) {
         if (this == ob) {
             return true;
         }
@@ -252,7 +253,8 @@ public final class Namespace {
      *
      * @return <code>String</code> - information about this instance.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "[Namespace: prefix \"" + prefix + "\" is mapped to URI \"" + 
                uri + "\"]";
     }
@@ -264,7 +266,8 @@ public final class Namespace {
      *
      * @return <code>int</code> - hash code for this <code>Namespace</code>.
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return uri.hashCode();
     }
 }
