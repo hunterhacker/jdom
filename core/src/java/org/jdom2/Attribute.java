@@ -387,12 +387,11 @@ public class Attribute implements Serializable, Cloneable {
         // no prefix found
         if ((prefix == null) || ("".equals(prefix))) {
             return getName();
-        } else {
-            return new StringBuffer(prefix)
+        }
+        return new StringBuilder(prefix)
                 .append(':')
                 .append(getName())
                 .toString();
-        }
     }
 
     /**
@@ -522,8 +521,9 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
      */
+    @Override
     public String toString() {
-        return new StringBuffer()
+        return new StringBuilder()
             .append("[Attribute: ")
             .append(getQualifiedName())
             .append("=\"")
@@ -541,6 +541,7 @@ public class Attribute implements Serializable, Cloneable {
      * @return <code>boolean</code> - whether the <code>Attribute</code> is
      *         equal to the supplied <code>Object</code>.
      */
+    @Override
     public final boolean equals(final Object ob) {
         return (ob == this);
     }
@@ -550,6 +551,7 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @return <code>int</code> - hash code.
      */
+    @Override
     public final int hashCode() {
         return super.hashCode();
     }
@@ -559,6 +561,7 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @return <code>Object</code> - clone of this <code>Attribute</code>.
      */
+    @Override
     public Object clone() {
         Attribute attribute = null;
         try {
