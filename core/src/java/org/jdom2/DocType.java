@@ -234,7 +234,8 @@ public class DocType extends Content {
      * 1.0 string value.
      * @return the empty string
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return "";  // doctypes don't have an XPath string value
     }
 
@@ -264,7 +265,8 @@ public class DocType extends Content {
      * @return <code>String</code> - information about the
      *         <code>DocType</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer()
             .append("[DocType: ")
             .append(new org.jdom2.output.XMLOutputter().outputString(this))
