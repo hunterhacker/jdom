@@ -76,7 +76,7 @@ public class ProcessingInstruction extends Content {
     protected String rawData;
 
     /** The data for the PI in name/value pairs */
-    protected Map mapData;
+    protected Map<String,String> mapData;
 
     /**
      * Default, no-args constructor for implementations
@@ -107,7 +107,7 @@ public class ProcessingInstruction extends Content {
      * @throws IllegalTargetException if the given target is illegal
      *         as a processing instruction name.
      */
-    public ProcessingInstruction(String target, Map data) {
+    public ProcessingInstruction(String target, Map<String,String> data) {
         setTarget(target);
         setData(data);
     }
@@ -149,7 +149,8 @@ public class ProcessingInstruction extends Content {
      *
      * @return the data of this PI
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return rawData;
     }
 
@@ -179,15 +180,8 @@ public class ProcessingInstruction extends Content {
      * @return <code>List</code> - the <code>List</code> containing the
      *         "attribute" names.
      */
-    public List getPseudoAttributeNames() {
-      Set mapDataSet = mapData.entrySet();
-      List nameList = new ArrayList();
-      for (Iterator i = mapDataSet.iterator(); i.hasNext();) {
-         String wholeSet = (i.next()).toString();
-         String attrName = wholeSet.substring(0,(wholeSet.indexOf("=")));
-         nameList.add(attrName);
-      }
-      return nameList;
+    public List<String> getPseudoAttributeNames() {
+      return new ArrayList<String>(mapData.keySet());
     }
 
     /**
@@ -216,7 +210,7 @@ public class ProcessingInstruction extends Content {
      * @param data new map data to use
      * @return <code>ProcessingInstruction</code> - modified PI.
      */
-    public ProcessingInstruction setData(Map data) {
+    public ProcessingInstruction setData(Map<String,String> data) {
         String temp = toString(data);
 
         String reason = Verifier.checkProcessingInstructionData(temp);
@@ -225,7 +219,7 @@ public class ProcessingInstruction extends Content {
         }
 
         this.rawData = temp;
-        this.mapData = new LinkedHashMap(data);
+        this.mapData = new LinkedHashMap<String,String>(data);
         return this;
     }
 
@@ -240,7 +234,7 @@ public class ProcessingInstruction extends Content {
      * @return <code>String</code> - value of name/value pair.
      */
     public String getPseudoAttributeValue(String name) {
-        return (String)mapData.get(name);
+        return mapData.get(name);
     }
 
     /**
@@ -288,34 +282,31 @@ public class ProcessingInstruction extends Content {
     /**
      * This will convert the Map to a string representation.
      *
-     * @param mapData <code>Map</code> PI data to convert
+     * @param pmapData <code>Map</code> PI data to convert
      * @return a string representation of the Map as appropriate for a PI
      */
-    private String toString(Map mapData) {
-        StringBuffer rawData = new StringBuffer();
+    private static final String toString(Map<String,String> pmapData) {
+        StringBuilder stringData = new StringBuilder();
 
-        Iterator i = mapData.keySet().iterator();
-        while (i.hasNext()) {
-            String name = (String)i.next();
-            String value = (String)mapData.get(name);
-            rawData.append(name)
+        for (Map.Entry<String,String> me : pmapData.entrySet()) {
+            stringData.append(me.getKey())
                    .append("=\"")
-                   .append(value)
+                   .append(me.getValue())
                    .append("\" ");
         }
         // Remove last space, if we did any appending
-        if (rawData.length() > 0) {
-            rawData.setLength(rawData.length() - 1);
+        if (stringData.length() > 0) {
+            stringData.setLength(stringData.length() - 1);
         }
 
-        return rawData.toString();
+        return stringData.toString();
     }
 
     /**
      * This will parse and load the instructions for the PI.
      * This is separated to allow it to occur once and then be reused.
      */
-    private Map parseData(String rawData) {
+    private Map<String,String> parseData(String prawData) {
         // The parsing here is done largely "by hand" which means the code
         // gets a little tricky/messy.  The following conditions should
         // now be handled correctly:
@@ -327,12 +318,12 @@ public class ProcessingInstruction extends Content {
         //   <?pi id=22?>                       Empty Map
         //   <?pi id='22?>                      Empty Map
 
-        Map data = new LinkedHashMap();
+        Map<String,String> data = new LinkedHashMap<String,String>();
 
         // System.out.println("rawData: " + rawData);
 
         // The inputData variable holds the part of rawData left to parse
-        String inputData = rawData.trim();
+        String inputData = prawData.trim();
 
         // Iterate through the remaining inputData string
         while (!inputData.trim().equals("")) {
@@ -354,7 +345,7 @@ public class ProcessingInstruction extends Content {
                                      inputData.substring(pos+1));
                     // A null value means a parse error and we return empty!
                     if (bounds == null) {
-                        return new HashMap();
+                        return Collections.emptyMap();
                     }
                     value = inputData.substring(bounds[0]+pos+1,
                                                 bounds[1]+pos+1);
@@ -451,8 +442,9 @@ public class ProcessingInstruction extends Content {
      * @return <code>String</code> - information about the
      *         <code>ProcessingInstruction</code>
      */
-    public String toString() {
-        return new StringBuffer()
+    @Override
+	public String toString() {
+        return new StringBuilder()
             .append("[ProcessingInstruction: ")
             .append(new org.jdom2.output.XMLOutputter().outputString(this))
             .append("]")
@@ -465,7 +457,8 @@ public class ProcessingInstruction extends Content {
      * @return <code>Object</code> - clone of this
      * <code>ProcessingInstruction</code>.
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         ProcessingInstruction pi = (ProcessingInstruction) super.clone();
 
         // target and rawdata are immutable and references copied by
