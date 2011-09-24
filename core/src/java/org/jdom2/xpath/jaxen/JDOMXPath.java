@@ -62,290 +62,299 @@ import org.jdom2.*;
 
 
 /**
- * A non-public concrete XPath implementation for Jaxen.
+ * A concrete XPath implementation for Jaxen.
+ * 
+ * This class must be public because the main JDOM XPath class needs to access
+ * the class, and the constructor.
  *
  * @author  Laurent Bihanic
  */
-public class JDOMXPath extends    org.jdom2.xpath.XPath {             // package protected
+public class JDOMXPath extends    org.jdom2.xpath.XPath {
 
-   /**
-    * The compiled XPath object to select nodes.  This attribute can
-    * not be made final as it needs to be set upon object
-    * deserialization.
-    */
-   private transient JaxenXPath xPath;
+	/**
+	 * The compiled XPath object to select nodes.  This attribute can
+	 * not be made final as it needs to be set upon object
+	 * deserialization.
+	 */
+	private transient XPath xPath;
 
-   /**
-    * The current context for XPath expression evaluation.
-    */
-   private           Object    currentContext;
+	/**
+	 * The current context for XPath expression evaluation.
+	 * The navigator is responsible for exposing JDOM content to Jaxen, including
+	 * the wrapping of Namespace instances in NamespaceContainer
+	 * <p>
+	 * Because of the need to wrap Namespace, we also need to unwrap namespace.
+	 * Further, we can't re-use the details from one 'selectNodes' to another
+	 * because the Document tree may have been modfied between, and also, we do
+	 * not want to be holding on to memory.
+	 * <p>
+	 * Finally, we want to pre-load the NamespaceContext with the namespaces
+	 * that are in scope for the contextNode being searched.
+	 * <p> 
+	 * So, we need to reset the Navigator before and after each use.
+	 * try{} finally {} to the rescue.  
+	 */
+	private final JDOMNavigator navigator = new JDOMNavigator();
+	
+	/**
+	 * Same story, need to be able to strip NamespaceContainer instances from
+	 * Namespace content.
+	 * @param o A result object which could potentially be a NamespaceContainer
+	 * @return The input parameter unless it is a NamespaceContainer in which
+	 * case return the wrapped Namespace
+	 */
+	private static final Object unWrapNS(Object o) {
+		if (o instanceof NamespaceContainer) {
+			return ((NamespaceContainer)o).getNamespace();
+		}
+		return o;
+	}
 
-   /**
-    * Creates a new XPath wrapper object, compiling the specified
-    * XPath expression.
-    *
-    * @param  expr   the XPath expression to wrap.
-    *
-    * @throws JDOMException   if the XPath expression is invalid.
-    */
-   public JDOMXPath(String expr) throws JDOMException {
-      setXPath(expr);
-   }
+	/**
+	 * Same story, need to be able to replace NamespaceContainer instances with
+	 * Namespace content.
+	 * @param results A list potentially containing NamespaceContainer instances
+	 * @return The parameter list with NamespaceContainer instances replaced by
+	 * the wrapped Namespace instances.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static final List unWrap(List results) {
+		for (ListIterator it = results.listIterator(); it.hasNext(); ) {
+			Object o = it.next();
+			Object p = unWrapNS(o);
+			if (o != p) {
+				it.set(p);
+			}
+		}
+		return results;
+	}
+	
 
-   /**
-    * Evaluates the wrapped XPath expression and returns the list
-    * of selected items.
-    *
-    * @param  context   the node to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the list of selected items, which may be of types: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
-    *         Double, or String.
-    *
-    * @throws JDOMException   if the evaluation of the XPath
-    *                         expression on the specified context
-    *                         failed.
-    */
-   public List<?> selectNodes(Object context) throws JDOMException {
-      try {
-         currentContext = context;
 
-         return xPath.selectNodes(context);
-      }
-      catch (JaxenException ex1) {
-         throw new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
-      }
-      finally {
-         currentContext = null;
-      }
-   }
+	/**
+	 * Creates a new XPath wrapper object, compiling the specified
+	 * XPath expression.
+	 *
+	 * @param  expr   the XPath expression to wrap.
+	 *
+	 * @throws JDOMException   if the XPath expression is invalid.
+	 */
+	public JDOMXPath(String expr) throws JDOMException {
+		setXPath(expr);
+	}
 
-   /**
-    * Evaluates the wrapped XPath expression and returns the first
-    * entry in the list of selected nodes (or atomics).
-    *
-    * @param  context   the node to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the first selected item, which may be of types: {@link Element},
-    *         {@link Attribute}, {@link Text}, {@link CDATA},
-    *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
-    *         Double, String, or <code>null</code> if no item was selected.
-    *
-    * @throws JDOMException   if the evaluation of the XPath
-    *                         expression on the specified context
-    *                         failed.
-    */
-   public Object selectSingleNode(Object context) throws JDOMException {
-      try {
-         currentContext = context;
+	/**
+	 * Evaluates the wrapped XPath expression and returns the list
+	 * of selected items.
+	 *
+	 * @param  context   the node to use as context for evaluating
+	 *                   the XPath expression.
+	 *
+	 * @return the list of selected items, which may be of types: {@link Element},
+	 *         {@link Attribute}, {@link Text}, {@link CDATA},
+	 *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+	 *         Double, or String.
+	 *
+	 * @throws JDOMException   if the evaluation of the XPath
+	 *                         expression on the specified context
+	 *                         failed.
+	 */
+	@Override
+	public List<?> selectNodes(Object context) throws JDOMException {
+		try {
+			navigator.setContext(context);
 
-         return xPath.selectSingleNode(context);
-      }
-      catch (JaxenException ex1) {
-         throw new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
-      }
-      finally {
-         currentContext = null;
-      }
-   }
+			return unWrap(xPath.selectNodes(context));
+		}
+		catch (JaxenException ex1) {
+			throw new JDOMException("XPath error while evaluating \"" +
+					xPath.toString() + "\": " + ex1.getMessage(), ex1);
+		}
+		finally {
+			navigator.reset();
+		}
+	}
 
-   /**
-    * Returns the string value of the first node selected by applying
-    * the wrapped XPath expression to the given context.
-    *
-    * @param  context   the element to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the string value of the first node selected by applying
-    *         the wrapped XPath expression to the given context.
-    *
-    * @throws JDOMException   if the XPath expression is invalid or
-    *                         its evaluation on the specified context
-    *                         failed.
-    */
-   public String valueOf(Object context) throws JDOMException {
-      try {
-         currentContext = context;
+	/**
+	 * Evaluates the wrapped XPath expression and returns the first
+	 * entry in the list of selected nodes (or atomics).
+	 *
+	 * @param  context   the node to use as context for evaluating
+	 *                   the XPath expression.
+	 *
+	 * @return the first selected item, which may be of types: {@link Element},
+	 *         {@link Attribute}, {@link Text}, {@link CDATA},
+	 *         {@link Comment}, {@link ProcessingInstruction}, Boolean,
+	 *         Double, String, or <code>null</code> if no item was selected.
+	 *
+	 * @throws JDOMException   if the evaluation of the XPath
+	 *                         expression on the specified context
+	 *                         failed.
+	 */
+	@Override
+	public Object selectSingleNode(Object context) throws JDOMException {
+		try {
+			navigator.setContext(context);
 
-         return xPath.stringValueOf(context);
-      }
-      catch (JaxenException ex1) {
-         throw new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
-      }
-      finally {
-         currentContext = null;
-      }
-   }
+			return unWrapNS(xPath.selectSingleNode(context));
+		}
+		catch (JaxenException ex1) {
+			throw new JDOMException("XPath error while evaluating \"" +
+					xPath.toString() + "\": " + ex1.getMessage(), ex1);
+		}
+		finally {
+			navigator.reset();
+		}
+	}
 
-   /**
-    * Returns the number value of the first item selected by applying
-    * the wrapped XPath expression to the given context.
-    *
-    * @param  context   the element to use as context for evaluating
-    *                   the XPath expression.
-    *
-    * @return the number value of the first item selected by applying
-    *         the wrapped XPath expression to the given context,
-    *         <code>null</code> if no node was selected or the
-    *         special value {@link java.lang.Double#NaN}
-    *         (Not-a-Number) if the selected value can not be
-    *         converted into a number value.
-    *
-    * @throws JDOMException   if the XPath expression is invalid or
-    *                         its evaluation on the specified context
-    *                         failed.
-    */
-   public Number numberValueOf(Object context) throws JDOMException {
-      try {
-         currentContext = context;
+	/**
+	 * Returns the string value of the first node selected by applying
+	 * the wrapped XPath expression to the given context.
+	 *
+	 * @param  context   the element to use as context for evaluating
+	 *                   the XPath expression.
+	 *
+	 * @return the string value of the first node selected by applying
+	 *         the wrapped XPath expression to the given context.
+	 *
+	 * @throws JDOMException   if the XPath expression is invalid or
+	 *                         its evaluation on the specified context
+	 *                         failed.
+	 */
+	@Override
+	public String valueOf(Object context) throws JDOMException {
+		try {
+			navigator.setContext(context);
 
-         return xPath.numberValueOf(context);
-      }
-      catch (JaxenException ex1) {
-         throw new JDOMException("XPath error while evaluating \"" +
-                        xPath.toString() + "\": " + ex1.getMessage(), ex1);
-      }
-      finally {
-         currentContext = null;
-      }
-   }
+			return xPath.stringValueOf(context);
+		}
+		catch (JaxenException ex1) {
+			throw new JDOMException("XPath error while evaluating \"" +
+					xPath.toString() + "\": " + ex1.getMessage(), ex1);
+		}
+		finally {
+			navigator.reset();
+		}
+	}
 
-   /**
-    * Defines an XPath variable and sets its value.
-    *
-    * @param  name    the variable name.
-    * @param  value   the variable value.
-    *
-    * @throws IllegalArgumentException   if <code>name</code> is not
-    *                                    a valid XPath variable name
-    *                                    or if the value type is not
-    *                                    supported by the underlying
-    *                                    implementation
-    */
-   public void setVariable(String name, Object value)
-                                        throws IllegalArgumentException {
-      Object o = xPath.getVariableContext();
-      if (o instanceof SimpleVariableContext) {
-           ((SimpleVariableContext)o).setVariableValue(null, name, value);
-      }
-   }
+	/**
+	 * Returns the number value of the first item selected by applying
+	 * the wrapped XPath expression to the given context.
+	 *
+	 * @param  context   the element to use as context for evaluating
+	 *                   the XPath expression.
+	 *
+	 * @return the number value of the first item selected by applying
+	 *         the wrapped XPath expression to the given context,
+	 *         <code>null</code> if no node was selected or the
+	 *         special value {@link java.lang.Double#NaN}
+	 *         (Not-a-Number) if the selected value can not be
+	 *         converted into a number value.
+	 *
+	 * @throws JDOMException   if the XPath expression is invalid or
+	 *                         its evaluation on the specified context
+	 *                         failed.
+	 */
+	@Override
+	public Number numberValueOf(Object context) throws JDOMException {
+		try {
+			navigator.setContext(context);
 
-   /**
-    * Adds a namespace definition to the list of namespaces known of
-    * this XPath expression.
-    * <p>
-    * <strong>Note</strong>: In XPath, there is no such thing as a
-    * 'default namespace'.  The empty prefix <b>always</b> resolves
-    * to the empty namespace URI.</p>
-    *
-    * @param  namespace   the namespace.
-    */
-   public void addNamespace(Namespace namespace) {
-      try {
-         xPath.addNamespace(namespace.getPrefix(), namespace.getURI());
-      }
-      catch (JaxenException ex1) { 
-    	  /* Can't happen here. */ 
-      }
-   }
+			return xPath.numberValueOf(context);
+		}
+		catch (JaxenException ex1) {
+			throw new JDOMException("XPath error while evaluating \"" +
+					xPath.toString() + "\": " + ex1.getMessage(), ex1);
+		}
+		finally {
+			navigator.reset();
+		}
+	}
 
-   /**
-    * Returns the wrapped XPath expression as a string.
-    *
-    * @return the wrapped XPath expression as a string.
-    */
-   public String getXPath() {
-      return (xPath.toString());
-   }
+	/**
+	 * Defines an XPath variable and sets its value.
+	 *
+	 * @param  name    the variable name.
+	 * @param  value   the variable value.
+	 *
+	 * @throws IllegalArgumentException   if <code>name</code> is not
+	 *                                    a valid XPath variable name
+	 *                                    or if the value type is not
+	 *                                    supported by the underlying
+	 *                                    implementation
+	 */
+	@Override
+	public void setVariable(String name, Object value)
+			throws IllegalArgumentException {
+		Object o = xPath.getVariableContext();
+		if (o instanceof SimpleVariableContext) {
+			((SimpleVariableContext)o).setVariableValue(null, name, value);
+		}
+	}
 
-   /**
-    * Compiles and sets the XPath expression wrapped by this object.
-    *
-    * @param  expr   the XPath expression to wrap.
-    *
-    * @throws JDOMException   if the XPath expression is invalid.
-    */
-   private void setXPath(String expr) throws JDOMException {
-      try {
-         xPath = new JaxenXPath(expr);
-         xPath.setNamespaceContext(new NSContext());
-      }
-      catch (Exception ex1) {
-         throw new JDOMException(
-                        "Invalid XPath expression: \"" + expr + "\"", ex1);
-      }
-   }
+	/**
+	 * Adds a namespace definition to the list of namespaces known of
+	 * this XPath expression.
+	 * <p>
+	 * <strong>Note</strong>: In XPath, there is no such thing as a
+	 * 'default namespace'.  The empty prefix <b>always</b> resolves
+	 * to the empty namespace URI.</p>
+	 *
+	 * @param  namespace   the namespace.
+	 */
+	@Override
+	public void addNamespace(Namespace namespace) {
+		navigator.includeNamespace(namespace);
+	}
 
-   public String toString() {
-      return (xPath.toString());
-   }
+	/**
+	 * Returns the wrapped XPath expression as a string.
+	 *
+	 * @return the wrapped XPath expression as a string.
+	 */
+	@Override
+	public String getXPath() {
+		return (xPath.toString());
+	}
 
-   public boolean equals(Object o) {
-      if (o instanceof JDOMXPath) {
-         JDOMXPath x = (JDOMXPath)o;
+	/**
+	 * Compiles and sets the XPath expression wrapped by this object.
+	 *
+	 * @param  expr   the XPath expression to wrap.
+	 *
+	 * @throws JDOMException   if the XPath expression is invalid.
+	 */
+	private void setXPath(String expr) throws JDOMException {
+		try {
+			xPath = new BaseXPath(expr, navigator);
+			xPath.setNamespaceContext(navigator);
+		}
+		catch (Exception ex1) {
+			throw new JDOMException(
+					"Invalid XPath expression: \"" + expr + "\"", ex1);
+		}
+	}
 
-         return (super.equals(o) &&
-                 xPath.toString().equals(x.xPath.toString()));
-      }
-      return false;
-   }
+	@Override
+	public String toString() {
+		return (xPath.toString());
+	}
 
-   public int hashCode() {
-      return xPath.hashCode();
-   }
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof JDOMXPath) {
+			JDOMXPath x = (JDOMXPath)o;
 
-   private class NSContext extends SimpleNamespaceContext {
-      public NSContext() {
-         super();
-      }
+			return (super.equals(o) &&
+					xPath.toString().equals(x.xPath.toString()));
+		}
+		return false;
+	}
 
-      /**
-       * <i>[Jaxen NamespaceContext interface support]</i> Translates
-       * the provided namespace prefix into the matching bound
-       * namespace URI.
-       *
-       * @param  prefix   the namespace prefix to resolve.
-       *
-       * @return the namespace URI matching the prefix.
-       */
-      public String translateNamespacePrefixToUri(String prefix) {
-         if ((prefix == null) || (prefix.length() == 0)) {
-            return null;
-         }
+	@Override
+	public int hashCode() {
+		return xPath.hashCode();
+	}
 
-         String uri = super.translateNamespacePrefixToUri(prefix);
-         if (uri == null) {
-            Object ctx = currentContext;
-            if (ctx != null) {
-               Element elt = null;
-
-               // Get closer element node
-               if (ctx instanceof Element) {
-                  elt = (Element)ctx;
-               } else if (ctx instanceof Attribute) {
-                  elt = ((Attribute)ctx).getParent();
-               } else if (ctx instanceof Content) {
-                  elt = ((Content) ctx).getParentElement();
-               } else if (ctx instanceof Document) {
-                  elt = ((Document)ctx).getRootElement();
-               }
-
-               if (elt != null) {
-                  Namespace ns = elt.getNamespace(prefix);
-                  if (ns != null) {
-                     uri = ns.getURI();
-                  }
-               }
-            }
-         }
-         return uri;
-      }
-   }
 }
 

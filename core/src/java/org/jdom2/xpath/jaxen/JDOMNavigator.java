@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.List;
 
+import org.jaxen.BaseXPath;
 import org.jaxen.DefaultNavigator;
 import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenConstants;
+import org.jaxen.NamespaceContext;
 import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 import org.jaxen.saxpath.SAXPathException;
@@ -26,14 +28,64 @@ import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.input.SAXBuilder;
 
-final class JDOMNavigator extends DefaultNavigator {
-	
-	private final IdentityHashMap<Element, NamespaceContainer[]> emtnsmap = 
-			new IdentityHashMap<Element, NamespaceContainer[]>();
-	
+final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
+
+	private final IdentityHashMap<Element, NamespaceContainer[]> emtnsmap
+	= new IdentityHashMap<Element, NamespaceContainer[]>();
+
+	private final HashMap<String, String> nsFromContext = new HashMap<String, String>();
+	private final HashMap<String, String> nsFromUser = new HashMap<String, String>();
+
+	void reset() {
+		emtnsmap.clear();
+		nsFromContext.clear();
+	}
+
+	void setContext(Object node) {
+		// make sure we have no hard-references to any Elements
+		emtnsmap.clear();
+		nsFromContext.clear();
+
+		List<Namespace> nsl = null;
+		if (node instanceof Content) {
+			nsl = ((Content)node).getNamespacesInScope();
+		} else if (node instanceof NamespaceContainer) {
+			nsl = ((NamespaceContainer)node).getParentElement().getNamespacesInScope();
+		} else if (node instanceof Attribute) {
+			Element pnt = ((Attribute)node).getParent();
+			if (pnt != null) {
+				nsl = pnt.getNamespacesInScope();
+			}
+		}
+		if (nsl != null) {
+			for (Namespace ns : nsl) {
+				nsFromContext.put(ns.getPrefix(), ns.getURI());
+			}
+		}
+	}
+
+	void includeNamespace(Namespace namespace) {
+		nsFromUser.put(namespace.getPrefix(), namespace.getURI());
+	}
+
+	@Override
+	public String translateNamespacePrefixToUri(String prefix) {
+		if (prefix == null) {
+			return null;
+		}
+		String uri = nsFromUser.get(prefix);
+		if (uri != null) {
+			return uri;
+		}
+		return nsFromContext.get(prefix);
+	}
+
+
 	@Override
 	public XPath parseXPath(String path) throws SAXPathException {
-		return new JaxenXPath(path);
+		XPath ret = new BaseXPath(path, this);
+		ret.setNamespaceContext(this);
+		return ret;
 	}
 
 	@Override
@@ -226,49 +278,30 @@ final class JDOMNavigator extends DefaultNavigator {
 		return JaxenConstants.EMPTY_ITERATOR;
 	}
 
-	private void accumulate(HashMap<String,NamespaceContainer> current,
-			Element context, Namespace ns) {
-		if (!current.containsKey(ns.getPrefix())) {
-			current.put(ns.getPrefix(), 
-					new NamespaceContainer(ns, context));
-		}
-	}
-
 	@Override
 	public Iterator<?> getNamespaceAxisIterator(final Object contextNode) throws UnsupportedAxisException {
-        if ( ! isElement(contextNode) ) {
-            return JaxenConstants.EMPTY_ITERATOR;
-        }
-        
-        Element elem = (Element) contextNode;
-        
-        NamespaceContainer[] namespaces = emtnsmap.get(elem);
-        if (namespaces == null) {
+		//The namespace axis applies to Elements only in XPath.
+		if ( !isElement(contextNode) ) {
+			return JaxenConstants.EMPTY_ITERATOR;
+		}
+		NamespaceContainer[] ret = emtnsmap.get(contextNode);
+		if (ret == null) {
+			List<Namespace> nsl = ((Element)contextNode).getNamespacesInScope();
+			ret = new NamespaceContainer[nsl.size()];
+			int i = 0;
+			for (Namespace ns : nsl) {
+				ret[i++] = new NamespaceContainer(ns, (Element)contextNode);
+			}
+			emtnsmap.put((Element)contextNode, ret);
+		}
 
-	        LinkedHashMap<String,NamespaceContainer> current = 
-	        		new LinkedHashMap<String, NamespaceContainer>();
-	        accumulate(current, elem, Namespace.XML_NAMESPACE);
-	        
-	        while (elem != null) {
-	        	accumulate(current, elem, elem.getNamespace());
-	        	for (Object ns : elem.getAdditionalNamespaces()) {
-	        		accumulate(current, elem, (Namespace)ns);
-	        	}
-	        	for (Object att : elem.getAttributes()) {
-	        		accumulate(current, elem, ((Attribute)att).getNamespace());
-	        	}
-	        	elem = elem.getParentElement();
-	        }
-		    namespaces = current.values().toArray(new NamespaceContainer[current.size()]);
-		    // Cannot use elem because that is used to walk up the hierarchy.
-		    emtnsmap.put((Element)contextNode, namespaces);
-        }
-        return Arrays.asList(namespaces).iterator();
+		return Arrays.asList(ret).iterator();
+
 	}
 
 	@Override
 	public Iterator<?> getParentAxisIterator(Object contextNode) throws UnsupportedAxisException {
-		
+
 		Parent p = null;
 		if (contextNode instanceof Content) {
 			p = ((Content)contextNode).getParent();
@@ -282,4 +315,5 @@ final class JDOMNavigator extends DefaultNavigator {
 		}
 		return JaxenConstants.EMPTY_ITERATOR;
 	}
+
 }

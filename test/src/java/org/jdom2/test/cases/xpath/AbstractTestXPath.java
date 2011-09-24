@@ -405,8 +405,8 @@ public abstract class AbstractTestXPath {
 	public void testGetALLNamespaces() {
 		//Namespace.NO_NAMESPACE is declared earlier in documentOrder.
 		// so it comes first.
-		checkXPath("//c3nsa:child/namespace::*", child3emt, "", 
-				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE, child3nsa, child3nsb);
+		checkXPath("//c3nsa:child/namespace::*", child3emt, "jdom:c3nsa", 
+				child3nsa, Namespace.NO_NAMESPACE, child3nsb, Namespace.XML_NAMESPACE);
 	}
 	
 	@Test
@@ -521,7 +521,7 @@ public abstract class AbstractTestXPath {
 	
 	@Test
 	public void testXPathNamespaces() {
-		checkXPath("namespace::*", child3emt, null, Namespace.XML_NAMESPACE, child3nsa, child3nsb, Namespace.NO_NAMESPACE);
+		checkXPath("namespace::*", child3emt, null, child3nsa, Namespace.NO_NAMESPACE, child3nsb, Namespace.XML_NAMESPACE);
 	}
 	
 	@Test
