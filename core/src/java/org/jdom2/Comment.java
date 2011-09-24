@@ -87,7 +87,8 @@ public class Comment extends Content {
      *
      * @return the text of this comment
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return text;
     }
 
@@ -128,7 +129,8 @@ public class Comment extends Content {
      * @return <code>String</code> - information about the
      *         <code>Attribute</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer()
             .append("[Comment: ")
             .append(new org.jdom2.output.XMLOutputter().outputString(this))
