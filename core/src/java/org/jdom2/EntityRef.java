@@ -137,7 +137,8 @@ public class EntityRef extends Content {
      * 1.0 string value.
      * @return the empty string
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return "";  // entity references don't have XPath string values
     }
 
@@ -221,7 +222,8 @@ public class EntityRef extends Content {
      * @return <code>String</code> - information about the
      *         <code>EntityRef</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer()
             .append("[EntityRef: ")
             .append("&")
