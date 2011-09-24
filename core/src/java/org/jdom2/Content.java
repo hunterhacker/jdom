@@ -113,8 +113,8 @@ public abstract class Content implements Cloneable, Serializable {
      * @return the containing Element or null if unattached or a root element
      */
     public Element getParentElement() {
-        Parent parent = getParent();
-        return (Element) ((parent instanceof Element) ? parent : null);
+        Parent pnt = getParent();
+        return (Element) ((pnt instanceof Element) ? pnt : null);
     }
 
     /**
@@ -154,7 +154,8 @@ public abstract class Content implements Cloneable, Serializable {
      *
      * @return a detached deep copy of this child and descendants
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         try {
             Content c = (Content)super.clone();
             c.parent = null;
@@ -176,7 +177,8 @@ public abstract class Content implements Cloneable, Serializable {
      * @return <code>boolean</code> - whether the <code>Content</code> is
      *         equal to the supplied <code>Object</code>.
      */
-    public final boolean equals(Object ob) {
+    @Override
+	public final boolean equals(Object ob) {
         return (ob == this);
     }
 
@@ -185,7 +187,8 @@ public abstract class Content implements Cloneable, Serializable {
      *
      * @return <code>int</code> - hash code.
      */
-    public final int hashCode() {
+    @Override
+	public final int hashCode() {
         return super.hashCode();
     }
     
