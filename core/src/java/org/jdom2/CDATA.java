@@ -100,7 +100,8 @@ public class CDATA extends Text {
      *          by {@link org.jdom2.Verifier#checkCharacterData})
      *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
-    public Text setText(final String str) {
+    @Override
+	public Text setText(final String str) {
         // Overrides Text.setText() because this needs to check that CDATA rules
         // are enforced. We could have a separate Verifier check for CDATA
         // beyond Text and call that alone before super.setText().
@@ -130,7 +131,8 @@ public class CDATA extends Text {
      *          by {@link org.jdom2.Verifier#checkCharacterData})
      *         or the CDATA end delimiter <code>]]&gt;</code>.
      */
-    public void append(final String str) {
+    @Override
+	public void append(final String str) {
         // Overrides Text.append(String) because this needs to check that CDATA
         // rules are enforced. We could have a separate Verifier check for CDATA
         // beyond Text and call that alone before super.setText().
@@ -168,7 +170,8 @@ public class CDATA extends Text {
      *
      * @param text Text node to append.
      */
-    public void append(final Text text) {
+    @Override
+	public void append(final Text text) {
         // Overrides Text.append(Text) because this needs to check that CDATA
         // rules are enforced. We could have a separate Verifier check for CDATA
         // beyond Text and call that alone before super.setText().
@@ -189,7 +192,8 @@ public class CDATA extends Text {
      *
      * @return <code>String</code> - information about this node.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer(64)
             .append("[CDATA: ")
             .append(getText())
