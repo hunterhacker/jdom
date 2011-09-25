@@ -111,7 +111,7 @@ class JAXPParserFactory {               // package protected
      *                       configuring the JAXP SAX parser.
      */
     public static XMLReader createParser(boolean validating,
-                          Map features, Map properties) throws JDOMException {
+                          Map<String,Boolean> features, Map<String,Object> properties) throws JDOMException {
         try {
             SAXParser parser = null;
 
@@ -152,7 +152,7 @@ class JAXPParserFactory {               // package protected
      *                       the property.
      */
     private static void setProperty(SAXParser parser,
-                        Map properties, String name) throws JDOMException {
+                        Map<String,Object> properties, String name) throws JDOMException {
         try {
             if (properties.containsKey(name)) {
                 parser.setProperty(name, properties.get(name));
