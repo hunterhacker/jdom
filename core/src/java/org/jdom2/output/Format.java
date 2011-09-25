@@ -54,7 +54,9 @@
 
 package org.jdom2.output;
 
-import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+
 import org.jdom2.Verifier;
 
 /**
@@ -408,13 +410,15 @@ public class Format implements Cloneable {
         return encoding;
     }
 
-    public Object clone() {
+    @Override
+	public Format clone() {
         Format format = null;
 
         try {
             format = (Format) super.clone();
         }
         catch (CloneNotSupportedException ce) {
+        	// swallow.
         }
 
         return format;
@@ -427,76 +431,66 @@ public class Format implements Cloneable {
      * If JDK 1.4 isn't around, default to no special encoding.
      */
     class DefaultEscapeStrategy implements EscapeStrategy {
-        private int bits;
-        Object encoder;
-        Method canEncode;
+        private final int bits;
+        private final CharsetEncoder encoder;
 
         public DefaultEscapeStrategy(String encoding) {
             if ("UTF-8".equalsIgnoreCase(encoding) ||
                     "UTF-16".equalsIgnoreCase(encoding)) {
                 bits = 16;
+                encoder = null;
             }
             else if ("ISO-8859-1".equalsIgnoreCase(encoding) ||
                     "Latin1".equalsIgnoreCase(encoding)) {
                 bits = 8;
+                encoder = null;
             }
             else if ("US-ASCII".equalsIgnoreCase(encoding) ||
                     "ASCII".equalsIgnoreCase(encoding)) {
                 bits = 7;
+                encoder = null;
             }
             else {
                 bits = 0;
-                //encoder = Charset.forName(encoding).newEncoder();
-                try {
-                    Class charsetClass = Class.forName("java.nio.charset.Charset");
-                    Class encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
-                    Method forName = charsetClass.getMethod("forName", String.class);
-                    Object charsetObj = forName.invoke(null, encoding);
-                    Method newEncoder = charsetClass.getMethod("newEncoder");
-                    encoder = newEncoder.invoke(charsetObj);
-                    canEncode = encoderClass.getMethod("canEncode", char.class);
-                }
-                catch (Exception ignored) {
-                }
+                encoder = Charset.forName(encoding).newEncoder();
             }
         }
 
-        public boolean shouldEscape(char ch) {
+        @Override
+		public boolean shouldEscape(char ch) {
             if (bits == 16) {
-                if (Verifier.isHighSurrogate(ch))
+                if (Verifier.isHighSurrogate(ch)) {
                     return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
-                else
-                    return false;
-            }
-            if (bits == 8) {
-                if ((int) ch > 255)
-                    return true;
-                else
-                    return false;
-            }
-            if (bits == 7) {
-                if ((int) ch > 127)
-                    return true;
-                else
-                    return false;
-            }
-            else {
-                if (Verifier.isHighSurrogate(ch))
-                    return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
-                
-                if (canEncode != null && encoder != null) {
-                    try {
-                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[]{new Character(ch)});
-                        return !val.booleanValue();
-                    }
-                    catch (Exception ignored) {
-                    }
                 }
-                // Return false if we don't know.  This risks not escaping
-                // things which should be escaped, but also means people won't
-                // start getting loads of unnecessary escapes.
                 return false;
             }
+            if (bits == 8) {
+                if (ch > 255) {
+                    return true;
+                }
+                return false;
+            }
+            if (bits == 7) {
+                if (ch > 127) {
+                    return true;
+                }
+                return false;
+            }
+            if (Verifier.isHighSurrogate(ch))
+                return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
+            
+            if (encoder != null) {
+                try {
+                    return !encoder.canEncode(ch);
+                }
+                catch (Exception ignored) {
+                	// ignore problems.
+                }
+            }
+            // Return false if we don't know.  This risks not escaping
+            // things which should be escaped, but also means people won't
+            // start getting loads of unnecessary escapes.
+            return false;
         }
     }
 
@@ -602,7 +596,8 @@ public class Format implements Cloneable {
             this.name = name;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return name;
         }
     }
