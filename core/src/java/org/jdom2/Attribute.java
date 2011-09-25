@@ -66,7 +66,7 @@ import java.io.*;
  * @author  Wesley Biggs
  * @author  Victor Toni
  */
-public class Attribute implements Serializable, Cloneable {
+public class Attribute extends Content implements Serializable, Cloneable {
 
     /**
      * Attribute type: the attribute has not been declared or type
@@ -172,9 +172,6 @@ public class Attribute implements Serializable, Cloneable {
     /** The type of the <code>Attribute</code> */
     protected int type = UNDECLARED_TYPE;
 
-    /** Parent element, or null if none */
-    protected Element parent;
-
     /**
      * Default, no-args constructor for implementations to use if needed.
      */
@@ -272,53 +269,14 @@ public class Attribute implements Serializable, Cloneable {
     /**
      * This will return the parent of this <code>Attribute</code>.
      * If there is no parent, then this returns <code>null</code>.
+     * Use return-type covariance to override Content's getParent() method
+     * to return an Element, not just a Parent
      *
      * @return parent of this <code>Attribute</code>
      */
+    @Override
     public Element getParent() {
-        return parent;
-    }
-
-    /**
-     * This retrieves the owning <code>{@link Document}</code> for
-     * this Attribute, or null if not a currently a member of a
-     * <code>{@link Document}</code>.
-     *
-     * @return <code>Document</code> owning this Attribute, or null.
-     */
-    public Document getDocument() {
-        final Element parentElement = getParent();
-        if (parentElement != null) {
-	        return parentElement.getDocument();
-        }
-
-        return null;
-    }
-
-    /**
-     * This will set the parent of this <code>Attribute</code>.
-     *
-     * @param parent <code>Element</code> to be new parent.
-     * @return this <code>Attribute</code> modified.
-     */
-    protected Attribute setParent(final Element parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    /**
-     * This detaches the <code>Attribute</code> from its parent, or does
-     * nothing if the <code>Attribute</code> has no parent.
-     *
-     * @return <code>Attribute</code> - this <code>Attribute</code> modified.
-     */
-    public Attribute detach() {
-        final Element parentElement = getParent();
-        if (parentElement != null) {
-            parentElement.removeAttribute(getName(),getNamespace());
-        }
-
-        return this;
+        return (Element)super.getParent();
     }
 
     /**
@@ -465,7 +423,8 @@ public class Attribute implements Serializable, Cloneable {
      *
      * @return <code>String</code> - value for this attribute.
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return value;
     }
 
@@ -534,49 +493,13 @@ public class Attribute implements Serializable, Cloneable {
     }
 
     /**
-     * This tests for equality of this <code>Attribute</code> to the supplied
-     * <code>Object</code>.
-     *
-     * @param ob <code>Object</code> to compare to.
-     * @return <code>boolean</code> - whether the <code>Attribute</code> is
-     *         equal to the supplied <code>Object</code>.
-     */
-    @Override
-    public final boolean equals(final Object ob) {
-        return (ob == this);
-    }
-
-    /**
-     * This returns the hash code for this <code>Attribute</code>.
-     *
-     * @return <code>int</code> - hash code.
-     */
-    @Override
-    public final int hashCode() {
-        return super.hashCode();
-    }
-
-    /**
      * This will return a clone of this <code>Attribute</code>.
      *
      * @return <code>Object</code> - clone of this <code>Attribute</code>.
      */
     @Override
-    public Object clone() {
-        Attribute attribute = null;
-        try {
-            attribute = (Attribute) super.clone();
-        }
-        catch (final CloneNotSupportedException ignore) {
-            // Won't happen
-        }
-
-        // Name, namespace, and value are references to imutable objects
-        // and are copied by super.clone() (aka Object.clone())
-
-        // super.clone() copies reference to set parent to null
-        attribute.parent = null;
-        return attribute;
+    public Attribute clone() {
+        return (Attribute) super.clone();
     }
 
     /////////////////////////////////////////////////////////////////

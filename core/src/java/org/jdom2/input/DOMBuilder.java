@@ -271,7 +271,7 @@ public class DOMBuilder {
                                 // overridden at a lower level than what we are expecting.
                                 // track all prefixes to ensure they are not changed lower
                                 // down.
-                                HashSet overrides = new HashSet();
+                                HashSet<String> overrides = new HashSet();
                                 Element p = element;
                                 uploop: do {
                                     // Search up the Element tree looking for a prefixed namespace

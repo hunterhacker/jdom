@@ -397,7 +397,8 @@ public class Element extends Content implements Parent {
      *
      * @return a concatentation of all text node descendants
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         final StringBuffer buffer = new StringBuffer();
 
         final Iterator iter = getContent().iterator();
@@ -421,11 +422,13 @@ public class Element extends Content implements Parent {
         return parent instanceof Document;
     }
 
-    public int getContentSize() {
+    @Override
+	public int getContentSize() {
         return content.size();
     }
 
-    public int indexOf(final Content child) {
+    @Override
+	public int indexOf(final Content child) {
         return content.indexOf(child);
     }
 
@@ -660,7 +663,8 @@ public class Element extends Content implements Parent {
      *         <code>{@link CDATA}</code>, and
      *         <code>{@link EntityRef}</code> objects.
      */
-    public List getContent() {
+    @Override
+	public List getContent() {
         return content;
     }
 
@@ -676,7 +680,8 @@ public class Element extends Content implements Parent {
      * @param filter <code>Filter</code> to apply
      * @return <code>List</code> - filtered Element content
      */
-    public List getContent(final Filter filter) {
+    @Override
+	public List getContent(final Filter filter) {
         return content.getView(filter);
     }
 
@@ -685,7 +690,8 @@ public class Element extends Content implements Parent {
      *
      * @return list of the old children detached from this parent
      */
-    public List removeContent() {
+    @Override
+	public List removeContent() {
         final List old = new ArrayList(content);
         content.clear();
         return old;
@@ -697,7 +703,8 @@ public class Element extends Content implements Parent {
      * @param filter filter to select which content to remove
      * @return list of the old children detached from this parent
      */
-    public List removeContent(final Filter filter) {
+    @Override
+	public List removeContent(final Filter filter) {
         final List old = new ArrayList();
         final Iterator iter = content.getView(filter).iterator();
         while (iter.hasNext()) {
@@ -865,7 +872,8 @@ public class Element extends Content implements Parent {
         return this;
     }
 
-    public List cloneContent() {
+    @Override
+	public List cloneContent() {
         final int size = getContentSize();
         final List list = new ArrayList(size);
         for (int i = 0; i < size; i++) {
@@ -875,7 +883,8 @@ public class Element extends Content implements Parent {
         return list;
     }
 
-    public Content getContent(final int index) {
+    @Override
+	public Content getContent(final int index) {
         return (Content) content.get(index);
     }
 
@@ -884,11 +893,16 @@ public class Element extends Content implements Parent {
 //        return (i < 0) ? null : getContent(i);
 //    }
 
-    public boolean removeContent(final Content child) {
+    @Override
+	public boolean removeContent(final Content child) {
+    	if (child instanceof Attribute) {
+    		return attributes.remove(child);
+    	}
         return content.remove(child);
     }
 
-    public Content removeContent(final int index) {
+    @Override
+	public Content removeContent(final int index) {
         return (Content) content.remove(index);
     }
 
@@ -1237,7 +1251,8 @@ public class Element extends Content implements Parent {
      * @return <code>String</code> - information about the
      *         <code>Element</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         final StringBuffer stringForm = new StringBuffer(64)
             .append("[Element: <")
             .append(getQualifiedName());
@@ -1263,7 +1278,8 @@ public class Element extends Content implements Parent {
      *
      * @return the clone of this element
      */
-   public Object clone() {
+   @Override
+public Object clone() {
 
        // Ken Rune Helland <kenh@csc.no> is our local clone() guru
 
@@ -1358,7 +1374,8 @@ public class Element extends Content implements Parent {
      *
      * @return an iterator to walk descendants
      */
-    public Iterator getDescendants() {
+    @Override
+	public Iterator getDescendants() {
         return new DescendantIterator(this);
     }
 
@@ -1371,7 +1388,8 @@ public class Element extends Content implements Parent {
      * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants within a filter
      */
-    public Iterator getDescendants(final Filter filter) {
+    @Override
+	public Iterator getDescendants(final Filter filter) {
         final Iterator iterator = new DescendantIterator(this);
         return new FilterIterator(iterator, filter);
     }

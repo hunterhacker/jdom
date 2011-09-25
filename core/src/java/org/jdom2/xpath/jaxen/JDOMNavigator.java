@@ -51,11 +51,6 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 			nsl = ((Content)node).getNamespacesInScope();
 		} else if (node instanceof NamespaceContainer) {
 			nsl = ((NamespaceContainer)node).getParentElement().getNamespacesInScope();
-		} else if (node instanceof Attribute) {
-			Element pnt = ((Attribute)node).getParent();
-			if (pnt != null) {
-				nsl = pnt.getNamespacesInScope();
-			}
 		}
 		if (nsl != null) {
 			for (Namespace ns : nsl) {
@@ -232,13 +227,6 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 		if (contextNode instanceof Document) {
 			return contextNode;
 		}
-		if (contextNode instanceof Attribute) {
-			Element p = ((Attribute)contextNode).getParent();
-			if (p == null) {
-				return null;
-			}
-			return ((Content)p).getDocument();
-		}
 		if (contextNode instanceof NamespaceContainer) {
 			return ((NamespaceContainer)contextNode).getParentElement().getDocument();
 		}
@@ -249,9 +237,6 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 	public Object getParentNode(Object contextNode) throws UnsupportedAxisException {
 		if (contextNode instanceof Document) {
 			return null;
-		}
-		if (contextNode instanceof Attribute) {
-			return ((Attribute)contextNode).getParent();
 		}
 		if (contextNode instanceof NamespaceContainer) {
 			return ((NamespaceContainer)contextNode).getParentElement();
@@ -305,8 +290,6 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 		Parent p = null;
 		if (contextNode instanceof Content) {
 			p = ((Content)contextNode).getParent();
-		} else if (contextNode instanceof Attribute) {
-			p = ((Attribute)contextNode).getParent();
 		} else if (contextNode instanceof NamespaceContainer) {
 			p = ((NamespaceContainer)contextNode).getParentElement();
 		}
