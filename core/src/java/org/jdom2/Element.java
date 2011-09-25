@@ -1316,7 +1316,7 @@ public Object clone() {
        if (content != null) {
            for(int i = 0; i < content.size(); i++) {
                final Content c = (Content) content.get(i);
-               element.content.add(c.clone());
+               element.content.add((Content)c.clone());
            }
        }
 
@@ -1342,7 +1342,7 @@ public Object clone() {
             final int size = additionalNamespaces.size();
             out.write(size);
             for (int i = 0; i < size; i++) {
-                final Namespace additional = (Namespace) additionalNamespaces.get(i);
+                final Namespace additional = additionalNamespaces.get(i);
                 out.writeObject(additional.getPrefix());
                 out.writeObject(additional.getURI());
             }

@@ -1905,10 +1905,17 @@ public final class TestElement {
 
     @Test
     public void test_AddingString() {
-    	Vector v = new Vector();
+    	Vector<Object> v = new Vector<Object>();
     	v.add("one");
     	Element e = new Element("e");
-    	e.setContent(v);
+    	try {
+    		e.setContent(v);
+    		fail("Should not be avle to add String content");
+    	} catch (ClassCastException cce) {
+    		// good.
+    	} catch (Exception ex) {
+    		fail("Expected ClassCastException, not " + ex.getClass());
+    	}
     }
     
 	@Test
