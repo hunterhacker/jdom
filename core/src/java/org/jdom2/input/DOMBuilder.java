@@ -54,13 +54,21 @@
 
 package org.jdom2.input;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
 
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.w3c.dom.*;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMFactory;
+import org.jdom2.Namespace;
+import org.w3c.dom.Attr;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Builds a JDOM {@link org.jdom2.Document org.jdom2.Document} from a pre-existing
@@ -267,36 +275,14 @@ public class DOMBuilder {
                         		// must be a defaulted value from an XSD.
                         		// perhaps we can find the namespace in our
                         		// element's ancestry, and use the prefix from that.
-                                // We need to ensure that a particular prefix has not been
-                                // overridden at a lower level than what we are expecting.
-                                // track all prefixes to ensure they are not changed lower
-                                // down.
-                                HashSet<String> overrides = new HashSet();
-                                Element p = element;
-                                uploop: do {
-                                    // Search up the Element tree looking for a prefixed namespace
-                                    // matching our attURI
-                                    if (p.getNamespace().getURI().equals(attURI)
-                                            && !overrides.contains(p.getNamespacePrefix())
-                                            && !"".equals(element.getNamespace().getPrefix())) {
-                                        // we need a prefix. It's impossible to have a namespaced
-                                        // attribute if there is no prefix for that attribute.
-                                        attNS = p.getNamespace();
-                                        break uploop;
-                                    }
-                                    overrides.add(p.getNamespacePrefix());
-                                    for (Iterator it = p.getAdditionalNamespaces().iterator();
-                                            it.hasNext(); ) {
-                                        Namespace tns = (Namespace)it.next();
-                                        if (!overrides.contains(tns.getPrefix())
-                                                 && attURI.equals(tns.getURI())) {
-                                            attNS = tns;
-                                            break uploop;
-                                        }
-                                        overrides.add(tns.getPrefix());
-                                    }
-                                    p = p.getParentElement();
-                                } while (p != null);
+                        		HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
+                        		for(Namespace nss : element.getNamespacesInScope()) {
+                        			if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
+                        				attNS = nss;
+                        				break;
+                        			}
+                        			tmpmap.put(nss.getPrefix(), nss);
+                        		}
                                 if (attNS == null) {
                                     // we cannot find a 'prevailing' namespace that has a prefix
                                     // that is for this namespace.
@@ -312,7 +298,7 @@ public class DOMBuilder {
                                     int cnt = 0;
                                     String base = "attns";
                                     String pfx = base + cnt;
-                                    while (overrides.contains(pfx)) {
+                                    while (tmpmap.containsKey(pfx)) {
                                         cnt++;
                                         pfx = base + cnt;
                                     }
