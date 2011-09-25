@@ -69,17 +69,17 @@ import org.jdom2.Namespace;
 class NamespaceStack {
  
     /** The prefixes available */
-    private Stack prefixes;
+    private Stack<String> prefixes;
 
     /** The URIs available */
-    private Stack uris;        
+    private Stack<String> uris;        
 
     /**
      * This creates the needed storage.
      */
     NamespaceStack() {
-        prefixes = new Stack();
-        uris = new Stack();
+        prefixes = new Stack<String>();
+        uris = new Stack<String>();
     }
   
     /**
@@ -100,7 +100,7 @@ class NamespaceStack {
      * @return <code>String</code> - the popped namespace prefix.
      */
     public String pop() {
-        String prefix = (String)prefixes.pop();
+        String prefix = prefixes.pop();
         uris.pop();
 
         return prefix;
@@ -127,7 +127,7 @@ class NamespaceStack {
         if (index == -1) {
             return null;
         }
-        String uri = (String)uris.elementAt(index);
+        String uri = uris.elementAt(index);
         return uri;       
     }
     
@@ -136,6 +136,7 @@ class NamespaceStack {
      * most recently added <code>{@link Namespace}</code> to
      * the "oldest," all to <code>System.out</code>.
      */
+    @Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         String sep = System.getProperty("line.separator");
