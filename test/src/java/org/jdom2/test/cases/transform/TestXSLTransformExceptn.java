@@ -26,7 +26,7 @@ public class TestXSLTransformExceptn {
 		RuntimeException re = new RuntimeException("abc");
 		XSLTransformException e = new XSLTransformException("msg", re);
 		assertTrue(re == e.getCause());
-		assertEquals("msg: abc", e.getMessage());
+		assertEquals("msg", e.getMessage());
 	}
 
 }
