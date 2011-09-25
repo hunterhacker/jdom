@@ -196,7 +196,8 @@ public class TestProcessingInstruction {
 
 	@Test
 	public void testCloneD() {
-		ProcessingInstruction pi = new ProcessingInstruction("test", Collections.emptyMap());
+		Map<String,String> empty = Collections.emptyMap();
+		ProcessingInstruction pi = new ProcessingInstruction("test", empty);
 		ProcessingInstruction copy = (ProcessingInstruction)pi.clone();
 		assertTrue(!pi.equals(copy));
 		checkEquals(pi.getTarget(), copy.getTarget());
