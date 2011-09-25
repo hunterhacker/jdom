@@ -228,7 +228,8 @@ public class Text extends Content {
      *
      * @return the text
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return value;
     }
 
@@ -242,7 +243,8 @@ public class Text extends Content {
      *
      * @return <code>String</code> - information about this node.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer(64)
             .append("[Text: ")
             .append(getText())
@@ -256,7 +258,8 @@ public class Text extends Content {
      *
      * @return <code>Text</code> - cloned node.
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         Text text = (Text)super.clone();
         text.value = value;
         return text;
