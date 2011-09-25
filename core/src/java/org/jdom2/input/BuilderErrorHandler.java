@@ -73,7 +73,8 @@ public class BuilderErrorHandler implements ErrorHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong
      */
-    public void warning(SAXParseException exception) throws SAXException {
+    @Override
+	public void warning(SAXParseException exception) throws SAXException {
         // nothing
     }
 
@@ -86,7 +87,8 @@ public class BuilderErrorHandler implements ErrorHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong
      */
-    public void error(SAXParseException exception) throws SAXException {
+    @Override
+	public void error(SAXParseException exception) throws SAXException {
         throw exception;
     }
 
@@ -99,7 +101,8 @@ public class BuilderErrorHandler implements ErrorHandler {
      * @param exception <code>SAXParseException</code> that occurred.
      * @throws SAXException when things go wrong
      */
-    public void fatalError(SAXParseException exception) throws SAXException {
+    @Override
+	public void fatalError(SAXParseException exception) throws SAXException {
         throw exception;
     }
 }
