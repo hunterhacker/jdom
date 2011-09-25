@@ -55,6 +55,7 @@
 package org.jdom2;
 
 import java.util.*;
+
 import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.Parent;
@@ -66,11 +67,11 @@ import org.jdom2.Parent;
  * @author Bradley S. Huffman
  * @author Jason Hunter
  */
-class DescendantIterator implements Iterator {
+class DescendantIterator implements Iterator<Content> {
 
-    private Iterator iterator;
-    private Iterator nextIterator;
-    private List stack = new ArrayList();
+    private Iterator<Content> iterator;
+    private Iterator<Content> nextIterator;
+    private List<Iterator<Content>> stack = new ArrayList<Iterator<Content>>();
 
     /**
      * Iterator for the descendants of the supplied object.
@@ -89,7 +90,8 @@ class DescendantIterator implements Iterator {
      *
      * @return true is the iterator has more descendants
      */
-    public boolean hasNext() {
+    @Override
+	public boolean hasNext() {
         if (iterator != null && iterator.hasNext()) return true;
         if (nextIterator != null && nextIterator.hasNext()) return true;
         if (stackHasAnyNext()) return true;
@@ -101,7 +103,8 @@ class DescendantIterator implements Iterator {
      *
      * @return the next descendant
      */
-    public Object next() {
+    @Override
+	public Content next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -125,7 +128,7 @@ class DescendantIterator implements Iterator {
             }
         }
 
-        Content child = (Content) iterator.next();
+        Content child = iterator.next();
         if (child instanceof Element) {
             nextIterator = ((Element)child).getContent().iterator();
         }
@@ -138,26 +141,27 @@ class DescendantIterator implements Iterator {
      * iteration and all children, siblings, and any node following the
      * removed node (in document order) will be visited.
      */
-    public void remove() {
+    @Override
+	public void remove() {
         iterator.remove();
     }
 
-    private Iterator pop() {
+    private Iterator<Content> pop() {
         int stackSize = stack.size();
         if (stackSize == 0) {
             throw new NoSuchElementException("empty stack");
         }
-        return (Iterator) stack.remove(stackSize - 1);
+        return stack.remove(stackSize - 1);
     }
 
-    private void push(Iterator itr) {
+    private void push(Iterator<Content> itr) {
         stack.add(itr);
     }
 
     private boolean stackHasAnyNext() {
         int size = stack.size();
         for (int i = 0; i < size; i++) {
-            Iterator itr = (Iterator) stack.get(i);
+            Iterator<Content> itr = stack.get(i);
             if (itr.hasNext()) {
                 return true;
             }

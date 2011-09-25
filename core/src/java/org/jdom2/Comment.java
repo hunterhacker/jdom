@@ -118,6 +118,11 @@ public class Comment extends Content {
         this.text = text;
         return this;
     }
+    
+    @Override
+    public Comment clone() {
+    	return (Comment)super.clone();
+    }
 
     /**
      * This returns a <code>String</code> representation of the

@@ -54,23 +54,36 @@
 
 package org.jdom2.filter;
 
+import org.jdom2.Content;
+
 /**
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
  */
-public abstract class AbstractFilter implements Filter {
+public abstract class AbstractFilter<T extends Content> implements Filter<T> {
+	
+	@Override
+	public final boolean matches(Content content) {
+		return filter(content) != null;
+	}
 
-    public Filter negate() {
+    @Override
+	public final Filter<? extends Content> negate() {
+    	if (this instanceof NegateFilter) {
+    		return ((NegateFilter)this).getBaseFilter();
+    	}
         return new NegateFilter(this);
     }
 
-    public Filter or(Filter filter) {
+    @Override
+	public final Filter<? extends Content> or(Filter<?> filter) {
         return new OrFilter(this, filter);
     }
 
-    public Filter and(Filter filter) {
-        return new AndFilter(this, filter);
+    @Override
+	public final Filter<T> and(Filter<? extends T> filter) {
+        return new AndFilter<T>(this, filter);
     }
 
 }

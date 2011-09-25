@@ -1,7 +1,5 @@
 package org.jdom2.test.cases.filter;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jdom2.CDATA;
@@ -166,14 +164,14 @@ public class TestContentFilter extends AbstractTestFilter {
 		exerciseContent(cb, ContentFilter.ELEMENT);
 	}
 	
-	@Test
-	public void testDocumentContentFilter() {
-		ContentFilter cf = new ContentFilter(ContentFilter.DOCUMENT);
-		assertTrue(cf.matches(getDocument()));
-		assertFalse(cf.matches(getRoot()));
-		ContentFilter cfe = new ContentFilter(ContentFilter.ELEMENT);
-		assertFalse(cfe.matches(getDocument()));
-	}
+//	@Test
+//	public void testDocumentContentFilter() {
+//		ContentFilter cf = new ContentFilter(ContentFilter.DOCUMENT);
+//		assertTrue(cf.matches(getDocument()));
+//		assertFalse(cf.matches(getRoot()));
+//		ContentFilter cfe = new ContentFilter(ContentFilter.ELEMENT);
+//		assertFalse(cfe.matches(getDocument()));
+//	}
 	
 	@Test
 	public void testDocTypeContentFilter() {

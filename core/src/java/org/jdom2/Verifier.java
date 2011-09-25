@@ -401,13 +401,13 @@ final public class Verifier {
      *         <code>null</code> if no collision.
      */
     public static String checkNamespaceCollision(Namespace namespace,
-                                                 List list) {
+                                                 List<?> list) {
         if (list == null) {
             return null;
         }
 
         String reason = null;
-        Iterator i = list.iterator();
+        Iterator<?> i = list.iterator();
         while ((reason == null) && i.hasNext()) {
             Object obj = i.next();
             if (obj instanceof Attribute) {

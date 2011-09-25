@@ -259,7 +259,7 @@ public class Text extends Content {
      * @return <code>Text</code> - cloned node.
      */
     @Override
-	public Object clone() {
+	public Text clone() {
         Text text = (Text)super.clone();
         text.value = value;
         return text;

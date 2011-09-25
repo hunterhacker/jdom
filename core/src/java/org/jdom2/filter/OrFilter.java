@@ -54,19 +54,21 @@
 
 package org.jdom2.filter;
 
+import org.jdom2.Content;
+
 /**
  * Allow two filters to be chained together with a logical
  * <b>or</b> operation.
  *
  * @author Bradley S. Huffman
  */
-final class OrFilter extends AbstractFilter {
+final class OrFilter extends AbstractFilter<Content> {
 
     /** Filter for left side of logical <b>or</b> */
-    private Filter left;
+    private Filter<?> left;
 
     /** Filter for right side of logical <b>or</b> */
-    private Filter right;
+    private Filter<?> right;
 
     /**
      * Match if either of the supplied filters.
@@ -75,7 +77,7 @@ final class OrFilter extends AbstractFilter {
      * @param right right side of logical <b>or</b>
      * @throws IllegalArgumentException if either supplied filter is null
      */
-    public OrFilter(Filter left, Filter right) {
+    public OrFilter(Filter<?> left, Filter<?> right) {
         if ((left == null) || (right == null)) {
             throw new IllegalArgumentException("null filter not allowed");
         }
@@ -83,11 +85,16 @@ final class OrFilter extends AbstractFilter {
         this.right = right;
     }
 
-    public boolean matches(Object obj) {
-        return left.matches(obj) || right.matches(obj);
+    @Override
+	public Content filter(Content obj) {
+        if (left.matches(obj) || right.matches(obj)) {
+        	return obj;
+        }
+        return null;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -102,11 +109,13 @@ final class OrFilter extends AbstractFilter {
         return false;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return (31 * left.hashCode()) + right.hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer(64)
                    .append("[OrFilter: ")
                    .append(left.toString())

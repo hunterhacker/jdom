@@ -151,11 +151,13 @@ public abstract class Content implements Cloneable, Serializable {
     /**
      * Returns a deep, unattached copy of this child and its descendants
      * detached from any parent or document.
+     * <p>
+     * Use co-variant return type to give back a Content. 
      *
      * @return a detached deep copy of this child and descendants
      */
     @Override
-	public Object clone() {
+	public Content clone() {
         try {
             Content c = (Content)super.clone();
             c.parent = null;

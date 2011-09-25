@@ -20,11 +20,10 @@ public class TestElementFilterList extends AbstractTestList<Element> {
 		super(Element.class, false);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Element> buildEmptyList() {
 		base.getContent().clear();
-		return (List<Element>)base.getContent(new ElementFilter());
+		return base.getContent(new ElementFilter());
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class TestElementFilterList extends AbstractTestList<Element> {
 	@Override
 	public Element[] buildIllegalArgumentContent() {
 		return new Element[]{base, parent};
-	};
+	}
 	
 	@Before
 	public void detatchAll () {

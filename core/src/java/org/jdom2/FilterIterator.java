@@ -62,13 +62,13 @@ import org.jdom2.filter.*;
  *
  * @author Bradley S. Huffman
  */
-class FilterIterator implements Iterator {
+class FilterIterator<T extends Content> implements Iterator<T> {
 
-    private Iterator iterator;
-    private Filter filter;
-    private Object nextObject;
+    private Iterator<? extends Content> iterator;
+    private Filter<T> filter;
+    private T nextObject;
 
-    public FilterIterator(Iterator iterator, Filter filter) {
+    public FilterIterator(Iterator<? extends Content> iterator, Filter<T> filter) {
         if ((iterator == null) || (filter == null)) {
             throw new IllegalArgumentException("null parameter");
         }
@@ -76,32 +76,36 @@ class FilterIterator implements Iterator {
         this.filter = filter;
     }
 
-    public boolean hasNext() {
+    @Override
+	public boolean hasNext() {
         if (nextObject != null) {
             return true;
         }
 
         while (iterator.hasNext()) {
-            Object obj = iterator.next();
-            if (filter.matches(obj)) {
-                nextObject = obj;
+            Content obj = iterator.next();
+            T f = filter.filter(obj);
+            if (f != null) {
+                nextObject = f;
                 return true;
             }
         }
         return false;
     }
 
-    public Object next() {
+    @Override
+	public T next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
 
-        Object obj = nextObject;
+        T obj = nextObject;
         nextObject = null;
         return obj;
     }
 
-    public void remove() {
+    @Override
+	public void remove() {
         // XXX Could cause probs for sure if hasNext() is
         // called before the remove(), although that's unlikely.
         iterator.remove();

@@ -54,35 +54,42 @@
 
 package org.jdom2.filter;
 
+import org.jdom2.Content;
+
 /**
  * Filter that is the logical <b>negation</b> operation of another filter.
  *
  *
  * @author Bradley S. Huffman
  */
-final class NegateFilter extends AbstractFilter {
+final class NegateFilter extends AbstractFilter<Content> {
 
     // Underlying filter.
-    private Filter filter;
+    private Filter<? extends Content> filter;
 
     /**
      * Match if the supplied filter <b>does not</b> match.
      *
      * @param filter filter to use.
      */
-    public NegateFilter(Filter filter) {
+    public NegateFilter(Filter<? extends Content> filter) {
         this.filter = filter;
     }
 
-    public boolean matches(Object obj) {
-        return !filter.matches(obj);
+    @Override
+	public Content filter(Content content) {
+    	if (filter.matches(content)) {
+    		return null;
+    	}
+    	return content;
     }
 
-    public Filter negate() {
+	Filter<? extends Content> getBaseFilter() {
         return filter;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -93,11 +100,13 @@ final class NegateFilter extends AbstractFilter {
         return false;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return ~filter.hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuffer(64)
                    .append("[NegateFilter: ")
                    .append(filter.toString())

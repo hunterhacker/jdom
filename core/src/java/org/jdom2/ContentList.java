@@ -363,8 +363,8 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
      * @param filter <code>Filter</code> for this view.
      * @return a list representing the rules of the <code>Filter</code>.
      */
-    List<Content> getView(Filter filter) {
-        return new FilterList(filter);
+    <E extends Content> List<E> getView(Filter<E> filter) {
+        return new FilterList<E>(filter);
     }
 
     /**
@@ -510,10 +510,10 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
      * for <code>Document</code>s or <code>Element</code>s.
      */
 
-    class FilterList extends AbstractList<Content> implements java.io.Serializable {
+    class FilterList<F extends Content> extends AbstractList<F> implements java.io.Serializable {
 
         /** The Filter */
-        Filter filter;
+        Filter<F> filter;
 
         /** Current number of items in this view */
         int count = 0;
@@ -531,7 +531,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
         /**
          * Create a new instance of the FilterList with the specified Filter.
          */
-        FilterList(Filter filter) {
+        FilterList(Filter<F> filter) {
             this.filter = filter;
         }
 
@@ -564,24 +564,24 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
          * @return The Object which was returned.
          */
         @Override
-		public Content get(int index) {
+		public F get(int index) {
             int adjusted = getAdjustedIndex(index);
-            return ContentList.this.get(adjusted);
+            return filter.filter(ContentList.this.get(adjusted));
         }
 
         @Override
-		public Iterator<Content> iterator() {
-            return new FilterListIterator(filter, 0);
+		public Iterator<F> iterator() {
+            return new FilterListIterator<F>(filter, 0);
         }
 
         @Override
-		public ListIterator<Content> listIterator() {
-            return new FilterListIterator(filter, 0);
+		public ListIterator<F> listIterator() {
+            return new FilterListIterator<F>(filter, 0);
         }
 
         @Override
-		public ListIterator<Content> listIterator(int index) {
-            return new FilterListIterator(filter,  index);
+		public ListIterator<F> listIterator(int index) {
+            return new FilterListIterator<F>(filter,  index);
         }
 
         /**
@@ -591,21 +591,20 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
          * @return The Object which was removed.
          */
         @Override
-		public Content remove(int index) {
+		public F remove(int index) {
             int adjusted = getAdjustedIndex(index);
-            Content old = ContentList.this.get(adjusted);
-            if (filter.matches(old)) {
-                old = ContentList.this.remove(adjusted);
+        	Content oldc = ContentList.this.get(adjusted);
+            F old = filter.filter(oldc);
+            if (old != null) {
+                ContentList.this.remove(adjusted);
                 expected++;
                 count--;
+                return old;
             }
-            else {
-                throw new IllegalAddException("Filter won't allow the " +
-                                             (old.getClass()).getName() +
-                                             " '" + old + "' (index " + index +
-                                             ") to be removed");
-            }
-            return old;
+            throw new IllegalAddException("Filter won't allow the " +
+                                         (oldc.getClass()).getName() +
+                                         " '" + oldc + "' (index " + index +
+                                         ") to be removed");
         }
 
         /**
@@ -618,18 +617,18 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
          * throws IndexOutOfBoundsException if index < 0 || index >= size()
          */
         @Override
-		public Content set(int index, Content obj) {
-            Content old = null;
+		public F set(int index, F obj) {
+            F old = null;
             if (filter.matches(obj)) {
                 int adjusted = getAdjustedIndex(index);
-                old = ContentList.this.get(adjusted);
-                if (!filter.matches(old)) {
+                Content oldc = filter.filter(ContentList.this.get(adjusted));
+                if (!filter.matches(oldc)) {
                     throw new IllegalAddException("Filter won't allow the " +
-                                             (old.getClass()).getName() +
-                                             " '" + old + "' (index " + index +
+                                             (oldc.getClass()).getName() +
+                                             " '" + oldc + "' (index " + index +
                                              ") to be removed");
                 }
-                old = ContentList.this.set(adjusted, obj);
+                old = filter.filter(ContentList.this.set(adjusted, obj));
                 expected += 2;
             }
             else {
@@ -660,7 +659,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 
             count = 0;
             for (int i = 0; i < ContentList.this.size(); i++) {
-                Object obj = ContentList.this.elementData[i];
+                Content obj = ContentList.this.elementData[i];
                 if (filter.matches(obj)) {
                     count++;
                 }
@@ -678,7 +677,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
         final private int getAdjustedIndex(int index) {
             int adjusted = 0;
             for (int i = 0; i < ContentList.this.size; i++) {
-                Object obj = ContentList.this.elementData[i];
+                Content obj = ContentList.this.elementData[i];
                 if (filter.matches(obj)) {
                     if (index == adjusted) {
                         return i;
@@ -698,10 +697,10 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
     /* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */
     /* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */
 
-    class FilterListIterator implements ListIterator<Content> {
+    class FilterListIterator<F extends Content> implements ListIterator<F> {
 
         /** The Filter that applies */
-        Filter filter;
+        Filter<F> filter;
 
         /** Whether this iterator is in forward or reverse. */
         private boolean forward = false;
@@ -726,7 +725,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
         /**
          * Default constructor
          */
-        FilterListIterator(Filter filter, int start) {
+        FilterListIterator(Filter<F> filter, int start) {
 			this.filter = filter;
 			expected = ContentList.this.getModCount();
 			// always start list iterators in backward mode ....
@@ -783,7 +782,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
          * Returns the next element in the list.
          */
         @Override
-		public Content next() {
+		public F next() {
         	if (!hasNext())
 				throw new NoSuchElementException("next() is beyond the end of the Iterator");
 			index = nextIndex();
@@ -791,7 +790,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 			forward = true;
 			canremove = true;
 			canset = true;
-			return ContentList.this.get(cursor);
+			return filter.filter(ContentList.this.get(cursor));
         }
 
         /**
@@ -807,7 +806,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
          * Returns the previous element in the list.
          */
         @Override
-		public Content previous() {
+		public F previous() {
 			if (!hasPrevious())
 				throw new NoSuchElementException("previous() is before the start of the Iterator");
 			index = previousIndex();
@@ -815,7 +814,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 			forward = false;
 			canremove = true;
 			canset = true;
-			return ContentList.this.get(cursor);
+			return filter.filter(ContentList.this.get(cursor));
 		}
 
         /**

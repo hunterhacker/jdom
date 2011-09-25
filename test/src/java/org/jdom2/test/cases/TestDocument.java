@@ -771,7 +771,8 @@ public final class TestDocument {
 		assertTrue(doc.indexOf(comment2) == 1);
 		assertTrue(doc.indexOf(doctype) == 2);
 		
-		doc.setContent(2, Collections.emptySet());
+		Set<Content> empty = Collections.emptySet();
+		doc.setContent(2, empty);
 		assertTrue(comment1.getParent() == doc);
 		assertTrue(comment2.getParent() == doc);
 		assertTrue(doctype.getParent() == null);

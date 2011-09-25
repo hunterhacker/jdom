@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jdom2.Comment;
+import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -49,12 +50,12 @@ public class TestXSLTransformer {
 		assertEquals(expect, actual);
 	}
 	
-	private void checkDocs(Document docexpect, boolean addroot, List<?> content) {
-		List toadd = content;
+	private void checkDocs(Document docexpect, boolean addroot, List<Content> content) {
+		List<Content> toadd = content;
 		if (addroot) {
 			Element root = new Element(docexpect.getRootElement().getName());
 			root.addContent(content);
-			toadd = Collections.singletonList(root);
+			toadd = Collections.singletonList((Content)root);
 		}
 		Document actdoc = new Document(toadd);
 		checkDocs(docexpect, actdoc);

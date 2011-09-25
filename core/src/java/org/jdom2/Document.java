@@ -55,6 +55,7 @@
 package org.jdom2;
 
 import java.util.*;
+
 import org.jdom2.filter.*;
 
 /**
@@ -82,7 +83,7 @@ public class Document implements Parent {
     protected String baseURI = null;
 
     // Supports the setProperty/getProperty calls
-    private HashMap propertyMap = null;
+    private HashMap<String,Object> propertyMap = null;
 
     /**
      * Creates a new empty document.  A document must have a root element,
@@ -159,15 +160,17 @@ public class Document implements Parent {
      * @throws IllegalAddException if the List contains more than
      *         one Element or objects of illegal types.
      */
-    public Document(List content) {
+    public Document(List<? extends Content> content) {
         setContent(content);
     }
 
-    public int getContentSize() {
+    @Override
+	public int getContentSize() {
         return content.size();
     }
 
-    public int indexOf(Content child) {
+    @Override
+	public int indexOf(Content child) {
         return content.indexOf(child);
     }
 
@@ -259,9 +262,7 @@ public class Document implements Parent {
         if (index < 0) {
             return null;
         }
-        else {
-            return (DocType) content.get(index);
-        }
+        return (DocType) content.get(index);
     }
 
     /**
@@ -325,7 +326,7 @@ public class Document implements Parent {
      * @throws IllegalAddException if any item in the collection
      *         already has a parent or is of an illegal type.
      */
-    public Document addContent(Collection c) {
+    public Document addContent(Collection<? extends Content> c) {
         content.addAll(c);
         return this;
     }
@@ -359,14 +360,15 @@ public class Document implements Parent {
      * @throws IllegalAddException if any item in the collection
      *         already has a parent or is of an illegal type.
      */
-    public Document addContent(int index, Collection c) {
+    public Document addContent(int index, Collection<? extends Content> c) {
         content.addAll(index, c);
         return this;
     }
 
-    public List cloneContent() {
+    @Override
+	public List<Content> cloneContent() {
         int size = getContentSize();
-        List list = new ArrayList(size);
+        List<Content> list = new ArrayList<Content>(size);
         for (int i = 0; i < size; i++) {
             Content child = getContent(i);
             list.add(child.clone());
@@ -374,8 +376,9 @@ public class Document implements Parent {
         return list;
     }
 
-    public Content getContent(int index) {
-        return (Content) content.get(index);
+    @Override
+	public Content getContent(int index) {
+        return content.get(index);
     }
 
 //    public Content getChild(Filter filter) {
@@ -397,7 +400,8 @@ public class Document implements Parent {
      * @return <code>List</code> - all Document content
      * @throws IllegalStateException if the root element hasn't been set
      */
-    public List getContent() {
+    @Override
+	public List<Content> getContent() {
         if (!hasRootElement())
             throw new IllegalStateException("Root element not set");
         return content;
@@ -416,7 +420,8 @@ public class Document implements Parent {
      * @return <code>List</code> - filtered Document content
      * @throws IllegalStateException if the root element hasn't been set
      */
-    public List getContent(Filter filter) {
+    @Override
+	public <F extends Content> List<F> getContent(Filter<F> filter) {
         if (!hasRootElement())
             throw new IllegalStateException("Root element not set");
         return content.getView(filter);
@@ -427,8 +432,9 @@ public class Document implements Parent {
      *
      * @return list of the old children detached from this parent
      */
-    public List removeContent() {
-        List old = new ArrayList(content);
+    @Override
+	public List<Content> removeContent() {
+        List<Content> old = new ArrayList<Content>(content);
         content.clear();
         return old;
     }
@@ -439,11 +445,12 @@ public class Document implements Parent {
      * @param filter filter to select which content to remove
      * @return list of the old children detached from this parent
      */
-    public List removeContent(Filter filter) {
-        List old = new ArrayList();
-        Iterator itr = content.getView(filter).iterator();
+    @Override
+	public <F extends Content> List<F> removeContent(Filter<F> filter) {
+        List<F> old = new ArrayList<F>();
+        Iterator<F> itr = content.getView(filter).iterator();
         while (itr.hasNext()) {
-            Content child = (Content) itr.next();
+            F child = itr.next();
             old.add(child);
             itr.remove();
         }
@@ -484,7 +491,7 @@ public class Document implements Parent {
      * @throws IllegalAddException if the List contains objects of
      *         illegal types or with existing parentage.
      */
-    public Document setContent(Collection newContent) {
+    public Document setContent(Collection<? extends Content> newContent) {
         content.clearAndSet(newContent);
         return this;
     }
@@ -549,18 +556,20 @@ public class Document implements Parent {
      * @throws IndexOutOfBoundsException if index is negative or greater
      *         than the current number of children.
      */
-    public Document setContent(int index, Collection collection) {
+    public Document setContent(int index, Collection<? extends Content> collection) {
         content.remove(index);
         content.addAll(index, collection);
         return this;
     }
 
-    public boolean removeContent(Content child) {
+    @Override
+	public boolean removeContent(Content child) {
         return content.remove(child);
     }
 
-    public Content removeContent(int index) {
-        return (Content) content.remove(index);
+    @Override
+	public Content removeContent(int index) {
+        return content.remove(index);
     }
 
     /**
@@ -606,7 +615,8 @@ public class Document implements Parent {
      * @return <code>String</code> - information about the
      *         <code>Document</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer stringForm = new StringBuffer()
             .append("[Document: ");
 
@@ -639,7 +649,8 @@ public class Document implements Parent {
      * @return <code>boolean</code> whether the <code>Document</code> is
      *         equal to the supplied <code>Object</code>
      */
-    public final boolean equals(Object ob) {
+    @Override
+	public final boolean equals(Object ob) {
         return (ob == this);
     }
 
@@ -648,7 +659,8 @@ public class Document implements Parent {
      *
      * @return <code>int</code> hash code
      */
-    public final int hashCode() {
+    @Override
+	public final int hashCode() {
         return super.hashCode();
     }
 
@@ -657,7 +669,8 @@ public class Document implements Parent {
      *
      * @return <code>Object</code> clone of this <code>Document</code>
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         Document doc = null;
 
         try {
@@ -675,16 +688,15 @@ public class Document implements Parent {
         for (int i = 0; i < content.size(); i++) {
             Object obj = content.get(i);
             if (obj instanceof Element) {
-                Element element = (Element)((Element)obj).clone();
+                Element element = ((Element)obj).clone();
                 doc.content.add(element);
             }
             else if (obj instanceof Comment) {
-                Comment comment = (Comment)((Comment)obj).clone();
+                Comment comment = ((Comment)obj).clone();
                 doc.content.add(comment);
             }
             else if (obj instanceof ProcessingInstruction) {
-                ProcessingInstruction pi = (ProcessingInstruction)
-                           ((ProcessingInstruction)obj).clone();
+                ProcessingInstruction pi = ((ProcessingInstruction)obj).clone();
                 doc.content.add(pi);
             }
             else if (obj instanceof DocType) {
@@ -701,7 +713,8 @@ public class Document implements Parent {
      *
      * @return an iterator to walk descendants
      */
-    public Iterator getDescendants() {
+    @Override
+	public Iterator<Content> getDescendants() {
         return new DescendantIterator(this);
     }
 
@@ -714,11 +727,13 @@ public class Document implements Parent {
      * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants within a filter
      */
-    public Iterator getDescendants(Filter filter) {
-        return new FilterIterator(new DescendantIterator(this), filter);
+    @Override
+	public <F extends Content> Iterator<F> getDescendants(Filter<F> filter) {
+        return new FilterIterator<F>(new DescendantIterator(this), filter);
     }
 
-    public Parent getParent() {
+    @Override
+	public Parent getParent() {
         return null;  // documents never have parents
     }
 
@@ -727,7 +742,8 @@ public class Document implements Parent {
     /**
      * @see org.jdom2.Parent#getDocument()
      */
-    public Document getDocument() {
+    @Override
+	public Document getDocument() {
         return this;
     }
 
@@ -741,7 +757,7 @@ public class Document implements Parent {
      */
     public void setProperty(String id, Object value) {
         if (propertyMap == null) {
-            propertyMap = new HashMap();
+            propertyMap = new HashMap<String, Object>();
         }
         propertyMap.put(id, value);
     }

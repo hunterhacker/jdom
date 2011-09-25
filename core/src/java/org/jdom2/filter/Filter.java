@@ -54,6 +54,8 @@
 
 package org.jdom2.filter;
 
+import org.jdom2.Content;
+
 
 /**
  * A generalized filter to restrict visibility or mutability on a list.
@@ -61,7 +63,17 @@ package org.jdom2.filter;
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
-public interface Filter extends java.io.Serializable {
+public interface Filter <T extends Content> extends java.io.Serializable {
+	
+	/**
+	 * Check to see if the content matches this Filter.
+	 * If it does, return the content cast as this filter's return type,
+	 * otherwise return null.
+	 * @param content The content to test.
+	 * @return The content if it matches the filter, cast as this Filter's type.
+	 */
+	public T filter(Content content);
+	
     /**
      * Check to see if the object matches a predefined set of rules.
      *
@@ -69,5 +81,12 @@ public interface Filter extends java.io.Serializable {
      * @return <code>true</code> if the object matches a predfined 
      *           set of rules.
      */
-    public boolean matches(Object obj);
+    public boolean matches(Content content);
+
+
+    public Filter<? extends Content> negate();
+
+    public Filter<? extends Content> or(Filter<?> filter);
+
+    public Filter<T> and(Filter<? extends T> filter);
 }

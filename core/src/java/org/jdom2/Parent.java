@@ -102,7 +102,7 @@ public interface Parent extends Cloneable, Serializable {
      *
      * @return list of cloned child content
      */
-    List cloneContent();
+    List<Content> cloneContent();
 
     /**
      * Returns the child at the given index.
@@ -132,7 +132,7 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IllegalStateException if parent is a Document
      *         and the root element is not set
      */
-    List getContent();
+    List<Content> getContent();
 
     /**
      * Returns as a {@link java.util.List} the content of
@@ -151,7 +151,7 @@ public interface Parent extends Cloneable, Serializable {
      * @throws IllegalStateException if parent is a Document
      *         and the root element is not set
      */
-    List getContent(Filter filter);
+    <E extends Content> List<E> getContent(Filter<E> filter);
 
     /**
      * Removes all content from this parent and returns the detached
@@ -159,7 +159,7 @@ public interface Parent extends Cloneable, Serializable {
      *
      * @return list of the old content detached from this parent
      */
-    List removeContent();
+    List<Content> removeContent();
 
     /**
      * Removes from this parent all child content matching the given filter
@@ -168,7 +168,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param  filter filter to apply
      * @return list of the detached children matching the filter
      */
-    List removeContent(Filter filter);
+    <E extends Content> List<E> removeContent(Filter<E> filter);
 
     /**
      * Removes a single child node from the content list.
@@ -202,7 +202,7 @@ public interface Parent extends Cloneable, Serializable {
      *
      * @return an iterator to walk descendants
      */
-    Iterator getDescendants();
+    Iterator<Content> getDescendants();
 
     /**
      * Returns an {@link java.util.Iterator} that walks over all descendants
@@ -214,7 +214,7 @@ public interface Parent extends Cloneable, Serializable {
      * @param filter filter to select which descendants to see
      * @return an iterator to walk descendants that match a filter
      */
-    Iterator getDescendants(Filter filter);
+    <E extends Content> Iterator<E> getDescendants(Filter<E> filter);
 
     /**
      * Return this parent's parent, or null if this parent is currently
