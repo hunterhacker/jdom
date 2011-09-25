@@ -69,7 +69,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Element Factory
     // =====================================================================
 
-    public Element element(String name, Namespace namespace) {
+    @Override
+	public Element element(String name, Namespace namespace) {
         Element e = new Element();
         e.name = name;
         if (namespace == null) {
@@ -79,18 +80,21 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return e;
     }
 
-    public Element element(String name) {
+    @Override
+	public Element element(String name) {
         Element e = new Element();
         e.name = name;
         e.namespace = Namespace.NO_NAMESPACE;
         return e;
     }
 
-    public Element element(String name, String uri) {
+    @Override
+	public Element element(String name, String uri) {
         return element(name, Namespace.getNamespace("", uri));
     }
 
-    public Element element(String name, String prefix, String uri) {
+    @Override
+	public Element element(String name, String prefix, String uri) {
         return element(name, Namespace.getNamespace(prefix, uri));
     }
 
@@ -98,7 +102,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Attribute Factory
     // =====================================================================
 
-    public Attribute attribute(String name, String value, Namespace namespace) {
+    @Override
+	public Attribute attribute(String name, String value, Namespace namespace) {
         Attribute a = new Attribute();
         a.name = name;
         a.value = value;
@@ -109,7 +114,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return a;
     }
 
-    public Attribute attribute(String name, String value, int type, Namespace namespace) {
+    @Override
+	public Attribute attribute(String name, String value, int type, Namespace namespace) {
         Attribute a = new Attribute();
         a.name = name;
         a.type = type;
@@ -121,7 +127,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return a;
     }
 
-    public Attribute attribute(String name, String value) {
+    @Override
+	public Attribute attribute(String name, String value) {
         Attribute a = new Attribute();
         a.name = name;
         a.value = value;
@@ -129,7 +136,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return a;
     }
 
-    public Attribute attribute(String name, String value, int type) {
+    @Override
+	public Attribute attribute(String name, String value, int type) {
         Attribute a = new Attribute();
         a.name = name;
         a.type = type;
@@ -142,7 +150,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Text Factory
     // =====================================================================
 
-    public Text text(String str) {
+    @Override
+	public Text text(String str) {
         Text t = new Text();
         t.value = str;
         return t;
@@ -152,7 +161,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // CDATA Factory
     // =====================================================================
 
-    public CDATA cdata(String str) {
+    @Override
+	public CDATA cdata(String str) {
         CDATA c = new CDATA();
         c.value = str;
         return c;
@@ -162,7 +172,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Comment Factory
     // =====================================================================
 
-    public Comment comment(String str) {
+    @Override
+	public Comment comment(String str) {
         Comment c = new Comment();
         c.text = str;
         return c;
@@ -172,21 +183,24 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Processing Instruction Factory
     // =====================================================================
 
-    public ProcessingInstruction processingInstruction(String target, Map data) {
+    @Override
+	public ProcessingInstruction processingInstruction(String target, Map<String,String> data) {
         ProcessingInstruction p = new ProcessingInstruction();
         p.target = target;
         p.setData(data);
         return p;
     }
 
-    public ProcessingInstruction processingInstruction(String target, String data) {
+    @Override
+	public ProcessingInstruction processingInstruction(String target, String data) {
         ProcessingInstruction p = new ProcessingInstruction();
         p.target = target;
         p.setData(data);
         return p;
     }
 
-    public ProcessingInstruction processingInstruction(String target) {
+    @Override
+	public ProcessingInstruction processingInstruction(String target) {
         ProcessingInstruction p = new ProcessingInstruction();
         p.target = target;
         p.rawData = "";
@@ -197,20 +211,23 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Entity Ref Factory
     // =====================================================================
 
-    public EntityRef entityRef(String name) {
+    @Override
+	public EntityRef entityRef(String name) {
         EntityRef e = new org.jdom2.EntityRef();
         e.name = name;
         return e;
     }
 
-    public EntityRef entityRef(String name, String systemID) {
+    @Override
+	public EntityRef entityRef(String name, String systemID) {
         EntityRef e = new EntityRef();
         e.name = name;
         e.systemID = systemID;
         return e;
     }
 
-    public EntityRef entityRef(String name, String publicID, String systemID) {
+    @Override
+	public EntityRef entityRef(String name, String publicID, String systemID) {
         EntityRef e = new EntityRef();
         e.name = name;
         e.publicID = publicID;
@@ -222,7 +239,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // DocType Factory
     // =====================================================================
 
-    public DocType docType(String elementName, String publicID, String systemID) {
+    @Override
+	public DocType docType(String elementName, String publicID, String systemID) {
         DocType d = new DocType();
         d.elementName = elementName;
         d.publicID = publicID;
@@ -230,11 +248,13 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return d;
     }
 
-    public DocType docType(String elementName, String systemID) {
+    @Override
+	public DocType docType(String elementName, String systemID) {
         return docType(elementName, null, systemID);
     }
 
-    public DocType docType(String elementName) {
+    @Override
+	public DocType docType(String elementName) {
         return docType(elementName, null, null);
     }
 
@@ -242,7 +262,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // Document Factory
     // =====================================================================
 
-    public Document document(Element rootElement, DocType docType, String baseURI) {
+    @Override
+	public Document document(Element rootElement, DocType docType, String baseURI) {
         Document d = new Document();
         if (docType != null) {
             addContent(d, docType);
@@ -256,11 +277,13 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         return d;
     }
 
-    public Document document(Element rootElement, DocType docType) {
+    @Override
+	public Document document(Element rootElement, DocType docType) {
         return document(rootElement, docType, null);
     }
 
-    public Document document(Element rootElement) {
+    @Override
+	public Document document(Element rootElement) {
         return document(rootElement, null, null);
     }
 
@@ -268,7 +291,8 @@ public class UncheckedJDOMFactory implements JDOMFactory {
     // List manipulation
     // =====================================================================
 
-    public void addContent(Parent parent, Content child) {
+    @Override
+	public void addContent(Parent parent, Content child) {
         if (parent instanceof Element) {
             Element elt = (Element) parent;
             elt.content.uncheckedAddContent(child);
@@ -279,13 +303,15 @@ public class UncheckedJDOMFactory implements JDOMFactory {
         }
     }
 
-    public void setAttribute(Element parent, Attribute a) {
+    @Override
+	public void setAttribute(Element parent, Attribute a) {
         parent.attributes.uncheckedAddAttribute(a);
     }
 
-    public void addNamespaceDeclaration(Element parent, Namespace additional) {
+    @Override
+	public void addNamespaceDeclaration(Element parent, Namespace additional) {
         if (parent.additionalNamespaces == null) {
-            parent.additionalNamespaces = new ArrayList(5); //Element.INITIAL_ARRAY_SIZE
+            parent.additionalNamespaces = new ArrayList<Namespace>(5); //Element.INITIAL_ARRAY_SIZE
         }
         parent.additionalNamespaces.add(additional);
     }

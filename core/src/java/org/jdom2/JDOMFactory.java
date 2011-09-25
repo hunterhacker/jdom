@@ -282,7 +282,7 @@ public interface JDOMFactory {
      *             name/value pairs
      */
     public ProcessingInstruction processingInstruction(String target,
-                                                       Map data);
+                                                       Map<String,String> data);
 
     /**
      * This will create a new <code>ProcessingInstruction</code>
