@@ -547,6 +547,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             transferNamespaces(element);
         }
 
+        flushCharacters();
+
+        if (atRoot) {
+            document.setRootElement(element);  // XXX should we use a factory call?
+            atRoot = false;
+        } else {
+            factory.addContent(getCurrentElement(), element);
+        }
+        currentElement = element;
+
         // Handle attributes
         for (int i=0, len=atts.getLength(); i<len; i++) {
             Attribute attribute = null;
@@ -586,40 +596,15 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                 // or the schema sets attributeFormDefault="qualified"
                 String attURI = atts.getURI(i);
                 Namespace attNS = null;
-                Element p = element;
-                // We need to ensure that a particular prefix has not been
-                // overridden at a lower level than what we are expecting.
-                // track all prefixes to ensure they are not changed lower
-                // down.
-                HashSet overrides = new HashSet();
-                uploop: do {
-                    // Search up the Element tree looking for a prefixed namespace
-                    // matching our attURI
-                    if (p.getNamespace().getURI().equals(attURI)
-                            && !overrides.contains(p.getNamespacePrefix())
-                            && !"".equals(element.getNamespace().getPrefix())) {
-                        // we need a prefix. It's impossible to have a namespaced
-                        // attribute if there is no prefix for that attribute.
-                        attNS = p.getNamespace();
-                        break uploop;
-                    }
-                    overrides.add(p.getNamespacePrefix());
-                    for (Iterator it = p.getAdditionalNamespaces().iterator();
-                            it.hasNext(); ) {
-                        Namespace ns = (Namespace)it.next();
-                        if (!overrides.contains(ns.getPrefix())
-                                 && attURI.equals(ns.getURI())) {
-                            attNS = ns;
-                            break uploop;
-                        }
-                        overrides.add(ns.getPrefix());
-                    }
-                    if (p == element) {
-                        p = currentElement;
-                    } else {
-                        p = p.getParentElement();
-                    }
-                } while (p != null);
+        		HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
+        		for(Namespace nss : element.getNamespacesInScope()) {
+        			if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
+        				attNS = nss;
+        				break;
+        			}
+        			tmpmap.put(nss.getPrefix(), nss);
+        		}
+        		
                 if (attNS == null) {
                     // we cannot find a 'prevailing' namespace that has a prefix
                     // that is for this namespace.
@@ -635,7 +620,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                     int cnt = 0;
                     String base = "attns";
                     String pfx = base + cnt;
-                    while (overrides.contains(pfx)) {
+                    while (tmpmap.containsKey(pfx)) {
                         cnt++;
                         pfx = base + cnt;
                     }
@@ -650,15 +635,6 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
             factory.setAttribute(element, attribute);
         }
 
-        flushCharacters();
-
-        if (atRoot) {
-            document.setRootElement(element);  // XXX should we use a factory call?
-            atRoot = false;
-        } else {
-            factory.addContent(getCurrentElement(), element);
-        }
-        currentElement = element;
     }
 
     /**
