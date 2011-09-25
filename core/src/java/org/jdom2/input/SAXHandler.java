@@ -75,7 +75,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
                                                           DTDHandler {
 
     /** Hash table to map SAX attribute type names to JDOM attribute types. */
-    private static final Map attrNameToTypeMap = new HashMap(13);
+    private static final Map<String, Integer> attrNameToTypeMap = new HashMap<String, Integer>(13);
 
     /** <code>Document</code> object being built */
     private Document document;
@@ -112,7 +112,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
     /** Temporary holder for namespaces that have been declared with
       * startPrefixMapping, but are not yet available on the element */
-    private List declaredNamespaces;
+    private List<Namespace> declaredNamespaces;
 
     /** Temporary holder for the internal subset */
     private StringBuffer internalSubset = new StringBuffer();
@@ -121,7 +121,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
     private TextBuffer textBuffer = new TextBuffer();
 
     /** The external entities defined in this document */
-    private Map externalEntities;
+    private Map<String, String[]> externalEntities;
 
     /** The JDOMFactory used for JDOM object creation */
     private JDOMFactory factory;
@@ -199,8 +199,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         }
 
         atRoot = true;
-        declaredNamespaces = new ArrayList();
-        externalEntities = new HashMap();
+        declaredNamespaces = new ArrayList<Namespace>();
+        externalEntities = new HashMap<String, String[]>();
 
         document = this.factory.document(null);
     }
@@ -323,7 +323,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         return ignoringWhite;
     }
 
-    public void startDocument() {
+    @Override
+	public void startDocument() {
         if (locator != null) {
             document.setBaseURI(locator.getSystemId());
         }
@@ -338,7 +339,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param systemID system id
      * @throws SAXException when things go wrong
      */
-    public void externalEntityDecl(String name,
+    @Override
+	public void externalEntityDecl(String name,
                                    String publicID, String systemID)
                                    throws SAXException {
         // Store the public and system ids for the name
@@ -362,7 +364,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param value <code>String</code> value of attribute
      * @throws SAXException
      */
-    public void attributeDecl(String eName, String aName, String type,
+    @Override
+	public void attributeDecl(String eName, String aName, String type,
                               String valueDefault, String value)
         throws SAXException {
 
@@ -397,7 +400,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param model <code>String</code> model of the element in DTD syntax
      * @throws SAXException
      */
-    public void elementDecl(String name, String model) throws SAXException {
+    @Override
+	public void elementDecl(String name, String model) throws SAXException {
         // Skip elements that come from the external subset
         if (!inInternalSubset) return;
 
@@ -415,7 +419,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param value <code>String</code> value of the entity
      * @throws SAXException
      */
-    public void internalEntityDecl(String name, String value)
+    @Override
+	public void internalEntityDecl(String name, String value)
         throws SAXException {
 
         // Skip entities that come from the external subset
@@ -443,7 +448,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      *             pairs.
      * @throws SAXException when things go wrong
      */
-    public void processingInstruction(String target, String data)
+    @Override
+	public void processingInstruction(String target, String data)
         throws SAXException {
 
         if (suppress) return;
@@ -466,7 +472,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param name <code>String</code> name of entity
      * @throws SAXException when things go wrong
      */
-    public void skippedEntity(String name)
+    @Override
+	public void skippedEntity(String name)
         throws SAXException {
 
         // We don't handle parameter entity references.
@@ -484,7 +491,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param prefix <code>String</code> namespace prefix.
      * @param uri <code>String</code> namespace URI.
      */
-    public void startPrefixMapping(String prefix, String uri)
+    @Override
+	public void startPrefixMapping(String prefix, String uri)
         throws SAXException {
 
         if (suppress) return;
@@ -510,7 +518,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param atts <code>Attributes</code> list for this element
      * @throws SAXException when things go wrong
      */
-    public void startElement(String namespaceURI, String localName,
+    @Override
+	public void startElement(String namespaceURI, String localName,
                              String qName, Attributes atts)
                              throws SAXException {
         if (suppress) return;
@@ -659,9 +668,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param element <code>Element</code> to read namespaces from.
      */
     private void transferNamespaces(Element element) {
-        Iterator i = declaredNamespaces.iterator();
-        while (i.hasNext()) {
-            Namespace ns = (Namespace)i.next();
+        for (Namespace ns : declaredNamespaces) {
             if (ns != element.getNamespace()) {
                 element.addNamespaceDeclaration(ns);
             }
@@ -677,7 +684,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param length <code>int</code> length of data.
      * @throws SAXException
      */
-    public void characters(char[] ch, int start, int length)
+    @Override
+	public void characters(char[] ch, int start, int length)
                     throws SAXException {
 
         if (suppress || (length == 0))
@@ -700,7 +708,8 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
      * @param length <code>int</code> - length of whitespace after start
      * @throws SAXException when things go wrong
      */
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    @Override
+	public void ignorableWhitespace(char[] ch, int start, int length)
                                                      throws SAXException {
         if (!ignoringWhite) {
             characters(ch, start, length);
@@ -771,7 +780,8 @@ if (!inDTD) {
      * @param qName <code>String</code> name of element in XML 1.0 form
      * @throws SAXException when things go wrong
      */
-    public void endElement(String namespaceURI, String localName,
+    @Override
+	public void endElement(String namespaceURI, String localName,
                            String qName) throws SAXException {
 
         if (suppress) return;
@@ -804,7 +814,8 @@ if (!inDTD) {
      * @param publicID <code>String</code> public ID of DTD
      * @param systemID <code>String</code> system ID of DTD
      */
-    public void startDTD(String name, String publicID, String systemID)
+    @Override
+	public void startDTD(String name, String publicID, String systemID)
         throws SAXException {
 
         flushCharacters(); // Is this needed here?
@@ -819,14 +830,16 @@ if (!inDTD) {
      *
      * @throws SAXException
      */
-    public void endDTD() throws SAXException {
+    @Override
+	public void endDTD() throws SAXException {
 
         document.getDocType().setInternalSubset(internalSubset.toString());
         inDTD = false;
         inInternalSubset = false;
     }
 
-    public void startEntity(String name) throws SAXException {
+    @Override
+	public void startEntity(String name) throws SAXException {
         entityDepth++;
 
         if (expand || entityDepth > 1) {
@@ -851,7 +864,7 @@ if (!inDTD) {
             if (!expand) {
                 String pub = null;
                 String sys = null;
-                String[] ids = (String[]) externalEntities.get(name);
+                String[] ids = externalEntities.get(name);
                 if (ids != null) {
                   pub = ids[0];  // may be null, that's OK
                   sys = ids[1];  // may be null, that's OK
@@ -875,7 +888,8 @@ if (!inDTD) {
         }
     }
 
-    public void endEntity(String name) throws SAXException {
+    @Override
+	public void endEntity(String name) throws SAXException {
         entityDepth--;
         if (entityDepth == 0) {
             // No way are we suppressing if not in an entity,
@@ -892,7 +906,8 @@ if (!inDTD) {
      *
      * @throws SAXException
      */
-    public void startCDATA() throws SAXException {
+    @Override
+	public void startCDATA() throws SAXException {
         if (suppress) return;
 
         inCDATA = true;
@@ -901,7 +916,8 @@ if (!inDTD) {
     /**
      * Report a CDATA section
      */
-    public void endCDATA() throws SAXException {
+    @Override
+	public void endCDATA() throws SAXException {
         if (suppress) return;
 
         previousCDATA = true;
@@ -919,7 +935,8 @@ if (!inDTD) {
      * @param length <code>int</code> length of data.
      * @throws SAXException
      */
-    public void comment(char[] ch, int start, int length)
+    @Override
+	public void comment(char[] ch, int start, int length)
         throws SAXException {
 
         if (suppress) return;
@@ -949,7 +966,8 @@ if (!inDTD) {
      * @param publicID the public ID of the notation
      * @param systemID the system ID of the notation
      */
-    public void notationDecl(String name, String publicID, String systemID)
+    @Override
+	public void notationDecl(String name, String publicID, String systemID)
         throws SAXException {
 
         if (!inInternalSubset) return;
@@ -968,7 +986,8 @@ if (!inDTD) {
      * @param systemID <code>String</code> of the unparsed entity decl
      * @param notationName <code>String</code> of the unparsed entity decl
      */
-    public void unparsedEntityDecl(String name, String publicID,
+    @Override
+	public void unparsedEntityDecl(String name, String publicID,
                                    String systemID, String notationName)
         throws SAXException {
 
@@ -1035,7 +1054,7 @@ if (!inDTD) {
      * @see Attributes#getType
      */
     private static int getAttributeType(String typeName) {
-        Integer type = (Integer)(attrNameToTypeMap.get(typeName));
+        Integer type = attrNameToTypeMap.get(typeName);
         if (type == null) {
             if (typeName != null && typeName.length() > 0 &&
                 typeName.charAt(0) == '(') {
@@ -1044,12 +1063,9 @@ if (!inDTD) {
                 // starting with a parenthesis.
                 return Attribute.ENUMERATED_TYPE;
             }
-            else {
-                return Attribute.UNDECLARED_TYPE;
-            }
-        } else {
-            return type.intValue();
+            return Attribute.UNDECLARED_TYPE;
         }
+        return type.intValue();
     }
 
     /**
@@ -1064,7 +1080,8 @@ if (!inDTD) {
      * @param locator <code>Locator</code> an object that can return
      * the location of any SAX document event.
      */
-    public void setDocumentLocator(Locator locator) {
+    @Override
+	public void setDocumentLocator(Locator locator) {
         this.locator = locator;
     }
 
