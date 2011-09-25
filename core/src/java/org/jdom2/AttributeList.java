@@ -114,8 +114,8 @@ class AttributeList extends AbstractList<Attribute>
      * @return true (as per the general contract of Collection.add).
      * @throws IndexOutOfBoundsException if index < 0 || index > size()
      */
-    public boolean add(Attribute obj) {
-        Attribute attribute = (Attribute) obj;
+    @Override
+	public boolean add(Attribute attribute) {
         int duplicate = indexOfDuplicate(attribute);
         if (duplicate < 0) {
             add(size(), attribute);
@@ -133,7 +133,8 @@ class AttributeList extends AbstractList<Attribute>
      * @param index index where to add <code>Attribute</code>
      * @param attribute <code>Attribute</code> to add
      */
-    public void add(int index, Attribute attribute) {
+    @Override
+	public void add(int index, Attribute attribute) {
         if (attribute.getParent() != null) {
             throw new IllegalAddException(
                           "The attribute already has an existing parent \"" +
@@ -174,7 +175,8 @@ class AttributeList extends AbstractList<Attribute>
      * @return <code>true</code> if the list was modified as a result of
      * the add.
      */
-    public boolean addAll(Collection<? extends Attribute> collection) {
+    @Override
+	public boolean addAll(Collection<? extends Attribute> collection) {
         return addAll(size(), collection);
     }
 
@@ -189,7 +191,8 @@ class AttributeList extends AbstractList<Attribute>
      *                           the add.
      * throws IndexOutOfBoundsException if index < 0 || index > size()
      */
-    public boolean addAll(int index, Collection<? extends Attribute> collection) {
+    @Override
+	public boolean addAll(int index, Collection<? extends Attribute> collection) {
         if (index<0 || index>size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -226,7 +229,8 @@ class AttributeList extends AbstractList<Attribute>
     /**
      * Clear the current list.
      */
-    public void clear() {
+    @Override
+	public void clear() {
         if (elementData != null) {
             for (int i = 0; i < size; i++) {
                 Attribute attribute = elementData[i];
@@ -303,7 +307,8 @@ class AttributeList extends AbstractList<Attribute>
      * @param index The offset of the object.
      * @return The Object which was returned.
      */
-    public Attribute get(int index) {
+    @Override
+	public Attribute get(int index) {
         if (index<0 || index>=size) {
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -353,7 +358,8 @@ class AttributeList extends AbstractList<Attribute>
      * @param index The offset of the object.
      * @return The Object which was removed.
      */
-    public Attribute remove(int index) {
+    @Override
+	public Attribute remove(int index) {
         if (index<0 || index>=size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -394,7 +400,8 @@ class AttributeList extends AbstractList<Attribute>
      * @return The object which was replaced.
      * throws IndexOutOfBoundsException if index < 0 || index >= size()
      */
-    public Attribute set(int index, Attribute attribute) {
+    @Override
+	public Attribute set(int index, Attribute attribute) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index +
                                                 " Size: " + size());
@@ -415,7 +422,7 @@ class AttributeList extends AbstractList<Attribute>
             throw new IllegalAddException(parent, attribute, reason);
         }
 
-        Attribute old = (Attribute) elementData[index];
+        Attribute old = elementData[index];
         old.setParent(null);
 
         elementData[index] = attribute;
@@ -440,14 +447,16 @@ class AttributeList extends AbstractList<Attribute>
      *
      * @return The number of items in this list.
      */
-    public int size() {
+    @Override
+	public int size() {
         return size;
     }
 
     /**
      * Return this list as a <code>String</code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString();
     }
 }
