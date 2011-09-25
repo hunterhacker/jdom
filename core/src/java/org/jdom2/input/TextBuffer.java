@@ -111,9 +111,7 @@ class TextBuffer {
         if (prefixString == null) {
             return 0;
         }
-        else {
-            return prefixString.length() + arraySize;
-        }
+        return prefixString.length() + arraySize;
     }
 
     /** Clears the text value and prepares the TextBuffer for reuse. */
@@ -143,7 +141,8 @@ class TextBuffer {
     }
 
     /** Returns the text value stored in the buffer. */
-    public String toString() {
+    @Override
+	public String toString() {
         if (prefixString == null) {
             return "";
         }
