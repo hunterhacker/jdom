@@ -123,10 +123,10 @@ public class SAXBuilder {
     private boolean ignoringBoundaryWhite = false;
 
     /** User-specified features to be set on the SAX parser */
-    private HashMap features = new HashMap(5);
+    private HashMap<String,Boolean> features = new HashMap<String, Boolean>(5);
 
     /** User-specified properties to be set on the SAX parser */
-    private HashMap properties = new HashMap(5);
+    private HashMap<String,Object> properties = new HashMap<String, Object>(5);
 
     /** Whether to use fast parser reconfiguration */
     private boolean fastReconfigure = false;
@@ -523,10 +523,9 @@ public class SAXBuilder {
             if (systemId != null) {
                 throw new JDOMParseException("Error on line " +
                     e.getLineNumber() + " of document " + systemId, e, doc);
-            } else {
-                throw new JDOMParseException("Error on line " +
-                    e.getLineNumber(), e, doc);
             }
+            throw new JDOMParseException("Error on line " +
+                e.getLineNumber(), e, doc);
         }
         catch (SAXException e) {
             throw new JDOMParseException("Error in building: " +
@@ -599,7 +598,7 @@ public class SAXBuilder {
             // to the hard coded default parser
             try {
                 // Get factory class and method.
-                Class factoryClass =
+                Class<?> factoryClass =
                     Class.forName("org.jdom2.input.JAXPParserFactory");
 
                 Method createParser =
@@ -752,18 +751,13 @@ public class SAXBuilder {
                                           boolean coreFeatures)
                                                         throws JDOMException {
         // Set any user-specified features on the parser.
-        Iterator iter = features.keySet().iterator();
-        while (iter.hasNext()) {
-            String  name  = (String)iter.next();
-            Boolean value = (Boolean)features.get(name);
-            internalSetFeature(parser, name, value.booleanValue(), name);
+        for (Map.Entry<String,Boolean> me : features.entrySet()) {
+            internalSetFeature(parser, me.getKey(), me.getValue().booleanValue(), me.getKey());
         }
 
         // Set any user-specified properties on the parser.
-        iter = properties.keySet().iterator();
-        while (iter.hasNext()) {
-            String name = (String)iter.next();
-            internalSetProperty(parser, name, properties.get(name), name);
+        for (Map.Entry<String,Object> me : properties.entrySet()) {
+            internalSetProperty(parser, me.getKey(), me.getValue(), me.getKey());
         }
 
         if (coreFeatures) {
