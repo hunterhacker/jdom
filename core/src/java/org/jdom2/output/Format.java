@@ -452,7 +452,13 @@ public class Format implements Cloneable {
             }
             else {
                 bits = 0;
-                encoder = Charset.forName(encoding).newEncoder();
+                CharsetEncoder cse = null;
+                try {
+                	cse = Charset.forName(encoding).newEncoder();
+                } catch (Exception e) {
+                	// swallow that... and assume false.
+                }
+                encoder = cse;
             }
         }
 
