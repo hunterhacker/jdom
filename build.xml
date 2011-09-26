@@ -166,9 +166,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<target name="prepare-src" depends="prepare">
 		<!-- copy src files -->
-		<copy todir="${core.build}" filtering="yes">
-			<fileset dir="${core.src}"/>
-		</copy>
 		<copy todir="${about.build}" filtering="yes">
 			<fileset dir="${about.src}"/>
 		</copy>
@@ -178,9 +175,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<copy todir="${contrib.build}" filtering="yes">
 			<fileset dir="${contrib.src}"/>
 		</copy>
-		<copy todir="${junit.build}" filtering="yes">
-			<fileset dir="${junit.src}"/>
-		</copy>
 	</target>
 
 	<!-- =================================================================== -->
@@ -189,13 +183,13 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<target name="compile.core" depends="prepare-src"
           description="Compiles the core source code">
 
-		<javac srcdir="${core.build}"
+		<javac srcdir="${core.src}"
            destdir="${core.build}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
            target="${compile.target}"
            source="${compile.source}"
-           deprecation="${compile.deprecation}">
+           deprecation="${compile.deprecation}" includeantruntime="false">
 			<classpath refid="base.class.path"/>
 		</javac>
 	</target>
@@ -245,13 +239,18 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<target name="compile.junit" depends="compile.core"
 	          description="Compiles the junit source code">
 
-		<javac srcdir="${junit.build}"
+		<copy todir="${junit.build}" >
+			<fileset dir="${junit.src}" excludes="*.java" />
+		</copy>
+		
+		<javac srcdir="${junit.src}"
 	           destdir="${junit.build}"
 	           debug="${compile.debug}"
 	           optimize="${compile.optimize}"
 	           target="${compile.target}"
 	           source="${compile.source}"
-	           deprecation="${compile.deprecation}">
+	           deprecation="${compile.deprecation}"
+			   includeantruntime="false">
 			<classpath refid="core.class.path" />
 		</javac>
 	</target>
@@ -372,13 +371,14 @@ For instructions on how to build JDOM, please view the README.txt file.
 			
 			<batchtest haltonerror="false" haltonfailure="false"
 				failureproperty="junit.failed" todir="${junit.xml}" >
-				<fileset dir="${junit.build}">
+				<fileset dir="${junit.src}">
 					<include name="**/Test*.java"/>
 					<exclude name="**/generate/**" />
 				</fileset>
 			</batchtest>
 			
 		</junit>
+		
 		<junitreport todir="${junit.report}">
 		  <fileset dir="${junit.xml}">
 		    <include name="TEST-*.xml"/>
@@ -392,7 +392,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		description="Run the code coverage tool.">
 		<deltree dir="${coverage.out}"/>
 		<mkdir dir="${coverage.out}" />
-		<cobertura-report srcdir="${core.build}" destdir="${coverage.out}" datafile="${cobertura.datafile}"/>
+		<cobertura-report srcdir="${core.src}" destdir="${coverage.out}" datafile="${cobertura.datafile}"/>
 		<echo message="See ${coverage.out}/index.html for results." />
 	</target>
 	
