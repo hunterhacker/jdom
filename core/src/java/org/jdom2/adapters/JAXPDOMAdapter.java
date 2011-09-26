@@ -54,11 +54,9 @@
 
 package org.jdom2.adapters;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
-import org.jdom2.*;
-import org.jdom2.input.*;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 
 /**
@@ -75,7 +73,8 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws JDOMException when errors occur in parsing.
       */
-    public Document createDocument() 
+    @Override
+	public Document createDocument() 
         throws JDOMException {
 
         try {
@@ -84,7 +83,7 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
             Class.forName("javax.xml.transform.Transformer");
 
             // Try JAXP 1.1 calls to build the document
-            Class factoryClass =
+            Class<?> factoryClass =
                 Class.forName("javax.xml.parsers.DocumentBuilderFactory");
 
             // factory = DocumentBuilderFactory.newInstance();
@@ -98,7 +97,7 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
             Object jaxpParser  = newDocBuilder.invoke(factory);
 
             // domDoc = jaxpParser.newDocument();
-            Class parserClass = jaxpParser.getClass();
+            Class<?> parserClass = jaxpParser.getClass();
             Method newDoc = parserClass.getMethod("newDocument");
             org.w3c.dom.Document domDoc =
                 (org.w3c.dom.Document) newDoc.invoke(jaxpParser);
