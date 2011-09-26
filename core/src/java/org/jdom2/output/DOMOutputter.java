@@ -55,10 +55,19 @@
 
 package org.jdom2.output;
 
-import java.util.*;
-
-import org.jdom2.*;
-import org.jdom2.adapters.*;
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.adapters.DOMAdapter;
 
 
 /**
@@ -152,9 +161,7 @@ public class DOMOutputter {
             }
             
             // Add content
-            Iterator itr = document.getContent().iterator();
-            while (itr.hasNext()) {
-                Object node = itr.next();
+            for (Content node : document.getContent()) {
 
                 if (node instanceof Element) {
                     org.w3c.dom.Element domElement =
@@ -292,9 +299,7 @@ public class DOMOutputter {
             }
 
             // Add additional namespaces also
-            Iterator itr = element.getAdditionalNamespaces().iterator();
-            while (itr.hasNext()) {
-                Namespace additional = (Namespace)itr.next();
+            for (Namespace additional : element.getAdditionalNamespaces()) {
                 String prefix = additional.getPrefix();
                 String uri = namespaces.getURI(prefix);
                 if (!additional.getURI().equals(uri)) {
@@ -305,9 +310,7 @@ public class DOMOutputter {
             }
 
             // Add attributes to the DOM element
-            itr = element.getAttributes().iterator();
-            while (itr.hasNext()) {
-                Attribute attribute = (Attribute) itr.next();
+            for (Attribute attribute : element.getAttributes()) {
                 domElement.setAttributeNode(output(attribute, domDoc));
                 Namespace ns1 = attribute.getNamespace();
                 if ((ns1 != Namespace.NO_NAMESPACE) && 
@@ -340,19 +343,12 @@ public class DOMOutputter {
             }
 
             // Add content to the DOM element
-            itr = element.getContent().iterator();
-            while (itr.hasNext()) {
-                Object node = itr.next();
+            for (Content node : element.getContent()) {
 
                 if (node instanceof Element) {
                     Element e = (Element) node;
                     org.w3c.dom.Element domElt = output(e, domDoc, namespaces);
                     domElement.appendChild(domElt);
-                }
-                else if (node instanceof String) {
-                    String str = (String) node;
-                    org.w3c.dom.Text domText = domDoc.createTextNode(str);
-                    domElement.appendChild(domText);
                 }
                 else if (node instanceof CDATA) {
                     CDATA cdata = (CDATA) node;
