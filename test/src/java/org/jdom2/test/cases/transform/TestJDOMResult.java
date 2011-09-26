@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMFactory;
@@ -122,7 +123,7 @@ public class TestJDOMResult {
 		// OK, we expect things now.
 		Element child = new Element("child");
 		Text text = new Text("text");
-		ArrayList<Object> nodes = new ArrayList<Object>(2);
+		ArrayList<Content> nodes = new ArrayList<Content>(2);
 		nodes.add(child);
 		nodes.add(text);
 		

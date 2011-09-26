@@ -54,14 +54,26 @@
 
 package org.jdom2.transform;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.transform.sax.*;
+import javax.xml.transform.sax.SAXSource;
 
-import org.jdom2.*;
-import org.jdom2.output.*;
-import org.xml.sax.*;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.output.SAXOutputter;
+import org.jdom2.output.XMLOutputter;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
 
 /**
  * A holder for an XML Transformation source: a Document, Element, or list of
@@ -150,7 +162,7 @@ public class JDOMSource extends SAXSource {
    * @throws IllegalArgumentException   if <code>source</code> is
    *                                    <code>null</code>.
    */
-  public JDOMSource(List source) {
+  public JDOMSource(List<? extends Content> source) {
     setNodes(source);
   }
 
@@ -164,7 +176,7 @@ public class JDOMSource extends SAXSource {
    *                                    <code>null</code>.
    */
   public JDOMSource(Element source) {
-    List nodes = new ArrayList();
+    List<Content> nodes = new ArrayList<Content>();
     nodes.add(source);
 
     setNodes(nodes);
@@ -232,7 +244,7 @@ public class JDOMSource extends SAXSource {
    *
    * @see    #getNodes
    */
-  public void setNodes(List source) {
+  public void setNodes(List<? extends Content> source) {
     super.setInputSource(new JDOMInputSource(source));
   }
 
@@ -244,14 +256,8 @@ public class JDOMSource extends SAXSource {
    *
    * @see    #setDocument
    */
-  public List getNodes() {
-    Object   src   = ((JDOMInputSource)getInputSource()).getSource();
-    List     nodes = null;
-
-    if (src instanceof List) {
-      nodes = (List)src;
-    }
-    return nodes;
+  public List<? extends Content> getNodes() {
+	return ((JDOMInputSource)getInputSource()).getListSource();
   }
 
 
@@ -271,7 +277,8 @@ public class JDOMSource extends SAXSource {
    *
    * @throws UnsupportedOperationException   always!
    */
-  public void setInputSource(InputSource inputSource)
+  @Override
+public void setInputSource(InputSource inputSource)
                                   throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
@@ -293,7 +300,8 @@ public class JDOMSource extends SAXSource {
    *                                         {@link XMLFilter}.
    * @see    #getXMLReader
    */
-  public void setXMLReader(XMLReader reader)
+  @Override
+public void setXMLReader(XMLReader reader)
                               throws UnsupportedOperationException {
     if (reader instanceof XMLFilter) {
       // Connect the filter chain to a document reader.
@@ -321,7 +329,8 @@ public class JDOMSource extends SAXSource {
    * @return an XMLReader reading the XML data from the source
    *         JDOM document.
    */
-  public XMLReader getXMLReader() {
+  @Override
+public XMLReader getXMLReader() {
     if (this.xmlReader == null) {
       this.xmlReader = buildDocumentReader();
     }
@@ -361,15 +370,19 @@ public class JDOMSource extends SAXSource {
     /**
      * The source as a JDOM document or a list of JDOM nodes.
      */
-    private Object source = null;
+    private Document docsource = null;
 
+    /**
+     * The source as a JDOM document or a list of JDOM nodes.
+     */
+    private List<? extends Content> listsource = null;
     /**
      * Builds a InputSource wrapping the specified JDOM Document.
      *
      * @param  document   the source document.
      */
     public JDOMInputSource(Document document) {
-      this.source = document;
+      this.docsource = document;
     }
 
     /**
@@ -377,8 +390,8 @@ public class JDOMSource extends SAXSource {
      *
      * @param  nodes   the source JDOM nodes.
      */
-    public JDOMInputSource(List nodes) {
-      this.source = nodes;
+    public JDOMInputSource(List<? extends Content> nodes) {
+      this.listsource = nodes;
     }
 
     /**
@@ -387,7 +400,7 @@ public class JDOMSource extends SAXSource {
      * @return the source as a JDOM document or a list of JDOM nodes.
      */
     public Object getSource() {
-      return source;
+      return docsource == null ? listsource : docsource;
     }
 
     //-------------------------------------------------------------------------
@@ -407,7 +420,8 @@ public class JDOMSource extends SAXSource {
      *
      * @throws UnsupportedOperationException  always!
      */
-    public void setCharacterStream(Reader characterStream)
+    @Override
+	public void setCharacterStream(Reader characterStream)
                                       throws UnsupportedOperationException {
       throw new UnsupportedOperationException();
     }
@@ -425,23 +439,21 @@ public class JDOMSource extends SAXSource {
      * @return a Reader to a string representation of the
      *         source JDOM document.
      */
-    public Reader getCharacterStream() {
-      Object src    = this.getSource();
+    @Override
+	public Reader getCharacterStream() {
       Reader reader = null;
 
-      if (src instanceof Document) {
+      if (docsource != null) {
         // Get an in-memory string representation of the document
         // and return a reader on it.
         reader = new StringReader(
-                            new XMLOutputter().outputString((Document)src));
+                            new XMLOutputter().outputString(docsource));
       }
-      else {
-        if (src instanceof List) {
+      else if (listsource != null) {
           reader = new StringReader(
-                            new XMLOutputter().outputString((List)src));
-        }
-        // Else: No source, no reader!
+                            new XMLOutputter().outputString(listsource));
       }
+      // Else: No source, no reader!
       return reader;
     }
     /**
@@ -457,10 +469,20 @@ public class JDOMSource extends SAXSource {
      *
      * @throws UnsupportedOperationException  always!
      */
-    public void setByteStream(InputStream byteStream)
+    @Override
+	public void setByteStream(InputStream byteStream)
                                       throws UnsupportedOperationException {
       throw new UnsupportedOperationException();
     }
+
+	public Document getDocumentSource() {
+		return docsource;
+	}
+
+	public List<? extends Content> getListSource() {
+		// TODO Auto-generated method stub
+		return listsource;
+	}
 
   }
 
@@ -501,7 +523,8 @@ public class JDOMSource extends SAXSource {
      *
      * @throws SAXNotSupportedException   always!
      */
-    public void parse(String systemId) throws SAXNotSupportedException {
+    @Override
+	public void parse(String systemId) throws SAXNotSupportedException {
       throw new SAXNotSupportedException(
                        "Only JDOM Documents are supported as input");
     }
@@ -522,15 +545,16 @@ public class JDOMSource extends SAXSource {
      * @throws SAXNotSupportedException   if the input source does
      *                                    not wrap a JDOM document.
      */
-    public void parse(InputSource input) throws SAXException {
+    @Override
+	public void parse(InputSource input) throws SAXException {
       if (input instanceof JDOMInputSource) {
         try {
-          Object source = ((JDOMInputSource)input).getSource();
-          if (source instanceof Document) {
-            this.output((Document)source);
+          Document docsource = ((JDOMInputSource)input).getDocumentSource();
+          if (docsource != null) {
+            this.output(docsource);
           }
           else {
-            this.output((List)source);
+            this.output(((JDOMInputSource)input).getListSource());
           }
         }
         catch (JDOMException e) {

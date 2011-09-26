@@ -209,7 +209,7 @@ public class XSLTransformer {
      * @return                     transformed output nodes
      * @throws XSLTransformException       if there's a problem in the transformation
      */
-    public List transform(List inputNodes) throws XSLTransformException {
+    public List<Content> transform(List<Content> inputNodes) throws XSLTransformException {
         JDOMSource source = new JDOMSource(inputNodes);
         JDOMResult result = new JDOMResult();
         result.setFactory(factory);  // null ok

@@ -117,7 +117,9 @@ public class JDOMResult extends SAXResult {
    * implementations that natively support JDOM, as a JDOM document
    * or a list of JDOM nodes.
    */
-  private Object result = null;
+  private List<Content> resultlist = null;
+  
+  private Document resultdoc = null;
 
   /**
    * Whether the application queried the result (as a list or a
@@ -159,8 +161,8 @@ public class JDOMResult extends SAXResult {
    *
    * @see    #getResult
    */
-  public void setResult(List result) {
-    this.result  = result;
+  public void setResult(List<Content> result) {
+    this.resultlist  = result;
     this.queried = false;
   }
 
@@ -176,26 +178,27 @@ public class JDOMResult extends SAXResult {
    * @return the transformation result as a (possibly empty) list of
    *         JDOM nodes (Elements, Texts, Comments, PIs...).
    */
-  public List getResult() {
-    List nodes = Collections.EMPTY_LIST;
+  public List<Content> getResult() {
+    List<Content> nodes = Collections.emptyList();
 
     // Retrieve result from the document builder if not set.
     this.retrieveResult();
 
-    if (result instanceof List) {
-      nodes = (List)result;
+    if (resultlist != null) {
+      nodes = resultlist;
     }
     else {
-      if ((result instanceof Document) && (queried == false)) {
-        List content = ((Document)result).getContent();
-        nodes = new ArrayList(content.size());
+      if (resultdoc != null && queried == false) {
+        List<Content> content = resultdoc.getContent();
+        nodes = new ArrayList<Content>(content.size());
 
         while (content.size() != 0)
         {
-          Object o = content.remove(0);
+          Content o = content.remove(0);
           nodes.add(o);
         }
-        result = nodes;
+        resultlist = nodes;
+        resultdoc = null;
       }
     }
     queried = true;
@@ -219,7 +222,8 @@ public class JDOMResult extends SAXResult {
    * @see    #getDocument
    */
   public void setDocument(Document document) {
-    this.result  = document;
+    this.resultdoc  = document;
+    this.resultlist = null;
     this.queried = false;
   }
 
@@ -249,20 +253,21 @@ public class JDOMResult extends SAXResult {
     // Retrieve result from the document builder if not set.
     this.retrieveResult();
 
-    if (result instanceof Document) {
-      doc = (Document)result;
+    if (resultdoc != null) {
+      doc = resultdoc;
     }
     else {
-      if ((result instanceof List) && (queried == false)) {
+      if (resultlist != null && (queried == false)) {
         // Try to create a document from the result nodes
         try {
           JDOMFactory f = this.getFactory();
           if (f == null) { f = new DefaultJDOMFactory(); }
 
           doc = f.document(null);
-          doc.setContent((List)result);
+          doc.setContent(resultlist);
 
-          result = doc;
+          resultdoc = doc;
+          resultlist = null;
         }
         catch (RuntimeException ex1) {
           // Some of the result nodes are not valid children of a
@@ -310,7 +315,7 @@ public class JDOMResult extends SAXResult {
    * retrieves the result tree being built by the document builder.
    */
   private void retrieveResult() {
-    if (result == null) {
+    if (resultlist == null && resultdoc == null) {
       this.setResult(((DocumentBuilder)this.getHandler()).getResult());
     }
   }
@@ -324,7 +329,10 @@ public class JDOMResult extends SAXResult {
    *
    * @param handler Must be a non-null ContentHandler reference.
    */
-  public void setHandler(ContentHandler handler) { }
+  @Override
+  public void setHandler(ContentHandler handler) {
+	  // Do Nothing
+  }
 
   /**
    * Sets the SAX2 LexicalHandler for the output.
@@ -336,7 +344,10 @@ public class JDOMResult extends SAXResult {
    * @param handler A non-null LexicalHandler for
    *                handling lexical parse events.
    */
-  public void setLexicalHandler(LexicalHandler handler) { }
+  @Override
+  public void setLexicalHandler(LexicalHandler handler) {
+	  // Ignore.
+  }
 
 
   //=========================================================================
@@ -368,7 +379,7 @@ public class JDOMResult extends SAXResult {
      * @return the transformation result as a (possibly empty) list of
      *         JDOM nodes (Elements, Texts, Comments, PIs...).
      */
-    public List getResult() {
+    public List<Content> getResult() {
       // Flush remaining text content in case the last text segment is
       // outside an element.
       try {
@@ -386,13 +397,13 @@ public class JDOMResult extends SAXResult {
      * @return a (possibly empty) list of JDOM nodes, detached from
      *         their parent.
      */
-    private List getDetachedContent(Element elt) {
-      List content = elt.getContent();
-      List nodes   = new ArrayList(content.size());
+    private List<Content> getDetachedContent(Element elt) {
+      List<Content> content = elt.getContent();
+      List<Content> nodes   = new ArrayList<Content>(content.size());
 
       while (content.size() != 0)
       {
-        Object o = content.remove(0);
+        Content o = content.remove(0);
         nodes.add(o);
       }
       return (nodes);
@@ -429,12 +440,12 @@ public class JDOMResult extends SAXResult {
      *         <code>null</code> if no new transformation occurred
      *         since the result of the previous one was returned.
      */
-    public List getResult() {
-      List result = null;
+    public List<Content> getResult() {
+      List<Content> mresult = null;
 
       if (this.saxHandler != null) {
         // Retrieve result from SAX content handler.
-        result = this.saxHandler.getResult();
+        mresult = this.saxHandler.getResult();
 
         // Detach the (non-reusable) SAXHandler instance.
         this.saxHandler = null;
@@ -442,7 +453,7 @@ public class JDOMResult extends SAXResult {
         // And get ready for the next transformation.
         this.startDocumentReceived = false;
       }
-      return result;
+      return mresult;
     }
 
     private void ensureInitialization() throws SAXException {
@@ -467,7 +478,8 @@ public class JDOMResult extends SAXResult {
      * @throws SAXException   if any error occurred while creating
      *                        the document builder.
      */
-    public void startDocument() throws SAXException {
+    @Override
+	public void startDocument() throws SAXException {
       this.startDocumentReceived = true;
 
       // Reset any previously set result.
@@ -507,7 +519,8 @@ public class JDOMResult extends SAXResult {
      * @throws SAXException   if any error occurred while creating
      *                        the document builder.
      */
-    public void startElement(String nsURI, String localName, String qName,
+    @Override
+	public void startElement(String nsURI, String localName, String qName,
                                            Attributes atts) throws SAXException
     {
       this.ensureInitialization();
@@ -518,7 +531,8 @@ public class JDOMResult extends SAXResult {
      * <i>[SAX ContentHandler interface support]</i> Begins the
      * scope of a prefix-URI Namespace mapping.
      */
-    public void startPrefixMapping(String prefix, String uri)
+    @Override
+	public void startPrefixMapping(String prefix, String uri)
                                                         throws SAXException {
       this.ensureInitialization();
       super.startPrefixMapping(prefix, uri);
@@ -528,7 +542,8 @@ public class JDOMResult extends SAXResult {
      * <i>[SAX ContentHandler interface support]</i> Receives
      * notification of character data.
      */
-    public void characters(char ch[], int start, int length)
+    @Override
+	public void characters(char ch[], int start, int length)
                                                         throws SAXException {
       this.ensureInitialization();
       super.characters(ch, start, length);
@@ -538,7 +553,8 @@ public class JDOMResult extends SAXResult {
      * <i>[SAX ContentHandler interface support]</i> Receives
      * notification of ignorable whitespace in element content.
      */
-    public void ignorableWhitespace(char ch[], int start, int length)
+    @Override
+	public void ignorableWhitespace(char ch[], int start, int length)
                                                         throws SAXException {
       this.ensureInitialization();
       super.ignorableWhitespace(ch, start, length);
@@ -548,7 +564,8 @@ public class JDOMResult extends SAXResult {
      * <i>[SAX ContentHandler interface support]</i> Receives
      * notification of a processing instruction.
      */
-    public void processingInstruction(String target, String data)
+    @Override
+	public void processingInstruction(String target, String data)
                                                         throws SAXException {
       this.ensureInitialization();
       super.processingInstruction(target, data);
@@ -558,7 +575,8 @@ public class JDOMResult extends SAXResult {
      * <i>[SAX ContentHandler interface support]</i> Receives
      * notification of a skipped entity.
      */
-    public void skippedEntity(String name) throws SAXException {
+    @Override
+	public void skippedEntity(String name) throws SAXException {
       this.ensureInitialization();
       super.skippedEntity(name);
     }
@@ -581,7 +599,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void startDTD(String name, String publicId, String systemId)
+    @Override
+	public void startDTD(String name, String publicId, String systemId)
                                         throws SAXException {
       this.ensureInitialization();
       this.saxHandler.startDTD(name, publicId, systemId);
@@ -593,7 +612,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void endDTD() throws SAXException {
+    @Override
+	public void endDTD() throws SAXException {
       this.saxHandler.endDTD();
     }
 
@@ -607,7 +627,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void startEntity(String name) throws SAXException {
+    @Override
+	public void startEntity(String name) throws SAXException {
       this.ensureInitialization();
       this.saxHandler.startEntity(name);
     }
@@ -620,7 +641,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void endEntity(String name) throws SAXException {
+    @Override
+	public void endEntity(String name) throws SAXException {
       this.saxHandler.endEntity(name);
     }
 
@@ -630,7 +652,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void startCDATA() throws SAXException {
+    @Override
+	public void startCDATA() throws SAXException {
       this.ensureInitialization();
       this.saxHandler.startCDATA();
     }
@@ -641,7 +664,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void endCDATA() throws SAXException {
+    @Override
+	public void endCDATA() throws SAXException {
       this.saxHandler.endCDATA();
     }
 
@@ -655,7 +679,8 @@ public class JDOMResult extends SAXResult {
      *
      * @throws SAXException   The application may raise an exception.
      */
-    public void comment(char ch[], int start, int length)
+    @Override
+	public void comment(char ch[], int start, int length)
                                   throws SAXException {
       this.ensureInitialization();
       this.saxHandler.comment(ch, start, length);

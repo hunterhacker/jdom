@@ -307,7 +307,8 @@ public class TestJDOMSource {
 	public void testXMLReaderParseGarbageInputSource() throws SAXException, IOException {
 		
 		JDOMSource sourcea = new JDOMSource(new Element("root"));
-		JDOMSource sourceb = new JDOMSource(Collections.singletonList(Double.valueOf(123.4)));
+		List junk = Collections.singletonList(Double.valueOf(123.4));
+		JDOMSource sourceb = new JDOMSource(junk);
 		XMLReader reader = sourcea.getXMLReader();
 		assertTrue(reader instanceof SAXOutputter);
 		SAXOutputter readeroutputter = (SAXOutputter)reader;

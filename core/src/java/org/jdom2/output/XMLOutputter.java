@@ -246,7 +246,7 @@ public class XMLOutputter implements Cloneable {
      * @param list <code>List</code> of nodes.
      * @param out <code>OutputStream</code> to use.
      */
-    public void output(List<Content> list, OutputStream out)
+    public void output(List<? extends Content> list, OutputStream out)
                     throws IOException {
         Writer writer = makeWriter(out);
         output(list, writer);  // output() flushes
@@ -450,7 +450,7 @@ public class XMLOutputter implements Cloneable {
      * @param list <code>List</code> of nodes.
      * @param out <code>Writer</code> to use.
      */
-    public void output(List<Content> list, Writer out)
+    public void output(List<? extends Content> list, Writer out)
                     throws IOException {
         printContentRange(out, list, 0, list.size(),
                           0, createNamespaceStack());
@@ -580,7 +580,7 @@ public class XMLOutputter implements Cloneable {
      *
      * @param list <code>List</code> to format.
      */
-    public String outputString(List<Content> list) {
+    public String outputString(List<? extends Content> list) {
         StringWriter out = new StringWriter();
         try {
             output(list, out);  // output() flushes
@@ -991,7 +991,7 @@ public class XMLOutputter implements Cloneable {
      * @param level <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void printContentRange(Writer out, List<Content> content,
+    private void printContentRange(Writer out, List<? extends Content> content,
                                      int start, int end, int level,
                                      NamespaceStack namespaces)
                        throws IOException {
@@ -1060,7 +1060,7 @@ public class XMLOutputter implements Cloneable {
      * @param end index of last content node (exclusive).
      * @param out <code>Writer</code> to use.
      */
-    private void printTextRange(Writer out, List<Content> content, int start, int end
+    private void printTextRange(Writer out, List<? extends Content> content, int start, int end
                                   ) throws IOException {
         String previous; // Previous text printed
         Object node;     // Next node to print
@@ -1250,7 +1250,7 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if content contains
     // all whitespace.
     // @param start index to begin search (inclusive)
-    private int skipLeadingWhite(List<Content> content, int start) {
+    private int skipLeadingWhite(List<? extends Content> content, int start) {
         if (start < 0) {
             start = 0;
         }
@@ -1274,7 +1274,7 @@ public class XMLOutputter implements Cloneable {
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrailingWhite(List<Content> content, int start) {
+    private int skipTrailingWhite(List<? extends Content> content, int start) {
         int size = content.size();
         if (start > size) {
             start = size;
@@ -1297,7 +1297,7 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if there is no more non-CDATA,
     // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
-    private static int nextNonText(List<Content> content, int start) {
+    private static int nextNonText(List<? extends Content> content, int start) {
         if (start < 0) {
             start = 0;
         }
