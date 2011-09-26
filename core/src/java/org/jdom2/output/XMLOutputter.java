@@ -140,7 +140,7 @@ public class XMLOutputter implements Cloneable {
      * before use.
      */
     public XMLOutputter(Format format) {
-        userFormat = (Format) format.clone();
+        userFormat = format.clone();
         currentFormat = userFormat;
     }
 
@@ -153,7 +153,7 @@ public class XMLOutputter implements Cloneable {
      * @param that the XMLOutputter to clone
      */
     public XMLOutputter(XMLOutputter that) {
-        this.userFormat = (Format) that.userFormat.clone();
+        this.userFormat = that.userFormat.clone();
         currentFormat = userFormat;
     }
 
@@ -167,7 +167,7 @@ public class XMLOutputter implements Cloneable {
      * @param newFormat the format to use for output
      */
     public void setFormat(Format newFormat) {
-        this.userFormat = (Format) newFormat.clone();
+        this.userFormat = newFormat.clone();
         this.currentFormat = userFormat;
     }
 
@@ -176,7 +176,7 @@ public class XMLOutputter implements Cloneable {
      * Format object returned is a clone of the one used internally.
      */
     public Format getFormat() {
-        return (Format) userFormat.clone();
+        return userFormat.clone();
     }
 
     // * * * * * * * * * * Output to a OutputStream * * * * * * * * * *
@@ -246,7 +246,7 @@ public class XMLOutputter implements Cloneable {
      * @param list <code>List</code> of nodes.
      * @param out <code>OutputStream</code> to use.
      */
-    public void output(List list, OutputStream out)
+    public void output(List<Content> list, OutputStream out)
                     throws IOException {
         Writer writer = makeWriter(out);
         output(list, writer);  // output() flushes
@@ -360,7 +360,7 @@ public class XMLOutputter implements Cloneable {
         // Print out root element, as well as any root level
         // comments and processing instructions,
         // starting with no indentation
-        List content = doc.getContent();
+        List<Content> content = doc.getContent();
         int size = content.size();
         for (int i = 0; i < size; i++) {
             Object obj = content.get(i);
@@ -435,7 +435,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void outputElementContent(Element element, Writer out)
                     throws IOException {
-        List content = element.getContent();
+        List<Content> content = element.getContent();
         printContentRange(out, content, 0, content.size(),
                           0, createNamespaceStack());
         out.flush();
@@ -450,7 +450,7 @@ public class XMLOutputter implements Cloneable {
      * @param list <code>List</code> of nodes.
      * @param out <code>Writer</code> to use.
      */
-    public void output(List list, Writer out)
+    public void output(List<Content> list, Writer out)
                     throws IOException {
         printContentRange(out, list, 0, list.size(),
                           0, createNamespaceStack());
@@ -534,7 +534,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(doc, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -549,7 +551,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(doctype, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -564,7 +568,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(element, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -574,11 +580,13 @@ public class XMLOutputter implements Cloneable {
      *
      * @param list <code>List</code> to format.
      */
-    public String outputString(List list) {
+    public String outputString(List<Content> list) {
         StringWriter out = new StringWriter();
         try {
             output(list, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -593,7 +601,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(cdata, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -608,7 +618,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(text, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -624,7 +636,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(comment, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -639,7 +653,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(pi, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -654,7 +670,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             output(entity, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
 
@@ -671,7 +689,9 @@ public class XMLOutputter implements Cloneable {
         StringWriter out = new StringWriter();
         try {
             outputElementContent(element, out);  // output() flushes
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        	// swallow - will never happen.
+        }
         return out.toString();
     }
     
@@ -870,8 +890,8 @@ public class XMLOutputter implements Cloneable {
                                 int level, NamespaceStack namespaces)
                        throws IOException {
 
-        List attributes = element.getAttributes();
-        List content = element.getContent();
+        List<Attribute> attributes = element.getAttributes();
+        List<Content> content = element.getContent();
 
         // Check for xml:space and adjust format settings
         String space = null;
@@ -905,7 +925,7 @@ public class XMLOutputter implements Cloneable {
 
         // Print out attributes
         if (attributes != null)
-            printAttributes(out, attributes, element, namespaces);
+            printAttributes(out, attributes, namespaces);
 
         // Depending on the settings (newlines, textNormalize, etc), we may
         // or may not want to print all of the content, so determine the
@@ -971,7 +991,7 @@ public class XMLOutputter implements Cloneable {
      * @param level <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void printContentRange(Writer out, List content,
+    private void printContentRange(Writer out, List<Content> content,
                                      int start, int end, int level,
                                      NamespaceStack namespaces)
                        throws IOException {
@@ -1040,7 +1060,7 @@ public class XMLOutputter implements Cloneable {
      * @param end index of last content node (exclusive).
      * @param out <code>Writer</code> to use.
      */
-    private void printTextRange(Writer out, List content, int start, int end
+    private void printTextRange(Writer out, List<Content> content, int start, int end
                                   ) throws IOException {
         String previous; // Previous text printed
         Object node;     // Next node to print
@@ -1140,7 +1160,7 @@ public class XMLOutputter implements Cloneable {
      * @param attributes <code>List</code> of Attribute objcts
      * @param out <code>Writer</code> to use
      */
-    protected void printAttributes(Writer out, List attributes, Element parent,
+    protected void printAttributes(Writer out, List<Attribute> attributes,
                                    NamespaceStack namespaces)
                        throws IOException {
 
@@ -1150,7 +1170,7 @@ public class XMLOutputter implements Cloneable {
         // if someone tries to do this
         // Set prefixes = new HashSet();
         for (int i = 0; i < attributes.size(); i++) {
-            Attribute attribute = (Attribute) attributes.get(i);
+            Attribute attribute = attributes.get(i);
             Namespace ns = attribute.getNamespace();
             if ((ns != Namespace.NO_NAMESPACE) &&
                 (ns != Namespace.XML_NAMESPACE)) {
@@ -1187,10 +1207,9 @@ public class XMLOutputter implements Cloneable {
     private void printAdditionalNamespaces(Writer out, Element element,
                                            NamespaceStack namespaces)
                                 throws IOException {
-        List list = element.getAdditionalNamespaces();
+        List<Namespace> list = element.getAdditionalNamespaces();
         if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                Namespace additional = (Namespace)list.get(i);
+            for (Namespace additional : list) {
                 printNamespace(out, additional, namespaces);
             }
         }
@@ -1231,7 +1250,7 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if content contains
     // all whitespace.
     // @param start index to begin search (inclusive)
-    private int skipLeadingWhite(List content, int start) {
+    private int skipLeadingWhite(List<Content> content, int start) {
         if (start < 0) {
             start = 0;
         }
@@ -1255,7 +1274,7 @@ public class XMLOutputter implements Cloneable {
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrailingWhite(List content, int start) {
+    private int skipTrailingWhite(List<Content> content, int start) {
         int size = content.size();
         if (start > size) {
             start = size;
@@ -1278,7 +1297,7 @@ public class XMLOutputter implements Cloneable {
     // index = content.size() is returned if there is no more non-CDATA,
     // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
-    private static int nextNonText(List content, int start) {
+    private static int nextNonText(List<Content> content, int start) {
         if (start < 0) {
             start = 0;
         }
@@ -1538,14 +1557,15 @@ public class XMLOutputter implements Cloneable {
     /**
      * Returns a copy of this XMLOutputter.
      */
-    public Object clone() {
+    @Override
+    public XMLOutputter clone() {
         // Implementation notes: Since all state of an XMLOutputter is
         // embodied in simple private instance variables, Object.clone
         // can be used.  Note that since Object.clone is totally
         // broken, we must catch an exception that will never be
         // thrown.
         try {
-            return super.clone();
+            return (XMLOutputter)super.clone();
         }
         catch (java.lang.CloneNotSupportedException e) {
             // even though this should never ever happen, it's still
@@ -1562,7 +1582,8 @@ public class XMLOutputter implements Cloneable {
      *
      * @return a string listing the settings for this XMLOutputter instance
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < userFormat.lineSeparator.length(); i++) {
             char ch = userFormat.lineSeparator.charAt(i);
@@ -1610,6 +1631,7 @@ public class XMLOutputter implements Cloneable {
     protected static class NamespaceStack
         extends org.jdom2.output.NamespaceStack
     {
+    	// do nothing, but read the Javadoc above.
     }
 
     // Support method to print a name without using elt.getQualifiedName()
