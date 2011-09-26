@@ -89,7 +89,7 @@ public class TestSAXOutputter {
     private void roundTrip(SAXSetup setup, Element emt) {
     	XMLOutputter xout = new XMLOutputter(Format.getRawFormat());
     	Document tstdoc = new Document();
-    	tstdoc.addContent((Element)emt.clone());
+    	tstdoc.addContent(emt.clone());
     	String expect = xout.outputString(tstdoc);
     	
     	String actual = null;
@@ -199,7 +199,7 @@ public class TestSAXOutputter {
     	assertEquals(expect, actual);
     }
     
-    private void roundTrip(SAXSetup setup, List<?> content) {
+    private void roundTrip(SAXSetup setup, List<? extends Content> content) {
     	XMLOutputter xout = new XMLOutputter(Format.getRawFormat());
     	Document tstdoc = new Document();
     	for (Object o : content) {
@@ -715,8 +715,8 @@ public class TestSAXOutputter {
 		
 		Document doc = null;
 		Element emt = null;
-		List<?> list = null;
-		List<?> empty = new ArrayList<Object>();
+		List<Content> list = null;
+		List<Content> empty = new ArrayList<Content>();
 		saxout.output(doc);
 		saxout.output(emt);
 		saxout.output(list);

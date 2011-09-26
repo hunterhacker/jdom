@@ -481,22 +481,16 @@ public class SAXOutputter {
             // Namespace prefix declarations.
             return (this.declareNamespaces);
         }
-        else {
-            if (NAMESPACES_SAX_FEATURE.equals(name)) {
-                // Namespaces feature always supported by SAXOutputter.
-                return (true);
-            }
-            else {
-                if (VALIDATION_SAX_FEATURE.equals(name)) {
-                    // Report DTD events.
-                    return (this.reportDtdEvents);
-                }
-                else {
-                    // Not a supported feature.
-                    throw new SAXNotRecognizedException(name);
-                }
-            }
+        if (NAMESPACES_SAX_FEATURE.equals(name)) {
+            // Namespaces feature always supported by SAXOutputter.
+            return (true);
         }
+        if (VALIDATION_SAX_FEATURE.equals(name)) {
+            // Report DTD events.
+            return (this.reportDtdEvents);
+        }
+        // Not a supported feature.
+        throw new SAXNotRecognizedException(name);
     }
 
     /**
@@ -565,15 +559,11 @@ public class SAXOutputter {
             (LEXICAL_HANDLER_ALT_PROPERTY.equals(name))) {
             return this.getLexicalHandler();
         }
-        else {
-            if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
-                (DECL_HANDLER_ALT_PROPERTY.equals(name))) {
-                return this.getDeclHandler();
-            }
-            else {
-                throw new SAXNotRecognizedException(name);
-            }
+        if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
+            (DECL_HANDLER_ALT_PROPERTY.equals(name))) {
+            return this.getDeclHandler();
         }
+        throw new SAXNotRecognizedException(name);
     }
 
 
@@ -603,9 +593,7 @@ public class SAXOutputter {
 
         // Handle root element, as well as any root level
         // processing instructions and comments
-        Iterator i = document.getContent().iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
+        for (Content obj : document.getContent()) {
 
             // update locator
             locator.setNode(obj);
@@ -645,7 +633,7 @@ public class SAXOutputter {
      *
      * @see #output(org.jdom2.Document)
      */
-    public void output(List nodes) throws JDOMException {
+    public void output(List<? extends Content> nodes) throws JDOMException {
         if ((nodes == null) || (nodes.size() == 0)) {
             return;
         }
@@ -707,7 +695,7 @@ public class SAXOutputter {
      *
      * @see #outputFragment(org.jdom2.Content)
      */
-    public void outputFragment(List nodes) throws JDOMException {
+    public void outputFragment(List<? extends Content> nodes) throws JDOMException {
         if ((nodes == null) || (nodes.size() == 0)) {
             return;
         }
@@ -919,68 +907,20 @@ public class SAXOutputter {
                                           NamespaceStack namespaces)
                                                    throws JDOMException {
         AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
-
-        Namespace ns = element.getNamespace();
-        if (ns != Namespace.XML_NAMESPACE) {
-            String prefix = ns.getPrefix();
-            String uri = namespaces.getURI(prefix);
-            if (!ns.getURI().equals(uri)) {
-                namespaces.push(ns);
-                nsAtts = this.addNsAttribute(nsAtts, ns);
-                try {
-                    contentHandler.startPrefixMapping(prefix, ns.getURI());
-                }
-                catch (SAXException se) {
-                   throw new JDOMException(
-                       "Exception in startPrefixMapping", se);
-                }
-            }
-        }
-
-        // Fire additional namespace declarations
-        List additionalNamespaces = element.getAdditionalNamespaces();
-        if (additionalNamespaces != null) {
-            Iterator itr = additionalNamespaces.iterator();
-            while (itr.hasNext()) {
-                ns = (Namespace)itr.next();
-                String prefix = ns.getPrefix();
-                String uri = namespaces.getURI(prefix);
-                if (!ns.getURI().equals(uri)) {
-                    namespaces.push(ns);
-                    nsAtts = this.addNsAttribute(nsAtts, ns);
-                    try {
-                        contentHandler.startPrefixMapping(prefix, ns.getURI());
-                    }
-                    catch (SAXException se) {
-                        throw new JDOMException(
-                            "Exception in startPrefixMapping", se);
-                    }
-                }
-            }
-        }
         
-        // Fire any namespace on Attributes that were not explicity added as additionals.
-        List attributes = element.getAttributes();
-        if (attributes != null) {
-            Iterator itr = attributes.iterator();
-            while (itr.hasNext()) {
-                Attribute att = (Attribute)itr.next();
-                ns = att.getNamespace();
-                String prefix = ns.getPrefix();
-                String uri = namespaces.getURI(prefix);
-                if (!ns.getURI().equals(uri)) {
-                    namespaces.push(ns);
-                    nsAtts = this.addNsAttribute(nsAtts, ns);
-                    try {
-                        contentHandler.startPrefixMapping(prefix, ns.getURI());
-                    }
-                    catch (SAXException se) {
-                        throw new JDOMException(
-                            "Exception in startPrefixMapping", se);
-                    }
-                }
-            }
+        for (Namespace ns : element.getNamespacesIntroduced()) {
+        	if (ns == Namespace.XML_NAMESPACE) {
+        		// skip it.
+        		continue;
+        	}
+            try {
+	        	nsAtts = this.addNsAttribute(nsAtts, ns);
+	        	contentHandler.startPrefixMapping(ns.getPrefix(), ns.getURI());
+	        } catch (SAXException se) {
+	        	throw new JDOMException("Exception in startPrefixMapping", se);
+	        }
         }
+
         return nsAtts;
     }
 
@@ -1029,10 +969,7 @@ public class SAXOutputter {
         AttributesImpl atts = (nsAtts != null)?
                               new AttributesImpl(nsAtts): new AttributesImpl();
 
-        List attributes = element.getAttributes();
-        Iterator i = attributes.iterator();
-        while (i.hasNext()) {
-            Attribute a = (Attribute) i.next();
+        for (Attribute a : element.getAttributes()) {
             atts.addAttribute(a.getNamespaceURI(),
                               a.getName(),
                               a.getQualifiedName(),
@@ -1077,9 +1014,9 @@ public class SAXOutputter {
      * @param content element content as a <code>List</code> of nodes.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void elementContent(List content, NamespaceStack namespaces)
+    private void elementContent(List<? extends Content> content, NamespaceStack namespaces)
                       throws JDOMException {
-        for (Iterator i=content.iterator(); i.hasNext(); ) {
+        for (Iterator<? extends Content> i=content.iterator(); i.hasNext(); ) {
             Object obj = i.next();
 
             if (obj instanceof Content) {
@@ -1302,9 +1239,7 @@ public class SAXOutputter {
                if (se.getException() instanceof JDOMException) {
                    throw (JDOMException)(se.getException());
                }
-               else {
-                   throw new JDOMException(se.getMessage(), se);
-               }
+               throw new JDOMException(se.getMessage(), se);
             }
         }
         else {
@@ -1329,7 +1264,7 @@ public class SAXOutputter {
         // available then the getXMLReader call fails and we skip
         // to the hard coded default parser
         try {
-            Class factoryClass =
+            Class<?> factoryClass =
                     Class.forName("javax.xml.parsers.SAXParserFactory");
 
             // factory = SAXParserFactory.newInstance();
@@ -1342,7 +1277,7 @@ public class SAXOutputter {
             Object jaxpParser   = newSAXParser.invoke(factory);
 
             // parser = jaxpParser.getXMLReader();
-            Class parserClass = jaxpParser.getClass();
+            Class<? extends Object> parserClass = jaxpParser.getClass();
             Method getXMLReader =
                     parserClass.getMethod("getXMLReader");
             parser = (XMLReader)getXMLReader.invoke(jaxpParser);
