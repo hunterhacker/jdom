@@ -55,6 +55,8 @@
 
 package org.jdom2.output;
 
+import java.util.List;
+
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
@@ -141,7 +143,6 @@ public class DOMOutputter {
      */
     public org.w3c.dom.Document output(Document document)
                                        throws JDOMException {
-        NamespaceStack namespaces = new NamespaceStack();
 
         org.w3c.dom.Document domDoc = null;
         try {
@@ -165,7 +166,7 @@ public class DOMOutputter {
 
                 if (node instanceof Element) {
                     org.w3c.dom.Element domElement =
-                    		output((Element) node, domDoc, namespaces);
+                    		output((Element) node, domDoc);
                     domDoc.appendChild(domElement); // normal case
                 }
                 else if (node instanceof Comment) {
@@ -262,84 +263,44 @@ public class DOMOutputter {
     }
 
     private org.w3c.dom.Element output(Element element,
-                                         org.w3c.dom.Document domDoc,
-                                         NamespaceStack namespaces)
+                                         org.w3c.dom.Document domDoc)
                                          throws JDOMException {
         try {
-            int previouslyDeclaredNamespaces = namespaces.size();
 
-            org.w3c.dom.Element domElement = null;
-            if (element.getNamespace() == Namespace.NO_NAMESPACE) {
-                // No namespace, use createElement
-                domElement = forceNamespaceAware ?
-                             domDoc.createElementNS(null, element.getQualifiedName())
-                             : domDoc.createElement(element.getQualifiedName());            }
-            else {
-                domElement = domDoc.createElementNS(
-                                          element.getNamespaceURI(),
-                                          element.getQualifiedName());
-            }
+        	org.w3c.dom.Element domElement = null;
+        	if (element.getNamespace() == Namespace.NO_NAMESPACE) {
+        		// No namespace, use createElement
+        		domElement = forceNamespaceAware ?
+        				domDoc.createElementNS(null, element.getQualifiedName())
+        				: domDoc.createElement(element.getQualifiedName());            }
+        	else {
+        		domElement = domDoc.createElementNS(
+        				element.getNamespaceURI(),
+        				element.getQualifiedName());
+        	}
 
-            // Add namespace attributes, beginning with the element's own
-            // Do this only if it's not the XML namespace and it's
-            // not the NO_NAMESPACE with the prefix "" not yet mapped
-            // (we do output xmlns="" if the "" prefix was already used 
-            // and we need to reclaim it for the NO_NAMESPACE)
-            Namespace ns = element.getNamespace();
-            if (ns != Namespace.XML_NAMESPACE &&
-                           !(ns == Namespace.NO_NAMESPACE && 
-                             namespaces.getURI("") == null)) {
-                String prefix = ns.getPrefix();
-                String uri = namespaces.getURI(prefix);
-                if (!ns.getURI().equals(uri)) { // output a new namespace decl
-                    namespaces.push(ns);
-                    String attrName = getXmlnsTagFor(ns);
-                    domElement.setAttribute(attrName, ns.getURI());
-                }
-            }
+        	List<Namespace> nsq = element.getNamespacesInScope();
 
-            // Add additional namespaces also
-            for (Namespace additional : element.getAdditionalNamespaces()) {
-                String prefix = additional.getPrefix();
-                String uri = namespaces.getURI(prefix);
-                if (!additional.getURI().equals(uri)) {
-                    String attrName = getXmlnsTagFor(additional);
-                    domElement.setAttribute(attrName, additional.getURI());
-                    namespaces.push(additional);
-                }
-            }
+        	// Add namespace attributes, beginning with the element's own
+        	// Do this only if it's not the XML namespace and it's
+        	// not the NO_NAMESPACE with the prefix "" not yet mapped
+        	// (we do output xmlns="" if the "" prefix was already used 
+        	// and we need to reclaim it for the NO_NAMESPACE)
+        	for (Namespace ns : nsq) {
+        		if (ns == Namespace.XML_NAMESPACE) {
+        			continue;
+        		}
+        		if (ns == Namespace.NO_NAMESPACE && element.getParentElement() == null) {
+        			continue;
+        		}
+
+        		domElement.setAttribute(getXmlnsTagFor(ns), ns.getURI());
+        	}
+
 
             // Add attributes to the DOM element
             for (Attribute attribute : element.getAttributes()) {
                 domElement.setAttributeNode(output(attribute, domDoc));
-                Namespace ns1 = attribute.getNamespace();
-                if ((ns1 != Namespace.NO_NAMESPACE) && 
-                    (ns1 != Namespace.XML_NAMESPACE)) {
-                    String prefix = ns1.getPrefix();
-                    String uri = namespaces.getURI(prefix);
-                    if (!ns1.getURI().equals(uri)) { // output a new decl
-                        String attrName = getXmlnsTagFor(ns1);
-                        domElement.setAttribute(attrName, ns1.getURI());
-                        namespaces.push(ns1);
-                    }
-                }
-                // Crimson doesn't like setAttributeNS() for non-NS attribs
-                if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
-                    // No namespace, use setAttribute
-                    if (forceNamespaceAware) {
-                        domElement.setAttributeNS(null,
-                                                  attribute.getQualifiedName(),
-                                                  attribute.getValue());
-                    } else {
-                        domElement.setAttribute(attribute.getQualifiedName(),
-                                                attribute.getValue());
-                    }
-                }
-                else {
-                    domElement.setAttributeNS(attribute.getNamespaceURI(),
-                                              attribute.getQualifiedName(),
-                                              attribute.getValue());
-                }
             }
 
             // Add content to the DOM element
@@ -347,7 +308,7 @@ public class DOMOutputter {
 
                 if (node instanceof Element) {
                     Element e = (Element) node;
-                    org.w3c.dom.Element domElt = output(e, domDoc, namespaces);
+                    org.w3c.dom.Element domElt = output(e, domDoc);
                     domElement.appendChild(domElt);
                 }
                 else if (node instanceof CDATA) {
@@ -389,11 +350,6 @@ public class DOMOutputter {
                 }
             }
     
-            // Remove declared namespaces from stack
-            while (namespaces.size() > previouslyDeclaredNamespaces) {
-                namespaces.pop();
-            }
-
             return domElement;
         }
         catch (Exception e) {

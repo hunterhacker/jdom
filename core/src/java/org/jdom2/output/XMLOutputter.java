@@ -366,8 +366,7 @@ public class XMLOutputter implements Cloneable {
             Object obj = content.get(i);
 
             if (obj instanceof Element) {
-                printElement(out, doc.getRootElement(), 0,
-                             createNamespaceStack());
+                printElement(out, doc.getRootElement(), 0);
             }
             else if (obj instanceof Comment) {
                 printComment(out, (Comment) obj);
@@ -419,7 +418,7 @@ public class XMLOutputter implements Cloneable {
     public void output(Element element, Writer out) throws IOException {
         // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
-        printElement(out, element, 0, createNamespaceStack());
+        printElement(out, element, 0);
         out.flush();
     }
 
@@ -436,8 +435,7 @@ public class XMLOutputter implements Cloneable {
     public void outputElementContent(Element element, Writer out)
                     throws IOException {
         List<Content> content = element.getContent();
-        printContentRange(out, content, 0, content.size(),
-                          0, createNamespaceStack());
+        printContentRange(out, content, 0, content.size(), 0);
         out.flush();
     }
 
@@ -452,8 +450,7 @@ public class XMLOutputter implements Cloneable {
      */
     public void output(List<? extends Content> list, Writer out)
                     throws IOException {
-        printContentRange(out, list, 0, list.size(),
-                          0, createNamespaceStack());
+        printContentRange(out, list, 0, list.size(), 0);
         out.flush();
     }
 
@@ -887,7 +884,7 @@ public class XMLOutputter implements Cloneable {
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
     protected void printElement(Writer out, Element element,
-                                int level, NamespaceStack namespaces)
+                                int level)
                        throws IOException {
 
         List<Attribute> attributes = element.getAttributes();
@@ -914,18 +911,12 @@ public class XMLOutputter implements Cloneable {
         out.write("<");
         printQualifiedName(out, element);
 
-        // Mark our namespace starting point
-        int previouslyDeclaredNamespaces = namespaces.size();
-
         // Print the element's namespace, if appropriate
-        printElementNamespace(out, element, namespaces);
-
-        // Print out additional namespace declarations
-        printAdditionalNamespaces(out, element, namespaces);
+        printElementNamespaces(out, element);
 
         // Print out attributes
         if (attributes != null)
-            printAttributes(out, attributes, namespaces);
+            printAttributes(out, attributes);
 
         // Depending on the settings (newlines, textNormalize, etc), we may
         // or may not want to print all of the content, so determine the
@@ -955,8 +946,7 @@ public class XMLOutputter implements Cloneable {
             if (nextNonText(content, start) < size) {
                 // Case Mixed Content - normal indentation
                 newline(out);
-                printContentRange(out, content, start, size,
-                                  level + 1, namespaces);
+                printContentRange(out, content, start, size, level + 1);
                 newline(out);
                 indent(out, level);
             }
@@ -967,11 +957,6 @@ public class XMLOutputter implements Cloneable {
             out.write("</");
             printQualifiedName(out, element);
             out.write(">");
-        }
-
-        // remove declared namespaces from stack
-        while (namespaces.size() > previouslyDeclaredNamespaces) {
-            namespaces.pop();
         }
 
         // Restore our format settings
@@ -992,8 +977,7 @@ public class XMLOutputter implements Cloneable {
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
     private void printContentRange(Writer out, List<? extends Content> content,
-                                     int start, int end, int level,
-                                     NamespaceStack namespaces)
+                                     int start, int end, int level)
                        throws IOException {
         boolean firstNode; // Flag for 1st node in content
         Object next;       // Node we're about to print
@@ -1035,7 +1019,7 @@ public class XMLOutputter implements Cloneable {
                 printComment(out, (Comment)next);
             }
             else if (next instanceof Element) {
-                printElement(out, (Element)next, level, namespaces);
+                printElement(out, (Element)next, level);
             }
             else if (next instanceof ProcessingInstruction) {
                 printProcessingInstruction(out, (ProcessingInstruction)next);
@@ -1132,16 +1116,10 @@ public class XMLOutputter implements Cloneable {
      * @param ns <code>Namespace</code> to print definition of
      * @param out <code>Writer</code> to use.
      */
-    private void printNamespace(Writer out, Namespace ns,
-                                NamespaceStack namespaces)
+    private void printNamespace(Writer out, Namespace ns)
                      throws IOException {
         String prefix = ns.getPrefix();
         String uri = ns.getURI();
-
-        // Already printed namespace decl?
-        if (uri.equals(namespaces.getURI(prefix))) {
-            return;
-        }
 
         out.write(" xmlns");
         if (!prefix.equals("")) {
@@ -1151,7 +1129,6 @@ public class XMLOutputter implements Cloneable {
         out.write("=\"");
         out.write(escapeAttributeEntities(uri));
         out.write("\"");
-        namespaces.push(ns);
     }
 
     /**
@@ -1160,8 +1137,7 @@ public class XMLOutputter implements Cloneable {
      * @param attributes <code>List</code> of Attribute objcts
      * @param out <code>Writer</code> to use
      */
-    protected void printAttributes(Writer out, List<Attribute> attributes,
-                                   NamespaceStack namespaces)
+    protected void printAttributes(Writer out, List<Attribute> attributes)
                        throws IOException {
 
         // I do not yet handle the case where the same prefix maps to
@@ -1169,13 +1145,7 @@ public class XMLOutputter implements Cloneable {
         // this is illegal; but as yet we don't throw an exception
         // if someone tries to do this
         // Set prefixes = new HashSet();
-        for (int i = 0; i < attributes.size(); i++) {
-            Attribute attribute = attributes.get(i);
-            Namespace ns = attribute.getNamespace();
-            if ((ns != Namespace.NO_NAMESPACE) &&
-                (ns != Namespace.XML_NAMESPACE)) {
-                    printNamespace(out, ns, namespaces);
-            }
+        for (Attribute attribute : attributes) {
 
             out.write(" ");
             printQualifiedName(out, attribute);
@@ -1187,33 +1157,29 @@ public class XMLOutputter implements Cloneable {
         }
     }
 
-    private void printElementNamespace(Writer out, Element element,
-                                       NamespaceStack namespaces)
+    private void printElementNamespaces(Writer out, Element element)
                              throws IOException {
         // Add namespace decl only if it's not the XML namespace and it's
         // not the NO_NAMESPACE with the prefix "" not yet mapped
         // (we do output xmlns="" if the "" prefix was already used and we
         // need to reclaim it for the NO_NAMESPACE)
-        Namespace ns = element.getNamespace();
-        if (ns == Namespace.XML_NAMESPACE) {
-            return;
-        }
-        if ( !((ns == Namespace.NO_NAMESPACE) &&
-               (namespaces.getURI("") == null))) {
-            printNamespace(out, ns, namespaces);
-        }
+    	for (Namespace ns : element.getNamespacesIntroduced()) {
+	        if (ns == Namespace.XML_NAMESPACE) {
+	        	// never print the XML namespace.
+	            continue;
+	        }
+	        // use the getParentElement() call here, because isRootElement()
+	        // returns 'false' for detached elements
+	        if (ns == Namespace.NO_NAMESPACE && element.getParentElement() == null) {
+	        	
+	        	// never print the NO-Namespace, unless it is overridden
+	        	// back at a lower level.
+	            continue;
+	        }
+            printNamespace(out, ns);
+    	}
     }
 
-    private void printAdditionalNamespaces(Writer out, Element element,
-                                           NamespaceStack namespaces)
-                                throws IOException {
-        List<Namespace> list = element.getAdditionalNamespaces();
-        if (list != null) {
-            for (Namespace additional : list) {
-                printNamespace(out, additional, namespaces);
-            }
-        }
-    }
 
     // * * * * * * * * * * Support methods * * * * * * * * * *
     // * * * * * * * * * * Support methods * * * * * * * * * *
@@ -1608,30 +1574,6 @@ public class XMLOutputter implements Cloneable {
             "lineSeparator = '" + buffer.toString() + "', " +
             "textMode = " + userFormat.mode + "]"
         );
-    }
-
-    /**
-     * Factory for making new NamespaceStack objects.  The NamespaceStack
-     * created is actually an inner class extending the package protected
-     * NamespaceStack, as a way to make NamespaceStack "friendly" toward
-     * subclassers.
-     */
-    private NamespaceStack createNamespaceStack() {
-       // actually returns a XMLOutputter.NamespaceStack (see below)
-       return new NamespaceStack();
-    }
-
-    /**
-     * Our own null subclass of NamespaceStack.  This plays a little
-     * trick with Java access protection.  We want subclasses of
-     * XMLOutputter to be able to override protected methods that
-     * declare a NamespaceStack parameter, but we don't want to
-     * declare the parent NamespaceStack class as public.
-     */
-    protected static class NamespaceStack
-        extends org.jdom2.output.NamespaceStack
-    {
-    	// do nothing, but read the Javadoc above.
     }
 
     // Support method to print a name without using elt.getQualifiedName()

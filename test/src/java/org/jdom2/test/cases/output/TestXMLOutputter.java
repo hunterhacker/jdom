@@ -414,7 +414,7 @@ public final class TestXMLOutputter {
 
 	@Test
 	public void testOutputElementNamespaces() {
-		String txt = "<ns:root xmlns:ns=\"myns\" xmlns:two=\"two\" xmlns:ans=\"attributens\" ans:att=\"val\" />";
+		String txt = "<ns:root xmlns:ns=\"myns\" xmlns:ans=\"attributens\" xmlns:two=\"two\" ans:att=\"val\" />";
 		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
 		Namespace ans = Namespace.getNamespace("ans", "attributens");
 		emt.setAttribute(new Attribute("att", "val", ans));

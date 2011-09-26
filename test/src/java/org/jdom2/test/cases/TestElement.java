@@ -1893,7 +1893,7 @@ public final class TestElement {
 
         //here is what we expect back after serialization
         String bufWithEmptyNS2 =
-                "<element xmlns=\"http://foo\" xmlns:foo=\"http://test1\" xmlns:bar=\"http://test2\"><child1 xmlns=\"\" anAttribute=\"no namespace\" /><child2 xmlns=\"\" xmlns:x=\"http://foo\" x:anAttribute=\"with namespace\"><descendent /></child2></element>";
+                "<element xmlns=\"http://foo\" xmlns:bar=\"http://test2\" xmlns:foo=\"http://test1\"><child1 xmlns=\"\" anAttribute=\"no namespace\" /><child2 xmlns=\"\" xmlns:x=\"http://foo\" x:anAttribute=\"with namespace\"><descendent /></child2></element>";
 
         Element elIn2 = UnitTestUtil.deSerialize(element2);
 

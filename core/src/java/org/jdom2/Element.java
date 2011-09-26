@@ -413,6 +413,10 @@ public class Element extends Content implements Parent {
 	 * Returns whether this element is a root element. This can be used in
 	 * tandem with {@link #getParent} to determine if an element has any
 	 * "attachments" to a parent element or document.
+	 * <p>
+	 * An element is a root element when it has a parent and that parent is a
+	 * Document. In particular, this means that detatched Elements are <b>not</b>
+	 * root elements.
 	 *
 	 * @return                     whether this is a root element
 	 */

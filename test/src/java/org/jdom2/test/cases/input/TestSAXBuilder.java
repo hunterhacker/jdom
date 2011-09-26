@@ -185,7 +185,7 @@ public final class TestSAXBuilder {
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof com.sun.org.apache.xerces.internal.parsers.SAXParser);
+			assertTrue(reader.getClass().getName().equals("com.sun.org.apache.xerces.internal.parsers.SAXParser"));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
