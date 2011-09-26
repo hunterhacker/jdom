@@ -54,12 +54,13 @@
 
 package org.jdom2.adapters;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
-import org.jdom2.*;
-import org.w3c.dom.*;
+import org.jdom2.DocType;
+import org.jdom2.JDOMException;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 
 /**
  * A DOMAdapter utility abstract base class.
@@ -76,7 +77,8 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws JDOMException when errors occur.
      */
-    public abstract Document createDocument() throws JDOMException;
+    @Override
+	public abstract Document createDocument() throws JDOMException;
 
     /**
      * This creates an empty <code>Document</code> object based
@@ -88,7 +90,8 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
      * @return <code>Document</code> - created DOM Document.
      * @throws JDOMException when errors occur.
      */
-    public Document createDocument(DocType doctype) throws JDOMException {
+    @Override
+	public Document createDocument(DocType doctype) throws JDOMException {
         if (doctype == null) {
             return createDocument();
         }
@@ -123,7 +126,7 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
         // reflection.  This method is not part of the DOM spec, but it's
         // available on Xerces 1.4.4+.  It's not currently in Crimson.
         try {
-            Class dtclass = dt.getClass();
+            Class<? extends DocumentType> dtclass = dt.getClass();
             Method setInternalSubset = dtclass.getMethod(
                 "setInternalSubset", String.class);
             setInternalSubset.invoke(dt, s);
