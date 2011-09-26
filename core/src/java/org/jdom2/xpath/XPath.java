@@ -102,7 +102,7 @@ public abstract class XPath implements Serializable {
     *
     * @see    #newInstance
     */
-   private static Constructor constructor = null;
+   private static Constructor<? extends XPath> constructor = null;
 
    /**
     * Creates a new XPath wrapper object, compiling the specified
@@ -125,10 +125,15 @@ public abstract class XPath implements Serializable {
                // Access to system property denied. => Use default impl.
                className = DEFAULT_XPATH_CLASS;
             }
-            setXPathClass(Class.forName(className));
+            @SuppressWarnings("unchecked")
+			Class<? extends XPath> useclass = (Class<? extends XPath>) Class.forName(className);
+            if (!XPath.class.isAssignableFrom(useclass)) {
+            	throw new JDOMException("Unable to create a JDOMXPath from class '" + className + "'.");
+            }
+            setXPathClass(useclass);
          }
          // Allocate and return new implementation instance.
-         return (XPath)constructor.newInstance(path);
+         return constructor.newInstance(path);
       }
       catch (JDOMException ex1) {
          throw ex1;
@@ -158,7 +163,7 @@ public abstract class XPath implements Serializable {
     *                                    not a concrete subclass
     *                                    of XPath.
     */
-   public static void setXPathClass(Class aClass) throws JDOMException {
+   public static void setXPathClass(Class<? extends XPath> aClass) throws JDOMException {
       if (aClass == null) {
          throw new IllegalArgumentException("aClass");
       }
@@ -199,7 +204,7 @@ public abstract class XPath implements Serializable {
      *                         expression on the specified context
      *                         failed.
      */
-   abstract public List selectNodes(Object context) throws JDOMException;
+   abstract public List<?> selectNodes(Object context) throws JDOMException;
 
     /**
      * Evaluates the wrapped XPath expression and returns the first
@@ -334,7 +339,7 @@ public abstract class XPath implements Serializable {
     *                         its evaluation on the specified context
     *                         failed.
     */
-   public static List selectNodes(Object context, String path)
+   public static List<?> selectNodes(Object context, String path)
                                                         throws JDOMException {
       return newInstance(path).selectNodes(context);
    }
