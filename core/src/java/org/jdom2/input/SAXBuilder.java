@@ -973,29 +973,6 @@ public class SAXBuilder {
         return build(new InputSource(systemId));
     }
 
-//    /**
-//     * Imitation of File.toURL(), a JDK 1.2 method, reimplemented
-//     * here to work with JDK 1.1.
-//     *
-//     * @see java.io.File
-//     *
-//     * @param f the file to convert
-//     * @return the file path converted to a file: URL
-//     */
-//    protected URL fileToURL(File f) throws MalformedURLException {
-//        String path = f.getAbsolutePath();
-//        if (File.separatorChar != '/') {
-//            path = path.replace(File.separatorChar, '/');
-//        }
-//        if (!path.startsWith("/")) {
-//            path = "/" + path;
-//        }
-//        if (!path.endsWith("/") && f.isDirectory()) {
-//            path = path + "/";
-//        }
-//        return new URL("file", "", path);
-//    }
-
     /** Custom File.toUrl() implementation to handle special chars in file names
      *
      * @param file file object whose path will be converted
@@ -1003,54 +980,9 @@ public class SAXBuilder {
      * @throws MalformedURLException if there's a problem constructing a URL
      */
     private static URL fileToURL(File file) throws MalformedURLException {
-        StringBuffer buffer = new StringBuffer();
-        String path = file.getAbsolutePath();
-
-        // Convert non-URL style file separators
-        if (File.separatorChar != '/') {
-            path = path.replace(File.separatorChar, '/');
-        }
-
-        // Make sure it starts at root
-        if (!path.startsWith("/")) {
-            buffer.append('/');
-        }
-
-        // Copy, converting URL special characters as we go
-        int len = path.length();
-        for (int i = 0; i < len; i++) {
-            char c = path.charAt(i);
-            if (c == ' ')
-                buffer.append("%20");
-            else if (c == '#')
-                buffer.append("%23");
-            else if (c == '%')
-                buffer.append("%25");
-            else if (c == '&')
-                buffer.append("%26");
-            else if (c == ';')
-                buffer.append("%3B");
-            else if (c == '<')
-                buffer.append("%3C");
-            else if (c == '=')
-                buffer.append("%3D");
-            else if (c == '>')
-                buffer.append("%3E");
-            else if (c == '?')
-                buffer.append("%3F");
-            else if (c == '~')
-                buffer.append("%7E");
-            else
-                buffer.append(c);
-        }
-
-        // Make sure directories end with slash
-        if (!path.endsWith("/") && file.isDirectory()) {
-            buffer.append('/');
-        }
-
-        // Return URL
-        return new URL("file", "", buffer.toString());
+    	
+    	return file.getAbsoluteFile().toURI().toURL();
+    	
     }
 
     /**
