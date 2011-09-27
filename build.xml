@@ -166,9 +166,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<target name="prepare-src" depends="prepare">
 		<!-- copy src files -->
-		<copy todir="${about.build}" filtering="yes">
-			<fileset dir="${about.src}"/>
-		</copy>
 		<copy todir="${samples.build}" filtering="yes">
 			<fileset dir="${samples.src}"/>
 		</copy>
@@ -191,20 +188,6 @@ For instructions on how to build JDOM, please view the README.txt file.
            source="${compile.source}"
            deprecation="${compile.deprecation}" includeantruntime="false">
 			<classpath refid="base.class.path"/>
-		</javac>
-	</target>
-
-	<target name="compile.about" depends="prepare-src"
-          description="Compiles the about source code">
-
-		<javac srcdir="${about.build}"
-           destdir="${about.build}"
-           debug="${compile.debug}"
-           optimize="${compile.optimize}"
-           target="${compile.target}"
-           source="${compile.source}"
-           deprecation="${compile.deprecation}">
-			<classpath refid="core.class.path"/>
 		</javac>
 	</target>
 
@@ -255,14 +238,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</javac>
 	</target>
 	
-	<target name="compile" depends="compile.core, compile.about, compile.junit, compile.contrib, compile.samples"
+	<target name="compile" depends="compile.core, compile.junit, compile.contrib, compile.samples"
 	 		description="Compiles all JDOM code (core, samples, junit, contrib)" />
-
-	<!-- =================================================================== -->
-	<!-- Compiles the "About" code                                           -->
-	<!-- =================================================================== -->
-	<target name="about" depends="compile.about"
-          description="Compiles the About code" />
 
 	<!-- =================================================================== -->
 	<!-- Creates the class package                                           -->
@@ -299,7 +276,7 @@ For instructions on how to build JDOM, please view the README.txt file.
           description="Creates the API documentation">
 		<mkdir dir="${build.javadocs}"/>
 		<javadoc packagenames="${packages}"
-             sourcepath="${core.build}"
+             sourcepath="${core.src}"
              destdir="${build.javadocs}"
              author="true"
              version="true"
