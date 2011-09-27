@@ -74,9 +74,9 @@ public class DescendantDemo {
         Document doc = builder.build(args[0]);
 
         System.out.println("All content:");
-        Iterator itr = doc.getDescendants();
+        Iterator<? extends Content> itr = doc.getDescendants();
         while (itr.hasNext()) {
-            Content c = (Content) itr.next();
+            Content c = itr.next();
             System.out.println(c);
         }
 
@@ -84,7 +84,7 @@ public class DescendantDemo {
         System.out.println("Only elements:");
         itr = doc.getDescendants(new ElementFilter());
         while (itr.hasNext()) {
-            Content c = (Content) itr.next();
+            Content c = itr.next();
             System.out.println(c);
         }
 
@@ -92,7 +92,7 @@ public class DescendantDemo {
         System.out.println("Everything that's not an element:");
         itr = doc.getDescendants(new ElementFilter().negate());
         while (itr.hasNext()) {
-            Content c = (Content) itr.next();
+            Content c = itr.next();
             System.out.println(c);
         }
 
@@ -100,7 +100,7 @@ public class DescendantDemo {
         System.out.println("Only elements with localname of servlet:");
         itr = doc.getDescendants(new ElementFilter("servlet"));
         while (itr.hasNext()) {
-            Content c = (Content) itr.next();
+            Content c = itr.next();
             System.out.println(c);
         }
 
@@ -110,7 +110,7 @@ public class DescendantDemo {
         itr = doc.getDescendants(new ElementFilter("servlet-name")
                                  .or(new ElementFilter("servlet-class")));
         while (itr.hasNext()) {
-            Content c = (Content) itr.next();
+            Content c = itr.next();
             System.out.println(c);
         }
 

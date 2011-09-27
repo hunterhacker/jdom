@@ -120,7 +120,7 @@ public class DataUnformatFilter extends XMLFilterBase
     public void reset ()
     {
         state = SEEN_NOTHING;
-        stateStack = new Stack();
+        stateStack = new Stack<Object>();
         whitespace = new StringBuffer();
     }
 
@@ -140,7 +140,8 @@ public class DataUnformatFilter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ContentHandler#startDocument
      */
-    public void startDocument ()
+    @Override
+	public void startDocument ()
     throws SAXException
     {
         reset();
@@ -159,7 +160,8 @@ public class DataUnformatFilter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement (String uri, String localName,
+    @Override
+	public void startElement (String uri, String localName,
                               String qName, Attributes atts)
     throws SAXException
     {
@@ -180,7 +182,8 @@ public class DataUnformatFilter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ContentHandler#endElement
      */
-    public void endElement (String uri, String localName, String qName)
+    @Override
+	public void endElement (String uri, String localName, String qName)
     throws SAXException
     {
         if (state == SEEN_ELEMENT) {
@@ -203,7 +206,8 @@ public class DataUnformatFilter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ContentHandler#characters
      */
-    public void characters (char ch[], int start, int length)
+    @Override
+	public void characters (char ch[], int start, int length)
     throws SAXException
     {
         if (state != SEEN_DATA) {
@@ -248,7 +252,8 @@ public class DataUnformatFilter extends XMLFilterBase
       *            further down the chain raises an exception.
       * @see org.xml.sax.ContentHandler#ignorableWhitespace
       */
-    public void ignorableWhitespace (char ch[], int start, int length)
+    @Override
+	public void ignorableWhitespace (char ch[], int start, int length)
     throws SAXException
     {
         emitWhitespace();
@@ -265,7 +270,8 @@ public class DataUnformatFilter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ContentHandler#processingInstruction
      */
-    public void processingInstruction (String target, String data)
+    @Override
+	public void processingInstruction (String target, String data)
     throws SAXException
     {
         emitWhitespace();
@@ -333,7 +339,7 @@ public class DataUnformatFilter extends XMLFilterBase
     ////////////////////////////////////////////////////////////////////
 
     private Object state = SEEN_NOTHING;
-    private Stack stateStack = new Stack();
+    private Stack<Object> stateStack = new Stack<Object>();
 
     private StringBuffer whitespace = new StringBuffer();
 

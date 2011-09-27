@@ -87,37 +87,37 @@ public class WarReader {
     Element root = doc.getRootElement();
 
     // Print servlet information
-    List servlets = root.getChildren("servlet");
+    List<Element> servlets = root.getChildren("servlet");
     out.println("This WAR has "+ servlets.size() +" registered servlets:");
-    Iterator i = servlets.iterator();
+    Iterator<Element> i = servlets.iterator();
     while (i.hasNext()) {
-      Element servlet = (Element) i.next();
+      Element servlet = i.next();
       out.print("\t" + servlet.getChild("servlet-name")
                               .getTextTrim() +
                 " for " + servlet.getChild("servlet-class")
                                  .getTextTrim());
-      List initParams = servlet.getChildren("init-param");
+      List<Element> initParams = servlet.getChildren("init-param");
       out.println(" (it has " + initParams.size() + " init params)");
     }
 
     // Print security role information
-    List securityRoles = root.getChildren("security-role");
+    List<Element> securityRoles = root.getChildren("security-role");
     if (securityRoles.size() == 0) {
       out.println("This WAR contains no roles");
     }
     else {
-      Element securityRole = (Element) securityRoles.get(0);
-      List roleNames = securityRole.getChildren("role-name");
+      Element securityRole = securityRoles.get(0);
+      List<Element> roleNames = securityRole.getChildren("role-name");
       out.println("This WAR contains " + roleNames.size() + " roles:");
       i = roleNames.iterator();
       while (i.hasNext()) {
-        Element e = (Element) i.next();
+        Element e = i.next();
         out.println("\t" + e.getTextTrim());
       }
     }
         
     // Print distributed information (notice this is out of order)
-    List distrib = root.getChildren("distributed");
+    List<Element> distrib = root.getChildren("distributed");
     if (distrib.size() == 0) {
       out.println("This WAR is not distributed");
     } else {

@@ -504,7 +504,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            cannot set the requested value.
      * @see org.xml.sax.XMLReader#setProperty
      */
-    public void setProperty (String name, Object value)
+    @Override
+	public void setProperty (String name, Object value)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
@@ -529,7 +530,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            cannot determine its value at this time.
      * @see org.xml.sax.XMLReader#setFeature
      */
-    public Object getProperty (String name)
+    @Override
+	public Object getProperty (String name)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
@@ -552,7 +554,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            supplied by the application.
      * @see org.xml.sax.XMLReader#parse(org.xml.sax.InputSource)
      */
-    public void parse (InputSource input)
+    @Override
+	public void parse (InputSource input)
     throws SAXException, IOException
     {
         installLexicalHandler();
@@ -577,9 +580,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
     {
         if (handler == null) {
             throw new NullPointerException("Null lexical handler");
-        } else {
-            lexicalHandler = handler;
         }
+        lexicalHandler = handler;
     }
     
     
@@ -612,7 +614,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startDTD
      */
-    public void startDTD(String name, String publicId, String systemId)
+    @Override
+	public void startDTD(String name, String publicId, String systemId)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startDTD(name, publicId, systemId);
@@ -627,7 +630,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endDTD
      */
-    public void endDTD()
+    @Override
+	public void endDTD()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endDTD();
@@ -645,7 +649,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startEntity
      */
-    public void startEntity(String name)
+    @Override
+	public void startEntity(String name)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startEntity(name);
@@ -661,7 +666,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endEntity
      */
-    public void endEntity(String name)
+    @Override
+	public void endEntity(String name)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endEntity(name);
@@ -676,7 +682,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startCDATA
      */
-    public void startCDATA()
+    @Override
+	public void startCDATA()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startCDATA();
@@ -691,7 +698,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endCDATA
      */
-    public void endCDATA()
+    @Override
+	public void endCDATA()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endCDATA();
@@ -709,7 +717,8 @@ public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#comment
      */
-    public void comment(char[] ch, int start, int length)
+    @Override
+	public void comment(char[] ch, int start, int length)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.comment(ch, start, length);

@@ -81,23 +81,23 @@ public class XPathReader {
 
         // Print servlet information
         XPath servletPath = XPath.newInstance("//servlet");
-        List servlets = servletPath.selectNodes(doc);
+        List<?> servlets = servletPath.selectNodes(doc);
 
         out.println("This WAR has "+ servlets.size() +" registered servlets:");
-        Iterator i = servlets.iterator();
+        Iterator<?> i = servlets.iterator();
         while (i.hasNext()) {
             Element servlet = (Element) i.next();
             out.print("\t" + servlet.getChild("servlet-name")
                                     .getTextTrim() +
                       " for " + servlet.getChild("servlet-class")
                                        .getTextTrim());
-            List initParams = servlet.getChildren("init-param");
+            List<Element> initParams = servlet.getChildren("init-param");
             out.println(" (it has " + initParams.size() + " init params)"); 
         }
             
         // Print security role information
         XPath rolePath = XPath.newInstance("//security-role/role-name/text()");
-        List roleNames = rolePath.selectNodes(doc);
+        List<?> roleNames = rolePath.selectNodes(doc);
 
         if (roleNames.size() == 0) {
             out.println("This WAR contains no roles");

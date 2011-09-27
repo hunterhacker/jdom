@@ -74,7 +74,8 @@ public class DocumentReader extends XMLReaderBase {
         this.doc = doc;
     }
 
-    public void parse(InputSource input) throws SAXException, IOException {
+    @Override
+	public void parse(InputSource input) throws SAXException, IOException {
         SAXOutputter outputter = new SAXOutputter(this, this, this, this, this);
         try {
             outputter.output(doc);

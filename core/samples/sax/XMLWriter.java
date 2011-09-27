@@ -334,9 +334,9 @@ public class XMLWriter extends XMLFilterBase
     {
         setOutput(writer);
         nsSupport = new NamespaceSupport();
-        prefixTable = new HashMap();
-        forcedDeclTable = new HashMap();
-        doneDeclTable = new HashMap();
+        prefixTable = new HashMap<String, String>();
+        forcedDeclTable = new HashMap<String, Boolean>();
+        doneDeclTable = new HashMap<String, String>();
     }
 
 
@@ -443,7 +443,7 @@ public class XMLWriter extends XMLFilterBase
      */
     public String getPrefix (String uri)
     {
-        return (String)prefixTable.get(uri);
+        return prefixTable.get(uri);
     }
 
 
@@ -505,7 +505,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#startDocument
      */
-    public void startDocument ()
+    @Override
+	public void startDocument ()
     throws SAXException
     {
         reset();
@@ -525,7 +526,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#endDocument
      */
-    public void endDocument ()
+    @Override
+	public void endDocument ()
     throws SAXException
     {
         closeElement();
@@ -558,7 +560,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement (String uri, String localName,
+    @Override
+	public void startElement (String uri, String localName,
                               String qName, Attributes atts)
     throws SAXException
     {
@@ -595,7 +598,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#endElement
      */
-    public void endElement (String uri, String localName, String qName)
+    @Override
+	public void endElement (String uri, String localName, String qName)
     throws SAXException
     {
         if (openElement) {
@@ -628,7 +632,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#characters
      */
-    public void characters (char ch[], int start, int len)
+    @Override
+	public void characters (char ch[], int start, int len)
     throws SAXException
     {
         closeElement();
@@ -650,7 +655,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#ignorableWhitespace
      */
-    public void ignorableWhitespace (char ch[], int start, int length)
+    @Override
+	public void ignorableWhitespace (char ch[], int start, int length)
     throws SAXException
     {
         closeElement();
@@ -672,7 +678,8 @@ public class XMLWriter extends XMLFilterBase
      *            the filter chain raises an exception.
      * @see org.xml.sax.ContentHandler#processingInstruction
      */
-    public void processingInstruction (String target, String data)
+    @Override
+	public void processingInstruction (String target, String data)
     throws SAXException
     {
         closeElement();
@@ -708,7 +715,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startDTD
      */
-    public void startDTD(String name, String publicId, String systemId)
+    @Override
+	public void startDTD(String name, String publicId, String systemId)
     throws SAXException {
       //closeElement();
         inDTD = true;
@@ -742,7 +750,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endDTD
      */
-    public void endDTD()
+    @Override
+	public void endDTD()
     throws SAXException {
         inDTD = false;
         super.endDTD();
@@ -761,7 +770,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startEntity
      */
-    public void startEntity(String name)
+    @Override
+	public void startEntity(String name)
     throws SAXException {
         closeElement();
         write('&');
@@ -781,7 +791,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endEntity
      */
-    public void endEntity(String name)
+    @Override
+	public void endEntity(String name)
     throws SAXException {
         super.endEntity(name);
     }
@@ -796,7 +807,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startCDATA
      */
-    public void startCDATA()
+    @Override
+	public void startCDATA()
     throws SAXException {
         closeElement();
         write("<![CDATA[");
@@ -813,7 +825,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endCDATA
      */
-    public void endCDATA()
+    @Override
+	public void endCDATA()
     throws SAXException {
         write("]]>");
         super.endCDATA();
@@ -832,7 +845,8 @@ public class XMLWriter extends XMLFilterBase
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#comment
      */
-    public void comment(char[] ch, int start, int length)
+    @Override
+	public void comment(char[] ch, int start, int length)
     throws SAXException {
         if (!inDTD) {
             closeElement();
@@ -861,9 +875,9 @@ public class XMLWriter extends XMLFilterBase
      */
     private void forceNSDecls ()
     {
-        Iterator prefixes = forcedDeclTable.keySet().iterator();
+        Iterator<String> prefixes = forcedDeclTable.keySet().iterator();
         while (prefixes.hasNext()) {
-            String prefix = (String)prefixes.next();
+            String prefix = prefixes.next();
             doPrefix(prefix, null, true);
         }
     }
@@ -899,14 +913,14 @@ public class XMLWriter extends XMLFilterBase
         if (prefix != null) {
             return prefix;
         }
-        prefix = (String) doneDeclTable.get(uri);
+        prefix = doneDeclTable.get(uri);
         if (prefix != null &&
         ((!isElement || defaultNS != null) &&
         "".equals(prefix) || nsSupport.getURI(prefix) != null)) {
             prefix = null;
         }
         if (prefix == null) {
-            prefix = (String) prefixTable.get(uri);
+            prefix = prefixTable.get(uri);
             if (prefix != null &&
             ((!isElement || defaultNS != null) &&
             "".equals(prefix) || nsSupport.getURI(prefix) != null)) {
@@ -926,7 +940,7 @@ public class XMLWriter extends XMLFilterBase
         for (;
         prefix == null || nsSupport.getURI(prefix) != null;
         prefix = "__NS" + ++prefixCounter)
-        ;
+        
         nsSupport.declarePrefix(prefix, uri);
         doneDeclTable.put(uri, prefix);
         return prefix;
@@ -1075,7 +1089,7 @@ public class XMLWriter extends XMLFilterBase
     private void writeNSDecls ()
     throws SAXException
     {
-        Enumeration prefixes = nsSupport.getDeclaredPrefixes();
+        Enumeration<?> prefixes = nsSupport.getDeclaredPrefixes();
         while (prefixes.hasMoreElements()) {
             String prefix = (String) prefixes.nextElement();
             String uri = nsSupport.getURI(prefix);
@@ -1140,9 +1154,9 @@ public class XMLWriter extends XMLFilterBase
     // Internal state.
     ////////////////////////////////////////////////////////////////////
 
-    private Map prefixTable;
-    private Map forcedDeclTable;
-    private Map doneDeclTable;
+    private Map<String,String> prefixTable;
+    private Map<String,Boolean> forcedDeclTable;
+    private Map<String,String> doneDeclTable;
     private boolean openElement = false;
     private int elementLevel = 0;
     private Writer output;

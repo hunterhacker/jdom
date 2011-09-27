@@ -452,7 +452,8 @@ implements LexicalHandler, XMLReader
      *            cannot set the requested value.
      * @see org.xml.sax.XMLReader#setFeature
      */
-    public void setFeature (String name, boolean state)
+    @Override
+	public void setFeature (String name, boolean state)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         throw new SAXNotRecognizedException("Feature: " + name);
@@ -473,7 +474,8 @@ implements LexicalHandler, XMLReader
      *            cannot determine its state at this time.
      * @see org.xml.sax.XMLReader#getFeature
      */
-    public boolean getFeature (String name)
+    @Override
+	public boolean getFeature (String name)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         throw new SAXNotRecognizedException("Feature: " + name);
@@ -494,7 +496,8 @@ implements LexicalHandler, XMLReader
      *            cannot set the requested value.
      * @see org.xml.sax.XMLReader#setProperty
      */
-    public void setProperty (String name, Object value)
+    @Override
+	public void setProperty (String name, Object value)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
@@ -521,7 +524,8 @@ implements LexicalHandler, XMLReader
      *            cannot determine its value at this time.
      * @see org.xml.sax.XMLReader#setFeature
      */
-    public Object getProperty (String name)
+    @Override
+	public Object getProperty (String name)
     throws SAXNotRecognizedException, SAXNotSupportedException
     {
         for (int i = 0; i < LEXICAL_HANDLER_NAMES.length; i++) {
@@ -544,7 +548,8 @@ implements LexicalHandler, XMLReader
      *            supplied by the application.
      * @see org.xml.sax.XMLReader#parse(org.xml.sax.InputSource)
      */
-    public abstract void parse (InputSource input)
+    @Override
+	public abstract void parse (InputSource input)
     throws SAXException, IOException;
 
 
@@ -559,7 +564,8 @@ implements LexicalHandler, XMLReader
      *            supplied by the application.
      * @see org.xml.sax.XMLReader#parse(java.lang.String)
      */
-    public void parse (String systemId)
+    @Override
+	public void parse (String systemId)
     throws SAXException, IOException
     {
         parse(new InputSource(systemId));
@@ -574,13 +580,13 @@ implements LexicalHandler, XMLReader
      *            is null.
      * @see org.xml.sax.XMLReader#setEntityResolver
      */
-    public void setEntityResolver (EntityResolver resolver)
+    @Override
+	public void setEntityResolver (EntityResolver resolver)
     {
         if (resolver == null) {
             throw new NullPointerException("Null entity resolver");
-        } else {
-            entityResolver = resolver;
         }
+        entityResolver = resolver;
     }
     
     
@@ -590,7 +596,8 @@ implements LexicalHandler, XMLReader
      * @return The current entity resolver, or null if none was set.
      * @see org.xml.sax.XMLReader#getEntityResolver
      */
-    public EntityResolver getEntityResolver ()
+    @Override
+	public EntityResolver getEntityResolver ()
     {
         return entityResolver;
     }
@@ -604,13 +611,13 @@ implements LexicalHandler, XMLReader
      *            is null.
      * @see org.xml.sax.XMLReader#setDTDHandler
      */
-    public void setDTDHandler (DTDHandler handler)
+    @Override
+	public void setDTDHandler (DTDHandler handler)
     {
         if (handler == null) {
             throw new NullPointerException("Null DTD handler");
-        } else {
-            dtdHandler = handler;
         }
+        dtdHandler = handler;
     }
     
     
@@ -620,7 +627,8 @@ implements LexicalHandler, XMLReader
      * @return The current DTD handler, or null if none was set.
      * @see org.xml.sax.XMLReader#getDTDHandler
      */
-    public DTDHandler getDTDHandler ()
+    @Override
+	public DTDHandler getDTDHandler ()
     {
         return dtdHandler;
     }
@@ -634,13 +642,13 @@ implements LexicalHandler, XMLReader
      *            is null.
      * @see org.xml.sax.XMLReader#setContentHandler
      */
-    public void setContentHandler (ContentHandler handler)
+    @Override
+	public void setContentHandler (ContentHandler handler)
     {
         if (handler == null) {
             throw new NullPointerException("Null content handler");
-        } else {
-            contentHandler = handler;
         }
+        contentHandler = handler;
     }
     
     
@@ -650,7 +658,8 @@ implements LexicalHandler, XMLReader
      * @return The current content handler, or null if none was set.
      * @see org.xml.sax.XMLReader#getContentHandler
      */
-    public ContentHandler getContentHandler ()
+    @Override
+	public ContentHandler getContentHandler ()
     {
         return contentHandler;
     }
@@ -664,13 +673,13 @@ implements LexicalHandler, XMLReader
      *            is null.
      * @see org.xml.sax.XMLReader#setErrorHandler
      */
-    public void setErrorHandler (ErrorHandler handler)
+    @Override
+	public void setErrorHandler (ErrorHandler handler)
     {
         if (handler == null) {
             throw new NullPointerException("Null error handler");
-        } else {
-            errorHandler = handler;
         }
+        errorHandler = handler;
     }
     
     
@@ -680,7 +689,8 @@ implements LexicalHandler, XMLReader
      * @return The current error handler, or null if none was set.
      * @see org.xml.sax.XMLReader#getErrorHandler
      */
-    public ErrorHandler getErrorHandler ()
+    @Override
+	public ErrorHandler getErrorHandler ()
     {
         return errorHandler;
     }
@@ -703,9 +713,8 @@ implements LexicalHandler, XMLReader
     {
         if (handler == null) {
             throw new NullPointerException("Null lexical handler");
-        } else {
-            lexicalHandler = handler;
         }
+        lexicalHandler = handler;
     }
     
     
@@ -739,7 +748,8 @@ implements LexicalHandler, XMLReader
      *            new InputSource.
      * @see org.xml.sax.EntityResolver#resolveEntity
      */
-    public InputSource resolveEntity (String publicId, String systemId)
+    @Override
+	public InputSource resolveEntity (String publicId, String systemId)
     throws SAXException /* IOException added in SAX2.01 bugfix release */
     {
         if (entityResolver != null) {
@@ -749,9 +759,8 @@ implements LexicalHandler, XMLReader
             catch (IOException ex) {
                 throw new SAXException(ex);
             }
-        } else {
-            return null;
         }
+        return null;
     }
     
     
@@ -771,7 +780,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.DTDHandler#notationDecl
      */
-    public void notationDecl (String name, String publicId, String systemId)
+    @Override
+	public void notationDecl (String name, String publicId, String systemId)
     throws SAXException
     {
         if (dtdHandler != null) {
@@ -791,7 +801,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.DTDHandler#unparsedEntityDecl
      */
-    public void unparsedEntityDecl (String name, String publicId,
+    @Override
+	public void unparsedEntityDecl (String name, String publicId,
     String systemId, String notationName)
     throws SAXException
     {
@@ -814,9 +825,10 @@ implements LexicalHandler, XMLReader
      * @param locator The document locator.
      * @see org.xml.sax.ContentHandler#setDocumentLocator
      */
-    public void setDocumentLocator (Locator locator)
+    @Override
+	public void setDocumentLocator (Locator locator)
     {
-        this.locator = locator;
+        //this.locator = locator;
         if (contentHandler != null) {
             contentHandler.setDocumentLocator(locator);
         }
@@ -830,7 +842,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#startDocument
      */
-    public void startDocument ()
+    @Override
+	public void startDocument ()
     throws SAXException
     {
         if (contentHandler != null) {
@@ -846,7 +859,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#endDocument
      */
-    public void endDocument ()
+    @Override
+	public void endDocument ()
     throws SAXException
     {
         if (contentHandler != null) {
@@ -864,7 +878,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#startPrefixMapping
      */
-    public void startPrefixMapping (String prefix, String uri)
+    @Override
+	public void startPrefixMapping (String prefix, String uri)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -881,7 +896,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#endPrefixMapping
      */
-    public void endPrefixMapping (String prefix)
+    @Override
+	public void endPrefixMapping (String prefix)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -902,7 +918,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement (String uri, String localName, String qName,
+    @Override
+	public void startElement (String uri, String localName, String qName,
     Attributes atts)
     throws SAXException
     {
@@ -923,7 +940,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#endElement
      */
-    public void endElement (String uri, String localName, String qName)
+    @Override
+	public void endElement (String uri, String localName, String qName)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -942,7 +960,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#characters
      */
-    public void characters (char ch[], int start, int length)
+    @Override
+	public void characters (char ch[], int start, int length)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -961,7 +980,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#ignorableWhitespace
      */
-    public void ignorableWhitespace (char ch[], int start, int length)
+    @Override
+	public void ignorableWhitespace (char ch[], int start, int length)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -979,7 +999,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#processingInstruction
      */
-    public void processingInstruction (String target, String data)
+    @Override
+	public void processingInstruction (String target, String data)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -996,7 +1017,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ContentHandler#skippedEntity
      */
-    public void skippedEntity (String name)
+    @Override
+	public void skippedEntity (String name)
     throws SAXException
     {
         if (contentHandler != null) {
@@ -1019,7 +1041,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ErrorHandler#warning
      */
-    public void warning (SAXParseException e)
+    @Override
+	public void warning (SAXParseException e)
     throws SAXException
     {
         if (errorHandler != null) {
@@ -1036,7 +1059,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ErrorHandler#error
      */
-    public void error (SAXParseException e)
+    @Override
+	public void error (SAXParseException e)
     throws SAXException
     {
         if (errorHandler != null) {
@@ -1053,7 +1077,8 @@ implements LexicalHandler, XMLReader
      *            an exception during processing.
      * @see org.xml.sax.ErrorHandler#fatalError
      */
-    public void fatalError (SAXParseException e)
+    @Override
+	public void fatalError (SAXParseException e)
     throws SAXException
     {
         if (errorHandler != null) {
@@ -1080,7 +1105,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startDTD
      */
-    public void startDTD(String name, String publicId, String systemId)
+    @Override
+	public void startDTD(String name, String publicId, String systemId)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startDTD(name, publicId, systemId);
@@ -1095,7 +1121,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endDTD
      */
-    public void endDTD()
+    @Override
+	public void endDTD()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endDTD();
@@ -1113,7 +1140,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startEntity
      */
-    public void startEntity(String name)
+    @Override
+	public void startEntity(String name)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startEntity(name);
@@ -1129,7 +1157,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endEntity
      */
-    public void endEntity(String name)
+    @Override
+	public void endEntity(String name)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endEntity(name);
@@ -1144,7 +1173,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#startCDATA
      */
-    public void startCDATA()
+    @Override
+	public void startCDATA()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.startCDATA();
@@ -1159,7 +1189,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#endCDATA
      */
-    public void endCDATA()
+    @Override
+	public void endCDATA()
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.endCDATA();
@@ -1177,7 +1208,8 @@ implements LexicalHandler, XMLReader
      *            further down the chain raises an exception.
      * @see org.xml.sax.ext.LexicalHandler#comment
      */
-    public void comment(char[] ch, int start, int length)
+    @Override
+	public void comment(char[] ch, int start, int length)
     throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.comment(ch, start, length);
@@ -1190,7 +1222,7 @@ implements LexicalHandler, XMLReader
     // Internal state.
     ////////////////////////////////////////////////////////////////////
 
-    private Locator locator = null;
+    //private Locator locator = null;
     private EntityResolver entityResolver = null;
     private DTDHandler dtdHandler = null;
     private ContentHandler contentHandler = null;
