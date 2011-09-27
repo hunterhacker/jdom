@@ -1164,10 +1164,6 @@ public class XMLOutputter implements Cloneable {
         // (we do output xmlns="" if the "" prefix was already used and we
         // need to reclaim it for the NO_NAMESPACE)
     	for (Namespace ns : element.getNamespacesIntroduced()) {
-	        if (ns == Namespace.XML_NAMESPACE) {
-	        	// never print the XML namespace.
-	            continue;
-	        }
 	        // use the getParentElement() call here, because isRootElement()
 	        // returns 'false' for detached elements
 	        if (ns == Namespace.NO_NAMESPACE && element.getParentElement() == null) {

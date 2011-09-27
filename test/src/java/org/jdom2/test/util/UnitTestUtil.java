@@ -1,6 +1,7 @@
 package org.jdom2.test.util;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -11,15 +12,90 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 import org.jdom2.Attribute;
+import org.jdom2.Content;
 import org.jdom2.Element;
+import org.jdom2.Namespace;
 
 public class UnitTestUtil {
+	
+	public static final void testNamespaceIntro(Content content, Namespace...expect) {
+		List<Namespace> intro = content.getNamespacesIntroduced();
+		List<Namespace> exp = Arrays.asList(expect);
+		
+		if (!exp.equals(intro)) {
+			fail("We expect Introduced equal the Expected Namespaces." +
+					"\n   Introduced: " + intro.toString() +
+					"\n   Expected:   " + exp.toString());
+		}
+	}
+	
+	public static final void testNamespaceScope(Content content, Namespace...expect) {
+		List<Namespace> introduced = content.getNamespacesIntroduced();
+		List<Namespace> inscope = new ArrayList<Namespace>(content.getNamespacesInScope());
+		List<Namespace> inherited = content.getNamespacesInherited();
+		
+		if (introduced.size() + inherited.size() != inscope.size()) {
+			fail(String.format("InScope Namespaces do not add up: InScope=%d Inherited=%d, Introduced=%d",
+					inscope.size(), inherited.size(), introduced.size()));
+		}
+		int inher = 0;
+		int intro = 0;
+		for (Namespace ns : inscope) {
+			if (inher < inherited.size() && inherited.get(inher) == ns) {
+				inher++;
+			}
+			if (intro < introduced.size() && introduced.get(intro) == ns) {
+				intro++;
+			}
+		}
+		if (intro < introduced.size()) {
+			// we are missing content(or it is out of order) in the lists.
+			fail("Introduced list contains out-of-order, or non-intersecting Namespaces." +
+					"\n   InScope:    " + inscope.toString() +
+					"\n   Introduced: " + introduced.toString());
+		}
+		if (inher < inherited.size()) {
+			// we are missing content(or it is out of order) in the lists.
+			fail("Inherited list contains out-of-order, or non-intersecting Namespaces." +
+					"\n   InScope:   " + inscope.toString() +
+					"\n   Inherited: " + inherited.toString());
+		}
+		
+		
+		int i = 0;
+		for (Namespace ns : inscope) {
+			if (i >= expect.length) {
+				fail("We have additional Namespaces " + inscope.subList(i, inscope.size()));
+			}
+			if (expect[i] != ns) {
+				assertEquals("InScope differs from Expected at index " + i, expect[i], ns);
+			}
+			i++;
+		}
+		if (i < expect.length) {
+			ArrayList<Namespace> missing = new ArrayList<Namespace>(expect.length - i);
+			while (i < expect.length) {
+				missing.add(expect[i++]);
+			}
+			fail("InScope is missing Namespaces " + missing);
+		}
+		
+		inscope.removeAll(introduced);
+		if (!inscope.equals(inherited)) {
+			fail("We expect InScope - Introduced to equal Inherited." +
+					"\n   InScope:   " + inscope.toString() +
+					"\n   Inherited: " + inherited.toString());
+		}
+		
+	}
 	
 	/**
 	 * Serialize, then deserialize an instance object.

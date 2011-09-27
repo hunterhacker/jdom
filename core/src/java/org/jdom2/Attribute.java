@@ -54,7 +54,10 @@
 
 package org.jdom2;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -642,9 +645,12 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	@Override
 	public List<Namespace> getNamespacesInScope() {
 		if (getParent() == null) {
-			return Collections.singletonList(getNamespace());
+			ArrayList<Namespace> ret = new ArrayList<Namespace>(3);
+			ret.add(getNamespace());
+			ret.add(Namespace.XML_NAMESPACE);
+			return Collections.unmodifiableList(ret);
 		}
-		return getParent().getNamespacesInScope();
+		return orderFirst(getNamespace(), getParent().getNamespacesInScope());
 	}
 
 	@Override
@@ -654,20 +660,23 @@ public class Attribute extends Content implements Serializable, Cloneable {
 		}
 		return Collections.emptyList();
 	}
-
+	
 	@Override
 	public List<Namespace> getNamespacesInherited() {
 		if (getParent() == null) {
-			return Collections.emptyList();
+			return Collections.singletonList(Namespace.XML_NAMESPACE);
 		}
-		List<Namespace> nsl = getParent().getNamespacesInScope();
-		if (nsl.get(0) == getNamespace()) {
+		return orderFirst(getNamespace(), getParent().getNamespacesInScope());
+	}
+    
+    
+	private static final List<Namespace> orderFirst(final Namespace nsa, List<Namespace> nsl) {
+		if (nsl.get(0) == nsa) {
 			return nsl;
 		}
 		// OK, we have our namespace list, but our's is not the first.
 		// we need the Attribute's Namespace to be up front.
 		TreeMap<String,Namespace> tm = new TreeMap<String, Namespace>();
-		Namespace nsa = getNamespace();
 		for (Namespace ns : nsl) {
 			if (ns != nsa) {
 				tm.put(ns.getPrefix(), ns);
@@ -678,6 +687,5 @@ public class Attribute extends Content implements Serializable, Cloneable {
 		ret.addAll(tm.values());
 		return Collections.unmodifiableList(ret);
 	}
-    
-    
+
 }

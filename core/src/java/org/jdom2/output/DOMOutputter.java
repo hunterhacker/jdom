@@ -279,7 +279,7 @@ public class DOMOutputter {
         				element.getQualifiedName());
         	}
 
-        	List<Namespace> nsq = element.getNamespacesInScope();
+        	List<Namespace> nsq = element.getNamespacesIntroduced();
 
         	// Add namespace attributes, beginning with the element's own
         	// Do this only if it's not the XML namespace and it's
@@ -290,10 +290,6 @@ public class DOMOutputter {
         		if (ns == Namespace.XML_NAMESPACE) {
         			continue;
         		}
-        		if (ns == Namespace.NO_NAMESPACE && element.getParentElement() == null) {
-        			continue;
-        		}
-
         		domElement.setAttribute(getXmlnsTagFor(ns), ns.getURI());
         	}
 

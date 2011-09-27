@@ -213,7 +213,7 @@ public abstract class Content implements Cloneable, Serializable {
     	// Element class will override this method to do it differently.
     	Element emt = getParentElement();
     	if (emt == null) {
-    		return Collections.emptyList();
+    		return Collections.singletonList(Namespace.XML_NAMESPACE);
     	}
     	return emt.getNamespacesInScope();
     }

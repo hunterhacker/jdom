@@ -872,10 +872,6 @@ public class SAXOutputter {
         // contentHandler.startPrefixMapping()
         List<Namespace> nsq = element.getNamespacesIntroduced();
         for (Namespace ns : nsq) {
-        	if (ns == Namespace.XML_NAMESPACE) {
-        		// skip it.
-        		continue;
-        	}
         	startPrefixMapping(ns);
         	nsAtts = this.addNsAttribute(nsAtts, ns);
         }

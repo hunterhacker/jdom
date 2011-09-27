@@ -1602,6 +1602,12 @@ public class Element extends Content implements Parent {
 				}
 			}
 		}
+		
+		if (getParentElement() == null && !namespaces.containsKey("")) {
+			// we are the root element, and there is no 'default' namespace.
+			namespaces.put("", Namespace.NO_NAMESPACE);
+		}
+		
 		ArrayList<Namespace> al = new ArrayList<Namespace>(namespaces.size());
 		al.add(getNamespace());
 		namespaces.remove(getNamespacePrefix());
@@ -1613,7 +1619,15 @@ public class Element extends Content implements Parent {
 	@Override
 	public List<Namespace> getNamespacesInherited() {
 		if (getParentElement() == null) {
-			return Collections.emptyList();
+			ArrayList<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
+			for (Iterator<Namespace> it = ret.iterator(); it.hasNext();) {
+				Namespace ns = it.next();
+				if (ns == Namespace.NO_NAMESPACE || ns == Namespace.XML_NAMESPACE) {
+					continue;
+				}
+				it.remove();
+			}
+			return Collections.unmodifiableList(ret);
 		}
 
 		// OK, the things we inherit are the prefixes we have in scope that
@@ -1637,8 +1651,15 @@ public class Element extends Content implements Parent {
 	@Override
 	public List<Namespace> getNamespacesIntroduced() {
 		if (getParentElement() == null) {
-			// we introduce everything
-			return getNamespacesInScope();
+			// we introduce everything... except XML_NAMESPACE
+			List<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
+			for (Iterator<Namespace> it = ret.iterator(); it.hasNext(); ) {
+				Namespace ns = it.next();
+				if (ns == Namespace.XML_NAMESPACE || ns == Namespace.NO_NAMESPACE) {
+					it.remove();
+				}
+			}
+			return Collections.unmodifiableList(ret);
 		}
 
 		// OK, the things we introduce are the prefixes we have in scope that
