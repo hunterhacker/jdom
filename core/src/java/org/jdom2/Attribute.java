@@ -55,6 +55,10 @@
 package org.jdom2;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * An XML attribute. Methods allow the user to obtain the value of the attribute
@@ -634,4 +638,46 @@ public class Attribute extends Content implements Serializable, Cloneable {
         namespace = Namespace.getNamespace(
             (String) in.readObject(), (String) in.readObject());
     }
+
+	@Override
+	public List<Namespace> getNamespacesInScope() {
+		if (getParent() == null) {
+			return Collections.singletonList(getNamespace());
+		}
+		return getParent().getNamespacesInScope();
+	}
+
+	@Override
+	public List<Namespace> getNamespacesIntroduced() {
+		if (getParent() == null) {
+			return Collections.singletonList(getNamespace());
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Namespace> getNamespacesInherited() {
+		if (getParent() == null) {
+			return Collections.emptyList();
+		}
+		List<Namespace> nsl = getParent().getNamespacesInScope();
+		if (nsl.get(0) == getNamespace()) {
+			return nsl;
+		}
+		// OK, we have our namespace list, but our's is not the first.
+		// we need the Attribute's Namespace to be up front.
+		TreeMap<String,Namespace> tm = new TreeMap<String, Namespace>();
+		Namespace nsa = getNamespace();
+		for (Namespace ns : nsl) {
+			if (ns != nsa) {
+				tm.put(ns.getPrefix(), ns);
+			}
+		}
+		ArrayList<Namespace> ret = new ArrayList<Namespace>(tm.size() + 1);
+		ret.add(nsa);
+		ret.addAll(tm.values());
+		return Collections.unmodifiableList(ret);
+	}
+    
+    
 }
