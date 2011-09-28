@@ -263,10 +263,7 @@ public class AbstractTestFilter {
 			exerciseCore(nf.or(nf.negate()), parent, new TrueCallBack());
 			exerciseCore(nf.and(nf.negate()), parent, new FalseCallBack());
 			
-			/*
-			 * Fix Issue #19 before enabling the following!
-			 *
-			
+
 			Filter afor = UnitTestUtil.deSerialize(af).or(nf);
 			Filter bfor = nf.or(af);
 			assertFilterEquals(afor, bfor);
@@ -274,7 +271,7 @@ public class AbstractTestFilter {
 			Filter afand = UnitTestUtil.deSerialize(af).and(nf);
 			Filter bfand = nf.and(af);
 			assertFilterEquals(afand, bfand);
-			*/
+
 		}
 	}
 	

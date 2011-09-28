@@ -111,7 +111,7 @@ final class OrFilter extends AbstractFilter<Content> {
 
 	@Override
 	public int hashCode() {
-		return (31 * left.hashCode()) + right.hashCode();
+		return ~(left.hashCode()) ^ right.hashCode();
 	}
 
 	@Override

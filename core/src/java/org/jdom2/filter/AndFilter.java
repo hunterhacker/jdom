@@ -111,7 +111,7 @@ final class AndFilter<T> extends AbstractFilter<T> {
 
 	@Override
 	public int hashCode() {
-		return (31 * left.hashCode()) + right.hashCode();
+		return (left.hashCode()) ^ right.hashCode();
 	}
 
 	@Override
