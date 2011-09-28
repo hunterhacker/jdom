@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2.filter;
@@ -64,15 +64,15 @@ import java.util.List;
  * @author  Bradley S. Huffman
  */
 public interface Filter <T> extends java.io.Serializable {
-	
-	
+
+
 	/**
 	 * Filter the input list of all content except that which matches the Filter.
 	 * @param content The content to filter.
 	 * @return a new read-only list of the filtered input content.
 	 */
 	public List<T> filter(List<?> content);
-	
+
 	/**
 	 * Check to see if the content matches this Filter.
 	 * If it does, return the content cast as this filter's return type,
@@ -81,22 +81,22 @@ public interface Filter <T> extends java.io.Serializable {
 	 * @return The content if it matches the filter, cast as this Filter's type.
 	 */
 	public T filter(Object content);
-	
-    /**
-     * Check to see if the object matches a predefined set of rules.
-     *
-     * @param obj The object to verify.
-     * @return <code>true</code> if the object matches a predfined 
-     *           set of rules.
-     */
-    public boolean matches(Object content);
+
+	/**
+	 * Check to see if the object matches a predefined set of rules.
+	 *
+	 * @param obj The object to verify.
+	 * @return <code>true</code> if the object matches a predfined 
+	 *           set of rules.
+	 */
+	public boolean matches(Object content);
 
 
-    public Filter<?> negate();
+	public Filter<?> negate();
 
-    public Filter<?> or(Filter<?> filter);
+	public Filter<?> or(Filter<?> filter);
 
-    public Filter<T> and(Filter<? extends T> filter);
-    
-    public <R> Filter<R> refine(Filter<R> filter);
+	public Filter<T> and(Filter<? extends T> filter);
+
+	public <R> Filter<R> refine(Filter<R> filter);
 }

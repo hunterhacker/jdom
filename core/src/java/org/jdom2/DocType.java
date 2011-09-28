@@ -63,214 +63,214 @@ package org.jdom2;
  */
 public class DocType extends Content {
 
-    /** The element being constrained */
-    protected String elementName;
+	/** The element being constrained */
+	protected String elementName;
 
-    /** The public ID of the DOCTYPE */
-    protected String publicID;
+	/** The public ID of the DOCTYPE */
+	protected String publicID;
 
-    /** The system ID of the DOCTYPE */
-    protected String systemID;
+	/** The system ID of the DOCTYPE */
+	protected String systemID;
 
-    /** The internal subset of the DOCTYPE */
-    protected String internalSubset;
+	/** The internal subset of the DOCTYPE */
+	protected String internalSubset;
 
-    /**
-     * Default, no-args constructor for implementations to use if needed.
-     */
-    protected DocType() {}
+	/**
+	 * Default, no-args constructor for implementations to use if needed.
+	 */
+	protected DocType() {}
 
-    /*
-     * XXX:
-     *   We need to take care of entities and notations here.
-     */
+	/*
+	 * XXX:
+	 *   We need to take care of entities and notations here.
+	 */
 
-    /**
-     * This will create the <code>DocType</code> with
-     * the specified element name and a reference to an
-     * external DTD.
-     *
-     * @param elementName <code>String</code> name of
-     *        element being constrained.
-     * @param publicID <code>String</code> public ID of
-     *        referenced DTD
-     * @param systemID <code>String</code> system ID of
-     *        referenced DTD
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal or the public ID is not a legal public ID.
-     * @throws IllegalNameException if the given root element name is not a
-     *         legal XML element name.
-     */
-    public DocType(String elementName, String publicID, String systemID) {
-        setElementName(elementName);
-        setPublicID(publicID);
-        setSystemID(systemID);
-    }
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and a reference to an
+	 * external DTD.
+	 *
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param publicID <code>String</code> public ID of
+	 *        referenced DTD
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal or the public ID is not a legal public ID.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
+	 */
+	public DocType(String elementName, String publicID, String systemID) {
+		setElementName(elementName);
+		setPublicID(publicID);
+		setSystemID(systemID);
+	}
 
-    /**
-     * This will create the <code>DocType</code> with
-     * the specified element name and reference to an
-     * external DTD.
-     *
-     * @param elementName <code>String</code> name of
-     *        element being constrained.
-     * @param systemID <code>String</code> system ID of
-     *        referenced DTD
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal.
-     * @throws IllegalNameException if the given root element name is not a
-     *         legal XML element name.
-     */
-    public DocType(String elementName, String systemID) {
-        this(elementName, null, systemID);
-    }
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and reference to an
+	 * external DTD.
+	 *
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
+	 */
+	public DocType(String elementName, String systemID) {
+		this(elementName, null, systemID);
+	}
 
-    /**
-     * This will create the <code>DocType</code> with
-     * the specified element name
-     *
-     * @param elementName <code>String</code> name of
-     *        element being constrained.
-     * @throws IllegalNameException if the given root element name is not a
-     *         legal XML element name.
-     */
-    public DocType(String elementName) {
-        this(elementName, null, null);
-    }
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name
+	 *
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
+	 */
+	public DocType(String elementName) {
+		this(elementName, null, null);
+	}
 
-    /**
-     * This will retrieve the element name being constrained.
-     *
-     * @return <code>String</code> - element name for DOCTYPE
-     */
-    public String getElementName() {
-        return elementName;
-    }
+	/**
+	 * This will retrieve the element name being constrained.
+	 *
+	 * @return <code>String</code> - element name for DOCTYPE
+	 */
+	public String getElementName() {
+		return elementName;
+	}
 
-    /**
-     * This will set the root element name declared by this
-     * DOCTYPE declaration.
-     *
-     * @return DocType <code>DocType</code> this DocType object
-     * @param elementName <code>String</code> name of
-     *        root element being constrained.
-     * @throws IllegalNameException if the given root element name is not a
-     *         legal XML element name.
-     */
-    public DocType setElementName(String elementName) {
-        // This can contain a colon so we use checkXMLName()
-        // instead of checkElementName()
-        String reason = Verifier.checkXMLName(elementName);
-        if (reason != null) {
-            throw new IllegalNameException(elementName, "DocType", reason);
-        }
-        this.elementName = elementName;
-        return this;
-    }
+	/**
+	 * This will set the root element name declared by this
+	 * DOCTYPE declaration.
+	 *
+	 * @return DocType <code>DocType</code> this DocType object
+	 * @param elementName <code>String</code> name of
+	 *        root element being constrained.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
+	 */
+	public DocType setElementName(String elementName) {
+		// This can contain a colon so we use checkXMLName()
+		// instead of checkElementName()
+		String reason = Verifier.checkXMLName(elementName);
+		if (reason != null) {
+			throw new IllegalNameException(elementName, "DocType", reason);
+		}
+		this.elementName = elementName;
+		return this;
+	}
 
-    /**
-     * This will retrieve the public ID of an externally
-     * referenced DTD, or an empty <code>String</code> if
-     * none is referenced.
-     *
-     * @return <code>String</code> - public ID of referenced DTD.
-     */
-    public String getPublicID() {
-        return publicID;
-    }
+	/**
+	 * This will retrieve the public ID of an externally
+	 * referenced DTD, or an empty <code>String</code> if
+	 * none is referenced.
+	 *
+	 * @return <code>String</code> - public ID of referenced DTD.
+	 */
+	public String getPublicID() {
+		return publicID;
+	}
 
-    /**
-     * This will set the public ID of an externally
-     * referenced DTD.
-     *
-     * @param publicID id to set
-     * @return DocType <code>DocType</code> this DocType object
-     * @throws IllegalDataException if the given public ID is not a legal
-     *         public ID.
-     */
-    public DocType setPublicID(String publicID) {
-        String reason = Verifier.checkPublicID(publicID);
-        if (reason != null) {
-            throw new IllegalDataException(publicID, "DocType", reason);
-        }
-        this.publicID = publicID;
+	/**
+	 * This will set the public ID of an externally
+	 * referenced DTD.
+	 *
+	 * @param publicID id to set
+	 * @return DocType <code>DocType</code> this DocType object
+	 * @throws IllegalDataException if the given public ID is not a legal
+	 *         public ID.
+	 */
+	public DocType setPublicID(String publicID) {
+		String reason = Verifier.checkPublicID(publicID);
+		if (reason != null) {
+			throw new IllegalDataException(publicID, "DocType", reason);
+		}
+		this.publicID = publicID;
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * This will retrieve the system ID of an externally
-     * referenced DTD, or an empty <code>String</code> if
-     * none is referenced.
-     *
-     * @return <code>String</code> - system ID of referenced DTD.
-     */
-    public String getSystemID() {
-        return systemID;
-    }
+	/**
+	 * This will retrieve the system ID of an externally
+	 * referenced DTD, or an empty <code>String</code> if
+	 * none is referenced.
+	 *
+	 * @return <code>String</code> - system ID of referenced DTD.
+	 */
+	public String getSystemID() {
+		return systemID;
+	}
 
-    /**
-     * This will set the system ID of an externally
-     * referenced DTD.
-     *
-     * @param systemID id to set
-     * @return systemID <code>String</code> system ID of
-     *                  referenced DTD.
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal.
-     */
-    public DocType setSystemID(String systemID) {
-        String reason = Verifier.checkSystemLiteral(systemID);
-        if (reason != null) {
-            throw new IllegalDataException(systemID, "DocType", reason);
-        }
-        this.systemID = systemID;
+	/**
+	 * This will set the system ID of an externally
+	 * referenced DTD.
+	 *
+	 * @param systemID id to set
+	 * @return systemID <code>String</code> system ID of
+	 *                  referenced DTD.
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 */
+	public DocType setSystemID(String systemID) {
+		String reason = Verifier.checkSystemLiteral(systemID);
+		if (reason != null) {
+			throw new IllegalDataException(systemID, "DocType", reason);
+		}
+		this.systemID = systemID;
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Returns the empty string since doctypes don't have an XPath
-     * 1.0 string value.
-     * @return the empty string
-     */
-    @Override
+	/**
+	 * Returns the empty string since doctypes don't have an XPath
+	 * 1.0 string value.
+	 * @return the empty string
+	 */
+	@Override
 	public String getValue() {
-        return "";  // doctypes don't have an XPath string value
-    }
+		return "";  // doctypes don't have an XPath string value
+	}
 
-    /**
-     * This sets the data for the internal subset.
-     *
-     * @param newData data for the internal subset, as a
-     *        <code>String</code>.
-     */
-    public void setInternalSubset(String newData) {
-        internalSubset = newData;
-    }
+	/**
+	 * This sets the data for the internal subset.
+	 *
+	 * @param newData data for the internal subset, as a
+	 *        <code>String</code>.
+	 */
+	public void setInternalSubset(String newData) {
+		internalSubset = newData;
+	}
 
-    /**
-     * This returns the data for the internal subset.
-     *
-     * @return <code>String</code> - the internal subset
-     */
-    public String getInternalSubset() {
-        return internalSubset;
-    }
+	/**
+	 * This returns the data for the internal subset.
+	 *
+	 * @return <code>String</code> - the internal subset
+	 */
+	public String getInternalSubset() {
+		return internalSubset;
+	}
 
-    /**
-     * This returns a <code>String</code> representation of the
-     * <code>DocType</code>, suitable for debugging.
-     *
-     * @return <code>String</code> - information about the
-     *         <code>DocType</code>
-     */
-    @Override
+	/**
+	 * This returns a <code>String</code> representation of the
+	 * <code>DocType</code>, suitable for debugging.
+	 *
+	 * @return <code>String</code> - information about the
+	 *         <code>DocType</code>
+	 */
+	@Override
 	public String toString() {
-        return new StringBuffer()
-            .append("[DocType: ")
-            .append(new org.jdom2.output.XMLOutputter().outputString(this))
-            .append("]")
-            .toString();
-    }
+		return new StringBuffer()
+		.append("[DocType: ")
+		.append(new org.jdom2.output.XMLOutputter().outputString(this))
+		.append("]")
+		.toString();
+	}
 }

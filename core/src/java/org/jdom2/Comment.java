@@ -63,84 +63,84 @@ package org.jdom2;
  */
 public class Comment extends Content {
 
-    /** Text of the <code>Comment</code> */
-    protected String text;
+	/** Text of the <code>Comment</code> */
+	protected String text;
 
-    /**
-     * Default, no-args constructor for implementations to use if needed.
-     */
-    protected Comment() {}
+	/**
+	 * Default, no-args constructor for implementations to use if needed.
+	 */
+	protected Comment() {}
 
-    /**
-     * This creates the comment with the supplied text.
-     *
-     * @param text <code>String</code> content of comment.
-     */
-    public Comment(String text) {
-        setText(text);
-    }
+	/**
+	 * This creates the comment with the supplied text.
+	 *
+	 * @param text <code>String</code> content of comment.
+	 */
+	public Comment(String text) {
+		setText(text);
+	}
 
 
-    /**
-     * Returns the XPath 1.0 string value of this element, which is the
-     * text of this comment.
-     *
-     * @return the text of this comment
-     */
-    @Override
+	/**
+	 * Returns the XPath 1.0 string value of this element, which is the
+	 * text of this comment.
+	 *
+	 * @return the text of this comment
+	 */
+	@Override
 	public String getValue() {
-        return text;
-    }
+		return text;
+	}
 
-    /**
-     * This returns the textual data within the <code>Comment</code>.
-     *
-     * @return <code>String</code> - text of comment.
-     */
-    public String getText() {
-        return text;
-    }
+	/**
+	 * This returns the textual data within the <code>Comment</code>.
+	 *
+	 * @return <code>String</code> - text of comment.
+	 */
+	public String getText() {
+		return text;
+	}
 
-    /**
-     * This will set the value of the <code>Comment</code>.
-     *
-     * @param text <code>String</code> text for comment.
-     * @return <code>Comment</code> - this Comment modified.
-     * @throws IllegalDataException if the given text is illegal for a
-     *         Comment.
-     */
-    public Comment setText(String text) {
-        String reason;
-        if ((reason = Verifier.checkCommentData(text)) != null) {
-            throw new IllegalDataException(text, "comment", reason);
-        }
+	/**
+	 * This will set the value of the <code>Comment</code>.
+	 *
+	 * @param text <code>String</code> text for comment.
+	 * @return <code>Comment</code> - this Comment modified.
+	 * @throws IllegalDataException if the given text is illegal for a
+	 *         Comment.
+	 */
+	public Comment setText(String text) {
+		String reason;
+		if ((reason = Verifier.checkCommentData(text)) != null) {
+			throw new IllegalDataException(text, "comment", reason);
+		}
 
-        this.text = text;
-        return this;
-    }
-    
-    @Override
-    public Comment clone() {
-    	return (Comment)super.clone();
-    }
+		this.text = text;
+		return this;
+	}
 
-    /**
-     * This returns a <code>String</code> representation of the
-     * <code>Comment</code>, suitable for debugging. If the XML
-     * representation of the <code>Comment</code> is desired,
-     * {@link org.jdom2.output.XMLOutputter#outputString(Comment)}
-     * should be used.
-     *
-     * @return <code>String</code> - information about the
-     *         <code>Attribute</code>
-     */
-    @Override
+	@Override
+	public Comment clone() {
+		return (Comment)super.clone();
+	}
+
+	/**
+	 * This returns a <code>String</code> representation of the
+	 * <code>Comment</code>, suitable for debugging. If the XML
+	 * representation of the <code>Comment</code> is desired,
+	 * {@link org.jdom2.output.XMLOutputter#outputString(Comment)}
+	 * should be used.
+	 *
+	 * @return <code>String</code> - information about the
+	 *         <code>Attribute</code>
+	 */
+	@Override
 	public String toString() {
-        return new StringBuffer()
-            .append("[Comment: ")
-            .append(new org.jdom2.output.XMLOutputter().outputString(this))
-            .append("]")
-            .toString();
-    }
+		return new StringBuffer()
+		.append("[Comment: ")
+		.append(new org.jdom2.output.XMLOutputter().outputString(this))
+		.append("]")
+		.toString();
+	}
 
 }

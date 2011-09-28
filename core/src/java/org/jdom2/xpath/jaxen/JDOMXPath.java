@@ -95,7 +95,7 @@ public class JDOMXPath extends    org.jdom2.xpath.XPath {
 	 * try{} finally {} to the rescue.  
 	 */
 	private final JDOMNavigator navigator = new JDOMNavigator();
-	
+
 	/**
 	 * Same story, need to be able to strip NamespaceContainer instances from
 	 * Namespace content.
@@ -128,7 +128,7 @@ public class JDOMXPath extends    org.jdom2.xpath.XPath {
 		}
 		return results;
 	}
-	
+
 
 
 	/**

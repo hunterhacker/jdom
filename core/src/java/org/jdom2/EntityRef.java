@@ -64,172 +64,172 @@ package org.jdom2;
  */
 public class EntityRef extends Content {
 
-    /** The name of the <code>EntityRef</code> */
-    protected String name;
+	/** The name of the <code>EntityRef</code> */
+	protected String name;
 
-    /** The PublicID of the <code>EntityRef</code> */
-    protected String publicID;
+	/** The PublicID of the <code>EntityRef</code> */
+	protected String publicID;
 
-    /** The SystemID of the <code>EntityRef</code> */
-    protected String systemID;
+	/** The SystemID of the <code>EntityRef</code> */
+	protected String systemID;
 
-    /**
-     * Default, no-args constructor for implementations to use if needed.
-     */
-    protected EntityRef() {}
+	/**
+	 * Default, no-args constructor for implementations to use if needed.
+	 */
+	protected EntityRef() {}
 
-    /**
-     * This will create a new <code>EntityRef</code> with the supplied name.
-     *
-     * @param name <code>String</code> name of element.
-     * @throws IllegalNameException if the given name is not a legal
-     *         XML name.
-     */
-    public EntityRef(String name) {
-        this(name, null, null);
-    }
+	/**
+	 * This will create a new <code>EntityRef</code> with the supplied name.
+	 *
+	 * @param name <code>String</code> name of element.
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 */
+	public EntityRef(String name) {
+		this(name, null, null);
+	}
 
-    /**
-     * This will create a new <code>EntityRef</code>
-     * with the supplied name and system id.
-     *
-     * @param name <code>String</code> name of element.
-     * @param systemID system id of the entity reference being constructed
-     * @throws IllegalNameException if the given name is not a legal
-     *         XML name.
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal.
-     */
-    public EntityRef(String name, String systemID) {
-        this(name, null, systemID);
-    }
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name and system id.
+	 *
+	 * @param name <code>String</code> name of element.
+	 * @param systemID system id of the entity reference being constructed
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 */
+	public EntityRef(String name, String systemID) {
+		this(name, null, systemID);
+	}
 
-    /**
-     * This will create a new <code>EntityRef</code>
-     * with the supplied name, public id, and system id.
-     *
-     * @param name <code>String</code> name of element.
-     * @param publicID public id of the entity reference being constructed
-     * @param systemID system id of the entity reference being constructed
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal or the the given public ID is not a
-     *         legal public ID
-     * @throws IllegalNameException if the given name is not a legal
-     *         XML name.
-     */
-    public EntityRef(String name, String publicID, String systemID) {
-        setName(name);
-        setPublicID(publicID);
-        setSystemID(systemID);
-    }
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name, public id, and system id.
+	 *
+	 * @param name <code>String</code> name of element.
+	 * @param publicID public id of the entity reference being constructed
+	 * @param systemID system id of the entity reference being constructed
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal or the the given public ID is not a
+	 *         legal public ID
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 */
+	public EntityRef(String name, String publicID, String systemID) {
+		setName(name);
+		setPublicID(publicID);
+		setSystemID(systemID);
+	}
 
-    /**
-     * This returns the name of the <code>EntityRef</code>.
-     *
-     * @return <code>String</code> - entity name.
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * This returns the name of the <code>EntityRef</code>.
+	 *
+	 * @return <code>String</code> - entity name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Returns the empty string since entity references don't have an XPath
-     * 1.0 string value.
-     * @return the empty string
-     */
-    @Override
+	/**
+	 * Returns the empty string since entity references don't have an XPath
+	 * 1.0 string value.
+	 * @return the empty string
+	 */
+	@Override
 	public String getValue() {
-        return "";  // entity references don't have XPath string values
-    }
+		return "";  // entity references don't have XPath string values
+	}
 
-    /**
-     * This will return the publid ID of this <code>EntityRef</code>.
-     * If there is no public ID, then this returns <code>null</code>.
-     *
-     * @return public ID of this <code>EntityRef</code>
-     */
-    public String getPublicID() {
-        return publicID;
-    }
+	/**
+	 * This will return the publid ID of this <code>EntityRef</code>.
+	 * If there is no public ID, then this returns <code>null</code>.
+	 *
+	 * @return public ID of this <code>EntityRef</code>
+	 */
+	public String getPublicID() {
+		return publicID;
+	}
 
-    /**
-     * This will return the system ID of this <code>EntityRef</code>.
-     * If there is no system ID, then this returns <code>null</code>.
-     *
-     * @return system ID of this <code>EntityRef</code>
-     */
-    public String getSystemID() {
-        return systemID;
-    }
+	/**
+	 * This will return the system ID of this <code>EntityRef</code>.
+	 * If there is no system ID, then this returns <code>null</code>.
+	 *
+	 * @return system ID of this <code>EntityRef</code>
+	 */
+	public String getSystemID() {
+		return systemID;
+	}
 
-    /**
-     * This will set the name of this <code>EntityRef</code>.
-     *
-     * @param name new name of the entity
-     * @return this <code>EntityRef</code> modified.
-     * @throws IllegalNameException if the given name is not a legal
-     *         XML name.
-     */
-    public EntityRef setName(String name) {
-        // This can contain a colon so we use checkXMLName()
-        // instead of checkElementName()
-        String reason = Verifier.checkXMLName(name);
-        if (reason != null) {
-            throw new IllegalNameException(name, "EntityRef", reason);
-        }
-        this.name = name;
-        return this;
-    }
+	/**
+	 * This will set the name of this <code>EntityRef</code>.
+	 *
+	 * @param name new name of the entity
+	 * @return this <code>EntityRef</code> modified.
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 */
+	public EntityRef setName(String name) {
+		// This can contain a colon so we use checkXMLName()
+		// instead of checkElementName()
+		String reason = Verifier.checkXMLName(name);
+		if (reason != null) {
+			throw new IllegalNameException(name, "EntityRef", reason);
+		}
+		this.name = name;
+		return this;
+	}
 
-    /**
-     * This will set the public ID of this <code>EntityRef</code>.
-     *
-     * @param publicID new public id
-     * @return this <code>EntityRef</code> modified.
-     * @throws IllegalDataException if the given public ID is not a legal
-     *         public ID.
-     */
-    public EntityRef setPublicID(String publicID) {
-        String reason = Verifier.checkPublicID(publicID);
-        if (reason != null) {
-            throw new IllegalDataException(publicID, "EntityRef", reason);
-        }
-        this.publicID = publicID;
-        return this;
-    }
+	/**
+	 * This will set the public ID of this <code>EntityRef</code>.
+	 *
+	 * @param publicID new public id
+	 * @return this <code>EntityRef</code> modified.
+	 * @throws IllegalDataException if the given public ID is not a legal
+	 *         public ID.
+	 */
+	public EntityRef setPublicID(String publicID) {
+		String reason = Verifier.checkPublicID(publicID);
+		if (reason != null) {
+			throw new IllegalDataException(publicID, "EntityRef", reason);
+		}
+		this.publicID = publicID;
+		return this;
+	}
 
-    /**
-     * This will set the system ID of this <code>EntityRef</code>.
-     *
-     * @param systemID new system id
-     * @throws IllegalDataException if the given system ID is not a legal
-     *         system literal.
-     * @return this <code>EntityRef</code> modified.
-     */
-    public EntityRef setSystemID(String systemID) {
-        String reason = Verifier.checkSystemLiteral(systemID);
-        if (reason != null) {
-            throw new IllegalDataException(systemID, "EntityRef", reason);
-        }
-        this.systemID = systemID;
-        return this;
-    }
+	/**
+	 * This will set the system ID of this <code>EntityRef</code>.
+	 *
+	 * @param systemID new system id
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 * @return this <code>EntityRef</code> modified.
+	 */
+	public EntityRef setSystemID(String systemID) {
+		String reason = Verifier.checkSystemLiteral(systemID);
+		if (reason != null) {
+			throw new IllegalDataException(systemID, "EntityRef", reason);
+		}
+		this.systemID = systemID;
+		return this;
+	}
 
-    /**
-     * This returns a <code>String</code> representation of the
-     * <code>EntityRef</code>, suitable for debugging.
-     *
-     * @return <code>String</code> - information about the
-     *         <code>EntityRef</code>
-     */
-    @Override
+	/**
+	 * This returns a <code>String</code> representation of the
+	 * <code>EntityRef</code>, suitable for debugging.
+	 *
+	 * @return <code>String</code> - information about the
+	 *         <code>EntityRef</code>
+	 */
+	@Override
 	public String toString() {
-        return new StringBuffer()
-            .append("[EntityRef: ")
-            .append("&")
-            .append(name)
-            .append(";")
-            .append("]")
-            .toString();
-    }
+		return new StringBuffer()
+		.append("[EntityRef: ")
+		.append("&")
+		.append(name)
+		.append(";")
+		.append("]")
+		.toString();
+	}
 }

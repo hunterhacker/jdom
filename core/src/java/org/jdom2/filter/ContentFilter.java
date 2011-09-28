@@ -81,279 +81,279 @@ import org.jdom2.*;
  */
 public class ContentFilter extends AbstractFilter<Content> {
 
-    /** Mask for JDOM {@link Element} objects */
-    public static final int ELEMENT   = 1;
+	/** Mask for JDOM {@link Element} objects */
+	public static final int ELEMENT   = 1;
 
-    /** Mask for JDOM {@link CDATA} objects */
-    public static final int CDATA     = 2;
+	/** Mask for JDOM {@link CDATA} objects */
+	public static final int CDATA     = 2;
 
-    /** Mask for JDOM {@link Text} objects */
-    public static final int TEXT      = 4;
+	/** Mask for JDOM {@link Text} objects */
+	public static final int TEXT      = 4;
 
-    /** Mask for JDOM {@link Comment} objects */
-    public static final int COMMENT   = 8;
+	/** Mask for JDOM {@link Comment} objects */
+	public static final int COMMENT   = 8;
 
-    /** Mask for JDOM {@link ProcessingInstruction} objects */
-    public static final int PI        = 16;
+	/** Mask for JDOM {@link ProcessingInstruction} objects */
+	public static final int PI        = 16;
 
-    /** Mask for JDOM {@link EntityRef} objects */
-    public static final int ENTITYREF = 32;
+	/** Mask for JDOM {@link EntityRef} objects */
+	public static final int ENTITYREF = 32;
 
-    /** Mask for JDOM {@link Document} object */
-    public static final int DOCUMENT  = 64;
+	/** Mask for JDOM {@link Document} object */
+	public static final int DOCUMENT  = 64;
 
-    /** Mask for JDOM {@link DocType} object */
-    public static final int DOCTYPE = 128;
+	/** Mask for JDOM {@link DocType} object */
+	public static final int DOCTYPE = 128;
 
-    /** The JDOM object mask */
-    private int filterMask;
+	/** The JDOM object mask */
+	private int filterMask;
 
-    /**
-     * Default constructor that allows any legal JDOM objects.
-     */
-    public ContentFilter() {
-        setDefaultMask();
-    }
+	/**
+	 * Default constructor that allows any legal JDOM objects.
+	 */
+	public ContentFilter() {
+		setDefaultMask();
+	}
 
-    /**
-     * Set whether all JDOM objects are visible or not.
-     *
-     * @param allVisible <code>true</code> all JDOM objects are visible,
-     *                   <code>false</code> all JDOM objects are hidden.
-     */
-    public ContentFilter(boolean allVisible) {
-        if (allVisible) {
-            setDefaultMask();
-        }
-        else {
-            filterMask &= ~filterMask;
-        }
-    }
+	/**
+	 * Set whether all JDOM objects are visible or not.
+	 *
+	 * @param allVisible <code>true</code> all JDOM objects are visible,
+	 *                   <code>false</code> all JDOM objects are hidden.
+	 */
+	public ContentFilter(boolean allVisible) {
+		if (allVisible) {
+			setDefaultMask();
+		}
+		else {
+			filterMask &= ~filterMask;
+		}
+	}
 
-    /**
-     * Filter out JDOM objects according to a filtering mask.
-     *
-     * @param mask Mask of JDOM objects to allow.
-     */
-    public ContentFilter(int mask) {
-        setFilterMask(mask);
-    }
+	/**
+	 * Filter out JDOM objects according to a filtering mask.
+	 *
+	 * @param mask Mask of JDOM objects to allow.
+	 */
+	public ContentFilter(int mask) {
+		setFilterMask(mask);
+	}
 
-    /**
-     * Return current filtering mask.
-     *
-     * @return the current filtering mask
-     */
-    public int getFilterMask() {
-        return filterMask;
-    }
+	/**
+	 * Return current filtering mask.
+	 *
+	 * @return the current filtering mask
+	 */
+	public int getFilterMask() {
+		return filterMask;
+	}
 
-    /**
-     * Set filtering mask.
-     *
-     * @param mask the new filtering mask
-     */
-    public void setFilterMask(int mask) {
-        setDefaultMask();
-        filterMask &= mask;
-    }
+	/**
+	 * Set filtering mask.
+	 *
+	 * @param mask the new filtering mask
+	 */
+	public void setFilterMask(int mask) {
+		setDefaultMask();
+		filterMask &= mask;
+	}
 
-    /**
-     * Set this filter to allow all legal JDOM objects.
-     */
-    public void setDefaultMask() {
-        filterMask = ELEMENT | CDATA | TEXT | COMMENT |
-                     PI | ENTITYREF | DOCUMENT | DOCTYPE;
-    }
+	/**
+	 * Set this filter to allow all legal JDOM objects.
+	 */
+	public void setDefaultMask() {
+		filterMask = ELEMENT | CDATA | TEXT | COMMENT |
+				PI | ENTITYREF | DOCUMENT | DOCTYPE;
+	}
 
-    /**
-     * Set filter to match only JDOM objects that are legal
-     * document content.
-     */
-    public void setDocumentContent() {
-        filterMask = ELEMENT | COMMENT | PI | DOCTYPE;
-    }
+	/**
+	 * Set filter to match only JDOM objects that are legal
+	 * document content.
+	 */
+	public void setDocumentContent() {
+		filterMask = ELEMENT | COMMENT | PI | DOCTYPE;
+	}
 
-    /**
-     * Set filter to match only JDOM objects that are legal
-     * element content.
-     */
-    public void setElementContent() {
-        filterMask = ELEMENT | CDATA | TEXT |
-                     COMMENT | PI | ENTITYREF;
-    }
+	/**
+	 * Set filter to match only JDOM objects that are legal
+	 * element content.
+	 */
+	public void setElementContent() {
+		filterMask = ELEMENT | CDATA | TEXT |
+				COMMENT | PI | ENTITYREF;
+	}
 
-    /**
-     * Set visiblity of <code>Element</code> objects.
-     *
-     * @param visible whether Elements are visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setElementVisible(boolean visible) {
-        if (visible) {
-            filterMask |= ELEMENT;
-        }
-        else {
-            filterMask &= ~ELEMENT;
-        }
-    }
+	/**
+	 * Set visiblity of <code>Element</code> objects.
+	 *
+	 * @param visible whether Elements are visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setElementVisible(boolean visible) {
+		if (visible) {
+			filterMask |= ELEMENT;
+		}
+		else {
+			filterMask &= ~ELEMENT;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>CDATA</code> objects.
-     *
-     * @param visible whether CDATA nodes are visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setCDATAVisible(boolean visible) {
-        if (visible) {
-            filterMask |= CDATA;
-        }
-        else {
-            filterMask &= ~CDATA;
-        }
-    }
+	/**
+	 * Set visiblity of <code>CDATA</code> objects.
+	 *
+	 * @param visible whether CDATA nodes are visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setCDATAVisible(boolean visible) {
+		if (visible) {
+			filterMask |= CDATA;
+		}
+		else {
+			filterMask &= ~CDATA;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>Text</code> objects.
-     *
-     * @param visible whether Text nodes are visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setTextVisible(boolean visible) {
-        if (visible) {
-            filterMask |= TEXT;
-        }
-        else {
-            filterMask &= ~TEXT;
-        }
-    }
+	/**
+	 * Set visiblity of <code>Text</code> objects.
+	 *
+	 * @param visible whether Text nodes are visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setTextVisible(boolean visible) {
+		if (visible) {
+			filterMask |= TEXT;
+		}
+		else {
+			filterMask &= ~TEXT;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>Comment</code> objects.
-     *
-     * @param visible whether Comments are visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setCommentVisible(boolean visible) {
-        if (visible) {
-            filterMask |= COMMENT;
-        }
-        else {
-            filterMask &= ~COMMENT;
-        }
-    }
+	/**
+	 * Set visiblity of <code>Comment</code> objects.
+	 *
+	 * @param visible whether Comments are visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setCommentVisible(boolean visible) {
+		if (visible) {
+			filterMask |= COMMENT;
+		}
+		else {
+			filterMask &= ~COMMENT;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>ProcessingInstruction</code> objects.
-     *
-     * @param visible whether ProcessingInstructions are visible,
-     *        <code>true</code> if yes, <code>false</code> if not
-     */
-    public void setPIVisible(boolean visible) {
-        if (visible) {
-            filterMask |= PI;
-        }
-        else {
-            filterMask &= ~PI;
-        }
-    }
+	/**
+	 * Set visiblity of <code>ProcessingInstruction</code> objects.
+	 *
+	 * @param visible whether ProcessingInstructions are visible,
+	 *        <code>true</code> if yes, <code>false</code> if not
+	 */
+	public void setPIVisible(boolean visible) {
+		if (visible) {
+			filterMask |= PI;
+		}
+		else {
+			filterMask &= ~PI;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>EntityRef</code> objects.
-     *
-     * @param visible whether EntityRefs are visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setEntityRefVisible(boolean visible) {
-        if (visible) {
-            filterMask |= ENTITYREF;
-        }
-        else {
-            filterMask &= ~ENTITYREF;
-        }
-    }
+	/**
+	 * Set visiblity of <code>EntityRef</code> objects.
+	 *
+	 * @param visible whether EntityRefs are visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setEntityRefVisible(boolean visible) {
+		if (visible) {
+			filterMask |= ENTITYREF;
+		}
+		else {
+			filterMask &= ~ENTITYREF;
+		}
+	}
 
-    /**
-     * Set visiblity of <code>DocType</code> objects.
-     *
-     * @param visible whether the DocType is visible, <code>true</code>
-     *        if yes, <code>false</code> if not
-     */
-    public void setDocTypeVisible(boolean visible) {
-        if (visible) {
-            filterMask |= DOCTYPE;
-        }
-        else {
-            filterMask &= ~DOCTYPE;
-        }
-    }
+	/**
+	 * Set visiblity of <code>DocType</code> objects.
+	 *
+	 * @param visible whether the DocType is visible, <code>true</code>
+	 *        if yes, <code>false</code> if not
+	 */
+	public void setDocTypeVisible(boolean visible) {
+		if (visible) {
+			filterMask |= DOCTYPE;
+		}
+		else {
+			filterMask &= ~DOCTYPE;
+		}
+	}
 
-    /**
-     * Check to see if the object matches according to the filter mask.
-     *
-     * @param content The object to verify.
-     * @return <code>true</code> if the objected matched a predfined
-     *           set of rules.
-     */
-    @Override
+	/**
+	 * Check to see if the object matches according to the filter mask.
+	 *
+	 * @param content The object to verify.
+	 * @return <code>true</code> if the objected matched a predfined
+	 *           set of rules.
+	 */
+	@Override
 	public Content filter(Object obj) {
-    	if (obj == null || !Content.class.isInstance(obj)) {
-    		return null;
-    	}
-    	
-    	Content content = (Content)obj;
-    	
-        if (content instanceof Element) {
-            return (filterMask & ELEMENT) != 0 ? content : null;
-        }
-        else if (content instanceof CDATA) {  // must come before Text check
-            return (filterMask & CDATA) != 0 ? content : null;
-        }
-        else if (content instanceof Text) {
-            return (filterMask & TEXT) != 0 ? content : null;
-        }
-        else if (content instanceof Comment) {
-            return (filterMask & COMMENT) != 0 ? content : null;
-        }
-        else if (content instanceof ProcessingInstruction) {
-            return (filterMask & PI) != 0 ? content : null;
-        }
-        else if (content instanceof EntityRef) {
-            return (filterMask & ENTITYREF) != 0 ? content : null;
-        }
-//        else if (obj instanceof Document) {
-//            return (filterMask & DOCUMENT) != 0 ? obj : null;
-//        }
-        else if (content instanceof DocType) {
-            return (filterMask & DOCTYPE) != 0 ? content : null;
-        }
+		if (obj == null || !Content.class.isInstance(obj)) {
+			return null;
+		}
 
-        return null;
-    }
+		Content content = (Content)obj;
 
-    /**
-     * Returns whether the two filters are equivalent (i&#46;e&#46; the
-     * matching mask values are identical).
-     *
-     * @param  obj                 the object to compare against
-     * @return                     whether the two filters are equal
-     */
-    @Override
+		if (content instanceof Element) {
+			return (filterMask & ELEMENT) != 0 ? content : null;
+		}
+		else if (content instanceof CDATA) {  // must come before Text check
+			return (filterMask & CDATA) != 0 ? content : null;
+		}
+		else if (content instanceof Text) {
+			return (filterMask & TEXT) != 0 ? content : null;
+		}
+		else if (content instanceof Comment) {
+			return (filterMask & COMMENT) != 0 ? content : null;
+		}
+		else if (content instanceof ProcessingInstruction) {
+			return (filterMask & PI) != 0 ? content : null;
+		}
+		else if (content instanceof EntityRef) {
+			return (filterMask & ENTITYREF) != 0 ? content : null;
+		}
+		//        else if (obj instanceof Document) {
+		//            return (filterMask & DOCUMENT) != 0 ? obj : null;
+		//        }
+		else if (content instanceof DocType) {
+			return (filterMask & DOCTYPE) != 0 ? content : null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns whether the two filters are equivalent (i&#46;e&#46; the
+	 * matching mask values are identical).
+	 *
+	 * @param  obj                 the object to compare against
+	 * @return                     whether the two filters are equal
+	 */
+	@Override
 	public boolean equals(Object obj) {
-        // Generated by IntelliJ
-        if (this == obj) return true;
-        if (!(obj instanceof ContentFilter)) return false;
+		// Generated by IntelliJ
+		if (this == obj) return true;
+		if (!(obj instanceof ContentFilter)) return false;
 
-        final ContentFilter filter = (ContentFilter) obj;
+		final ContentFilter filter = (ContentFilter) obj;
 
-        if (filterMask != filter.filterMask) return false;
+		if (filterMask != filter.filterMask) return false;
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
-        // Generated by IntelliJ
-        return filterMask;
-    }
+		// Generated by IntelliJ
+		return filterMask;
+	}
 }

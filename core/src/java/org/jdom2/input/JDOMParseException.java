@@ -65,105 +65,105 @@ import org.xml.sax.*;
  */
 public class JDOMParseException extends JDOMException {
 
-    /**
-     * The portion of the document that was successfully built before
-     * the parse error occurred.
-     */
-    private final Document partialDocument;
+	/**
+	 * The portion of the document that was successfully built before
+	 * the parse error occurred.
+	 */
+	private final Document partialDocument;
 
-    /**
-     * This will create a parse <code>Exception</code> with the given
-     * message and wrap the <code>Exception</code> that cause a document
-     * parse to fail.
-     *
-     * @param message <code>String</code> message indicating
-     *                the problem that occurred.
-     * @param cause <code>Throwable</code> that caused this
-     *              to be thrown.
-     */
-    public JDOMParseException(String message, Throwable cause)  {
-        this(message, cause, null);
-    }
+	/**
+	 * This will create a parse <code>Exception</code> with the given
+	 * message and wrap the <code>Exception</code> that cause a document
+	 * parse to fail.
+	 *
+	 * @param message <code>String</code> message indicating
+	 *                the problem that occurred.
+	 * @param cause <code>Throwable</code> that caused this
+	 *              to be thrown.
+	 */
+	public JDOMParseException(String message, Throwable cause)  {
+		this(message, cause, null);
+	}
 
-    /**
-     * This will create a parse <code>Exception</code> with the given
-     * message and the partial document and wrap the
-     * <code>Exception</code> that cause a document parse to fail.
-     *
-     * @param message <code>String</code> message indicating
-     *                the problem that occurred.
-     * @param cause <code>Throwable</code> that caused this
-     *              to be thrown.
-     * @param partialDocument <code>Document</code> the portion of
-     *                        the input XML document that was
-     *                        successfully built.
-     */
-    public JDOMParseException(String message, Throwable cause,
-                              Document partialDocument)  {
-        super(message, cause);
-        this.partialDocument = partialDocument;
-    }
+	/**
+	 * This will create a parse <code>Exception</code> with the given
+	 * message and the partial document and wrap the
+	 * <code>Exception</code> that cause a document parse to fail.
+	 *
+	 * @param message <code>String</code> message indicating
+	 *                the problem that occurred.
+	 * @param cause <code>Throwable</code> that caused this
+	 *              to be thrown.
+	 * @param partialDocument <code>Document</code> the portion of
+	 *                        the input XML document that was
+	 *                        successfully built.
+	 */
+	public JDOMParseException(String message, Throwable cause,
+			Document partialDocument)  {
+		super(message, cause);
+		this.partialDocument = partialDocument;
+	}
 
-    /**
-     * Returns the partial document that was successfully built before
-     * the error occurred.
-     *
-     * @return the partial document or null if none.
-     */
-    public Document getPartialDocument() {
-        return partialDocument;
-    }
+	/**
+	 * Returns the partial document that was successfully built before
+	 * the error occurred.
+	 *
+	 * @return the partial document or null if none.
+	 */
+	public Document getPartialDocument() {
+		return partialDocument;
+	}
 
-    /**
-     * Returns the public identifier of the entity where the
-     * parse error occurred.
-     *
-     * @return a string containing the public identifier, or
-     *         <code>null</code> if the information is not available.
-     */
-    public String getPublicId() {
-        return (getCause() instanceof SAXParseException)?
-                        ((SAXParseException)getCause()).getPublicId(): null;
-    }
+	/**
+	 * Returns the public identifier of the entity where the
+	 * parse error occurred.
+	 *
+	 * @return a string containing the public identifier, or
+	 *         <code>null</code> if the information is not available.
+	 */
+	public String getPublicId() {
+		return (getCause() instanceof SAXParseException)?
+				((SAXParseException)getCause()).getPublicId(): null;
+	}
 
-    /**
-     * Returns the system identifier of the entity where the
-     * parse error occurred.
-     *
-     * @return a string containing the system identifier, or
-     *         <code>null</code> if the information is not available.
-     */
-    public String getSystemId() {
-        return (getCause() instanceof SAXParseException)?
-                        ((SAXParseException)getCause()).getSystemId(): null;
-    }
+	/**
+	 * Returns the system identifier of the entity where the
+	 * parse error occurred.
+	 *
+	 * @return a string containing the system identifier, or
+	 *         <code>null</code> if the information is not available.
+	 */
+	public String getSystemId() {
+		return (getCause() instanceof SAXParseException)?
+				((SAXParseException)getCause()).getSystemId(): null;
+	}
 
-    /**
-     * Returns the line number of the end of the text where the
-     * parse error occurred.
-     * <p>
-     * The first line in the document is line 1.</p>
-     *
-     * @return an integer representing the line number, or -1
-     *         if the information is not available.
-     */
-    public int getLineNumber() {
-        return (getCause() instanceof SAXParseException)?
-                        ((SAXParseException)getCause()).getLineNumber(): -1;
-    }
+	/**
+	 * Returns the line number of the end of the text where the
+	 * parse error occurred.
+	 * <p>
+	 * The first line in the document is line 1.</p>
+	 *
+	 * @return an integer representing the line number, or -1
+	 *         if the information is not available.
+	 */
+	public int getLineNumber() {
+		return (getCause() instanceof SAXParseException)?
+				((SAXParseException)getCause()).getLineNumber(): -1;
+	}
 
-    /**
-     * Returns the column number of the end of the text where the
-     * parse error occurred.
-     * <p>
-     * The first column in a line is position 1.</p>
-     *
-     * @return an integer representing the column number, or -1
-     *         if the information is not available.
-     */
-    public int getColumnNumber() {
-        return (getCause() instanceof SAXParseException)?
-                        ((SAXParseException)getCause()).getColumnNumber(): -1;
-    }
+	/**
+	 * Returns the column number of the end of the text where the
+	 * parse error occurred.
+	 * <p>
+	 * The first column in a line is position 1.</p>
+	 *
+	 * @return an integer representing the column number, or -1
+	 *         if the information is not available.
+	 */
+	public int getColumnNumber() {
+		return (getCause() instanceof SAXParseException)?
+				((SAXParseException)getCause()).getColumnNumber(): -1;
+	}
 }
 

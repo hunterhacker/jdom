@@ -66,12 +66,12 @@ import org.jdom2.Content;
  * @author Bradley S. Huffman
  */
 public abstract class AbstractFilter<T> implements Filter<T> {
-	
+
 	@Override
 	public final boolean matches(Object content) {
 		return filter(content) != null;
 	}
-	
+
 	@Override
 	public List<T> filter(List<?> content) {
 		if (content == null) {
@@ -87,26 +87,26 @@ public abstract class AbstractFilter<T> implements Filter<T> {
 		return Collections.unmodifiableList(ret);
 	}
 
-    @Override
+	@Override
 	public final Filter<?> negate() {
-    	if (this instanceof NegateFilter) {
-    		return ((NegateFilter)this).getBaseFilter();
-    	}
-        return new NegateFilter(this);
-    }
+		if (this instanceof NegateFilter) {
+			return ((NegateFilter)this).getBaseFilter();
+		}
+		return new NegateFilter(this);
+	}
 
-    @Override
+	@Override
 	public final Filter<? extends Content> or(Filter<?> filter) {
-        return new OrFilter(this, filter);
-    }
+		return new OrFilter(this, filter);
+	}
 
-    @Override
+	@Override
 	public final Filter<T> and(Filter<? extends T> filter) {
-        return new AndFilter<T>(this, filter);
-    }
+		return new AndFilter<T>(this, filter);
+	}
 
-    @Override
-    public <R> Filter<R> refine(Filter<R> filter) {
-    	return new RefineFilter<R>(filter);
-    }
+	@Override
+	public <R> Filter<R> refine(Filter<R> filter) {
+		return new RefineFilter<R>(filter);
+	}
 }

@@ -64,65 +64,65 @@ import org.jdom2.Content;
  */
 final class OrFilter extends AbstractFilter<Content> {
 
-    /** Filter for left side of logical <b>or</b> */
-    private Filter<?> left;
+	/** Filter for left side of logical <b>or</b> */
+	private Filter<?> left;
 
-    /** Filter for right side of logical <b>or</b> */
-    private Filter<?> right;
+	/** Filter for right side of logical <b>or</b> */
+	private Filter<?> right;
 
-    /**
-     * Match if either of the supplied filters.
-     *
-     * @param left left side of logical <b>or</b>
-     * @param right right side of logical <b>or</b>
-     * @throws IllegalArgumentException if either supplied filter is null
-     */
-    public OrFilter(Filter<?> left, Filter<?> right) {
-        if ((left == null) || (right == null)) {
-            throw new IllegalArgumentException("null filter not allowed");
-        }
-        this.left = left;
-        this.right = right;
-    }
+	/**
+	 * Match if either of the supplied filters.
+	 *
+	 * @param left left side of logical <b>or</b>
+	 * @param right right side of logical <b>or</b>
+	 * @throws IllegalArgumentException if either supplied filter is null
+	 */
+	public OrFilter(Filter<?> left, Filter<?> right) {
+		if ((left == null) || (right == null)) {
+			throw new IllegalArgumentException("null filter not allowed");
+		}
+		this.left = left;
+		this.right = right;
+	}
 
-    @Override
+	@Override
 	public Content filter(Object obj) {
-        if (left.matches(obj) || right.matches(obj)) {
-        	return (Content)obj;
-        }
-        return null;
-    }
+		if (left.matches(obj) || right.matches(obj)) {
+			return (Content)obj;
+		}
+		return null;
+	}
 
-    @Override
+	@Override
 	public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+		if (this == obj) {
+			return true;
+		}
 
-        if (obj instanceof OrFilter) {
-            OrFilter filter = (OrFilter) obj;
-            if ((left.equals(filter.left)  && right.equals(filter.right)) ||
-                (left.equals(filter.right) && right.equals(filter.left))) {
-                    return true;
-            }
-        }
-        return false;
-    }
+		if (obj instanceof OrFilter) {
+			OrFilter filter = (OrFilter) obj;
+			if ((left.equals(filter.left)  && right.equals(filter.right)) ||
+					(left.equals(filter.right) && right.equals(filter.left))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
-        return (31 * left.hashCode()) + right.hashCode();
-    }
+		return (31 * left.hashCode()) + right.hashCode();
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return new StringBuffer(64)
-                   .append("[OrFilter: ")
-                   .append(left.toString())
-                   .append(",\n")
-                   .append("           ")
-                   .append(right.toString())
-                   .append("]")
-                   .toString();
-    }
+		return new StringBuffer(64)
+		.append("[OrFilter: ")
+		.append(left.toString())
+		.append(",\n")
+		.append("           ")
+		.append(right.toString())
+		.append("]")
+		.toString();
+	}
 }

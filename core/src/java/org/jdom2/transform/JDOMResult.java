@@ -2,14 +2,14 @@
 
  Copyright (C) 2001-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2.transform;
@@ -99,592 +99,592 @@ import org.xml.sax.helpers.*;
  */
 public class JDOMResult extends SAXResult {
 
-  /**
-   * If {@link javax.xml.transform.TransformerFactory#getFeature}
-   * returns <code>true</code> when passed this value as an
-   * argument, the Transformer natively supports JDOM.
-   * <p>
-   * <strong>Note</strong>: This implementation does not override
-   * the {@link SAXResult#FEATURE} value defined by its superclass
-   * to be considered as a SAXResult by Transformer implementations
-   * not natively supporting JDOM.</p>
-   */
-  public final static String JDOM_FEATURE =
-                      "http://org.jdom2.transform.JDOMResult/feature";
+	/**
+	 * If {@link javax.xml.transform.TransformerFactory#getFeature}
+	 * returns <code>true</code> when passed this value as an
+	 * argument, the Transformer natively supports JDOM.
+	 * <p>
+	 * <strong>Note</strong>: This implementation does not override
+	 * the {@link SAXResult#FEATURE} value defined by its superclass
+	 * to be considered as a SAXResult by Transformer implementations
+	 * not natively supporting JDOM.</p>
+	 */
+	public final static String JDOM_FEATURE =
+			"http://org.jdom2.transform.JDOMResult/feature";
 
-  /**
-   * The result of a transformation, as set by Transformer
-   * implementations that natively support JDOM, as a JDOM document
-   * or a list of JDOM nodes.
-   */
-  private List<Content> resultlist = null;
-  
-  private Document resultdoc = null;
+	/**
+	 * The result of a transformation, as set by Transformer
+	 * implementations that natively support JDOM, as a JDOM document
+	 * or a list of JDOM nodes.
+	 */
+	private List<Content> resultlist = null;
 
-  /**
-   * Whether the application queried the result (as a list or a
-   * document) since it was last set.
-   */
-  private boolean queried = false;
+	private Document resultdoc = null;
 
-  /**
-   * The custom JDOM factory to use when building the transformation
-   * result or <code>null</code> to use the default JDOM classes.
-   */
-  private JDOMFactory factory = null;
+	/**
+	 * Whether the application queried the result (as a list or a
+	 * document) since it was last set.
+	 */
+	private boolean queried = false;
 
-  /**
-   * Public default constructor.
-   */
-  public JDOMResult() {
-    // Allocate custom builder object...
-    DocumentBuilder builder = new DocumentBuilder();
+	/**
+	 * The custom JDOM factory to use when building the transformation
+	 * result or <code>null</code> to use the default JDOM classes.
+	 */
+	private JDOMFactory factory = null;
 
-    // And use it as ContentHandler and LexicalHandler.
-    super.setHandler(builder);
-    super.setLexicalHandler(builder);
-  }
+	/**
+	 * Public default constructor.
+	 */
+	public JDOMResult() {
+		// Allocate custom builder object...
+		DocumentBuilder builder = new DocumentBuilder();
 
-  /**
-   * Sets the object(s) produced as result of an XSL Transformation.
-   * <p>
-   * <strong>Note</strong>: This method shall be used by the
-   * {@link javax.xml.transform.Transformer} implementations that
-   * natively support JDOM to directly set the transformation
-   * result rather than considering this object as a
-   * {@link SAXResult}.  Applications should <i>not</i> use this
-   * method.</p>
-   *
-   * @param  result   the result of a transformation as a
-   *                  {@link java.util.List list} of JDOM nodes
-   *                  (Elements, Texts, Comments, PIs...).
-   *
-   * @see    #getResult
-   */
-  public void setResult(List<Content> result) {
-    this.resultlist  = result;
-    this.queried = false;
-  }
+		// And use it as ContentHandler and LexicalHandler.
+		super.setHandler(builder);
+		super.setLexicalHandler(builder);
+	}
 
-  /**
-   * Returns the result of an XSL Transformation as a list of JDOM
-   * nodes.
-   * <p>
-   * If the result of the transformation is a JDOM document,
-   * this method converts it into a list of JDOM nodes; any
-   * subsequent call to {@link #getDocument} will return
-   * <code>null</code>.</p>
-   *
-   * @return the transformation result as a (possibly empty) list of
-   *         JDOM nodes (Elements, Texts, Comments, PIs...).
-   */
-  public List<Content> getResult() {
-    List<Content> nodes = Collections.emptyList();
+	/**
+	 * Sets the object(s) produced as result of an XSL Transformation.
+	 * <p>
+	 * <strong>Note</strong>: This method shall be used by the
+	 * {@link javax.xml.transform.Transformer} implementations that
+	 * natively support JDOM to directly set the transformation
+	 * result rather than considering this object as a
+	 * {@link SAXResult}.  Applications should <i>not</i> use this
+	 * method.</p>
+	 *
+	 * @param  result   the result of a transformation as a
+	 *                  {@link java.util.List list} of JDOM nodes
+	 *                  (Elements, Texts, Comments, PIs...).
+	 *
+	 * @see    #getResult
+	 */
+	public void setResult(List<Content> result) {
+		this.resultlist  = result;
+		this.queried = false;
+	}
 
-    // Retrieve result from the document builder if not set.
-    this.retrieveResult();
+	/**
+	 * Returns the result of an XSL Transformation as a list of JDOM
+	 * nodes.
+	 * <p>
+	 * If the result of the transformation is a JDOM document,
+	 * this method converts it into a list of JDOM nodes; any
+	 * subsequent call to {@link #getDocument} will return
+	 * <code>null</code>.</p>
+	 *
+	 * @return the transformation result as a (possibly empty) list of
+	 *         JDOM nodes (Elements, Texts, Comments, PIs...).
+	 */
+	public List<Content> getResult() {
+		List<Content> nodes = Collections.emptyList();
 
-    if (resultlist != null) {
-      nodes = resultlist;
-    }
-    else {
-      if (resultdoc != null && queried == false) {
-        List<Content> content = resultdoc.getContent();
-        nodes = new ArrayList<Content>(content.size());
+		// Retrieve result from the document builder if not set.
+		this.retrieveResult();
 
-        while (content.size() != 0)
-        {
-          Content o = content.remove(0);
-          nodes.add(o);
-        }
-        resultlist = nodes;
-        resultdoc = null;
-      }
-    }
-    queried = true;
+		if (resultlist != null) {
+			nodes = resultlist;
+		}
+		else {
+			if (resultdoc != null && queried == false) {
+				List<Content> content = resultdoc.getContent();
+				nodes = new ArrayList<Content>(content.size());
 
-    return (nodes);
-  }
+				while (content.size() != 0)
+				{
+					Content o = content.remove(0);
+					nodes.add(o);
+				}
+				resultlist = nodes;
+				resultdoc = null;
+			}
+		}
+		queried = true;
 
-  /**
-   * Sets the document produced as result of an XSL Transformation.
-   * <p>
-   * <strong>Note</strong>: This method shall be used by the
-   * {@link javax.xml.transform.Transformer} implementations that
-   * natively support JDOM to directly set the transformation
-   * result rather than considering this object as a
-   * {@link SAXResult}.  Applications should <i>not</i> use this
-   * method.</p>
-   *
-   * @param  document   the JDOM document result of a transformation.
-   *
-   * @see    #setResult
-   * @see    #getDocument
-   */
-  public void setDocument(Document document) {
-    this.resultdoc  = document;
-    this.resultlist = null;
-    this.queried = false;
-  }
+		return (nodes);
+	}
 
-  /**
-   * Returns the result of an XSL Transformation as a JDOM document.
-   * <p>
-   * If the result of the transformation is a list of nodes,
-   * this method attempts to convert it into a JDOM document. If
-   * successful, any subsequent call to {@link #getResult} will
-   * return an empty list.</p>
-   * <p>
-   * <strong>Warning</strong>: The XSLT 1.0 specification states that
-   * the output of an XSL transformation is not a well-formed XML
-   * document but a list of nodes. Applications should thus use
-   * {@link #getResult} instead of this method or at least expect
-   * <code>null</code> documents to be returned.
-   *
-   * @return the transformation result as a JDOM document or
-   *         <code>null</code> if the result of the transformation
-   *         can not be converted into a well-formed document.
-   *
-   * @see    #getResult
-   */
-  public Document getDocument() {
-    Document doc = null;
+	/**
+	 * Sets the document produced as result of an XSL Transformation.
+	 * <p>
+	 * <strong>Note</strong>: This method shall be used by the
+	 * {@link javax.xml.transform.Transformer} implementations that
+	 * natively support JDOM to directly set the transformation
+	 * result rather than considering this object as a
+	 * {@link SAXResult}.  Applications should <i>not</i> use this
+	 * method.</p>
+	 *
+	 * @param  document   the JDOM document result of a transformation.
+	 *
+	 * @see    #setResult
+	 * @see    #getDocument
+	 */
+	public void setDocument(Document document) {
+		this.resultdoc  = document;
+		this.resultlist = null;
+		this.queried = false;
+	}
 
-    // Retrieve result from the document builder if not set.
-    this.retrieveResult();
+	/**
+	 * Returns the result of an XSL Transformation as a JDOM document.
+	 * <p>
+	 * If the result of the transformation is a list of nodes,
+	 * this method attempts to convert it into a JDOM document. If
+	 * successful, any subsequent call to {@link #getResult} will
+	 * return an empty list.</p>
+	 * <p>
+	 * <strong>Warning</strong>: The XSLT 1.0 specification states that
+	 * the output of an XSL transformation is not a well-formed XML
+	 * document but a list of nodes. Applications should thus use
+	 * {@link #getResult} instead of this method or at least expect
+	 * <code>null</code> documents to be returned.
+	 *
+	 * @return the transformation result as a JDOM document or
+	 *         <code>null</code> if the result of the transformation
+	 *         can not be converted into a well-formed document.
+	 *
+	 * @see    #getResult
+	 */
+	public Document getDocument() {
+		Document doc = null;
 
-    if (resultdoc != null) {
-      doc = resultdoc;
-    }
-    else {
-      if (resultlist != null && (queried == false)) {
-        // Try to create a document from the result nodes
-        try {
-          JDOMFactory f = this.getFactory();
-          if (f == null) { f = new DefaultJDOMFactory(); }
+		// Retrieve result from the document builder if not set.
+		this.retrieveResult();
 
-          doc = f.document(null);
-          doc.setContent(resultlist);
+		if (resultdoc != null) {
+			doc = resultdoc;
+		}
+		else {
+			if (resultlist != null && (queried == false)) {
+				// Try to create a document from the result nodes
+				try {
+					JDOMFactory f = this.getFactory();
+					if (f == null) { f = new DefaultJDOMFactory(); }
 
-          resultdoc = doc;
-          resultlist = null;
-        }
-        catch (RuntimeException ex1) {
-          // Some of the result nodes are not valid children of a
-          // Document node. => return null.
-        	return null;
-        }
-      }
-    }
-    queried = true;
+					doc = f.document(null);
+					doc.setContent(resultlist);
 
-    return (doc);
-  }
+					resultdoc = doc;
+					resultlist = null;
+				}
+				catch (RuntimeException ex1) {
+					// Some of the result nodes are not valid children of a
+					// Document node. => return null.
+					return null;
+				}
+			}
+		}
+		queried = true;
 
-  /**
-   * Sets a custom JDOMFactory to use when building the
-   * transformation result. Use a custom factory to build the tree
-   * with your own subclasses of the JDOM classes.
-   *
-   * @param  factory   the custom <code>JDOMFactory</code> to use or
-   *                   <code>null</code> to use the default JDOM
-   *                   classes.
-   *
-   * @see    #getFactory
-   */
-  public void setFactory(JDOMFactory factory) {
-    this.factory = factory;
-  }
+		return (doc);
+	}
 
-  /**
-   * Returns the custom JDOMFactory used to build the transformation
-   * result.
-   *
-   * @return the custom <code>JDOMFactory</code> used to build the
-   *         transformation result or <code>null</code> if the
-   *         default JDOM classes are being used.
-   *
-   * @see    #setFactory
-   */
-  public JDOMFactory getFactory() {
-    return this.factory;
-  }
+	/**
+	 * Sets a custom JDOMFactory to use when building the
+	 * transformation result. Use a custom factory to build the tree
+	 * with your own subclasses of the JDOM classes.
+	 *
+	 * @param  factory   the custom <code>JDOMFactory</code> to use or
+	 *                   <code>null</code> to use the default JDOM
+	 *                   classes.
+	 *
+	 * @see    #getFactory
+	 */
+	public void setFactory(JDOMFactory factory) {
+		this.factory = factory;
+	}
 
-  /**
-   * Checks whether a transformation result has been set and, if not,
-   * retrieves the result tree being built by the document builder.
-   */
-  private void retrieveResult() {
-    if (resultlist == null && resultdoc == null) {
-      this.setResult(((DocumentBuilder)this.getHandler()).getResult());
-    }
-  }
+	/**
+	 * Returns the custom JDOMFactory used to build the transformation
+	 * result.
+	 *
+	 * @return the custom <code>JDOMFactory</code> used to build the
+	 *         transformation result or <code>null</code> if the
+	 *         default JDOM classes are being used.
+	 *
+	 * @see    #setFactory
+	 */
+	public JDOMFactory getFactory() {
+		return this.factory;
+	}
 
-  //-------------------------------------------------------------------------
-  // SAXResult overwritten methods
-  //-------------------------------------------------------------------------
+	/**
+	 * Checks whether a transformation result has been set and, if not,
+	 * retrieves the result tree being built by the document builder.
+	 */
+	private void retrieveResult() {
+		if (resultlist == null && resultdoc == null) {
+			this.setResult(((DocumentBuilder)this.getHandler()).getResult());
+		}
+	}
 
-  /**
-   * Sets the target to be a SAX2 ContentHandler.
-   *
-   * @param handler Must be a non-null ContentHandler reference.
-   */
-  @Override
-  public void setHandler(ContentHandler handler) {
-	  // Do Nothing
-  }
+	//-------------------------------------------------------------------------
+	// SAXResult overwritten methods
+	//-------------------------------------------------------------------------
 
-  /**
-   * Sets the SAX2 LexicalHandler for the output.
-   * <p>
-   * This is needed to handle XML comments and the like.  If the
-   * lexical handler is not set, an attempt should be made by the
-   * transformer to cast the ContentHandler to a LexicalHandler.</p>
-   *
-   * @param handler A non-null LexicalHandler for
-   *                handling lexical parse events.
-   */
-  @Override
-  public void setLexicalHandler(LexicalHandler handler) {
-	  // Ignore.
-  }
+	/**
+	 * Sets the target to be a SAX2 ContentHandler.
+	 *
+	 * @param handler Must be a non-null ContentHandler reference.
+	 */
+	@Override
+	public void setHandler(ContentHandler handler) {
+		// Do Nothing
+	}
+
+	/**
+	 * Sets the SAX2 LexicalHandler for the output.
+	 * <p>
+	 * This is needed to handle XML comments and the like.  If the
+	 * lexical handler is not set, an attempt should be made by the
+	 * transformer to cast the ContentHandler to a LexicalHandler.</p>
+	 *
+	 * @param handler A non-null LexicalHandler for
+	 *                handling lexical parse events.
+	 */
+	@Override
+	public void setLexicalHandler(LexicalHandler handler) {
+		// Ignore.
+	}
 
 
-  //=========================================================================
-  // FragmentHandler nested class
-  //=========================================================================
+	//=========================================================================
+	// FragmentHandler nested class
+	//=========================================================================
 
-  private static class FragmentHandler extends SAXHandler {
-    /**
-     * A dummy root element required by SAXHandler that can only
-     * cope with well-formed documents.
-     */
-    private Element dummyRoot = new Element("root", null, null);
+	private static class FragmentHandler extends SAXHandler {
+		/**
+		 * A dummy root element required by SAXHandler that can only
+		 * cope with well-formed documents.
+		 */
+		private Element dummyRoot = new Element("root", null, null);
 
-    /**
-     * Public constructor.
-     */
-    public FragmentHandler(JDOMFactory factory) {
-      super(factory);
+		/**
+		 * Public constructor.
+		 */
+		public FragmentHandler(JDOMFactory factory) {
+			super(factory);
 
-      // Add a dummy root element to the being-built document as XSL
-      // transformation can output node lists instead of well-formed
-      // documents.
-      this.pushElement(dummyRoot);
-    }
+			// Add a dummy root element to the being-built document as XSL
+			// transformation can output node lists instead of well-formed
+			// documents.
+			this.pushElement(dummyRoot);
+		}
 
-    /**
-     * Returns the result of an XSL Transformation.
-     *
-     * @return the transformation result as a (possibly empty) list of
-     *         JDOM nodes (Elements, Texts, Comments, PIs...).
-     */
-    public List<Content> getResult() {
-      // Flush remaining text content in case the last text segment is
-      // outside an element.
-      try {
-        this.flushCharacters();
-      }
-      catch (SAXException e) { /* Ignore... */  }
-      return this.getDetachedContent(dummyRoot);
-    }
+		/**
+		 * Returns the result of an XSL Transformation.
+		 *
+		 * @return the transformation result as a (possibly empty) list of
+		 *         JDOM nodes (Elements, Texts, Comments, PIs...).
+		 */
+		public List<Content> getResult() {
+			// Flush remaining text content in case the last text segment is
+			// outside an element.
+			try {
+				this.flushCharacters();
+			}
+			catch (SAXException e) { /* Ignore... */  }
+			return this.getDetachedContent(dummyRoot);
+		}
 
-    /**
-     * Returns the content of a JDOM Element detached from it.
-     *
-     * @param  elt   the element to get the content from.
-     *
-     * @return a (possibly empty) list of JDOM nodes, detached from
-     *         their parent.
-     */
-    private List<Content> getDetachedContent(Element elt) {
-      List<Content> content = elt.getContent();
-      List<Content> nodes   = new ArrayList<Content>(content.size());
+		/**
+		 * Returns the content of a JDOM Element detached from it.
+		 *
+		 * @param  elt   the element to get the content from.
+		 *
+		 * @return a (possibly empty) list of JDOM nodes, detached from
+		 *         their parent.
+		 */
+		private List<Content> getDetachedContent(Element elt) {
+			List<Content> content = elt.getContent();
+			List<Content> nodes   = new ArrayList<Content>(content.size());
 
-      while (content.size() != 0)
-      {
-        Content o = content.remove(0);
-        nodes.add(o);
-      }
-      return (nodes);
-    }
-  }
+			while (content.size() != 0)
+			{
+				Content o = content.remove(0);
+				nodes.add(o);
+			}
+			return (nodes);
+		}
+	}
 
-  //=========================================================================
-  // DocumentBuilder inner class
-  //=========================================================================
+	//=========================================================================
+	// DocumentBuilder inner class
+	//=========================================================================
 
-  private class DocumentBuilder extends XMLFilterImpl
-                                implements LexicalHandler {
-    /**
-     * The actual JDOM document builder.
-     */
-    private FragmentHandler saxHandler = null;
+	private class DocumentBuilder extends XMLFilterImpl
+	implements LexicalHandler {
+		/**
+		 * The actual JDOM document builder.
+		 */
+		private FragmentHandler saxHandler = null;
 
-    /**
-     * Whether the startDocument event was received. Some XSLT
-     * processors such as Oracle's do not fire this event.
-     */
-    private boolean startDocumentReceived = false;
+		/**
+		 * Whether the startDocument event was received. Some XSLT
+		 * processors such as Oracle's do not fire this event.
+		 */
+		private boolean startDocumentReceived = false;
 
-    /**
-     * Public default constructor.
-     */
-    public DocumentBuilder() { }
+		/**
+		 * Public default constructor.
+		 */
+		public DocumentBuilder() { }
 
-    /**
-     * Returns the result of an XSL Transformation.
-     *
-     * @return the transformation result as a (possibly empty) list of
-     *         JDOM nodes (Elements, Texts, Comments, PIs...) or
-     *         <code>null</code> if no new transformation occurred
-     *         since the result of the previous one was returned.
-     */
-    public List<Content> getResult() {
-      List<Content> mresult = null;
+		/**
+		 * Returns the result of an XSL Transformation.
+		 *
+		 * @return the transformation result as a (possibly empty) list of
+		 *         JDOM nodes (Elements, Texts, Comments, PIs...) or
+		 *         <code>null</code> if no new transformation occurred
+		 *         since the result of the previous one was returned.
+		 */
+		public List<Content> getResult() {
+			List<Content> mresult = null;
 
-      if (this.saxHandler != null) {
-        // Retrieve result from SAX content handler.
-        mresult = this.saxHandler.getResult();
+			if (this.saxHandler != null) {
+				// Retrieve result from SAX content handler.
+				mresult = this.saxHandler.getResult();
 
-        // Detach the (non-reusable) SAXHandler instance.
-        this.saxHandler = null;
+				// Detach the (non-reusable) SAXHandler instance.
+				this.saxHandler = null;
 
-        // And get ready for the next transformation.
-        this.startDocumentReceived = false;
-      }
-      return mresult;
-    }
+				// And get ready for the next transformation.
+				this.startDocumentReceived = false;
+			}
+			return mresult;
+		}
 
-    private void ensureInitialization() throws SAXException {
-      // Trigger document initialization if XSLT processor failed to
-      // fire the startDocument event.
-      if (this.startDocumentReceived == false) {
-        this.startDocument();
-      }
-    }
+		private void ensureInitialization() throws SAXException {
+			// Trigger document initialization if XSLT processor failed to
+			// fire the startDocument event.
+			if (this.startDocumentReceived == false) {
+				this.startDocument();
+			}
+		}
 
-    //-----------------------------------------------------------------------
-    // XMLFilterImpl overwritten methods
-    //-----------------------------------------------------------------------
+		//-----------------------------------------------------------------------
+		// XMLFilterImpl overwritten methods
+		//-----------------------------------------------------------------------
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Processes a
-     * start of document event.
-     * <p>
-     * This implementation creates a new JDOM document builder and
-     * marks the current result as "under construction".</p>
-     *
-     * @throws SAXException   if any error occurred while creating
-     *                        the document builder.
-     */
-    @Override
-	public void startDocument() throws SAXException {
-      this.startDocumentReceived = true;
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Processes a
+		 * start of document event.
+		 * <p>
+		 * This implementation creates a new JDOM document builder and
+		 * marks the current result as "under construction".</p>
+		 *
+		 * @throws SAXException   if any error occurred while creating
+		 *                        the document builder.
+		 */
+		@Override
+		public void startDocument() throws SAXException {
+			this.startDocumentReceived = true;
 
-      // Reset any previously set result.
-      setResult(null);
+			// Reset any previously set result.
+			setResult(null);
 
-      // Create the actual JDOM document builder and register it as
-      // ContentHandler on the superclass (XMLFilterImpl): this
-      // implementation will take care of propagating the LexicalHandler
-      // events.
-      this.saxHandler = new FragmentHandler(getFactory());
-      super.setContentHandler(this.saxHandler);
+			// Create the actual JDOM document builder and register it as
+			// ContentHandler on the superclass (XMLFilterImpl): this
+			// implementation will take care of propagating the LexicalHandler
+			// events.
+			this.saxHandler = new FragmentHandler(getFactory());
+			super.setContentHandler(this.saxHandler);
 
-      // And propagate event.
-      super.startDocument();
-    }
+			// And propagate event.
+			super.startDocument();
+		}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Receives
-     * notification of the beginning of an element.
-     * <p>
-     * This implementation ensures that startDocument() has been
-     * called prior processing an element.
-     *
-     * @param  nsURI       the Namespace URI, or the empty string if
-     *                     the element has no Namespace URI or if
-     *                     Namespace processing is not being performed.
-     * @param  localName   the local name (without prefix), or the
-     *                     empty string if Namespace processing is
-     *                     not being performed.
-     * @param  qName       the qualified name (with prefix), or the
-     *                     empty string if qualified names are not
-     *                     available.
-     * @param  atts        The attributes attached to the element.  If
-     *                     there are no attributes, it shall be an
-     *                     empty Attributes object.
-     *
-     * @throws SAXException   if any error occurred while creating
-     *                        the document builder.
-     */
-    @Override
-	public void startElement(String nsURI, String localName, String qName,
-                                           Attributes atts) throws SAXException
-    {
-      this.ensureInitialization();
-      super.startElement(nsURI, localName, qName, atts);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Receives
+		 * notification of the beginning of an element.
+		 * <p>
+		 * This implementation ensures that startDocument() has been
+		 * called prior processing an element.
+		 *
+		 * @param  nsURI       the Namespace URI, or the empty string if
+		 *                     the element has no Namespace URI or if
+		 *                     Namespace processing is not being performed.
+		 * @param  localName   the local name (without prefix), or the
+		 *                     empty string if Namespace processing is
+		 *                     not being performed.
+		 * @param  qName       the qualified name (with prefix), or the
+		 *                     empty string if qualified names are not
+		 *                     available.
+		 * @param  atts        The attributes attached to the element.  If
+		 *                     there are no attributes, it shall be an
+		 *                     empty Attributes object.
+		 *
+		 * @throws SAXException   if any error occurred while creating
+		 *                        the document builder.
+		 */
+		@Override
+		public void startElement(String nsURI, String localName, String qName,
+				Attributes atts) throws SAXException
+				{
+			this.ensureInitialization();
+			super.startElement(nsURI, localName, qName, atts);
+				}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Begins the
-     * scope of a prefix-URI Namespace mapping.
-     */
-    @Override
-	public void startPrefixMapping(String prefix, String uri)
-                                                        throws SAXException {
-      this.ensureInitialization();
-      super.startPrefixMapping(prefix, uri);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Begins the
+		 * scope of a prefix-URI Namespace mapping.
+		 */
+		@Override
+		public void startPrefixMapping(String prefix, String uri)
+				throws SAXException {
+			this.ensureInitialization();
+			super.startPrefixMapping(prefix, uri);
+		}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Receives
-     * notification of character data.
-     */
-    @Override
-	public void characters(char ch[], int start, int length)
-                                                        throws SAXException {
-      this.ensureInitialization();
-      super.characters(ch, start, length);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Receives
+		 * notification of character data.
+		 */
+		@Override
+		public void characters(char ch[], int start, int length)
+				throws SAXException {
+			this.ensureInitialization();
+			super.characters(ch, start, length);
+		}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Receives
-     * notification of ignorable whitespace in element content.
-     */
-    @Override
-	public void ignorableWhitespace(char ch[], int start, int length)
-                                                        throws SAXException {
-      this.ensureInitialization();
-      super.ignorableWhitespace(ch, start, length);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Receives
+		 * notification of ignorable whitespace in element content.
+		 */
+		@Override
+		public void ignorableWhitespace(char ch[], int start, int length)
+				throws SAXException {
+			this.ensureInitialization();
+			super.ignorableWhitespace(ch, start, length);
+		}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Receives
-     * notification of a processing instruction.
-     */
-    @Override
-	public void processingInstruction(String target, String data)
-                                                        throws SAXException {
-      this.ensureInitialization();
-      super.processingInstruction(target, data);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Receives
+		 * notification of a processing instruction.
+		 */
+		@Override
+		public void processingInstruction(String target, String data)
+				throws SAXException {
+			this.ensureInitialization();
+			super.processingInstruction(target, data);
+		}
 
-    /**
-     * <i>[SAX ContentHandler interface support]</i> Receives
-     * notification of a skipped entity.
-     */
-    @Override
-	public void skippedEntity(String name) throws SAXException {
-      this.ensureInitialization();
-      super.skippedEntity(name);
-    }
+		/**
+		 * <i>[SAX ContentHandler interface support]</i> Receives
+		 * notification of a skipped entity.
+		 */
+		@Override
+		public void skippedEntity(String name) throws SAXException {
+			this.ensureInitialization();
+			super.skippedEntity(name);
+		}
 
-    //-----------------------------------------------------------------------
-    // LexicalHandler interface support
-    //-----------------------------------------------------------------------
+		//-----------------------------------------------------------------------
+		// LexicalHandler interface support
+		//-----------------------------------------------------------------------
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the
-     * start of DTD declarations, if any.
-     *
-     * @param  name       the document type name.
-     * @param  publicId   the declared public identifier for the
-     *                    external DTD subset, or <code>null</code>
-     *                    if none was declared.
-     * @param  systemId   the declared system identifier for the
-     *                    external DTD subset, or <code>null</code>
-     *                    if none was declared.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void startDTD(String name, String publicId, String systemId)
-                                        throws SAXException {
-      this.ensureInitialization();
-      this.saxHandler.startDTD(name, publicId, systemId);
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the
+		 * start of DTD declarations, if any.
+		 *
+		 * @param  name       the document type name.
+		 * @param  publicId   the declared public identifier for the
+		 *                    external DTD subset, or <code>null</code>
+		 *                    if none was declared.
+		 * @param  systemId   the declared system identifier for the
+		 *                    external DTD subset, or <code>null</code>
+		 *                    if none was declared.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void startDTD(String name, String publicId, String systemId)
+				throws SAXException {
+			this.ensureInitialization();
+			this.saxHandler.startDTD(name, publicId, systemId);
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the end
-     * of DTD declarations.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void endDTD() throws SAXException {
-      this.saxHandler.endDTD();
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the end
+		 * of DTD declarations.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void endDTD() throws SAXException {
+			this.saxHandler.endDTD();
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the
-     * beginning of some internal and external XML entities.
-     *
-     * @param  name   the name of the entity.  If it is a parameter
-     *                entity, the name will begin with '%', and if it
-     *                is the external DTD subset, it will be "[dtd]".
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void startEntity(String name) throws SAXException {
-      this.ensureInitialization();
-      this.saxHandler.startEntity(name);
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the
+		 * beginning of some internal and external XML entities.
+		 *
+		 * @param  name   the name of the entity.  If it is a parameter
+		 *                entity, the name will begin with '%', and if it
+		 *                is the external DTD subset, it will be "[dtd]".
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void startEntity(String name) throws SAXException {
+			this.ensureInitialization();
+			this.saxHandler.startEntity(name);
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the end
-     * of an entity.
-     *
-     * @param  name   the name of the entity that is ending.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void endEntity(String name) throws SAXException {
-      this.saxHandler.endEntity(name);
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the end
+		 * of an entity.
+		 *
+		 * @param  name   the name of the entity that is ending.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void endEntity(String name) throws SAXException {
+			this.saxHandler.endEntity(name);
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the
-     * start of a CDATA section.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void startCDATA() throws SAXException {
-      this.ensureInitialization();
-      this.saxHandler.startCDATA();
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the
+		 * start of a CDATA section.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void startCDATA() throws SAXException {
+			this.ensureInitialization();
+			this.saxHandler.startCDATA();
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports the end
-     * of a CDATA section.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void endCDATA() throws SAXException {
-      this.saxHandler.endCDATA();
-    }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports the end
+		 * of a CDATA section.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void endCDATA() throws SAXException {
+			this.saxHandler.endCDATA();
+		}
 
-    /**
-     * <i>[SAX LexicalHandler interface support]</i> Reports an XML
-     * comment anywhere in the document.
-     *
-     * @param  ch     an array holding the characters in the comment.
-     * @param  start  the starting position in the array.
-     * @param  length the number of characters to use from the array.
-     *
-     * @throws SAXException   The application may raise an exception.
-     */
-    @Override
-	public void comment(char ch[], int start, int length)
-                                  throws SAXException {
-      this.ensureInitialization();
-      this.saxHandler.comment(ch, start, length);
-    }
-  }
+		/**
+		 * <i>[SAX LexicalHandler interface support]</i> Reports an XML
+		 * comment anywhere in the document.
+		 *
+		 * @param  ch     an array holding the characters in the comment.
+		 * @param  start  the starting position in the array.
+		 * @param  length the number of characters to use from the array.
+		 *
+		 * @throws SAXException   The application may raise an exception.
+		 */
+		@Override
+		public void comment(char ch[], int start, int length)
+				throws SAXException {
+			this.ensureInitialization();
+			this.saxHandler.comment(ch, start, length);
+		}
+	}
 }
 

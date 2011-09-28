@@ -66,150 +66,150 @@ import java.util.*;
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
-    public DefaultJDOMFactory() { }
+	public DefaultJDOMFactory() { }
 
-    // Allow Javadocs to inherit from JDOMFactory
+	// Allow Javadocs to inherit from JDOMFactory
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value, Namespace namespace) {
-        return new Attribute(name, value, namespace);
-    }
+		return new Attribute(name, value, namespace);
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value,
-                                            int type, Namespace namespace) {
-        return new Attribute(name, value, type, namespace);
-    }
+			int type, Namespace namespace) {
+		return new Attribute(name, value, type, namespace);
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value) {
-        return new Attribute(name, value);
-    }
+		return new Attribute(name, value);
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value, int type) {
-        return new Attribute(name, value, type);
-    }
+		return new Attribute(name, value, type);
+	}
 
-    @Override
+	@Override
 	public CDATA cdata(String text) {
-        return new CDATA(text);
-    }
+		return new CDATA(text);
+	}
 
-    @Override
+	@Override
 	public Text text(String text) {
-        return new Text(text);
-    }
+		return new Text(text);
+	}
 
-    @Override
+	@Override
 	public Comment comment(String text) {
-        return new Comment(text);
-    }
+		return new Comment(text);
+	}
 
-    @Override
+	@Override
 	public DocType docType(String elementName,
-                           String publicID, String systemID) {
-        return new DocType(elementName, publicID, systemID);
-    }
+			String publicID, String systemID) {
+		return new DocType(elementName, publicID, systemID);
+	}
 
-    @Override
+	@Override
 	public DocType docType(String elementName, String systemID) {
-        return new DocType(elementName, systemID);
-    }
+		return new DocType(elementName, systemID);
+	}
 
-    @Override
+	@Override
 	public DocType docType(String elementName) {
-        return new DocType(elementName);
-    }
+		return new DocType(elementName);
+	}
 
-    @Override
+	@Override
 	public Document document(Element rootElement, DocType docType) {
-        return new Document(rootElement, docType);
-    }
+		return new Document(rootElement, docType);
+	}
 
-    @Override
+	@Override
 	public Document document(Element rootElement, DocType docType, String baseURI) {
-        return new Document(rootElement, docType, baseURI);
-    }
+		return new Document(rootElement, docType, baseURI);
+	}
 
-    @Override
+	@Override
 	public Document document(Element rootElement) {
-        return new Document(rootElement);
-    }
+		return new Document(rootElement);
+	}
 
-    @Override
+	@Override
 	public Element element(String name, Namespace namespace) {
-        return new Element(name, namespace);
-    }
+		return new Element(name, namespace);
+	}
 
-    @Override
+	@Override
 	public Element element(String name) {
-        return new Element(name);
-    }
+		return new Element(name);
+	}
 
-    @Override
+	@Override
 	public Element element(String name, String uri) {
-        return new Element(name, uri);
-    }
+		return new Element(name, uri);
+	}
 
-    @Override
+	@Override
 	public Element element(String name, String prefix, String uri) {
-        return new Element(name, prefix, uri);
-    }
+		return new Element(name, prefix, uri);
+	}
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target) {
-    	return new ProcessingInstruction(target);
-    }
+		return new ProcessingInstruction(target);
+	}
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target,
-                                                       Map<String,String> data) {
-        return new ProcessingInstruction(target, data);
-    }
+			Map<String,String> data) {
+		return new ProcessingInstruction(target, data);
+	}
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target,
-                                                       String data) {
-        return new ProcessingInstruction(target, data);
-    }
+			String data) {
+		return new ProcessingInstruction(target, data);
+	}
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name) {
-        return new EntityRef(name);
-    }
+		return new EntityRef(name);
+	}
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name, String publicID, String systemID) {
-        return new EntityRef(name, publicID, systemID);
-    }
+		return new EntityRef(name, publicID, systemID);
+	}
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name, String systemID) {
-        return new EntityRef(name, systemID);
-    }
+		return new EntityRef(name, systemID);
+	}
 
-    // =====================================================================
-    // List manipulation
-    // =====================================================================
+	// =====================================================================
+			// List manipulation
+			// =====================================================================
 
-    @Override
-	public void addContent(Parent parent, Content child) {
-        if (parent instanceof Document) {
-            ((Document) parent).addContent(child);
-        }
-        else {
-            ((Element) parent).addContent(child);
-        }
-    }
+			@Override
+			public void addContent(Parent parent, Content child) {
+		if (parent instanceof Document) {
+			((Document) parent).addContent(child);
+		}
+		else {
+			((Element) parent).addContent(child);
+		}
+	}
 
-    @Override
+	@Override
 	public void setAttribute(Element parent, Attribute a) {
-        parent.setAttribute(a);
-    }
+		parent.setAttribute(a);
+	}
 
-    @Override
+	@Override
 	public void addNamespaceDeclaration(Element parent, Namespace additional) {
-        parent.addNamespaceDeclaration(additional);
-    }
+		parent.addNamespaceDeclaration(additional);
+	}
 }

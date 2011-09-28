@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2.output;
@@ -65,48 +65,48 @@ import org.xml.sax.helpers.*;
  *
  */
 public class JDOMLocator extends LocatorImpl {
-   
-    /** The JDOM node being processed by SAXOutputter. */
-    private Object node;
 
-    /**
-     * Default no-arg constructor.
-     */
-    JDOMLocator() {                             // package protected
-        super();
-    }
+	/** The JDOM node being processed by SAXOutputter. */
+	private Object node;
 
-    /**
-     * Copy contructor.
-     *
-     * @param locator <code>Locator</code> to copy location
-     *                information from.
-     */
-    JDOMLocator(Locator locator) {              // package protected
-        super(locator);
+	/**
+	 * Default no-arg constructor.
+	 */
+	JDOMLocator() {                             // package protected
+		super();
+	}
 
-        if (locator instanceof JDOMLocator) {
-            this.setNode(((JDOMLocator)locator).getNode());
-        }
-    }
+	/**
+	 * Copy contructor.
+	 *
+	 * @param locator <code>Locator</code> to copy location
+	 *                information from.
+	 */
+	JDOMLocator(Locator locator) {              // package protected
+		super(locator);
 
-    /**
-     * Returns the JDOM node being processed by SAXOutputter.
-     *
-     * @return the JDOM node being processed by SAXOutputter.
-     */
-    public Object getNode() {
-        return this.node;
-    }
+		if (locator instanceof JDOMLocator) {
+			this.setNode(((JDOMLocator)locator).getNode());
+		}
+	}
 
-    /**
-     * Sets the being-processed node.
-     *
-     * @param node <code>Object</code> node currently processed
-     *             by SAXOutputter.
-     */
-    void setNode(Object node) {                 // package protected
-        this.node = node;
-    }
+	/**
+	 * Returns the JDOM node being processed by SAXOutputter.
+	 *
+	 * @return the JDOM node being processed by SAXOutputter.
+	 */
+	public Object getNode() {
+		return this.node;
+	}
+
+	/**
+	 * Sets the being-processed node.
+	 *
+	 * @param node <code>Object</code> node currently processed
+	 *             by SAXOutputter.
+	 */
+	void setNode(Object node) {                 // package protected
+		this.node = node;
+	}
 }
 

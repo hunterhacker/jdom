@@ -64,50 +64,50 @@ import org.jdom2.filter.*;
  */
 class FilterIterator<T extends Content> implements Iterator<T> {
 
-    private Iterator<? extends Content> iterator;
-    private Filter<T> filter;
-    private T nextObject;
+	private Iterator<? extends Content> iterator;
+	private Filter<T> filter;
+	private T nextObject;
 
-    public FilterIterator(Iterator<? extends Content> iterator, Filter<T> filter) {
-        if ((iterator == null) || (filter == null)) {
-            throw new IllegalArgumentException("null parameter");
-        }
-        this.iterator = iterator;
-        this.filter = filter;
-    }
+	public FilterIterator(Iterator<? extends Content> iterator, Filter<T> filter) {
+		if ((iterator == null) || (filter == null)) {
+			throw new IllegalArgumentException("null parameter");
+		}
+		this.iterator = iterator;
+		this.filter = filter;
+	}
 
-    @Override
+	@Override
 	public boolean hasNext() {
-        if (nextObject != null) {
-            return true;
-        }
+		if (nextObject != null) {
+			return true;
+		}
 
-        while (iterator.hasNext()) {
-            Content obj = iterator.next();
-            T f = filter.filter(obj);
-            if (f != null) {
-                nextObject = f;
-                return true;
-            }
-        }
-        return false;
-    }
+		while (iterator.hasNext()) {
+			Content obj = iterator.next();
+			T f = filter.filter(obj);
+			if (f != null) {
+				nextObject = f;
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
+	@Override
 	public T next() {
-        if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
 
-        T obj = nextObject;
-        nextObject = null;
-        return obj;
-    }
+		T obj = nextObject;
+		nextObject = null;
+		return obj;
+	}
 
-    @Override
+	@Override
 	public void remove() {
-        // XXX Could cause probs for sure if hasNext() is
-        // called before the remove(), although that's unlikely.
-        iterator.remove();
-    }
+		// XXX Could cause probs for sure if hasNext() is
+		// called before the remove(), although that's unlikely.
+		iterator.remove();
+	}
 }

@@ -68,23 +68,23 @@ import org.xml.sax.*;
  */
 class JAXPParserFactory {               // package protected
 
-    /** JAXP 1.2 schema language property id. */
-    private static final String JAXP_SCHEMA_LANGUAGE_PROPERTY =
-       "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+	/** JAXP 1.2 schema language property id. */
+	private static final String JAXP_SCHEMA_LANGUAGE_PROPERTY =
+			"http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
-    /** JAXP 1.2 schema location property id. */
-    private static final String JAXP_SCHEMA_LOCATION_PROPERTY =
-       "http://java.sun.com/xml/jaxp/properties/schemaSource";
+	/** JAXP 1.2 schema location property id. */
+	private static final String JAXP_SCHEMA_LOCATION_PROPERTY =
+			"http://java.sun.com/xml/jaxp/properties/schemaSource";
 
-    /**
-     * Private constructor to forbid allocating instances of this utility
-     * class.
-     */
-    private JAXPParserFactory() {
-        // Never called.
-    }
+	/**
+	 * Private constructor to forbid allocating instances of this utility
+	 * class.
+	 */
+	private JAXPParserFactory() {
+		// Never called.
+	}
 
-    /* Implementor's note regarding createParser() design: The features and
+	/* Implementor's note regarding createParser() design: The features and
     properties are normally set in SAXBuilder, but we take them in
     createParser() as well because some features or properties may need to be
     applied during the JAXP parser construction. Today, for example, properties
@@ -95,79 +95,79 @@ class JAXPParserFactory {               // package protected
     must be done on the SAXParser object which is only visible in
     JAXParserFactory. Features is also passed in case some future JAXP release
     defines JAXP-specific features.
-     */
+	 */
 
-    /**
-     * Creates a SAX parser allocated through the configured JAXP SAX
-     * parser factory.
-     *
-     * @param  validating   whether a validating parser is requested.
-     * @param  features     the user-defined SAX features.
-     * @param  properties   the user-defined SAX properties.
-     *
-     * @return a configured XMLReader.
-     *
-     * @throws JDOMException if any error occurred when allocating or
-     *                       configuring the JAXP SAX parser.
-     */
-    public static XMLReader createParser(boolean validating,
-                          Map<String,Boolean> features, Map<String,Object> properties) throws JDOMException {
-        try {
-            SAXParser parser = null;
+	/**
+	 * Creates a SAX parser allocated through the configured JAXP SAX
+	 * parser factory.
+	 *
+	 * @param  validating   whether a validating parser is requested.
+	 * @param  features     the user-defined SAX features.
+	 * @param  properties   the user-defined SAX properties.
+	 *
+	 * @return a configured XMLReader.
+	 *
+	 * @throws JDOMException if any error occurred when allocating or
+	 *                       configuring the JAXP SAX parser.
+	 */
+	public static XMLReader createParser(boolean validating,
+			Map<String,Boolean> features, Map<String,Object> properties) throws JDOMException {
+		try {
+			SAXParser parser = null;
 
-            // Allocate and configure JAXP SAX parser factory.
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setValidating(validating);
-            factory.setNamespaceAware(true);
+			// Allocate and configure JAXP SAX parser factory.
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setValidating(validating);
+			factory.setNamespaceAware(true);
 
-            try {
-                // Allocate parser.
-                parser = factory.newSAXParser();
-            }
-            catch (ParserConfigurationException e) {
-                throw new JDOMException("Could not allocate JAXP SAX Parser", e);
-            }
+			try {
+				// Allocate parser.
+				parser = factory.newSAXParser();
+			}
+			catch (ParserConfigurationException e) {
+				throw new JDOMException("Could not allocate JAXP SAX Parser", e);
+			}
 
-            // Set user-defined JAXP properties (if any)
-            setProperty(parser, properties, JAXP_SCHEMA_LANGUAGE_PROPERTY);
-            setProperty(parser, properties, JAXP_SCHEMA_LOCATION_PROPERTY);
+			// Set user-defined JAXP properties (if any)
+			setProperty(parser, properties, JAXP_SCHEMA_LANGUAGE_PROPERTY);
+			setProperty(parser, properties, JAXP_SCHEMA_LOCATION_PROPERTY);
 
-            // Return configured SAX XMLReader.
-            return parser.getXMLReader();
-        }
-        catch (SAXException e) {
-            throw new JDOMException("Could not allocate JAXP SAX Parser", e);
-        }
-    }
+			// Return configured SAX XMLReader.
+			return parser.getXMLReader();
+		}
+		catch (SAXException e) {
+			throw new JDOMException("Could not allocate JAXP SAX Parser", e);
+		}
+	}
 
-    /**
-     * Sets a property on a JAXP SAX parser object if and only if it
-     * is declared in the user-defined properties.
-     *
-     * @param  parser       the JAXP SAX parser to configure.
-     * @param  properties   the user-defined SAX properties.
-     * @param  name         the name of the property to set.
-     *
-     * @throws JDOMException if any error occurred while configuring
-     *                       the property.
-     */
-    private static void setProperty(SAXParser parser,
-                        Map<String,Object> properties, String name) throws JDOMException {
-        try {
-            if (properties.containsKey(name)) {
-                parser.setProperty(name, properties.get(name));
-            }
-        }
-        catch (SAXNotSupportedException e) {
-            throw new JDOMException(
-                name + " property not supported for JAXP parser " +
-                parser.getClass().getName());
-        }
-        catch (SAXNotRecognizedException e) {
-            throw new JDOMException(
-                name + " property not recognized for JAXP parser " +
-                parser.getClass().getName());
-        }
-    }
+	/**
+	 * Sets a property on a JAXP SAX parser object if and only if it
+	 * is declared in the user-defined properties.
+	 *
+	 * @param  parser       the JAXP SAX parser to configure.
+	 * @param  properties   the user-defined SAX properties.
+	 * @param  name         the name of the property to set.
+	 *
+	 * @throws JDOMException if any error occurred while configuring
+	 *                       the property.
+	 */
+	private static void setProperty(SAXParser parser,
+			Map<String,Object> properties, String name) throws JDOMException {
+		try {
+			if (properties.containsKey(name)) {
+				parser.setProperty(name, properties.get(name));
+			}
+		}
+		catch (SAXNotSupportedException e) {
+			throw new JDOMException(
+					name + " property not supported for JAXP parser " +
+							parser.getClass().getName());
+		}
+		catch (SAXNotRecognizedException e) {
+			throw new JDOMException(
+					name + " property not recognized for JAXP parser " +
+							parser.getClass().getName());
+		}
+	}
 }
 

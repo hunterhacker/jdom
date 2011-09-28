@@ -85,302 +85,302 @@ import org.w3c.dom.NodeList;
  */
 public class DOMBuilder {
 
-    /** The factory for creating new JDOM objects */
-    private JDOMFactory factory = new DefaultJDOMFactory();
+	/** The factory for creating new JDOM objects */
+	private JDOMFactory factory = new DefaultJDOMFactory();
 
-    /**
-     * This creates a new DOMBuilder which will attempt to first locate
-     * a parser via JAXP, then will try to use a set of default parsers.
-     * The underlying parser will not validate.
-     */
-    public DOMBuilder() {
-    }
+	/**
+	 * This creates a new DOMBuilder which will attempt to first locate
+	 * a parser via JAXP, then will try to use a set of default parsers.
+	 * The underlying parser will not validate.
+	 */
+	public DOMBuilder() {
+	}
 
-    /*
-     * This sets a custom JDOMFactory for the builder.  Use this to build
-     * the tree with your own subclasses of the JDOM classes.
-     *
-     * @param factory <code>JDOMFactory</code> to use
-     */
-    public void setFactory(JDOMFactory factory) {
-        this.factory = factory;
-    }
+	/*
+	 * This sets a custom JDOMFactory for the builder.  Use this to build
+	 * the tree with your own subclasses of the JDOM classes.
+	 *
+	 * @param factory <code>JDOMFactory</code> to use
+	 */
+	public void setFactory(JDOMFactory factory) {
+		this.factory = factory;
+	}
 
-    /**
-     * Returns the current {@link org.jdom2.JDOMFactory} in use.
-     * @return the factory in use
-     */
-    public JDOMFactory getFactory() {
-        return factory;
-    }
+	/**
+	 * Returns the current {@link org.jdom2.JDOMFactory} in use.
+	 * @return the factory in use
+	 */
+	public JDOMFactory getFactory() {
+		return factory;
+	}
 
-    /**
-     * This will build a JDOM tree from an existing DOM tree.
-     *
-     * @param domDocument <code>org.w3c.dom.Document</code> object
-     * @return <code>Document</code> - JDOM document object.
-     */
-    public Document build(org.w3c.dom.Document domDocument) {
-        Document doc = factory.document(null);
-        buildTree(domDocument, doc, null, true);
-        return doc;
-    }
+	/**
+	 * This will build a JDOM tree from an existing DOM tree.
+	 *
+	 * @param domDocument <code>org.w3c.dom.Document</code> object
+	 * @return <code>Document</code> - JDOM document object.
+	 */
+	public Document build(org.w3c.dom.Document domDocument) {
+		Document doc = factory.document(null);
+		buildTree(domDocument, doc, null, true);
+		return doc;
+	}
 
-    /**
-     * This will build a JDOM Element from an existing DOM Element
-     *
-     * @param domElement <code> org.w3c.dom.Element</code> object
-     * @return <code>Element</code> - JDOM Element object
-     */
-    public org.jdom2.Element build(org.w3c.dom.Element domElement) {
-        Document doc = factory.document(null);
-        buildTree(domElement, doc, null, true);
-        return doc.getRootElement();
-    }
+	/**
+	 * This will build a JDOM Element from an existing DOM Element
+	 *
+	 * @param domElement <code> org.w3c.dom.Element</code> object
+	 * @return <code>Element</code> - JDOM Element object
+	 */
+	public org.jdom2.Element build(org.w3c.dom.Element domElement) {
+		Document doc = factory.document(null);
+		buildTree(domElement, doc, null, true);
+		return doc.getRootElement();
+	}
 
-    /**
-     * This takes a DOM <code>Node</code> and builds up
-     * a JDOM tree, recursing until the DOM tree is exhausted
-     * and the JDOM tree results.
-     *
-     * @param node <code>Code</node> to examine.
-     * @param doc JDOM <code>Document</code> being built.
-     * @param current <code>Element</code> that is current parent.
-     * @param atRoot <code>boolean</code> indicating whether at root level.
-     */
-    private void buildTree(Node node,
-                           Document doc,
-                           Element current,
-                           boolean atRoot) {
-        // Recurse through the tree
-        switch (node.getNodeType()) {
-            case Node.DOCUMENT_NODE:
-                NodeList nodes = node.getChildNodes();
-                for (int i=0, size=nodes.getLength(); i<size; i++) {
-                    buildTree(nodes.item(i), doc, current, true);
-                }
-                break;
+	/**
+	 * This takes a DOM <code>Node</code> and builds up
+	 * a JDOM tree, recursing until the DOM tree is exhausted
+	 * and the JDOM tree results.
+	 *
+	 * @param node <code>Code</node> to examine.
+	 * @param doc JDOM <code>Document</code> being built.
+	 * @param current <code>Element</code> that is current parent.
+	 * @param atRoot <code>boolean</code> indicating whether at root level.
+	 */
+	private void buildTree(Node node,
+			Document doc,
+			Element current,
+			boolean atRoot) {
+		// Recurse through the tree
+		switch (node.getNodeType()) {
+			case Node.DOCUMENT_NODE:
+				NodeList nodes = node.getChildNodes();
+				for (int i=0, size=nodes.getLength(); i<size; i++) {
+					buildTree(nodes.item(i), doc, current, true);
+				}
+				break;
 
-            case Node.ELEMENT_NODE:
-                String nodeName = node.getNodeName();
-                String prefix = "";
-                String localName = nodeName;
-                int colon = nodeName.indexOf(':');
-                if (colon >= 0) {
-                    prefix = nodeName.substring(0, colon);
-                    localName = nodeName.substring(colon + 1);
-                }
+			case Node.ELEMENT_NODE:
+				String nodeName = node.getNodeName();
+				String prefix = "";
+				String localName = nodeName;
+				int colon = nodeName.indexOf(':');
+				if (colon >= 0) {
+					prefix = nodeName.substring(0, colon);
+					localName = nodeName.substring(colon + 1);
+				}
 
-                // Get element's namespace
-                Namespace ns = null;
-                String uri = node.getNamespaceURI();
-                if (uri == null) {
-                    ns = (current == null) ? Namespace.NO_NAMESPACE
-                                           : current.getNamespace(prefix);
-                }
-                else {
-                    ns = Namespace.getNamespace(prefix, uri);
-                }
+				// Get element's namespace
+				Namespace ns = null;
+				String uri = node.getNamespaceURI();
+				if (uri == null) {
+					ns = (current == null) ? Namespace.NO_NAMESPACE
+							: current.getNamespace(prefix);
+				}
+				else {
+					ns = Namespace.getNamespace(prefix, uri);
+				}
 
-                Element element = factory.element(localName, ns);
+				Element element = factory.element(localName, ns);
 
-                if (atRoot) {
-                    // If at root, set as document root
-                    doc.setRootElement(element);  // XXX should we use a factory call?
-                } else {
-                    // else add to parent element
-                    factory.addContent(current, element);
-                }
+				if (atRoot) {
+					// If at root, set as document root
+					doc.setRootElement(element);  // XXX should we use a factory call?
+				} else {
+					// else add to parent element
+					factory.addContent(current, element);
+				}
 
-                // Add namespaces
-                NamedNodeMap attributeList = node.getAttributes();
-                int attsize = attributeList.getLength();
+				// Add namespaces
+				NamedNodeMap attributeList = node.getAttributes();
+				int attsize = attributeList.getLength();
 
-                for (int i = 0; i < attsize; i++) {
-                    Attr att = (Attr) attributeList.item(i);
+				for (int i = 0; i < attsize; i++) {
+					Attr att = (Attr) attributeList.item(i);
 
-                    String attname = att.getName();
-                    if (attname.startsWith("xmlns")) {
-                        String attPrefix = "";
-                        colon = attname.indexOf(':');
-                        if (colon >= 0) {
-                            attPrefix = attname.substring(colon + 1);
-                        }
+					String attname = att.getName();
+					if (attname.startsWith("xmlns")) {
+						String attPrefix = "";
+						colon = attname.indexOf(':');
+						if (colon >= 0) {
+							attPrefix = attname.substring(colon + 1);
+						}
 
-                        String attvalue = att.getValue();
+						String attvalue = att.getValue();
 
-                        Namespace declaredNS =
-                            Namespace.getNamespace(attPrefix, attvalue);
+						Namespace declaredNS =
+								Namespace.getNamespace(attPrefix, attvalue);
 
-                        // Add as additional namespaces if it's different
-                        // to this element's namespace (perhaps we should
-                        // also have logic not to mark them as additional if
-                        // it's been done already, but it probably doesn't
-                        // matter)
-                        if (prefix.equals(attPrefix)) {
-                        	// RL: note, it should also be true that uri.equals(attvalue)
-                        	// if not, then the parser is boken.
-                        	// further, declaredNS should be exactly the same as ns
-                        	// so the following should in fact do nothing.
-                            element.setNamespace(declaredNS);
-                        }
-                        else {
-                            factory.addNamespaceDeclaration(element, declaredNS);
-                        }
-                    }
-                }
+						// Add as additional namespaces if it's different
+						// to this element's namespace (perhaps we should
+						// also have logic not to mark them as additional if
+						// it's been done already, but it probably doesn't
+						// matter)
+						if (prefix.equals(attPrefix)) {
+							// RL: note, it should also be true that uri.equals(attvalue)
+							// if not, then the parser is boken.
+							// further, declaredNS should be exactly the same as ns
+							// so the following should in fact do nothing.
+							element.setNamespace(declaredNS);
+						}
+						else {
+							factory.addNamespaceDeclaration(element, declaredNS);
+						}
+					}
+				}
 
-                // Add attributes
-                for (int i = 0; i < attsize; i++) {
-                    Attr att = (Attr) attributeList.item(i);
+				// Add attributes
+				for (int i = 0; i < attsize; i++) {
+					Attr att = (Attr) attributeList.item(i);
 
-                    String attname = att.getName();
+					String attname = att.getName();
 
-                    if ( !attname.startsWith("xmlns")) {
-                        String attPrefix = "";
-                        String attLocalName = attname;
-                        colon = attname.indexOf(':');
-                        if (colon >= 0) {
-                            attPrefix = attname.substring(0, colon);
-                            attLocalName = attname.substring(colon + 1);
-                        }
-                        
-                        String attvalue = att.getValue();
+					if ( !attname.startsWith("xmlns")) {
+						String attPrefix = "";
+						String attLocalName = attname;
+						colon = attname.indexOf(':');
+						if (colon >= 0) {
+							attPrefix = attname.substring(0, colon);
+							attLocalName = attname.substring(colon + 1);
+						}
 
-                        // Get attribute's namespace
-                        Namespace attNS = null;
-                        String attURI = att.getNamespaceURI(); 
-                        if (attURI == null || "".equals(attURI)) {
-                        	attNS = Namespace.NO_NAMESPACE;
-                        } else {
-                        	// various conditions can lead here.
-                        	// the logical one is that we have a prefix for the
-                        	// attribute, and also a namespace URI.
-                        	// The alternative to that is in some conditions,
-                        	// the parser could have a 'default' or 'fixed'
-                        	// attribute that comes from an XSD used for
-                        	// validation. In that case there may not be a prefix
-                        	// There's also the possibility the DOM contains
-                        	// garbage.
-                        	if (attPrefix.length() > 0) {
-	                        	// If the att has a prefix, we can assume that
-	                        	// the DOM is valid, and we can just use the prefix.
-                        		// if this prefix conflicts with some other namespace
-                        		// then we re-declare it. If redeclaring it screws up
-                        		// other attributes in this Element, then the DOM
-                        		// was broken to start with.
-                        		attNS = Namespace.getNamespace(attPrefix, attURI);
-                        	} else {
-                        		// OK, no prefix.
-                        		// must be a defaulted value from an XSD.
-                        		// perhaps we can find the namespace in our
-                        		// element's ancestry, and use the prefix from that.
-                        		HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
-                        		for(Namespace nss : element.getNamespacesInScope()) {
-                        			if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
-                        				attNS = nss;
-                        				break;
-                        			}
-                        			tmpmap.put(nss.getPrefix(), nss);
-                        		}
-                                if (attNS == null) {
-                                    // we cannot find a 'prevailing' namespace that has a prefix
-                                    // that is for this namespace.
-                                    // This basically means that there's an XMLSchema, for the
-                                    // DEFAULT namespace, and there's a defaulted/fixed
-                                    // attribute definition in the XMLSchema that's targeted
-                                    // for this namespace,... but, the user has either not
-                                    // declared a prefixed version of the namespace, or has
-                                    // re-declared the same prefix at a lower level with a
-                                    // different namespace.
-                                    // All of these things are possible.
-                                    // Create some sort of default prefix.
-                                    int cnt = 0;
-                                    String base = "attns";
-                                    String pfx = base + cnt;
-                                    while (tmpmap.containsKey(pfx)) {
-                                        cnt++;
-                                        pfx = base + cnt;
-                                    }
-                                    attNS = Namespace.getNamespace(pfx, attURI);
-                                }
-                        	}
-                        }
+						String attvalue = att.getValue();
 
-                        Attribute attribute =
-                            factory.attribute(attLocalName, attvalue, attNS);
-                        factory.setAttribute(element, attribute);
-                    }
-                }
+						// Get attribute's namespace
+						Namespace attNS = null;
+						String attURI = att.getNamespaceURI(); 
+						if (attURI == null || "".equals(attURI)) {
+							attNS = Namespace.NO_NAMESPACE;
+						} else {
+							// various conditions can lead here.
+							// the logical one is that we have a prefix for the
+							// attribute, and also a namespace URI.
+							// The alternative to that is in some conditions,
+							// the parser could have a 'default' or 'fixed'
+							// attribute that comes from an XSD used for
+							// validation. In that case there may not be a prefix
+							// There's also the possibility the DOM contains
+							// garbage.
+							if (attPrefix.length() > 0) {
+								// If the att has a prefix, we can assume that
+								// the DOM is valid, and we can just use the prefix.
+								// if this prefix conflicts with some other namespace
+								// then we re-declare it. If redeclaring it screws up
+								// other attributes in this Element, then the DOM
+								// was broken to start with.
+								attNS = Namespace.getNamespace(attPrefix, attURI);
+							} else {
+								// OK, no prefix.
+								// must be a defaulted value from an XSD.
+								// perhaps we can find the namespace in our
+								// element's ancestry, and use the prefix from that.
+								HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
+								for(Namespace nss : element.getNamespacesInScope()) {
+									if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
+										attNS = nss;
+										break;
+									}
+									tmpmap.put(nss.getPrefix(), nss);
+								}
+								if (attNS == null) {
+									// we cannot find a 'prevailing' namespace that has a prefix
+									// that is for this namespace.
+									// This basically means that there's an XMLSchema, for the
+									// DEFAULT namespace, and there's a defaulted/fixed
+									// attribute definition in the XMLSchema that's targeted
+									// for this namespace,... but, the user has either not
+									// declared a prefixed version of the namespace, or has
+									// re-declared the same prefix at a lower level with a
+									// different namespace.
+									// All of these things are possible.
+									// Create some sort of default prefix.
+									int cnt = 0;
+									String base = "attns";
+									String pfx = base + cnt;
+									while (tmpmap.containsKey(pfx)) {
+										cnt++;
+										pfx = base + cnt;
+									}
+									attNS = Namespace.getNamespace(pfx, attURI);
+								}
+							}
+						}
 
-                // Recurse on child nodes
-                // The list should never be null nor should it ever contain
-                // null nodes, but some DOM impls are broken
-                NodeList children = node.getChildNodes();
-                if (children != null) {
-                    int size = children.getLength();
-                    for (int i = 0; i < size; i++) {
-                        Node item = children.item(i);
-                        if (item != null) {
-                            buildTree(item, doc, element, false);
-                        }
-                    }
-                }
-                break;
+						Attribute attribute =
+								factory.attribute(attLocalName, attvalue, attNS);
+						factory.setAttribute(element, attribute);
+					}
+				}
 
-            case Node.TEXT_NODE:
-                String data = node.getNodeValue();
-                factory.addContent(current, factory.text(data));
-                break;
+				// Recurse on child nodes
+				// The list should never be null nor should it ever contain
+				// null nodes, but some DOM impls are broken
+				NodeList children = node.getChildNodes();
+				if (children != null) {
+					int size = children.getLength();
+					for (int i = 0; i < size; i++) {
+						Node item = children.item(i);
+						if (item != null) {
+							buildTree(item, doc, element, false);
+						}
+					}
+				}
+				break;
 
-            case Node.CDATA_SECTION_NODE:
-                String cdata = node.getNodeValue();
-                factory.addContent(current, factory.cdata(cdata));
-                break;
+			case Node.TEXT_NODE:
+				String data = node.getNodeValue();
+				factory.addContent(current, factory.text(data));
+				break;
+
+			case Node.CDATA_SECTION_NODE:
+				String cdata = node.getNodeValue();
+				factory.addContent(current, factory.cdata(cdata));
+				break;
 
 
-            case Node.PROCESSING_INSTRUCTION_NODE:
-                if (atRoot) {
-                    factory.addContent(doc,
-                        factory.processingInstruction(node.getNodeName(),
-                                                      node.getNodeValue()));
-                } else {
-                    factory.addContent(current,
-                        factory.processingInstruction(node.getNodeName(),
-                                                      node.getNodeValue()));
-                }
-                break;
+			case Node.PROCESSING_INSTRUCTION_NODE:
+				if (atRoot) {
+					factory.addContent(doc,
+							factory.processingInstruction(node.getNodeName(),
+									node.getNodeValue()));
+				} else {
+					factory.addContent(current,
+							factory.processingInstruction(node.getNodeName(),
+									node.getNodeValue()));
+				}
+				break;
 
-            case Node.COMMENT_NODE:
-                if (atRoot) {
-                    factory.addContent(doc, factory.comment(node.getNodeValue()));
-                } else {
-                    factory.addContent(current, factory.comment(node.getNodeValue()));
-                }
-                break;
+			case Node.COMMENT_NODE:
+				if (atRoot) {
+					factory.addContent(doc, factory.comment(node.getNodeValue()));
+				} else {
+					factory.addContent(current, factory.comment(node.getNodeValue()));
+				}
+				break;
 
-            case Node.ENTITY_REFERENCE_NODE:
-                EntityRef entity = factory.entityRef(node.getNodeName());
-                factory.addContent(current, entity);
-                break;
+			case Node.ENTITY_REFERENCE_NODE:
+				EntityRef entity = factory.entityRef(node.getNodeName());
+				factory.addContent(current, entity);
+				break;
 
-            case Node.ENTITY_NODE:
-                // ??
-                break;
+			case Node.ENTITY_NODE:
+				// ??
+						break;
 
-            case Node.DOCUMENT_TYPE_NODE:
-                DocumentType domDocType = (DocumentType)node;
-                String publicID = domDocType.getPublicId();
-                String systemID = domDocType.getSystemId();
-                String internalDTD = domDocType.getInternalSubset();
+			case Node.DOCUMENT_TYPE_NODE:
+				DocumentType domDocType = (DocumentType)node;
+				String publicID = domDocType.getPublicId();
+				String systemID = domDocType.getSystemId();
+				String internalDTD = domDocType.getInternalSubset();
 
-                DocType docType = factory.docType(domDocType.getName());
-                docType.setPublicID(publicID);
-                docType.setSystemID(systemID);
-                docType.setInternalSubset(internalDTD);
+				DocType docType = factory.docType(domDocType.getName());
+				docType.setPublicID(publicID);
+				docType.setSystemID(systemID);
+				docType.setInternalSubset(internalDTD);
 
-                factory.addContent(doc, docType);
-                break;
-        }
-    }
+				factory.addContent(doc, docType);
+				break;
+		}
+	}
 }

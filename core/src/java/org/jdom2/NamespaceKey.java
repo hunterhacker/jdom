@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2;
@@ -62,42 +62,42 @@ package org.jdom2;
  */
 final class NamespaceKey {
 
-    private String prefix;
-    private String uri;
-    private int hash;
+	private String prefix;
+	private String uri;
+	private int hash;
 
-    public NamespaceKey(String prefix, String uri) {
-        this.prefix = prefix;
-        this.uri = uri;
-        this.hash = prefix.hashCode();
-    }
+	public NamespaceKey(String prefix, String uri) {
+		this.prefix = prefix;
+		this.uri = uri;
+		this.hash = prefix.hashCode();
+	}
 
-    public NamespaceKey(Namespace namespace) {
-        this(namespace.getPrefix(), namespace.getURI());
-    }
+	public NamespaceKey(Namespace namespace) {
+		this(namespace.getPrefix(), namespace.getURI());
+	}
 
-    @Override
+	@Override
 	public boolean equals(Object ob) {
-        if (this == ob) {
-            return true;
-        }
-        else if (ob instanceof NamespaceKey) {
-            NamespaceKey other = (NamespaceKey) ob;
-            return prefix.equals(other.prefix) && uri.equals(other.uri);
-        }
-        else {
-            return false;
-        }
-    }
+		if (this == ob) {
+			return true;
+		}
+		else if (ob instanceof NamespaceKey) {
+			NamespaceKey other = (NamespaceKey) ob;
+			return prefix.equals(other.prefix) && uri.equals(other.uri);
+		}
+		else {
+			return false;
+		}
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
-        return hash;
-    }
-    
-    @Override
+		return hash;
+	}
+
+	@Override
 	public String toString() {
-        return "[NamespaceKey: prefix \"" + prefix +
-               "\" is mapped to URI \"" + uri + "\"]";
-    }
+		return "[NamespaceKey: prefix \"" + prefix +
+		         "\" is mapped to URI \"" + uri + "\"]";
+	}
 }

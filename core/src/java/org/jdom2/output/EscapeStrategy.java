@@ -64,10 +64,10 @@ package org.jdom2.output;
  */
 public interface EscapeStrategy {
 
-    /**
-     * Test whether the supplied character should be formatted literally
-     * or as a character entity.
-     */
-    public boolean shouldEscape(char ch);
+	/**
+	 * Test whether the supplied character should be formatted literally
+	 * or as a character entity.
+	 */
+	public boolean shouldEscape(char ch);
 }
 

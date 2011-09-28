@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2;
@@ -65,254 +65,254 @@ import java.util.*;
  */
 public class UncheckedJDOMFactory implements JDOMFactory {
 
-    // =====================================================================
-    // Element Factory
-    // =====================================================================
+	// =====================================================================
+	// Element Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public Element element(String name, Namespace namespace) {
-        Element e = new Element();
-        e.name = name;
-        if (namespace == null) {
-            namespace = Namespace.NO_NAMESPACE;
-        }
-        e.namespace = namespace;
-        return e;
-    }
+		Element e = new Element();
+		e.name = name;
+		if (namespace == null) {
+			namespace = Namespace.NO_NAMESPACE;
+		}
+		e.namespace = namespace;
+		return e;
+	}
 
-    @Override
+	@Override
 	public Element element(String name) {
-        Element e = new Element();
-        e.name = name;
-        e.namespace = Namespace.NO_NAMESPACE;
-        return e;
-    }
+		Element e = new Element();
+		e.name = name;
+		e.namespace = Namespace.NO_NAMESPACE;
+		return e;
+	}
 
-    @Override
+	@Override
 	public Element element(String name, String uri) {
-        return element(name, Namespace.getNamespace("", uri));
-    }
+		return element(name, Namespace.getNamespace("", uri));
+	}
 
-    @Override
+	@Override
 	public Element element(String name, String prefix, String uri) {
-        return element(name, Namespace.getNamespace(prefix, uri));
-    }
+		return element(name, Namespace.getNamespace(prefix, uri));
+	}
 
-    // =====================================================================
-    // Attribute Factory
-    // =====================================================================
+	// =====================================================================
+	// Attribute Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value, Namespace namespace) {
-        Attribute a = new Attribute();
-        a.name = name;
-        a.value = value;
-        if (namespace == null) {
-            namespace = Namespace.NO_NAMESPACE;
-        }
-        a.namespace = namespace;
-        return a;
-    }
+		Attribute a = new Attribute();
+		a.name = name;
+		a.value = value;
+		if (namespace == null) {
+			namespace = Namespace.NO_NAMESPACE;
+		}
+		a.namespace = namespace;
+		return a;
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value, int type, Namespace namespace) {
-        Attribute a = new Attribute();
-        a.name = name;
-        a.type = type;
-        a.value = value;
-        if (namespace == null) {
-            namespace = Namespace.NO_NAMESPACE;
-        }
-        a.namespace = namespace;
-        return a;
-    }
+		Attribute a = new Attribute();
+		a.name = name;
+		a.type = type;
+		a.value = value;
+		if (namespace == null) {
+			namespace = Namespace.NO_NAMESPACE;
+		}
+		a.namespace = namespace;
+		return a;
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value) {
-        Attribute a = new Attribute();
-        a.name = name;
-        a.value = value;
-        a.namespace = Namespace.NO_NAMESPACE;
-        return a;
-    }
+		Attribute a = new Attribute();
+		a.name = name;
+		a.value = value;
+		a.namespace = Namespace.NO_NAMESPACE;
+		return a;
+	}
 
-    @Override
+	@Override
 	public Attribute attribute(String name, String value, int type) {
-        Attribute a = new Attribute();
-        a.name = name;
-        a.type = type;
-        a.value = value;
-        a.namespace = Namespace.NO_NAMESPACE;
-        return a;
-    }
+		Attribute a = new Attribute();
+		a.name = name;
+		a.type = type;
+		a.value = value;
+		a.namespace = Namespace.NO_NAMESPACE;
+		return a;
+	}
 
-    // =====================================================================
-    // Text Factory
-    // =====================================================================
+	// =====================================================================
+			// Text Factory
+			// =====================================================================
 
-    @Override
+	@Override
 	public Text text(String str) {
-        Text t = new Text();
-        t.value = str;
-        return t;
-    }
+		Text t = new Text();
+		t.value = str;
+		return t;
+	}
 
-    // =====================================================================
-    // CDATA Factory
-    // =====================================================================
+	// =====================================================================
+	// CDATA Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public CDATA cdata(String str) {
-        CDATA c = new CDATA();
-        c.value = str;
-        return c;
-    }
+		CDATA c = new CDATA();
+		c.value = str;
+		return c;
+	}
 
-    // =====================================================================
-    // Comment Factory
-    // =====================================================================
+	// =====================================================================
+	// Comment Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public Comment comment(String str) {
-        Comment c = new Comment();
-        c.text = str;
-        return c;
-    }
+		Comment c = new Comment();
+		c.text = str;
+		return c;
+	}
 
-    // =====================================================================
-    // Processing Instruction Factory
-    // =====================================================================
+	// =====================================================================
+	// Processing Instruction Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target, Map<String,String> data) {
-        ProcessingInstruction p = new ProcessingInstruction();
-        p.target = target;
-        p.setData(data);
-        return p;
-    }
+		ProcessingInstruction p = new ProcessingInstruction();
+		p.target = target;
+		p.setData(data);
+		return p;
+	}
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target, String data) {
-        ProcessingInstruction p = new ProcessingInstruction();
-        p.target = target;
-        p.setData(data);
-        return p;
-    }
+		ProcessingInstruction p = new ProcessingInstruction();
+		p.target = target;
+		p.setData(data);
+		return p;
+	}
 
-    @Override
+	@Override
 	public ProcessingInstruction processingInstruction(String target) {
-        ProcessingInstruction p = new ProcessingInstruction();
-        p.target = target;
-        p.rawData = "";
-        return p;
-    }
+		ProcessingInstruction p = new ProcessingInstruction();
+		p.target = target;
+		p.rawData = "";
+		return p;
+	}
 
-    // =====================================================================
-    // Entity Ref Factory
-    // =====================================================================
+	// =====================================================================
+	// Entity Ref Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name) {
-        EntityRef e = new org.jdom2.EntityRef();
-        e.name = name;
-        return e;
-    }
+		EntityRef e = new org.jdom2.EntityRef();
+		e.name = name;
+		return e;
+	}
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name, String systemID) {
-        EntityRef e = new EntityRef();
-        e.name = name;
-        e.systemID = systemID;
-        return e;
-    }
+		EntityRef e = new EntityRef();
+		e.name = name;
+		e.systemID = systemID;
+		return e;
+	}
 
-    @Override
+	@Override
 	public EntityRef entityRef(String name, String publicID, String systemID) {
-        EntityRef e = new EntityRef();
-        e.name = name;
-        e.publicID = publicID;
-        e.systemID = systemID;
-        return e;
-    }
+		EntityRef e = new EntityRef();
+		e.name = name;
+		e.publicID = publicID;
+		e.systemID = systemID;
+		return e;
+	}
 
-    // =====================================================================
-    // DocType Factory
-    // =====================================================================
+	// =====================================================================
+	// DocType Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public DocType docType(String elementName, String publicID, String systemID) {
-        DocType d = new DocType();
-        d.elementName = elementName;
-        d.publicID = publicID;
-        d.systemID = systemID;
-        return d;
-    }
+		DocType d = new DocType();
+		d.elementName = elementName;
+		d.publicID = publicID;
+		d.systemID = systemID;
+		return d;
+	}
 
-    @Override
+	@Override
 	public DocType docType(String elementName, String systemID) {
-        return docType(elementName, null, systemID);
-    }
+		return docType(elementName, null, systemID);
+	}
 
-    @Override
+	@Override
 	public DocType docType(String elementName) {
-        return docType(elementName, null, null);
-    }
+		return docType(elementName, null, null);
+	}
 
-    // =====================================================================
-    // Document Factory
-    // =====================================================================
+	// =====================================================================
+	// Document Factory
+	// =====================================================================
 
-    @Override
+	@Override
 	public Document document(Element rootElement, DocType docType, String baseURI) {
-        Document d = new Document();
-        if (docType != null) {
-            addContent(d, docType);
-        }
-        if (rootElement != null) {
-            addContent(d, rootElement);
-        }
-        if (baseURI != null) {
-            d.baseURI = baseURI;
-        }
-        return d;
-    }
+		Document d = new Document();
+		if (docType != null) {
+			addContent(d, docType);
+		}
+		if (rootElement != null) {
+			addContent(d, rootElement);
+		}
+		if (baseURI != null) {
+			d.baseURI = baseURI;
+		}
+		return d;
+	}
 
-    @Override
+	@Override
 	public Document document(Element rootElement, DocType docType) {
-        return document(rootElement, docType, null);
-    }
+		return document(rootElement, docType, null);
+	}
 
-    @Override
+	@Override
 	public Document document(Element rootElement) {
-        return document(rootElement, null, null);
-    }
+		return document(rootElement, null, null);
+	}
 
-    // =====================================================================
-    // List manipulation
-    // =====================================================================
+	// =====================================================================
+	// List manipulation
+	// =====================================================================
 
-    @Override
+	@Override
 	public void addContent(Parent parent, Content child) {
-        if (parent instanceof Element) {
-            Element elt = (Element) parent;
-            elt.content.uncheckedAddContent(child);
-        }
-        else {
-            Document doc = (Document) parent;
-            doc.content.uncheckedAddContent(child);
-        }
-    }
+		if (parent instanceof Element) {
+			Element elt = (Element) parent;
+			elt.content.uncheckedAddContent(child);
+		}
+		else {
+			Document doc = (Document) parent;
+			doc.content.uncheckedAddContent(child);
+		}
+	}
 
-    @Override
+	@Override
 	public void setAttribute(Element parent, Attribute a) {
-        parent.attributes.uncheckedAddAttribute(a);
-    }
+		parent.attributes.uncheckedAddAttribute(a);
+	}
 
-    @Override
+	@Override
 	public void addNamespaceDeclaration(Element parent, Namespace additional) {
-        if (parent.additionalNamespaces == null) {
-            parent.additionalNamespaces = new ArrayList<Namespace>(5); //Element.INITIAL_ARRAY_SIZE
-        }
-        parent.additionalNamespaces.add(additional);
-    }
+		if (parent.additionalNamespaces == null) {
+			parent.additionalNamespaces = new ArrayList<Namespace>(5); //Element.INITIAL_ARRAY_SIZE
+		}
+		parent.additionalNamespaces.add(additional);
+	}
 }

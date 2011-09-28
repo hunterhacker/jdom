@@ -113,173 +113,173 @@ import org.xml.sax.EntityResolver;
  */
 public class XSLTransformer {
 
-    private Templates templates;
+	private Templates templates;
 
-    /**
-     * The custom JDOM factory to use when building the transformation
-     * result or <code>null</code> to use the default JDOM classes.
-     */
-    private JDOMFactory factory = null;
+	/**
+	 * The custom JDOM factory to use when building the transformation
+	 * result or <code>null</code> to use the default JDOM classes.
+	 */
+	private JDOMFactory factory = null;
 
-    // Internal constructor to support the other constructors
-    private XSLTransformer(Source stylesheet) throws XSLTransformException {
-        try {
-            templates = TransformerFactory.newInstance()
-                    .newTemplates(stylesheet);
-        }
-        catch (TransformerException e) {
-            throw new XSLTransformException("Could not construct XSLTransformer", e);
-        }
-    }
+	// Internal constructor to support the other constructors
+	private XSLTransformer(Source stylesheet) throws XSLTransformException {
+		try {
+			templates = TransformerFactory.newInstance()
+					.newTemplates(stylesheet);
+		}
+		catch (TransformerException e) {
+			throw new XSLTransformException("Could not construct XSLTransformer", e);
+		}
+	}
 
-    /**
-     * Creates a transformer for a given stylesheet system id.
-     *
-     * @param  stylesheetSystemId  source stylesheet as a Source object
-     * @throws XSLTransformException       if there's a problem in the TrAX back-end
-     */
-    public XSLTransformer(String stylesheetSystemId) throws XSLTransformException {
-        this(new StreamSource(stylesheetSystemId));
-    }
+	/**
+	 * Creates a transformer for a given stylesheet system id.
+	 *
+	 * @param  stylesheetSystemId  source stylesheet as a Source object
+	 * @throws XSLTransformException       if there's a problem in the TrAX back-end
+	 */
+	public XSLTransformer(String stylesheetSystemId) throws XSLTransformException {
+		this(new StreamSource(stylesheetSystemId));
+	}
 
-    /**
-     * <p>
-     * This will create a new <code>XSLTransformer</code> by
-     *  reading the stylesheet from the specified
-     *   <code>InputStream</code>.
-     * </p>
-     *
-     * @param stylesheet <code>InputStream</code> from which the stylesheet is read.
-     * @throws XSLTransformException when an IOException, format error, or
-     * something else prevents the stylesheet from being compiled
-     */
-    public XSLTransformer(InputStream stylesheet) throws XSLTransformException {
-        this(new StreamSource(stylesheet));
-    }
+	/**
+	 * <p>
+	 * This will create a new <code>XSLTransformer</code> by
+	 *  reading the stylesheet from the specified
+	 *   <code>InputStream</code>.
+	 * </p>
+	 *
+	 * @param stylesheet <code>InputStream</code> from which the stylesheet is read.
+	 * @throws XSLTransformException when an IOException, format error, or
+	 * something else prevents the stylesheet from being compiled
+	 */
+	public XSLTransformer(InputStream stylesheet) throws XSLTransformException {
+		this(new StreamSource(stylesheet));
+	}
 
-    /**
-     * <p>
-     * This will create a new <code>XSLTransformer</code> by
-     *  reading the stylesheet from the specified
-     *   <code>Reader</code>.
-     * </p>
-     *
-     * @param stylesheet <code>Reader</code> from which the stylesheet is read.
-     * @throws XSLTransformException when an IOException, format error, or
-     * something else prevents the stylesheet from being compiled
-     */
-    public XSLTransformer(Reader stylesheet) throws XSLTransformException {
-        this(new StreamSource(stylesheet));
-    }
+	/**
+	 * <p>
+	 * This will create a new <code>XSLTransformer</code> by
+	 *  reading the stylesheet from the specified
+	 *   <code>Reader</code>.
+	 * </p>
+	 *
+	 * @param stylesheet <code>Reader</code> from which the stylesheet is read.
+	 * @throws XSLTransformException when an IOException, format error, or
+	 * something else prevents the stylesheet from being compiled
+	 */
+	public XSLTransformer(Reader stylesheet) throws XSLTransformException {
+		this(new StreamSource(stylesheet));
+	}
 
-    /**
-     * <p>
-     * This will create a new <code>XSLTransformer</code> by
-     *  reading the stylesheet from the specified
-     *   <code>File</code>.
-     * </p>
-     *
-     * @param stylesheet <code>File</code> from which the stylesheet is read.
-     * @throws XSLTransformException when an IOException, format error, or
-     * something else prevents the stylesheet from being compiled
-     */
-    public XSLTransformer(File stylesheet) throws XSLTransformException {
-        this(new StreamSource(stylesheet));
-    }
+	/**
+	 * <p>
+	 * This will create a new <code>XSLTransformer</code> by
+	 *  reading the stylesheet from the specified
+	 *   <code>File</code>.
+	 * </p>
+	 *
+	 * @param stylesheet <code>File</code> from which the stylesheet is read.
+	 * @throws XSLTransformException when an IOException, format error, or
+	 * something else prevents the stylesheet from being compiled
+	 */
+	public XSLTransformer(File stylesheet) throws XSLTransformException {
+		this(new StreamSource(stylesheet));
+	}
 
-    /**
-     * <p>
-     * This will create a new <code>XSLTransformer</code> by
-     *  reading the stylesheet from the specified
-     *   <code>Document</code>.
-     * </p>
-     *
-     * @param stylesheet <code>Document</code> containing the stylesheet.
-     * @throws XSLTransformException when the supplied <code>Document</code>
-     *  is not syntactically correct XSLT
-     */
-    public XSLTransformer(Document stylesheet) throws XSLTransformException {
-        this(new JDOMSource(stylesheet));
-    }
+	/**
+	 * <p>
+	 * This will create a new <code>XSLTransformer</code> by
+	 *  reading the stylesheet from the specified
+	 *   <code>Document</code>.
+	 * </p>
+	 *
+	 * @param stylesheet <code>Document</code> containing the stylesheet.
+	 * @throws XSLTransformException when the supplied <code>Document</code>
+	 *  is not syntactically correct XSLT
+	 */
+	public XSLTransformer(Document stylesheet) throws XSLTransformException {
+		this(new JDOMSource(stylesheet));
+	}
 
-    /**
-     * Transforms the given input nodes to a list of output nodes.
-     *
-     * @param  inputNodes          input nodes
-     * @return                     transformed output nodes
-     * @throws XSLTransformException       if there's a problem in the transformation
-     */
-    public List<Content> transform(List<Content> inputNodes) throws XSLTransformException {
-        JDOMSource source = new JDOMSource(inputNodes);
-        JDOMResult result = new JDOMResult();
-        result.setFactory(factory);  // null ok
-        try {
-            templates.newTransformer().transform(source, result);
-            return result.getResult();
-        }
-        catch (TransformerException e) {
-            throw new XSLTransformException("Could not perform transformation", e);
-        }
-    }
-    
-    /**
-     * Transforms the given document to an output document.
-     *
-     * @param  inputDoc            input document
-     * @return                     transformed output document
-     * @throws XSLTransformException       if there's a problem in the transformation
-     */
-    public Document transform(Document inputDoc) throws XSLTransformException {
-    	return transform(inputDoc, null);
-    }
+	/**
+	 * Transforms the given input nodes to a list of output nodes.
+	 *
+	 * @param  inputNodes          input nodes
+	 * @return                     transformed output nodes
+	 * @throws XSLTransformException       if there's a problem in the transformation
+	 */
+	public List<Content> transform(List<Content> inputNodes) throws XSLTransformException {
+		JDOMSource source = new JDOMSource(inputNodes);
+		JDOMResult result = new JDOMResult();
+		result.setFactory(factory);  // null ok
+		try {
+			templates.newTransformer().transform(source, result);
+			return result.getResult();
+		}
+		catch (TransformerException e) {
+			throw new XSLTransformException("Could not perform transformation", e);
+		}
+	}
 
-    /**
-     * Transforms the given document to an output document.
-     *
-     * @param  inputDoc            input document
-     * @param  resolver			   entity resolver for the input document
-     * @return                     transformed output document
-     * @throws XSLTransformException       if there's a problem in the transformation
-     */
-    public Document transform(Document inputDoc, EntityResolver resolver) throws XSLTransformException {
-        JDOMSource source = new JDOMSource(inputDoc, resolver);
-        JDOMResult result = new JDOMResult();
-        result.setFactory(factory);  // null ok
-        try {
-            templates.newTransformer().transform(source, result);
-            return result.getDocument();
-        }
-        catch (TransformerException e) {
-            throw new XSLTransformException("Could not perform transformation", e);
-        }
-    }
+	/**
+	 * Transforms the given document to an output document.
+	 *
+	 * @param  inputDoc            input document
+	 * @return                     transformed output document
+	 * @throws XSLTransformException       if there's a problem in the transformation
+	 */
+	public Document transform(Document inputDoc) throws XSLTransformException {
+		return transform(inputDoc, null);
+	}
 
-    /**
-     * Sets a custom JDOMFactory to use when building the
-     * transformation result. Use a custom factory to build the tree
-     * with your own subclasses of the JDOM classes.
-     *
-     * @param  factory   the custom <code>JDOMFactory</code> to use or
-     *                   <code>null</code> to use the default JDOM
-     *                   classes.
-     *
-     * @see    #getFactory
-     */
-    public void setFactory(JDOMFactory factory) {
-      this.factory = factory;
-    }
+	/**
+	 * Transforms the given document to an output document.
+	 *
+	 * @param  inputDoc            input document
+	 * @param  resolver			   entity resolver for the input document
+	 * @return                     transformed output document
+	 * @throws XSLTransformException       if there's a problem in the transformation
+	 */
+	public Document transform(Document inputDoc, EntityResolver resolver) throws XSLTransformException {
+		JDOMSource source = new JDOMSource(inputDoc, resolver);
+		JDOMResult result = new JDOMResult();
+		result.setFactory(factory);  // null ok
+		try {
+			templates.newTransformer().transform(source, result);
+			return result.getDocument();
+		}
+		catch (TransformerException e) {
+			throw new XSLTransformException("Could not perform transformation", e);
+		}
+	}
 
-    /**
-     * Returns the custom JDOMFactory used to build the transformation
-     * result.
-     *
-     * @return the custom <code>JDOMFactory</code> used to build the
-     *         transformation result or <code>null</code> if the
-     *         default JDOM classes are being used.
-     *
-     * @see    #setFactory
-     */
-    public JDOMFactory getFactory() {
-      return this.factory;
-    }
+	/**
+	 * Sets a custom JDOMFactory to use when building the
+	 * transformation result. Use a custom factory to build the tree
+	 * with your own subclasses of the JDOM classes.
+	 *
+	 * @param  factory   the custom <code>JDOMFactory</code> to use or
+	 *                   <code>null</code> to use the default JDOM
+	 *                   classes.
+	 *
+	 * @see    #getFactory
+	 */
+	public void setFactory(JDOMFactory factory) {
+		this.factory = factory;
+	}
+
+	/**
+	 * Returns the custom JDOMFactory used to build the transformation
+	 * result.
+	 *
+	 * @return the custom <code>JDOMFactory</code> used to build the
+	 *         transformation result or <code>null</code> if the
+	 *         default JDOM classes are being used.
+	 *
+	 * @see    #setFactory
+	 */
+	public JDOMFactory getFactory() {
+		return this.factory;
+	}
 }

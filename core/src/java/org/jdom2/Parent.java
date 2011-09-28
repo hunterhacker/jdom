@@ -71,166 +71,166 @@ import org.jdom2.filter.Filter;
  */
 public interface Parent extends Cloneable, Serializable {
 
-    /**
-     * Returns the number of children in this parent's content list.
-     * Children may be any {@link Content} type.
-     *
-     * @return number of children
-     */
-    int getContentSize();
+	/**
+	 * Returns the number of children in this parent's content list.
+	 * Children may be any {@link Content} type.
+	 *
+	 * @return number of children
+	 */
+	int getContentSize();
 
-    /**
-     * Returns the index of the supplied child in the content list,
-     * or -1 if not a child of this parent.
-     *
-     * @param child  child to search for
-     * @return       index of child, or -1 if not found
-     */
-    int indexOf(Content child);
+	/**
+	 * Returns the index of the supplied child in the content list,
+	 * or -1 if not a child of this parent.
+	 *
+	 * @param child  child to search for
+	 * @return       index of child, or -1 if not found
+	 */
+	int indexOf(Content child);
 
-//    /**
-//     * Starting at the given index (inclusive), returns the index of
-//     * the first child matching the supplied filter, or -1
-//     * if none is found.
-//     *
-//     * @return index of child, or -1 if none found
-//     */
-//    int indexOf(int index, Filter filter);
+	//    /**
+	//     * Starting at the given index (inclusive), returns the index of
+	//     * the first child matching the supplied filter, or -1
+	//     * if none is found.
+	//     *
+	//     * @return index of child, or -1 if none found
+	//     */
+	//    int indexOf(int index, Filter filter);
 
-    /**
-     * Returns a list containing detached clones of this parent's content list.
-     *
-     * @return list of cloned child content
-     */
-    List<Content> cloneContent();
+	/**
+	 * Returns a list containing detached clones of this parent's content list.
+	 *
+	 * @return list of cloned child content
+	 */
+	List<Content> cloneContent();
 
-    /**
-     * Returns the child at the given index.
-     *
-     * @param index location of desired child
-     * @return child at the given index
-     * @throws IndexOutOfBoundsException if index is negative or beyond
-     *         the current number of children
-     * @throws IllegalStateException if parent is a Document
-     *         and the root element is not set
-     */
-    Content getContent(int index);
+	/**
+	 * Returns the child at the given index.
+	 *
+	 * @param index location of desired child
+	 * @return child at the given index
+	 * @throws IndexOutOfBoundsException if index is negative or beyond
+	 *         the current number of children
+	 * @throws IllegalStateException if parent is a Document
+	 *         and the root element is not set
+	 */
+	Content getContent(int index);
 
-    /**
-     * Returns the full content of this parent as a {@link java.util.List}
-     * which contains objects of type {@link Content}. The returned list is
-     * <b>"live"</b> and in document order. Any modifications
-     * to it affect the element's actual contents. Modifications are checked
-     * for conformance to XML 1.0 rules.
-     * <p>
-     * Sequential traversal through the List is best done with an Iterator
-     * since the underlying implement of {@link java.util.List#size} may
-     * require walking the entire list and indexed lookups may require
-     * starting at the beginning each time.
-     *
-     * @return a list of the content of the parent
-     * @throws IllegalStateException if parent is a Document
-     *         and the root element is not set
-     */
-    List<Content> getContent();
+	/**
+	 * Returns the full content of this parent as a {@link java.util.List}
+	 * which contains objects of type {@link Content}. The returned list is
+	 * <b>"live"</b> and in document order. Any modifications
+	 * to it affect the element's actual contents. Modifications are checked
+	 * for conformance to XML 1.0 rules.
+	 * <p>
+	 * Sequential traversal through the List is best done with an Iterator
+	 * since the underlying implement of {@link java.util.List#size} may
+	 * require walking the entire list and indexed lookups may require
+	 * starting at the beginning each time.
+	 *
+	 * @return a list of the content of the parent
+	 * @throws IllegalStateException if parent is a Document
+	 *         and the root element is not set
+	 */
+	List<Content> getContent();
 
-    /**
-     * Returns as a {@link java.util.List} the content of
-     * this parent that matches the supplied filter. The returned list is
-     * <b>"live"</b> and in document order. Any modifications to it affect
-     * the element's actual contents. Modifications are checked for
-     * conformance to XML 1.0 rules.
-     * <p>
-     * Sequential traversal through the List is best done with an Iterator
-     * since the underlying implement of {@link java.util.List#size} may
-     * require walking the entire list and indexed lookups may require
-     * starting at the beginning each time.
-     *
-     * @param  filter filter to apply
-     * @return a list of the content of the parent matching the filter
-     * @throws IllegalStateException if parent is a Document
-     *         and the root element is not set
-     */
-    <E extends Content> List<E> getContent(Filter<E> filter);
+	/**
+	 * Returns as a {@link java.util.List} the content of
+	 * this parent that matches the supplied filter. The returned list is
+	 * <b>"live"</b> and in document order. Any modifications to it affect
+	 * the element's actual contents. Modifications are checked for
+	 * conformance to XML 1.0 rules.
+	 * <p>
+	 * Sequential traversal through the List is best done with an Iterator
+	 * since the underlying implement of {@link java.util.List#size} may
+	 * require walking the entire list and indexed lookups may require
+	 * starting at the beginning each time.
+	 *
+	 * @param  filter filter to apply
+	 * @return a list of the content of the parent matching the filter
+	 * @throws IllegalStateException if parent is a Document
+	 *         and the root element is not set
+	 */
+	<E extends Content> List<E> getContent(Filter<E> filter);
 
-    /**
-     * Removes all content from this parent and returns the detached
-     * children.
-     *
-     * @return list of the old content detached from this parent
-     */
-    List<Content> removeContent();
+	/**
+	 * Removes all content from this parent and returns the detached
+	 * children.
+	 *
+	 * @return list of the old content detached from this parent
+	 */
+	List<Content> removeContent();
 
-    /**
-     * Removes from this parent all child content matching the given filter
-     * and returns a list of the detached children.
-     *
-     * @param  filter filter to apply
-     * @return list of the detached children matching the filter
-     */
-    <E extends Content> List<E> removeContent(Filter<E> filter);
+	/**
+	 * Removes from this parent all child content matching the given filter
+	 * and returns a list of the detached children.
+	 *
+	 * @param  filter filter to apply
+	 * @return list of the detached children matching the filter
+	 */
+	<E extends Content> List<E> removeContent(Filter<E> filter);
 
-    /**
-     * Removes a single child node from the content list.
-     *
-     * @param  child  child to remove
-     * @return whether the removal occurred
-     */
-    boolean removeContent(Content child);
+	/**
+	 * Removes a single child node from the content list.
+	 *
+	 * @param  child  child to remove
+	 * @return whether the removal occurred
+	 */
+	boolean removeContent(Content child);
 
-    /**
-     * Removes and returns the child at the given
-     * index, or returns null if there's no such child.
-     *
-     * @param index index of child to remove
-     * @return detached child at given index or null if no
-     * @throws IndexOutOfBoundsException if index is negative or beyond
-     *             the current number of children
-     */
-    Content removeContent(int index);
+	/**
+	 * Removes and returns the child at the given
+	 * index, or returns null if there's no such child.
+	 *
+	 * @param index index of child to remove
+	 * @return detached child at given index or null if no
+	 * @throws IndexOutOfBoundsException if index is negative or beyond
+	 *             the current number of children
+	 */
+	Content removeContent(int index);
 
-    /**
-     * Obtain a deep, unattached copy of this parent and it's children.
-     *
-     * @return a deep copy of this parent and it's children.
-     */
-    Object clone();
+	/**
+	 * Obtain a deep, unattached copy of this parent and it's children.
+	 *
+	 * @return a deep copy of this parent and it's children.
+	 */
+	Object clone();
 
-    /**
-     * Returns an {@link java.util.Iterator} that walks over all descendants
-     * in document order.
-     *
-     * @return an iterator to walk descendants
-     */
-    Iterator<Content> getDescendants();
+	/**
+	 * Returns an {@link java.util.Iterator} that walks over all descendants
+	 * in document order.
+	 *
+	 * @return an iterator to walk descendants
+	 */
+	Iterator<Content> getDescendants();
 
-    /**
-     * Returns an {@link java.util.Iterator} that walks over all descendants
-     * in document order applying the Filter to return only elements that
-     * match the filter rule.  With filters you can match only Elements,
-     * only Comments, Elements or Comments, only Elements with a given name
-     * and/or prefix, and so on.
-     *
-     * @param filter filter to select which descendants to see
-     * @return an iterator to walk descendants that match a filter
-     */
-    <E extends Content> Iterator<E> getDescendants(Filter<E> filter);
+	/**
+	 * Returns an {@link java.util.Iterator} that walks over all descendants
+	 * in document order applying the Filter to return only elements that
+	 * match the filter rule.  With filters you can match only Elements,
+	 * only Comments, Elements or Comments, only Elements with a given name
+	 * and/or prefix, and so on.
+	 *
+	 * @param filter filter to select which descendants to see
+	 * @return an iterator to walk descendants that match a filter
+	 */
+	<E extends Content> Iterator<E> getDescendants(Filter<E> filter);
 
-    /**
-     * Return this parent's parent, or null if this parent is currently
-     * not attached to another parent. This is the same method as in Content but
-     * also added to Parent to allow more easy up-the-tree walking.
-     *
-     * @return this parent's parent or null if none
-     */
-    Parent getParent();
+	/**
+	 * Return this parent's parent, or null if this parent is currently
+	 * not attached to another parent. This is the same method as in Content but
+	 * also added to Parent to allow more easy up-the-tree walking.
+	 *
+	 * @return this parent's parent or null if none
+	 */
+	Parent getParent();
 
-    /**
-     * Return this parent's owning document or null if the branch containing
-     * this parent is currently not attached to a document.
-     *
-     * @return this child's owning document or null if none
-     */
-    Document getDocument();
+	/**
+	 * Return this parent's owning document or null if the branch containing
+	 * this parent is currently not attached to a document.
+	 *
+	 * @return this child's owning document or null if none
+	 */
+	Document getDocument();
 
 }

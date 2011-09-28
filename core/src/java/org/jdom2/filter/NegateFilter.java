@@ -63,53 +63,53 @@ package org.jdom2.filter;
  */
 final class NegateFilter extends AbstractFilter<Object> {
 
-    // Underlying filter.
-    private Filter<?> filter;
+	// Underlying filter.
+	private Filter<?> filter;
 
-    /**
-     * Match if the supplied filter <b>does not</b> match.
-     *
-     * @param filter filter to use.
-     */
-    public NegateFilter(Filter<?> filter) {
-        this.filter = filter;
-    }
+	/**
+	 * Match if the supplied filter <b>does not</b> match.
+	 *
+	 * @param filter filter to use.
+	 */
+	public NegateFilter(Filter<?> filter) {
+		this.filter = filter;
+	}
 
-    @Override
+	@Override
 	public Object filter(Object content) {
-    	if (filter.matches(content)) {
-    		return null;
-    	}
-    	return content;
-    }
+		if (filter.matches(content)) {
+			return null;
+		}
+		return content;
+	}
 
 	Filter<?> getBaseFilter() {
-        return filter;
-    }
+		return filter;
+	}
 
-    @Override
+	@Override
 	public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+		if (this == obj) {
+			return true;
+		}
 
-        if (obj instanceof NegateFilter) {
-            return filter.equals(((NegateFilter) obj).filter);
-        }
-        return false;
-    }
+		if (obj instanceof NegateFilter) {
+			return filter.equals(((NegateFilter) obj).filter);
+		}
+		return false;
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
-        return ~filter.hashCode();
-    }
+		return ~filter.hashCode();
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return new StringBuffer(64)
-                   .append("[NegateFilter: ")
-                   .append(filter.toString())
-                   .append("]")
-                   .toString();
-    }
+		return new StringBuffer(64)
+		.append("[NegateFilter: ")
+		.append(filter.toString())
+		.append("]")
+		.toString();
+	}
 }

@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2.adapters;
@@ -69,22 +69,22 @@ import org.w3c.dom.Document;
  */
 public interface DOMAdapter {
 
-    /**
-     * This creates an empty <code>Document</code> object based
-     * on a specific parser implementation.
-     *
-     * @return <code>Document</code> - created DOM Document.
-     * @throws JDOMException when errors occur.
-     */
-    public Document createDocument() throws JDOMException;
+	/**
+	 * This creates an empty <code>Document</code> object based
+	 * on a specific parser implementation.
+	 *
+	 * @return <code>Document</code> - created DOM Document.
+	 * @throws JDOMException when errors occur.
+	 */
+	public Document createDocument() throws JDOMException;
 
-    /**
-     * This creates an empty <code>Document</code> object based
-     * on a specific parser implementation with the given DOCTYPE.
-     *
-     * @param doctype Initial <code>DocType</code> of the document.
-     * @return <code>Document</code> - created DOM Document.
-     * @throws JDOMException when errors occur.
-     */
-    public Document createDocument(DocType doctype) throws JDOMException;
+	/**
+	 * This creates an empty <code>Document</code> object based
+	 * on a specific parser implementation with the given DOCTYPE.
+	 *
+	 * @param doctype Initial <code>DocType</code> of the document.
+	 * @return <code>Document</code> - created DOM Document.
+	 * @throws JDOMException when errors occur.
+	 */
+	public Document createDocument(DocType doctype) throws JDOMException;
 }

@@ -74,106 +74,106 @@ import org.jdom2.*;
  */
 class TextBuffer {
 
-    /** The first part of the text value (the "prefix"). If null, the
-      * text value is the empty string. */
-    private String prefixString;
+	/** The first part of the text value (the "prefix"). If null, the
+	 * text value is the empty string. */
+	private String prefixString;
 
-    /** The rest of the text value (the "suffix"). Only the first 
-      * code>arraySize</code> characters are valid. */
-    private char[] array;
+	/** The rest of the text value (the "suffix"). Only the first 
+	 * code>arraySize</code> characters are valid. */
+	private char[] array;
 
-    /** The size of the rest of the text value. If zero, then only 
-      * code>prefixString</code> contains the text value. */
-    private int arraySize;
+	/** The size of the rest of the text value. If zero, then only 
+	 * code>prefixString</code> contains the text value. */
+	private int arraySize;
 
-    /** Constructor */
-    TextBuffer() {
-        array = new char[4096]; // initial capacity
-        arraySize = 0;
-    }
+	/** Constructor */
+	TextBuffer() {
+		array = new char[4096]; // initial capacity
+		arraySize = 0;
+	}
 
-    /** Append the specified text to the text value of this buffer. */
-    void append(char[] source, int start, int count) {
-        if (prefixString == null) {
-            // This is the first chunk, so we'll store it in the prefix string
-            prefixString = new String(source, start, count);
-        }
-        else {
-            // This is a subsequent chunk, so we'll add it to the char array
-            ensureCapacity(arraySize + count);
-            System.arraycopy(source, start, array, arraySize, count);
-            arraySize += count;
-        }
-    }
+	/** Append the specified text to the text value of this buffer. */
+	void append(char[] source, int start, int count) {
+		if (prefixString == null) {
+			// This is the first chunk, so we'll store it in the prefix string
+			prefixString = new String(source, start, count);
+		}
+		else {
+			// This is a subsequent chunk, so we'll add it to the char array
+			ensureCapacity(arraySize + count);
+			System.arraycopy(source, start, array, arraySize, count);
+			arraySize += count;
+		}
+	}
 
-    /** Returns the size of the text value. */
-    int size() {
-        if (prefixString == null) {
-            return 0;
-        }
-        return prefixString.length() + arraySize;
-    }
+	/** Returns the size of the text value. */
+	int size() {
+		if (prefixString == null) {
+			return 0;
+		}
+		return prefixString.length() + arraySize;
+	}
 
-    /** Clears the text value and prepares the TextBuffer for reuse. */
-    void clear() {
-        arraySize = 0;
-        prefixString = null;
-    }
+	/** Clears the text value and prepares the TextBuffer for reuse. */
+	void clear() {
+		arraySize = 0;
+		prefixString = null;
+	}
 
-    boolean isAllWhitespace() {
-        if ((prefixString == null) || (prefixString.length() == 0)) {
-            return true;
-        }
+	boolean isAllWhitespace() {
+		if ((prefixString == null) || (prefixString.length() == 0)) {
+			return true;
+		}
 
-        int size = prefixString.length();
-        for(int i = 0; i < size; i++) {
-            if ( !Verifier.isXMLWhitespace(prefixString.charAt(i))) {
-                return false;
-            }
-        }
+		int size = prefixString.length();
+		for(int i = 0; i < size; i++) {
+			if ( !Verifier.isXMLWhitespace(prefixString.charAt(i))) {
+				return false;
+			}
+		}
 
-        for(int i = 0; i < arraySize; i++) {
-            if ( !Verifier.isXMLWhitespace(array[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
+		for(int i = 0; i < arraySize; i++) {
+			if ( !Verifier.isXMLWhitespace(array[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    /** Returns the text value stored in the buffer. */
-    @Override
+	/** Returns the text value stored in the buffer. */
+	@Override
 	public String toString() {
-        if (prefixString == null) {
-            return "";
-        }
+		if (prefixString == null) {
+			return "";
+		}
 
-        String str = "";
-        if (arraySize == 0) {
-            // Char array is empty, so the text value is just prefixString.
-            str = prefixString;
-        }
-        else {
-            // Char array is not empty, so the text value is prefixString
-            // plus the char array.
-            str = new StringBuffer(prefixString.length() + arraySize)
-                    .append(prefixString)
-                    .append(array, 0, arraySize)
-                    .toString();
-        }
-        return str;
-    }
+		String str = "";
+		if (arraySize == 0) {
+			// Char array is empty, so the text value is just prefixString.
+			str = prefixString;
+		}
+		else {
+			// Char array is not empty, so the text value is prefixString
+			// plus the char array.
+			str = new StringBuffer(prefixString.length() + arraySize)
+			.append(prefixString)
+			.append(array, 0, arraySize)
+			.toString();
+		}
+		return str;
+	}
 
-    // Ensure that the char array has room for at least "csize" characters.
-    private void ensureCapacity(int csize) {
-        int capacity = array.length;
-        if (csize > capacity) {
-            char[] old = array;
-            int nsize = capacity;
-            while (csize > nsize) {
-                nsize += (capacity/2);
-            }
-            array = new char[nsize];
-            System.arraycopy(old, 0, array, 0, arraySize);
-        }
-    }
+	// Ensure that the char array has room for at least "csize" characters.
+	private void ensureCapacity(int csize) {
+		int capacity = array.length;
+		if (csize > capacity) {
+			char[] old = array;
+			int nsize = capacity;
+			while (csize > nsize) {
+				nsize += (capacity/2);
+			}
+			array = new char[nsize];
+			System.arraycopy(old, 0, array, 0, arraySize);
+		}
+	}
 }

@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2;
@@ -62,51 +62,51 @@ package org.jdom2;
  */
 public class IllegalDataException extends IllegalArgumentException {
 
-    /**
-     * This will create an <code>Exception</code> indicating
-     * that the specified data is illegal for the construct
-     * it was supplied to.
-     *
-     * @param data <code>String</code> data that breaks rules.
-     * @param construct <code>String</code> construct that data is illegal for.
-     * @param reason <code>String</code> message or reason data is illegal.
-     */
-    IllegalDataException(String data, String construct, String reason) {
-        super(new StringBuffer()
-              .append("The data \"")
-              .append(data)
-              .append("\" is not legal for a JDOM ")
-              .append(construct)
-              .append(": ")
-              .append(reason)
-              .append(".")
-              .toString());
-    }
+	/**
+	 * This will create an <code>Exception</code> indicating
+	 * that the specified data is illegal for the construct
+	 * it was supplied to.
+	 *
+	 * @param data <code>String</code> data that breaks rules.
+	 * @param construct <code>String</code> construct that data is illegal for.
+	 * @param reason <code>String</code> message or reason data is illegal.
+	 */
+	IllegalDataException(String data, String construct, String reason) {
+		super(new StringBuffer()
+		.append("The data \"")
+		.append(data)
+		.append("\" is not legal for a JDOM ")
+		.append(construct)
+		.append(": ")
+		.append(reason)
+		.append(".")
+		.toString());
+	}
 
-    /**
-     * This will create an <code>Exception</code> indicating
-     * that the specified data is illegal for the construct
-     * it was supplied to.
-     *
-     * @param data <code>String</code> data that breaks rules.
-     * @param construct <code>String</code> construct that data is illegal for.
-     */
-    IllegalDataException(String data, String construct) {
-        super(new StringBuffer()
-              .append("The data \"")
-              .append(data)
-              .append("\" is not legal for a JDOM ")
-              .append(construct)
-              .append(".")
-              .toString());
-    }
+	/**
+	 * This will create an <code>Exception</code> indicating
+	 * that the specified data is illegal for the construct
+	 * it was supplied to.
+	 *
+	 * @param data <code>String</code> data that breaks rules.
+	 * @param construct <code>String</code> construct that data is illegal for.
+	 */
+	IllegalDataException(String data, String construct) {
+		super(new StringBuffer()
+		.append("The data \"")
+		.append(data)
+		.append("\" is not legal for a JDOM ")
+		.append(construct)
+		.append(".")
+		.toString());
+	}
 
-    /**
-     * This will create an exceptoin with the specified error message.
-     *
-     * @param reason cause of the problem
-     */
-    public IllegalDataException(String reason) {
-        super(reason);
-    }
+	/**
+	 * This will create an exceptoin with the specified error message.
+	 *
+	 * @param reason cause of the problem
+	 */
+	public IllegalDataException(String reason) {
+		super(reason);
+	}
 }

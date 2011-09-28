@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 package org.jdom2.input;
@@ -64,45 +64,45 @@ import org.xml.sax.*;
 
 public class BuilderErrorHandler implements ErrorHandler {
 
-    /**
-     * This method is called when a warning has occurred; this indicates
-     * that while no XML rules were broken, something appears to be
-     * incorrect or missing.
-     * The implementation of this method here is a "no op".
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws SAXException when things go wrong
-     */
-    @Override
+	/**
+	 * This method is called when a warning has occurred; this indicates
+	 * that while no XML rules were broken, something appears to be
+	 * incorrect or missing.
+	 * The implementation of this method here is a "no op".
+	 *
+	 * @param exception <code>SAXParseException</code> that occurred.
+	 * @throws SAXException when things go wrong
+	 */
+	@Override
 	public void warning(SAXParseException exception) throws SAXException {
-        // nothing
-    }
+		// nothing
+	}
 
-    /**
-     * This method is called in response to an error that has occurred; 
-     * this indicates that a rule was broken, typically in validation, but 
-     * that parsing could reasonably continue.
-     * The implementation of this method here is to rethrow the exception.
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws SAXException when things go wrong
-     */
-    @Override
+	/**
+	 * This method is called in response to an error that has occurred; 
+	 * this indicates that a rule was broken, typically in validation, but 
+	 * that parsing could reasonably continue.
+	 * The implementation of this method here is to rethrow the exception.
+	 *
+	 * @param exception <code>SAXParseException</code> that occurred.
+	 * @throws SAXException when things go wrong
+	 */
+	@Override
 	public void error(SAXParseException exception) throws SAXException {
-        throw exception;
-    }
+		throw exception;
+	}
 
-    /**
-     * This method is called in response to a fatal error; this indicates that
-     * a rule has been broken that makes continued parsing either impossible
-     * or an almost certain waste of time.
-     * The implementation of this method here is to rethrow the exception.
-     *
-     * @param exception <code>SAXParseException</code> that occurred.
-     * @throws SAXException when things go wrong
-     */
-    @Override
+	/**
+	 * This method is called in response to a fatal error; this indicates that
+	 * a rule has been broken that makes continued parsing either impossible
+	 * or an almost certain waste of time.
+	 * The implementation of this method here is to rethrow the exception.
+	 *
+	 * @param exception <code>SAXParseException</code> that occurred.
+	 * @throws SAXException when things go wrong
+	 */
+	@Override
 	public void fatalError(SAXParseException exception) throws SAXException {
-        throw exception;
-    }
+		throw exception;
+	}
 }

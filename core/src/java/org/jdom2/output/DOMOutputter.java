@@ -2,14 +2,14 @@
 
  Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions, and the disclaimer that follows 
     these conditions in the documentation and/or other materials 
@@ -18,11 +18,11 @@
  3. The name "JDOM" must not be used to endorse or promote products
     derived from this software without prior written permission.  For
     written permission, please contact <request_AT_jdom_DOT_org>.
- 
+
  4. Products derived from this software may not be called "JDOM", nor
     may "JDOM" appear in their name, without prior written permission
     from the JDOM Project Management <request_AT_jdom_DOT_org>.
- 
+
  In addition, we request (but do not require) that you include in the 
  end-user documentation provided with the redistribution and/or in the 
  software itself an acknowledgement equivalent to the following:
@@ -49,7 +49,7 @@
  created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  on the JDOM Project, please see <http://www.jdom.org/>.
- 
+
  */
 
 
@@ -85,312 +85,312 @@ import org.jdom2.adapters.DOMAdapter;
  */
 public class DOMOutputter {
 
-    /** Default adapter class */
-    private static final String DEFAULT_ADAPTER_CLASS =
-        "org.jdom2.adapters.XercesDOMAdapter";
+	/** Default adapter class */
+	private static final String DEFAULT_ADAPTER_CLASS =
+			"org.jdom2.adapters.XercesDOMAdapter";
 
-    /** Adapter to use for interfacing with the DOM implementation */
-    private String adapterClass;
+	/** Adapter to use for interfacing with the DOM implementation */
+	private String adapterClass;
 
-    /** Output a DOM with namespaces but just the empty namespace */
-    private boolean forceNamespaceAware;
+	/** Output a DOM with namespaces but just the empty namespace */
+	private boolean forceNamespaceAware;
 
-    /**
-     * This creates a new DOMOutputter which will attempt to first locate
-     * a DOM implementation to use via JAXP, and if JAXP does not exist or
-     * there's a problem, will fall back to the default parser.
-     */
-    public DOMOutputter() {
-        // nothing
-    }
+	/**
+	 * This creates a new DOMOutputter which will attempt to first locate
+	 * a DOM implementation to use via JAXP, and if JAXP does not exist or
+	 * there's a problem, will fall back to the default parser.
+	 */
+	public DOMOutputter() {
+		// nothing
+	}
 
-    /**
-     * This creates a new DOMOutputter using the specified DOMAdapter
-     * implementation as a way to choose the underlying parser.
-     *
-     * @param adapterClass <code>String</code> name of class
-     *                     to use for DOM output
-     */
-    public DOMOutputter(String adapterClass) {
-        this.adapterClass = adapterClass;
-    }
+	/**
+	 * This creates a new DOMOutputter using the specified DOMAdapter
+	 * implementation as a way to choose the underlying parser.
+	 *
+	 * @param adapterClass <code>String</code> name of class
+	 *                     to use for DOM output
+	 */
+	public DOMOutputter(String adapterClass) {
+		this.adapterClass = adapterClass;
+	}
 
-    /**
-     * Controls how NO_NAMESPACE nodes are handeled. If true the outputter
-     * always creates a namespace aware DOM.
-     * @param flag
-     */
-    public void setForceNamespaceAware(boolean flag) {
-        this.forceNamespaceAware = flag;
-    }
+	/**
+	 * Controls how NO_NAMESPACE nodes are handeled. If true the outputter
+	 * always creates a namespace aware DOM.
+	 * @param flag
+	 */
+	public void setForceNamespaceAware(boolean flag) {
+		this.forceNamespaceAware = flag;
+	}
 
-    /**
-     * Returns whether DOMs will be constructed with namespaces even when
-     * the source document has elements all in the empty namespace.
-     * @return the forceNamespaceAware flag value
-     */
-    public boolean getForceNamespaceAware() {
-        return forceNamespaceAware;
-    }
+	/**
+	 * Returns whether DOMs will be constructed with namespaces even when
+	 * the source document has elements all in the empty namespace.
+	 * @return the forceNamespaceAware flag value
+	 */
+	public boolean getForceNamespaceAware() {
+		return forceNamespaceAware;
+	}
 
-    /**
-     * This converts the JDOM <code>Document</code> parameter to a 
-     * DOM Document, returning the DOM version.  The DOM implementation
-     * is the one chosen in the constructor.
-     *
-     * @param document <code>Document</code> to output.
-     * @return an <code>org.w3c.dom.Document</code> version
-     */
-    public org.w3c.dom.Document output(Document document)
-                                       throws JDOMException {
+	/**
+	 * This converts the JDOM <code>Document</code> parameter to a 
+	 * DOM Document, returning the DOM version.  The DOM implementation
+	 * is the one chosen in the constructor.
+	 *
+	 * @param document <code>Document</code> to output.
+	 * @return an <code>org.w3c.dom.Document</code> version
+	 */
+	public org.w3c.dom.Document output(Document document)
+			throws JDOMException {
 
-        org.w3c.dom.Document domDoc = null;
-        try {
-            // Assign DOCTYPE during construction
-            DocType dt = document.getDocType();
-            domDoc = createDOMDocument(dt);
+		org.w3c.dom.Document domDoc = null;
+		try {
+			// Assign DOCTYPE during construction
+			DocType dt = document.getDocType();
+			domDoc = createDOMDocument(dt);
 
-            // Check for existing root element which may have been
-            // automatically added by the DOM Document construction
-            // (if there is a DocType)
-            org.w3c.dom.Element autoroot = domDoc.getDocumentElement();
-            if (autoroot != null) {
-            	// remove the automatically added root element.
-                // If we leave this attached it will/may mess up the order
-            	// of content on the DOM Document node.
-            	domDoc.removeChild(autoroot);
-            }
-            
-            // Add content
-            for (Content node : document.getContent()) {
+			// Check for existing root element which may have been
+			// automatically added by the DOM Document construction
+			// (if there is a DocType)
+			org.w3c.dom.Element autoroot = domDoc.getDocumentElement();
+			if (autoroot != null) {
+				// remove the automatically added root element.
+				// If we leave this attached it will/may mess up the order
+				// of content on the DOM Document node.
+				domDoc.removeChild(autoroot);
+			}
 
-                if (node instanceof Element) {
-                    org.w3c.dom.Element domElement =
-                    		output((Element) node, domDoc);
-                    domDoc.appendChild(domElement); // normal case
-                }
-                else if (node instanceof Comment) {
-                    Comment comment = (Comment) node;
-                    org.w3c.dom.Comment domComment =
-                        domDoc.createComment(comment.getText());
-                    domDoc.appendChild(domComment);
-                }
-                else if (node instanceof ProcessingInstruction) {
-                    ProcessingInstruction pi = 
-                        (ProcessingInstruction) node;
-                    org.w3c.dom.ProcessingInstruction domPI =
-                         domDoc.createProcessingInstruction(
-                         pi.getTarget(), pi.getData());
-                    domDoc.appendChild(domPI);
-                }
-                else if (node instanceof DocType) {
-                    // We already dealt with the DocType above
-                }
-                else {
-                    throw new JDOMException(
-                        "Document contained top-level content with type:" +
-                        node.getClass().getName());
-                }
-            }
-        }
-        catch (Throwable e) {
-            throw new JDOMException("Exception outputting Document", e);
-        }
+			// Add content
+			for (Content node : document.getContent()) {
 
-        return domDoc;
-    }
+				if (node instanceof Element) {
+					org.w3c.dom.Element domElement =
+							output((Element) node, domDoc);
+					domDoc.appendChild(domElement); // normal case
+				}
+				else if (node instanceof Comment) {
+					Comment comment = (Comment) node;
+					org.w3c.dom.Comment domComment =
+							domDoc.createComment(comment.getText());
+					domDoc.appendChild(domComment);
+				}
+				else if (node instanceof ProcessingInstruction) {
+					ProcessingInstruction pi = 
+							(ProcessingInstruction) node;
+					org.w3c.dom.ProcessingInstruction domPI =
+							domDoc.createProcessingInstruction(
+									pi.getTarget(), pi.getData());
+					domDoc.appendChild(domPI);
+				}
+				else if (node instanceof DocType) {
+					// We already dealt with the DocType above
+				}
+				else {
+					throw new JDOMException(
+							"Document contained top-level content with type:" +
+									node.getClass().getName());
+				}
+			}
+		}
+		catch (Throwable e) {
+			throw new JDOMException("Exception outputting Document", e);
+		}
 
-    private org.w3c.dom.Document createDOMDocument(DocType dt)
-                                       throws JDOMException {
-        if (adapterClass != null) {
-            // The user knows that they want to use a particular impl
-            try {
-                DOMAdapter adapter =
-                    (DOMAdapter)Class.forName(adapterClass).newInstance();
-                // System.out.println("using specific " + adapterClass);
-                return adapter.createDocument(dt);
-            }
-            catch (ClassNotFoundException e) {
-                // e.printStackTrace();
-            }
-            catch (IllegalAccessException e) {
-                // e.printStackTrace();
-            }
-            catch (InstantiationException e) {
-                // e.printStackTrace();
-            }
-        }
-        else {
-            // Try using JAXP...
-            try {
-                DOMAdapter adapter =
-                    (DOMAdapter)Class.forName(
-                    "org.jdom2.adapters.JAXPDOMAdapter").newInstance();
-                // System.out.println("using JAXP");
-                return adapter.createDocument(dt);
-            }
-            catch (ClassNotFoundException e) {
-                // e.printStackTrace();
-            }
-            catch (IllegalAccessException e) {
-                // e.printStackTrace();
-            }
-            catch (InstantiationException e) {
-                // e.printStackTrace();
-            }
-        }
+		return domDoc;
+	}
 
-        // If no DOM doc yet, try to use a hard coded default
-        try {
-            DOMAdapter adapter = (DOMAdapter)
-                Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
-            return adapter.createDocument(dt);
-            // System.out.println("Using default " +
-            //   DEFAULT_ADAPTER_CLASS);
-        }
-        catch (ClassNotFoundException e) {
-            // e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-            // e.printStackTrace();
-        }
-        catch (InstantiationException e) {
-            // e.printStackTrace();
-        }
+	private org.w3c.dom.Document createDOMDocument(DocType dt)
+			throws JDOMException {
+		if (adapterClass != null) {
+			// The user knows that they want to use a particular impl
+			try {
+				DOMAdapter adapter =
+						(DOMAdapter)Class.forName(adapterClass).newInstance();
+				// System.out.println("using specific " + adapterClass);
+				return adapter.createDocument(dt);
+			}
+			catch (ClassNotFoundException e) {
+				// e.printStackTrace();
+			}
+			catch (IllegalAccessException e) {
+				// e.printStackTrace();
+			}
+			catch (InstantiationException e) {
+				// e.printStackTrace();
+			}
+		}
+		else {
+			// Try using JAXP...
+			try {
+				DOMAdapter adapter =
+						(DOMAdapter)Class.forName(
+								"org.jdom2.adapters.JAXPDOMAdapter").newInstance();
+				// System.out.println("using JAXP");
+				return adapter.createDocument(dt);
+			}
+			catch (ClassNotFoundException e) {
+				// e.printStackTrace();
+			}
+			catch (IllegalAccessException e) {
+				// e.printStackTrace();
+			}
+			catch (InstantiationException e) {
+				// e.printStackTrace();
+			}
+		}
 
-        throw new JDOMException("No JAXP or default parser available");
-        
-    }
+		// If no DOM doc yet, try to use a hard coded default
+		try {
+			DOMAdapter adapter = (DOMAdapter)
+					Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
+			return adapter.createDocument(dt);
+			// System.out.println("Using default " +
+			//   DEFAULT_ADAPTER_CLASS);
+		}
+		catch (ClassNotFoundException e) {
+			// e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			// e.printStackTrace();
+		}
+		catch (InstantiationException e) {
+			// e.printStackTrace();
+		}
 
-    private org.w3c.dom.Element output(Element element,
-                                         org.w3c.dom.Document domDoc)
-                                         throws JDOMException {
-        try {
+		throw new JDOMException("No JAXP or default parser available");
 
-        	org.w3c.dom.Element domElement = null;
-        	if (element.getNamespace() == Namespace.NO_NAMESPACE) {
-        		// No namespace, use createElement
-        		domElement = forceNamespaceAware ?
-        				domDoc.createElementNS(null, element.getQualifiedName())
-        				: domDoc.createElement(element.getQualifiedName());            }
-        	else {
-        		domElement = domDoc.createElementNS(
-        				element.getNamespaceURI(),
-        				element.getQualifiedName());
-        	}
+	}
 
-        	List<Namespace> nsq = element.getNamespacesIntroduced();
+	private org.w3c.dom.Element output(Element element,
+			org.w3c.dom.Document domDoc)
+					throws JDOMException {
+		try {
 
-        	// Add namespace attributes, beginning with the element's own
-        	// Do this only if it's not the XML namespace and it's
-        	// not the NO_NAMESPACE with the prefix "" not yet mapped
-        	// (we do output xmlns="" if the "" prefix was already used 
-        	// and we need to reclaim it for the NO_NAMESPACE)
-        	for (Namespace ns : nsq) {
-        		if (ns == Namespace.XML_NAMESPACE) {
-        			continue;
-        		}
-        		domElement.setAttribute(getXmlnsTagFor(ns), ns.getURI());
-        	}
+			org.w3c.dom.Element domElement = null;
+			if (element.getNamespace() == Namespace.NO_NAMESPACE) {
+				// No namespace, use createElement
+				domElement = forceNamespaceAware ?
+						domDoc.createElementNS(null, element.getQualifiedName())
+						: domDoc.createElement(element.getQualifiedName());            }
+			else {
+				domElement = domDoc.createElementNS(
+						element.getNamespaceURI(),
+						element.getQualifiedName());
+			}
+
+			List<Namespace> nsq = element.getNamespacesIntroduced();
+
+			// Add namespace attributes, beginning with the element's own
+			// Do this only if it's not the XML namespace and it's
+			// not the NO_NAMESPACE with the prefix "" not yet mapped
+			// (we do output xmlns="" if the "" prefix was already used 
+			// and we need to reclaim it for the NO_NAMESPACE)
+			for (Namespace ns : nsq) {
+				if (ns == Namespace.XML_NAMESPACE) {
+					continue;
+				}
+				domElement.setAttribute(getXmlnsTagFor(ns), ns.getURI());
+			}
 
 
-            // Add attributes to the DOM element
-            for (Attribute attribute : element.getAttributes()) {
-                domElement.setAttributeNode(output(attribute, domDoc));
-            }
+			// Add attributes to the DOM element
+			for (Attribute attribute : element.getAttributes()) {
+				domElement.setAttributeNode(output(attribute, domDoc));
+			}
 
-            // Add content to the DOM element
-            for (Content node : element.getContent()) {
+			// Add content to the DOM element
+			for (Content node : element.getContent()) {
 
-                if (node instanceof Element) {
-                    Element e = (Element) node;
-                    org.w3c.dom.Element domElt = output(e, domDoc);
-                    domElement.appendChild(domElt);
-                }
-                else if (node instanceof CDATA) {
-                    CDATA cdata = (CDATA) node;
-                    org.w3c.dom.CDATASection domCdata =
-                        domDoc.createCDATASection(cdata.getText());
-                    domElement.appendChild(domCdata);
-                }
-                else if (node instanceof Text) {
-                    Text text = (Text) node;
-                    org.w3c.dom.Text domText =
-                        domDoc.createTextNode(text.getText());
-                    domElement.appendChild(domText);
-                }
-                else if (node instanceof Comment) {
-                    Comment comment = (Comment) node;
-                    org.w3c.dom.Comment domComment =
-                        domDoc.createComment(comment.getText());
-                    domElement.appendChild(domComment);
-                }
-                else if (node instanceof ProcessingInstruction) {
-                    ProcessingInstruction pi = 
-                        (ProcessingInstruction) node;
-                    org.w3c.dom.ProcessingInstruction domPI =
-                         domDoc.createProcessingInstruction(
-                         pi.getTarget(), pi.getData());
-                    domElement.appendChild(domPI);
-                }
-                else if (node instanceof EntityRef) {
-                    EntityRef entity = (EntityRef) node;
-                    org.w3c.dom.EntityReference domEntity =
-                        domDoc.createEntityReference(entity.getName());
-                    domElement.appendChild(domEntity);
-                }
-                else {
-                    throw new JDOMException(
-                        "Element contained content with type:" +
-                        node.getClass().getName());
-                }
-            }
-    
-            return domElement;
-        }
-        catch (Exception e) {
-            throw new JDOMException("Exception outputting Element " +
-                                    element.getQualifiedName(), e);
-        }
-    }
+				if (node instanceof Element) {
+					Element e = (Element) node;
+					org.w3c.dom.Element domElt = output(e, domDoc);
+					domElement.appendChild(domElt);
+				}
+				else if (node instanceof CDATA) {
+					CDATA cdata = (CDATA) node;
+					org.w3c.dom.CDATASection domCdata =
+							domDoc.createCDATASection(cdata.getText());
+					domElement.appendChild(domCdata);
+				}
+				else if (node instanceof Text) {
+					Text text = (Text) node;
+					org.w3c.dom.Text domText =
+							domDoc.createTextNode(text.getText());
+					domElement.appendChild(domText);
+				}
+				else if (node instanceof Comment) {
+					Comment comment = (Comment) node;
+					org.w3c.dom.Comment domComment =
+							domDoc.createComment(comment.getText());
+					domElement.appendChild(domComment);
+				}
+				else if (node instanceof ProcessingInstruction) {
+					ProcessingInstruction pi = 
+							(ProcessingInstruction) node;
+					org.w3c.dom.ProcessingInstruction domPI =
+							domDoc.createProcessingInstruction(
+									pi.getTarget(), pi.getData());
+					domElement.appendChild(domPI);
+				}
+				else if (node instanceof EntityRef) {
+					EntityRef entity = (EntityRef) node;
+					org.w3c.dom.EntityReference domEntity =
+							domDoc.createEntityReference(entity.getName());
+					domElement.appendChild(domEntity);
+				}
+				else {
+					throw new JDOMException(
+							"Element contained content with type:" +
+									node.getClass().getName());
+				}
+			}
 
-    private org.w3c.dom.Attr output(Attribute attribute,
-                                      org.w3c.dom.Document domDoc)
-                                      throws JDOMException {
-         org.w3c.dom.Attr domAttr = null;
-         try {
-             if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
-                 // No namespace, use createAttribute
-                 if (forceNamespaceAware) {
-                     domAttr = domDoc.createAttributeNS(null, attribute.getQualifiedName());
-                 } else {
-                     domAttr = domDoc.createAttribute(attribute.getQualifiedName());
-                 }
-             }
-             else {
-                 domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
-                                                  attribute.getQualifiedName());
-             }
-             domAttr.setValue(attribute.getValue());
-         } catch (Exception e) {
-             throw new JDOMException("Exception outputting Attribute " +
-                                     attribute.getQualifiedName(), e);
-         }
-         return domAttr;
-    }
+			return domElement;
+		}
+		catch (Exception e) {
+			throw new JDOMException("Exception outputting Element " +
+					element.getQualifiedName(), e);
+		}
+	}
 
-    /**
-     * This will handle adding any <code>{@link Namespace}</code>
-     * attributes to the DOM tree.
-     *
-     * @param ns <code>Namespace</code> to add definition of
-     */
-    private static String getXmlnsTagFor(Namespace ns) {
-        String attrName = "xmlns";
-        if (!ns.getPrefix().equals("")) {
-            attrName += ":";
-            attrName += ns.getPrefix();
-        }
-        return attrName;
-    }
+	private org.w3c.dom.Attr output(Attribute attribute,
+			org.w3c.dom.Document domDoc)
+					throws JDOMException {
+		org.w3c.dom.Attr domAttr = null;
+		try {
+			if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
+				// No namespace, use createAttribute
+				if (forceNamespaceAware) {
+					domAttr = domDoc.createAttributeNS(null, attribute.getQualifiedName());
+				} else {
+					domAttr = domDoc.createAttribute(attribute.getQualifiedName());
+				}
+			}
+			else {
+				domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
+						attribute.getQualifiedName());
+			}
+			domAttr.setValue(attribute.getValue());
+		} catch (Exception e) {
+			throw new JDOMException("Exception outputting Attribute " +
+					attribute.getQualifiedName(), e);
+		}
+		return domAttr;
+	}
+
+	/**
+	 * This will handle adding any <code>{@link Namespace}</code>
+	 * attributes to the DOM tree.
+	 *
+	 * @param ns <code>Namespace</code> to add definition of
+	 */
+	private static String getXmlnsTagFor(Namespace ns) {
+		String attrName = "xmlns";
+		if (!ns.getPrefix().equals("")) {
+			attrName += ":";
+			attrName += ns.getPrefix();
+		}
+		return attrName;
+	}
 }

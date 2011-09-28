@@ -887,7 +887,7 @@ public class Element extends Content implements Parent {
 	}
 
 	//    public Content getChild(Filter filter) {
-		//        int i = indexOf(0, filter);
+	//        int i = indexOf(0, filter);
 	//        return (i < 0) ? null : getContent(i);
 	//    }
 
@@ -1602,12 +1602,12 @@ public class Element extends Content implements Parent {
 				}
 			}
 		}
-		
+
 		if (getParentElement() == null && !namespaces.containsKey("")) {
 			// we are the root element, and there is no 'default' namespace.
 			namespaces.put("", Namespace.NO_NAMESPACE);
 		}
-		
+
 		ArrayList<Namespace> al = new ArrayList<Namespace>(namespaces.size());
 		al.add(getNamespace());
 		namespaces.remove(getNamespacePrefix());
