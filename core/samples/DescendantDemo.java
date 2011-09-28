@@ -56,6 +56,7 @@ import java.util.*;
 
 import org.jdom2.*;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.*;
 import org.jdom2.output.*;
 
@@ -90,7 +91,7 @@ public class DescendantDemo {
 
         System.out.println();
         System.out.println("Everything that's not an element:");
-        itr = doc.getDescendants(new ElementFilter().negate());
+        itr = doc.getDescendants(new ElementFilter().negate().refine(Filters.content()));
         while (itr.hasNext()) {
             Content c = itr.next();
             System.out.println(c);

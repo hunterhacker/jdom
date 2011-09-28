@@ -54,7 +54,6 @@
 
 package org.jdom2.filter;
 
-import org.jdom2.Content;
 
 /**
  * Allow two filters to be chained together with a logical
@@ -62,10 +61,10 @@ import org.jdom2.Content;
  *
  * @author Bradley S. Huffman
  */
-final class AndFilter<T extends Content> extends AbstractFilter<T> {
+final class AndFilter<T> extends AbstractFilter<T> {
 
     // Filter for left side of logical <b>and</b>.
-    private Filter<T> left;
+    private Filter<? extends T> left;
 
     // Filter for right side of logical <b>and</b>.
     private Filter<? extends T> right;
@@ -77,7 +76,7 @@ final class AndFilter<T extends Content> extends AbstractFilter<T> {
      * @param right right side of logical <b>and</b>
      * @throws IllegalArgumentException if either supplied filter is null
      */
-    public AndFilter(Filter<T> left, Filter<? extends T> right) {
+    public AndFilter(Filter<? extends T> left, Filter<? extends T> right) {
         if ((left == null) || (right == null)) {
             throw new IllegalArgumentException("null filter not allowed");
         }
@@ -86,7 +85,7 @@ final class AndFilter<T extends Content> extends AbstractFilter<T> {
     }
 
     @Override
-	public T filter(Content content) {
+	public T filter(Object content) {
     	T ret = left.filter(content);
     	if (ret != null) {
     		return right.filter(ret);

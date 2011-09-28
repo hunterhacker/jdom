@@ -291,35 +291,41 @@ public class ContentFilter extends AbstractFilter<Content> {
     /**
      * Check to see if the object matches according to the filter mask.
      *
-     * @param obj The object to verify.
+     * @param content The object to verify.
      * @return <code>true</code> if the objected matched a predfined
      *           set of rules.
      */
     @Override
-	public Content filter(Content obj) {
-        if (obj instanceof Element) {
-            return (filterMask & ELEMENT) != 0 ? obj : null;
+	public Content filter(Object obj) {
+    	if (obj == null || !Content.class.isInstance(obj)) {
+    		return null;
+    	}
+    	
+    	Content content = (Content)obj;
+    	
+        if (content instanceof Element) {
+            return (filterMask & ELEMENT) != 0 ? content : null;
         }
-        else if (obj instanceof CDATA) {  // must come before Text check
-            return (filterMask & CDATA) != 0 ? obj : null;
+        else if (content instanceof CDATA) {  // must come before Text check
+            return (filterMask & CDATA) != 0 ? content : null;
         }
-        else if (obj instanceof Text) {
-            return (filterMask & TEXT) != 0 ? obj : null;
+        else if (content instanceof Text) {
+            return (filterMask & TEXT) != 0 ? content : null;
         }
-        else if (obj instanceof Comment) {
-            return (filterMask & COMMENT) != 0 ? obj : null;
+        else if (content instanceof Comment) {
+            return (filterMask & COMMENT) != 0 ? content : null;
         }
-        else if (obj instanceof ProcessingInstruction) {
-            return (filterMask & PI) != 0 ? obj : null;
+        else if (content instanceof ProcessingInstruction) {
+            return (filterMask & PI) != 0 ? content : null;
         }
-        else if (obj instanceof EntityRef) {
-            return (filterMask & ENTITYREF) != 0 ? obj : null;
+        else if (content instanceof EntityRef) {
+            return (filterMask & ENTITYREF) != 0 ? content : null;
         }
 //        else if (obj instanceof Document) {
 //            return (filterMask & DOCUMENT) != 0 ? obj : null;
 //        }
-        else if (obj instanceof DocType) {
-            return (filterMask & DOCTYPE) != 0 ? obj : null;
+        else if (content instanceof DocType) {
+            return (filterMask & DOCTYPE) != 0 ? content : null;
         }
 
         return null;

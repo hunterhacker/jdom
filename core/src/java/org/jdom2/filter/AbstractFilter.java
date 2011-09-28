@@ -54,6 +54,10 @@
 
 package org.jdom2.filter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.jdom2.Content;
 
 /**
@@ -61,15 +65,30 @@ import org.jdom2.Content;
  *
  * @author Bradley S. Huffman
  */
-public abstract class AbstractFilter<T extends Content> implements Filter<T> {
+public abstract class AbstractFilter<T> implements Filter<T> {
 	
 	@Override
-	public final boolean matches(Content content) {
+	public final boolean matches(Object content) {
 		return filter(content) != null;
+	}
+	
+	@Override
+	public List<T> filter(List<?> content) {
+		if (content == null) {
+			return Collections.emptyList();
+		}
+		ArrayList<T> ret = new ArrayList<T>(content.size());
+		for (Object obj : content) {
+			T c = filter(obj);
+			if (c != null) {
+				ret.add(c);
+			}
+		}
+		return Collections.unmodifiableList(ret);
 	}
 
     @Override
-	public final Filter<? extends Content> negate() {
+	public final Filter<?> negate() {
     	if (this instanceof NegateFilter) {
     		return ((NegateFilter)this).getBaseFilter();
     	}
@@ -86,4 +105,8 @@ public abstract class AbstractFilter<T extends Content> implements Filter<T> {
         return new AndFilter<T>(this, filter);
     }
 
+    @Override
+    public <R> Filter<R> refine(Filter<R> filter) {
+    	return new RefineFilter<R>(filter);
+    }
 }

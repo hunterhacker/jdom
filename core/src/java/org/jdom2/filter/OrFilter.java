@@ -86,9 +86,9 @@ final class OrFilter extends AbstractFilter<Content> {
     }
 
     @Override
-	public Content filter(Content obj) {
+	public Content filter(Object obj) {
         if (left.matches(obj) || right.matches(obj)) {
-        	return obj;
+        	return (Content)obj;
         }
         return null;
     }
