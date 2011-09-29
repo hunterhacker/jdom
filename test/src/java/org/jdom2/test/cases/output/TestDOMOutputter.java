@@ -217,4 +217,14 @@ public final class TestDOMOutputter {
 		roundTrip(setup, doc);
     }
     
+    @Test
+    public void testWithDocType() throws JDOMException {
+    	DocType dt = new DocType("root");
+    	dt.setInternalSubset("<!ELEMENT root (#PCDATA)>");
+    	Element root = new Element("root");
+    	Document doc = new Document(root, dt);
+
+    	roundTrip(doc);
+    }
+
 }
