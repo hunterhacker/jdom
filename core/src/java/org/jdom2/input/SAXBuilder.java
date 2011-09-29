@@ -54,14 +54,31 @@
 
 package org.jdom2.input;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.jdom2.*;
-
-import org.xml.sax.*;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.JDOMFactory;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
@@ -596,18 +613,13 @@ public class SAXBuilder {
 			// Note we need JAXP 1.1, and if JAXP 1.0 is all that's
 			// available then the getXMLReader call fails and we skip
 			// to the hard coded default parser
+			// Actually, for JDOM2 we can assume JAXP1.1, this fixes a bug
+			// (issue #46), where setting an invalid value on the
+			// JAXP Properties causes an InvocationTargetException instead of
+			// a JDOMException.
+			// We no longer need the reflection to make this work
 			try {
-				// Get factory class and method.
-				Class<?> factoryClass =
-						Class.forName("org.jdom2.input.JAXPParserFactory");
-
-				Method createParser =
-						factoryClass.getMethod("createParser",
-								boolean.class, Map.class, Map.class );
-
-				// Create SAX parser.
-				parser = (XMLReader)createParser.invoke(null,
-						Boolean.valueOf(validate), features, properties);
+				parser = JAXPParserFactory.createParser(Boolean.valueOf(validate), features, properties);
 
 				// Configure parser
 				setFeaturesAndProperties(parser, false);

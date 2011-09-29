@@ -314,10 +314,12 @@ public final class TestSAXBuilder {
 			@Override
 			public void notationDecl(String arg0, String arg1, String arg2)
 					throws SAXException {
+				// do nothing
 			}
 			@Override
 			public void unparsedEntityDecl(String arg0, String arg1,
 					String arg2, String arg3) throws SAXException {
+				// do nothing
 			}
 		};
 		
@@ -429,7 +431,6 @@ public final class TestSAXBuilder {
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof XMLReader);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			fail("Could not create parser: " + e.getMessage());
@@ -444,12 +445,10 @@ public final class TestSAXBuilder {
 			sb.setFeature(feature, true);
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof XMLReader);
 			assertTrue(reader.getFeature(feature));
 			sb.setFeature(feature, false);
 			reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof XMLReader);
 			assertFalse(reader.getFeature(feature));
 			
 		} catch (Exception e) {
@@ -463,28 +462,35 @@ public final class TestSAXBuilder {
 		LexicalHandler lh = new LexicalHandler() {
 			@Override
 			public void startEntity(String arg0) throws SAXException {
+				// Do nothing;
 			}
 			@Override
 			public void startDTD(String arg0, String arg1, String arg2)
 					throws SAXException {
+				// Do nothing;
 			}
 			@Override
 			public void startCDATA() throws SAXException {
+				// Do nothing;
 			}
 			@Override
 			public void endEntity(String arg0) throws SAXException {
+				// Do nothing;
 			}
 			
 			@Override
 			public void endDTD() throws SAXException {
+				// Do nothing;
 			}
 			
 			@Override
 			public void endCDATA() throws SAXException {
+				// Do nothing;
 			}
 			
 			@Override
 			public void comment(char[] arg0, int arg1, int arg2) throws SAXException {
+				// Do nothing;
 			}
 		};
 		
@@ -494,12 +500,29 @@ public final class TestSAXBuilder {
 			sb.setProperty(propname, lh);
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof XMLReader);
 			assertTrue(lh == reader.getProperty(propname));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Could not create parser: " + e.getMessage());
 		}
+		sb.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "XMLSchema");
+
+	}
+
+	@Test
+	public void testSetPropertyTwo() {
+		MySAXBuilder sb = new MySAXBuilder();
+		try {
+			sb.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "XMLSchema");
+			sb.createParser();
+			fail("Should not be able to set the property");
+		} catch (JDOMException jde) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+
 	}
 
     /**
@@ -529,7 +552,7 @@ public final class TestSAXBuilder {
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
-		List content = doc.getRootElement().getContent();
+		List<Content> content = doc.getRootElement().getContent();
 		assertTrue("didn't get EntityRef for unexpanded entities",
 			content.get(0) instanceof EntityRef);
 		assertTrue("didn't get EntityRef for unexpanded entities",
