@@ -193,4 +193,12 @@ public class ElementFilter extends AbstractFilter<Element> {
 			namespace = Namespace.getNamespace((String) prefix, (String) uri);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "[ElementFilter: Name " + (name == null ? "*any*" : name) +
+				" with Namespace " + namespace + "]";
+	}
+
+
 }

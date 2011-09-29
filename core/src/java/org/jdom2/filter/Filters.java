@@ -4,21 +4,6 @@ import org.jdom2.*;
 
 public final class Filters {
 
-	private static final class ClassFilter<T> extends AbstractFilter<T> {
-
-		private final Class<? extends T> fclass;
-
-		public ClassFilter(Class<? extends T> tclass) {
-			fclass = tclass;
-		}
-
-		@Override
-		public T filter(Object content) {
-			return fclass.isInstance(content) ? fclass.cast(content) : null;
-		}
-
-	}
-
 	private static final Filter<Content> fcontent = 
 			new ClassFilter<Content>(Content.class);
 

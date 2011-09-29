@@ -65,7 +65,7 @@ import org.jdom2.Content;
  *
  * @author Bradley S. Huffman
  */
-public abstract class AbstractFilter<T> implements Filter<T> {
+abstract class AbstractFilter<T> implements Filter<T> {
 
 	@Override
 	public final boolean matches(Object content) {
@@ -101,12 +101,12 @@ public abstract class AbstractFilter<T> implements Filter<T> {
 	}
 
 	@Override
-	public final Filter<T> and(Filter<? extends T> filter) {
-		return new AndFilter<T>(this, filter);
+	public final Filter<?> and(Filter<?> filter) {
+		return new AndFilter<Object>(this, filter);
 	}
 
 	@Override
 	public <R> Filter<R> refine(Filter<R> filter) {
-		return new RefineFilter<R>(filter);
+		return new RefineFilter<R>(this, filter);
 	}
 }

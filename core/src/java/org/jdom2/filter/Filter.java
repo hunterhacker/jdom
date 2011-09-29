@@ -92,11 +92,11 @@ public interface Filter <T> extends java.io.Serializable {
 	public boolean matches(Object content);
 
 
-	public Filter<?> negate();
+	public Filter<? extends Object> negate();
 
-	public Filter<?> or(Filter<?> filter);
+	public Filter<? extends Object> or(Filter<?> filter);
 
-	public Filter<T> and(Filter<? extends T> filter);
+	public Filter<?> and(Filter<?> filter);
 
 	public <R> Filter<R> refine(Filter<R> filter);
 }

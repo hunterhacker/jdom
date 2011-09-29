@@ -2,6 +2,7 @@ package org.jdom2.test.cases.filter;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -19,13 +20,14 @@ import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
-import org.jdom2.filter.AbstractFilter;
+import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
 import org.jdom2.test.util.UnitTestUtil;
 
 public class AbstractTestFilter {
 	
-	protected static final void assertFilterNotEquals(Filter a, Filter b) {
+	protected static final void assertFilterNotEquals(Filter<?> a, Filter<?> b) {
 		assertTrue("A Filter is null.", a != null);
 		assertTrue("B Filter is null.", b != null);
 		assertTrue (!a.equals(null));
@@ -39,9 +41,11 @@ public class AbstractTestFilter {
 					"the same hashCode(): " + a.hashCode() + "\n   " + 
 					a.toString() + " \n   " + b.toString());
 		}
+		Filter<Content> base = new ContentFilter();
+		assertFalse(base.refine(a).equals(base.refine(b)));
 	}
 	
-	protected static final void assertFilterEquals(Filter a, Filter b) {
+	protected static final void assertFilterEquals(Filter<?> a, Filter<?> b) {
 		assertTrue("A Filter is null.", a != null);
 		assertTrue("B Filter is null.", b != null);
 		assertTrue (!a.equals(null));
@@ -64,6 +68,8 @@ public class AbstractTestFilter {
 			fail("Both filters are equals(), but their hashCode() values differ: " + 
 					a.toString() + " and " + b.toString());
 		}
+		Filter<Content> base = new ContentFilter();
+		assertTrue(base.refine(a).equals(base.refine(b)));
 	}
 	
 	protected interface CallBack {
@@ -224,62 +230,68 @@ public class AbstractTestFilter {
 	}
 	
 	
-	protected void exercise(Filter ef, Parent parent, CallBack callback) {
-		assertTrue("filter is null", ef != null);
+	protected <F extends Content> void exercise(Filter<F> af, Parent parent, CallBack callback) {
+		assertTrue("filter is null", af != null);
 		assertTrue("list is null", parent != null);
 		assertTrue("callback is null", callback != null);
-		assertTrue(ef.toString() != null); // basic test to ensure toString is run.
-		exerciseCore(ef, parent, callback);
-		if (ef instanceof AbstractFilter) {
-			AbstractFilter af = (AbstractFilter)ef;
-			
-			try {
-				Filter or = af.or(null); 
-				fail  ("expected an exception from " + or);
-			} catch (RuntimeException re) {
-				// good
-			} catch (Exception e) {
-				fail ("Expected a RuntimeException.");
-			}
-			
-			try {
-				Filter and = af.and(null); 
-				fail  ("expected an exception from " + and);
-			} catch (RuntimeException re) {
-				// good
-			} catch (Exception e) {
-				fail ("Expected a RuntimeException.");
-			}
-			
-			exerciseCore(af.negate(), parent, new NegateCallBack(callback));
-			exerciseCore(af.or(af.negate()), parent, new TrueCallBack());
-			exerciseCore(af.or(UnitTestUtil.deSerialize(af)), parent, callback);
-			exerciseCore(af.and(af.negate()), parent, new FalseCallBack());
-			exerciseCore(af.and(af), parent, callback);
-			exerciseCore(af.and(UnitTestUtil.deSerialize(af)), parent, callback);
-			
-			AbstractFilter nf = (AbstractFilter)af.negate();
-			exerciseCore(nf.negate(), parent, callback);
-			exerciseCore(nf.or(nf.negate()), parent, new TrueCallBack());
-			exerciseCore(nf.and(nf.negate()), parent, new FalseCallBack());
-			
-
-			Filter afor = UnitTestUtil.deSerialize(af).or(nf);
-			Filter bfor = nf.or(af);
-			assertFilterEquals(afor, bfor);
-			
-			Filter afand = UnitTestUtil.deSerialize(af).and(nf);
-			Filter bfand = nf.and(af);
-			assertFilterEquals(afand, bfand);
-
+		assertTrue(af.toString() != null); // basic test to ensure toString is run.
+		// can never match null if it returns a <F extends Content>
+		assertFalse(af.matches(null));
+		// can never match Object if it returns a <F extends Content>
+		assertFalse(af.matches(new Object()));
+		exerciseCore(af, parent, callback);
+		try {
+			Filter<?> or = af.or(null); 
+			fail  ("expected an exception from " + or);
+		} catch (RuntimeException re) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected a RuntimeException.");
 		}
+		
+		try {
+			Filter<?> and = af.and(null); 
+			fail  ("expected an exception from " + and);
+		} catch (RuntimeException re) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected a RuntimeException.");
+		}
+		
+		exerciseCore(af.negate().refine(Filters.content()), parent, new NegateCallBack(callback));
+		exerciseCore(af.or(af.negate()).refine(Filters.content()), parent, new TrueCallBack());
+		exerciseCore(af.or(UnitTestUtil.deSerialize(af)).refine(Filters.content()), parent, callback);
+		exerciseCore(af.negate().and(af).refine(Filters.content()), parent, new FalseCallBack());
+		exerciseCore(af.and(af).refine(Filters.content()), parent, callback);
+		exerciseCore(af.and(UnitTestUtil.deSerialize(af)).refine(Filters.content()), parent, callback);
+		
+		Filter<?> nf = af.negate();
+		exerciseCore(nf.negate().refine(Filters.content()), parent, callback);
+		exerciseCore(nf.or(nf.negate()).refine(Filters.content()), parent, new TrueCallBack());
+		exerciseCore(nf.and(nf.negate()).refine(Filters.content()), parent, new FalseCallBack());
+		
+
+		Filter<?> afor = UnitTestUtil.deSerialize(af).or(nf);
+		Filter<?> bfor = nf.or(af);
+		assertFilterEquals(afor, bfor);
+		
+		Filter<?> afand = UnitTestUtil.deSerialize(af).and(nf);
+		Filter<?> bfand = nf.and(af);
+		assertFilterEquals(afand, bfand);
+		
+		assertFalse(af.equals(null));
+		assertFalse(nf.equals(null));
+		assertFalse(afor.equals(null));
+		assertFalse(bfor.equals(null));
+		assertFalse(afand.equals(null));
+		assertFalse(bfand.equals(null));
+
 	}
 	
-	@SuppressWarnings("unchecked")
-	private final void exerciseCore(Filter ef, Parent parent, CallBack callback) {
+	private final void exerciseCore(Filter<? extends Content> ef, Parent parent, CallBack callback) {
 		// exercise the toString()
 		assertTrue(ef.toString() != null);
-		List<Content> cont = (List<Content>)parent.getContent();
+		List<Content> cont = parent.getContent();
 		for (Content c : cont) {
 			assertTrue(parent == c.getParent());
 			if (parent instanceof Document) {
@@ -295,12 +307,15 @@ public class AbstractTestFilter {
 						+ " for value " + c);
 			}
 		}
-		Filter cf = UnitTestUtil.deSerialize(ef);
+		Filter<? extends Content> cf = UnitTestUtil.deSerialize(ef);
 		assertFilterEquals(cf, ef);
+		ContentFilter xf = new ContentFilter();
+		assertFilterEquals(cf.refine(xf), ef.refine(xf));
+		assertFilterEquals(xf.refine(cf), xf.refine(ef));
 		assertFalse(ef.equals(null));
-		if (ef instanceof AbstractFilter) {
-			assertFilterNotEquals(ef, ((AbstractFilter)ef).negate());
-		}
+		assertFilterNotEquals(ef, ef.negate());
+		assertFilterNotEquals(ef.refine(xf), ef.negate().refine(xf));
+		assertFilterNotEquals(xf.refine(ef), xf.refine(ef.negate()));
 		List<Content> depth = new ArrayList<Content>();
 		depth.addAll(cont);
 		int sz = depth.size();
@@ -311,15 +326,23 @@ public class AbstractTestFilter {
 				sz += kdata.size();
 			}
 		}
-		Iterator<Content> di = (Iterator<Content>)parent.getDescendants();
+		Iterator<? extends Content> di = parent.getDescendants();
+		
+		// confirm that the DepthIterator iterates over all content.
 		UnitTestUtil.testReadIterator(di, depth.toArray());
+		
+		List<Content> filtered = new ArrayList<Content>(depth.size());
 		for (Iterator<Content> it = depth.iterator(); it.hasNext(); ) {
-			if (!callback.isValid(it.next())) {
-				it.remove();
+			Content c = it.next();
+			if (callback.isValid(c)) {
+				filtered.add(c);
 			}
 		}
-		di = (Iterator<Content>)parent.getDescendants(ef);
-		UnitTestUtil.testReadIterator(di, depth.toArray());
+		
+		// 
+		di = parent.getDescendants(ef);
+		UnitTestUtil.testReadIterator(di, filtered.toArray());
+		assertEquals(filtered, ef.filter(depth));
 	}
 	
 }
