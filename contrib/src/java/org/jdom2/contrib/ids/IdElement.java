@@ -90,7 +90,8 @@ public class IdElement extends Element {
       this(name, Namespace.getNamespace(prefix, uri));
    }
 
-   protected Content setParent(Parent parent) {
+   @Override
+protected Content setParent(Parent parent) {
       // Save previous owning document (if any).
       Document prevDoc = this.getDocument();
       Document newDoc  = (parent != null)? parent.getDocument(): null;
@@ -128,7 +129,7 @@ public class IdElement extends Element {
       if ((prevDoc instanceof IdDocument) || (newDoc instanceof IdDocument)) {
          // At least one of the documents supports lookup by ID.
          // => Walk subtree to collect ID mappings.
-         Map ids = getIds(this, new HashMap());
+         Map<String,Element> ids = getIds(this, new HashMap<String, Element>());
 
          // Update previous owning document.
          if (prevDoc instanceof IdDocument) {
@@ -136,8 +137,8 @@ public class IdElement extends Element {
             // => Remove IDs from document's lookup table.
             IdDocument idDoc = (IdDocument)prevDoc;
 
-            for (Iterator i=ids.keySet().iterator(); i.hasNext(); ) {
-               idDoc.removeId(i.next().toString());
+            for (String key : ids.keySet()) {
+               idDoc.removeId(key);
             }
          }
          // Else: Lookup by ID not supported. => Nothing to update!
@@ -148,9 +149,8 @@ public class IdElement extends Element {
             // => Add IDs from document's lookup table.
             IdDocument idDoc = (IdDocument)newDoc;
 
-            for (Iterator i=ids.keySet().iterator(); i.hasNext(); ) {
-               String key = i.next().toString();
-               idDoc.addId(key, (Element)(ids.get(key)));
+            for (Map.Entry<String,Element> me : ids.entrySet()) {
+               idDoc.addId(me.getKey(), me.getValue());
             }
          }
          // Else: Lookup by ID not supported. => Nothing to update!
@@ -172,15 +172,11 @@ public class IdElement extends Element {
     *
     * @return the updated ID lookup table.
     */
-   private static Map getIds(Element root, Map ids) {
+   private static Map<String,Element> getIds(Element root, Map<String,Element> ids) {
       addIdAttributes(root, ids);
 
-      List children = root.getContent();
-      for (Iterator i=children.iterator(); i.hasNext(); ) {
-         Object o = i.next();
-         if (o instanceof Element) {
-            getIds((Element)o, ids);
-         }
+      for (Element emt : root.getChildren()) {
+          getIds(emt, ids);
       }
       return ids;
    }
@@ -194,11 +190,8 @@ public class IdElement extends Element {
     * @param  elt   the element to the ID attributes from.
     * @param  ids   the ID lookup table to populate.
     */
-   private static void addIdAttributes(Element elt, Map ids) {
-      List attrs = elt.getAttributes();
-      for (Iterator i=attrs.iterator(); i.hasNext(); ) {
-         Attribute attr = (Attribute)(i.next());
-
+   private static void addIdAttributes(Element elt, Map<String,Element> ids) {
+      for (Attribute attr : elt.getAttributes()) {
          if (attr.getAttributeType() == Attribute.ID_TYPE) {
             ids.put(attr.getValue(), elt);
             break;

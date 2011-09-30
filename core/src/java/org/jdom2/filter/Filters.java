@@ -109,6 +109,10 @@ public final class Filters {
 	public static final Filter<Double> fdouble() {
 		return fdouble;
 	}
+	
+	public static final <F> Filter<F> fclass(Class<F> clazz) {
+		return new ClassFilter<F>(clazz);
+	}
 
 
 }

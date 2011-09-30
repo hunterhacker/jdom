@@ -57,6 +57,7 @@ package org.jdom2.contrib.beans;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -125,7 +126,7 @@ public class JDOMBean {
     private SAXBuilder builder;
     
     /** file cache **/
-    private Map files = new HashMap();
+    private Map<String, FileInfo> files = new HashMap<String, FileInfo>();
 
     /** where to locate files **/
     private File fileRoot;
@@ -180,8 +181,10 @@ public class JDOMBean {
      * @return the path (absolute or relative) to the document root
      **/
     public String getFileRoot() {
-        if (fileRoot == null) return null;
-        else return fileRoot.getAbsolutePath();
+        if (fileRoot == null) { 
+        	return null;
+        }
+        return fileRoot.getAbsolutePath();
     }
     
     /**
@@ -203,7 +206,7 @@ public class JDOMBean {
      * @return a JDOM Document corresponding to the given filename
      **/
     public Document getDocument(String filename) throws JDOMException, IOException {
-        FileInfo info = (FileInfo) files.get(filename);
+        FileInfo info = files.get(filename);
         File file = getFile(filename);
         if (info == null ||
             info.modified < file.lastModified())
@@ -225,13 +228,10 @@ public class JDOMBean {
     }
 
     private File getFile(String filename) {
-        File file;
         if (fileRoot == null) {
             return new File(filename);
         }
-        else {
-            return new File(fileRoot, filename);
-        }
+        return new File(fileRoot, filename);
     }
     
     /**

@@ -134,7 +134,8 @@ import org.xml.sax.Attributes;
     * @return <code>true</code> is the element matches the XPath
     *         expression, <code>false</code> otherwise.
     */
-   public boolean match(String path, Attributes attrs) {
+   @Override
+public boolean match(String path, Attributes attrs) {
       return (this.re.matcher(path).matches());
    }
 
@@ -156,7 +157,8 @@ import org.xml.sax.Attributes;
     * @return <code>true</code> is the element matches the XPath
     *         expression, <code>false</code> otherwise.
     */
-   public boolean match(String path, Element elt) {
+   @Override
+public boolean match(String path, Element elt) {
       if (this.test != null) {
          boolean match = false;
 
@@ -168,9 +170,7 @@ import org.xml.sax.Attributes;
          }
          return (match);
       }
-      else {
-         return (true);
-      }
+      return (true);
    }
 }
 

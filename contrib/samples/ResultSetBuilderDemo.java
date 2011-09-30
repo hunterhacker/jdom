@@ -88,8 +88,6 @@ public class ResultSetBuilderDemo {
     Statement fill = con.createStatement();
     fill.executeUpdate(FILL);
 
-    Namespace ns = Namespace.getNamespace("xhtml", "http://w3.org/etc");
-
     Statement stmt = con.createStatement();
     ResultSet rs = stmt.executeQuery(
       "select id, name, home_url || contact_phone from rsbd");

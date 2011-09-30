@@ -108,17 +108,17 @@ public abstract class XPathMatcher {
     *
     * @see    #newXPathMatcher
     */
-   private static       Constructor     constructor     = null;
+   private static Constructor<?> constructor = null;
 
    /**
     * Whether debug traces are active.
     */
-   private static       boolean         debug           = false;
+   private static boolean debug = false;
 
    /**
     * The XPath expression this matcher matches!
     */
-   private final        String          expression;
+   private final String expression;
 
    /**
     * The element listener.
@@ -287,9 +287,7 @@ public abstract class XPathMatcher {
       if (expr.endsWith("]")) {
          return (expr.substring(expr.lastIndexOf('[')));
       }
-      else {
-         return (null);
-      }
+      return (null);
    }
 
 
@@ -332,7 +330,7 @@ public abstract class XPathMatcher {
     *                                    not a concrete subclass
     *                                    of XPathMatcher.
     */
-   public static void setXPathMatcherClass(Class aClass)
+   public static void setXPathMatcherClass(Class<?> aClass)
                         throws  IllegalArgumentException, JDOMException {
       if (aClass != null) {
          try {
@@ -340,8 +338,7 @@ public abstract class XPathMatcher {
                 (Modifier.isAbstract(aClass.getModifiers()) == false)) {
                // Concrete subclass pf XPathMatcher.
                // => Get the constructor to use.
-               constructor = aClass.getConstructor(
-                        new Class[] { String.class, ElementListener.class });
+               constructor = aClass.getConstructor(String.class, ElementListener.class);
             }
             else {
                throw (new JDOMException(
@@ -381,8 +378,7 @@ public abstract class XPathMatcher {
 
             setXPathMatcherClass(Class.forName(className));
          }
-         return ((XPathMatcher)(constructor.newInstance(new Object[]
-                                                { expression, listener })));
+         return (XPathMatcher)constructor.newInstance(expression, listener);
       }
       catch (InvocationTargetException ex1) {
          // Constructor threw an error on invocation.

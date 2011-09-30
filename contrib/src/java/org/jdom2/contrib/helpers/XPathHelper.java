@@ -55,11 +55,18 @@
 package org.jdom2.contrib.helpers;
 
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
-import org.jdom2.*;
-import org.jdom2.filter.ContentFilter;
+import org.jdom2.Attribute;
+import org.jdom2.Comment;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
 
 
 /**
@@ -115,9 +122,7 @@ public class XPathHelper {
         if (to == from) {
             return "node()";
         }
-        else {
-            return getElementPath(from, to, true).toString();
-        }
+        return getElementPath(from, to, true).toString();
     }
 
     /**
@@ -160,11 +165,9 @@ public class XPathHelper {
         if (to == from) {
             return "node()";
         }
-        else {
-            StringBuffer path = getElementPath(from, to.getParent(), false);
-            path.append('@').append(to.getName()).toString();
-            return path.toString();
-        }
+		StringBuilder path = getElementPath(from, to.getParent(), false);
+		path.append('@').append(to.getName()).toString();
+		return path.toString();
     }
 
     /**
@@ -207,23 +210,20 @@ public class XPathHelper {
         if (to == from) {
             return "node()";
         }
-        else {
-            Element parent = to.getParentElement();
-            List siblings = null;
-            int nodeType = ContentFilter.TEXT;
-            StringBuffer path = getElementPath(from, parent, false);
+		Element parent = to.getParentElement();
+		List<Text> siblings = null;
+		StringBuilder path = getElementPath(from, parent, false);
 
-            if (parent != null) {
-                siblings = parent.getContent(new ContentFilter(nodeType));
-            }
-            else {
-                Document doc = to.getDocument();
-                if (doc != null) {
-                    siblings = doc.getContent(new ContentFilter(nodeType));
-                }
-            }
-            return getPositionPath(to, siblings, "text()", path).toString();
-        }
+		if (parent != null) {
+		    siblings = parent.getContent(Filters.text());
+		}
+		else {
+		    Document doc = to.getDocument();
+		    if (doc != null) {
+		        siblings = doc.getContent(Filters.text());
+		    }
+		}
+		return getPositionPath(to, siblings, "text()", path).toString();
     }
 
     /**
@@ -266,23 +266,20 @@ public class XPathHelper {
         if (to == from) {
             return "node()";
         }
-        else {
-            Element parent = to.getParentElement();
-            List siblings = null;
-            int nodeType = ContentFilter.COMMENT;
-            StringBuffer path = getElementPath(from, parent, false);
+		Element parent = to.getParentElement();
+		List<Comment> siblings = null;
+		StringBuilder path = getElementPath(from, parent, false);
 
-            if (parent != null) {
-                siblings = parent.getContent(new ContentFilter(nodeType));
-            }
-            else {
-                Document doc = to.getDocument();
-                if (doc != null) {
-                    siblings = doc.getContent(new ContentFilter(nodeType));
-                }
-            }
-            return getPositionPath(to, siblings, "comment()", path).toString();
-        }
+		if (parent != null) {
+		    siblings = parent.getContent(Filters.comment());
+		}
+		else {
+		    Document doc = to.getDocument();
+		    if (doc != null) {
+		        siblings = doc.getContent(Filters.comment());
+		    }
+		}
+		return getPositionPath(to, siblings, "comment()", path).toString();
     }
 
     /**
@@ -328,24 +325,21 @@ public class XPathHelper {
         if (to == from) {
             return "node()";
         }
-        else {
-            Element parent = to.getParentElement();
-            List siblings = null;
-            int nodeType = ContentFilter.PI;
-            StringBuffer path = getElementPath(from, parent, false);
+		Element parent = to.getParentElement();
+		List<ProcessingInstruction> siblings = null;
+		StringBuilder path = getElementPath(from, parent, false);
 
-            if (parent != null) {
-                siblings = parent.getContent(new ContentFilter(nodeType));
-            }
-            else {
-                Document doc = to.getDocument();
-                if (doc != null) {
-                    siblings = doc.getContent(new ContentFilter(nodeType));
-                }
-            }
-            return getPositionPath(to, siblings,
-                                   "processing-instruction()", path).toString();
-        }
+		if (parent != null) {
+		    siblings = parent.getContent(Filters.processinginstruction());
+		}
+		else {
+		    Document doc = to.getDocument();
+		    if (doc != null) {
+		        siblings = doc.getContent(Filters.processinginstruction());
+		    }
+		}
+		return getPositionPath(to, siblings,
+		                       "processing-instruction()", path).toString();
     }
 
     /**
@@ -444,13 +438,13 @@ public class XPathHelper {
      *
      * @throws JDOMException if the XPath generation failed.
      */
-    private static StringBuffer getElementPath(Object from,
+    private static StringBuilder getElementPath(Object from,
                                                Element to, boolean leaf)
                                                   throws JDOMException {
         if (from instanceof Document) {
             from = null;
         }
-        return getElementPath((Element) from, to, leaf, new StringBuffer());
+        return getElementPath((Element) from, to, leaf, new StringBuilder());
     }
 
     /**
@@ -468,12 +462,11 @@ public class XPathHelper {
      *
      * @throws JDOMException if the XPath generation failed.
      */
-    private static StringBuffer getElementPath(Element from, Element to,
-                                               boolean leaf, StringBuffer path)
+    private static StringBuilder getElementPath(Element from, Element to,
+                                               boolean leaf, StringBuilder path)
                                                          throws JDOMException {
         if (to != from) {
-            boolean isRoot = false;
-            List siblings = null;
+            List<Element> siblings = null;
 
             Element parent = to.getParentElement();
             if (parent == null) {
@@ -484,7 +477,6 @@ public class XPathHelper {
                      "The \"from\" node is not an ancestor of the \"to\" node");
                 }
                 if (to.isRootElement()) {
-                    isRoot = true;
                     path.append('/');
                 }
             }
@@ -542,11 +534,11 @@ public class XPathHelper {
      * @return the XPath sub-expression to select the target node
      *         among its siblings.
      */
-    private static StringBuffer getPositionPath(Object node, List siblings,
+    private static StringBuilder getPositionPath(Object node, List<?> siblings,
                                                 String pathToken,
-                                                StringBuffer buffer) {
+                                                StringBuilder buffer) {
         if (buffer == null) {
-            buffer = new StringBuffer();
+            buffer = new StringBuilder();
         }
         if (pathToken != null) {
             buffer.append(pathToken);
@@ -554,7 +546,7 @@ public class XPathHelper {
 
         if ((siblings != null) && (siblings.size() != 1)) {
             int position = 0;
-            for (Iterator i = siblings.iterator(); i.hasNext();) {
+            for (Iterator<?> i = siblings.iterator(); i.hasNext();) {
                 position++;
                 if (i.next() == node) break;
             }

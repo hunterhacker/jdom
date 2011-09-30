@@ -67,7 +67,6 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import org.jdom2.*;
-import org.jdom2.JDOMFactory;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.SAXHandler;
 
@@ -167,7 +166,7 @@ public class ElementScanner extends XMLFilterImpl {
     * The registered element listeners, each wrapped in a
     * XPathMatcher instance.
     */
-   private final        Collection      listeners       = new ArrayList();
+   private final Collection<XPathMatcher> listeners = new ArrayList<XPathMatcher>();
 
    /**
     * The <i>SAXBuilder</i> instance to build the JDOM objects used
@@ -175,12 +174,12 @@ public class ElementScanner extends XMLFilterImpl {
     * SAXBuilder per se, we just want to reuse the tons of Java code
     * this class implements!
     */
-   private              ParserBuilder   parserBuilder   = new ParserBuilder();
+   private ParserBuilder parserBuilder = new ParserBuilder();
 
    /**
     * The <i>SAXHandler</i> instance to build the JDOM Elements.
     */
-   private              SAXHandler  saxHandler  = null;
+   private SAXHandler saxHandler  = null;
 
    /**
     * The path of the being parsed element.
@@ -192,7 +191,7 @@ public class ElementScanner extends XMLFilterImpl {
     * the matching rules active for all the ancestors of the
     * current node.
     */
-   private              Map             activeRules     = new HashMap();
+   private Map<String,Collection<XPathMatcher>> activeRules = new HashMap<String, Collection<XPathMatcher>>();
 
    /**
     * Construct an ElementScanner, with no parent.
@@ -259,8 +258,8 @@ public class ElementScanner extends XMLFilterImpl {
     */
    public void removeElementListener(ElementListener listener, String pattern) {
       if ((listener != null) || (pattern != null)) {
-         for (Iterator i=this.listeners.iterator(); i.hasNext(); ) {
-            XPathMatcher m = (XPathMatcher)(i.next());
+         for (Iterator<XPathMatcher> i=this.listeners.iterator(); i.hasNext(); ) {
+            XPathMatcher m = i.next();
 
             if (((m.getListener().equals(listener))  || (listener == null)) &&
                 ((m.getExpression().equals(pattern)) || (pattern  == null))) {
@@ -281,15 +280,13 @@ public class ElementScanner extends XMLFilterImpl {
     * @return the list of matching rules or <code>null</code> if
     *         no match was found.
     */
-   private Collection getMatchingRules(String path, Attributes attrs) {
-      Collection matchingRules = null;
+   private Collection<XPathMatcher> getMatchingRules(String path, Attributes attrs) {
+      Collection<XPathMatcher> matchingRules = null;
 
-      for (Iterator i=this.listeners.iterator(); i.hasNext(); ) {
-         XPathMatcher rule = (XPathMatcher)(i.next());
-
+      for (XPathMatcher rule : this.listeners) {
          if (rule.match(path, attrs)) {
             if (matchingRules == null) {
-               matchingRules = new ArrayList();
+               matchingRules = new ArrayList<XPathMatcher>();
             }
             matchingRules.add(rule);
          }
@@ -372,7 +369,8 @@ public class ElementScanner extends XMLFilterImpl {
     *         recognizes the feature name but cannot set the
     *         requested value.
     */
-   public void setFeature(String name, boolean state)
+   @Override
+public void setFeature(String name, boolean state)
                 throws SAXNotRecognizedException, SAXNotSupportedException {
       if (this.getParent() != null) {
          this.getParent().setFeature(name, state);
@@ -393,7 +391,8 @@ public class ElementScanner extends XMLFilterImpl {
     *         recognizes the property name but cannot set the
     *         requested value.
     */
-   public void setProperty(String name, Object value)
+   @Override
+public void setProperty(String name, Object value)
                 throws SAXNotRecognizedException, SAXNotSupportedException {
       if (this.getParent() != null) {
          this.getParent().setProperty(name, value);
@@ -425,7 +424,8 @@ public class ElementScanner extends XMLFilterImpl {
     *                        possibly from a byte stream or character
     *                        stream supplied by the application.
     */
-   public void parse(InputSource source)  throws IOException, SAXException {
+   @Override
+public void parse(InputSource source)  throws IOException, SAXException {
       // Allocate the element builder (SAXHandler subclass).
       this.saxHandler = this.parserBuilder.getContentHandler();
 
@@ -450,7 +450,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void startDocument()          throws SAXException {
+   @Override
+public void startDocument()          throws SAXException {
       // Reset state.
       this.currentPath.setLength(0);
       this.activeRules.clear();
@@ -467,7 +468,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void endDocument()            throws SAXException {
+   @Override
+public void endDocument()            throws SAXException {
       // Propagate event.
       this.saxHandler.endDocument();
       super.endDocument();
@@ -483,7 +485,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void startPrefixMapping(String prefix, String uri)
+   @Override
+public void startPrefixMapping(String prefix, String uri)
                                                         throws SAXException {
       // Propagate event.
       this.saxHandler.startPrefixMapping(prefix, uri);
@@ -499,7 +502,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void endPrefixMapping(String prefix)          throws SAXException {
+   @Override
+public void endPrefixMapping(String prefix)          throws SAXException {
       // Propagate event.
       this.saxHandler.endPrefixMapping(prefix);
       super.endPrefixMapping(prefix);
@@ -525,7 +529,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void startElement(String nsUri, String localName,
+   @Override
+public void startElement(String nsUri, String localName,
                             String qName, Attributes attrs)
                                                         throws SAXException {
       // Append new element to the current path.
@@ -533,7 +538,7 @@ public class ElementScanner extends XMLFilterImpl {
 
       // Retrieve the matching rules for this element.
       String eltPath           = this.currentPath.substring(0);
-      Collection matchingRules = this.getMatchingRules(eltPath, attrs);
+      Collection<XPathMatcher> matchingRules = this.getMatchingRules(eltPath, attrs);
       if (matchingRules != null) {
          // Matching rules found.
          // => Make them active to trigger element building.
@@ -564,7 +569,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void endElement(String nsUri, String localName, String qName)
+   @Override
+public void endElement(String nsUri, String localName, String qName)
                                                         throws SAXException {
       // Grab the being-built element.
       Element elt = this.saxHandler.getCurrentElement();
@@ -577,7 +583,7 @@ public class ElementScanner extends XMLFilterImpl {
 
       // Get the matching rules for this element (if any).
       String eltPath = this.currentPath.substring(0);
-      Collection matchingRules = (Collection)(this.activeRules.remove(eltPath));
+      Collection<XPathMatcher> matchingRules = this.activeRules.remove(eltPath);
       if (matchingRules != null) {
          // Matching rules found.
          // => Detach the current element if no rules remain active.
@@ -587,9 +593,7 @@ public class ElementScanner extends XMLFilterImpl {
 
          // And notify all matching listeners.
          try {
-            for (Iterator i=matchingRules.iterator(); i.hasNext(); ) {
-               XPathMatcher matcher = (XPathMatcher)(i.next());
-
+            for (XPathMatcher matcher : matchingRules) {
                if (matcher.match(eltPath, elt)) {
                   matcher.getListener().elementMatched(eltPath, elt);
                }
@@ -619,7 +623,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void characters(char[] ch, int start, int length)
+   @Override
+public void characters(char[] ch, int start, int length)
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
@@ -639,7 +644,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void ignorableWhitespace(char[] ch, int start, int length)
+   @Override
+public void ignorableWhitespace(char[] ch, int start, int length)
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
@@ -659,7 +665,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void processingInstruction(String target, String data)
+   @Override
+public void processingInstruction(String target, String data)
                                                         throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
@@ -677,7 +684,8 @@ public class ElementScanner extends XMLFilterImpl {
     * @throws SAXException   any SAX exception, possibly wrapping
     *                        another exception.
     */
-   public void skippedEntity(String name)               throws SAXException {
+   @Override
+public void skippedEntity(String name)               throws SAXException {
       // Propagate event.
       if (this.activeRules.size() != 0) {
          this.saxHandler.skippedEntity(name);
@@ -709,7 +717,8 @@ public class ElementScanner extends XMLFilterImpl {
       // SAXBuilder overwritten methods
       //----------------------------------------------------------------------
 
-      protected SAXHandler createContentHandler() {
+      @Override
+	protected SAXHandler createContentHandler() {
          return (new FragmentHandler(getFactory()));
       }
 

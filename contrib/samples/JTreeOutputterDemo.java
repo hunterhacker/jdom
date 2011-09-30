@@ -128,7 +128,8 @@ public class JTreeOutputterDemo implements ActionListener {
         frame.getContentPane().add("South", buttonPanel);
 
         frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent evt) {
+            @Override
+			public void windowClosing(WindowEvent evt) {
                 System.exit(0);
             }
         });
@@ -137,7 +138,8 @@ public class JTreeOutputterDemo implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent e) {
+    @Override
+	public void actionPerformed(ActionEvent e) {
         // Open File
         if (e.getSource() == openButton || e.getSource() == openFile) {
             doFile();
@@ -181,6 +183,7 @@ public class JTreeOutputterDemo implements ActionListener {
     }
 
     public void doSQL() {
+    	// do nothing
     }
 
 }
@@ -212,7 +215,8 @@ class URLDialog extends JDialog implements ActionListener {
         return this.url;
     }
 
-    public void actionPerformed(ActionEvent e) {
+    @Override
+	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == okButton) {
             this.url = urlField.getText(); setVisible(false);
         }

@@ -100,14 +100,14 @@ public class ResultSetBuilder {
     private SQLException exception;
 
     /** Map of original column names to display names */
-    private Map names = new HashMap();
+    private Map<String,String> names = new HashMap<String, String>();
 
     /**
      * Maps column data to be located either as an <code>Attribute</code> of
      * the row (if in the Map) or a child <code>Element</code> of the row
      * (if not in the Map)
      */
-    private Map attribs = new HashMap();
+    private Map<String, Boolean> attribs = new HashMap<String, Boolean>();
 
     /** The <code>Namespace</code> to use for each <code>Element</code> */
     private Namespace ns = Namespace.NO_NAMESPACE;
@@ -259,48 +259,44 @@ public class ResultSetBuilder {
       }
     }
 
-    protected String getString(ResultSet rs, int column, int columnType) 
+    protected String getString(ResultSet prs, int column, int columnType) 
                                    throws SQLException {
         if (columnType == Types.TIMESTAMP) {
-            Timestamp timeStamp = rs.getTimestamp(column);
+            Timestamp timeStamp = prs.getTimestamp(column);
             if (timeStamp != null) {
                 return DateFormat.getDateTimeInstance(DateFormat.FULL,
                                      DateFormat.FULL).format(timeStamp);
             }
         }
         if (columnType == Types.DATE) {
-            java.sql.Date date = rs.getDate(column);
+            java.sql.Date date = prs.getDate(column);
             if (date != null) {
                 return DateFormat.getDateInstance(DateFormat.FULL).format(date);
             }
         }
         if (columnType == Types.TIME) {
-            java.sql.Time time = rs.getTime(column);
+            java.sql.Time time = prs.getTime(column);
             if (time != null) {
                 return DateFormat.getTimeInstance(DateFormat.FULL).format(time);
             }
         }
-        return rs.getString(column);
+        return prs.getString(column);
     }
 
     private String lookupName(String origName) {
-      String name = (String) names.get(origName.toLowerCase());
+      String name = names.get(origName.toLowerCase());
       if (name != null) {
         return name;
       }
-      else {
-        return origName;
-      }
+      return origName;
     }
 
     private boolean isAttribute(String origName) {
-      Boolean val = (Boolean) attribs.get(origName.toLowerCase());
+      Boolean val = attribs.get(origName.toLowerCase());
       if (val == Boolean.TRUE) {
         return true;
       }
-      else {
-        return false;
-      }
+      return false;
     }
 
     /**

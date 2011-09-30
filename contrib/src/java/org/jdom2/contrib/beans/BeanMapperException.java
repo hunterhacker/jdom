@@ -62,31 +62,16 @@ package org.jdom2.contrib.beans;
 
 public class BeanMapperException extends Exception {
 
-    Exception rootCause;
-    
     public BeanMapperException(Exception rootCause) {
-        super(rootCause.toString());
-        this.rootCause = rootCause;
+        super(rootCause);
     }
     
     public BeanMapperException(String message, Exception rootCause) {
-        super(message + ": " +           rootCause.toString());
-        this.rootCause = rootCause;
+        super(message, rootCause);
     }
     
     public BeanMapperException(String message) {
         super(message);
     }
 
-    public Exception getRootCause() {
-        return rootCause;
-    }
-
-    public void printStackTrace() {
-        super.printStackTrace();
-        if (rootCause != null) {
-            System.err.print("Root cause: " );
-            rootCause.printStackTrace();
-        }
-    }    
 }

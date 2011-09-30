@@ -101,40 +101,50 @@ public class IdFactory extends DefaultJDOMFactory {
 
     // Allow Javadocs to inherit from superclass
 
-    public Attribute attribute(String name, String value, Namespace namespace) {
+    @Override
+	public Attribute attribute(String name, String value, Namespace namespace) {
         return new IdAttribute(name, value, namespace);
     }
 
-    public Attribute attribute(String name, String value,
+    @Override
+	public Attribute attribute(String name, String value,
                                             int type, Namespace namespace) {
         return new IdAttribute(name, value, type, namespace);
     }
 
-    public Attribute attribute(String name, String value) {
+    @Override
+	public Attribute attribute(String name, String value) {
         return new IdAttribute(name, value);
     }
 
-    public Attribute attribute(String name, String value, int type) {
+    @Override
+	public Attribute attribute(String name, String value, int type) {
         return new IdAttribute(name, value, type);
     }
 
-    public Document document(Element rootElement, DocType docType) {
+    @Override
+	public Document document(Element rootElement, DocType docType) {
         return new IdDocument(rootElement, docType);
     }
-    public Document document(Element rootElement) {
+    @Override
+	public Document document(Element rootElement) {
         return new IdDocument(rootElement);
     }
 
-    public Element element(String name, Namespace namespace) {
+    @Override
+	public Element element(String name, Namespace namespace) {
         return new IdElement(name, namespace);
     }
-    public Element element(String name) {
+    @Override
+	public Element element(String name) {
         return new IdElement(name);
     }
-    public Element element(String name, String uri) {
+    @Override
+	public Element element(String name, String uri) {
         return new IdElement(name, uri);
     }
-    public Element element(String name, String prefix, String uri) {
+    @Override
+	public Element element(String name, String prefix, String uri) {
         return new IdElement(name, prefix, uri);
     }
 }

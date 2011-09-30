@@ -60,9 +60,9 @@ public class LineNumberSAXBuilderDemo
 		SAXBuilder builder = new LineNumberSAXBuilder();
 		Document doc = builder.build(new StringReader(xml));
 
-		for (Iterator iter = doc.getDescendants(new ElementFilter());
+		for (Iterator<LineNumberElement> iter = doc.getDescendants(Filters.fclass(LineNumberElement.class));
          iter.hasNext(); ) {
-			LineNumberElement e = (LineNumberElement) iter.next();
+			LineNumberElement e = iter.next();
 			System.out.println(
 				e.getName() + ": lines " + e.getStartLine() + " to " + e.getEndLine());
 		}

@@ -82,6 +82,7 @@ import org.xml.sax.SAXException;
  */
 public class LineNumberSAXBuilder extends SAXBuilder
 {
+	@Override
 	protected SAXHandler createContentHandler()
 	{
 		return new MySAXHandler(new MyFactory());
@@ -90,21 +91,25 @@ public class LineNumberSAXBuilder extends SAXBuilder
 	private class MyFactory extends DefaultJDOMFactory
 	{
 
+		@Override
 		public Element element(String name)
 		{
 			return new LineNumberElement(name);
 		}
 
+		@Override
 		public Element element(String name, String prefix, String uri)
 		{
 			return new LineNumberElement(name, prefix, uri);
 		}
 
+		@Override
 		public Element element(String name, Namespace namespace)
 		{
 			return new LineNumberElement(name, namespace);
 		}
         
+		@Override
 		public Element element(String name, String uri)
 		{
 			return new LineNumberElement(name, uri);
@@ -121,6 +126,7 @@ public class LineNumberSAXBuilder extends SAXBuilder
 		}
 
 		/** override */
+		@Override
 		public void startElement(
 			String arg0,
 			String arg1,
@@ -138,6 +144,7 @@ public class LineNumberSAXBuilder extends SAXBuilder
 		}
 
 		/** override */
+		@Override
 		public void endElement(String arg0, String arg1, String arg2)
 			throws SAXException
 		{

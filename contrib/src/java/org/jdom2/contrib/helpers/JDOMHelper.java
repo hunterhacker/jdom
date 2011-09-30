@@ -86,15 +86,15 @@ public class JDOMHelper {
      * </ul>
      * </p>
      */
-    public static void sortElements(Element parent, Comparator c) {
+    public static void sortElements(Element parent, Comparator<Element> c) {
         // Create a new, static list of child elements, and sort it.
-        List children = new ArrayList(parent.getChildren());
+        List<Element> children = new ArrayList<Element>(parent.getChildren());
         Collections.sort(children, c);
-        ListIterator childrenIter = children.listIterator();
+        ListIterator<Element> childrenIter = children.listIterator();
         
         // Create a new, static list of all content items.
-        List content = new ArrayList(parent.getContent());
-        ListIterator contentIter = content.listIterator();
+        List<Content> content = new ArrayList<Content>(parent.getContent());
+        ListIterator<Content> contentIter = content.listIterator();
 
         // Loop through the content items, and whenever we find an Element,
         // we'll insert the next ordered Element in its place. Because the
@@ -107,7 +107,7 @@ public class JDOMHelper {
         }
 
         // Finally, we set the content list back into the parent Element.
-        parent.setContent((List)null);
+        parent.setContent((List<Content>)null);
         parent.setContent(content);
     }
 }

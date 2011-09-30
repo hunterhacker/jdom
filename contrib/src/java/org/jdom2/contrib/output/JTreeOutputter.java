@@ -75,6 +75,9 @@ public class JTreeOutputter {
     public JTreeOutputter() {
     }
 
+    /**
+	 * @param toBeCompatible unused. 
+	 */
     public JTreeOutputter(boolean toBeCompatible) {
         // just here to mimic the legacy JTreeOutputter
     }
@@ -106,19 +109,19 @@ public class JTreeOutputter {
         }
         processAttributes(el, dmtnLocal);
 
-        Iterator iter = el.getChildren().iterator();
+        Iterator<Element> iter = el.getChildren().iterator();
 
         while (iter.hasNext()) {
-            Element nextEl = (Element)iter.next();
+            Element nextEl = iter.next();
             processElement(nextEl, dmtnLocal);
         }
         dmtn.add(dmtnLocal);
     }
 
     protected void processAttributes(Element el, DefaultMutableTreeNode dmtn) {
-        Iterator atts = el.getAttributes().iterator();
+        Iterator<Attribute> atts = el.getAttributes().iterator();
         while (atts.hasNext()) {
-            Attribute att = (Attribute)atts.next();
+            Attribute att = atts.next();
             DefaultMutableTreeNode node = 
                 new DefaultMutableTreeNode("@" + att.getName());
             node.add(new DefaultMutableTreeNode(att.getValue()));

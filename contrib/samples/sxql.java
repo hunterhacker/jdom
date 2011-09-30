@@ -85,7 +85,7 @@ public class sxql {
   public static String query(Connection con, String query,
                          String root, String row, 
                          String ns, int maxRows, 
-                         Vector attributes, Vector elements) 
+                         Vector<String> attributes, Vector<String> elements) 
                                 throws Exception {
     // Execute SQL Query
     Statement stmt = con.createStatement();
@@ -121,7 +121,7 @@ public class sxql {
     }
 
     for (int i=0; i < attributes.size(); i++) {
-      String colName = (String) attributes.get(i);
+      String colName = attributes.get(i);
       String attrName = null;
 
       if (colName.indexOf("/") >= 0) {
@@ -154,7 +154,7 @@ public class sxql {
 
     // Rename element
     for (int i=0; i < elements.size(); i++) {
-      String colName = (String) elements.get(i);
+      String colName = elements.get(i);
       String elemName = null;
 
       if (colName.indexOf("/") >= 0) {
@@ -235,8 +235,8 @@ public class sxql {
     String row = null;
     String ns = null;
     int maxRows = 0;
-    Vector attributes = new Vector();
-    Vector elements = new Vector();
+    Vector<String> attributes = new Vector<String>();
+    Vector<String> elements = new Vector<String>();
 
     int i;
 

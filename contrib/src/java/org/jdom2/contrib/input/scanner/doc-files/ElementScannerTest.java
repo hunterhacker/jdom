@@ -47,7 +47,8 @@ public class ElementScannerTest
          this.name = name;
       }
 
-      public void elementMatched(String path, Element e)
+      @Override
+	public void elementMatched(String path, Element e)
       {
          try
          {

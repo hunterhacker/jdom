@@ -57,12 +57,11 @@ package org.jdom2.contrib.beans;
 import org.jdom2.*;
 import org.jdom2.output.*;
 import java.util.*;
-import java.util.List;
 import java.beans.*;
     
 public class TestIndexed implements java.io.Serializable {
     private String name;
-    private List toppings = new ArrayList();
+    private List<String> toppings = new ArrayList<String>();
     private int[] measurements = new int[]{36, 24, 38};
 
     public String getName() {
@@ -74,7 +73,7 @@ public class TestIndexed implements java.io.Serializable {
     }
 
     public String getTopping(int i) {
-        return (String) toppings.get(i);
+        return toppings.get(i);
     }
 
     public void setTopping(int i, String topping) {
@@ -87,7 +86,7 @@ public class TestIndexed implements java.io.Serializable {
     public String[] getTopping() {
         String[] a = new String[toppings.size()];
         for (int i = 0; i < toppings.size(); ++i) {
-            a[i] = (String) toppings.get(i);
+            a[i] = toppings.get(i);
         }
         return a;
     }
@@ -105,7 +104,8 @@ public class TestIndexed implements java.io.Serializable {
         this.measurements = measurements;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("TestIndexed[name='" + name + "'");
         for (int i = 0; i < toppings.size(); ++i) {
@@ -153,8 +153,8 @@ public class TestIndexed implements java.io.Serializable {
         System.out.println(test2);
 
         int[] test = new int[10];
-        Class a1 = test.getClass();
-        Class a2 = a1.getSuperclass();
+        Class<?> a1 = test.getClass();
+        Class<?> a2 = a1.getSuperclass();
         System.out.println("classes: " + a1 + " " + a2);
     }
 }

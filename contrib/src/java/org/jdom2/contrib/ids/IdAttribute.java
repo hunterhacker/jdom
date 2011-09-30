@@ -110,7 +110,8 @@ public class IdAttribute extends Attribute {
         return this;
     }
 
-    public Attribute setValue(String value) {
+    @Override
+	public Attribute setValue(String value) {
         String oldValue = this.getValue();
 
         super.setValue(value);
@@ -126,7 +127,8 @@ public class IdAttribute extends Attribute {
         return this;
     }
 
-    public Attribute setAttributeType(int type) {
+    @Override
+	public Attribute setAttributeType(int type) {
         int oldType = this.getAttributeType();
 
         if (type != oldType) {

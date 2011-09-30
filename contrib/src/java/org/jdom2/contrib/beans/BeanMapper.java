@@ -55,7 +55,6 @@
 package org.jdom2.contrib.beans;
 
 import java.lang.reflect.*;
-import java.util.Iterator;
 import java.util.*;
 import java.beans.*;
 import org.jdom2.Document;
@@ -169,7 +168,7 @@ public class BeanMapper {
     protected Namespace namespace;
     protected boolean ignoreMissingProperties = false;
     protected boolean ignoreNullProperties = true;
-    protected List mappings = new ArrayList();
+    protected List<Mapping> mappings = new ArrayList<Mapping>();
     protected StringConverter stringconverter = new StringConverter();
     
     /**
@@ -296,7 +295,7 @@ public class BeanMapper {
             element = createElement(elementName);
         }
         else {
-            Class beanclass = info.getBeanDescriptor().getBeanClass();
+            Class<?> beanclass = info.getBeanDescriptor().getBeanClass();
             beanname = unpackage(beanclass.getName());
             element = createElement(beanname);
         }
@@ -410,7 +409,7 @@ public class BeanMapper {
         if (value == null)
             return null;
         Object result;
-        Class type = value.getClass();
+        Class<?> type = value.getClass();
         String classname = type.getName();
 
         // todo: allow per-type callback to convert (if toString() is
@@ -424,7 +423,7 @@ public class BeanMapper {
         else if (type.isArray()) {
             // it's an array - use java.lang.reflect.Array to extract
             // items (or wrappers thereof)            
-            List list = new ArrayList();
+            List<Object> list = new ArrayList<Object>();
             for (int i=0; i<Array.getLength(value); ++i) {
                 Object item = Array.get(value, i);
                 list.add( convertValue(item) );        // recurse
@@ -452,8 +451,9 @@ public class BeanMapper {
                            child.getName() + "," +
                            value + ")");
                            
-        if (value == null)
-            ;        // do nothing
+        if (value == null) {
+            // do nothing
+        }
         else if (value instanceof Element) {
             child.addContent((Element)value);
         }
@@ -461,7 +461,7 @@ public class BeanMapper {
             child.setText((String)value);
         }
         else if (value instanceof List) {
-            for (Iterator it = ((List)value).iterator();
+            for (Iterator<?> it = ((List<?>)value).iterator();
                  it.hasNext(); )
             {
                 Object item = it.next();
@@ -493,18 +493,13 @@ public class BeanMapper {
 
         Object bean = instantiateBean(element.getName());
         
-        Iterator i;
         Mapping mapping;
         String propertyName;
-        List attributes;
-        List children;
 
-        Set alreadySet = new HashSet();
+        Set<String> alreadySet = new HashSet<String>();
         
         // map Attributes of parent first
-        attributes = element.getAttributes();
-        for (i=attributes.iterator(); i.hasNext(); ) {
-            Attribute attribute = (Attribute)i.next();
+        for (Attribute attribute : element.getAttributes()) {
             debug("Mapping " + attribute);
             mapping = getMappingForAttribute(null, attribute.getName());
             propertyName = (mapping==null) ?
@@ -513,10 +508,8 @@ public class BeanMapper {
         }
 
         // map child Elements
-        children = element.getChildren();
-        debug(element.toString() + " has " + children.size() + " children");
-        for (i=children.iterator(); i.hasNext(); ) {
-            Element child = (Element)i.next();
+        //debug(element.toString() + " has " + children.size() + " children");
+        for (Element child : element.getChildren()) {
             debug("Mapping " + child);
 
             mapping = getMappingForElement(child.getName());
@@ -535,9 +528,7 @@ public class BeanMapper {
             }
 
             // Now map all attributes of this child
-            attributes = child.getAttributes();
-            for (Iterator iatt=attributes.iterator(); iatt.hasNext(); ) {
-                Attribute attribute = (Attribute)iatt.next();
+            for (Attribute attribute : child.getAttributes()) {
                 debug("Mapping " + attribute);
                 mapping = getMappingForAttribute(child.getName(), 
                                                  attribute.getName());
@@ -563,7 +554,7 @@ public class BeanMapper {
                                 throws BeanMapperException {
         // todo: search multiple packages
         String className = null;
-        Class beanClass;
+        Class<?> beanClass;
         try {
             Mapping mapping = getMappingForElement(elementName);
             if (mapping != null &&
@@ -587,8 +578,8 @@ public class BeanMapper {
         }
     }
 
-    protected String getBeanClassName(String beanPackage, String elementName) {
-        return (beanPackage == null ? "" : (beanPackage + ".")) +
+    protected String getBeanClassName(String pbeanPackage, String elementName) {
+        return (pbeanPackage == null ? "" : (pbeanPackage + ".")) +
             Character.toUpperCase(elementName.charAt(0)) +
             elementName.substring(1);
     }
@@ -613,10 +604,8 @@ public class BeanMapper {
         if (ignoreMissingProperties) {
             return null;
         }
-        else {
-            throw new BeanMapperException("Missing property: " + 
-                propertyName + " in bean " + bean.getClass() + ": " + bean);
-        }
+		throw new BeanMapperException("Missing property: " + 
+		    propertyName + " in bean " + bean.getClass() + ": " + bean);
     } // findPropertyDescriptor
 
 
@@ -643,18 +632,18 @@ public class BeanMapper {
     protected boolean setProperty(Object bean, PropertyDescriptor property,
                                   Element parent, Object value)
                          throws BeanMapperException {
+        if (property == null)
+            return false;
+
         debug("setProperty: bean=" + bean + " property=" + 
                property.getName() + " value=" + value);
         try {
-            if (property == null)
-                return false;
-
             // convert the value to the right type
             Object valueObject;            
             if (property.getPropertyType().isArray()) {
                 // build array based on children of this name
                 Element child = (Element)value;
-                List children = parent.getChildren(child.getName());
+                List<Element> children = parent.getChildren(child.getName());
                 valueObject = buildArray(property, children);
             }
             else {
@@ -664,15 +653,14 @@ public class BeanMapper {
             }
 
             // find and invoke the setter
-            String propertyName = property.getName();                        
             Method setter = property.getWriteMethod();
-            Class[] params = setter.getParameterTypes();
+            Class<?>[] params = setter.getParameterTypes();
             if (params.length > 1)
                 throw new BeanMapperException(
                     "Setter takes multiple parameters: " + bean.getClass() + 
                     "." + setter.getName());
 
-            Class param = params[0];
+            Class<?> param = params[0];
             if (param != property.getPropertyType())
                 debug("Weird: setter takes " + param + ", property is " + 
                        property.getPropertyType());
@@ -692,17 +680,15 @@ public class BeanMapper {
         }
     }
 
-    protected Object convertString(String value, Class type) {
+    protected Object convertString(String value, Class<?> type) {
         if (value == null)
             return null;
         if (type == String.class)
             return value;
-        else
-            return
-                stringconverter.parse((String)value, type);
+		return stringconverter.parse(value, type);
     }                
 
-    protected Object convertJDOMValue(Object value, Class type)
+    protected Object convertJDOMValue(Object value, Class<?> type)
                             throws BeanMapperException {
         Object valueObject;
                 
@@ -739,7 +725,7 @@ public class BeanMapper {
                 // property type, so just let it figure out the
                 // right type
 
-                valueObject = toBean((Element)element.getChildren().get(0));
+                valueObject = toBean(element.getChildren().get(0));
             }
             else {
                 // element with multiple children -- must be an
@@ -759,12 +745,11 @@ public class BeanMapper {
     /**
      * @return an array of the appropriate type
      **/
-    protected Object buildArray(PropertyDescriptor property, List children)
+    protected Object buildArray(PropertyDescriptor property, List<Element> children)
                           throws BeanMapperException {
-        Class arrayClass = property.getPropertyType();
+        Class<?> arrayClass = property.getPropertyType();
 
-        Class itemClass;
-        itemClass = arrayClass.getComponentType();            
+        Class<?> itemClass = arrayClass.getComponentType();            
 
         if (itemClass == null) {
             throw new BeanMapperException("Can't instantiate array of type " +
@@ -776,7 +761,7 @@ public class BeanMapper {
 
         // fill it
         for (int i = 0; i<children.size(); ++i) {
-            Element child = (Element)children.get(i);
+            Element child = children.get(i);
             Object value = convertJDOMValue(child, itemClass);
             debug( itemClass + "[" + i + "]=" + value );
             Array.set(array, i, value);
@@ -786,9 +771,9 @@ public class BeanMapper {
     }
 
 
-    public static Class getArrayItemClass(Class arrayClass)
+    public static Class<?> getArrayItemClass(Class<?> arrayClass)
                                 throws ClassNotFoundException {
-        Class itemClass;
+        Class<?> itemClass;
         
         // there seems to be no way to get the item class from an
         // array class object, so parse the name
@@ -866,7 +851,7 @@ public class BeanMapper {
      * null => parent element
      * @param attribute the name of the attribute. null => set as element 
      **/
-    public void addMapping(String property, Class type,
+    public void addMapping(String property, Class<?> type,
                            String element, String attribute) {
         addMapping(new Mapping(property, type, element, attribute));
     }
@@ -876,9 +861,7 @@ public class BeanMapper {
     }
 
     public Mapping getMappingForProperty(String property) {
-        Iterator i = mappings.iterator();
-        while (i.hasNext()) {
-            Mapping m = (Mapping)i.next();
+        for (Mapping m : mappings) {
             if (m.property != null && m.property.equals(property)) {
                 return m;
             }
@@ -887,9 +870,7 @@ public class BeanMapper {
     }
     
     public Mapping getMappingForElement(String element) {
-        Iterator i = mappings.iterator();
-        while (i.hasNext()) {
-            Mapping m = (Mapping)i.next();
+        for (Mapping m : mappings) {
             if (m.element.equals(element)) {
                 return m;
             }
@@ -898,9 +879,7 @@ public class BeanMapper {
     }
     
     public Mapping getMappingForAttribute(String element, String attribute) {
-        Iterator i = mappings.iterator();
-        while (i.hasNext()) {
-            Mapping m = (Mapping)i.next();
+        for (Mapping m : mappings) {
             if (m.element != null &&
                 m.attribute != null &&
                 m.element.equals(element) &&
@@ -914,7 +893,7 @@ public class BeanMapper {
     
     public class Mapping {
         public String property;
-        public Class type;
+        public Class<?> type;
         public String element;
         public String attribute;
 
@@ -927,7 +906,7 @@ public class BeanMapper {
          * null => parent element
          * @param attribute the name of the attribute. null => set as element 
          **/
-        public Mapping(String property, Class type,
+        public Mapping(String property, Class<?> type,
                        String element, String attribute) {
             this.property = property;
             this.type = type;
@@ -940,9 +919,9 @@ public class BeanMapper {
 
     // Hiding
 
-    protected Set ignoredProperties = new HashSet();
-    protected Set ignoredElements = new HashSet();
-    protected Set ignoredAttributes = new HashSet();
+    protected Set<String> ignoredProperties = new HashSet<String>();
+    protected Set<String> ignoredElements = new HashSet<String>();
+    protected Set<String> ignoredAttributes = new HashSet<String>();
     
     public void ignoreProperty(String property) {
         ignoredProperties.add(property);

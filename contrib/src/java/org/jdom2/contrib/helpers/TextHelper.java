@@ -151,9 +151,8 @@ public class TextHelper {
         Element child = parent.getChild(name);
         if (child == null) {
             return null;
-        } else {
-            return child.getText().trim();
         }
+        return child.getText().trim();
     }
 
     /**
@@ -174,9 +173,8 @@ public class TextHelper {
         Element child = parent.getChild(name, ns);
         if (child == null) {
             return null;
-        } else {
-            return child.getText().trim();
         }
+		return child.getText().trim();
     }
 
     /**
@@ -195,9 +193,8 @@ public class TextHelper {
         Element child = parent.getChild(name);
         if (child == null) {
             return null;
-        } else {
-            return normalize(child.getText());
         }
+		return normalize(child.getText());
     }
 
     /**
@@ -218,9 +215,8 @@ public class TextHelper {
         Element child = parent.getChild(name, ns);
         if (child == null) {
             return null;
-        } else {
-            return normalize(child.getText());
         }
+		return normalize(child.getText());
     }
 }
 

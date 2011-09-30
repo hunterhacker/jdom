@@ -85,7 +85,7 @@ public class IdDocument extends Document {
    /**
     * <p>The ID lookup table for the document.</p>
     */
-   private Map ids = new HashMap();
+   private Map<String,Element> ids = new HashMap<String, Element>();
 
    /**
     * <p>
@@ -124,7 +124,7 @@ public class IdDocument extends Document {
     *         or <code>null</code> if none was found.
     */
    public Element getElementById(String id) {
-      return ((Element)(ids.get(id)));
+      return ids.get(id);
    }
 
    /**
