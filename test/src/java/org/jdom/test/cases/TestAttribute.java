@@ -829,10 +829,10 @@ public final class TestAttribute
         Attribute neginfinity = new Attribute("name", "-Infinity");
         Attribute inf = new Attribute("name", "INF");
         Attribute neginf = new Attribute("name", "-INF");
-        assertEquals(infinity.getDoubleValue(), Double.POSITIVE_INFINITY);
-        assertEquals(neginfinity.getDoubleValue(), Double.NEGATIVE_INFINITY);
-        assertEquals(inf.getDoubleValue(), Double.POSITIVE_INFINITY);
-        assertEquals(neginf.getDoubleValue(), Double.NEGATIVE_INFINITY);
+        assertEquals(new Double(infinity.getDoubleValue()), new Double(Double.POSITIVE_INFINITY));
+        assertEquals(new Double(neginfinity.getDoubleValue()), new Double(Double.NEGATIVE_INFINITY));
+        assertEquals(new Double(inf.getDoubleValue()), new Double(Double.POSITIVE_INFINITY));
+        assertEquals(new Double(neginf.getDoubleValue()), new Double(Double.NEGATIVE_INFINITY));
     }
 
 }

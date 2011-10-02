@@ -30,10 +30,10 @@ For instructions on how to build JDOM, please view the README.txt file.
 
     <property name="Name" value="JDOM"/>
     <property name="name" value="jdom"/>
-    <property name="version" value="1.1.1"/>
+    <property name="version" value="1.1.2-snap"/>
     <property name="version.impl" value="${version}"/>
     <property name="version.spec" value="1.0"/>
-    <property name="year" value="2007"/>
+    <property name="year" value="2011"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
@@ -183,7 +183,9 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <target name="about" depends="init"
           description="Compiles the About code">
-    <javac srcdir="${package.dir}"
+  	<!-- putting classes in default package is poor form -->
+  	<echo message="JDOMAbout is not longer deployed" />
+    <!-- javac srcdir="${package.dir}"
            destdir="${build.dest}"
            debug="${compile.debug}"
            optimize="${compile.optimize}"
@@ -191,7 +193,7 @@ For instructions on how to build JDOM, please view the README.txt file.
            source="${compile.source}"
            deprecation="${compile.deprecation}">
       <classpath refid="compile.class.path"/>
-    </javac>
+    </javac -->
   </target>
 
   <!-- =================================================================== -->
@@ -213,7 +215,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="compile,about"
+  <target name="package" depends="distclean,compile,javadoc"
           description="Creates the class package">
     <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
     <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
@@ -228,10 +230,14 @@ For instructions on how to build JDOM, please view the README.txt file.
                 <include name="LICENSE.txt"/>
           </fileset>
     </copy>
-    <jar jarfile="${build.dir}/${name}.jar"
+    <jar jarfile="${build.dir}/${name}-${version.impl}.jar"
          basedir="${build.dest}"
          excludes="META-INF/MANIFEST.MF"
          manifest="${build.dest}/META-INF/MANIFEST.MF"/>
+    <jar jarfile="${build.dir}/${name}-${version.impl}-sources.jar"
+         basedir="${build.src}" />
+    <jar jarfile="${build.dir}/${name}-${version.impl}-javadoc.jar"
+         basedir="${build.javadocs}" />
   </target>
 
   <!-- =================================================================== -->

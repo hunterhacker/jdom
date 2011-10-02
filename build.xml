@@ -1,0 +1,42 @@
+<project name="ant-demo" default="dist" basedir="." >
+
+	<!-- define Maven coordinates -->
+	<property name="groupId" value="org.jdom" />
+	<property name="artifactId" value="jdom" />
+	<property name="version" value="1.x-SNAPSHOT" />
+	
+	<property name="dist" value="dist" />
+
+	<target name="build">
+		<ant dir="core" target="package">
+			<property name="version" value="${version}"/>
+		</ant>
+		<ant dir="test" target="test" >
+			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
+			<property name="version" value="${version}"/>
+		</ant>
+		<ant dir="contrib" target="package" >
+			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
+			<property name="version" value="${version}"/>
+		</ant>
+		
+	</target>
+
+	<target name="dist" depends="build" description="generate the distribution">
+
+		<mkdir dir="${dist}" />
+		<delete dir="${dist}" includes="*.jar"/>
+		
+		<copy todir="${dist}">
+			<fileset dir="core/build" includes="*${version}*.jar"/>
+			<fileset dir="test/build" includes="*${version}*.jar"/>
+			<fileset dir="contrib/build" includes="*${version}*.jar"/>
+		</copy>
+		
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${dist}" />
+	</target>
+
+</project>
