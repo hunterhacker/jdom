@@ -218,7 +218,8 @@ public class ProcessingInstruction extends Content {
         }
 
         this.rawData = temp;
-        this.mapData = data;
+        // make a copy of the data.
+        this.mapData = new HashMap(data);
         return this;
     }
 
