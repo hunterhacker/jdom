@@ -1,6 +1,9 @@
 package org.jdom2.test.cases.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -11,16 +14,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jdom2.Comment;
 import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
-import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
-import org.jdom2.ProcessingInstruction;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.transform.XSLTransformException;
@@ -74,12 +74,12 @@ public class TestXSLTransformer {
 		}
 	}
 	
-	private void checkTransform(Document doc, List content, boolean atroot, SetupTransform setup) {
+	private void checkTransform(Document doc, List<Content> content, boolean atroot, SetupTransform setup) {
 		try {
 			XSLTransformer trans = setup == null
 					? new XSLTransformer(new StringReader(xslpassthrough))
 					: setup.buildTransformer();
-			List out = trans.transform(content);
+			List<Content> out = trans.transform(content);
 			checkDocs(doc, atroot, out);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,7 +170,7 @@ public class TestXSLTransformer {
 		SAXBuilder builder = new SAXBuilder();
 		final Document xsldoc = builder.build(new StringReader(xslpassthrough));
 		Document doc = new Document(new Element("root"));
-		List content = new ArrayList();
+		List<Content> content = new ArrayList<Content>();
 		content.add(new Element("root"));
 		checkTransform(doc, content, false, new SetupTransform() {
 			@Override

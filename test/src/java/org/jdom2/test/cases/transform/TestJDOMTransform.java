@@ -1,6 +1,7 @@
 package org.jdom2.test.cases.transform;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -17,11 +18,9 @@ import org.jdom2.Comment;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.transform.JDOMResult;
 import org.jdom2.transform.JDOMSource;

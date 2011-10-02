@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.SAXOutputter;
@@ -203,7 +204,7 @@ public class TestJDOMSource {
 	}
 
 	@Test
-	public void testInputSourceNullCharacterStream() throws IOException {
+	public void testInputSourceNullCharacterStream() {
 		JDOMSource source = new JDOMSource((Document)null);
 		Reader r = source.getInputSource().getCharacterStream();
 		assertNull(r);
@@ -304,11 +305,16 @@ public class TestJDOMSource {
 	}
 
 	@Test
-	public void testXMLReaderParseGarbageInputSource() throws SAXException, IOException {
+	public void testXMLReaderParseGarbageInputSource() {
 		
 		JDOMSource sourcea = new JDOMSource(new Element("root"));
-		List junk = Collections.singletonList(Double.valueOf(123.4));
-		JDOMSource sourceb = new JDOMSource(junk);
+		List<Double> junk = Collections.singletonList(Double.valueOf(123.4));
+		// Jump through hoops to defeat Generics.
+		@SuppressWarnings("cast")
+		List<?> tmpa = (List<?>)junk;
+		@SuppressWarnings("unchecked")
+		List<Content> tmpb = (List<Content>)tmpa;
+		JDOMSource sourceb = new JDOMSource(tmpb);
 		XMLReader reader = sourcea.getXMLReader();
 		assertTrue(reader instanceof SAXOutputter);
 		SAXOutputter readeroutputter = (SAXOutputter)reader;
