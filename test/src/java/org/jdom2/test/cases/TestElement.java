@@ -90,7 +90,7 @@ public final class TestElement {
     @Test
     public void test_TCC() {
     	Element emt = new Element() {
-    		
+    		// change nothing
     	};
     	assertNull(emt.getName());
     }
@@ -114,6 +114,9 @@ public final class TestElement {
             fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //name can't be null
@@ -122,6 +125,9 @@ public final class TestElement {
             fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -147,6 +153,9 @@ public final class TestElement {
             fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //name can't be null
@@ -155,6 +164,9 @@ public final class TestElement {
             fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -179,6 +191,9 @@ public final class TestElement {
             fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //name can't be null
@@ -187,6 +202,9 @@ public final class TestElement {
             fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -212,6 +230,9 @@ public final class TestElement {
             fail("allowed creation of an element with no name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //name can't be null
@@ -220,6 +241,9 @@ public final class TestElement {
             fail("allowed creation of an element with null name");
         }
         catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //we can assume the Verifier has been called by now so we are done
@@ -328,7 +352,7 @@ public final class TestElement {
         Element element = new Element("element");
         assertTrue("incorrectly identified element as root", !element.isRootElement());
 
-        Document doc = new Document(element);
+        new Document(element);
         assertTrue("incorrectly identified element as non root", element.isRootElement());
     }
 
@@ -577,13 +601,13 @@ public final class TestElement {
         element.addNamespaceDeclaration(Namespace.getNamespace("y", "urn:bar"));
         element.addNamespaceDeclaration(Namespace.getNamespace("z", "urn:baz"));
 
-        List list = element.getAdditionalNamespaces();
+        List<Namespace> list = element.getAdditionalNamespaces();
 
-        Namespace ns = (Namespace) list.get(0);
+        Namespace ns = list.get(0);
         assertTrue("didn't return added namespace", ns.getURI().equals("urn:foo"));
-        ns = (Namespace) list.get(1);
+        ns = list.get(1);
         assertTrue("didn't return added namespace", ns.getURI().equals("urn:bar"));
-        ns = (Namespace) list.get(2);
+        ns = list.get(2);
         assertTrue("didn't return added namespace", ns.getURI().equals("urn:baz"));
     }
 
@@ -600,7 +624,7 @@ public final class TestElement {
         element.setAttribute(att2);
         element.setAttribute(att3);
 
-        List list = element.getAttributes();
+        List<Attribute> list = element.getAttributes();
 
         assertEquals("incorrect size returned", list.size(), 3);
         assertEquals("incorrect attribute returned", list.get(0), att);
@@ -626,7 +650,7 @@ public final class TestElement {
         element.addContent(child3);
 
         //should only get the child elements in NO_NAMESPACE
-        List list = element.getChildren();
+        List<Element> list = element.getChildren();
         assertEquals("incorrect number of children returned", list.size(), 3);
         assertEquals("incorrect child returned", list.get(0), child1);
         assertEquals("incorrect child returned", list.get(1), child2);
@@ -652,10 +676,10 @@ public final class TestElement {
         element.addContent(child3);
 
         //should only get the child elements in NO_NAMESPACE
-        List list = element.getChildren("child");
+        List<Element> list = element.getChildren("child");
         assertEquals("incorrect number of children returned", list.size(), 2);
-        assertEquals("incorrect child returned", ((Element) list.get(0)).getAttribute("name").getValue(), "first");
-        assertEquals("incorrect child returned", ((Element) list.get(1)).getAttribute("name").getValue(), "second");
+        assertEquals("incorrect child returned", list.get(0).getAttribute("name").getValue(), "first");
+        assertEquals("incorrect child returned", list.get(1).getAttribute("name").getValue(), "second");
     }
 
     /**
@@ -678,10 +702,10 @@ public final class TestElement {
         element.addContent(child3);
 
         //should only get the child elements in the hogwarts namespace
-        List list = element.getChildren("child", ns);
+        List<Element> list = element.getChildren("child", ns);
         assertEquals("incorrect number of children returned", list.size(), 2);
-        assertEquals("incorrect child returned", ((Element) list.get(0)).getAttribute("name").getValue(), "first");
-        assertEquals("incorrect child returned", ((Element) list.get(1)).getAttribute("name").getValue(), "second");
+        assertEquals("incorrect child returned", list.get(0).getAttribute("name").getValue(), "first");
+        assertEquals("incorrect child returned", list.get(1).getAttribute("name").getValue(), "second");
     }
 
     /**
@@ -714,7 +738,7 @@ public final class TestElement {
         Text text = new Text("finally a new wand!");
         element.addContent(text);
 
-        List list = element.getContent();
+        List<Content> list = element.getContent();
 
         assertEquals("incorrect number of content items", 8, list.size());
         assertEquals("wrong child element", child1, list.get(0));
@@ -736,7 +760,7 @@ public final class TestElement {
 
         //first the simple case
         Element element = new Element("simple");
-        Element clone = (Element) element.clone();
+        Element clone = element.clone();
 
         assertTrue("clone should not be the same object", element != clone);
         assertEquals("clone should not have a parent", null, clone.getParent());
@@ -773,22 +797,22 @@ public final class TestElement {
         //a little more for the element
         element.addContent("top level element text");
 
-        clone = (Element) element.clone();
+        clone = element.clone();
         element = null;
         child3 = null;
         child2 = null;
         child1 = null;
 
         // additional namespaces
-        List additional = clone.getAdditionalNamespaces();
+        List<Namespace> additional = clone.getAdditionalNamespaces();
         assertEquals("incorrect deep clone additional namespace",
-                     (Namespace) additional.get(0),
+                     additional.get(0),
                      Namespace.getNamespace("foo", "http://test1"));
         assertEquals("incorrect deep clone additional namespace",
-                     (Namespace) additional.get(1),
+                     additional.get(1),
                      Namespace.getNamespace("bar", "http://test2"));
 
-        List list = clone.getContent();
+        List<Content> list = clone.getContent();
 
         //finally the test
 
@@ -900,9 +924,10 @@ public final class TestElement {
             element.addContent(comm);
             fail("didn't catch null Comment");
         }
-        catch (IllegalAddException e) {
-        }
         catch (NullPointerException e) {
+			// OK
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -920,9 +945,10 @@ public final class TestElement {
             element.addContent(el);
             fail("didn't catch null Element");
         }
-        catch (IllegalAddException e) {
-        }
         catch (NullPointerException e) {
+			// OK
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -940,9 +966,10 @@ public final class TestElement {
             element.addContent(entity);
             fail("didn't catch null EntityRef");
         }
-        catch (IllegalAddException e) {
-        }
         catch (NullPointerException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -960,9 +987,10 @@ public final class TestElement {
             element.addContent(pi);
             fail("didn't catch null ProcessingInstruction");
         }
-        catch (IllegalAddException e) {
-        }
         catch (NullPointerException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -981,13 +1009,27 @@ public final class TestElement {
         element.addContent("the third part");
         assertEquals("incorrect string value", "the first partthe second partthe third part", element.getText());
 
+        // RolfL: I'v tried not to mess with the 'original' JUnit tests, but the
+        // following comment does not match the code, or the tests.
+        // vvvvvvvvvv
         //test that add content null clears the content
+        // ^^^^^^^^^^
+        // Adding a null String appears to have always had the effect of adding
+        // a new 'empty' Text content...: new Text("")
+        // I am updating this test to match the current reality.
         try {
+        	// we expect addContent(null) to add a new Empty Text element.
+        	// thus 'last' will be accurate after the add.
+            int last = element.getContentSize();
+            
             String data = null;
             element.addContent(data);
-            List content = element.getContent();
+            
+            // ensure there is a new content at 'last', and that it is an empty string.
+            assertEquals("", element.getContent().get(last).getValue());
         }
         catch (IllegalAddException e) {
+        	fail("didn't handle null String content");
         }
         catch (NullPointerException e) {
             fail("didn't handle null String content");
@@ -1004,6 +1046,7 @@ public final class TestElement {
         Element child = new Element("child");
         Element childNS = new Element("child", Namespace.getNamespace("urn:foo"));
         element.addContent(child);
+        element.addContent(childNS);
         assertEquals("incorrect child returned", element.getChild("child"), child);
     }
 
@@ -1090,9 +1133,10 @@ public final class TestElement {
             element.setAttribute(null);
             fail("didn't catch null attribute");
         }
-        catch (IllegalArgumentException e) {
-        }
         catch (NullPointerException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
         
         try {
@@ -1120,9 +1164,10 @@ public final class TestElement {
             element.setAttribute(null, "value");
             fail("didn't catch null attribute name");
         }
-        catch (final IllegalArgumentException ignore) {
-        }
         catch (NullPointerException ignore) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
 		//try with null value
@@ -1130,9 +1175,10 @@ public final class TestElement {
             element.setAttribute("name2", null);
             fail("didn't catch null attribute value");
         }
-        catch (IllegalArgumentException e) {
-        }
         catch (NullPointerException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //try with bad characters
@@ -1141,6 +1187,9 @@ public final class TestElement {
             fail("didn't catch bad characters in attribute name");
         }
         catch (IllegalArgumentException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         try {
@@ -1148,6 +1197,9 @@ public final class TestElement {
             fail("didn't catch bad characters  in attribute value");
         }
         catch (IllegalArgumentException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -1232,7 +1284,9 @@ public final class TestElement {
             fail("didn't catch empty prefix for attribute ");
         }
         catch( final IllegalNameException ignore) {
-            
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         final Namespace testNamespace = Namespace.getNamespace("test", "http://test.org/test");
@@ -1395,7 +1449,7 @@ public final class TestElement {
         Element child2 = new Element("child", ns);
         Element child3 = new Element("child", Namespace.getNamespace("ftp://wombat.stew"));
 
-        LinkedList list = new LinkedList();
+        LinkedList<Content> list = new LinkedList<Content>();
         list.add(child1);
         list.add(child2);
         list.add(child3);
@@ -1412,7 +1466,7 @@ public final class TestElement {
         list.add(text);
 
         element.setContent(list);
-        List contentList = element.getContent();
+        List<Content> contentList = element.getContent();
 
         assertEquals("incorrect number of content items", 8, contentList.size());
         assertEquals("wrong child element", child1, contentList.get(0));
@@ -1424,16 +1478,19 @@ public final class TestElement {
         assertEquals("wrong EntityRef", entity, contentList.get(6));
         assertEquals("wrong text", text, contentList.get(7));
 
-        ArrayList newList = new ArrayList();
+        ArrayList<Content> newList = new ArrayList<Content>();
         //test adding a bad object type in the list
         newList.add(child1);
-        newList.add(new Integer(7));
+        addBrokenContent(newList, new Integer(7));
 
         try {
-            element.setContent(list);
+            element.setContent(newList);
             fail("didn't catch bad object type in list");
         }
         catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //should add content up to the point of the bad object in the list
@@ -1662,7 +1719,6 @@ public final class TestElement {
     @Test
     public void test_TCM__String_getText() {
         Element element = new Element("element");
-        Element child = new Element("child");
         element.addContent("  some text \nboo  ");
 
         assertEquals("incorrect text returned", "  some text \nboo  ", element.getText());
@@ -1698,9 +1754,9 @@ public final class TestElement {
     public void test_TCM__void_addNamespaceDeclaration_OrgJdomNamespace() {
         Element element = new Element("element");
         element.addNamespaceDeclaration(Namespace.getNamespace("x", "urn:foo"));
-        List list = element.getAdditionalNamespaces();
+        List<Namespace> list = element.getAdditionalNamespaces();
 
-        Namespace ns = (Namespace) list.get(0);
+        Namespace ns = list.get(0);
         assertTrue("didn't return added namespace", ns.getURI().equals("urn:foo"));
         assertTrue("didn't return added namespace prefix", ns.getPrefix().equals("x"));
     }
@@ -1732,6 +1788,9 @@ public final class TestElement {
                        el.getAttribute("first", two).getNamespace().equals(two));
         }
         catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //set up some unique namespaces for later tests
@@ -1745,7 +1804,10 @@ public final class TestElement {
             testNS3 = Namespace.getNamespace("test", "");
             fail("didn't catch bad \"\" uri name");
         }
-        catch (Exception e) {
+        catch (IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         //show how you can have an empty namespace with the current scheme
@@ -1758,6 +1820,9 @@ public final class TestElement {
             el.addNamespaceDeclaration(testNS3);
         }
         catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
         att = new Attribute("prefixNS", "test");
@@ -1839,6 +1904,9 @@ public final class TestElement {
 
         }
         catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -1899,7 +1967,7 @@ public final class TestElement {
 
         StringWriter sw2 = new StringWriter();
         XMLOutputter op2 = new XMLOutputter();
-        op.output(elIn2, sw2);
+        op2.output(elIn2, sw2);
         assertTrue("Incorrect data after serialization", sw2.toString().equals(bufWithEmptyNS2));
     }
 
@@ -1921,7 +1989,7 @@ public final class TestElement {
 	@Test
 	public void testElementAddDocType() {
 		try {
-			List<Content> list = (List<Content>)(new Element("tag").getContent());
+			List<Content> list = (new Element("tag").getContent());
 			list.add(new DocType("elementname"));
 			fail ("Should not be able to add DocType to an Element");
 		} catch (IllegalAddException iae) {
@@ -2246,6 +2314,13 @@ public final class TestElement {
 		assertTrue(att.getParent() == emt);
 		assertTrue("nval".equals(emt.getAttributeValue("att", myns)));
 	
+	}
+	
+	@SuppressWarnings("unchecked")
+	private final void addBrokenContent(Collection<?> cn, Object val) {
+		// this method is intentionally broken.
+		Collection<Object> ocn = (Collection<Object>)cn;
+		ocn.add(val);
 	}
 	
 }

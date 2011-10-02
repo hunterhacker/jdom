@@ -168,7 +168,7 @@ public class TestProcessingInstruction {
 	@Test
 	public void testCloneA() {
 		ProcessingInstruction pi = new ProcessingInstruction("test", "value");
-		ProcessingInstruction copy = (ProcessingInstruction)pi.clone();
+		ProcessingInstruction copy = pi.clone();
 		assertTrue(!pi.equals(copy));
 		checkEquals(pi.getTarget(), copy.getTarget());
 		checkEquals(pi.getValue(), copy.getValue());
@@ -177,7 +177,7 @@ public class TestProcessingInstruction {
 	@Test
 	public void testCloneB() {
 		ProcessingInstruction pi = new ProcessingInstruction("test", "");
-		ProcessingInstruction copy = (ProcessingInstruction)pi.clone();
+		ProcessingInstruction copy = pi.clone();
 		assertTrue(!pi.equals(copy));
 		checkEquals(pi.getTarget(), copy.getTarget());
 		checkEquals(pi.getValue(), copy.getValue());
@@ -188,7 +188,7 @@ public class TestProcessingInstruction {
 		ProcessingInstruction pi = new ProcessingInstruction("test", "");
 		pi.setPseudoAttribute("hi", "val");
 		pi.removePseudoAttribute("hi");
-		ProcessingInstruction copy = (ProcessingInstruction)pi.clone();
+		ProcessingInstruction copy = pi.clone();
 		assertTrue(!pi.equals(copy));
 		checkEquals(pi.getTarget(), copy.getTarget());
 		checkEquals(pi.getValue(), copy.getValue());
@@ -198,7 +198,7 @@ public class TestProcessingInstruction {
 	public void testCloneD() {
 		Map<String,String> empty = Collections.emptyMap();
 		ProcessingInstruction pi = new ProcessingInstruction("test", empty);
-		ProcessingInstruction copy = (ProcessingInstruction)pi.clone();
+		ProcessingInstruction copy = pi.clone();
 		assertTrue(!pi.equals(copy));
 		checkEquals(pi.getTarget(), copy.getTarget());
 		checkEquals(pi.getValue(), copy.getValue());

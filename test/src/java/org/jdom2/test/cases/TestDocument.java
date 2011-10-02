@@ -33,7 +33,6 @@ public final class TestDocument {
 	/**
 	 * Test constructor of Document with a List of content including the root element.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void test_TCC___List() {
 		Element bogus = new Element("bogus-root");
@@ -45,7 +44,7 @@ public final class TestDocument {
 		list.add(comment);
 		Document doc = new Document(list);
 		// Get a live list back
-		list = (List<Content>)doc.getContent();
+		list = doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
 		//no root element
@@ -54,6 +53,9 @@ public final class TestDocument {
 			doc.getRootElement();
 			fail("didn't catch missing root element");
 		} catch (IllegalStateException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		//set root back, then try to add another element to our
@@ -63,6 +65,9 @@ public final class TestDocument {
 			list.add(bogus);
 			fail("didn't catch duplicate root element");
 		} catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
@@ -95,7 +100,6 @@ public final class TestDocument {
 	/**
 	 * Test constructor of a Document with a List of content and a DocType.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void test_TCC___List_OrgJdomDocType() {
 		Element bogus = new Element("bogus-root");
@@ -109,7 +113,7 @@ public final class TestDocument {
 		list.add(comment);
 		Document doc = new Document(list);
 		// Get a live list back
-		list = (List<Content>)doc.getContent();
+		list = doc.getContent();
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 		assertEquals("incorrect doc type returned", docType, doc.getDocType());
 
@@ -118,6 +122,9 @@ public final class TestDocument {
 			doc.getRootElement();
 			fail("didn't catch missing root element");
 		} catch (IllegalStateException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		//set root back, then try to add another element to our
@@ -127,6 +134,9 @@ public final class TestDocument {
 			list.add(bogus);
 			fail("didn't catch duplicate root element");
 		} catch (IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 		assertEquals("incorrect root element returned", element, doc.getRootElement());
 
@@ -310,8 +320,8 @@ public final class TestDocument {
 	public void test_TCM__boolean_equals_Object() {
 		Element element = new Element("element");
 
-		Document doc = new Document(element);
-		assertEquals("invalid object equality", doc, (Object)doc);
+		Object doc = new Document(element);
+		assertEquals("invalid object equality", doc, doc);
 
 	}
 
@@ -420,8 +430,7 @@ public final class TestDocument {
 		child2 = null;
 		child1 = null;
 
-		@SuppressWarnings("unchecked")
-		List<Content> list = (List<Content>)docClone.getRootElement().getContent();
+		List<Content> list = docClone.getRootElement().getContent();
 
 		//finally the test
 		assertEquals("wrong comment", ((Comment)docClone.getContent().get(1)).getText(), "some comment");
@@ -477,8 +486,7 @@ public final class TestDocument {
 		Document doc = new Document(element);
 		doc.addContent(comment);
 		doc.addContent(comment2);
-		@SuppressWarnings("unchecked")
-		List<Content> content = (List<Content>)doc.getContent();
+		List<Content> content = doc.getContent();
 
 		assertEquals("wrong number of comments in List", 3, content.size());
 		assertEquals("wrong comment", comment, content.get(1));
@@ -497,8 +505,7 @@ public final class TestDocument {
 		Document doc = new Document(element);
 		doc.addContent(pi);
 		doc.addContent(pi2);
-		@SuppressWarnings("unchecked")
-		List<Content> content = (List<Content>)doc.getContent();
+		List<Content> content = doc.getContent();
 
 		assertEquals("wrong number of PI's in List", 3, content.size());
 		assertEquals("wrong PI", pi, content.get(1));
@@ -517,9 +524,12 @@ public final class TestDocument {
 		Document doc2 = new Document();
 		try {
 			doc2.setRootElement(element);
-			fail("didn't catch element already attached to anohter document");
+			fail("didn't catch element already attached to another document");
 		}
 		catch(IllegalAddException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 	}
 
@@ -566,7 +576,7 @@ public final class TestDocument {
 	 * Test that an Element properly handles default namespaces
 	 */
     @Test
-	public void test_TCU__testSerialization() throws IOException, ClassNotFoundException {
+	public void test_TCU__testSerialization() throws IOException {
 
 		//set up an element to test with
 		Element element= new Element("element", Namespace.getNamespace("http://foo"));
@@ -640,8 +650,7 @@ public final class TestDocument {
 		try {
 			Document doc = new Document();
 			doc.addContent(new Element("tag"));
-			@SuppressWarnings("unchecked")
-			List<Content> list = (List<Content>)doc.getContent();
+			List<Content> list = doc.getContent();
 			list.add(new DocType("elementname"));
 			fail ("Should not be able to add DocType to a document after an Element");
 		} catch (IllegalAddException iae) {

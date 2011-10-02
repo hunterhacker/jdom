@@ -122,34 +122,34 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__int_hashCode() {
-		List content = foo.getContent();
-		List content2 = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Content> content2 = new ArrayList<Content>();
 		content2.addAll(content);
 		assertEquals("bad hashcode", content2.hashCode(), content.hashCode());
     }
 
     @Test
     public void test_TCM__boolean_equals_Object() {
-		List content = foo.getContent();
-		List content2 = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Content> content2 = new ArrayList<Content>();
 		content2.addAll(content);
 		assertTrue("bad equals", content.equals(content2));
 		
-		List children = foo.getChildren();
-		List children2 = foo.getChildren();
+		List<Element> children = foo.getChildren();
+		List<Element> children2 = foo.getChildren();
 		assertTrue("bad equals", children.equals(children2));
     }
 
     @Test
     public void test_TCM__int_indexOf_Object() {
-		List children = foo.getChildren();
+		List<Element> children = foo.getChildren();
 		assertEquals("wrong result from indexOf", 0, children.indexOf(bar));
 		assertEquals("wrong result from indexOf", 1, children.indexOf(baz));
 		assertEquals("wrong result from indexOf", 2, children.indexOf(quux));
 		assertEquals("wrong result from indexOf", -1, children.indexOf(foo));
 		assertEquals("wrong result from indexOf", -1, children.indexOf(text1));
 
-		List content = foo.getContent();
+		List<Content> content = foo.getContent();
 		assertEquals("wrong result from indexOf", 0, content.indexOf(text1));
 		assertEquals("wrong result from indexOf", 1, content.indexOf(bar));
 		assertEquals("wrong result from indexOf", 2, content.indexOf(text2));
@@ -164,14 +164,14 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__int_lastIndexOf_Object() {
-		List children = foo.getChildren();
+		List<Element> children = foo.getChildren();
 		assertEquals("wrong result from lastIndexOf", 0, children.lastIndexOf(bar));
 		assertEquals("wrong result from lastIndexOf", 1, children.lastIndexOf(baz));
 		assertEquals("wrong result from lastIndexOf", 2, children.lastIndexOf(quux));
 		assertEquals("wrong result from lastIndexOf", -1, children.lastIndexOf(text3));
 		assertEquals("wrong result from lastIndexOf", -1, children.lastIndexOf(new Integer(17)));
 
-		List content = foo.getContent();
+		List<Content> content = foo.getContent();
 		assertEquals("wrong result from lastIndexOf", 0, content.lastIndexOf(text1));
 		assertEquals("wrong result from lastIndexOf", 1, content.lastIndexOf(bar));
 		assertEquals("wrong result from lastIndexOf", 2, content.lastIndexOf(text2));
@@ -186,12 +186,12 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__Object_get_int() {
-		List children = foo.getChildren();
+		List<Element> children = foo.getChildren();
 		assertEquals("wrong element from get", bar, children.get(0));
 		assertEquals("wrong element from get", baz, children.get(1));
 		assertEquals("wrong element from get", quux, children.get(2));
 
-		List content = foo.getContent();
+		List<Content> content = foo.getContent();
 		assertEquals("wrong element from get", text1, content.get(0));
 		assertEquals("wrong element from get", bar, content.get(1));
 		assertEquals("wrong element from get", text2, content.get(2));
@@ -204,25 +204,41 @@ public final class TestFilterList {
 		try {
 			children.get(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			children.get(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.get(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.get(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__Object_set_int_Object() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		Element blah = new Element("blah");
         Text text5 = new Text("this was bar");
@@ -248,33 +264,68 @@ public final class TestFilterList {
 		try {
 			children.set(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			children.set(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
-			children.set(1, new Comment("test"));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)children;
+			@SuppressWarnings("unchecked")
+			List<Comment> tmpb = (List<Comment>)tmpa;
+			tmpb.set(1, new Comment("test"));
 			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.set(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.set(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
+		
 		try {
-			content.set(1, new Integer(17));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)content;
+			@SuppressWarnings("unchecked")
+			List<Object> tmpb = (List<Object>)tmpa;
+			tmpb.set(1, new Integer(17));
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__void_add_int_Object() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		Element blah = new Element("blah");
         Text text5 = new Text("this is before bar");
@@ -304,33 +355,67 @@ public final class TestFilterList {
 		try {
 			children.add(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			children.add(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
-			children.add(1, new Comment("test"));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)children;
+			@SuppressWarnings("unchecked")
+			List<Comment> tmpb = (List<Comment>)tmpa;
+			tmpb.add(1, new Comment("test"));
 			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.add(48, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.add(-3, new Element("test"));
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
-			content.add(1, new Integer(17));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)content;
+			@SuppressWarnings("unchecked")
+			List<Integer> tmpb = (List<Integer>)tmpa;
+			tmpb.add(1, new Integer(17));
 			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__boolean_add_Object() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		Element blah = new Element("blah");
         Text text5 = new Text("this is last");
@@ -359,19 +444,37 @@ public final class TestFilterList {
 		assertTrue("parent is not correct", comment.getParent() == foo);
 
 		try {
-			children.add(new Comment("test"));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)children;
+			@SuppressWarnings("unchecked")
+			List<Comment> tmpb = (List<Comment>)tmpa;
+			tmpb.add(new Comment("test"));
 			fail("Should have thrown a ClassCastException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
-			content.add(new Integer(17));
+			// Jump through hoops to defeat Generics
+			@SuppressWarnings("cast")
+			List<?> tmpa = (List<?>)content;
+			@SuppressWarnings("unchecked")
+			List<Integer> tmpb = (List<Integer>)tmpa;
+			tmpb.add(new Integer(17));
 			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {}
+		} catch(ClassCastException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
 	public void testModification() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		modifyFoo();
 
@@ -403,9 +506,9 @@ public final class TestFilterList {
     @Test
     public void test_TCM__int_size() {
 		// Test size on lists.
-		List children = foo.getChildren();
+		List<Element> children = foo.getChildren();
 		assertEquals("wrong size", 3, children.size());
-		List content = foo.getContent();
+		List<Content> content = foo.getContent();
 		assertEquals("wrong size", 8, content.size());
 		
 		// Modify 
@@ -429,11 +532,11 @@ public final class TestFilterList {
     @Test
 	public void testConcurrentModification() {
 		// Get lists.
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 		// Get iterators.
-		Iterator iter = children.iterator();
-		Iterator iter2 = content.iterator();
+		Iterator<Element> iter = children.iterator();
+		Iterator<Content> iter2 = content.iterator();
 
 		// Modify 
 		modifyFoo();
@@ -443,6 +546,9 @@ public final class TestFilterList {
 			iter.hasNext();
 			fail("No concurrent modification exception.");
 		} catch(ConcurrentModificationException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		// Try to access an already-existing iterator.
@@ -450,6 +556,9 @@ public final class TestFilterList {
 			iter2.next();
 			fail("No concurrent modification exception.");
 		} catch(ConcurrentModificationException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		// Try to access a newly-created iterator.
@@ -462,10 +571,10 @@ public final class TestFilterList {
 		assertEquals("wrong size", 7, content.size());
 
 		// Test iterator.remove().
-		iter2 = children.iterator();
-		while(iter2.hasNext()) {
-			iter2.next();
-			iter2.remove();
+		Iterator<Element> iter3 = children.iterator();
+		while(iter3.hasNext()) {
+			iter3.next();
+			iter3.remove();
 		}
 
 		assertEquals("wrong size", 0, children.size());
@@ -484,8 +593,8 @@ public final class TestFilterList {
 
 	// Modify "foo" a bit.
 	private void modifyFoo() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 		// \n, bar, \n, baz, \n, comment, quux, \n
 
 		children.remove(1); // remove baz
@@ -514,8 +623,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__ArrayObject_toArray() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		Object[] childrenArray = children.toArray();
 		Object[] contentArray = content.toArray();
@@ -529,8 +638,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__ArrayObject_toArray_ArrayObject() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
 		// These arrays are big enough, and don't need to be expanded.
 		Object[] childrenArray = new Object[children.size()];
@@ -576,8 +685,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__boolean_contains_Object() {
-		List content = foo.getContent();
-		List children = foo.getChildren();
+		List<Content> content = foo.getContent();
+		List<Element> children = foo.getChildren();
 
 		assertTrue("bad contains", !content.contains(foo));
 		assertTrue("bad contains", content.contains(bar));
@@ -606,8 +715,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__void_clear() {
-		List content = foo.getContent();
-		List children = foo.getChildren();
+		List<Content> content = foo.getContent();
+		List<Element> children = foo.getChildren();
 
 		children.clear();
 
@@ -638,8 +747,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__Object_remove_int() {
-		List content = foo.getContent();
-		List children = foo.getChildren();
+		List<Content> content = foo.getContent();
+		List<Element> children = foo.getChildren();
 		
 		// \n, bar, \n, baz, \n, comment, quux, \n
 		content.remove(4); // third /n
@@ -665,25 +774,41 @@ public final class TestFilterList {
 		try {
 			children.remove(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			children.remove(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.remove(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.remove(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__boolean_remove_Object() {
-		List content = foo.getContent();
-		List children = foo.getChildren();
+		List<Content> content = foo.getContent();
+		List<Element> children = foo.getChildren();
 		
 		// contents: \n, bar, \n, baz, \n, comment, quux, \n
 		assertTrue("bad removal", content.remove(text1));			// first /n
@@ -718,7 +843,7 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__boolean_isEmpty() {
-		List children = foo.getChildren();
+		List<Element> children = foo.getChildren();
 		int size = children.size();
 		for (int i = 0; i < size; i++)
 		{
@@ -731,8 +856,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__boolean_containsAll_Collection() {
-		List content = foo.getContent();
-		List contentList = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Content> contentList = new ArrayList<Content>();
 		contentList.add(quux);
 		contentList.add(baz);
 		contentList.add(text3);
@@ -746,8 +871,8 @@ public final class TestFilterList {
 		contentList.add(comment2);
 		assertFalse("bad containsAll", content.containsAll(contentList));
 
-		List children = foo.getChildren();
-		List childrenList = new ArrayList();
+		List<Element> children = foo.getChildren();
+		List<Object> childrenList = new ArrayList<Object>();
 		childrenList.add(baz);
 		assertTrue("bad containsAll", children.containsAll(childrenList));
 		childrenList.add(bar);
@@ -759,8 +884,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__boolean_addAll_Collection() {
-		List content = foo.getContent();
-		List addList = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Content> addList = new ArrayList<Content>();
 		addList.add(comment2);
 		addList.add(comment3);
 		content.addAll(addList);
@@ -780,10 +905,14 @@ public final class TestFilterList {
 		try {
 			content.addAll(addList);
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+		} catch(IllegalArgumentException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 
-		List children = foo.getChildren();
-		List addList2 = new ArrayList();
+		List<Element> children = foo.getChildren();
+		List<Element> addList2 = new ArrayList<Element>();
 		Element newElement = new Element("newelement");
 		Element newElement2 = new Element("newelement2");
 		addList2.add(newElement);
@@ -800,13 +929,17 @@ public final class TestFilterList {
 		try {
 			children.addAll(addList2);
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+		} catch(IllegalArgumentException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__boolean_addAll_int_Collection() {
-		List content = foo.getContent();
-		List addList = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Content> addList = new ArrayList<Content>();
 		addList.add(comment2);
 		addList.add(comment3);
 		content.addAll(2, addList);
@@ -826,10 +959,14 @@ public final class TestFilterList {
 		try {
 			content.addAll(2, addList);
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+		} catch(IllegalArgumentException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 
-		List children = foo.getChildren();
-		List addList2 = new ArrayList();
+		List<Element> children = foo.getChildren();
+		List<Element> addList2 = new ArrayList<Element>();
 		Element newElement = new Element("newelement");
 		Element newElement2 = new Element("newelement2");
 		addList2.add(newElement);
@@ -846,13 +983,17 @@ public final class TestFilterList {
 		try {
 			children.addAll(0, addList2);
 			fail("Should have thrown an IllegalArgumentException");
-		} catch(IllegalArgumentException ex) {}
+		} catch(IllegalArgumentException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__boolean_removeAll_Collection() {
-		List content = foo.getContent();
-		List removeList = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Object> removeList = new ArrayList<Object>();
 		removeList.add(text4);
 		removeList.add(comment);
 		removeList.add(bar);
@@ -868,8 +1009,8 @@ public final class TestFilterList {
 		assertEquals("bad removeAll", null, comment.getParent());
 		assertEquals("bad removeAll", null, bar.getParent());
 
-		List children = foo.getChildren();
-		List removeList2 = new ArrayList();
+		List<Element> children = foo.getChildren();
+		List<Object> removeList2 = new ArrayList<Object>();
 		removeList2.add(baz);
 		removeList2.add(quux);
 		removeList2.add(new Integer(17)); // should have no effect.
@@ -881,8 +1022,8 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__boolean_retainAll_Collection() {
-		List content = foo.getContent();
-		List retainList = new ArrayList();
+		List<Content> content = foo.getContent();
+		List<Object> retainList = new ArrayList<Object>();
 		retainList.add(text3);
 		retainList.add(quux);
 		retainList.add(text1);
@@ -899,8 +1040,8 @@ public final class TestFilterList {
 		assertEquals("bad retainAll", null, comment.getParent());
 		assertEquals("bad retainAll", null, bar.getParent());
 
-		List children = foo.getChildren();
-		List retainList2 = new ArrayList();
+		List<Element> children = foo.getChildren();
+		List<Element> retainList2 = new ArrayList<Element>();
 		retainList2.add(baz);
 		children.retainAll(retainList2);
 		assertEquals("bad retainAll", 1, children.size());
@@ -909,10 +1050,10 @@ public final class TestFilterList {
 
     @Test
     public void test_TCM__List_subList_int_int() {
-		List children = foo.getChildren();
-		List content = foo.getContent();
+		List<Element> children = foo.getChildren();
+		List<Content> content = foo.getContent();
 
-		List contentSublist = content.subList(3, 7);	// baz, text3, comment, quux
+		List<Content> contentSublist = content.subList(3, 7);	// baz, text3, comment, quux
 		contentSublist.add(comment2);
 		assertEquals("bad subList", 5, contentSublist.size());
 		assertEquals("bad subList", baz, contentSublist.get(0));
@@ -921,7 +1062,7 @@ public final class TestFilterList {
 		assertEquals("bad subList", quux, contentSublist.get(3));
 		assertEquals("bad subList", comment2, contentSublist.get(4));
 
-		List childrenSublist = children.subList(0, 2);	// bar, baz
+		List<Element> childrenSublist = children.subList(0, 2);	// bar, baz
 		childrenSublist.remove(0);
 		assertEquals("bad subList", 1, childrenSublist.size());
 		assertEquals("bad subList", baz, childrenSublist.get(0));
@@ -944,8 +1085,8 @@ public final class TestFilterList {
 	// listIterator(), and listIterator(int).
     @Test
     public void test_TCM__ListIterator_listIterator_int() {
-		List children = foo.getChildren();
-		ListIterator iter = children.listIterator(1);
+		List<Element> children = foo.getChildren();
+		ListIterator<Element> iter = children.listIterator(1);
 
 		// next
 		assertTrue("hasPrevious is false", iter.hasPrevious());
@@ -965,8 +1106,8 @@ public final class TestFilterList {
 		assertFalse("hasPrevious is true", iter.hasPrevious());
 		assertTrue("hasNext is false", iter.hasNext());
 
-		List content = foo.getContent();
-		ListIterator iter2 = content.listIterator(1);
+		List<Content> content = foo.getContent();
+		ListIterator<Content> iter2 = content.listIterator(1);
 
 		// next
 		assertTrue("hasPrevious is false", iter2.hasPrevious());
@@ -1009,25 +1150,41 @@ public final class TestFilterList {
 		try {
 			children.listIterator(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			children.listIterator(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.listIterator(48);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
 		try {
 			content.listIterator(-3);
 			fail("Should have thrown an IndexOutOfBoundsException");
-		} catch(IndexOutOfBoundsException ex) {}
+		} catch(IndexOutOfBoundsException ex) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
     }
 
     @Test
     public void test_TCM__ListIterator_listIterator_int2() {
-		List children = foo.getChildren();
-		ListIterator iter = children.listIterator(1);
+		List<Element> children = foo.getChildren();
+		ListIterator<Element> iter = children.listIterator(1);
 
 		assertTrue("hasPrevious is false", iter.hasPrevious());
 		assertTrue("hasPrevious is false", iter.hasPrevious());
@@ -1047,8 +1204,8 @@ public final class TestFilterList {
 		assertTrue("hasNext is false", iter.hasNext());
 		assertTrue("hasNext is false", iter.hasNext());
 
-		List content = foo.getContent();
-		ListIterator iter2 = content.listIterator(1);
+		List<Content> content = foo.getContent();
+		ListIterator<Content> iter2 = content.listIterator(1);
 
 		// next
 		assertEquals("wrong element from get", bar, iter2.next());
@@ -1092,19 +1249,19 @@ public final class TestFilterList {
     public void test_list_replacement() {
 		Element el = new Element("parent");
 
-		List attr = el.getAttributes();
+		List<Attribute> attr = el.getAttributes();
 		el.setAttribute("test", "test");
 		assertEquals("wrong list size after adding attribute", 1, attr.size());
-		ArrayList attr2 = new ArrayList();
+		ArrayList<Attribute> attr2 = new ArrayList<Attribute>();
 		attr2.add(new Attribute("test", "test"));
 		attr2.add(new Attribute("test2", "test2"));
 		el.setAttributes(attr2);
 		assertEquals("wrong list size after replacing attribute", 2, attr.size());
 
-		List content = el.getContent();
+		List<Content> content = el.getContent();
 		el.addContent(new Element("test"));
 		assertEquals("wrong list size after adding content", 1, content.size());
-		ArrayList content2 = new ArrayList();
+		ArrayList<Content> content2 = new ArrayList<Content>();
 		content2.add(new Element("test"));
 		content2.add(new Element("test2"));
 		el.setContent(content2);
@@ -1116,7 +1273,7 @@ public final class TestFilterList {
     public void test_TCM__ListIterator_listIterator_int3() {
         try {
             Element r = new Element("root");
-            Document d = new Document().setRootElement(r);
+            new Document().setRootElement(r);
             r.addContent(new Element("element").setText("1"));
             r.addContent(new Element("element").setText("2"));
             r.addContent(new Element("element").setText("3"));
@@ -1124,9 +1281,9 @@ public final class TestFilterList {
             Element xxx = new Element("element").setText("xxx");
             Element yyy = new Element("element").setText("yyy");
 
-            ListIterator i = r.getChildren("element").listIterator();
+            ListIterator<Element> i = r.getChildren("element").listIterator();
             while (i.hasNext()) {
-                Element e = (Element) i.next();
+                Element e = i.next();
                 i.add(new Element("element").setText(e.getText() + "_x"));
                 i.add(new Element("element").setText(e.getText() + "_y")); // bug1 - double add should work
             }
@@ -1148,12 +1305,4 @@ public final class TestFilterList {
         }
     }
 
-
-	private void dump(List list) {
-		System.out.println("---");
-		Iterator iter = list.iterator();
-		while(iter.hasNext()) {
-			System.out.println("> " + iter.next());
-		}
-	}
 }

@@ -112,29 +112,37 @@ public final class TestAttribute {
 		try {
 			new Attribute(null, "value");
 			fail("didn't catch null attribute name");
-		} catch (final IllegalArgumentException e) {
 		} catch (final NullPointerException e) {
-			fail("NullPointerException with null attribute name");
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		try {
             new Attribute("test", null);
 			fail("didn't catch null attribute value");
-		} catch (final IllegalArgumentException e) {
 		} catch (final NullPointerException e) {
-			fail("NullPointerException with null attribute value");
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		try {
             new Attribute("test" + (char)0x01, "value");
 			fail("didn't catch invalid attribute name");
 		} catch (final IllegalArgumentException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 		try {
             new Attribute("test", "test" + (char)0x01);
 			fail("didn't catch invalid attribute value");
 		} catch (final IllegalArgumentException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 	}
@@ -162,12 +170,14 @@ public final class TestAttribute {
             new Attribute("test", "value", defaultNamespace);
 			fail("allowed creation of attribute with a default namespace");
 		} catch (final IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
-
 
 		try {
             new Attribute("test", "value", null);
-		} catch (final Exception e) {
+		} catch (Exception e) {
         		fail("didn't handle null attribute namespace");
 		}
 	}
@@ -209,7 +219,7 @@ public final class TestAttribute {
 
         assertFalse("attribute equal to null", attribute.equals(null));
 
-        final Object object = (Object) attribute;
+        final Object object = attribute;
         assertTrue("object not equal to attribute", attribute.equals(object));
         assertTrue("attribute not equal to object", object.equals(attribute));
 
@@ -298,6 +308,9 @@ public final class TestAttribute {
 			fail("incorrectly returned double from non double value" + attr.getDoubleValue());
 
 		} catch (DataConversionException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 	}
@@ -325,6 +338,9 @@ public final class TestAttribute {
             attr.getFloatValue();
             fail("incorrect float conversion from non float");
         } catch (DataConversionException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 
     }
@@ -364,6 +380,9 @@ public final class TestAttribute {
             attribute.getIntValue();
             fail("incorrect int conversion from non int");
         } catch (final DataConversionException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
     /**
@@ -417,6 +436,9 @@ public final class TestAttribute {
             attribute.getLongValue();
 			fail("incorrect long conversion from non long");
 		} catch (final DataConversionException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 	}
 
@@ -466,7 +488,7 @@ public final class TestAttribute {
         final String attributeValue = "value";
 
         final Attribute attribute = new Attribute(attributeName, attributeValue);
-        final Attribute clonedAttribute = (Attribute) attribute.clone();
+        final Attribute clonedAttribute = attribute.clone();
 
         assertTrue("incorrect name in clone", clonedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in clone", clonedAttribute.getValue().equals(attributeValue));
@@ -482,7 +504,7 @@ public final class TestAttribute {
         final String attributeValue = "value";
 
         final Attribute attribute = new Attribute(attributeName, attributeValue, attributeType);
-        final Attribute clonedAttribute = (Attribute) attribute.clone();
+        final Attribute clonedAttribute = attribute.clone();
 
         assertTrue("incorrect name in clone", clonedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in clone", clonedAttribute.getValue().equals(attributeValue));
@@ -503,7 +525,7 @@ public final class TestAttribute {
         final String attributeValue = "value";
 
         final Attribute attribute = new Attribute(attributeName, attributeValue, namespace);
-        final Attribute clonedAttribute = (Attribute) attribute.clone();
+        final Attribute clonedAttribute = attribute.clone();
 
         assertTrue("incorrect name in clone", clonedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in clone", clonedAttribute.getValue().equals(attributeValue));
@@ -528,7 +550,7 @@ public final class TestAttribute {
         final String attributeValue = "value";
 
         final Attribute attribute = new Attribute(attributeName, attributeValue, attributeType, namespace);
-        final Attribute clonedAttribute = (Attribute) attribute.clone();
+        final Attribute clonedAttribute = attribute.clone();
 
         assertTrue("incorrect name in clone", clonedAttribute.getName().equals(attributeName));
         assertTrue("incorrect value in clone", clonedAttribute.getValue().equals(attributeValue));
@@ -557,7 +579,10 @@ public final class TestAttribute {
     	try {
             attribute.setValue(null);
     		fail("Attribute setValue didn't catch null  string");
-    	} catch (final IllegalDataException e) {
+    	} catch (final NullPointerException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
     	}
 
     	try {
@@ -567,6 +592,9 @@ public final class TestAttribute {
     		attribute.setValue(buffer.toString());
     		fail("Attribute setValue didn't catch invalid comment string");
     	} catch (final IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
     	}
 
     }

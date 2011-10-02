@@ -81,7 +81,7 @@ public final class TestComment {
 	public void test_TCC() {
 		// test creating a subclass with an anonymous instance
 		final Comment theComment = new Comment() {
-			
+			// no modifications.
 		};
 		assertTrue(null == theComment.getText());
 	}
@@ -100,6 +100,9 @@ public final class TestComment {
 			theComment = new org.jdom2.Comment(null);
 			fail("Comment constructor didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 	}
 	/**
@@ -109,7 +112,7 @@ public final class TestComment {
 	public void test_TCM__boolean_equals_Object() {
 		Comment com = new Comment("test");
 
-		Object ob = (Object)com;
+		Object ob = com;
 
 		assertTrue("object not equal to comment", com.equals(ob));
 	}
@@ -169,6 +172,9 @@ public final class TestComment {
 			theComment.setText(null);
 			fail("Comment setText didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 		try {
 			char c= 0x11;
@@ -177,6 +183,9 @@ public final class TestComment {
 			theComment.setText(b.toString());
 			fail("Comment setText didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 
 	}
@@ -227,6 +236,9 @@ public final class TestComment {
 			theComment= new org.jdom2.Comment(null);
 			fail("Comment constructor didn't catch invalid comment string");
 		} catch (IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
 		}
 	}
 	

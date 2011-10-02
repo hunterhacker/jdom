@@ -83,11 +83,11 @@ public final class TestNamespace {
 	@Test
 	public void test_TCM__boolean_equals_Object() {
 		Namespace ns = Namespace.getNamespace("prefx", "http://some.other.place");
-		Object ob = (Object)ns;
+		Object ob = ns;
 		assertTrue("object not equal to attribute", ns.equals(ob));
 
 		ns = Namespace.NO_NAMESPACE;
-		ob = (Object)ns;
+		ob = ns;
 		assertTrue("object not equal to attribute", ns.equals(ob));
 
 		//ns = Namespace.EMPTY_NAMESPACE;

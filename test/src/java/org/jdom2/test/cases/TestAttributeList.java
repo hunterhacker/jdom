@@ -23,11 +23,10 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		super(Attribute.class, false);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Attribute> buildEmptyList() {
 		base.getAttributes().clear();
-		return (List<Attribute>)base.getAttributes();
+		return base.getAttributes();
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	@Override
 	public Attribute[] buildIllegalArgumentContent() {
 		return new Attribute[]{};
-	};
+	}
 	
 	@Before
 	public void detatchAll () {
@@ -63,8 +62,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	@Test
 	public void testDuplicateAttribute() {
 		Element emt = new Element("mine");
-		@SuppressWarnings("unchecked")
-		List<Attribute> attlist = (List<Attribute>)emt.getAttributes();
+		List<Attribute> attlist = emt.getAttributes();
 		Attribute att = new Attribute("hi", "there");
 		Attribute frodo = new Attribute("hi", "frodo");
 		Attribute bilbo = new Attribute("boo", "bilbo");
@@ -116,8 +114,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	@Test
 	public void testAttributeNamspaceCollision() {
 		Element emt = new Element("mine");
-		@SuppressWarnings("unchecked")
-		List<Attribute> attlist = (List<Attribute>)emt.getAttributes();
+		List<Attribute> attlist = emt.getAttributes();
 		Attribute atta = new Attribute("hi", "there", Namespace.getNamespace("mypfx", "nsa"));
 		Attribute attb = new Attribute("hi", "there", Namespace.getNamespace("mypfx", "nsb"));
 		attlist.add(atta);

@@ -317,6 +317,10 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         attribute name.
 	 */
 	public Attribute setName(final String name) {
+		if (name == null) {
+			throw new NullPointerException(
+					"Can not set a null name for an Attribute.");
+		}
 		final String reason  = Verifier.checkAttributeName(name);
 		if (reason != null) {
 			throw new IllegalNameException(name, "attribute", reason);
@@ -445,6 +449,10 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         {@link org.jdom2.Verifier#checkCharacterData}).
 	 */
 	public Attribute setValue(final String value) {
+		if (value == null) {
+			throw new NullPointerException(
+					"Can not set a null value for an Attribute");
+		}
 		final String reason = Verifier.checkCharacterData(value);
 		if (reason != null) {
 			throw new IllegalDataException(value, "attribute", reason);

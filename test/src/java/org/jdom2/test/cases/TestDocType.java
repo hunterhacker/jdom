@@ -81,7 +81,7 @@ public final class TestDocType {
     @Test
 	public void test_TCC() {
 		DocType theDocType = new DocType() {
-			
+			// change nothing
 		};
 
 		assertNull("incorrect element name", theDocType.getElementName());
@@ -133,7 +133,7 @@ public final class TestDocType {
 		String systemID = "FILE://temp/test.dtd";
 		DocType theDocType = new DocType("anElement", publicID, systemID);
 		
-		Object ob = (Object)theDocType;
+		Object ob = theDocType;
 		assertEquals(theDocType, ob);
 	}
 

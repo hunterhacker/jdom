@@ -115,6 +115,9 @@ public final class TestCDATA {
             new CDATA("some valid <text> with a CDATA section ending ]]>");
             fail("CDATA constructor didn't catch invalid comment string");
         } catch (final IllegalDataException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
 	}
 
@@ -126,7 +129,7 @@ public final class TestCDATA {
         final String text = "this is a CDATA section";
 	    final CDATA cdata = new CDATA(text);
 
-	    final Object object = (Object) cdata;
+	    final Object object = cdata;
 
         assertTrue("object not equal to CDATA", cdata.equals(object));
         assertTrue("CDATA not equal to object", object.equals(cdata));
@@ -245,6 +248,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -270,6 +276,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -291,6 +300,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
         
@@ -315,6 +327,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -329,6 +344,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -343,6 +361,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -356,6 +377,9 @@ public final class TestCDATA {
                 cdata.append(cdataEndText);
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
         
@@ -368,6 +392,9 @@ public final class TestCDATA {
             
             fail("failed to detect CDATA end marker");
         } catch (final IllegalDataException exception) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 
@@ -394,6 +421,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -419,6 +449,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -440,6 +473,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
         
@@ -464,6 +500,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -478,6 +517,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -492,6 +534,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
 
@@ -505,6 +550,9 @@ public final class TestCDATA {
                 cdata.append(new Text(cdataEndText));
                 fail("failed to detect CDATA end marker");
             } catch (final IllegalDataException exception) {
+    			// Do nothing
+    		} catch (Exception e) {
+    			fail("Unexpected exception " + e.getClass());
             }
         }
         
@@ -517,6 +565,9 @@ public final class TestCDATA {
             
             fail("failed to detect CDATA end marker");
         } catch (final IllegalDataException exception) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
         }
     }
 

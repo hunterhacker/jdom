@@ -47,7 +47,7 @@ public class TestText {
 	@Test
 	public void testClone() {
 		Text txt = new Text("frodo baggins");
-		Text clone = (Text)txt.clone();
+		Text clone = txt.clone();
 		assertTrue(clone != null);
 		assertTrue(txt != clone);
 		assertFalse(txt.equals(clone));

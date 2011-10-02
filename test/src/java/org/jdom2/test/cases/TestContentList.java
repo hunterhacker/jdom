@@ -13,11 +13,10 @@ public class TestContentList extends AbstractTestList<Content> {
 		super(Content.class, false);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Content> buildEmptyList() {
 		Element e = new Element("dummy");
-		return (List<Content>)e.getContent();
+		return e.getContent();
 	}
 
 	@Override
