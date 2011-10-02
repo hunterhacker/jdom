@@ -218,7 +218,7 @@ public final class TestDOMOutputter {
     }
     
     @Test
-    public void testWithDocType() throws JDOMException {
+    public void testWithDocType() {
     	DocType dt = new DocType("root");
     	dt.setInternalSubset("<!ELEMENT root (#PCDATA)>");
     	Element root = new Element("root");

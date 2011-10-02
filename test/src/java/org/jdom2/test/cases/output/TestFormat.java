@@ -159,7 +159,7 @@ public class TestFormat {
 	@Test
 	public void testClone() {
 		Format mine = Format.getRawFormat();
-		Format clone = (Format)mine.clone();
+		Format clone = mine.clone();
 		assertFalse(mine == clone);
 		checkEquals(mine, clone);
 	}

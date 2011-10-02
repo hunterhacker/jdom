@@ -154,6 +154,9 @@ public final class TestXMLOutputter {
         fail("Illegal surrogate pair should have thrown an exception");
       }
       catch (IllegalDataException e) {
+    	  // do nothing
+      } catch (Exception e) {
+    	  fail ("Unexpected exception " + e.getClass());
       }
     }
 
@@ -173,6 +176,9 @@ public final class TestXMLOutputter {
         fail("Illegal surrogate pair output should have thrown an exception");
       }
       catch (IllegalDataException e) {
+    	  // do nothing
+      } catch (Exception e) {
+    	  fail ("Unexpected exception " + e.getClass());
       }
     }
     
