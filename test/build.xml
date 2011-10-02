@@ -298,6 +298,15 @@ These are the meaningful targets for this build file:
       <classpath refid="test.class.path" />
     </java>
   </target>
+
+    <!-- =================================================================== -->
+    <!-- Master targets                                                      -->
+    <!-- =================================================================== -->
+	<target name="master" depends="distclean,package,test" 
+		description="Called from master build.xml" >
+	</target>
+	
+
 </project>
 
 <!-- End of file -->

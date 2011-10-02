@@ -3,27 +3,28 @@
 	<!-- define Maven coordinates -->
 	<property name="groupId" value="org.jdom" />
 	<property name="artifactId" value="jdom" />
-	<property name="version" value="1.x-SNAPSHOT" />
+	<property name="version" value="1.x-rgl" />
 	
+	<property name="gpg" value="gpg" 
+		description="Path to the GNU gpg program for maven target"/>
+
 	<property name="dist" value="dist" />
 
 	<target name="build.core">
-		<ant dir="core" target="package">
+		<ant dir="core" target="master" >
 			<property name="version" value="${version}"/>
 		</ant>
 	</target>
 	
 	<target name="build.test">
 		<echo message="Java Version - ${java.version} : Ant Version = ${ant.version}" />
-		<ant dir="test" target="test" >
-			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
+		<ant dir="test" target="master" >
 			<property name="version" value="${version}"/>
 		</ant>
 	</target>
 	
 	<target name="build.contrib">
-		<ant dir="contrib" target="package" >
-			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
+		<ant dir="contrib" target="master" >
 			<property name="version" value="${version}"/>
 		</ant>
 	</target>
@@ -31,7 +32,11 @@
 	
 	<target name="build" depends="build.core,build.test,build.contrib" />
 
-	<target name="dist" depends="build" description="generate the distribution">
+	<target name="clean" description="clean up">
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="dist" depends="clean, build" description="generate the distribution">
 
 		<mkdir dir="${dist}" />
 		<delete dir="${dist}" includes="*.jar"/>
@@ -44,8 +49,28 @@
 		
 	</target>
 
-	<target name="clean" description="clean up">
-		<delete dir="${dist}" />
+	<target name="maven" depends="dist" description="Build a maven bundle">
+		<property name="mavendir" value="${dist}" />
+		<property name="jarbase" value="jdom-${version}" />
+		<!-- copy/rename the pom template -->
+		<copy filtering="true" file="maven.pom" tofile="${dist}/${jarbase}.pom">
+			<filterset>
+				<filter token="artifactID" value="jdom"/>
+				<filter token="version" value="${version}" />
+				<filter token="jdk" value="1.2" />
+			</filterset>
+		</copy>
+		
+		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}.pom"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}.jar"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}-sources.jar"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}-javadoc.jar"/>
+		
+		<jar destfile="${mavendir}/${jarbase}-maven-bundle.jar"
+			basedir="${mavendir}"
+			includes="${jarbase}*" excludes="*maven-bundle*" />
+
 	</target>
+	
 
 </project>

@@ -285,6 +285,14 @@ These are the meaningful targets for this build file:
     <delete file="${Name}-${version}.zip"/>
   </target>
 
+    <!-- =================================================================== -->
+    <!-- Master targets                                                      -->
+    <!-- =================================================================== -->
+	<target name="master" depends="distclean,package" 
+		description="Called from master build.xml" >
+	</target>
+	
+	
 </project>
 
 <!-- End of file -->

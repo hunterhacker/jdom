@@ -215,7 +215,7 @@ For instructions on how to build JDOM, please view the README.txt file.
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="distclean,compile,javadoc"
+  <target name="package" depends="compile,javadoc"
           description="Creates the class package">
     <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
     <fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
@@ -303,6 +303,12 @@ For instructions on how to build JDOM, please view the README.txt file.
     <delete file="${Name}-${version}.zip"/>
   </target>
 
+    <!-- =================================================================== -->
+    <!-- Master targets                                                      -->
+    <!-- =================================================================== -->
+	<target name="master" depends="distclean,package" 
+		description="Called from master build.xml" >
+	</target>
+	
 </project>
-
 <!-- End of file -->
