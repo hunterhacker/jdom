@@ -4,8 +4,8 @@ echo Building...
 
 if "%JAVA_HOME%" == "" goto error
 
-set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;..\jdom\lib\ant.jar;..\jdom\lib\xml-apis.jar;..\jdom\lib\xerces.jar;.\lib\optional.jar;.\lib\junit.jar
-set ANT_HOME=..\jdom\lib
+set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;..\core\lib\ant.jar;..\core\lib\xml-apis.jar;..\core\lib\xerces.jar;.\lib\optional.jar;.\lib\junit.jar
+set ANT_HOME=..\core\lib
 
 echo Building with classpath %LOCALCLASSPATH%;%ADDITIONALCLASSPATH%
 

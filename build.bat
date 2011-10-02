@@ -1,11 +1,12 @@
 @echo off
 
-echo Building...
+echo JDOM Build System
+echo -------------------
 
 if "%JAVA_HOME%" == "" goto error
 
-set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;..\core\lib\ant.jar;..\core\lib\xml-apis.jar;..\core\lib\xerces.jar
-set ANT_HOME=../core/lib
+set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;.\core\lib\ant.jar;.\core\lib\xml-apis.jar;.\core\lib\xerces.jar;.\test\lib\optional.jar;.\test\lib\junit.jar
+set ANT_HOME=.\core\lib
 
 echo Building with classpath %LOCALCLASSPATH%;%ADDITIONALCLASSPATH%
 

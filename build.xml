@@ -7,20 +7,29 @@
 	
 	<property name="dist" value="dist" />
 
-	<target name="build">
+	<target name="build.core">
 		<ant dir="core" target="package">
 			<property name="version" value="${version}"/>
 		</ant>
+	</target>
+	
+	<target name="build.test">
+		<echo message="Java Version - ${java.version} : Ant Version = ${ant.version}" />
 		<ant dir="test" target="test" >
 			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
 			<property name="version" value="${version}"/>
 		</ant>
+	</target>
+	
+	<target name="build.contrib">
 		<ant dir="contrib" target="package" >
 			<property name="jdom-core.jar" location="core/build/jdom-${version}.jar"/>
 			<property name="version" value="${version}"/>
 		</ant>
-		
 	</target>
+	
+	
+	<target name="build" depends="build.core,build.test,build.contrib" />
 
 	<target name="dist" depends="build" description="generate the distribution">
 

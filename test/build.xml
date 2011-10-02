@@ -72,8 +72,8 @@ These are the meaningful targets for this build file:
     <property file="${jdom.dir}/build.properties" />
 
     <property name="Name" value="JDOM Test"/>
-    <property name="version" value="1.1.1"/>
-    <property name="name" value="jdom-${version}-test"/>
+    <property name="version" value="1.1.2-snap"/>
+    <property name="name" value="jdom-test-${version}"/>
     <property name="year" value="2007"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -105,7 +105,7 @@ These are the meaningful targets for this build file:
     <!-- Default JAR libraries -->
     <property name="xml-apis.jar"       value="${jdom.lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"         value="${jdom.lib.dir}/xerces.jar"/>
-    <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom.jar"/>
+    <property name="jdom-core.jar"      value="${jdom.build.dir}/jdom-${version}.jar"/>
     <property name="junit.jar"          value="${lib.dir}/junit.jar"/>
 
     <!-- Compilation class path -->
