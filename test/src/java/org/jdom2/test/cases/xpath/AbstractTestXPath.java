@@ -1,6 +1,9 @@
 package org.jdom2.test.cases.xpath;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -8,10 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.Comment;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
 import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.xpath.XPath;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public abstract class AbstractTestXPath {
@@ -212,7 +221,7 @@ public abstract class AbstractTestXPath {
 	}
 
 	@Test
-	public void testSerialization() throws JDOMException {
+	public void testSerialization() {
 		XPath xpath = setupXPath("//main", null);
 		XPath xser  = UnitTestUtil.deSerialize(xpath);
 		assertTrue(xpath != xser);
@@ -225,77 +234,77 @@ public abstract class AbstractTestXPath {
 	}
 	
 	@Test
-	public void testSelectDocumentDoc() throws JDOMException {
+	public void testSelectDocumentDoc() {
 		checkXPath("/", doc, mainvalue, doc);
 	}
 
 	@Test
-	public void testSelectDocumentMain() throws JDOMException {
+	public void testSelectDocumentMain() {
 		checkXPath("/", main, mainvalue, doc);
 	}
 
 	@Test
-	public void testSelectDocumentAttr() throws JDOMException {
+	public void testSelectDocumentAttr() {
 		checkXPath("/", child3attint, mainvalue, doc);
 	}
 
 	@Test
-	public void testSelectDocumentPI() throws JDOMException {
+	public void testSelectDocumentPI() {
 		checkXPath("/", mainpi, mainvalue, doc);
 	}
 
 	@Test
-	public void testSelectDocumentText() throws JDOMException {
+	public void testSelectDocumentText() {
 		checkXPath("/", child1text, mainvalue, doc);
 	}
 
 	@Test
-	public void testSelectMainByName() throws JDOMException {
+	public void testSelectMainByName() {
 		checkXPath("main", doc, mainvalue, main);
 	}
 
 	@Test
-	public void testSelectMainFromDoc() throws JDOMException {
+	public void testSelectMainFromDoc() {
 		checkXPath("//main", doc, mainvalue, main);
 	}
 
 	@Test
-	public void testAncestorsFromRoot() throws JDOMException {
+	public void testAncestorsFromRoot() {
 		checkXPath("ancestor::node()", doc, "");
 	}
 
 	@Test
-	public void testAncestorsFromMain() throws JDOMException {
+	public void testAncestorsFromMain() {
 		checkXPath("ancestor::node()", main, mainvalue, doc);
 	}
 
 	@Test
-	public void testAncestorsFromChild() throws JDOMException {
+	public void testAncestorsFromChild() {
 		checkXPath("ancestor::node()", child1emt, mainvalue, doc, main);
 	}
 
 	@Test
-	public void testAncestorOrSelfFromRoot() throws JDOMException {
+	public void testAncestorOrSelfFromRoot() {
 		checkXPath("ancestor-or-self::node()", doc, mainvalue, doc);
 	}
 
 	@Test
-	public void testAncestorOrSelfFromMain() throws JDOMException {
+	public void testAncestorOrSelfFromMain() {
 		checkXPath("ancestor-or-self::node()", main, mainvalue, doc, main);
 	}
 
 	@Test
-	public void testAncestorOrSelfFromMainAttribute() throws JDOMException {
+	public void testAncestorOrSelfFromMainAttribute() {
 		checkXPath("ancestor-or-self::node()", mainatt, mainvalue, doc, main, mainatt);
 	}
 
 	@Test
-	public void testAncestorOrSelfFromNamespace() throws JDOMException {
+	public void testAncestorOrSelfFromNamespace() {
 		checkXPath("ancestor-or-self::node()", child3nsa, null, child3nsa);
 	}
 
 	@Test
-	public void testAncestorOrSelfFromChild() throws JDOMException {
+	public void testAncestorOrSelfFromChild() {
 		checkXPath("ancestor-or-self::node()", child1emt, mainvalue, doc, main, child1emt);
 	}
 

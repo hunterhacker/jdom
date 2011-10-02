@@ -39,7 +39,7 @@ public class TestXpath {
 	public void testSelectNodesObjectString() {
 		try {
 			Document doc = new Document(new Element("main"));
-			List lst = XPath.selectNodes(doc, "/");
+			List<?> lst = XPath.selectNodes(doc, "/");
 			assertTrue(lst.size() == 1);
 			assertTrue(doc == lst.get(0));
 		} catch (JDOMException e) {
