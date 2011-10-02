@@ -1,3 +1,34 @@
+* * * * * * JDOM 1.1.2 (tag: jdom_1_1_2) from JDOM 1.1.1 * * * * * *
+
+Moved entire code base from CVS to Git, at https://github.com/hunterhacker/jdom
+
+Number of bug fixes. The '#' numbers refer to issues listed in GitHub at:
+    https://github.com/hunterhacker/jdom/issues
+
+#1  Schema validation can miss namespaces of default attributes
+#6  Remove unnecessary classes in the default package (JDOMAbout.class)
+#16 FilterListIterator.add() method does not check content type.
+#17 FilterListIterator does not behave well when add() or remove() is
+         called after previous()
+#20 ProcessingInstruction Map-data constructor should 'clone' the input map
+#21 Document.toString() throws IllegalStateException when no root element
+#22 It is possible to add root element before the DocType in a Document
+#23 Text.append("") deletes current value
+#29 org.jdom2.output.Format implements Cloneable, but clone() is not public
+#32 DOMOutputter can add Document content in the wrong order
+#36 JDOMSource.JDOMInputSource.setByteStream() should fail
+#39 JDOMResult.getDocument() should return null when content is not legal.
+#40 SAXOutputter does not fire startPrefixMapping() events for Attribute Namespaces
+#44 Element.getNamespace(String prefix) does not check attributes.
+
+
+Additionally, as per issue #3 Compiled Jar will now available on maven-central
+with the coordinates:
+  GroupId: org.jdom
+  ArtifactID: jdom
+  Version: 1.1.2
+(Note, It make take a few days to get the maven-central repository sync'd)
+
 * * * * * * JDOM 1.1.1 (tag: jdom_1_1_1) from JDOM 1.1 * * * * * *
 
 Fixed a synchronization issue in the Namespace class that could cause a
