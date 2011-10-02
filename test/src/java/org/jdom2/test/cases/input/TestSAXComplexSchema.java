@@ -60,7 +60,7 @@ public class TestSAXComplexSchema extends TestCase {
 			XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 			StringWriter sw = new StringWriter();
 			out.output(doc, sw);
-			String xml = sw.toString();
+			assertTrue(sw.toString().length() > 0);
 			//System.out.println("Document parsed. Content:\n" + xml + "\n");
 			
 			Namespace defns = Namespace.getNamespace("http://www.jdom.org/tests/default");
@@ -69,9 +69,9 @@ public class TestSAXComplexSchema extends TestCase {
 			Element root = doc.getRootElement();
 			assertTrue(root != null);
 			assertTrue("test".equals(root.getName()));
-			List kids = root.getChildren("data", defns);
-			for (Iterator it = kids.iterator(); it.hasNext(); ) {
-				Element data = (Element)it.next();
+			List<Element> kids = root.getChildren("data", defns);
+			for (Iterator<Element> it = kids.iterator(); it.hasNext(); ) {
+				Element data = it.next();
 				assertTrue(defns.equals(data.getNamespace()));
 				Attribute att = data.getAttribute("type", Namespace.NO_NAMESPACE);
 				assertTrue("Could not find type attribute in default ns.", att != null);

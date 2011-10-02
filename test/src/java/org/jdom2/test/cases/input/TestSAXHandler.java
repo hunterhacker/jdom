@@ -179,11 +179,11 @@ public class TestSAXHandler {
 				return handler;
 			}
 			@Override
-			public void build(SAXHandler handler) throws SAXException {
-				handler.startDTD("dtdname", "publicID", "systemID");
-				handler.endDTD();
-				handler.comment("comment".toCharArray(), 2, 2);
-				handler.startElement("", "root", "", EMPTYATTRIBUTES);
+			public void build(SAXHandler phandler) throws SAXException {
+				phandler.startDTD("dtdname", "publicID", "systemID");
+				phandler.endDTD();
+				phandler.comment("comment".toCharArray(), 2, 2);
+				phandler.startElement("", "root", "", EMPTYATTRIBUTES);
 			}
 		});
 		assertTrue(doc.hasRootElement());
