@@ -54,6 +54,7 @@
 
 package org.jdom2.adapters;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.jdom2.DocType;
@@ -130,8 +131,13 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
 			Method setInternalSubset = dtclass.getMethod(
 					"setInternalSubset", String.class);
 			setInternalSubset.invoke(dt, s);
-		}
-		catch (Exception e) {
+		} catch (InvocationTargetException e) {
+			// ignore
+		} catch (IllegalAccessException e) {
+			// ignore
+		} catch (SecurityException e) {
+			// ignore
+		} catch (NoSuchMethodException e) {
 			// ignore
 		}
 	}

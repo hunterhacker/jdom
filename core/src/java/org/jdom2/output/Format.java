@@ -430,7 +430,7 @@ public class Format implements Cloneable {
 	 * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
 	 * If JDK 1.4 isn't around, default to no special encoding.
 	 */
-	class DefaultEscapeStrategy implements EscapeStrategy {
+	private final static class DefaultEscapeStrategy implements EscapeStrategy {
 		private final int bits;
 		private final CharsetEncoder encoder;
 
