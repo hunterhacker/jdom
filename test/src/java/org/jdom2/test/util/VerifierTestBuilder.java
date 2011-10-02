@@ -51,7 +51,7 @@ public class VerifierTestBuilder {
 			int flen = 0;
 			
 			for (char i = 0; i < Character.MAX_VALUE; i++) {
-				q = (Boolean)meth.invoke(null, Character.valueOf((char)i));
+				q = (Boolean)meth.invoke(null, Character.valueOf(i));
 				if (q != valid) {
 					valid = q;
 					if (flen >= flips.length) {
