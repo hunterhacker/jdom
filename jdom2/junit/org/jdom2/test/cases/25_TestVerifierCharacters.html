@@ -1,0 +1,349 @@
+<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Unit Test Results: org.jdom2.test.cases.TestVerifierCharacters</title>
+<link rel="stylesheet" type="text/css" title="Style" href="../../../../stylesheet.css">
+<script type="text/javascript" language="JavaScript">
+        var TestCases = new Array();
+        var cur;
+        
+    cur = TestCases['org.jdom2.test.cases.TestVerifierCharacters'] = new Array();
+    
+        cur['about'] = './core/package';
+    
+        cur['about.build'] = './build/about';
+    
+        cur['about.src'] = './core/package';
+    
+        cur['ant.core.lib'] = 'C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib\\ant.jar';
+    
+        cur['ant.file'] = 'C:\\git\\jdom\\build.xml';
+    
+        cur['ant.home'] = 'C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300';
+    
+        cur['ant.java.version'] = '1.6';
+    
+        cur['ant.library.dir'] = 'C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib';
+    
+        cur['ant.project.default-target'] = 'package';
+    
+        cur['ant.project.invoked-targets'] = 'coverage';
+    
+        cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
+    
+        cur['awt.toolkit'] = 'sun.awt.windows.WToolkit';
+    
+        cur['basedir'] = 'C:\\git\\jdom';
+    
+        cur['build'] = './build';
+    
+        cur['build.javadocs'] = './build/apidocs';
+    
+        cur['cobertura.datafile'] = './build/instrumented/cobertura.ser';
+    
+        cur['compile.debug'] = 'true';
+    
+        cur['compile.deprecation'] = 'true';
+    
+        cur['compile.optimize'] = 'true';
+    
+        cur['compile.source'] = '1.5';
+    
+        cur['compile.target'] = '1.5';
+    
+        cur['contrib'] = './contrib';
+    
+        cur['contrib.build'] = './build/contrib';
+    
+        cur['contrib.src'] = './contrib/src/java';
+    
+        cur['core'] = './core';
+    
+        cur['core.build'] = './build/core';
+    
+        cur['core.src'] = './core/src/java';
+    
+        cur['coverage.out'] = './build/coverage';
+    
+        cur['DSTAMP'] = '20111002';
+    
+        cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
+    
+        cur['eclipse.pdebuild.scripts'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/scripts/';
+    
+        cur['eclipse.pdebuild.templates'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/templates/';
+    
+        cur['file.encoding'] = 'Cp1252';
+    
+        cur['file.encoding.pkg'] = 'sun.io';
+    
+        cur['file.separator'] = '\\';
+    
+        cur['forkjunit'] = 'true';
+    
+        cur['gpg'] = 'gpg';
+    
+        cur['instrument'] = 'true';
+    
+        cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
+    
+        cur['jarbase'] = 'jdom-2.x-SNAPSHOT';
+    
+        cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
+    
+        cur['java.awt.printerjob'] = 'sun.awt.windows.WPrinterJob';
+    
+        cur['java.class.path'] = 'C:\\git\\jdom\\build\\instrumented;C:\\git\\jdom\\build\\junit;C:\\git\\jdom\\lib\\jaxen-1.1.3.jar;C:\\git\\jdom\\lib\\xercesImpl.jar;C:\\git\\jdom\\lib\\xml-apis.jar;C:\\git\\jdom\\lib\\junit-4.8.2.jar;C:\\git\\jdom\\contrib\\lib\\isorelax.jar;C:\\git\\jdom\\build\\core;C:\\git\\jdom\\lib\\cobertura\\asm-3.0.jar;C:\\git\\jdom\\lib\\cobertura\\asm-tree-3.0.jar;C:\\git\\jdom\\lib\\cobertura\\cobertura.jar;C:\\git\\jdom\\lib\\cobertura\\jakarta-oro-2.0.8.jar;C:\\git\\jdom\\lib\\cobertura\\log4j-1.2.9.jar;C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib\\ant-launcher.jar;C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib\\ant.jar;C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib\\ant-junit.jar;C:\\eclipse\\plugins\\org.apache.ant_1.8.2.v20110505-1300\\lib\\ant-junit4.jar';
+    
+        cur['java.class.version'] = '50.0';
+    
+        cur['java.endorsed.dirs'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\endorsed';
+    
+        cur['java.ext.dirs'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\ext;C:\\windows\\Sun\\Java\\lib\\ext';
+    
+        cur['java.home'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre';
+    
+        cur['java.io.tmpdir'] = 'C:\\Users\\rolf\\AppData\\Local\\Temp\\';
+    
+        cur['java.library.path'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\bin;C:\\windows\\Sun\\Java\\bin;C:\\windows\\system32;C:\\windows;C:/eclipse/jre/bin/server;C:/eclipse/jre/bin;C:/eclipse/jre/lib/amd64;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Program Files\\TortoiseGit\\bin;C:\\Program Files (x86)\\GNU\\GnuPG\\pub;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\eclipse;;.';
+    
+        cur['java.runtime.name'] = 'Java(TM) SE Runtime Environment';
+    
+        cur['java.runtime.version'] = '1.6.0_26-b03';
+    
+        cur['java.specification.name'] = 'Java Platform API Specification';
+    
+        cur['java.specification.vendor'] = 'Sun Microsystems Inc.';
+    
+        cur['java.specification.version'] = '1.6';
+    
+        cur['java.vendor'] = 'Sun Microsystems Inc.';
+    
+        cur['java.vendor.url'] = 'http://java.sun.com/';
+    
+        cur['java.vendor.url.bug'] = 'http://java.sun.com/cgi-bin/bugreport.cgi';
+    
+        cur['java.version'] = '1.6.0_26';
+    
+        cur['java.vm.info'] = 'mixed mode';
+    
+        cur['java.vm.name'] = 'Java HotSpot(TM) 64-Bit Server VM';
+    
+        cur['java.vm.specification.name'] = 'Java Virtual Machine Specification';
+    
+        cur['java.vm.specification.vendor'] = 'Sun Microsystems Inc.';
+    
+        cur['java.vm.specification.version'] = '1.0';
+    
+        cur['java.vm.vendor'] = 'Sun Microsystems Inc.';
+    
+        cur['java.vm.version'] = '20.1-b02';
+    
+        cur['jaxen.jar'] = './lib/jaxen-1.1.3.jar';
+    
+        cur['junit'] = './test';
+    
+        cur['junit.build'] = './build/junit';
+    
+        cur['junit.instrumented'] = './build/instrumented';
+    
+        cur['junit.jar'] = './lib/junit-4.8.2.jar';
+    
+        cur['junit.report'] = './build/junit.report';
+    
+        cur['junit.src'] = './test/src/java';
+    
+        cur['junit.xml'] = './build/junit.xml';
+    
+        cur['lib.dir'] = './lib';
+    
+        cur['line.separator'] = '
+';
+    
+        cur['mavendir'] = './build/maven';
+    
+        cur['metainf'] = './core/package/META-INF';
+    
+        cur['metainf.build'] = './build/META-INF';
+    
+        cur['name'] = 'jdom';
+    
+        cur['Name'] = 'JDOM';
+    
+        cur['net.sourceforge.cobertura.datafile'] = 'C:\\git\\jdom\\build\\instrumented\\cobertura.ser';
+    
+        cur['os.arch'] = 'amd64';
+    
+        cur['os.name'] = 'Windows 7';
+    
+        cur['os.version'] = '6.1';
+    
+        cur['package.dir'] = './package';
+    
+        cur['packages'] = 'org.jdom2.*';
+    
+        cur['parser.jar'] = './lib/xercesImpl.jar';
+    
+        cur['path.separator'] = ';';
+    
+        cur['samples'] = './core/samples/';
+    
+        cur['samples.build'] = './build/samples';
+    
+        cur['samples.src'] = './core/samples//';
+    
+        cur['sun.arch.data.model'] = '64';
+    
+        cur['sun.boot.class.path'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\resources.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\rt.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\sunrsasign.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\jsse.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\jce.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\charsets.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\lib\\modules\\jdk.boot.jar;C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\classes';
+    
+        cur['sun.boot.library.path'] = 'C:\\Program Files\\Java\\jdk1.6.0_26\\jre\\bin';
+    
+        cur['sun.cpu.endian'] = 'little';
+    
+        cur['sun.cpu.isalist'] = 'amd64';
+    
+        cur['sun.desktop'] = 'windows';
+    
+        cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
+    
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases2018891793033119948.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher5668306977512132617.properties propsfile=C:\\git\\jdom\\junit7278872612041625825.properties';
+    
+        cur['sun.java.launcher'] = 'SUN_STANDARD';
+    
+        cur['sun.jnu.encoding'] = 'Cp1252';
+    
+        cur['sun.management.compiler'] = 'HotSpot 64-Bit Tiered Compilers';
+    
+        cur['sun.os.patch.level'] = '';
+    
+        cur['TODAY'] = 'October 2 2011';
+    
+        cur['TSTAMP'] = '2337';
+    
+        cur['user.country'] = 'CA';
+    
+        cur['user.dir'] = 'C:\\git\\jdom';
+    
+        cur['user.home'] = 'C:\\Users\\rolf';
+    
+        cur['user.language'] = 'en';
+    
+        cur['user.name'] = 'rolf';
+    
+        cur['user.timezone'] = '';
+    
+        cur['user.variant'] = '';
+    
+        cur['version'] = '2.x-SNAPSHOT';
+    
+        cur['version.impl'] = '2.x-SNAPSHOT';
+    
+        cur['version.spec'] = '2.alpha';
+    
+        cur['xmlapi.jar'] = './lib/xml-apis.jar';
+    
+        cur['year'] = '2011';
+    </script><script type="text/javascript" language="JavaScript">
+        function displayProperties (name) {
+          var win = window.open('','JUnitSystemProperties','scrollbars=1,resizable=1');
+          var doc = win.document;
+          doc.open();
+          doc.write("<html><head><title>Properties of " + name + "</title>");
+          doc.write("<style type=\"text/css\">");
+          doc.write("body {font:normal 68% verdana,arial,helvetica; color:#000000; }");
+          doc.write("table tr td, table tr th { font-size: 68%; }");
+          doc.write("table.properties { border-collapse:collapse; border-left:solid 1 #cccccc; border-top:solid 1 #cccccc; padding:5px; }");
+          doc.write("table.properties th { text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#eeeeee; }");
+          doc.write("table.properties td { font:normal; text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#fffffff; }");
+          doc.write("h3 { margin-bottom: 0.5em; font: bold 115% verdana,arial,helvetica }");
+          doc.write("</style>");
+          doc.write("</head><body>");
+          doc.write("<h3>Properties of " + name + "</h3>");
+          doc.write("<div align=\"right\"><a href=\"javascript:window.close();\">Close</a></div>");
+          doc.write("<table class='properties'>");
+          doc.write("<tr><th>Name</th><th>Value</th></tr>");
+          for (prop in TestCases[name]) {
+            doc.write("<tr><th>" + prop + "</th><td>" + TestCases[name][prop] + "</td></tr>");
+          }
+          doc.write("</table>");
+          doc.write("</body></html>");
+          doc.close();
+          win.focus();
+        }
+      
+      </script>
+</head>
+<body>
+<h1>Unit Test Results.</h1>
+<table width="100%">
+<tr>
+<td align="left"></td><td align="right">Designed for use with <a href="http://www.junit.org/">JUnit</a> and <a href="http://ant.apache.org/">Ant</a>.</td>
+</tr>
+</table>
+<hr size="1">
+<h3>Class org.jdom2.test.cases.TestVerifierCharacters</h3>
+<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+<tr valign="top">
+<th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
+</tr>
+<tr valign="top" class="Pass">
+<td><a title="Display all tests" href="25_TestVerifierCharacters.html">TestVerifierCharacters</a></td><td><a title="Display all tests" href="25_TestVerifierCharacters.html">13</a></td><td>0</td><td>0</td><td>22.669</td><td>2011-10-03T03:37:51</td><td>lenny</td>
+</tr>
+</table>
+<h2>Tests</h2>
+<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+<tr valign="top">
+<th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsHighSurrogate"></a>testIsHighSurrogate</td><td>Success</td><td></td><td>0.026</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsLowSurrogate"></a>testIsLowSurrogate</td><td>Success</td><td></td><td>0.020</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLDigit"></a>testIsXMLDigit</td><td>Success</td><td></td><td>0.346</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLNameCharacter"></a>testIsXMLNameCharacter</td><td>Success</td><td></td><td>5.969</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLPublicIDCharacter"></a>testIsXMLPublicIDCharacter</td><td>Success</td><td></td><td>0.184</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLNameStartCharacter"></a>testIsXMLNameStartCharacter</td><td>Success</td><td></td><td>4.517</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsURICharacter"></a>testIsURICharacter</td><td>Success</td><td></td><td>0.265</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsHexDigit"></a>testIsHexDigit</td><td>Success</td><td></td><td>0.055</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLLetter"></a>testIsXMLLetter</td><td>Success</td><td></td><td>4.444</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLCombiningChar"></a>testIsXMLCombiningChar</td><td>Success</td><td></td><td>2.067</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLExtender"></a>testIsXMLExtender</td><td>Success</td><td></td><td>0.127</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLLetterOrDigit"></a>testIsXMLLetterOrDigit</td><td>Success</td><td></td><td>4.594</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testIsXMLWhitespace"></a>testIsXMLWhitespace</td><td>Success</td><td></td><td>0.039</td>
+</tr>
+</table>
+<div class="Properties">
+<a href="javascript:displayProperties('org.jdom2.test.cases.TestVerifierCharacters');">
+                    Properties &raquo;
+                </a>
+</div>
+<div class="Properties">
+<a href="./25_TestVerifierCharacters-out.html">
+                        System.out &raquo;
+                    </a>
+</div>
+</body>
+</html>
