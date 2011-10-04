@@ -470,4 +470,16 @@ public class ProcessingInstruction extends Content {
 		}
 		return pi;
 	}
+
+	@Override
+	public ProcessingInstruction detach() {
+		return (ProcessingInstruction)super.detach();
+	}
+
+	@Override
+	protected ProcessingInstruction setParent(Parent parent) {
+		return (ProcessingInstruction)super.setParent(parent);
+	}
+	
+	
 }

@@ -158,7 +158,7 @@ public final class TestDocType {
 		String systemID = "FILE://temp/test.dtd";
 		DocType theDocType = new DocType("anElement", publicID, systemID);
 		
-		DocType theDocType2 = (DocType)theDocType.clone();
+		DocType theDocType2 = theDocType.clone();
 		
 		//assuming toString works as advertised....
 		
@@ -315,4 +315,15 @@ public final class TestDocType {
     	dt.setSystemID("sys'id \" with quote");
     }
     
+    @Test
+	public void testCloneDetatchParentDocType() {
+		Document parent = new Document();
+		DocType content = new DocType("val");
+		parent.addContent(content);
+		DocType clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

@@ -123,6 +123,16 @@ public class Comment extends Content {
 	public Comment clone() {
 		return (Comment)super.clone();
 	}
+	
+	@Override
+	public Comment detach() {
+		return (Comment)super.detach();
+	}
+
+	@Override
+	protected Comment setParent(Parent parent) {
+		return (Comment)super.setParent(parent);
+	}
 
 	/**
 	 * This returns a <code>String</code> representation of the

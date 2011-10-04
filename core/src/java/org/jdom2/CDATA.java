@@ -101,7 +101,7 @@ public class CDATA extends Text {
 	 *         or the CDATA end delimiter <code>]]&gt;</code>.
 	 */
 	@Override
-	public Text setText(final String str) {
+	public CDATA setText(final String str) {
 		// Overrides Text.setText() because this needs to check that CDATA rules
 		// are enforced. We could have a separate Verifier check for CDATA
 		// beyond Text and call that alone before super.setText().
@@ -200,4 +200,20 @@ public class CDATA extends Text {
 		.append("]")
 		.toString();
 	}
+	
+	@Override
+	public CDATA clone() {
+		return (CDATA)super.clone();
+	}
+
+	@Override
+	public CDATA detach() {
+		return (CDATA)super.detach();
+	}
+
+	@Override
+	protected CDATA setParent(Parent parent) {
+		return (CDATA)super.setParent(parent);
+	}
+	
 }

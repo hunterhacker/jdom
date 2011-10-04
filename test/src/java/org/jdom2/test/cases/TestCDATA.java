@@ -54,6 +54,7 @@
 package org.jdom2.test.cases;
 
 import org.jdom2.CDATA;
+import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
 import org.junit.Test;
@@ -631,4 +632,16 @@ public final class TestCDATA {
         }
     
     }
+	
+    @Test
+    public void testCloneDetatchParentCDATA() {
+		Element parent = new Element("root");
+		CDATA content = new CDATA("val");
+		parent.addContent(content);
+		CDATA clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

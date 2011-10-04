@@ -670,7 +670,7 @@ public class Document implements Parent {
 	 * @return <code>Object</code> clone of this <code>Document</code>
 	 */
 	@Override
-	public Object clone() {
+	public Document clone() {
 		Document doc = null;
 
 		try {
@@ -700,7 +700,7 @@ public class Document implements Parent {
 				doc.content.add(pi);
 			}
 			else if (obj instanceof DocType) {
-				DocType dt = (DocType) ((DocType)obj).clone();
+				DocType dt = ((DocType)obj).clone();
 				doc.content.add(dt);
 			}
 		}
@@ -773,5 +773,45 @@ public class Document implements Parent {
 	public Object getProperty(String id) {
 		if (propertyMap == null) return null;
 		return propertyMap.get(id);
+	}
+	
+	@Override
+	public void canContainContent(Content child, int index, boolean replace) {
+		if (child instanceof Element) {
+			if (content.indexOfFirstElement() >= 0) {
+				throw new IllegalAddException(
+						"Cannot add a second root element, only one is allowed");
+			}
+			if (content.indexOfDocType() >= index) {
+				throw new IllegalAddException(
+						"A root element cannot be added before the DocType");
+			}
+		}
+		if (child instanceof DocType) {
+			if (content.indexOfDocType() >= 0) {
+				throw new IllegalAddException(
+						"Cannot add a second doctype, only one is allowed");
+			}
+			int firstElt = content.indexOfFirstElement();
+			if (firstElt != -1 && firstElt < index) {
+				throw new IllegalAddException(
+						"A DocType cannot be added after the root element");
+			}
+		}
+		if (child instanceof CDATA) {
+			throw new IllegalAddException("A CDATA is not allowed at the document root");
+		}
+
+		if (child instanceof Text) {
+			throw new IllegalAddException("A Text is not allowed at the document root");
+		}
+
+		if (child instanceof EntityRef) {
+			throw new IllegalAddException("An EntityRef is not allowed at the document root");
+		}
+		
+		if (child instanceof Attribute) {
+			throw new IllegalAddException("An Attribute is not allowed at the document root");
+		}
 	}
 }

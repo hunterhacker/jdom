@@ -424,7 +424,7 @@ public final class TestDocument {
 
 		Document doc = new Document(element);
 		doc.addContent(topComment);
-		Document docClone = (Document)doc.clone();
+		Document docClone = doc.clone();
 		element = null;
 		child3 = null;
 		child2 = null;
@@ -941,7 +941,7 @@ public final class TestDocument {
 		doc.addContent(pi);
 		doc.addContent(root);
 		
-		Document clone = (Document)doc.clone();
+		Document clone = doc.clone();
 		assertTrue(doc.equals(doc));
 		assertTrue(clone.equals(clone));
 		assertFalse(clone.equals(doc));

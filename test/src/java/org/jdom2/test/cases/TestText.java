@@ -1,10 +1,12 @@
 package org.jdom2.test.cases;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
 import org.junit.Test;
@@ -98,6 +100,17 @@ public class TestText {
 	public void testToString() {
 		Text txt = new Text("frodo baggins");
 		assertTrue(txt.toString() != null);
+	}
+
+    @Test
+	public void testCloneDetatchParentText() {
+		Element parent = new Element("root");
+		Text content = new Text("val");
+		parent.addContent(content);
+		Text clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
 	}
 
 }

@@ -82,6 +82,10 @@ public abstract class Content implements Cloneable, Serializable {
 	/**
 	 * Detaches this child from its parent or does nothing if the child
 	 * has no parent.
+	 * <p>
+	 * This method can be overridden by particular Content subclasses to return
+	 * a specific type of Content (co-variant return type). All overriding
+	 * subclasses <b>must</b> call <code>super.detach()</code>;
 	 *
 	 * @return this child detached
 	 */
@@ -96,6 +100,10 @@ public abstract class Content implements Cloneable, Serializable {
 	 * Return this child's parent, or null if this child is currently
 	 * not attached. The parent can be either an {@link Element}
 	 * or a {@link Document}.
+	 * <p>
+	 * This method can be overridden by particular Content subclasses to return
+	 * a specific type of Parent (co-variant return type). All overriding
+	 * subclasses <b>must</b> call <code>super.getParent()</code>;
 	 *
 	 * @return this child's parent or null if none
 	 */
@@ -112,7 +120,7 @@ public abstract class Content implements Cloneable, Serializable {
 	 *
 	 * @return the containing Element or null if unattached or a root element
 	 */
-	public Element getParentElement() {
+	final public Element getParentElement() {
 		Parent pnt = getParent();
 		return (Element) ((pnt instanceof Element) ? pnt : null);
 	}
@@ -120,6 +128,10 @@ public abstract class Content implements Cloneable, Serializable {
 	/**
 	 * Sets the parent of this Content. The caller is responsible for removing
 	 * any pre-existing parentage.
+	 * <p>
+	 * This method can be overridden by particular Content subclasses to return
+	 * a specific type of Content (co-variant return type). All overriding
+	 * subclasses <b>must</b> call <code>super.setParent(Parent)</code>;
 	 *
 	 * @param  parent              new parent element
 	 * @return                     the target element
@@ -152,7 +164,9 @@ public abstract class Content implements Cloneable, Serializable {
 	 * Returns a deep, unattached copy of this child and its descendants
 	 * detached from any parent or document.
 	 * <p>
-	 * Use co-variant return type to give back a Content. 
+	 * This method can be overridden by particular Content subclasses to return
+	 * a specific type of Content (co-variant return type). All overriding
+	 * subclasses <b>must</b> call <code>super.clone()</code>;
 	 *
 	 * @return a detached deep copy of this child and descendants
 	 */

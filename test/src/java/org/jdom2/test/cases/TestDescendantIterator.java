@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDescendantIterator {
@@ -55,6 +56,7 @@ public class TestDescendantIterator {
 	}
 
 	@Test
+	@Ignore // TODO
 	public void testRemoveOne() {
 		Iterator<Content> it = buildIterator();
 		assertTrue(it.hasNext());
@@ -67,18 +69,16 @@ public class TestDescendantIterator {
 		// make the descendant iterator empty.
 		it.remove();
 		
-		// TODO This should be implemented to check the remove, but remove() is
-		// broken. See https://github.com/hunterhacker/jdom/issues/24
 		
-//		assertFalse(it.hasNext());
-//		try {
-//			assertTrue(null != it.next().toString());
-//			fail("Should not be able to iterate off the end of the descendants.");
-//		} catch (NoSuchElementException nse) {
-//			// good
-//		} catch (Exception e) {
-//			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
-//		}
+		assertFalse(it.hasNext());
+		try {
+			assertTrue(null != it.next().toString());
+			fail("Should not be able to iterate off the end of the descendants.");
+		} catch (NoSuchElementException nse) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
+		}
 		
 	}
 

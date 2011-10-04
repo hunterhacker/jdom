@@ -265,4 +265,20 @@ public class Text extends Content {
 		return text;
 	}
 
+	@Override
+	public Text detach() {
+		return (Text)super.detach();
+	}
+
+	@Override
+	protected Text setParent(Parent parent) {
+		return (Text)super.setParent(parent);
+	}
+	
+	@Override
+	public Element getParent() {
+		// because DocType can only be attached to a Document.
+		return (Element)super.getParent();
+	}
+
 }

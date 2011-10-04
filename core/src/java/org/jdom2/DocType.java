@@ -273,4 +273,26 @@ public class DocType extends Content {
 		.append("]")
 		.toString();
 	}
+	
+	@Override
+	public DocType clone() {
+		return (DocType)super.clone();
+	}
+
+	@Override
+	public DocType detach() {
+		return (DocType)super.detach();
+	}
+
+	@Override
+	protected DocType setParent(Parent parent) {
+		return (DocType)super.setParent(parent);
+	}
+	
+	@Override
+	public Document getParent() {
+		// because DocType can only be attached to a Document.
+		return (Document)super.getParent();
+	}
+	
 }

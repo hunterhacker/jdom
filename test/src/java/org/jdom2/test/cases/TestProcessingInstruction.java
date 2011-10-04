@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.IllegalNameException;
 import org.jdom2.IllegalTargetException;
@@ -332,4 +333,16 @@ public class TestProcessingInstruction {
 		}
 		return sb.toString();
 	}
+
+    @Test
+	public void testCloneDetatchParentProcessingInstruction() {
+		Element parent = new Element("root");
+		ProcessingInstruction content = new ProcessingInstruction("val", "");
+		parent.addContent(content);
+		ProcessingInstruction clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

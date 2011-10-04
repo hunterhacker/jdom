@@ -62,6 +62,7 @@ package org.jdom2.test.cases;
  * @version 1.0
  */
 import org.jdom2.Comment;
+import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -242,4 +243,15 @@ public final class TestComment {
 		}
 	}
 	
+    @Test
+	public void testCloneDetatchParentComment() {
+		Element parent = new Element("root");
+		Comment content = new Comment("val");
+		parent.addContent(content);
+		Comment clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

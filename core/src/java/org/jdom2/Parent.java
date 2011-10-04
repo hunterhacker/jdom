@@ -232,5 +232,16 @@ public interface Parent extends Cloneable, Serializable {
 	 * @return this child's owning document or null if none
 	 */
 	Document getDocument();
+	
+	/**
+	 * Test whether this Parent instance can contain the specified content
+	 * at the specified position.
+	 * @param content The content to be checked
+	 * @param index The location where the content would be put.
+	 * @param replace true if the intention is to replace the content already at
+	 * 				the index.
+	 * @throws IllegalAddException if there is a problem with the content
+	 */
+	void canContainContent(Content content, int index, boolean replace) throws IllegalAddException;
 
 }

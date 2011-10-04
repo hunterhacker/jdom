@@ -285,7 +285,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	public Element getParent() {
 		return (Element)super.getParent();
 	}
-
+	
 	/**
 	 * This will retrieve the local name of the
 	 * <code>Attribute</code>. For any XML attribute
@@ -507,16 +507,22 @@ public class Attribute extends Content implements Serializable, Cloneable {
 		.toString();
 	}
 
-	/**
-	 * This will return a clone of this <code>Attribute</code>.
-	 *
-	 * @return <code>Object</code> - clone of this <code>Attribute</code>.
-	 */
 	@Override
 	public Attribute clone() {
 		return (Attribute) super.clone();
 	}
 
+	@Override
+	public Attribute detach() {
+		return (Attribute)super.detach();
+	}
+
+	@Override
+	protected Attribute setParent(Parent parent) {
+		return (Attribute)super.setParent(parent);
+	}
+
+	
 	/////////////////////////////////////////////////////////////////
 	// Convenience Methods below here
 	/////////////////////////////////////////////////////////////////

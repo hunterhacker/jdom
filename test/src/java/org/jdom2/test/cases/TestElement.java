@@ -2323,4 +2323,15 @@ public final class TestElement {
 		ocn.add(val);
 	}
 	
+    @Test
+	public void testCloneDetatchParentElement() {
+		Element parent = new Element("root");
+		Element content = new Element("val");
+		parent.addContent(content);
+		Element clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

@@ -55,6 +55,13 @@ package org.jdom2.test.cases;
  */
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.jdom2.Attribute;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
@@ -65,7 +72,6 @@ import org.jdom2.Namespace;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import static org.junit.Assert.*;
 
 /**
  * Test the expected behaviour of the Attribute class.
@@ -819,5 +825,16 @@ public final class TestAttribute {
         assertEquals(inf.getDoubleValue(), Double.POSITIVE_INFINITY, 0.0);
         assertEquals(neginf.getDoubleValue(), Double.NEGATIVE_INFINITY, 0.0);
     }
+
+    @Test
+	public void testCloneDetatchParentAttribute() {
+		Element parent = new Element("root");
+		Attribute content = new Attribute("att", "val");
+		parent.addContent(content);
+		Attribute clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
 
 }

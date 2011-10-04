@@ -232,4 +232,25 @@ public class EntityRef extends Content {
 		.append("]")
 		.toString();
 	}
+
+	@Override
+	public EntityRef detach() {
+		return (EntityRef)super.detach();
+	}
+
+	@Override
+	protected EntityRef setParent(Parent parent) {
+		return (EntityRef)super.setParent(parent);
+	}
+	
+	@Override
+	public Element getParent() {
+		// because DocType can only be attached to a Document.
+		return (Element)super.getParent();
+	}
+
+	@Override
+	public EntityRef clone() {
+		return (EntityRef)super.clone();
+	}
 }

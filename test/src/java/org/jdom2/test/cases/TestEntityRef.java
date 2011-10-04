@@ -1,7 +1,11 @@
 package org.jdom2.test.cases;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
 import org.jdom2.IllegalNameException;
@@ -137,6 +141,17 @@ public class TestEntityRef {
 		} catch (Exception e) {
 			fail("Expeced IllegalNameException, but got " + e.getClass().getName());
 		}
-}
+	}
+
+    @Test
+	public void testCloneDetatchParentEntityRef() {
+		Element parent = new Element("root");
+		EntityRef content = new EntityRef("val");
+		parent.addContent(content);
+		EntityRef clone = content.detach().clone();
+		assertEquals(content.getValue(), clone.getValue());
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
 
 }

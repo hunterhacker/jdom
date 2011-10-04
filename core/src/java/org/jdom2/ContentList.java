@@ -83,9 +83,9 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	/** Our backing list */
 	private Content elementData[];
 	private int size;
-
+	
 	/** Document or Element this list belongs to */
-	private Parent parent;
+	private final Parent parent;
 
 	/** Force either a Document or Element parent */
 	ContentList(Parent parent) {
@@ -106,51 +106,6 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	}
 
 	/**
-	 * @see org.jdom2.ContentList#add(int, org.jdom2.Content)
-	 */
-	private void documentCanContain(int index, Content child) throws IllegalAddException {
-		if (child instanceof Element) {
-			if (indexOfFirstElement() >= 0) {
-				throw new IllegalAddException(
-						"Cannot add a second root element, only one is allowed");
-			}
-			if (indexOfDocType() >= index) {
-				throw new IllegalAddException(
-						"A root element cannot be added before the DocType");
-			}
-		}
-		if (child instanceof DocType) {
-			if (indexOfDocType() >= 0) {
-				throw new IllegalAddException(
-						"Cannot add a second doctype, only one is allowed");
-			}
-			int firstElt = indexOfFirstElement();
-			if (firstElt != -1 && firstElt < index) {
-				throw new IllegalAddException(
-						"A DocType cannot be added after the root element");
-			}
-		}
-		if (child instanceof CDATA) {
-			throw new IllegalAddException("A CDATA is not allowed at the document root");
-		}
-
-		if (child instanceof Text) {
-			throw new IllegalAddException("A Text is not allowed at the document root");
-		}
-
-		if (child instanceof EntityRef) {
-			throw new IllegalAddException("An EntityRef is not allowed at the document root");
-		}
-	}
-
-	private static void elementCanContain(Content child) throws IllegalAddException {
-		if (child instanceof DocType) {
-			throw new IllegalAddException(
-					"A DocType is not allowed except at the document level");
-		}
-	}
-
-	/**
 	 * Check and add the <code>Content</code> to this list at
 	 * the given index.
 	 * Inserts the specified object at the specified position in this list.
@@ -165,16 +120,16 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		if (child == null) {
 			throw new NullPointerException("Cannot add null object");
 		}
-		if (parent instanceof Document) {
-			documentCanContain(index, child);
-		}
-		else {
-			elementCanContain(child);
+		
+		if (index<0 || index>size) {
+			throw new IndexOutOfBoundsException("Index: " + index +
+					" Size: " + size());
 		}
 
 		if (child.getParent() != null) {
+			// the content to be added already has a parent.
 			Parent p = child.getParent();
-			if (p instanceof Document) {
+			if (child instanceof Element && p instanceof Document) {
 				throw new IllegalAddException((Element)child,
 						"The Content already has an existing parent document");
 			}
@@ -188,16 +143,14 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 					"The Element cannot be added to itself");
 		}
 
+		// Check to see whether this parent believes it can contain this content
+		parent.canContainContent(child, index, false);
+
 		// Detect if we have <a><b><c/></b></a> and c.add(a)
 		if ((parent instanceof Element && child instanceof Element) &&
 				((Element) child).isAncestor((Element)parent)) {
 			throw new IllegalAddException(
 					"The Element cannot be added as a descendent of itself");
-		}
-
-		if (index<0 || index>size) {
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
 		}
 
 		child.setParent(parent);
@@ -214,7 +167,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	}
 
 	/**
-	 * Add the specified collecton to the end of this list.
+	 * Add the specified collection to the end of this list.
 	 *
 	 * @param collection The collection to add to the list.
 	 * @return <code>true</code> if the list was modified as a result of
@@ -226,7 +179,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	}
 
 	/**
-	 * Inserts the specified collecton at the specified position in this list.
+	 * Inserts the specified collection at the specified position in this list.
 	 * Shifts the object currently at that position (if any) and any
 	 * subsequent objects to the right (adds one to their indices).
 	 *
@@ -247,23 +200,40 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 			throw new NullPointerException(
 					"Can not add a null collection to the ContentList");
 		}
-		if (collection.size() == 0) {
+		
+		int toadd = collection.size();
+		
+		if (toadd == 0) {
 			return false;
 		}
-		ensureCapacity(size() + collection.size());
+		
+		ensureCapacity(size() + toadd);
 
+		if (toadd == 1) {
+			// fast short-cut for a single sized collection.
+			add(index, collection.iterator().next());
+			return true;
+		}
+		
 		int count = 0;
+		Content[] tmpc = new Content[toadd];
+		int tmpmod = modCount;
+		Content[] tmpdata = Arrays.copyOf(elementData, elementData.length);
 		try {
 			for (Content c : collection) {
 				add(index + count, c);
-				count++;
+				tmpc[count++] = c;
 			}
-		}
-		catch (RuntimeException exception) {
-			for (int i = 0; i < count; i++) {
-				remove(index);
+		} finally {
+			if (count < tmpc.length) {
+				// something failed... remove all added content
+				// Do this the 'hard' way, just force-null the content's parent
+				while (--count >= 0) {
+					tmpc[count].setParent(null);
+				}
+				System.arraycopy(tmpdata, 0, elementData, 0, tmpdata.length);
+				modCount = tmpmod;
 			}
-			throw exception;
 		}
 
 		return true;
