@@ -383,25 +383,83 @@ public final class TestXMLOutputter {
 		root.addContent(new CDATA(" "));
 		root.addContent(new Text(" xx "));
 		root.addContent(new Text("yy"));
-		root.addContent(new Text(""));
+		root.addContent(new Text("    "));
 		root.addContent(new Text("zz"));
 		root.addContent(new Text("  ww"));
 		root.addContent(new EntityRef("amp"));
 		root.addContent(new Text("vv"));
 		root.addContent(new Text("  "));
 		checkOutput(root,
-				"<root><![CDATA[ ]]> xx yyzz  ww&amp;vv  </root>", 
-				"<root>xx yyzz ww&amp;vv</root>",
-				"<root>xx yyzz ww&amp;vv</root>",
+				"<root><![CDATA[ ]]> xx yy    zz  ww&amp;vv  </root>", 
+				"<root>xx yy zz ww&amp;vv</root>",
+				"<root>xx yy    zz  ww&amp;vv</root>",
 				// This should be changed with issue #31.
 				// The real value should have one additional
 				// space at the beginning and two at the end
 				// for now we leave the broken test here because it
 				// helps with the coverage reports.
 				// the next test is added to be a failing test.
-				"<root> xx yyzz  ww&amp;vv</root>");
+				"<root><![CDATA[ ]]> xx yy    zz  ww&amp;vv  </root>");
 	}
-	
+
+	@Test
+	public void testOutputElementMultiAllWhite() {
+		Element root = new Element("root");
+		root.addContent(new CDATA(" "));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("    "));
+		root.addContent(new Text(""));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("  \n \n "));
+		root.addContent(new Text("  \t "));
+		root.addContent(new Text("  "));
+		checkOutput(root,
+				"<root><![CDATA[ ]]>        \r\n \r\n   \t   </root>", 
+				"<root />",
+				"<root />",
+				"<root />");
+	}
+
+	@Test
+	public void testOutputElementMultiEntityLeftRight() {
+		Element root = new Element("root");
+		root.addContent(new EntityRef("erl"));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("    "));
+		root.addContent(new EntityRef("err"));
+		checkOutput(root,
+				"<root>&erl;     &err;</root>", 
+				"<root>&erl; &err;</root>",
+				"<root>&erl;     &err;</root>",
+				"<root>&erl;     &err;</root>");
+	}
+
+	@Test
+	public void testOutputElementMultiTrimLeftRight() {
+		Element root = new Element("root");
+		root.addContent(new Text(" tl "));
+		root.addContent(new Text(" mid "));
+		root.addContent(new Text(" tr "));
+		checkOutput(root,
+				"<root> tl  mid  tr </root>", 
+				"<root>tl mid tr</root>",
+				"<root>tl  mid  tr</root>",
+				"<root> tl  mid  tr </root>");
+	}
+
+	@Test
+	public void testOutputElementMultiCDATALeftRight() {
+		Element root = new Element("root");
+		root.addContent(new CDATA(" tl "));
+		root.addContent(new Text(" mid "));
+		root.addContent(new CDATA(" tr "));
+		checkOutput(root,
+				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>", 
+				"<root><![CDATA[tl]]> mid <![CDATA[tr]]></root>",
+				"<root><![CDATA[tl]]>  mid  <![CDATA[tr]]></root>",
+				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>");
+	}
+
 	@Test
 	public void testTrimFullWhite() {
 		// See issue #31.

@@ -60,6 +60,7 @@ import java.util.*;
 import javax.xml.transform.Result;
 
 import org.jdom2.*;
+import org.jdom2.output.Format.TextMode;
 
 /**
  * Outputs a JDOM document as a stream of bytes. The outputter can manage many
@@ -461,7 +462,7 @@ public class XMLOutputter implements Cloneable {
 	 * @param out <code>Writer</code> to use.
 	 */
 	public void output(CDATA cdata, Writer out) throws IOException {
-		printCDATA(out, cdata);
+		printCDATA(out, cdata, currentFormat.mode);
 		out.flush();
 	}
 
@@ -473,7 +474,7 @@ public class XMLOutputter implements Cloneable {
 	 * @param out <code>Writer</code> to use.
 	 */
 	public void output(Text text, Writer out) throws IOException {
-		printText(out, text);
+		printText(out, text, currentFormat.mode);
 		out.flush();
 	}
 
@@ -831,14 +832,14 @@ public class XMLOutputter implements Cloneable {
 
 	/**
 	 * This will handle printing of <code>{@link CDATA}</code> text.
-	 *
-	 * @param cdata <code>CDATA</code> to output.
 	 * @param out <code>Writer</code> to use.
+	 * @param cdata <code>CDATA</code> to output.
+	 * @param mode The mechanism to use to format the text.
 	 */
-	protected void printCDATA(Writer out, CDATA cdata) throws IOException {
-		String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
+	protected void printCDATA(Writer out, CDATA cdata, TextMode mode) throws IOException {
+		String str = (mode == Format.TextMode.NORMALIZE)
 				? cdata.getTextNormalize()
-						: ((currentFormat.mode == Format.TextMode.TRIM) ?
+						: ((mode == Format.TextMode.TRIM) ?
 								cdata.getText().trim() : cdata.getText());
 				out.write("<![CDATA[");
 				out.write(str);
@@ -847,14 +848,14 @@ public class XMLOutputter implements Cloneable {
 
 	/**
 	 * This will handle printing of <code>{@link Text}</code> strings.
-	 *
-	 * @param text <code>Text</code> to write.
 	 * @param out <code>Writer</code> to use.
+	 * @param text <code>Text</code> to write.
+	 * @param mode The mechanism to use to format the text.
 	 */
-	protected void printText(Writer out, Text text) throws IOException {
-		String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
+	protected void printText(Writer out, Text text, TextMode mode) throws IOException {
+		String str = (mode == Format.TextMode.NORMALIZE)
 				? text.getTextNormalize()
-						: ((currentFormat.mode == Format.TextMode.TRIM) ?
+						: ((mode == Format.TextMode.TRIM) ?
 								text.getText().trim() : text.getText());
 				out.write(escapeElementEntities(str));
 	}
@@ -862,12 +863,13 @@ public class XMLOutputter implements Cloneable {
 	/**
 	 * This will handle printing a string.  Escapes the element entities,
 	 * trims interior whitespace, etc. if necessary.
+	 * @param mode TODO
 	 */
-	private void printString(Writer out, String str) throws IOException {
-		if (currentFormat.mode == Format.TextMode.NORMALIZE) {
+	private void printString(Writer out, String str, TextMode mode) throws IOException {
+		if (mode == Format.TextMode.NORMALIZE) {
 			str = Text.normalizeString(str);
 		}
-		else if (currentFormat.mode == Format.TextMode.TRIM) {
+		else if (mode == Format.TextMode.TRIM) {
 			str = str.trim();
 		}
 		out.write(escapeElementEntities(str));
@@ -938,22 +940,20 @@ public class XMLOutputter implements Cloneable {
 		}
 		else {
 			out.write(">");
-
-			// For a special case where the content is only CDATA
-			// or Text we don't want to indent after the start or
-			// before the end tag.
-
-			if (nextNonText(content, start) < size) {
-				// Case Mixed Content - normal indentation
+			
+			boolean donewlines = nextNonText(content, 0) < content.size();
+			
+			if (donewlines) {
 				newline(out);
-				printContentRange(out, content, start, size, level + 1);
+			}
+
+			printContentRange(out, content, 0, size, level + 1);
+			
+			if (donewlines) {
 				newline(out);
 				indent(out, level);
 			}
-			else {
-				// Case all CDATA or Text - no indentation
-				printTextRange(out, content, start, size);
-			}
+			
 			out.write("</");
 			printQualifiedName(out, element);
 			out.write(">");
@@ -977,134 +977,269 @@ public class XMLOutputter implements Cloneable {
 	 * @param namespaces <code>List</code> stack of Namespaces in scope.
 	 */
 	private void printContentRange(Writer out, List<? extends Content> content,
-			int start, int end, int level)
+			final int start, final int end, final int level)
 					throws IOException {
-		boolean firstNode; // Flag for 1st node in content
-		Object next;       // Node we're about to print
-		int first, index;  // Indexes into the list of content
+		Content c;         // Node we're about to print
+		
+		// Basic theory of operation is as follows:
+		//    1. print any non-Text content
+		//    2. Accumulate all sequential text content and print them together
+		// Do not do any newlines before or after content.
 
-		index = start;
+		boolean donewline = false;
+		int index = start;
+		int txti = -1;
 		while (index < end) {
-			firstNode = (index == start) ? true : false;
-			next = content.get(index);
+			c = content.get(index);
 
-			//
-			// Handle consecutive CDATA, Text, and EntityRef nodes all at once
-			//
-			if ((next instanceof Text) || (next instanceof EntityRef)) {
-				first = skipLeadingWhite(content, index);
-				// Set index to next node for loop
-				index = nextNonText(content, first);
-
-				// If it's not all whitespace - print it!
-				if (first < index) {
-					if (!firstNode)
-						newline(out);
-					indent(out, level);
-					printTextRange(out, content, first, index);
+			if ((c instanceof Text) || (c instanceof EntityRef)) {
+				//
+				// Handle consecutive CDATA, Text, and EntityRef nodes all at once
+				//
+				if (txti < 0) {
+					txti = index;
 				}
-				continue;
-			}
+			} else {
+				if (txti >= 0) {
+					// we have text content we need to print.
+					// we also know that we are 'mixed' content
+					// so the text content should be indented.
+					// Additionally
+					if (donewline) {
+						newline(out);
+					}
+					donewline = true;
+					indent(out,level);
+					printTextRange(out, content, txti, index, currentFormat.mode);
+					txti = -1;
+				}
 
-			//
-			// Handle other nodes
-			//
-			if (!firstNode) {
-				newline(out);
-			}
-
-			indent(out, level);
-
-			if (next instanceof Comment) {
-				printComment(out, (Comment)next);
-			}
-			else if (next instanceof Element) {
-				printElement(out, (Element)next, level);
-			}
-			else if (next instanceof ProcessingInstruction) {
-				printProcessingInstruction(out, (ProcessingInstruction)next);
-			}
-			else {
-				// XXX if we get here then we have a illegal content, for
-				//     now we'll just ignore it (probably should throw
-				//     a exception)
+				if (donewline) {
+					newline(out);
+				}
+				donewline = true;
+				indent(out, level);
+	
+				if (c instanceof Comment) {
+					printComment(out, (Comment)c);
+				}
+				else if (c instanceof Element) {
+					printElement(out, (Element)c, level);
+				}
+				else if (c instanceof ProcessingInstruction) {
+					printProcessingInstruction(out, (ProcessingInstruction)c);
+				}
+				else {
+					// XXX if we get here then we have a illegal content, for
+					//     now we'll just ignore it (probably should throw
+					//     a exception)
+				}
 			}
 
 			index++;
 		} /* while */
+		if (txti >= 0) {
+			if (donewline) {
+				newline(out);
+				indent(out,level);
+			}
+			printTextRange(out, content, txti, end, currentFormat.mode);
+		}
 	}
 
 	/**
 	 * This will handle printing of a sequence of <code>{@link CDATA}</code>
-	 * or <code>{@link Text}</code> nodes.  It is an error to have any other
-	 * pass this method any other type of node.
-	 *
+	 * <code>{@link Text}</code>, or <code>{@link EntityRef}</code> nodes. 
+	 * It is an error to pass this method any other type of node.
+	 * @param out <code>Writer</code> to use.
 	 * @param content <code>List</code> of content to output
 	 * @param start index of first content node (inclusive).
 	 * @param end index of last content node (exclusive).
-	 * @param out <code>Writer</code> to use.
+	 * @param mode The format to use for this text content.
 	 */
-	private void printTextRange(Writer out, List<? extends Content> content, int start, int end
-			) throws IOException {
-		String previous; // Previous text printed
-		Object node;     // Next node to print
-		String next;     // Next text to print
-
-		previous = null;
-
-		// Remove leading whitespace-only nodes
-		start = skipLeadingWhite(content, start);
-
-		int size = content.size();
-		if (start < size) {
-			// And remove trialing whitespace-only nodes
-			end = skipTrailingWhite(content, end);
-
+	private void printTextRange(Writer out, List<? extends Content> content, 
+			final int start, final int end, final TextMode mode) throws IOException {
+		
+		// here we have a sequence of Text nodes to print.
+		// we follow the TextMode rules for it.
+		
+		if (start >= end) {
+			// nothing to do.
+			return;
+		}
+		
+		// For when there's just one thing to print, or in RAW mode we just
+		// print the contents...
+		// ... its the simplest mode.
+		if (start + 1 == end || TextMode.PRESERVE == mode) {
 			for (int i = start; i < end; i++) {
-				node = content.get(i);
-
-				// Get the unmangled version of the text
-				// we are about to print
-				if (node instanceof Text) {
-					next = ((Text) node).getText();
-				}
-				else if (node instanceof EntityRef) {
-					next = "&" + ((EntityRef) node).getValue() + ";";
-				}
-				else {
-					throw new IllegalStateException("Should see only " +
-							"CDATA, Text, or EntityRef");
-				}
-
-				// This may save a little time
-				if (next == null || "".equals(next)) {
-					continue;
-				}
-
-				// Determine if we need to pad the output (padding is
-				// only need in trim or normalizing mode)
-				if (previous != null) { // Not 1st node
-					if (currentFormat.mode == Format.TextMode.NORMALIZE ||
-							currentFormat.mode == Format.TextMode.TRIM) {
-						if ((endsWithWhite(previous)) ||
-								(startsWithWhite(next))) {
-							out.write(" ");
-						}
-					}
-				}
+				Content node = content.get(i);
 
 				// Print the node
 				if (node instanceof CDATA) {
-					printCDATA(out, (CDATA) node);
+					printCDATA(out, (CDATA) node, mode);
 				}
 				else if (node instanceof EntityRef) {
 					printEntityRef(out, (EntityRef) node);
 				}
 				else {
-					printString(out, next);
+					printText(out, (Text) node, mode);
 				}
+			}
+			return;
+		}
+		
+		// Right, at this point it is complex.
+		// we have multiple nodes to output, and it could be in one of three
+		// modes, TRIM, TRIM_FULL_WHITE, or NORMALIZE
+		
+		// first, let's check for real text content.
+		boolean gottext = false;
+		for (int i = start; i < end; i++) {
+			if (!isAllWhitespace(content.get(i))) {
+				gottext = true;
+				break;
+			}
+		}
+		
+		
+		// Let's get TRIM_FULL_WHITE out of the way.
+		// in this mode, if there is any real text content, we print it all.
+		// otherwise we print nothing
+		if (TextMode.TRIM_FULL_WHITE == mode) {
+			// Right, if we find text, we print it all.
+			// If we don't we print nothing.
+			if (gottext) {
+				for (int i = start; i < end; i++) {
+					Content node = content.get(i);
 
-				previous = next;
+					// Print the node
+					if (node instanceof CDATA) {
+						printCDATA(out, (CDATA) node, TextMode.PRESERVE);
+					}
+					else if (node instanceof EntityRef) {
+						printEntityRef(out, (EntityRef) node);
+					}
+					else {
+						printText(out, (Text) node, TextMode.PRESERVE);
+					}
+				}
+			}
+			return;
+		}
+		
+		// OK, now we are left with just TRIM and NORMALIZE
+		// Normalize is now actually easier.
+		if (TextMode.NORMALIZE == mode) {
+			boolean dospace = false;
+			// we know there's at least 2 content nodes...
+			// we process the 'gaps' to see if we need spaces, and print
+			// all the content in NORMALIZED form.
+			boolean first = true;
+			for (int i = start; i < end; i++) {
+				boolean endspace = false;
+				Content c = content.get(i);
+				if (c instanceof Text) {
+					String val = ((Text)c).getValue();
+					if (val.length() == 0) {
+						// ignore empty text.
+						continue;
+					}
+					if (isAllWhitespace(c)) {
+						// we skip all whitespace.
+						// but record the space
+						if (!first) {
+							dospace = true;
+						}
+						continue;
+					}
+					if (!first && !dospace && 
+							Verifier.isXMLWhitespace(val.charAt(0))) {
+						// we are between content, and need to put in a space.
+						dospace = true;
+					}
+					endspace = Verifier.isXMLWhitespace(val.charAt(val.length() - 1));
+				}
+				first = false;
+				if (dospace) {
+					printString(out, " ", TextMode.PRESERVE);
+				}
+					
+				if (c instanceof CDATA) {
+					printCDATA(out, (CDATA)c, TextMode.NORMALIZE);
+				} else if (c instanceof Text) {
+					printText(out, (Text)c, TextMode.NORMALIZE);
+				} else {
+					printEntityRef(out, (EntityRef)c);
+				}
+				dospace = endspace;
+			}
+			return;
+		}
+		
+		// All that's left now is multi-content that needs to be trimmed.
+		// For this, we do a cheat.... 
+		// we trim the left and right content, and print any middle content
+		// as raw.
+		// we have to preserve the right-whitespace of the left content, and the
+		// left whitespace of the right content.
+		if (TextMode.TRIM == mode) {
+		
+			int left = start;
+			while (left < end && isAllWhitespace(content.get(left))) {
+				left ++;
+			}
+			int right = end - 1;
+			while (right > left && isAllWhitespace(content.get(right))) {
+				right--;
+			}
+			if (left == right) {
+				// came down to just one value to output.
+				printTextRange(out, content, left, right + 1, mode);
+				return;
+			}
+			Content leftc = content.get(left);
+			if (leftc instanceof EntityRef) {
+				printEntityRef(out, (EntityRef)leftc);
+			} else {
+				String val = ((Text)leftc).getText();
+				char[] chars = val.toCharArray();
+				int cx = chars.length;
+				while (cx > 0 && Verifier.isXMLWhitespace(chars[cx - 1])) {
+					cx--;
+				}
+				if (leftc instanceof CDATA) {
+					printCDATA(out, (CDATA)leftc, TextMode.TRIM);
+				} else {
+					printText(out, (Text)leftc, TextMode.TRIM);
+				}
+				if (cx < chars.length) {
+					printString(out, new String(chars, cx, chars.length - cx), TextMode.PRESERVE);
+				}
+			}
+			
+			// Right, we have dealt with the left.
+			// now deal with the middle.
+			printTextRange(out, content, left + 1, right, TextMode.PRESERVE);
+			
+			Content rightc = content.get(right);
+			if (rightc instanceof EntityRef) {
+				printEntityRef(out, (EntityRef)rightc);
+			} else {
+				String val = ((Text)rightc).getText();
+				char[] chars = val.toCharArray();
+				int cx = 0;
+				while (cx < chars.length && Verifier.isXMLWhitespace(chars[cx])) {
+					cx++;
+				}
+				if (cx > 0) {
+					printString(out, new String(chars, 0, cx), TextMode.PRESERVE);
+				}
+				if (rightc instanceof CDATA) {
+					printCDATA(out, (CDATA)rightc, TextMode.TRIM);
+				} else {
+					printText(out, (Text)rightc, TextMode.TRIM);
+				}
 			}
 		}
 	}
@@ -1232,29 +1367,6 @@ public class XMLOutputter implements Cloneable {
 		return index;
 	}
 
-	// Return the index + 1 of the last non-all-whitespace CDATA or
-	// Text node,  index < 0 is returned
-	// if content contains all whitespace.
-	// @param start index to begin search (exclusive)
-	private int skipTrailingWhite(List<? extends Content> content, int start) {
-		int size = content.size();
-		if (start > size) {
-			start = size;
-		}
-
-		int index = start;
-		if (currentFormat.mode == Format.TextMode.TRIM_FULL_WHITE
-				|| currentFormat.mode == Format.TextMode.NORMALIZE
-				|| currentFormat.mode == Format.TextMode.TRIM) {
-			while (index >= 0) {
-				if (!isAllWhitespace(content.get(index - 1)))
-					break;
-				--index;
-			}
-		}
-		return index;
-	}
-
 	// Return the next non-CDATA, non-Text, or non-EntityRef node,
 	// index = content.size() is returned if there is no more non-CDATA,
 	// non-Text, or non-EntiryRef nodes
@@ -1280,10 +1392,7 @@ public class XMLOutputter implements Cloneable {
 	private boolean isAllWhitespace(Object obj) {
 		String str = null;
 
-		if (obj instanceof String) {
-			str = (String) obj;
-		}
-		else if (obj instanceof Text) {
+		if (obj instanceof Text) {
 			str = ((Text) obj).getText();
 		}
 		else if (obj instanceof EntityRef) {
@@ -1298,26 +1407,6 @@ public class XMLOutputter implements Cloneable {
 				return false;
 		}
 		return true;
-	}
-
-	// Determine if a string starts with a XML whitespace.
-	private boolean startsWithWhite(String str) {
-		if ((str != null) &&
-				(str.length() > 0) &&
-				Verifier.isXMLWhitespace(str.charAt(0))) {
-			return true;
-		}
-		return false;
-	}
-
-	// Determine if a string ends with a XML whitespace.
-	private boolean endsWithWhite(String str) {
-		if ((str != null) &&
-				(str.length() > 0) &&
-				Verifier.isXMLWhitespace(str.charAt(str.length() - 1))) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
