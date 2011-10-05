@@ -74,8 +74,28 @@ public class TestContent {
 		Namespace pfx = Namespace.getNamespace("pfx", "nsuri");
 		Element emt = new Element("root", pfx);
 		
+		// just to mix it up, double-up the declaration.
+		// cover a condition in getNamespacesInScope();
+		emt.addNamespaceDeclaration(pfx);
+		
 		UnitTestUtil.testNamespaceIntro(emt, pfx);
 		UnitTestUtil.testNamespaceScope(emt, pfx, Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE);
+		
+	}
+	
+	@Test
+	public void testNamespacesScopeDeepElement() {
+		Namespace pfx = Namespace.getNamespace("pfx", "nsuri");
+		Namespace pfy = Namespace.getNamespace("pfy", "nsyyy");
+		Element emt = new Element("root", pfx);
+		Element kid = new Element("kid", pfy);
+		emt.addContent(kid);
+		
+		UnitTestUtil.testNamespaceIntro(emt, pfx);
+		UnitTestUtil.testNamespaceScope(emt, pfx, Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE);
+		
+		UnitTestUtil.testNamespaceIntro(kid, pfy);
+		UnitTestUtil.testNamespaceScope(kid, pfy, Namespace.NO_NAMESPACE, pfx, Namespace.XML_NAMESPACE);
 		
 	}
 	

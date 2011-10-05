@@ -1588,6 +1588,8 @@ public final class TestElement {
         assertNull(child.getNamespace("attns"));
         child.setAttribute("att", "value", Namespace.getNamespace("attns", "atturi"));
         assertEquals("atturi", child.getNamespace("attns").getURI());
+        child.setAttribute("att", "value", Namespace.getNamespace("attnt", "atturt"));
+        assertEquals("atturt", child.getNamespace("attnt").getURI());
 
         assertNull(element.getNamespace("attns"));
 }
@@ -2000,12 +2002,107 @@ public final class TestElement {
 	}
 	
 	@Test
+	public void testElementAddAttribute() {
+		try {
+			List<Content> list = (new Element("tag").getContent());
+			list.add(new Attribute("att", "value"));
+			fail ("Should not be able to add Attribute to an Element's ContentList");
+		} catch (IllegalAddException iae) {
+			// good!
+		} catch (Exception e) {
+			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
+		}
+	}
+	
+	@Test
 	public void testGetNamespace() {
 		Element emt = new Element("mine");
 		assertTrue(Namespace.NO_NAMESPACE == emt.getNamespace());
 		assertTrue(emt.getNamespace(null) == null);
 		assertTrue(emt.getNamespace("none") == null);
 		assertTrue(emt.getNamespace("xml") == Namespace.XML_NAMESPACE);
+	}
+	
+	@Test
+	public void testSetNamespaceAdditional() {
+		Namespace nsa = Namespace.getNamespace("pfx","URIA");
+		Namespace nsb = Namespace.getNamespace("pfx","URIB");
+		Namespace nsc = Namespace.getNamespace("pfx","URIC");
+
+		Element emt = new Element("emt", nsa);
+		try {
+			// cannot add a second namespace with the same prefix as the Element.
+			emt.addNamespaceDeclaration(nsb);
+			fail("Expected Namespace Collision Exception.");
+		} catch (IllegalAddException iae) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Expected IllegalAddException, but got " + e.getClass());
+		}
+
+		// and we can change the Element's Namespace to nsc
+		emt.setNamespace(nsc);
+		// and back again.
+		emt.setNamespace(nsa);
+		
+		// further we can add nsa as an additional namespace because it is the
+		// same as the Element's namespace.
+		assertTrue(emt.addNamespaceDeclaration(nsa));
+		
+		try {
+			// but, now we can't change the Element's Namespace.
+			emt.setNamespace(nsb);
+			fail("Expected Namespace Collision Exception.");
+		} catch (IllegalAddException iae) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Expected IllegalAddException, but got " + e.getClass());
+		}
+
+		// false because it's already added.
+		assertFalse(emt.addNamespaceDeclaration(nsa));
+	}
+	
+	@Test
+	public void testSetNamespaceAttribute() {
+		Namespace nsa = Namespace.getNamespace("pfx","URIA");
+		Namespace nsb = Namespace.getNamespace("pfx","URIB");
+		Namespace nsc = Namespace.getNamespace("pfx","URIC");
+
+		Element emt = new Element("emt", nsa);
+		try {
+			// cannot add a second namespace with the same prefix as the Element.
+			emt.setAttribute("att", "val", nsb);
+			fail("Expected Namespace Collision Exception.");
+		} catch (IllegalAddException iae) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Expected IllegalAddException, but got " + e.getClass());
+		}
+
+		// and we can change the Element's Namespace to nsc
+		emt.setNamespace(nsc);
+		// and back again.
+		emt.setNamespace(nsa);
+		
+		// further we can add nsa as an additional namespace because it is the
+		// same as the Element's namespace.
+		assertTrue(emt == emt.setAttribute("att", "value", nsa));
+		
+		try {
+			// but, now we can't change the Element's Namespace.
+			emt.setNamespace(nsb);
+			fail("Expected Namespace Collision Exception.");
+		} catch (IllegalAddException iae) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Expected IllegalAddException, but got " + e.getClass());
+		}
+
 	}
 	
 	@Test
@@ -2229,8 +2326,6 @@ public final class TestElement {
 		} catch (Exception e) {
 			fail("Expected NullPointerException, but got " + e.getClass().getName());
 		}
-		
-		
 	}
 	
 	@Test
@@ -2270,7 +2365,7 @@ public final class TestElement {
 		assertTrue("val".equals(emt.getAttributeValue("att", "def")));
 		assertTrue("nsval".equals(emt.getAttributeValue("att", myns, "def")));
 		assertTrue("def".equals(emt.getAttributeValue("att", Namespace.XML_NAMESPACE, "def")));
-		// TODO should this be true?
+
 		assertTrue(emt.getAdditionalNamespaces().isEmpty());
 		
 		Attribute att = emt.getAttribute("att");

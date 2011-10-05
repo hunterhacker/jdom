@@ -63,6 +63,85 @@ import org.jdom2.filter.*;
  * An XML element. Methods allow the user to get and manipulate its child
  * elements and content, directly access the element's textual content,
  * manipulate its attributes, and manage namespaces.
+ * 
+ * <h2>About Namespaces</h2>
+ * The 'default' Namespace is a source of confusion, but it is simply the
+ * Namespace which is in-scope for an Element and has no Namespace prefix (
+ * prefix is "" but it could have any Namespace URI). There will always be
+ * exactly one Namespace that is in-scope for an element that has no prefix.
+ * <p>
+ * All Elements are in a Namespace. Unless a Namespace is supplied as part of
+ * the Element Constructor, or later modified by the
+ * {@link #setNamespace(Namespace)} method then the Element will be in the 
+ * {@link Namespace#NO_NAMESPACE} Namespace.
+ * <p>
+ * In addition to the Element's Namespace, there could be other Namespaces that
+ * are 'in scope' for the Element. The set of Namespaces that are in scope for
+ * an Element are the union of five sets:
+ * <table>
+ *   <tr>
+ *     <th valign="top">XML</th>
+ *     <td>
+ *       There is always exactly one member of this set, the 
+ *       {@link Namespace#XML_NAMESPACE XML Namespace}.
+ *       <br>
+ *       This set cannot be changed.
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <th valign="top">Element</th>
+ *     <td>
+ *       There is always exactly one member of this set, and it can be retrieved or
+ *       set with the methods {@link #getNamespace()} and {@link #setNamespace(Namespace)}
+ *       respectively.
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <th valign="top">Attribute</th>
+ *     <td>
+ *       This is the set of distinct Namespaces that are used on Attributes. You
+ *       can modify the set by adding and removing Attributes to the Element.
+ *       <p>
+ *       <b>NOTE:</b>
+ *       The {@link Namespace#NO_NAMESPACE NO_NAMESPACE} Namespace is always the
+ *       <i>default</i> Namespace for attributes (the Namespace that has no
+ *       prefix). Thus there may be a special case with this Namespace, because
+ *       if there is a different <i>default</i> Namespace for the Element, then
+ *       the NO_NAMESPACE Namespace is not part of the Element's in-scope
+ *       Namespace set (the Element cannot have two Namespaces in scope with the
+ *       same prefix - "").
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <th valign="top">Additional</th>
+ *     <td>
+ *       This set is maintained by the two methods {@link #addNamespaceDeclaration(Namespace)}
+ *       and {@link #removeNamespaceDeclaration(Namespace)}. You can get the full set
+ *       of additional Namespaces with {@link #getAdditionalNamespaces()}
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <th valign="top">Inherited</th>
+ *     <td>
+ *       This last set is somewhat dynamic because only those Namespaces on the
+ *       parent Element which are not re-defined by this Element will be 
+ *       inherited. A Namespace is redefined by setting a new Namespace with the
+ *       same prefix, but a different URI. If you set a Namespace on the Element
+ *       (or add a Namespace declaration or set an Attribute) with the same
+ *       prefix as another Namespace that would have been otherwise inherited,
+ *       then that other Namespace will no longer be inherited.
+ *     </td>
+ *   </tr>
+ * </table>
+ *   
+ * <p>
+ * Since you cannot change the XML_NAMESPACE, and the 'inherited' Namespace set
+ * is dynamic, the remaining Namespace sets are the most interesting from a JDOM
+ * perspective. JDOM validates all modifications that affect the Namespaces in
+ * scope for an Element. An IllegalAddException will be thrown if you attempt to
+ * add a new Namespace to the in-scope set if a different Namespace with the 
+ * same prefix is already part of one of these three sets (Element, Attribute,
+ * or Additional).
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter
@@ -219,12 +298,25 @@ public class Element extends Content implements Parent {
 	 *
 	 * @param  namespace           the new namespace
 	 * @return                     the target element
+	 * @throws IllegalAddException if there is a Namespace conflict
 	 */
 	public Element setNamespace(Namespace namespace) {
 		if (namespace == null) {
 			namespace = Namespace.NO_NAMESPACE;
 		}
 
+		String reason = Verifier.checkNamespaceCollision(namespace, 
+				getAdditionalNamespaces());
+		if (reason != null) {
+			throw new IllegalAddException(this, namespace, reason);
+		}
+		for (Attribute a : getAttributes()) {
+			reason = Verifier.checkNamespaceCollision(namespace, a);
+			if (reason != null) {
+				throw new IllegalAddException(this, namespace, reason);
+			}
+		}
+		
 		this.namespace = namespace;
 		return this;
 	}
@@ -333,10 +425,21 @@ public class Element extends Content implements Parent {
 	 * declarations higher in the tree than they would have to be.
 	 *
 	 * @param  additionalNamespace namespace to add
+	 * @return true if the namespace is added (false if it was previously added)
 	 * @throws IllegalAddException if the namespace prefix collides with another
 	 *                             namespace prefix on the element
 	 */
-	public void addNamespaceDeclaration(final Namespace additionalNamespace) {
+	public boolean addNamespaceDeclaration(final Namespace additionalNamespace) {
+
+		if (additionalNamespaces == null) {
+			additionalNamespaces = new ArrayList<Namespace>(INITIAL_ARRAY_SIZE);
+		}
+		
+		for (Namespace ns : additionalNamespaces) {
+			if (ns == additionalNamespace) {
+				return false;
+			}
+		}
 
 		// Verify the new namespace prefix doesn't collide with another
 		// declared namespace, an attribute prefix, or this element's prefix
@@ -345,11 +448,7 @@ public class Element extends Content implements Parent {
 			throw new IllegalAddException(this, additionalNamespace, reason);
 		}
 
-		if (additionalNamespaces == null) {
-			additionalNamespaces = new ArrayList<Namespace>(INITIAL_ARRAY_SIZE);
-		}
-
-		additionalNamespaces.add(additionalNamespace);
+		return additionalNamespaces.add(additionalNamespace);
 	}
 
 	/**
