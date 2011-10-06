@@ -1,0 +1,1607 @@
+package org.jdom.test.cases.input;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import org.jdom.*;
+import org.jdom.filter.ContentFilter;
+import org.jdom.input.SAXHandler;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.ext.Attributes2;
+import org.xml.sax.helpers.LocatorImpl;
+
+public class TestSAXHandler extends TestCase {
+	
+	private static final class Attributes2JDOM implements Attributes2 {
+		
+		// support only one attribute
+		private String attName = "";
+		private String attQName = "";
+		private String attValue="";
+		private String attType="";
+		private String attURI = "";
+		boolean set = false;
+		
+		//"nsuri", "att", "pfx:att", "CDATA", "val"
+		public void addAttribute(String uri, String name, String qname, String type, String value) {
+			if (set) {
+				throw new IllegalStateException();
+			}
+			set = true;
+			attName = name;
+			attQName = qname;
+			attValue = value;
+			attType = type;
+			attURI = uri;
+		}
+
+		public int getIndex(String uri, String lname) {
+			if (set && attURI.equals(uri) && attName.equals(lname)) {
+				return 0;
+			}
+			return -1;
+		}
+
+		public int getIndex(String qname) {
+			if (set && attQName.equals(qname)) {
+				return 0;
+			}
+			return -1;
+		}
+
+		public int getLength() {
+			if (set) {
+				return 1;
+			}
+			return 0;
+		}
+
+		public String getLocalName(int index) {
+			if (set && index == 0) {
+				return attName;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public String getQName(int index) {
+			if (set && index == 0) {
+				return attQName;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public String getType(int index) {
+			if (set && index == 0) {
+				return attType;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public String getURI(int index) {
+			if (set && index == 0) {
+				return attURI;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public String getValue(int index) {
+			if (set && index == 0) {
+				return attValue;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public String getType(String url, String lname) {
+			return getType(getIndex(url, lname));
+		}
+
+		public String getType(String qname) {
+			return getType(getIndex(qname));
+		}
+
+		public String getValue(String url, String lname) {
+			return getValue(getIndex(url, lname));
+		}
+
+		public String getValue(String qname) {
+			return getValue(getIndex(qname));
+		}
+
+		public boolean isDeclared(int index) {
+			if (set && index == 0) {
+				return true;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public boolean isDeclared(String qname) {
+			return isDeclared(getIndex(qname));
+		}
+
+		public boolean isDeclared(String uri, String lname) {
+			return isDeclared(getIndex(uri, lname));
+		}
+
+		public boolean isSpecified(int index) {
+			if (set && index == 0) {
+				return false;
+			}
+			throw new NoSuchElementException();
+		}
+
+		public boolean isSpecified(String uri, String lname) {
+			return isSpecified(getIndex(uri, lname));
+		}
+
+		public boolean isSpecified(String qname) {
+			return isSpecified(getIndex(qname));
+		}
+		
+	}
+	
+    /**
+     * The suite method runs all the tests
+     */
+    public static Test suite () {
+        return new TestSuite(TestSAXHandler.class);
+    }
+
+    private class MyHandler extends SAXHandler {
+		private MyHandler () {
+			super();
+		}
+		public void pushElement(Element element) {
+			super.pushElement(element);
+		}
+	}
+
+	private static final Attributes EMPTYATTRIBUTES = new Attributes2JDOM();
+
+	private static final void assertMatches(String pattern, String value) {
+		assertTrue("Pattern for assertMatches is null", pattern != null);
+		assertTrue("Value for assertMatches is null", value != null);
+		if (!value.matches(pattern)) {
+			fail("Value '" + value + "' does not match pattern '" + pattern +".");
+		}
+	}
+	
+	private abstract class Builder {
+		public SAXHandler createHandler() {
+			return new SAXHandler();
+		}
+		
+		public abstract void build(SAXHandler handler) throws SAXException;
+	}
+
+	private static final Document checkHandlerDocument(Builder cd) {
+		try {
+			SAXHandler handler = cd.createHandler();
+			handler.startDocument();
+			cd.build(handler);
+			handler.endDocument();
+			return handler.getDocument();
+		} catch (SAXException se) {
+			se.printStackTrace();
+			fail("Failed TestSAXHandler with SAXException: " + se.getMessage());
+		}
+		return null;
+
+	}
+
+	private static final Element checkHandlerElement(Builder cd) {
+		try {
+			SAXHandler handler = cd.createHandler();
+			handler.startDocument();
+			handler.startElement("", "root", "root", EMPTYATTRIBUTES);
+			cd.build(handler);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+			return handler.getDocument().getRootElement();
+		} catch (SAXException se) {
+			se.printStackTrace();
+			fail("Failed TestSAXHandler with SAXException: " + se.getMessage());
+		}
+		return null;
+
+	}
+
+	private static final String checkHandlerDTDInternalSubset(Builder cd) {
+		try {
+			SAXHandler handler = cd.createHandler();
+			handler.startDocument();
+			handler.startDTD("root", "publicID", "systemID");
+			cd.build(handler);
+			handler.endDTD();
+			handler.endDocument();
+			return handler.getDocument().getDocType().getInternalSubset().trim(); //.replaceAll("(^\\s*<\\s*)|(\\s*>\\s*$)", "");
+		} catch (SAXException se) {
+			se.printStackTrace();
+			fail("Failed TestSAXHandler with SAXException: " + se.getMessage());
+		}
+		return null;
+
+	}
+
+
+	public void testDocument() {
+		Document doc = null;
+		
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				// do nothing.
+			}
+		});
+		assertTrue(doc.getDocType() == null);
+		assertFalse(doc.hasRootElement());
+
+		final JDOMFactory deffac = new DefaultJDOMFactory();
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				return new SAXHandler(deffac);
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				assertTrue(deffac == handler.getFactory());
+			}
+		});
+		assertTrue(doc.getDocType() == null);
+		assertFalse(doc.hasRootElement());
+
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startDTD("dtdname", "publicID", "systemID");
+				handler.endDTD();
+			}
+		});
+		assertFalse(doc.hasRootElement());
+		assertTrue(doc.getDocType() != null);
+		assertEquals("dtdname", doc.getDocType().getElementName());
+		
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startDTD("dtdname", "publicID", "systemID");
+				handler.endDTD();
+				handler.comment("comment".toCharArray(), 2, 2);
+			}
+		});
+		assertFalse(doc.hasRootElement());
+		assertTrue(doc.getDocType() != null);
+		assertEquals("dtdname", doc.getDocType().getElementName());
+		assertTrue(doc.getContent(1) instanceof Comment);
+		assertEquals("mm", ((Comment)doc.getContent(1)).getText());
+
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startDTD("dtdname", "publicID", "systemID");
+				handler.endDTD();
+				handler.comment("comment".toCharArray(), 2, 2);
+				handler.startElement("", "root", "", EMPTYATTRIBUTES);
+			}
+		});
+		assertTrue(doc.hasRootElement());
+		assertTrue(doc.getDocType() != null);
+		assertEquals("dtdname", doc.getDocType().getElementName());
+		assertTrue(doc.getContent(1) instanceof Comment);
+		assertEquals("mm", ((Comment)doc.getContent(1)).getText());
+		assertTrue(doc.getContent(2) instanceof Element);
+		assertEquals("root", ((Element)doc.getContent(2)).getName());
+
+		final LocatorImpl loc = new LocatorImpl();
+		loc.setSystemId("baseURL");
+		final SAXHandler handler = new SAXHandler();
+		handler.setDocumentLocator(loc);
+		doc = checkHandlerDocument(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				return handler;
+			}
+
+
+			public void build(SAXHandler phandler) throws SAXException {
+				phandler.startDTD("dtdname", "publicID", "systemID");
+				phandler.endDTD();
+				phandler.comment("comment".toCharArray(), 2, 2);
+				phandler.startElement("", "root", "", EMPTYATTRIBUTES);
+			}
+		});
+		assertTrue(doc.hasRootElement());
+		assertTrue(doc.getDocType() != null);
+		assertEquals("dtdname", doc.getDocType().getElementName());
+		assertTrue(doc.getContent(1) instanceof Comment);
+		assertEquals("mm", ((Comment)doc.getContent(1)).getText());
+		assertTrue(doc.getContent(2) instanceof Element);
+		assertEquals("root", ((Element)doc.getContent(2)).getName());
+		assertEquals("baseURL", doc.getBaseURI());
+		assertTrue(loc == handler.getDocumentLocator());
+		
+	}
+
+
+	public void testExpandEntities() {
+		SAXHandler handler = new SAXHandler();
+		assertTrue(handler.getExpandEntities());
+		handler.setExpandEntities(true);
+		assertTrue(handler.getExpandEntities());
+		handler.setExpandEntities(false);
+		assertFalse(handler.getExpandEntities());
+		handler.setExpandEntities(true);
+		assertTrue(handler.getExpandEntities());
+	}
+
+
+	public void testIgnoringElementContentWhitespace() {
+		SAXHandler handler = new SAXHandler();
+		assertFalse(handler.getIgnoringElementContentWhitespace());
+		handler.setIgnoringElementContentWhitespace(true);
+		assertTrue(handler.getIgnoringElementContentWhitespace());
+		handler.setIgnoringElementContentWhitespace(false);
+		assertFalse(handler.getIgnoringElementContentWhitespace());
+		handler.setIgnoringElementContentWhitespace(true);
+		assertTrue(handler.getIgnoringElementContentWhitespace());
+	}
+
+
+	public void testIgnoringBoundaryWhitespace() {
+		SAXHandler handler = new SAXHandler();
+		assertFalse(handler.getIgnoringBoundaryWhitespace());
+		handler.setIgnoringBoundaryWhitespace(true);
+		assertTrue(handler.getIgnoringBoundaryWhitespace());
+		handler.setIgnoringBoundaryWhitespace(false);
+		assertFalse(handler.getIgnoringBoundaryWhitespace());
+		handler.setIgnoringBoundaryWhitespace(true);
+		assertTrue(handler.getIgnoringBoundaryWhitespace());
+	}
+
+
+	/* **********************************
+	 * LexicalHandler method tests.
+	 * **********************************/
+
+
+	public void testDTD() {
+		Document doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startDTD("root", "publicID", "systemID");
+				// bunch of things for use during a DTD.
+				handler.elementDecl("root", "model");
+				handler.attributeDecl("root", "att", "UNKNOWN", "", "");
+				handler.externalEntityDecl("extent", "publicID", "systemID");
+				handler.comment("foo".toCharArray(), 0, 3);
+				handler.internalEntityDecl("intent", "value");
+				handler.endDTD();
+			}
+		});
+
+		assertEquals("root", doc.getDocType().getElementName());
+		assertEquals("publicID", doc.getDocType().getPublicID());
+		assertEquals("systemID", doc.getDocType().getSystemID());
+	}
+
+
+	public void testEntity() {
+		// with expandEntities set to true, we lose the entity during parsing
+		assertTrue(
+				checkHandlerElement(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(true);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("entity");
+						handler.endEntity("entity");
+					}
+				}).getContentSize() == 0);
+		
+		// with expandEntities set to false, we expect an entity
+		assertMatches(".*&entity;.*",
+				checkHandlerElement(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(false);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("entity");
+						handler.endEntity("entity");
+					}
+				}).getContent(0).toString());
+		
+		// with [dtd] we expect nothing
+		assertTrue(
+				checkHandlerElement(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(false);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("[dtd]");
+						handler.endEntity("[dtd]");
+					}
+				}).getContentSize() == 0);
+
+		// 5 standard entities should be ignored.
+		assertTrue(
+				checkHandlerElement(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(false);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("amp");
+						handler.endEntity("amp");
+
+						handler.startEntity("apos");
+						handler.endEntity("apos");
+
+						handler.startEntity("quot");
+						handler.endEntity("quot");
+
+						handler.startEntity("gt");
+						handler.endEntity("gt");
+
+						handler.startEntity("lt");
+						handler.endEntity("lt");
+					}
+				}).getContentSize() == 0);
+		
+		// with expandEntities set to false, we expect an entity
+		EntityRef ent = (EntityRef)checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler handler = new SAXHandler();
+				handler.setExpandEntities(false);
+				return handler;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.externalEntityDecl("entity", "publicID", "systemID");
+				handler.startEntity("entity");
+				handler.endEntity("entity");
+			}
+		}).getContent(0);
+		assertEquals("entity", ent.getName());
+		assertEquals("publicID", ent.getPublicID());
+		assertEquals("systemID", ent.getSystemID());
+		
+		// when processing an entity, we should ignore all other event types.
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler handler = new SAXHandler();
+				handler.setExpandEntities(false);
+				return handler;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startEntity("entity");
+				handler.startPrefixMapping("prefix", "uri");
+				handler.startElement("", "ignore", "", new Attributes2JDOM());
+				handler.endElement("", "ignore", "");
+				handler.endPrefixMapping("prefix");
+				handler.processingInstruction("target", "data");
+				handler.comment("ignore".toCharArray(), 0, 6);
+				handler.characters("ignore".toCharArray(), 0, 6);
+				handler.characters("ignore".toCharArray(), 0, 0);
+				handler.ignorableWhitespace("  ".toCharArray(), 0, 2);
+				handler.startCDATA();
+				handler.characters("ignore".toCharArray(), 0, 6);
+				handler.endCDATA();
+				handler.endEntity("entity");
+			}
+		});
+		// everything should have been ignored because of the startEntity()
+		// which just leaves the actual entity itself.
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof EntityRef);
+		EntityRef ent2 = (EntityRef)emt.getContent(0);
+		assertEquals("entity", ent2.getName());
+
+		// when processing an entity, we should ignore all other event types.
+		Element emt2 = checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler handler = new SAXHandler();
+				handler.setExpandEntities(false);
+				return handler;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startEntity("entity");
+				// nested should be ignored.
+				handler.startEntity("nested");
+				handler.endEntity("nested");
+				handler.endEntity("entity");
+			}
+		});
+		// everything should have been ignored because of the startEntity()
+		// which just leaves the actual entity itself.
+		assertTrue(emt2.getContentSize() == 1);
+		assertTrue(emt2.getContent(0) instanceof EntityRef);
+		EntityRef ent3 = (EntityRef)emt2.getContent(0);
+		assertEquals("entity", ent3.getName());
+
+		// when outside the roo element should be ignored...
+		Document doc = checkHandlerDocument(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler handler = new SAXHandler();
+				handler.setExpandEntities(false);
+				return handler;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startEntity("entity");
+				handler.endEntity("entity");
+			}
+		});
+		// everything should have been ignored because of the startEntity()
+		// which just leaves the actual entity itself.
+		assertTrue(doc.getContentSize() == 0);
+
+	}
+
+
+	public void testCDATA() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.comment("foo".toCharArray(), 0, 3);
+				handler.characters("   ".toCharArray(), 0, 2);
+				handler.startCDATA();
+				handler.characters("  foobar  ".toCharArray(), 0, 10);
+				handler.endCDATA();
+				handler.characters("  ".toCharArray(), 0, 2);
+			}
+		});
+
+		assertEquals("foobar", emt.getTextTrim());
+		assertEquals("  foobar  ", ((CDATA)emt.getContent(new ContentFilter(ContentFilter.CDATA)).get(0)).getText());
+
+	}
+
+
+	public void testComment() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.comment("foo".toCharArray(), 0, 3);
+				handler.characters("   ".toCharArray(), 0, 2);
+				handler.startCDATA();
+				handler.characters("  foobar  ".toCharArray(), 0, 10);
+				handler.endCDATA();
+				handler.characters("  ".toCharArray(), 0, 2);
+				handler.comment("bar".toCharArray(), 0, 3);
+			}
+		});
+
+		int cnt = 0;
+		for (Iterator it = 
+				emt.getContent(new ContentFilter(ContentFilter.COMMENT)).iterator(); 
+				it.hasNext(); ) {
+			Object o = it.next();
+			assertTrue(o instanceof Comment);
+			switch (cnt++) {
+			case 0 :
+				assertEquals("foo", ((Comment)o).getText());
+				break;
+			case 1 :
+				assertEquals("bar", ((Comment)o).getText());
+				break;
+			default :
+				fail("Expecting only two comments");
+			
+			}
+		}
+		
+		assertMatches("\\s*<!--\\s*comment\\s*-->\\s*", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(false);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("[dtd]");
+						handler.unparsedEntityDecl("name", null, "systemID", "notationName");
+						handler.endEntity("[dtd]");
+						handler.comment("comment".toCharArray(), 0, 7);
+					}
+				}));
+
+	}
+
+
+
+	/* **********************************
+	 * DeclHandler method tests These should
+	 * all be run between LexicalHandler's
+	 * startDTD and endDTD events.
+	 * **********************************/
+
+
+	public void testAttributeDecl() {
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "", "", "");
+					}
+				}));
+
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s+default\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "", "default", "value");
+					}
+				}));
+
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s+\"value\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "", null, "value");
+					}
+				}));
+
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s+type\\s+default\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "type", "default", "value");
+					}
+				}));
+
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s+type\\s+\"value\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "type", null, "value");
+					}
+				}));
+
+		assertMatches("<!ATTLIST\\s+root\\s+att\\s+type\\s+#FIXED\\s+\"value\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.attributeDecl("root", "att", "type", "#FIXED", "value");
+					}
+				}));
+
+	}
+
+
+	public void testElementDecl() {
+		assertMatches("<!ELEMENT\\s+root\\s+model\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.elementDecl("root", "model");
+					}
+				}));
+	}
+
+
+	public void testInternalEntityDecl() {
+		assertMatches("<!ENTITY\\s+name\\s+\"value\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.internalEntityDecl("name", "value");
+					}
+				}));
+		
+		//Parameter Entity Declaration
+		assertMatches("<!ENTITY\\s+%\\s+name\\s+\"value\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.internalEntityDecl("%name", "value");
+					}
+				}));
+	}
+
+
+	public void testExternalEntityDecl() {
+		assertMatches("<!ENTITY\\s+name\\s+PUBLIC\\s+\"publicID\"\\s+\"systemID\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.externalEntityDecl("name", "publicID", "systemID");
+					}
+				}));
+
+		assertMatches("<!ENTITY\\s+name\\s+SYSTEM\\s+\"systemID\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.externalEntityDecl("name", null, "systemID");
+					}
+				}));
+
+	}
+
+
+	public void testUnparsedEntityDecl() {
+		assertMatches("<!ENTITY\\s+name\\s+PUBLIC\\s+\"publicID\"\\s+\"systemID\"\\s+NDATA\\s+notationName\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.unparsedEntityDecl("name", "publicID", "systemID", "notationName");
+					}
+				}));
+		
+		assertMatches("<!ENTITY\\s+name\\s+SYSTEM\\s+\"systemID\"\\s+NDATA\\s+notationName\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.unparsedEntityDecl("name", null, "systemID", "notationName");
+					}
+				}));
+		assertMatches("\\s*", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public SAXHandler createHandler() {
+						SAXHandler handler = new SAXHandler();
+						handler.setExpandEntities(false);
+						return handler;
+					}
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.startEntity("[dtd]");
+						handler.unparsedEntityDecl("name", null, "systemID", "notationName");
+						handler.endEntity("[dtd]");
+					}
+				}));
+	}
+
+
+	public void testNotationDecl() {
+		assertMatches("<!NOTATION\\s+name\\s+PUBLIC\\s+\"publicID\"\\s+\"systemID\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.notationDecl("name", "publicID", "systemID");
+					}
+				}));
+
+		assertMatches("<!NOTATION\\s+name\\s+SYSTEM\\s+\"systemID\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.notationDecl("name", null, "systemID");
+					}
+				}));
+		
+		assertMatches("<!NOTATION\\s+name\\s+PUBLIC\\s+\"publicID\"\\s*>", 
+				checkHandlerDTDInternalSubset(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.notationDecl("name", "publicID", null);
+					}
+				}));
+		
+		Document doc = checkHandlerDocument(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler handler = new SAXHandler();
+				handler.setExpandEntities(false);
+				return handler;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startDTD("name", "publicID", "systemID");
+				handler.startEntity("[dtd]");
+				handler.notationDecl("exdtd", "publicIDA", "systemIDA");
+				handler.endEntity("[dtd]");
+				handler.notationDecl("indtd", "publicIDB", "systemIDB");
+				handler.endDTD();
+			}
+		});
+		
+		DocType dt = doc.getDocType();
+		assertTrue(dt != null);
+		assertMatches("<!NOTATION\\s+indtd\\s+PUBLIC\\s+\"publicIDB\"\\s+\"systemIDB\"\\s*>", 
+				dt.getInternalSubset().trim());
+	}
+
+	/* **********************************
+	 * ContentHandler method tests.
+	 * **********************************/
+
+
+	public void testProcessingInstruction() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+					public void build(SAXHandler handler) throws SAXException {
+						handler.processingInstruction("target", "data");
+					}
+				});
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof ProcessingInstruction);
+		ProcessingInstruction pi = (ProcessingInstruction)emt.getContent(0);
+		assertEquals("target", pi.getTarget());
+		assertEquals("data", pi.getData());
+		
+		Document doc = checkHandlerDocument(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.processingInstruction("target", "data");
+			}
+		});
+		assertTrue(doc.getContentSize() == 1);
+		assertTrue(doc.getContent(0) instanceof ProcessingInstruction);
+		pi = (ProcessingInstruction)emt.getContent(0);
+		assertEquals("target", pi.getTarget());
+		assertEquals("data", pi.getData());
+		
+	}
+
+
+	public void testSkippedEntityString() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				// this one should be ignored.
+				handler.skippedEntity("%ignore");
+				// this one should be added.
+				handler.skippedEntity("entity");
+			}
+		});
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof EntityRef);
+		EntityRef er = (EntityRef)emt.getContent(0);
+		assertEquals("entity", er.getName());
+	}
+
+
+	public void testElementSimple() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", new Attributes2JDOM());
+				handler.endElement("", "child", "");
+			}
+		});
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+	}
+
+
+	public void testElementNullURI() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement(null, "child", "", new Attributes2JDOM());
+				handler.endElement(null, "child", "");
+			}
+		});
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+	}
+
+
+	public void testElementBadEndElement() {
+		try {
+			SAXHandler handler = new SAXHandler();
+			handler.startDocument();
+			handler.startElement("", "root", "root", EMPTYATTRIBUTES);
+			handler.endElement("", "root", "root");
+			handler.endElement("", "bad", "bad");
+			handler.endDocument();
+			fail("Should not have been able to create Element ");
+		} catch (SAXException se) {
+			// good
+		} catch (Exception e) {
+			fail("Expecting SAXEsception, but got " + e.getClass().getName());
+		}
+	}
+
+
+	public void testElementAttributesSimple() {
+		// simple attribute.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertEquals("val", child.getAttributeValue("att"));
+		assertEquals(Attribute.CDATA_TYPE, child.getAttribute("att").getAttributeType());
+	}
+
+
+	public void testElementAttributesNameXMLNS() {
+		// invalid xmlns attibute.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "xmlns", "xmlns", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().isEmpty());
+	}
+
+
+	public void testElementAttributesPrefixXMLNS() {
+		// invalid xmlns attibute.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "ns", "xmlns:ns", "CDATA", "uri");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 0);
+	}
+
+
+	public void testElementAttributesNoLocalName() {
+		// no-localname, but has qname.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertEquals("val", child.getAttributeValue("att"));
+	}
+
+
+	public void testElementAttributesSimpleInNamespace() {
+		// normal att-in-namespace.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "pfx:att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("pfx", "nsuri");
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+				handler.endPrefixMapping("pfx");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Namespace ns = Namespace.getNamespace("pfx", "nsuri");
+		assertTrue(child.getAttribute("att", ns) != null);
+		assertEquals("val", child.getAttributeValue("att", ns));
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceMustGeneratePrefix() {
+		// weird att-in-namespace - no prefix.
+		// namespace of parent element matches, but no prefix.
+		// should invent a prefix (attns0)
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("nsuri", "child", "child", atts);
+				handler.endElement("nsuri", "child", "child");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("nsuri", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Attribute a = child.getAttribute("att", child.getNamespace());
+		assertEquals("attns0", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceMustGenerateAlternatePrefix() {
+		// weird att-in-namespace - no prefix.
+		// namespace of parent element matches, but no prefix.
+		// also, attns0 is used by some other namespace.
+		// should invent a prefix (attns1)
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("attns0", "otheruri");
+				handler.startElement("nsuri", "child", "child", atts);
+				handler.endElement("nsuri", "child", "child");
+				handler.endPrefixMapping("atns0");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("nsuri", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Attribute a = child.getAttribute("att", child.getNamespace());
+		assertEquals("attns1", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceMustUseParentLevelPrefix() {
+		// weird att-in-namespace - no prefix.
+		// but there is a prefix declared for it at the parent level.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("pfx", "nsuri");
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+				handler.endPrefixMapping("pfx");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Namespace nsd = Namespace.getNamespace("differentprefix", "nsuri");
+		Attribute a = child.getAttribute("att", nsd);
+		assertEquals("pfx", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceMustUseActualParentPrefix() {
+		// weird att-in-namespace - no prefix.
+		// namespace of parent element matches, it has prefix.
+		// should use parent prefix (pfx)
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("attns0", "otheruri");
+				handler.startElement("nsuri", "child", "pfx:child", atts);
+				handler.endElement("nsuri", "child", "pfx:child");
+				handler.endPrefixMapping("atns0");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("pfx", child.getNamespacePrefix());
+		assertEquals("nsuri", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Attribute a = child.getAttribute("att", child.getNamespace());
+		assertEquals("pfx", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceParentPrefixOverrides() {
+		// weird att-in-namespace - no prefix.
+		// also, a matching prefix was overridden.
+		// should generate one (attns0).
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("pfx", "nsuri");
+				handler.startElement("nsuri", "middle", "pfx:middle", new Attributes2JDOM());
+				// re-define the namespace prefix with a different uri
+				handler.startElement("childuri", "child", "pfx:child", atts);
+				handler.endElement("childuri", "child", "pfx:child");
+				handler.endElement("", "middle", "pfx:middle");
+				handler.endPrefixMapping("pfx");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element middle = (Element)emt.getContent(0);
+		assertEquals("middle", middle.getName());
+		assertEquals("pfx", middle.getNamespacePrefix());
+		assertEquals("nsuri", middle.getNamespaceURI());
+		
+		Element child = middle.getChild("child", Namespace.getNamespace("childuri"));
+		assertEquals("child", child.getName());
+		assertEquals("pfx", child.getNamespacePrefix());
+		assertEquals("childuri", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Attribute a = child.getAttribute("att", middle.getNamespace());
+		assertEquals("attns0", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesNoPrefixNamespaceParentPrefixLevelOverrides() {
+		// weird att-in-namespace - no prefix.
+		// also, a matching prefix at the parent level was overridden.
+		// should generate one (attns0).
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("pfx", "nsuri");
+				handler.startElement("nsuri", "middle", "pfx:middle", new Attributes2JDOM());
+				// re-define the namespace prefix with a different uri
+				handler.startPrefixMapping("pfx", "ignoreuri");
+				handler.startElement("childuri", "child", "kid:child", atts);
+				handler.endElement("childuri", "child", "kid:child");
+				handler.endPrefixMapping("pfx");
+				handler.endElement("", "middle", "pfx:middle");
+				handler.endPrefixMapping("pfx");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element middle = (Element)emt.getContent(0);
+		assertEquals("middle", middle.getName());
+		assertEquals("pfx", middle.getNamespacePrefix());
+		assertEquals("nsuri", middle.getNamespaceURI());
+		
+		Element child = middle.getChild("child", Namespace.getNamespace("childuri"));
+		assertEquals("child", child.getName());
+		assertEquals("kid", child.getNamespacePrefix());
+		assertEquals("childuri", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertTrue(child.getAttribute("att") == null);
+		Attribute a = child.getAttribute("att", middle.getNamespace());
+		assertEquals("attns0", a.getNamespacePrefix());
+		assertEquals("nsuri", a.getNamespaceURI());
+		assertEquals("val", a.getValue());
+	}
+
+
+	public void testElementAttributesTypeIsEnumeration() {
+		// simple attribute.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "att", "att", "(val1,val2)", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		assertEquals("val", child.getAttributeValue("att"));
+	}
+
+
+	public void testElementAttributesTypeIsUnknown() {
+		// simple attribute.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "att", "att", "poppygook", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		Attribute att = child.getAttribute("att");
+		assertEquals("val", att.getValue());
+		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+	}
+
+
+	public void testElementAttributesTypeIsNull() {
+		// null attribute type.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "att", "att", null, "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		Attribute att = child.getAttribute("att");
+		assertEquals("val", att.getValue());
+		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+	}
+
+
+	public void testElementAttributesTypeIsEmptyString() {
+		// "" attribute type.
+		final Attributes2JDOM atts = new Attributes2JDOM();
+		atts.addAttribute("", "att", "att", "", "val");
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startElement("", "child", "", atts);
+				handler.endElement("", "child", "");
+			}
+		});
+		
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("", child.getNamespacePrefix());
+		assertEquals("", child.getNamespaceURI());
+		assertTrue(child.getAttributes().size() == 1);
+		Attribute att = child.getAttribute("att");
+		assertEquals("val", att.getValue());
+		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+	}
+
+
+	public void testPrefixMapping() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.startPrefixMapping("prefix", "uri");
+				handler.startElement("uri", "child", "prefix:uri", new Attributes2JDOM());
+				handler.endElement("uri", "child", "prefix:uri");
+				handler.endPrefixMapping("prefix");
+			}
+		});
+		assertTrue(emt.getContentSize() == 1);
+		assertTrue(emt.getContent(0) instanceof Element);
+		Element child = (Element)emt.getContent(0);
+		assertEquals("child", child.getName());
+		assertEquals("prefix", child.getNamespacePrefix());
+		assertEquals("uri", child.getNamespaceURI());
+	}
+
+
+	public void testCharacters() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.comment("foo".toCharArray(), 0, 3);
+				handler.characters("   ".toCharArray(), 0, 2);
+				// 0-length should be ignored.
+				handler.characters("xxxx".toCharArray(), 0, 0);
+				handler.characters("  foobar  ".toCharArray(), 0, 10);
+				handler.characters("  ".toCharArray(), 0, 2);
+			}
+		});
+
+		assertEquals("    foobar    ", emt.getText());
+		assertEquals("foobar", emt.getTextTrim());
+	}
+
+
+	public void testIgnorableWhitespaceTrue() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler ret = new SAXHandler();
+				ret.setIgnoringElementContentWhitespace(true);
+				return ret;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.comment("foo".toCharArray(), 0, 3);
+				// 3 chars, length 2 though.
+				handler.ignorableWhitespace("   ".toCharArray(), 0, 2);
+				handler.characters("  foobar  ".toCharArray(), 0, 10);
+				// 0 length
+				handler.ignorableWhitespace("  ".toCharArray(), 0, 0);
+				handler.ignorableWhitespace("  ".toCharArray(), 0, 2);
+			}
+		});
+
+		assertEquals("  foobar  ", emt.getText());
+		assertEquals("foobar", emt.getTextTrim());
+	}
+
+
+	public void testIgnorableBoundaryWhitespaceTrue() {
+		assertEquals("", checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler ret = new SAXHandler();
+				ret.setIgnoringBoundaryWhitespace(true);
+				return ret;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.characters("  \n\n  ".toCharArray(), 0, 6);
+			}
+		}).getText());
+
+		assertEquals(" \nx\n ", checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler ret = new SAXHandler();
+				ret.setIgnoringBoundaryWhitespace(true);
+				return ret;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.characters(" \nx\n ".toCharArray(), 0, 5);
+			}
+		}).getText());
+
+	}
+
+
+	public void testIgnorableWhitespaceFalse() {
+		Element emt = checkHandlerElement(new Builder() {
+
+
+			public SAXHandler createHandler() {
+				SAXHandler ret = new SAXHandler();
+				ret.setIgnoringElementContentWhitespace(false);
+				return ret;
+			}
+
+
+			public void build(SAXHandler handler) throws SAXException {
+				handler.comment("foo".toCharArray(), 0, 3);
+				handler.ignorableWhitespace("   ".toCharArray(), 0, 2);
+				handler.characters("  foobar  ".toCharArray(), 0, 10);
+				handler.ignorableWhitespace("  ".toCharArray(), 0, 2);
+			}
+		});
+
+		assertEquals("    foobar    ", emt.getText());
+		assertEquals("foobar", emt.getTextTrim());
+	}
+
+
+	public void testPushElement() {
+		try {
+			MyHandler handler = new MyHandler();
+			handler.startDocument();
+			handler.pushElement(new Element("root"));
+			handler.endDocument();
+			Document doc = handler.getDocument();
+			assertTrue(doc.hasRootElement());
+			assertEquals("root", doc.getRootElement().getName());
+		} catch (SAXException se) {
+			se.printStackTrace();
+			fail ("Failed to load MyHandler: " + se.getMessage());
+		}
+		try {
+			MyHandler handler = new MyHandler();
+			handler.startDocument();
+			handler.startElement("", "root", "root", new Attributes2JDOM());
+			handler.pushElement(new Element("child"));
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+			Document doc = handler.getDocument();
+			assertTrue(doc.hasRootElement());
+			assertEquals("root", doc.getRootElement().getName());
+			assertTrue(doc.getRootElement().getChild("child") != null);
+		} catch (SAXException se) {
+			se.printStackTrace();
+			fail ("Failed to load MyHandler: " + se.getMessage());
+		}
+	}
+
+
+	public void testIllegalGetCurrentElement() {
+		SAXHandler handler = new SAXHandler();
+		handler.startDocument();
+		try {
+			handler.getCurrentElement();
+			fail ("Should not be able to append bad element strcuture.");
+		} catch (SAXException se) {
+			// good/.
+		} catch (Exception e) {
+			fail("Expected to get SAXException but instead got " + e.getClass().getName() + "'.");
+		}
+		
+	}
+
+
+	public void testAndroidParserIssue2() throws SAXException {
+		SAXHandler handler = new SAXHandler();
+		handler.startDocument();
+		Attributes2JDOM attrs = new Attributes2JDOM();
+		attrs.addAttribute("", "attname", "", "CDATA", "val");
+		handler.startElement("", "root", "", attrs);
+		handler.endElement("", "root", "");
+		handler.endDocument();
+		Document doc = handler.getDocument();
+		Element root = doc.getRootElement();
+		assertEquals("root", root.getName());
+		Attribute att = root.getAttribute("attname");
+		assertNotNull(att);
+		assertEquals("val", att.getValue());
+	}
+
+}

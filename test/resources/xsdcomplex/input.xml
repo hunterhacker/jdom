@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<test xmlns="http://www.jdom.org/tests/default"
+      xmlns:imp="http://www.jdom.org/tests/imp" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://www.jdom.org/tests/default ./SAXTestComplexMain.xsd">
+   <data type="one" />
+   <data type="two" xmlns:attns0="junkns" />
+   <data type="three" xmlns:redo="http://www.jdom.org/tests/default" redo:mainxs="change" />
+   <xx:data type="four" xmlns:xx="http://www.jdom.org/tests/default" />
+</test>

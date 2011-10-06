@@ -261,7 +261,7 @@ These are the meaningful targets for this build file:
   <target name="test" depends="prepare-tests,package">
     <echo message="Running tests against ${jdom-core.jar} using parser ${parser.jar}"/>
 
-    <junit printSummary="yes">
+    <junit printSummary="yes" fork="true" dir="${basedir}">
       <classpath refid="test.class.path" />
   
       <formatter type="${test.outputFormat}" />
@@ -302,7 +302,7 @@ These are the meaningful targets for this build file:
     <!-- =================================================================== -->
     <!-- Master targets                                                      -->
     <!-- =================================================================== -->
-	<target name="master" depends="distclean,package,test" 
+	<target name="master" depends="distclean,package,test,testreport" 
 		description="Called from master build.xml" >
 	</target>
 	

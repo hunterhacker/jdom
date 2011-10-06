@@ -60,12 +60,24 @@ package org.jdom.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import junit.framework.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
-import org.jdom.*;
-import java.io.*;
-import java.util.*;
-import org.jdom.input.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.IllegalAddException;
+import org.jdom.JDOMException;
+import org.jdom.Namespace;
+import org.jdom.Verifier;
+import org.jdom.input.SAXBuilder;
 
 public final class TestVerifier extends junit.framework.TestCase {
 
@@ -97,10 +109,7 @@ public final class TestVerifier extends junit.framework.TestCase {
 	 * XML Letter characters
 	 */
 	private org.jdom.Element letters;
-	/**
-	 * Resource Bundle for various testing resources
-	 */
-	private ResourceBundle rb = ResourceBundle.getBundle("org.jdom.test.Test");
+
 	/**
 	 * resourceRoot is the directory relative to running root where
 	 * resources are found
@@ -295,7 +304,16 @@ public final class TestVerifier extends junit.framework.TestCase {
 	public void setUp() throws IOException, JDOMException {
 		
 		// get the ranges of valid characters from the xmlchars.xml resource
-		resourceRoot = rb.getString("test.resourceRoot");
+		resourceRoot = "resources";
+		File rbdir = new File(resourceRoot);
+		if (!rbdir.exists()) {
+			resourceRoot = "test/" + resourceRoot;
+			rbdir = new File(resourceRoot);
+			if (!rbdir.exists()) {
+				throw new IllegalStateException("Could not find Resource root: "
+						+ " (with or without the test/): " + resourceRoot);
+			}
+		}
 		Document allChars;
 		SAXBuilder builder = new SAXBuilder();
 		InputStream in = new FileInputStream(resourceRoot + "/xmlchars.xml");

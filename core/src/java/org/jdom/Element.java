@@ -230,6 +230,18 @@ public class Element extends Content implements Parent {
         if (namespace == null) {
             namespace = Namespace.NO_NAMESPACE;
         }
+		String reason = Verifier.checkNamespaceCollision(namespace, 
+				getAdditionalNamespaces());
+		if (reason != null) {
+			throw new IllegalAddException(this, namespace, reason);
+		}
+		for (Iterator it = getAttributes().iterator(); it.hasNext();) {
+			Attribute a = (Attribute)it.next();
+			reason = Verifier.checkNamespaceCollision(namespace, a);
+			if (reason != null) {
+				throw new IllegalAddException(this, namespace, reason);
+			}
+		}
 
         this.namespace = namespace;
         return this;

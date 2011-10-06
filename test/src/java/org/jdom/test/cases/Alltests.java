@@ -98,6 +98,8 @@ public static Test suite() {
 		suite.addTest(TestDocument.suite());
 		suite.addTest(TestFilterList.suite());
 		suite.addTest(TestSAXBuilder.suite());
+		suite.addTest(TestSAXHandler.suite());
+		suite.addTest(TestSAXComplexSchema.suite());
 		return suite;
 }
 }

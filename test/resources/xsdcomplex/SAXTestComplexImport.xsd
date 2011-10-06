@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.jdom.org/tests/imp"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jdom.org/tests/imp"
+        elementFormDefault="qualified">
+
+
+  <xs:attributeGroup name="simpleAG">
+    <xs:attribute name="type" type="xs:string" fixed="simple" form="qualified" /> 
+    <xs:attribute name="nodup" type="xs:string" fixed="impval" form="qualified" /> 
+  </xs:attributeGroup>
+
+</xs:schema>
