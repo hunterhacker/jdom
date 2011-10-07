@@ -56,12 +56,28 @@
 
 package org.jdom.input;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.jdom.*;
-import org.xml.sax.*;
-import org.xml.sax.ext.*;
-import org.xml.sax.helpers.*;
+import org.jdom.Attribute;
+import org.jdom.DefaultJDOMFactory;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.EntityRef;
+import org.jdom.JDOMFactory;
+import org.jdom.Namespace;
+import org.jdom.Parent;
+import org.xml.sax.Attributes;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.ext.DeclHandler;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * A support class for {@link SAXBuilder}.
@@ -592,6 +608,16 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 			int attType = getAttributeType(atts.getType(i));
 			String attValue = atts.getValue(i);
 			String attURI = atts.getURI(i);
+			
+			if ("xmlns".equals(attLocalName) || 
+					"xmlns".equals(attPrefix) || 
+					"http://www.w3.org/2000/xmlns/".equals(attURI)) {
+				// use the actual Namespace to check too, because, in theory, a
+				// namespace-aware parser does not need to set the qName unless
+				// the namespace-prefixes feature is set as well.
+				continue;
+			}
+
 			// just one thing to sort out....
 			// the prefix for the namespace.
 			if (!"".equals(attURI) && "".equals(attPrefix)) {
