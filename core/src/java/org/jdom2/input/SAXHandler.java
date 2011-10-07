@@ -56,6 +56,8 @@ package org.jdom2.input;
 
 import java.util.*;
 
+import javax.xml.XMLConstants;
+
 import org.jdom2.*;
 import org.xml.sax.*;
 import org.xml.sax.ext.*;
@@ -524,22 +526,26 @@ DTDHandler {
 					throws SAXException {
 		if (suppress) return;
 
-		Element element = null;
+        String prefix = "";
+        
+        // If QName is set, then set prefix and local name as necessary
+        if (!"".equals(qName)) {
+        	int colon = qName.indexOf(':');
 
-		if ((namespaceURI != null) && (!namespaceURI.equals(""))) {
-			String prefix = "";
+        	if (colon > 0) {
+        		prefix = qName.substring(0, colon);
+        	}
 
-			// Determine any prefix on the Element
-			if (!qName.equals(localName)) {
-				int split = qName.indexOf(":");
-				prefix = qName.substring(0, split);
-			}
-			Namespace elementNamespace =
-					Namespace.getNamespace(prefix, namespaceURI);
-			element = factory.element(localName, elementNamespace);
-		} else {
-			element = factory.element(localName);
-		}
+        	// If local name is not set, try to get it from the QName
+        	if ((localName == null) || (localName.equals(""))) {
+        		localName = qName.substring(colon + 1);
+        	}
+        }
+        // At this point either prefix and localName are set correctly or
+        // there is an error in the parser.
+
+        Namespace namespace = Namespace.getNamespace(prefix, namespaceURI);
+        Element element = factory.element(localName, namespace);
 
 		// Take leftover declared namespaces and add them to this element's
 		// map of namespaces
@@ -559,32 +565,52 @@ DTDHandler {
 
 		// Handle attributes
 		for (int i=0, len=atts.getLength(); i<len; i++) {
-			Attribute attribute = null;
 
+			String attPrefix = "";
 			String attLocalName = atts.getLocalName(i);
 			String attQName = atts.getQName(i);
-			int attType = getAttributeType(atts.getType(i));
 
-			// Bypass any xmlns attributes which might appear, as we got
-			// them already in startPrefixMapping().
-			// This is sometimes necessary when SAXHandler is used with
-			// another source than SAXBuilder, as with JDOMResult.
-			if (attQName.startsWith("xmlns:") || attQName.equals("xmlns")) {
+			// If attribute QName is set, then set attribute prefix and
+			// attribute local name as necessary
+			if (!attQName.equals("")) {
+				// Bypass any xmlns attributes which might appear, as we got
+				// them already in startPrefixMapping(). This is sometimes
+				// necessary when SAXHandler is used with another source than
+				// SAXBuilder, as with JDOMResult.
+				if (attQName.startsWith("xmlns:") || attQName.equals("xmlns")) {
+					continue;
+				}
+
+				int attColon = attQName.indexOf(':');
+
+				if (attColon > 0) {
+					attPrefix = attQName.substring(0, attColon);
+				}
+
+				// If localName is not set, try to get it from the QName
+				if ("".equals(attLocalName)) {
+					attLocalName = attQName.substring(attColon + 1);
+				}
+			}
+			
+			int attType = getAttributeType(atts.getType(i));
+			String attValue = atts.getValue(i);
+			String attURI = atts.getURI(i);
+			
+			if (XMLConstants.XMLNS_ATTRIBUTE.equals(attLocalName) || 
+					XMLConstants.XMLNS_ATTRIBUTE.equals(attPrefix) || 
+					XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(attURI)) {
+				// use the actual Namespace to check too, because, in theory, a
+				// namespace-aware parser does not need to set the qName unless
+				// the namespace-prefixes feature is set as well.
 				continue;
 			}
+			// At this point either attPrefix and attLocalName are set
+			// correctly or there is an error in the parser.
 
-			// First clause per http://markmail.org/message/2p245ggcjst27xe6
-			// patch from Mattias Jiderhamn
-			if ("".equals(attLocalName) && attQName.indexOf(":") == -1) {
-				attribute = factory.attribute(attQName, atts.getValue(i), attType);
-			} else if (!attQName.equals(attLocalName)) {
-				String attPrefix = attQName.substring(0, attQName.indexOf(":"));
-				Namespace attNs = Namespace.getNamespace(attPrefix,
-						atts.getURI(i));
-
-				attribute = factory.attribute(attLocalName, atts.getValue(i),
-						attType, attNs);
-			} else if (atts.getURI(i) != null && atts.getURI(i).length() > 0) {
+			// just one thing to sort out....
+			// the prefix for the namespace.
+			if (!"".equals(attURI) && "".equals(attPrefix)) {
 				// the localname and qName are the same, but there is a
 				// Namspace URI. We need to figure out the namespace prefix.
 				// this is an unusual condition. Currently the only known trigger
@@ -594,18 +620,16 @@ DTDHandler {
 				// is an attribute definition that has form="qualified".
 				//  <xs:attribute name="attname" form="qualified" ... />
 				// or the schema sets attributeFormDefault="qualified"
-				String attURI = atts.getURI(i);
-				Namespace attNS = null;
 				HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
 				for(Namespace nss : element.getNamespacesInScope()) {
 					if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
-						attNS = nss;
+						attPrefix = nss.getPrefix();
 						break;
 					}
 					tmpmap.put(nss.getPrefix(), nss);
 				}
 
-				if (attNS == null) {
+				if ("".equals(attPrefix)) {
 					// we cannot find a 'prevailing' namespace that has a prefix
 					// that is for this namespace.
 					// This basically means that there's an XMLSchema, for the
@@ -624,14 +648,13 @@ DTDHandler {
 						cnt++;
 						pfx = base + cnt;
 					}
-					attNS = Namespace.getNamespace(pfx, attURI);
+					attPrefix = pfx;
 				}
-				attribute = factory.attribute(attLocalName, atts.getValue(i),
-						attType, attNS);
-			} else {
-				attribute = factory.attribute(attLocalName, atts.getValue(i),
-						attType);
 			}
+			Namespace attNs = Namespace.getNamespace(attPrefix, attURI);
+				
+            Attribute attribute = factory.attribute(attLocalName, attValue,
+				                                                    attType, attNs);
 			factory.setAttribute(element, attribute);
 		}
 

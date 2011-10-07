@@ -2,6 +2,8 @@ package org.jdom2.test.cases.input;
 
 import static org.junit.Assert.*;
 
+import javax.xml.XMLConstants;
+
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
@@ -1379,6 +1381,59 @@ public class TestSAXHandler {
 			fail("Expected to get SAXException but instead got " + e.getClass().getName() + "'.");
 		}
 		
+	}
+	
+	@Test
+	public void testAndroidParserIssue2LocalOnly() throws SAXException {
+		SAXHandler handler = new SAXHandler();
+		handler.startDocument();
+		Attributes2Impl attrs = new Attributes2Impl();
+		attrs.addAttribute("", "attname", "", "CDATA", "val");
+		handler.startElement("", "root", "", attrs);
+		handler.endElement("", "root", "");
+		handler.endDocument();
+		Document doc = handler.getDocument();
+		Element root = doc.getRootElement();
+		assertEquals("root", root.getName());
+		Attribute att = root.getAttribute("attname");
+		assertNotNull(att);
+		assertEquals("val", att.getValue());
+	}
+
+	@Test
+	public void testAndroidParserIssue2QNameOnly() throws SAXException {
+		SAXHandler handler = new SAXHandler();
+		handler.startDocument();
+		Attributes2Impl attrs = new Attributes2Impl();
+		attrs.addAttribute("", "", "attname", "CDATA", "val");
+		handler.startElement("", "", "root", attrs);
+		handler.endElement("", "root", "");
+		handler.endDocument();
+		Document doc = handler.getDocument();
+		Element root = doc.getRootElement();
+		assertEquals("root", root.getName());
+		Attribute att = root.getAttribute("attname");
+		assertNotNull(att);
+		assertEquals("val", att.getValue());
+	}
+
+	@Test
+	public void testAndroidParserIssue2AttXMLNS() throws SAXException {
+		// test a namespace-aware parser that is not configured namespace-prefixes
+		// in theory, it should leave the qName empty, even for an XMLNS declaration
+		SAXHandler handler = new SAXHandler();
+		handler.startDocument();
+		Attributes2Impl attrs = new Attributes2Impl();
+		attrs.addAttribute(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "pfx", "", "CDATA", "nsuri");
+		handler.startElement("", "", "root", attrs);
+		handler.endElement("", "root", "");
+		handler.endDocument();
+		Document doc = handler.getDocument();
+		Element root = doc.getRootElement();
+		assertEquals("root", root.getName());
+		Attribute att = root.getAttribute("pfx");
+		assertNull(att);
+		assertTrue(root.getAttributes().isEmpty());
 	}
 
 }
