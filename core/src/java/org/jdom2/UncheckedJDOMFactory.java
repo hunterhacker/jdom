@@ -315,4 +315,10 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 		}
 		parent.additionalNamespaces.add(additional);
 	}
+	
+	@Override
+	public void setRoot(Document doc, Element root) {
+		doc.content.uncheckedAddContent(root);
+	}
+
 }

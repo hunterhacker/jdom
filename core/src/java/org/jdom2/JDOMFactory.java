@@ -340,4 +340,6 @@ public interface JDOMFactory {
 	public void setAttribute(Element element, Attribute a);
 
 	public void addNamespaceDeclaration(Element element, Namespace additional);
+	
+	public void setRoot(Document doc, Element root);
 }

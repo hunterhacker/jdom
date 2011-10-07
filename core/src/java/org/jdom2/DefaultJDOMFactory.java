@@ -212,4 +212,9 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	public void addNamespaceDeclaration(Element parent, Namespace additional) {
 		parent.addNamespaceDeclaration(additional);
 	}
+	
+	@Override
+	public void setRoot(Document doc, Element root) {
+		doc.setRootElement(root);
+	}
 }

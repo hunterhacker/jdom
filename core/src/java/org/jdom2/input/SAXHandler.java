@@ -556,7 +556,7 @@ DTDHandler {
 		flushCharacters();
 
 		if (atRoot) {
-			document.setRootElement(element);  // XXX should we use a factory call?
+			factory.setRoot(document, element);  // Yes, use a factory call...
 			atRoot = false;
 		} else {
 			factory.addContent(getCurrentElement(), element);
