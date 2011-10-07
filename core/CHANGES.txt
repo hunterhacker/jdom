@@ -6,6 +6,7 @@ Number of bug fixes. The '#' numbers refer to issues listed in GitHub at:
     https://github.com/hunterhacker/jdom/issues
 
 #1  Schema validation can miss namespaces of default attributes
+#2  Some parsers do not give qName details, relying instead on just local-name
 #6  Remove unnecessary classes in the default package (JDOMAbout.class)
 #16 FilterListIterator.add() method does not check content type.
 #17 FilterListIterator does not behave well when add() or remove() is
@@ -20,6 +21,7 @@ Number of bug fixes. The '#' numbers refer to issues listed in GitHub at:
 #39 JDOMResult.getDocument() should return null when content is not legal.
 #40 SAXOutputter does not fire startPrefixMapping() events for Attribute Namespaces
 #44 Element.getNamespace(String prefix) does not check attributes.
+#48 Element.setNamespace() does not check for Namespace conflicts.
 
 
 Additionally, as per issue #3 Compiled Jar will now available on maven-central
