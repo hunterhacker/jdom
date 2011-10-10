@@ -542,14 +542,17 @@ public final class TestFilterList {
 		modifyFoo();
 
 		// Try to access an already-existing iterator.
-		try {
-			iter.hasNext();
-			fail("No concurrent modification exception.");
-		} catch(ConcurrentModificationException ex) {
-			// Do nothing
-		} catch (Exception e) {
-			fail("Unexpected exception " + e.getClass());
-		}
+		
+//		Actual List implementations do not throw concurrentmod on the 
+//		hasNext/nextIndx methods, only next()
+//		try {
+//			iter.hasNext();
+//			fail("No concurrent modification exception.");
+//		} catch(ConcurrentModificationException ex) {
+//			// Do nothing
+//		} catch (Exception e) {
+//			fail("Unexpected exception " + e.getClass());
+//		}
 
 		// Try to access an already-existing iterator.
 		try {

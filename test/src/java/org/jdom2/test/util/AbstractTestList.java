@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -1071,7 +1072,125 @@ public abstract class AbstractTestList<T> {
 		illegalExercise(list, content, (T)null, NullPointerException.class);
 	}
 
+
+	@Test
+	public void testConcurrentMod() {
+		List<T> list = buildEmptyList();
+		
+		T[] sample = buildSampleContent();
+		assertTrue("Not enough sample data " + sample.length, sample.length > 2);
+		
+		ListIterator<T> it = list.listIterator();
+		// create a concurrent issue.
+		list.addAll(Arrays.asList(sample));
+		
+		// hasNext() should never throw CME.
+		assertTrue(it.hasNext());
+		assertTrue(0 == it.nextIndex());
+		
+		// hasNext() should never throw CME.
+		assertTrue(it.hasNext());
+		try {
+			it.next();
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+
+		
+		it = list.listIterator(list.size());
+		assertTrue(sample[sample.length - 1] == it.previous());
+		
+		// create a concurrent issue.
+		list.remove(sample.length - 1);
+		
+		// hasPrevious() should never throw CME.
+		assertTrue(it.hasPrevious());
+		
+		assertTrue(sample.length - 2 == it.previousIndex());
+
+		// hasPrevious() should never throw CME.
+		assertTrue(it.hasPrevious());
+		try {
+			it.previous();
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+		
+		// hasPrevious() should never throw CME.
+		assertTrue(it.hasPrevious());
+		try {
+			it.set(sample[sample.length - 1]);
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+
+		// hasPrevious() should never throw CME.
+		assertTrue(it.hasPrevious());
+		try {
+			it.add(sample[sample.length - 1]);
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+
+		// hasPrevious() should never throw CME.
+		assertTrue(it.hasPrevious());
+		try {
+			it.remove();
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+	}
 	
+	@Test
+	public void testConcurrentSetMod() {
+		List<T> list = buildEmptyList();
+		
+		T[] sample = buildSampleContent();
+		assertTrue("Not enough sample data " + sample.length, sample.length > 2);
+		
+		list.addAll(Arrays.asList(sample));
+		quickCheck(list, sample);
+		
+		T tmp = list.remove(0);
+		
+		T[] tmpsamp = Arrays.copyOfRange(sample, 1, sample.length);
+		quickCheck(list, tmpsamp);
+
+		// get a handle on our iterator....
+		ListIterator<T> it = list.listIterator();
+		
+		// make sure a set of the underlying does not effect the iterator.
+		tmpsamp[0] = tmp;
+		list.set(0, tmp);
+		quickCheck(list, tmpsamp);
+		
+		// next() should not throw CME because set() should not change modCount.
+		assertTrue(tmp == it.next());
+		
+		// then, for kicks, restore the original list with
+		it.add(sample[1]);
+		quickCheck(list, sample);
+	}
 	
 	
 }

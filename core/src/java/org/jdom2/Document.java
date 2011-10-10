@@ -778,7 +778,11 @@ public class Document implements Parent {
 	@Override
 	public void canContainContent(Content child, int index, boolean replace) {
 		if (child instanceof Element) {
-			if (content.indexOfFirstElement() >= 0) {
+			int cre = content.indexOfFirstElement();
+			if (replace && cre == index) {
+				return;
+			}
+			if (cre >= 0) {
 				throw new IllegalAddException(
 						"Cannot add a second root element, only one is allowed");
 			}
@@ -788,7 +792,12 @@ public class Document implements Parent {
 			}
 		}
 		if (child instanceof DocType) {
-			if (content.indexOfDocType() >= 0) {
+			int cdt = content.indexOfDocType();
+			if (replace && cdt == index) {
+				// It's OK to replace an existing DocType
+				return;
+			}
+			if (cdt >= 0) {
 				throw new IllegalAddException(
 						"Cannot add a second doctype, only one is allowed");
 			}
@@ -798,6 +807,7 @@ public class Document implements Parent {
 						"A DocType cannot be added after the root element");
 			}
 		}
+				
 		if (child instanceof CDATA) {
 			throw new IllegalAddException("A CDATA is not allowed at the document root");
 		}

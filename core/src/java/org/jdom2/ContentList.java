@@ -84,6 +84,12 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	private Content elementData[];
 	private int size;
 	
+	/**
+	 * modCount is used for concurrent modification,
+	 * but dataModCount is used for refreshing filters. 
+	 */
+	private transient int dataModCount = Integer.MIN_VALUE;
+	
 	/** Document or Element this list belongs to */
 	private final Parent parent;
 
@@ -103,6 +109,51 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		ensureCapacity(size + 1);
 		elementData[size++] = c;
 		modCount++;
+		dataModCount++;
+	}
+	
+	private final void checkIndex(final int index, final boolean excludes) {
+		final int max = excludes ? size - 1 : size;
+		
+		if (index < 0 || index > max) {
+			throw new IndexOutOfBoundsException("Index: " + index +
+					" Size: " + size);
+		}
+
+	}
+	
+	private final void checkPreConditions(final Content child, final int index, 
+			final boolean replace) {
+		if (child == null) {
+			throw new NullPointerException("Cannot add null object");
+		}
+		
+		checkIndex(index, replace);
+		
+		if (child.getParent() != null) {
+			// the content to be added already has a parent.
+			Parent p = child.getParent();
+			if (p instanceof Document) {
+				throw new IllegalAddException((Element)child,
+						"The Content already has an existing parent document");
+			}
+			throw new IllegalAddException(
+					"The Content already has an existing parent \"" +
+							((Element)p).getQualifiedName() + "\"");
+		}
+
+		if (child == parent) {
+			throw new IllegalAddException(
+					"The Element cannot be added to itself");
+		}
+
+		// Detect if we have <a><b><c/></b></a> and c.add(a)
+		if ((parent instanceof Element && child instanceof Element) &&
+				((Element) child).isAncestor((Element)parent)) {
+			throw new IllegalAddException(
+					"The Element cannot be added as a descendent of itself");
+		}
+
 	}
 
 	/**
@@ -117,41 +168,10 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 */
 	@Override
 	public void add(int index, Content child) {
-		if (child == null) {
-			throw new NullPointerException("Cannot add null object");
-		}
-		
-		if (index<0 || index>size) {
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
-		}
-
-		if (child.getParent() != null) {
-			// the content to be added already has a parent.
-			Parent p = child.getParent();
-			if (child instanceof Element && p instanceof Document) {
-				throw new IllegalAddException((Element)child,
-						"The Content already has an existing parent document");
-			}
-			throw new IllegalAddException(
-					"The Content already has an existing parent \"" +
-							((Element)p).getQualifiedName() + "\"");
-		}
-
-		if (child == parent) {
-			throw new IllegalAddException(
-					"The Element cannot be added to itself");
-		}
-
+		// Confirm basic sanity of child.
+		checkPreConditions(child, index, false);
 		// Check to see whether this parent believes it can contain this content
 		parent.canContainContent(child, index, false);
-
-		// Detect if we have <a><b><c/></b></a> and c.add(a)
-		if ((parent instanceof Element && child instanceof Element) &&
-				((Element) child).isAncestor((Element)parent)) {
-			throw new IllegalAddException(
-					"The Element cannot be added as a descendent of itself");
-		}
 
 		child.setParent(parent);
 
@@ -163,7 +183,9 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 			elementData[index] = child;
 			size++;
 		}
+		// Successful add's increment the AbstractList's modCount
 		modCount++;
+		dataModCount++;
 	}
 
 	/**
@@ -191,16 +213,13 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 */
 	@Override
 	public boolean addAll(int index, Collection<? extends Content> collection) {
-		if (index<0 || index>size) {
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
-		}
-
 		if ((collection == null)) {
 			throw new NullPointerException(
 					"Can not add a null collection to the ContentList");
 		}
 		
+		checkIndex(index, false);
+
 		int toadd = collection.size();
 		
 		if (toadd == 0) {
@@ -218,10 +237,12 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		int count = 0;
 		Content[] tmpc = new Content[toadd];
 		int tmpmod = modCount;
+		int tmpdmc = dataModCount;
 		Content[] tmpdata = Arrays.copyOf(elementData, elementData.length);
 		try {
 			for (Content c : collection) {
 				add(index + count, c);
+				// only increment the count after a successful add.
 				tmpc[count++] = c;
 			}
 		} finally {
@@ -233,6 +254,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 				}
 				System.arraycopy(tmpdata, 0, elementData, 0, tmpdata.length);
 				modCount = tmpmod;
+				dataModCount = tmpdmc;
 			}
 		}
 
@@ -253,6 +275,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 			size = 0;
 		}
 		modCount++;
+		dataModCount++;
 	}
 
 	/**
@@ -263,30 +286,34 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 * @param collection The collection to use.
 	 */
 	void clearAndSet(Collection<? extends Content> collection) {
+		if (collection == null || collection.isEmpty()) {
+			clear();
+			return;
+		}
+		
 		Content[] old = elementData;
 		int oldSize = size;
+		int oldmod = modCount;
+		int olddmc = dataModCount;
 
-		elementData = null;
-		size = 0;
-
-		if ((collection != null) && (collection.size() != 0)) {
+		boolean ok = false;
+		try {
+			elementData = null;
+			size = 0;
 			ensureCapacity(collection.size());
-			try {
-				addAll(0, collection);
-			}
-			catch (RuntimeException exception) {
+			modCount++;
+			dataModCount++;
+			addAll(0, collection);
+			ok = true;
+		} finally {
+			if (!ok) {
 				elementData = old;
 				size = oldSize;
-				throw exception;
+				modCount = oldmod;
+				dataModCount = olddmc;
 			}
 		}
 
-		if (old != null) {
-			for (int i = 0; i < oldSize; i++) {
-				removeParent(old[i]);
-			}
-		}
-		modCount++;
 	}
 
 	/**
@@ -320,10 +347,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 */
 	@Override
 	public Content get(int index) {
-		if (index<0 || index>=size) {
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
-		}
+		checkIndex(index, true);
 		return elementData[index];
 	}
 
@@ -381,9 +405,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 */
 	@Override
 	public Content remove(int index) {
-		if (index<0 || index>=size)
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
+		checkIndex(index, true);
 
 		Content old = elementData[index];
 		removeParent(old);
@@ -406,44 +428,31 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	 * object.
 	 *
 	 * @param index The location to set the value to.
-	 * @param obj The location to set the value to.
+	 * @param child The location to set the value to.
 	 * @return The object which was replaced.
 	 * throws IndexOutOfBoundsException if index < 0 || index >= size()
 	 */
 	@Override
-	public Content set(int index, Content obj) {
-		if (index<0 || index>=size)
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
+	public Content set(final int index, final Content child) {
+		// Confirm basic sanity of child.
+		checkPreConditions(child, index, true);
 
-		if (obj == null) {
-			throw new NullPointerException("Can not set a Content entry to null");
-		}
+		// Ensure the detail checks out OK too.
+		parent.canContainContent(child, index, true);
+		
+		/*
+		 * Do a special case of set() where we don't do a remove() then add()
+		 * because that affects the modCount. We want to do a true set().
+		 * See issue #15 
+		 */
 
-		if ((obj instanceof Element) && (parent instanceof Document)) {
-			int root = indexOfFirstElement();
-			if ((root >= 0) && (root != index)) {
-				throw new IllegalAddException(
-						"Cannot add a second root element, only one is allowed");
-			}
-		}
-
-		if ((obj instanceof DocType) && (parent instanceof Document)) {
-			int docTypeIndex = indexOfDocType();
-			if ((docTypeIndex >= 0) && (docTypeIndex != index)) {
-				throw new IllegalAddException(
-						"Cannot add a second doctype, only one is allowed");
-			}
-		}
-
-		Content old = remove(index);
-		try {
-			add(index, obj);
-		}
-		catch (RuntimeException exception) {
-			add(index, old);
-			throw exception;
-		}
+		final Content old = elementData[index];
+		removeParent(old);
+		child.setParent(parent);
+		elementData[index] = child;
+		// for set method we increment dataModCount, but not modCount
+		// set does not change the structure of the List (size())
+		dataModCount++;
 		return old;
 	}
 
@@ -467,36 +476,28 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		return super.toString();
 	}
 
-	/** Give access of ContentList.modCount to FilterList */
-	private int getModCount() {
-		return modCount;
-	}
-
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 
 	/**
 	 * <code>FilterList</code> represents legal JDOM content, including content
 	 * for <code>Document</code>s or <code>Element</code>s.
+	 * <p>
+	 * FilterList represents a dynamic view of the backing ContentList, changes
+	 * to the backing list are reflected in the FilterList, and visa-versa.
 	 */
 
-	class FilterList<F extends Content> extends AbstractList<F> implements java.io.Serializable {
+	class FilterList<F extends Content> extends AbstractList<F>
+			implements java.io.Serializable {
 
-		/** The Filter */
-		Filter<F> filter;
-
-		/** Current number of items in this view */
-		int count = 0;
-
-		/** Expected modCount in our backing list */
-		int expected = -1;
-
-		// Implementation Note: Directly after size() is called, expected
-		//       is sync'd with ContentList.modCount and count provides
-		//       the true size of this view.  Before the first call to
-		//       size() or if the backing list is modified outside this
-		//       FilterList, both might contain bogus values and should
-		//       not be used without first calling size();
+		// The filter to apply
+		final Filter<F> filter;
+		// correlate the position in the filtered list to the index in the
+		// backing ContentList.
+		int[] backingpos = new int[size + 5];
+		int   backingsize = 0;
+		// track data modifications in the backing ContentList.
+		int xdata = -1;
 
 		/**
 		 * Create a new instance of the FilterList with the specified Filter.
@@ -504,6 +505,50 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		FilterList(Filter<F> filter) {
 			this.filter = filter;
 		}
+
+        /**
+         * Synchronise our view to the backing list.
+         * Only synchronise the first <code>index</code> view elements. For want
+         * of a better word, we'll call this a 'Lazy' implementation.
+         * @param index how much we want to sync. Set to -1 to synchronise everything.
+         * @return the index in the backing array of the <i>index'th</i> match.
+         *         or the backing data size if there is no match for the index.
+         */
+        private final int resync(int index) {
+        	if (xdata != dataModCount) {
+        		// The underlying list was modified somehow...
+        		// we need to invalidate our research...
+        		xdata = dataModCount;
+        		backingsize = 0;
+        		if (size >= backingpos.length) {
+        			backingpos = new int[size + 1];
+        		}
+        	}
+        	
+        	if (index >= 0 && index < backingsize) {
+        		// we have already indexed far enough...
+        		// return the backing index.
+        		return backingpos[index];
+        	}
+        	
+        	// the index in the backing list of the next value to check.
+        	int bpi = 0;
+        	if (backingsize > 0) {
+        		bpi = backingpos[backingsize - 1] + 1;
+        	}
+        	
+        	while (bpi < size) {
+    			F gotit = filter.filter(elementData[bpi]);
+    			if (gotit != null) {
+    				backingpos[backingsize] = bpi;
+    				if (backingsize++ == index) {
+    					return bpi;
+    				}
+    			}
+    			bpi++;
+        	}
+        	return size;
+        }
 
 		/**
 		 * Inserts the specified object at the specified position in this list.
@@ -516,15 +561,31 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public void add(int index, Content obj) {
-			if (filter.matches(obj)) {
-				int adjusted = getAdjustedIndex(index);
-				ContentList.this.add(adjusted, obj);
-				expected++;
-				count++;
+			if (index < 0) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			else throw new ClassCastException("Filter won't allow the " +
-					obj.getClass().getName() +
-					" '" + obj + "' to be added to the list");
+			int adj = resync(index);
+			if (adj == size && index > size()) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			if (filter.matches(obj)) {
+				ContentList.this.add(adj, obj);
+				
+				// we can optimize the lazyness now by doing a partial reset on
+				// the backing list... invalidate everything *after* the added
+				// content
+				if (backingpos.length <= size) {
+					backingpos = Arrays.copyOf(backingpos, backingpos.length + 1);
+				}
+				backingpos[index] = adj;
+				backingsize = index + 1;
+				xdata = dataModCount;
+				
+			} else {
+				throw new ClassCastException("Filter won't allow the " +
+						obj.getClass().getName() +
+						" '" + obj + "' to be added to the list");
+			}
 		}
 
 		/**
@@ -535,23 +596,29 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public F get(int index) {
-			int adjusted = getAdjustedIndex(index);
-			return filter.filter(ContentList.this.get(adjusted));
+			if (index < 0) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			int adj = resync(index);
+			if (adj == size) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			return filter.filter(ContentList.this.get(adj));
 		}
 
 		@Override
 		public Iterator<F> iterator() {
-			return new FilterListIterator<F>(filter, 0);
+			return new FilterListIterator<F>(this, 0);
 		}
 
 		@Override
 		public ListIterator<F> listIterator() {
-			return new FilterListIterator<F>(filter, 0);
+			return new FilterListIterator<F>(this, 0);
 		}
 
 		@Override
 		public ListIterator<F> listIterator(int index) {
-			return new FilterListIterator<F>(filter,  index);
+			return new FilterListIterator<F>(this,  index);
 		}
 
 		/**
@@ -562,13 +629,20 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public F remove(int index) {
-			int adjusted = getAdjustedIndex(index);
-			Content oldc = ContentList.this.get(adjusted);
+			if (index < 0) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			int adj = resync(index);
+			if (adj == size) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			Content oldc = ContentList.this.get(adj);
 			F old = filter.filter(oldc);
 			if (old != null) {
-				ContentList.this.remove(adjusted);
-				expected++;
-				count--;
+				ContentList.this.remove(adj);
+				// optimize the backing cache.
+				backingsize = index;
+				xdata = dataModCount;
 				return old;
 			}
 			throw new IllegalAddException("Filter won't allow the " +
@@ -588,25 +662,23 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public F set(int index, F obj) {
-			F old = null;
-			if (filter.matches(obj)) {
-				int adjusted = getAdjustedIndex(index);
-				Content oldc = filter.filter(ContentList.this.get(adjusted));
-				if (!filter.matches(oldc)) {
-					throw new IllegalAddException("Filter won't allow the " +
-							(oldc.getClass()).getName() +
-							" '" + oldc + "' (index " + index +
-							") to be removed");
-				}
-				old = filter.filter(ContentList.this.set(adjusted, obj));
-				expected += 2;
+			if (index < 0) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			else {
-				throw new ClassCastException("Filter won't allow index " +
-						index + " to be set to " +
-						(obj.getClass()).getName());
+			int adj = resync(index);
+			if (adj == size) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			return old;
+			F ins = filter.filter(obj);
+			if (ins != null) {
+				F oldc = filter.filter(ContentList.this.set(adj, ins));
+				// optimize the backing....
+				xdata = dataModCount;
+				return oldc;
+			}
+			throw new ClassCastException("Filter won't allow index " +
+					index + " to be set to " +
+					(obj.getClass()).getName());
 		}
 
 		/**
@@ -616,61 +688,19 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public int size() {
-			// Implementation Note: Directly after size() is called, expected
-			//       is sync'd with ContentList.modCount and count provides
-			//       the true size of this view.  Before the first call to
-			//       size() or if the backing list is modified outside this
-			//       FilterList, both might contain bogus values and should
-			//       not be used without first calling size();
-
-			if (expected == ContentList.this.getModCount()) {
-				return count;
-			}
-
-			count = 0;
-			for (int i = 0; i < ContentList.this.size(); i++) {
-				Content obj = ContentList.this.elementData[i];
-				if (filter.matches(obj)) {
-					count++;
-				}
-			}
-			expected = ContentList.this.getModCount();
-			return count;
+			resync(-1);
+			return backingsize;
 		}
 
-		/**
-		 * Return the adjusted index
-		 *
-		 * @param index Index of in this view.
-		 * @return True index in backing list
-		 */
-		final private int getAdjustedIndex(int index) {
-			int adjusted = 0;
-			for (int i = 0; i < ContentList.this.size; i++) {
-				Content obj = ContentList.this.elementData[i];
-				if (filter.matches(obj)) {
-					if (index == adjusted) {
-						return i;
-					}
-					adjusted++;
-				}
-			}
-
-			if (index == adjusted) {
-				return ContentList.this.size;
-			}
-
-			return ContentList.this.size + 1;
-		}
 	}
 
 	/* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */
 	/* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */
 
-	class FilterListIterator<F extends Content> implements ListIterator<F> {
+	final class FilterListIterator<F extends Content> implements ListIterator<F> {
 
 		/** The Filter that applies */
-		Filter<F> filter;
+		private final FilterList<F> filterlist;
 
 		/** Whether this iterator is in forward or reverse. */
 		private boolean forward = false;
@@ -679,65 +709,43 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		/** Whether a call to set() is valid */
 		private boolean canset = false;
 
-		/** Index in backing list of next object */
-		private int cursor = -1;
-		/** the backing index to use if we actually DO move */
-		private int tmpcursor = -1;
-		/** Index in ListIterator */
-		private int index = -1;
-
 		/** Expected modCount in our backing list */
-		private int expected = -1;
-
-		/** Number of elements matching the filter. */
-		private int fsize = 0;
+		private int expectedmod = -1;
+		
+		private int cursor = -1;
 
 		/**
 		 * Default constructor
 		 */
-		FilterListIterator(Filter<F> filter, int start) {
-			this.filter = filter;
-			expected = ContentList.this.getModCount();
+		FilterListIterator(final FilterList<F> flist, final int start) {
+			filterlist = flist;
+			expectedmod = modCount;
 			// always start list iterators in backward mode ....
 			// it makes sense... really.
 			forward = false;
 
 			if (start < 0) {
-				throw new IndexOutOfBoundsException("Index: " + start);
+				throw new IndexOutOfBoundsException("Index: " + start + " Size: " + filterlist.size());
+			}
+			
+			int adj = filterlist.resync(start);
+			
+			if (adj == size && start > filterlist.size()) {
+				// the start point is after the end of the list.
+				// it is only allowed to be the same as size(), no larger.
+				throw new IndexOutOfBoundsException("Index: " + start + " Size: " + filterlist.size());
 			}
 
-			// the number of matching elements....
-			fsize = 0;
-
-			// go through the list, count the matching elements...
-			for (int i = 0; i < ContentList.this.size(); i++) {
-				if (filter.matches(ContentList.this.get(i))) {
-					if (start == fsize) {
-						// set the back-end cursor to the matching element....
-						cursor = i;
-						// set the front-end cursor too.
-						index = fsize;
-					}
-					fsize++;
-				}
+			cursor = start;
+		}
+		
+		private void checkConcurrent() {
+			if (expectedmod != modCount) {
+				throw new ConcurrentModificationException("The ContentList " +
+						"supporting the FilterList this iterator is " +
+						"processing has been modified by something other " +
+						"than this Iterator.");
 			}
-
-			if (start > fsize) {
-				throw new IndexOutOfBoundsException("Index: " + start + " Size: " + fsize);
-			}
-			if (cursor == -1) {
-				// implies that start == fsize (i.e. after the last element
-				// put the insertion point at the end of the Underlying
-				// content list ....
-				// i.e. an add() at this point may potentially end up with
-				// filtered content between previous() and next()
-				// the alternative is to put the cursor on the Content after
-				// the last Content that the filter passed
-				// The implications are ambiguous.
-				cursor = ContentList.this.size();
-				index = fsize;
-			}
-
 		}
 
 		/**
@@ -745,22 +753,8 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public boolean hasNext() {
-			return nextIndex() < fsize;
-		}
-
-		/**
-		 * Returns the next element in the list.
-		 */
-		@Override
-		public F next() {
-			if (!hasNext())
-				throw new NoSuchElementException("next() is beyond the end of the Iterator");
-			index = nextIndex();
-			cursor = tmpcursor;
-			forward = true;
-			canremove = true;
-			canset = true;
-			return filter.filter(ContentList.this.get(cursor));
+			int next = forward ? cursor + 1 : cursor;
+			return filterlist.resync(next) < size;
 		}
 
 		/**
@@ -769,22 +763,8 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public boolean hasPrevious() {
-			return previousIndex() >= 0;
-		}
-
-		/**
-		 * Returns the previous element in the list.
-		 */
-		@Override
-		public F previous() {
-			if (!hasPrevious())
-				throw new NoSuchElementException("previous() is before the start of the Iterator");
-			index = previousIndex();
-			cursor = tmpcursor;
-			forward = false;
-			canremove = true;
-			canset = true;
-			return filter.filter(ContentList.this.get(cursor));
+			int prev = forward ? cursor : cursor - 1;
+			return prev >= 0;
 		}
 
 		/**
@@ -793,25 +773,7 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public int nextIndex() {
-			checkConcurrentModification();
-			if (forward) {
-				// Starting with next possibility ....
-				for (int i = cursor + 1; i < ContentList.this.size(); i++) {
-					if (filter.matches(ContentList.this.get(i))) {
-						tmpcursor = i;
-						return index + 1;
-					}
-				}
-				// Never found another match.... put the insertion point at
-				// the end of the list....
-				tmpcursor = ContentList.this.size();
-				return index + 1;
-			}
-
-			// We've been going back... so nextIndex() returns the same
-			// element.
-			tmpcursor = cursor;
-			return index;
+			return forward ? cursor + 1 : cursor;
 		}
 
 		/**
@@ -821,53 +783,69 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public int previousIndex() {
-			checkConcurrentModification();
-			if (!forward) {
-				// starting with next possibility ....
-				for (int i = cursor - 1; i >= 0; i--) {
-					if (filter.matches(ContentList.this.get(i))) {
-						tmpcursor = i;
-						return index - 1;
-					}
-				}
-				// Never found another match.... put the insertion point at
-				// the start of the list....
-				tmpcursor = -1;
-				return index - 1;
-			}
-
-			// We've been going forwards... so previousIndex() returns same
-			// element.
-			tmpcursor = cursor;
-			return index;
+			return forward ? cursor : cursor - 1;
 		}
 
 		/**
-		 * Inserts the specified element into the list.
+		 * Returns the next element in the list.
+		 */
+		@Override
+		public F next() {
+			checkConcurrent();
+			int next = forward ? cursor + 1 : cursor;
+			
+			if (filterlist.resync(next) >= size) {
+				throw new NoSuchElementException("next() is beyond the end of the Iterator");
+			}
+
+			cursor = next;
+			forward = true;
+			canremove = true;
+			canset = true;
+			return filterlist.get(cursor);
+		}
+
+		/**
+		 * Returns the previous element in the list.
+		 */
+		@Override
+		public F previous() {
+			checkConcurrent();
+			int prev = forward ? cursor : cursor - 1;
+			
+			if (prev < 0) {
+				throw new NoSuchElementException("previous() is beyond the beginning of the Iterator");
+			}
+
+			cursor = prev;
+			forward = false;
+			canremove = true;
+			canset = true;
+			return filterlist.get(cursor);
+		}
+
+		/**
+		 * Inserts the specified element into the list .
 		 */
 		@Override
 		public void add(Content obj) {
-			if (!filter.matches(obj)) {
-				throw new ClassCastException("Filter won't allow the " +
-						obj.getClass().getName() +
-						" '" + obj + "' to be added to the list");
-			}
-
-			// Call to nextIndex() will check concurrent.
-			nextIndex();
-			// tmpcursor is the backing cursor of the next element
-			// Remember that List.add(index,obj) is really an insert....
-			ContentList.this.add(tmpcursor, obj);
-			expected = ContentList.this.getModCount();
+			checkConcurrent();
+			// always add before what would normally be returned by next();
+			int next = forward ? cursor + 1 : cursor;
+			
+			filterlist.add(next, obj);
+			
+			expectedmod = modCount;
+			
 			canremove = canset = false;
-
-			if (forward) {
-				index++;
-			} else {
-				forward = true;
-			}
-			fsize++;
-			cursor = tmpcursor;
+			
+			// a call to next() should be unaffected, so, whatever was going to
+			// be next will still be next, remember, what was going to be next
+			// has been shifted 'right' by our insert.
+			// we ensure this by setting the cursor to next(), and making it
+			// forward
+			cursor = next;
+			forward = true;
 		}
 
 		/**
@@ -876,30 +854,22 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 */
 		@Override
 		public void remove() {
+			checkConcurrent();
 			if (!canremove)
 				throw new IllegalStateException("Can not remove an "
 						+ "element unless either next() or previous() has been called "
 						+ "since the last remove()");
-			// we are removing the last entry reuned by either next() or previous().
+			// we are removing the last entry returned by either next() or previous().
 			// the idea is to remove it, and pretend that we used to be at the
 			// entry that happened *after* the removed entry.
 			// so, get what would be the next entry (set at tmpcursor).
 			// so call nextIndex to set tmpcursor to what would come after.
-			boolean dir = forward;
-			forward = true;
-			try {
-				nextIndex();
-				ContentList.this.remove(cursor);
-			} finally {
-				forward = dir;
-			}
-			cursor = tmpcursor - 1;
-			expected = ContentList.this.getModCount();
-
+			filterlist.remove(cursor);
 			forward = false;
+			expectedmod = modCount;
+
 			canremove = false;
 			canset = false;
-			fsize--;
 		}
 
 		/**
@@ -907,30 +877,18 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		 * <code>previous</code> with the specified element.
 		 */
 		@Override
-		public void set(Content obj) {
-			if (!canset)
+		public void set(F obj) {
+			checkConcurrent();
+			if (!canset) {
 				throw new IllegalStateException("Can not set an element "
 						+ "unless either next() or previous() has been called since the " 
 						+ "last remove() or set()");
-			checkConcurrentModification();
-
-			if (!filter.matches(obj)) {
-				throw new ClassCastException("Filter won't allow index " + index + " to be set to "
-						+ (obj.getClass()).getName());
 			}
 
-			ContentList.this.set(cursor, obj);
-			expected = ContentList.this.getModCount();
+			filterlist.set(cursor, obj);
+			expectedmod = modCount;
 
 		}
 
-		/**
-		 * Check if are backing list is being modified by someone else.
-		 */
-		private void checkConcurrentModification() {
-			if (expected != ContentList.this.getModCount()) {
-				throw new ConcurrentModificationException();
-			}
-		}
 	}
 }
