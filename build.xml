@@ -3,7 +3,7 @@
 	<!-- define Maven coordinates -->
 	<property name="groupId" value="org.jdom" />
 	<property name="artifactId" value="jdom" />
-	<property name="version" value="1.x-rgl" />
+	<property name="version" value="1.x-snapshot" />
 	
 	<property name="gpg" value="gpg" 
 		description="Path to the GNU gpg program for maven target"/>
@@ -47,6 +47,44 @@
 			<fileset dir="contrib/build" includes="*${version}*.jar"/>
 		</copy>
 		
+		<copy todir="${dist}/jdom">
+			<fileset dir="core" excludes="**/classes/** , **/build/src/**" />
+		</copy>
+			
+		<copy todir="${dist}/jdom-contrib">
+			<fileset dir="contrib" excludes="**/classes/** , **/build/src/**" />
+		</copy>
+			
+		<copy todir="${dist}/jdom-test">
+			<fileset dir="test" excludes="**/classes/** , **/build/src/**" />
+		</copy>
+			
+
+		<zip destfile="${dist}/jdom-${version}.zip" >
+			<fileset dir="${dist}" includes="jdom/**" />
+		</zip>
+		
+		<zip destfile="${dist}/jdom-contrib-${version}.zip">
+			<fileset dir="${dist}" includes="jdom-contrib/**" />
+		</zip>
+		
+		<zip destfile="${dist}/jdom-test-${version}.zip">
+			<fileset dir="${dist}" includes="jdom-test/**" />
+		</zip>
+
+		
+		<tar destfile="${dist}/jdom-${version}.tar.gz" compression="gzip">
+			<fileset dir="${dist}" includes="jdom/**" />
+		</tar>
+		
+		<tar destfile="${dist}/jdom-contrib-${version}.tar.gz" compression="gzip">
+			<fileset dir="${dist}" includes="jdom-contrib/**" />
+		</tar>
+		
+		<tar destfile="${dist}/jdom-test-${version}.tar.gz" compression="gzip">
+			<fileset dir="${dist}" includes="jdom-test/**" />
+		</tar>
+			
 	</target>
 
 	<target name="maven" depends="dist" description="Build a maven bundle">
