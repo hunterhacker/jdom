@@ -73,17 +73,14 @@
 		</zip>
 
 		
-		<tar destfile="${dist}/jdom-${version}.tar.gz" compression="gzip">
-			<fileset dir="${dist}" includes="jdom/**" />
-		</tar>
+		<tar destfile="${dist}/jdom-${version}.tar.gz" 
+			compression="gzip" basedir="${dist}" includes="jdom/**" />
 		
-		<tar destfile="${dist}/jdom-contrib-${version}.tar.gz" compression="gzip">
-			<fileset dir="${dist}" includes="jdom-contrib/**" />
-		</tar>
+		<tar destfile="${dist}/jdom-contrib-${version}.tar.gz" 
+			compression="gzip" basedir="${dist}" includes="jdom-contrib/**" />
 		
-		<tar destfile="${dist}/jdom-test-${version}.tar.gz" compression="gzip">
-			<fileset dir="${dist}" includes="jdom-test/**" />
-		</tar>
+		<tar destfile="${dist}/jdom-test-${version}.tar.gz" 
+			compression="gzip" basedir="${dist}" includes="jdom-test/**" />
 			
 	</target>
 
