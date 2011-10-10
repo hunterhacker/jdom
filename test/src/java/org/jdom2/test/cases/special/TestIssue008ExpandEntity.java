@@ -14,11 +14,12 @@ import org.junit.Test;
 
 public class TestIssue008ExpandEntity {
 	
-	private final void roundTrip(boolean expand, String encoding, String expect) {
+	private final void roundTrip(boolean expand, boolean validating, String encoding, String expect) {
 		String docloc = this.getClass().getPackage().getName().replaceAll("\\.", "/") + "/TestIssue008.xml";
 		URL docurl = ClassLoader.getSystemResource(docloc);
 
 		SAXBuilder builder = new SAXBuilder();
+		builder.setValidation(validating);
 		builder.setExpandEntities(expand);
 		Document doc = null;
 		try {
@@ -45,32 +46,65 @@ public class TestIssue008ExpandEntity {
 
 	@Test
 	public void testFalse() {
-		roundTrip(false, null, "<doc>&minus;</doc>");
+		roundTrip(false, false, null, "<doc>&minus;</doc>");
 	}
 
 	@Test
 	public void testFalseUSASCII() {
-		roundTrip(false, "US-ASCII", "<doc>&minus;</doc>");
+		roundTrip(false, false, "US-ASCII", "<doc>&minus;</doc>");
 	}
 
 	@Test
 	public void testFalseUTF8() {
-		roundTrip(false, "UTF-8", "<doc>&minus;</doc>");
+		roundTrip(false, false, "UTF-8", "<doc>&minus;</doc>");
 	}
 
 	@Test
 	public void testTrueUSASCII() {
-		roundTrip(true, "US-ASCII", "<doc>&#x2212;</doc>");
+		roundTrip(true, false, "US-ASCII", "<doc>&#x2212;</doc>");
 	}
 
 	@Test
 	public void testTrueUTF8() {
-		roundTrip(true, "UTF-8", "<doc>\u2212</doc>");
+		roundTrip(true, false, "UTF-8", "<doc>\u2212</doc>");
 	}
 
 	@Test
 	public void testTrue() {
-		roundTrip(true, null, "<doc>\u2212</doc>");
+		roundTrip(true, false, null, "<doc>\u2212</doc>");
 	}
+
+
+
+	@Test
+	public void testValidFalse() {
+		roundTrip(false, true, null, "<doc>&minus;</doc>");
+	}
+
+	@Test
+	public void testValidFalseUSASCII() {
+		roundTrip(false, true, "US-ASCII", "<doc>&minus;</doc>");
+	}
+
+	@Test
+	public void testValidFalseUTF8() {
+		roundTrip(false, true, "UTF-8", "<doc>&minus;</doc>");
+	}
+
+	@Test
+	public void testValidTrueUSASCII() {
+		roundTrip(true, true, "US-ASCII", "<doc>&#x2212;</doc>");
+	}
+
+	@Test
+	public void testValidTrueUTF8() {
+		roundTrip(true, true, "UTF-8", "<doc>\u2212</doc>");
+	}
+
+	@Test
+	public void testValidTrue() {
+		roundTrip(true, true, null, "<doc>\u2212</doc>");
+	}
+
 
 }
