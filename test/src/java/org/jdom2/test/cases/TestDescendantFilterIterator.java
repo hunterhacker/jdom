@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -58,6 +59,16 @@ public class TestDescendantFilterIterator {
 	public void testRemoveOne() {
 		Iterator<Element> it = buildIterator();
 		assertTrue(it.hasNext());
+		try {
+			it.remove();
+			fail("Should not be able to remove before next().");
+		} catch (IllegalStateException ise) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail ("Expected IllegalStateException but got " + e.getClass());
+		}
+		
 		Object f = it.next();
 		assertNotNull(f != null);
 		assertTrue(f instanceof Element);
@@ -67,18 +78,61 @@ public class TestDescendantFilterIterator {
 		// make the descendant iterator empty.
 		it.remove();
 		
-		// TODO This should be implemented to check the remove, but remove() is
-		// broken. See https://github.com/hunterhacker/jdom/issues/24
+		try {
+			it.remove();
+			fail("Should not be able to double-remove.");
+		} catch (IllegalStateException ise) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail ("Expected IllegalStateException but got " + e.getClass());
+		}
 		
-//		assertFalse(it.hasNext());
-//		try {
-//			assertTrue(null != it.next().toString());
-//			fail("Should not be able to iterate off the end of the descendants.");
-//		} catch (NoSuchElementException nse) {
-//			// good
-//		} catch (Exception e) {
-//			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
-//		}
+		
+		assertFalse(it.hasNext());
+		try {
+			assertTrue(null != it.next().toString());
+			fail("Should not be able to iterate off the end of the descendants.");
+		} catch (NoSuchElementException nse) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
+		}
+		
+	}
+	
+	@Test
+	public void testIllegal() {
+		try {
+			Element emt = new Element("root");
+			emt.getDescendants(null);
+		} catch (NullPointerException npe) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NullPointerException, but got " + e.getClass().getName());
+		}
+	}
+	
+	@Test
+	public void testDeep() {
+		Document doc = new Document();
+		Element emt = new Element("root");
+		Element kid = new Element("kid");
+		Element leaf = new Element("leaf");
+		kid.addContent(leaf);
+		emt.addContent(kid);
+		emt.addContent(new Element("sib"));
+		doc.addContent(emt);
+		String[] tags = new String[] {"root", "kid", "leaf", "sib"};
+		ArrayList<String> al = new ArrayList<String>();
+		Iterator<Element> it = doc.getDescendants(new ElementFilter());
+		while (it.hasNext()) {
+			al.add(it.next().getName());
+		}
+		assertTrue(al.size() == tags.length);
+		for (int i = 0; i < tags.length; i++) {
+			assertEquals(tags[i], al.get(i));
+		}
 		
 	}
 

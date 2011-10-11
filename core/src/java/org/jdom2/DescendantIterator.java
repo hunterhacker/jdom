@@ -57,7 +57,6 @@ package org.jdom2;
 import java.util.*;
 
 import org.jdom2.Content;
-import org.jdom2.Element;
 import org.jdom2.Parent;
 
 /**
@@ -69,9 +68,9 @@ import org.jdom2.Parent;
  */
 class DescendantIterator implements Iterator<Content> {
 
-	private Iterator<Content> iterator;
-	private Iterator<Content> nextIterator;
-	private List<Iterator<Content>> stack = new ArrayList<Iterator<Content>>();
+	private ArrayDeque<ListIterator<Content>> stack = new ArrayDeque<ListIterator<Content>>();
+	ListIterator<Content> current = null;
+	ListIterator<Content> following = null;
 
 	/**
 	 * Iterator for the descendants of the supplied object.
@@ -79,22 +78,31 @@ class DescendantIterator implements Iterator<Content> {
 	 * @param parent document or element whose descendants will be iterated
 	 */
 	DescendantIterator(Parent parent) {
-		if (parent == null) {
-			throw new IllegalArgumentException("parent parameter was null");
-		}
-		this.iterator = parent.getContent().iterator();
+		// can trust that parent is not null, DescendantIterator is package-private.
+		current = parent.getContent().listIterator();
 	}
 
 	/**
-	 * Returns true> if the iteration has more {@link Content} descendants.
+	 * Returns <b>true</b> if the iteration has more {@link Content} descendants.
 	 *
 	 * @return true is the iterator has more descendants
 	 */
 	@Override
 	public boolean hasNext() {
-		if (iterator != null && iterator.hasNext()) return true;
-		if (nextIterator != null && nextIterator.hasNext()) return true;
-		if (stackHasAnyNext()) return true;
+		if (following != null && following.hasNext()) {
+			// the last content returned has un-processed child content
+			return true;
+		}
+		if (current.hasNext()) {
+			// the last content has un-iterated siblings.
+			return true;
+		}
+		for (Iterator<Content> it : stack) {
+			if (it.hasNext()) {
+				// an ancestor has un-iterated siblings.
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -105,34 +113,35 @@ class DescendantIterator implements Iterator<Content> {
 	 */
 	@Override
 	public Content next() {
-		if (!hasNext()) {
-			throw new NoSuchElementException();
-		}
-
-		// If we need to descend, go for it and record where we are.
-		// We do the shuffle here on the next next() call so remove() is easy
-		// to code up.
-		if (nextIterator != null) {
-			push(iterator);
-			iterator = nextIterator;
-			nextIterator = null;
-		}
-
-		// If this iterator is finished, try moving up the stack
-		while (!iterator.hasNext()) {
-			if (stack.size() > 0) {
-				iterator = pop();
-			}
-			else {
-				throw new NoSuchElementException("Somehow we lost our iterator");
+		Content ret = null;
+		if (following != null && following.hasNext()) {
+			// The last returned content is a parent with unprocessed content
+			ret = following.next();
+			stack.push(current);
+			current = following;
+		} else if (current.hasNext()) {
+			// the last content returned has un-iterated siblings.
+			ret = current.next();
+		} else {
+			// check up the ancestry for the next unprocessed sibling...
+			while (ret == null && !stack.isEmpty()) {
+				// while we go we pop the stack.
+				current = stack.pop();
+				if (current.hasNext()) {
+					ret = current.next();
+				}
 			}
 		}
-
-		Content child = iterator.next();
-		if (child instanceof Element) {
-			nextIterator = ((Element)child).getContent().iterator();
+		if (ret == null) {
+			throw new NoSuchElementException("Iterated off the end of the " +
+					"DescendantIterator");
 		}
-		return child;
+		if (ret instanceof Parent) {
+			following = ((Parent)ret).getContent().listIterator();
+		} else {
+			following = null;
+		}
+		return ret;
 	}
 
 	/**
@@ -143,29 +152,8 @@ class DescendantIterator implements Iterator<Content> {
 	 */
 	@Override
 	public void remove() {
-		iterator.remove();
+		current.remove();
+		following = null;
 	}
 
-	private Iterator<Content> pop() {
-		int stackSize = stack.size();
-		if (stackSize == 0) {
-			throw new NoSuchElementException("empty stack");
-		}
-		return stack.remove(stackSize - 1);
-	}
-
-	private void push(Iterator<Content> itr) {
-		stack.add(itr);
-	}
-
-	private boolean stackHasAnyNext() {
-		int size = stack.size();
-		for (int i = 0; i < size; i++) {
-			Iterator<Content> itr = stack.get(i);
-			if (itr.hasNext()) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

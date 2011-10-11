@@ -728,7 +728,7 @@ public class Document implements Parent {
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
-	public <F extends Content> Iterator<F> getDescendants(Filter<F> filter) {
+	public <F extends Content> Iterator<F> getDescendants(final Filter<F> filter) {
 		return new FilterIterator<F>(new DescendantIterator(this), filter);
 	}
 

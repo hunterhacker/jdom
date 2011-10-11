@@ -17,6 +17,10 @@ public class TestIssue008ExpandEntity {
 	private final void roundTrip(boolean expand, boolean validating, String encoding, String expect) {
 		String docloc = this.getClass().getPackage().getName().replaceAll("\\.", "/") + "/TestIssue008.xml";
 		URL docurl = ClassLoader.getSystemResource(docloc);
+		
+		if (docurl == null) {
+			throw new IllegalStateException("Unable to get resource " + docloc);
+		}
 
 		SAXBuilder builder = new SAXBuilder();
 		builder.setValidation(validating);

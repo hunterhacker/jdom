@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDescendantIterator {
@@ -56,7 +55,6 @@ public class TestDescendantIterator {
 	}
 
 	@Test
-	@Ignore // TODO
 	public void testRemoveOne() {
 		Iterator<Content> it = buildIterator();
 		assertTrue(it.hasNext());

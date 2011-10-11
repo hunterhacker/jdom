@@ -171,6 +171,11 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<target name="compile.core" depends="prepare"
           description="Compiles the core source code">
 
+		<!-- Copy resources and stuff - everything except Java code -->
+		<copy todir="${core.build}" >
+			<fileset dir="${core.src}" excludes="**/*.java" />
+		</copy>
+		
 		<javac srcdir="${core.src}"
            destdir="${core.build}"
            debug="${compile.debug}"
@@ -187,7 +192,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 		<!-- Copy resources and stuff - everything except Java code -->
 		<copy todir="${samples.build}" >
-			<fileset dir="${samples.src}" excludes="*.java" />
+			<fileset dir="${samples.src}" excludes="**/*.java" />
 		</copy>
 		
 		<javac srcdir="${samples.src}"
@@ -206,7 +211,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 		<!-- Copy resources and stuff - everything except Java code -->
 		<copy todir="${contrib.build}" >
-			<fileset dir="${contrib.src}" excludes="*.java" />
+			<fileset dir="${contrib.src}" excludes="**/*.java" />
 		</copy>
 		
 		<javac srcdir="${contrib.src}"
@@ -225,7 +230,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 		<!-- Copy resources and stuff - everything except Java code -->
 		<copy todir="${junit.build}" >
-			<fileset dir="${junit.src}" excludes="*.java" />
+			<fileset dir="${junit.src}" excludes="**/*.java" />
 		</copy>
 		
 		<javac srcdir="${junit.src}"
@@ -330,10 +335,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<delete dir="${junit.xml}" />
 		<mkdir dir="${junit.xml}" />
 
-		<!-- this may already be set true in the cobertura task. -->
-		<property name="forkjunit" value="false" />
-
-		<junit fork="${forkjunit}" forkmode="once" haltonerror="false" haltonfailure="false"
+		<!--  We need to fork to get the resources on the classpath -->
+		<!-- Otherwise we rely on ant's ClassLoader which does not do resources nicely -->
+		<junit fork="true" forkmode="once" haltonerror="false" haltonfailure="false"
 			failureproperty="junit.failed" printsummary="true" timeout="100000"
 			showoutput="true" includeantruntime="true" >
 			
@@ -345,10 +349,13 @@ For instructions on how to build JDOM, please view the README.txt file.
 			
 			<batchtest haltonerror="false" haltonfailure="false"
 				failureproperty="junit.failed" todir="${junit.xml}" >
-				<fileset dir="${junit.src}">
-					<include name="**/Test*.java"/>
-					<exclude name="**/generate/**" />
-				</fileset>
+				<sort>
+					<name />
+					<fileset dir="${junit.src}">
+						<include name="**/Test*.java"/>
+						<exclude name="**/generate/**" />
+					</fileset>
+				</sort>
 			</batchtest>
 			
 		</junit>

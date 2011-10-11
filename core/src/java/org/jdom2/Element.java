@@ -1479,8 +1479,7 @@ public class Element extends Content implements Parent {
 	 */
 	@Override
 	public <F extends Content> Iterator<F> getDescendants(final Filter<F> filter) {
-		final Iterator<Content> iterator = new DescendantIterator(this);
-		return new FilterIterator<F>(iterator, filter);
+		return new FilterIterator<F>(new DescendantIterator(this), filter);
 	}
 
 

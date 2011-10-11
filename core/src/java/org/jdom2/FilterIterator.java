@@ -62,15 +62,18 @@ import org.jdom2.filter.*;
  *
  * @author Bradley S. Huffman
  */
-class FilterIterator<T extends Content> implements Iterator<T> {
+class FilterIterator<T> implements Iterator<T> {
 
-	private Iterator<? extends Content> iterator;
+	private Iterator<?> iterator;
 	private Filter<T> filter;
 	private T nextObject;
+	private boolean canremove = false;
 
-	public FilterIterator(Iterator<? extends Content> iterator, Filter<T> filter) {
-		if ((iterator == null) || (filter == null)) {
-			throw new IllegalArgumentException("null parameter");
+	public FilterIterator(Iterator<?> iterator, Filter<T> filter) {
+		// can trust that iterator is not null, but filter may be.
+		if (filter == null) {
+			throw new NullPointerException("Cannot specify a null Filter " +
+					"for a FilterIterator");
 		}
 		this.iterator = iterator;
 		this.filter = filter;
@@ -78,12 +81,15 @@ class FilterIterator<T extends Content> implements Iterator<T> {
 
 	@Override
 	public boolean hasNext() {
+		
+		canremove = false;
+		
 		if (nextObject != null) {
 			return true;
 		}
 
 		while (iterator.hasNext()) {
-			Content obj = iterator.next();
+			Object obj = iterator.next();
 			T f = filter.filter(obj);
 			if (f != null) {
 				nextObject = f;
@@ -101,13 +107,19 @@ class FilterIterator<T extends Content> implements Iterator<T> {
 
 		T obj = nextObject;
 		nextObject = null;
+		canremove = true;
 		return obj;
 	}
 
 	@Override
 	public void remove() {
-		// XXX Could cause probs for sure if hasNext() is
-		// called before the remove(), although that's unlikely.
+		if (!canremove) {
+			throw new IllegalStateException("remove() can only be called " +
+					"on the FilterIterator immediately after a successful " +
+					"call to next(). A call to remove() immediately after " +
+					"a call to hasNext() or remove() will also fail.");
+		}
+		canremove = false;
 		iterator.remove();
 	}
 }
