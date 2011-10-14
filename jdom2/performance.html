@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+
+  <title>JDOM2 Performance</title>
+
+  <link rel="stylesheet" href="../jdom.css" type="text/css" />
+</head>
+
+<body>
+  <div id="container">
+
+    <h1><a href="http://github.com/hunterhacker/jdom">JDOM2</a> Performance</h1>
+
+    <div class="description">
+      Java manipulation of XML made easy.
+    </div>
+
+	<p />    
+    The following is a basic metric of the performance characteristics of JDOM2.
+    This is not meant to be a reproducable baseline, rather, it is intended to
+    give an idea of whether a change has improved or decreased the performance.
+    <p />
+    Running this test on different computers is meaningless. You need to run the
+    same tests on different code to compare the code changes, not the computers.
+    <p />
+    
+    For some sense of consistency, I have chosen 'hamlet' as a base XML document
+    to test. It is available for 
+    <a href="http://www.ibiblio.org/xml/examples/shakespeare/">free on ibiblio</a>.
+    The raw <a href="http://www.ibiblio.org/xml/examples/shakespeare/hamlet.xml">Hamlet</a>
+    is not actually valid XML (go figure), as you need to change the XML declaration
+    to lower-case.
+    <p />
+    There is 'working' copy of Hamlet in contrib/src/resources/hamlet.xml
+    </p>
+    The code used to compute the benchmark does a few things.
+    <ul>
+    <li>Input - ]It measures the number of bytes in the input XML files</li>	
+    <li>JDOM - It measures the amount of memory required to load the XML as a JDOM document</li>	
+    <li>Parse - The SAXBuilder.parse() method is timed (the XML input is pre-loaded in
+    	to a CharArrayReader so there should be no effect of IO on the time)</li>	
+	<li>Scan - It measures how long it takes to do a simple, and then an Element-Filtered
+	    DescendantIterator 'walk' of the document tree.</li>	
+	<li>Dump - It measures how long it takes to output the document to a 'bitbucket'
+	    in the three major Format outputs (pretty, compact, raw).</li>	
+	<li>Dupe - It measures how long it takes to recursively 'duplicate' the document
+	    by using a 'brute-force' mechanism which uses the 'new' constructors for
+	    the content. See the code for what it does.</li>	
+	<li>XPath - It measures how long it takes to do two XPath operations, one that selects
+	    all attributes with a non-existing name (expect no results). The other
+	    selects all Elements.</li>	
+	<li>Checked - It measures how long it takes to send the document back through the
+		SAXHandler using the DefaultJDOMFactory</li>	
+	<li>UnChecked - It measures how long it takes to send the document back through the
+		SAXHandler using the UncheckedJDOMFactory</li>
+	</ul>	
+	
+	<h2>Baseline Results - JDOM 1.1.2</h2>
+	
+	<p/>
+	<hr/>
+	<p/>
+	Based on JDOM-1.1.2 in a the same Java6 code as below, using the xerces/jaxen jars from JDOM1.1.2
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>197.71ms</td><td>4.96ms</td><td>75.96ms</td><td>11.12ms</td><td>256.71ms</td><td>9.61ms</td><td>8.09ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>201.01ms</td><td>4.96ms</td><td>11.07ms</td><td>9.00ms</td><td>254.74ms</td><td>10.22ms</td><td>8.09ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>200.03ms</td><td>4.95ms</td><td>11.18ms</td><td>8.96ms</td><td>253.40ms</td><td>9.95ms</td><td>8.16ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>200.23ms</td><td>4.99ms</td><td>11.43ms</td><td>8.96ms</td><td>254.72ms</td><td>9.54ms</td><td>8.80ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>199.48ms</td><td>4.91ms</td><td>11.27ms</td><td>8.53ms</td><td>253.15ms</td><td>9.69ms</td><td>8.04ms</td></tr>
+	</table>
+
+	<p/>
+	
+	<h2>JDOM 2 Results</h2>	
+
+	<p/>
+	<hr/>
+	<p/>
+	Commit <a href="https://github.com/hunterhacker/jdom/commit/d937b230013b209b6600d4281217d13ef410b996">d937b23001</a> just prior to ContentList changes.
+	<br />	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>209.18ms</td><td>4.91ms</td><td>61.01ms</td><td>25.87ms</td><td>281.87ms</td><td>45.20ms</td><td>41.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>210.77ms</td><td>5.33ms</td><td>61.24ms</td><td>26.33ms</td><td>279.61ms</td><td>43.63ms</td><td>41.20ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>210.33ms</td><td>4.83ms</td><td>62.62ms</td><td>27.07ms</td><td>281.42ms</td><td>44.20ms</td><td>42.00ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>210.20ms</td><td>4.93ms</td><td>60.93ms</td><td>25.48ms</td><td>279.78ms</td><td>43.55ms</td><td>43.90ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>211.23ms</td><td>4.92ms</td><td>60.77ms</td><td>25.90ms</td><td>281.52ms</td><td>44.44ms</td><td>41.80ms</td></tr>
+	</table>
+
+
+	
+	<p/>
+	<hr/>
+	<p/>
+	After changes to ContentList <a href="https://github.com/hunterhacker/jdom/commit/e270fd04a335dc6a3c431b4827f26411b03e873f">e270fd04a3</a>
+	to make the FilterList and FilterListIterator
+	work correctly on get/set and other issues. The major change here that has
+	affected the performance is the final methods and parameter values
+	for the checkIndex and checkPreConditions, I think. In reality, ContentList
+	is doing additional work because of the new dataModCount variable.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>209.10ms</td><td>4.67ms</td><td>58.91ms</td><td>24.49ms</td><td>279.07ms</td><td>42.89ms</td><td>39.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.06ms</td><td>5.24ms</td><td>58.39ms</td><td>24.25ms</td><td>267.83ms</td><td>42.23ms</td><td>39.95ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.10ms</td><td>5.28ms</td><td>57.60ms</td><td>24.16ms</td><td>274.26ms</td><td>41.10ms</td><td>38.83ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.53ms</td><td>4.78ms</td><td>59.08ms</td><td>24.12ms</td><td>271.91ms</td><td>44.01ms</td><td>40.57ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>209.43ms</td><td>4.78ms</td><td>58.64ms</td><td>25.06ms</td><td>280.05ms</td><td>41.80ms</td><td>41.55ms</td></tr>
+	</table>
+	
+	
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/hunterhacker/jdom">hunterhacker/jdom</a>
+    </div>
+
+  </div>
+
+  
+</body>
+</html>
+
+
+
+

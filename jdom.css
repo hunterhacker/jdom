@@ -2,18 +2,18 @@ body {
       margin-top: 1.0em;
       background-color: #fff;
       font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #222;
+      color: #111;
     }
 #container {
       margin: 0 auto;
       width: 700px;
     }
-h1 { font-size: 3.8em; color: #d5be5d; margin-bottom: 3px; }
+h1 { font-size: 3.8em; color: #359e35; margin-bottom: 3px; }
 h1 .small { font-size: 0.4em; }
 h1 a { text-decoration: none }
 h2 { font-size: 1.5em; color: #d5be5d; }
 h3 { text-align: center; color: #d5be5d; }
-a { color: #d5be5d; }
+a { color: #359e35; }
 .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
 .download { float: right; }
 pre { background: #000; color: #bbb; padding: 15px;}
