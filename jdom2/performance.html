@@ -72,7 +72,19 @@
 		<tr><td>273.14KiB</td><td>2.26MiB</td><td>200.23ms</td><td>4.99ms</td><td>11.43ms</td><td>8.96ms</td><td>254.72ms</td><td>9.54ms</td><td>8.80ms</td></tr>
 		<tr><td>273.14KiB</td><td>2.26MiB</td><td>199.48ms</td><td>4.91ms</td><td>11.27ms</td><td>8.53ms</td><td>253.15ms</td><td>9.69ms</td><td>8.04ms</td></tr>
 	</table>
-
+	<p/>
+	<hr/>
+	<p/>
+	After adding counter in DevNull
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>212.31ms</td><td>4.68ms</td><td>12.47ms</td><td>8.71ms</td><td>259.47ms</td><td>10.27ms</td><td>8.15ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>199.44ms</td><td>4.71ms</td><td>11.57ms</td><td>9.18ms</td><td>260.96ms</td><td>9.96ms</td><td>9.11ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>200.48ms</td><td>5.04ms</td><td>11.67ms</td><td>8.64ms</td><td>260.08ms</td><td>9.49ms</td><td>8.14ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>199.52ms</td><td>4.68ms</td><td>11.30ms</td><td>8.54ms</td><td>256.91ms</td><td>10.05ms</td><td>8.52ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>199.18ms</td><td>4.74ms</td><td>11.27ms</td><td>8.69ms</td><td>259.17ms</td><td>9.90ms</td><td>7.94ms</td></tr>
+	</table>
 	<p/>
 	
 	<h2>JDOM 2 Results</h2>	
@@ -111,6 +123,22 @@
 		<tr><td>273.14KiB</td><td>2.26MiB</td><td>209.43ms</td><td>4.78ms</td><td>58.64ms</td><td>25.06ms</td><td>280.05ms</td><td>41.80ms</td><td>41.55ms</td></tr>
 	</table>
 	
+	<p>
+	<hr/>
+	<p/>
+	Add NamespaceStack to XMLOutputter and SAXOutputter... see 
+	<a href="https://github.com/hunterhacker/jdom/commit/16e00081bc0d5263e5737f42b80d1b1fd18e129e">16e00081b...</a>
+	for all the performance fix details.
+	It looks like the fix for Multi-sequential-Text issues is still slowig things down slightly.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>206.22ms</td><td>4.35ms</td><td>17.23ms</td><td>10.25ms</td><td>266.19ms</td><td>11.08ms</td><td>10.24ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>205.91ms</td><td>5.21ms</td><td>17.33ms</td><td>10.30ms</td><td>267.94ms</td><td>11.00ms</td><td>10.04ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>204.68ms</td><td>4.42ms</td><td>16.15ms</td><td>11.20ms</td><td>266.09ms</td><td>10.99ms</td><td>9.40ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>204.74ms</td><td>4.27ms</td><td>16.66ms</td><td>10.53ms</td><td>264.21ms</td><td>11.10ms</td><td>9.42ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>205.44ms</td><td>4.13ms</td><td>16.99ms</td><td>10.58ms</td><td>263.71ms</td><td>11.80ms</td><td>10.21ms</td></tr>
+	</table>
 	
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/hunterhacker/jdom">hunterhacker/jdom</a>
