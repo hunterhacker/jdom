@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jdom2.*;
-import org.jdom2.filter.Filters;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.SAXHandler;
 import org.jdom2.output.Format;
@@ -35,59 +35,81 @@ public class PerfDoc {
 		}
 	}
 	
-	private static final Writer devnull = new Writer() {
+	private static class DevNull extends Writer {
+		
+		int counter = 0;
+		
+		public void reset() {
+			counter = 0;
+		}
+		
+		public int getCounter() {
+			return counter;
+		}
 		
 		@Override
 		public void write(char[] cbuf, int off, int len) throws IOException {
 			// do nothing
+			counter++;
 		}
 		
 		@Override
 		public void flush() throws IOException {
 			// do nothing
+			counter++;
 		}
 		
 		@Override
 		public void close() throws IOException {
 			// do nothing
+			counter++;
 		}
 
 		@Override
 		public void write(int c) throws IOException {
 			// do nothing
+			counter++;
 		}
 
 		@Override
 		public void write(char[] cbuf) throws IOException {
 			// do nothing
+			counter++;
 		}
 
 		@Override
 		public void write(String str) throws IOException {
 			// do nothing
+			counter++;
 		}
 
 		@Override
 		public void write(String str, int off, int len) throws IOException {
 			// do nothing
+			counter++;
 		}
 
 		@Override
 		public Writer append(CharSequence csq) throws IOException {
+			counter++;
 			return this;
 		}
 
 		@Override
 		public Writer append(CharSequence csq, int start, int end) throws IOException {
+			counter++;
 			return this;
 		}
 
 		@Override
 		public Writer append(char c) throws IOException {
+			counter++;
 			return this;
 		}
 		
-	};
+	}
+	
+	private static final DevNull devnull = new DevNull();
 	
 	private final File infile;
 	
@@ -157,8 +179,8 @@ public class PerfDoc {
 	
 	public int recurse(Element emt) {
 		int cnt = 1;
-		for (Element kid : emt.getChildren()) {
-			cnt += recurse(kid);
+		for (Object kid : emt.getChildren()) {
+			cnt += recurse((Element)kid);
 		}
 		return cnt;
 	}
@@ -176,7 +198,7 @@ public class PerfDoc {
 				}
 				
 				int felements = 0;
-				Iterator<Element> et = document.getDescendants(Filters.element());
+				Iterator<?> et = document.getDescendants(new ElementFilter());
 				while (et.hasNext()) {
 					et.next();
 					felements++;
@@ -199,19 +221,31 @@ public class PerfDoc {
 			
 			@Override
 			public void run() throws Exception {
+				long start = System.nanoTime();
 				dump(Format.getCompactFormat());
+				long comp = System.nanoTime();
 				dump(Format.getPrettyFormat());
+				long pretty = System.nanoTime();
 				dump(Format.getRawFormat());
+				long raw = System.nanoTime();
+				raw -= pretty;
+				pretty -= comp;
+				comp -= start;
+				System.out.printf("Raw=%d Pretty=%8d Compact=%8d\n", raw, pretty, comp);
 			}
 		});
 		return dumpTime;
 	}
 	
-	private long dump(Format format) throws IOException {
+	private void dump(Format format) throws IOException {
 		XMLOutputter xout = new XMLOutputter(format);
-		long start = System.nanoTime();
+		devnull.reset();
+		System.setProperty("NamespaceStack", "");
 		xout.output(document, devnull);
-		return System.nanoTime() - start;
+		System.clearProperty("NamespaceStack");
+		if (devnull.getCounter() <= 0) {
+			throw new IllegalStateException("Needed a counter");
+		}
 	}
 	
 	public long xpath() throws Exception {
@@ -235,14 +269,15 @@ public class PerfDoc {
 			if (c instanceof Element) {
 				Element emt = (Element)c;
 				Element ne = new Element(emt.getName(), emt.getNamespacePrefix(), emt.getNamespaceURI());
-				for (Attribute att : emt.getAttributes()) {
+				for (Object oatt : emt.getAttributes()) {
+					Attribute att = (Attribute)oatt;
 					Attribute a = new Attribute(att.getName(), att.getValue(), 
 							att.getAttributeType(), 
 							Namespace.getNamespace(att.getNamespacePrefix(), att.getNamespaceURI()));
 					emt.setAttribute(a);
 				}
-				for (Namespace ns : emt.getAdditionalNamespaces()) {
-					ne.addNamespaceDeclaration(ns);
+				for (Object ns : emt.getAdditionalNamespaces()) {
+					ne.addNamespaceDeclaration((Namespace)ns);
 				}
 				ne.addContent(duplicateContent(emt.getContent()));
 				ret.add(ne);

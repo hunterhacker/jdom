@@ -1881,7 +1881,7 @@ public final class TestElement {
         StringWriter sw = new StringWriter();
         XMLOutputter op = new XMLOutputter();
         op.output(element, sw);
-        assertTrue("Incorrect output for NO_NAMESPACE in a default namespace", sw.toString().equals(bufWithNoNS));
+        assertEquals("Incorrect output for NO_NAMESPACE in a default namespace", bufWithNoNS, sw.toString());
 
         //new try setting a new empty default namespace for children
         element = new Element("element", Namespace.getNamespace("http://foo"));
@@ -1944,7 +1944,7 @@ public final class TestElement {
         StringWriter sw = new StringWriter();
         XMLOutputter op = new XMLOutputter();
         op.output(elIn, sw);
-        assertTrue("Incorrect data after serialization", sw.toString().equals(bufWithEmptyNS));
+        assertEquals("Incorrect data after serialization", sw.toString(), bufWithEmptyNS);
 
         //set up an element to test with
         Element element2 = new Element("element", Namespace.getNamespace("http://foo"));

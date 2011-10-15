@@ -12,7 +12,7 @@ public class PerfTest {
 		long min = Long.MAX_VALUE;
 		long max = Long.MIN_VALUE;
 		long sum = 0L;
-		final int cnt = 6;
+		final int cnt = 12;
 		for (int i = 0 ; i < cnt; i++) {
 			System.gc();
 			long time = System.nanoTime();

@@ -600,7 +600,7 @@ public class SAXOutputter {
 
 			if (obj instanceof Element) {
 				// process root element and its content
-				element(document.getRootElement());
+				element(document.getRootElement(), new NamespaceStack());
 			}
 			else if (obj instanceof ProcessingInstruction) {
 				// contentHandler.processingInstruction()
@@ -645,7 +645,7 @@ public class SAXOutputter {
 		startDocument();
 
 		// Process node list.
-		elementContent(nodes);
+		elementContent(nodes, new NamespaceStack());
 
 		// contentHandler.endDocument()
 		endDocument();
@@ -671,7 +671,7 @@ public class SAXOutputter {
 		startDocument();
 
 		// Output node.
-		elementContent(node);
+		elementContent(node, new NamespaceStack());
 
 		// contentHandler.endDocument()
 		endDocument();
@@ -701,7 +701,7 @@ public class SAXOutputter {
 		}
 
 		// Output node list as a document fragment.
-		elementContent(nodes);
+		elementContent(nodes, new NamespaceStack());
 	}
 
 	/**
@@ -728,7 +728,7 @@ public class SAXOutputter {
 		}
 
 		// Output single node as a document fragment.
-		elementContent(node);
+		elementContent(node, new NamespaceStack());
 	}
 
 	/**
@@ -864,36 +864,40 @@ public class SAXOutputter {
 	 * @param element <code>Element</code> used in callbacks.
 	 * @param namespaces <code>List</code> stack of Namespaces in scope.
 	 */
-	private void element(Element element)
+	private void element(Element element, NamespaceStack stack)
 			throws JDOMException {
 
 		AttributesImpl nsAtts = null;   // The namespaces as xmlns attributes
 
 		// contentHandler.startPrefixMapping()
-		List<Namespace> nsq = element.getNamespacesIntroduced();
-		for (Namespace ns : nsq) {
-			startPrefixMapping(ns);
-			nsAtts = this.addNsAttribute(nsAtts, ns);
+		stack.push(element);
+		try {
+			for (Namespace ns : stack.addedForward()) {
+				startPrefixMapping(ns);
+				nsAtts = this.addNsAttribute(nsAtts, ns);
+			}
+	
+			// contentHandler.startElement()
+			startElement(element, nsAtts);
+	
+			// handle content in the element
+			elementContent(element.getContent(), stack);
+	
+			// update locator
+			if (locator != null) {
+				locator.setNode(element);
+			}
+	
+			// contentHandler.endElement()
+			endElement(element);
+		} finally {
+			stack.pop();
 		}
-
-		// contentHandler.startElement()
-		startElement(element, nsAtts);
-
-		// handle content in the element
-		elementContent(element.getContent());
-
-		// update locator
-		if (locator != null) {
-			locator.setNode(element);
-		}
-
-		// contentHandler.endElement()
-		endElement(element);
-
+	
 		// contentHandler.endPrefixMapping()
 		// de-map in reverse order to the mapping.
-		for (ListIterator<Namespace> li = nsq.listIterator(nsq.size()); li.hasPrevious();) { 
-			endPrefixMapping(li.previous());
+		for (Namespace ns : stack.addedReverse()) { 
+			endPrefixMapping(ns);
 		}
 	}
 
@@ -998,13 +1002,13 @@ public class SAXOutputter {
 	 *
 	 * @param content element content as a <code>List</code> of nodes.
 	 */
-	private void elementContent(List<? extends Content> content)
+	private void elementContent(List<? extends Content> content, NamespaceStack stack)
 			throws JDOMException {
 		for (Iterator<? extends Content> i=content.iterator(); i.hasNext(); ) {
 			Object obj = i.next();
 
 			if (obj instanceof Content) {
-				this.elementContent((Content)obj);
+				this.elementContent((Content)obj, stack);
 			}
 			else {
 				// Not a valid element child. This could happen with
@@ -1024,7 +1028,7 @@ public class SAXOutputter {
 	 * @param node a <code>Content</code> node.
 	 * @param namespaces <code>List</code> stack of Namespaces in scope.
 	 */
-	private void elementContent(Content node)
+	private void elementContent(Content node, NamespaceStack stack)
 			throws JDOMException {
 		// update locator
 		if (locator != null) {
@@ -1032,7 +1036,7 @@ public class SAXOutputter {
 		}
 
 		if (node instanceof Element) {
-			element((Element) node);
+			element((Element) node, stack);
 		}
 		else if (node instanceof CDATA) {
 			cdata(((CDATA) node).getText());

@@ -357,17 +357,16 @@ public class XMLOutputter implements Cloneable {
 	public void output(Document doc, Writer out) throws IOException {
 
 		printDeclaration(out, doc, userFormat.encoding);
+		
+		NamespaceStack stack = new NamespaceStack();
 
 		// Print out root element, as well as any root level
 		// comments and processing instructions,
 		// starting with no indentation
-		List<Content> content = doc.getContent();
-		int size = content.size();
-		for (int i = 0; i < size; i++) {
-			Object obj = content.get(i);
+		for (Content obj : doc.getContent()) {
 
 			if (obj instanceof Element) {
-				printElement(out, doc.getRootElement(), 0);
+				printElement(out, doc.getRootElement(), 0, stack);
 			}
 			else if (obj instanceof Comment) {
 				printComment(out, (Comment) obj);
@@ -393,7 +392,7 @@ public class XMLOutputter implements Cloneable {
 		// Output final line separator
 		// We output this no matter what the newline flags say
 		out.write(currentFormat.lineSeparator);
-
+		
 		out.flush();
 	}
 
@@ -419,7 +418,7 @@ public class XMLOutputter implements Cloneable {
 	public void output(Element element, Writer out) throws IOException {
 		// If this is the root element we could pre-initialize the
 		// namespace stack with the namespaces
-		printElement(out, element, 0);
+		printElement(out, element, 0, new NamespaceStack());
 		out.flush();
 	}
 
@@ -436,7 +435,7 @@ public class XMLOutputter implements Cloneable {
 	public void outputElementContent(Element element, Writer out)
 			throws IOException {
 		List<Content> content = element.getContent();
-		printContentRange(out, content, 0, content.size(), 0);
+		printContentRange(out, content, 0, new NamespaceStack());
 		out.flush();
 	}
 
@@ -451,7 +450,7 @@ public class XMLOutputter implements Cloneable {
 	 */
 	public void output(List<? extends Content> list, Writer out)
 			throws IOException {
-		printContentRange(out, list, 0, list.size(), 0);
+		printContentRange(out, list, 0, new NamespaceStack());
 		out.flush();
 	}
 
@@ -886,7 +885,7 @@ public class XMLOutputter implements Cloneable {
 	 * @param namespaces <code>List</code> stack of Namespaces in scope.
 	 */
 	protected void printElement(Writer out, Element element,
-			int level)
+			int level, NamespaceStack stack)
 					throws IOException {
 
 		List<Attribute> attributes = element.getAttributes();
@@ -914,49 +913,54 @@ public class XMLOutputter implements Cloneable {
 		printQualifiedName(out, element);
 
 		// Print the element's namespace, if appropriate
-		printElementNamespaces(out, element);
-
-		// Print out attributes
-		if (attributes != null)
-			printAttributes(out, attributes);
-
-		// Depending on the settings (newlines, textNormalize, etc), we may
-		// or may not want to print all of the content, so determine the
-		// index of the start of the content we're interested
-		// in based on the current settings.
-
-		int start = skipLeadingWhite(content, 0);
-		int size = content.size();
-		if (start >= size) {
-			// Case content is empty or all insignificant whitespace
-			if (currentFormat.expandEmptyElements) {
-				out.write("></");
+		stack.push(element);
+		try {
+			printElementNamespaces(out, element, stack);
+			// Print out attributes
+			if (attributes != null)
+				printAttributes(out, attributes);
+	
+			// Depending on the settings (newlines, textNormalize, etc), we may
+			// or may not want to print all of the content, so determine the
+			// index of the start of the content we're interested
+			// in based on the current settings.
+	
+			int start = skipLeadingWhite(content, 0);
+			final int size = content.size();
+			if (start >= size) {
+				// Case content is empty or all insignificant whitespace
+				if (currentFormat.expandEmptyElements) {
+					out.write("></");
+					printQualifiedName(out, element);
+					out.write(">");
+				}
+				else {
+					out.write(" />");
+				}
+			}
+			else {
+				out.write(">");
+				
+				boolean donewlines = nextNonText(content, 0) < size;
+				
+				if (donewlines) {
+					newline(out);
+				}
+	
+				printContentRange(out, content, level + 1, stack);
+				
+				if (donewlines) {
+					newline(out);
+					indent(out, level);
+				}
+				
+				out.write("</");
 				printQualifiedName(out, element);
 				out.write(">");
 			}
-			else {
-				out.write(" />");
-			}
-		}
-		else {
-			out.write(">");
-			
-			boolean donewlines = nextNonText(content, 0) < content.size();
-			
-			if (donewlines) {
-				newline(out);
-			}
-
-			printContentRange(out, content, 0, size, level + 1);
-			
-			if (donewlines) {
-				newline(out);
-				indent(out, level);
-			}
-			
-			out.write("</");
-			printQualifiedName(out, element);
-			out.write(">");
+	
+		} finally {
+			stack.pop();
 		}
 
 		// Restore our format settings
@@ -964,22 +968,17 @@ public class XMLOutputter implements Cloneable {
 	}
 
 	/**
-	 * This will handle printing of content within a given range.
-	 * The range to print is specified in typical Java fashion; the
-	 * starting index is inclusive, while the ending index is
-	 * exclusive.
+	 * This will handle printing of content.
 	 *
 	 * @param content <code>List</code> of content to output
-	 * @param start index of first content node (inclusive.
-	 * @param end index of last content node (exclusive).
 	 * @param out <code>Writer</code> to use.
 	 * @param level <code>int</code> level of indentation.
 	 * @param namespaces <code>List</code> stack of Namespaces in scope.
 	 */
-	private void printContentRange(Writer out, List<? extends Content> content,
-			final int start, final int end, final int level)
+	private final void printContentRange(final Writer out, 
+			final List<? extends Content> content,
+			final int level, NamespaceStack stack)
 					throws IOException {
-		Content c;         // Node we're about to print
 		
 		// Basic theory of operation is as follows:
 		//    1. print any non-Text content
@@ -987,11 +986,9 @@ public class XMLOutputter implements Cloneable {
 		// Do not do any newlines before or after content.
 
 		boolean donewline = false;
-		int index = start;
 		int txti = -1;
-		while (index < end) {
-			c = content.get(index);
-
+		int index = 0;
+		for (Content c : content) {
 			if ((c instanceof Text) || (c instanceof EntityRef)) {
 				//
 				// Handle consecutive CDATA, Text, and EntityRef nodes all at once
@@ -1024,7 +1021,7 @@ public class XMLOutputter implements Cloneable {
 					printComment(out, (Comment)c);
 				}
 				else if (c instanceof Element) {
-					printElement(out, (Element)c, level);
+					printElement(out, (Element)c, level, stack);
 				}
 				else if (c instanceof ProcessingInstruction) {
 					printProcessingInstruction(out, (ProcessingInstruction)c);
@@ -1035,7 +1032,6 @@ public class XMLOutputter implements Cloneable {
 					//     a exception)
 				}
 			}
-
 			index++;
 		} /* while */
 		if (txti >= 0) {
@@ -1043,7 +1039,7 @@ public class XMLOutputter implements Cloneable {
 				newline(out);
 				indent(out,level);
 			}
-			printTextRange(out, content, txti, end, currentFormat.mode);
+			printTextRange(out, content, txti, index, currentFormat.mode);
 		}
 	}
 
@@ -1057,7 +1053,8 @@ public class XMLOutputter implements Cloneable {
 	 * @param end index of last content node (exclusive).
 	 * @param mode The format to use for this text content.
 	 */
-	private void printTextRange(Writer out, List<? extends Content> content, 
+	private final void printTextRange(final Writer out, 
+			final List<? extends Content> content, 
 			final int start, final int end, final TextMode mode) throws IOException {
 		
 		// here we have a sequence of Text nodes to print.
@@ -1292,13 +1289,13 @@ public class XMLOutputter implements Cloneable {
 		}
 	}
 
-	private void printElementNamespaces(Writer out, Element element)
+	private void printElementNamespaces(Writer out, Element element, NamespaceStack stack)
 			throws IOException {
 		// Add namespace decl only if it's not the XML namespace and it's
 		// not the NO_NAMESPACE with the prefix "" not yet mapped
 		// (we do output xmlns="" if the "" prefix was already used and we
 		// need to reclaim it for the NO_NAMESPACE)
-		for (Namespace ns : element.getNamespacesIntroduced()) {
+		for (Namespace ns : stack.addedForward()) {
 			// use the getParentElement() call here, because isRootElement()
 			// returns 'false' for detached elements
 			if (ns == Namespace.NO_NAMESPACE && element.getParentElement() == null) {
