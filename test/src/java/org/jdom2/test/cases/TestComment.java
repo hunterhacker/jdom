@@ -61,12 +61,17 @@ package org.jdom2.test.cases;
  * @author Philip Nelson
  * @version 1.0
  */
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.jdom2.Comment;
+import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import static org.junit.Assert.*;
 
 public final class TestComment {
 
@@ -254,4 +259,8 @@ public final class TestComment {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.Comment == new Comment("").getCType());
+    }
 }

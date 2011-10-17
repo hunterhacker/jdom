@@ -74,7 +74,9 @@ public class CDATA extends Text {
 	 * classes. It allows subclassers to get a raw instance with no
 	 * initialization.
 	 */
-	protected CDATA() { }
+	protected CDATA() {
+		super(CType.CDATA);
+	}
 
 	/**
 	 * This constructor creates a new <code>CDATA</code> node, with the
@@ -87,6 +89,7 @@ public class CDATA extends Text {
 	 *         or the CDATA end delimiter <code>]]&gt;</code>.
 	 */
 	public CDATA(final String string) {
+		super(CType.CDATA);
 		setText(string);
 	}
 

@@ -54,6 +54,7 @@
 package org.jdom2.test.cases;
 
 import org.jdom2.CDATA;
+import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
@@ -644,4 +645,8 @@ public final class TestCDATA {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.CDATA == new CDATA("").getCType());
+    }
 }

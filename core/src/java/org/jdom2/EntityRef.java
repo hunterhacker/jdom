@@ -76,7 +76,9 @@ public class EntityRef extends Content {
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
 	 */
-	protected EntityRef() {}
+	protected EntityRef() {
+		super(CType.EntityRef);
+	}
 
 	/**
 	 * This will create a new <code>EntityRef</code> with the supplied name.
@@ -118,6 +120,7 @@ public class EntityRef extends Content {
 	 *         XML name.
 	 */
 	public EntityRef(String name, String publicID, String systemID) {
+		super(CType.EntityRef);
 		setName(name);
 		setPublicID(publicID);
 		setSystemID(systemID);

@@ -54,6 +54,7 @@
 
 package org.jdom2;
 
+
 /**
  * An XML comment. Methods allow the user to get and set the text of the
  * comment.
@@ -69,7 +70,9 @@ public class Comment extends Content {
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
 	 */
-	protected Comment() {}
+	protected Comment() {
+		super(CType.Comment);
+	}
 
 	/**
 	 * This creates the comment with the supplied text.
@@ -77,6 +80,7 @@ public class Comment extends Content {
 	 * @param text <code>String</code> content of comment.
 	 */
 	public Comment(String text) {
+		super(CType.Comment);
 		setText(text);
 	}
 

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
@@ -113,4 +114,8 @@ public class TestText {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.Text == new Text("").getCType());
+    }
 }

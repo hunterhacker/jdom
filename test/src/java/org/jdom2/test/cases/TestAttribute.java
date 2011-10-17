@@ -63,6 +63,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jdom2.Attribute;
+import org.jdom2.Content;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -837,4 +838,8 @@ public final class TestAttribute {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.Attribute == new Attribute("att", "val").getCType());
+    }
 }

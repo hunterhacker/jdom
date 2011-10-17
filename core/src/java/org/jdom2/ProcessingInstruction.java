@@ -82,7 +82,9 @@ public class ProcessingInstruction extends Content {
 	 * Default, no-args constructor for implementations
 	 * to use if needed.
 	 */
-	protected ProcessingInstruction() { }
+	protected ProcessingInstruction() {
+		super(CType.ProcessingInstruction);
+	}
 
 	/**
 	 * This will create a new <code>ProcessingInstruction</code>
@@ -93,8 +95,7 @@ public class ProcessingInstruction extends Content {
 	 *         as a processing instruction name.
 	 */
 	public ProcessingInstruction(String target) {
-		setTarget(target);
-		setData("");
+		this(target, "");
 	}
 
 	/**
@@ -108,6 +109,7 @@ public class ProcessingInstruction extends Content {
 	 *         as a processing instruction name.
 	 */
 	public ProcessingInstruction(String target, Map<String,String> data) {
+		super(CType.ProcessingInstruction);
 		setTarget(target);
 		setData(data);
 	}
@@ -122,6 +124,7 @@ public class ProcessingInstruction extends Content {
 	 *         as a processing instruction name.
 	 */
 	public ProcessingInstruction(String target, String data) {
+		super(CType.ProcessingInstruction);
 		setTarget(target);
 		setData(data);
 	}

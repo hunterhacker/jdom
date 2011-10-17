@@ -199,7 +199,9 @@ public class Element extends Content implements Parent {
 	 * should call one of the public constructors so variable initialization is
 	 * handled automatically.
 	 */
-	protected Element() { }
+	protected Element() {
+		super(CType.Element);
+	}
 
 	/**
 	 * Creates a new element with the supplied (local) name and namespace. If
@@ -211,6 +213,7 @@ public class Element extends Content implements Parent {
 	 *                              name
 	 */
 	public Element(final String name, final Namespace namespace) {
+		super(CType.Element);
 		setName(name);
 		setNamespace(namespace);
 	}
@@ -410,7 +413,7 @@ public class Element extends Content implements Parent {
 			return getName();
 		}
 
-		return new StringBuffer(namespace.getPrefix())
+		return new StringBuilder(namespace.getPrefix())
 		.append(':')
 		.append(name)
 		.toString();

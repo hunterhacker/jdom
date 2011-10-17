@@ -78,7 +78,9 @@ public class DocType extends Content {
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
 	 */
-	protected DocType() {}
+	protected DocType() {
+		super(CType.DocType);
+	}
 
 	/*
 	 * XXX:
@@ -102,6 +104,7 @@ public class DocType extends Content {
 	 *         legal XML element name.
 	 */
 	public DocType(String elementName, String publicID, String systemID) {
+		super(CType.DocType);
 		setElementName(elementName);
 		setPublicID(publicID);
 		setSystemID(systemID);

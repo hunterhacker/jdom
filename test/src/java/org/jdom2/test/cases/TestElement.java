@@ -2429,4 +2429,8 @@ public final class TestElement {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.Element == new Element("root").getCType());
+    }
 }

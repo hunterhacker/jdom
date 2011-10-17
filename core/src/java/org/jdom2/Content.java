@@ -75,9 +75,33 @@ import java.util.List;
  */
 public abstract class Content implements Cloneable, Serializable {
 
+	public static enum CType {
+		Comment,
+		Element,
+		ProcessingInstruction,
+		EntityRef,
+		Text,
+		CDATA,
+		DocType,
+		Attribute
+	}
+	
 	protected Parent parent = null;
+	protected final CType ctype;
 
-	protected Content() {}
+	protected Content(CType type) {
+		ctype = type;
+	}
+	
+	
+	/**
+	 * All content has an enumerated type expressing the type of content.
+	 * This makes it possible to use switch-type statements on the content.
+	 * @return A CType enumerated value representing this content.
+	 */
+	public final CType getCType() {
+		return ctype;
+	}
 
 	/**
 	 * Detaches this child from its parent or does nothing if the child

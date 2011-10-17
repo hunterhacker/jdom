@@ -326,4 +326,8 @@ public final class TestDocType {
 		assertNull(clone.getParent());
 	}
 
+    @Test
+    public void testContentCType() {
+    	assertTrue(Content.CType.DocType == new DocType("root").getCType());
+    }
 }

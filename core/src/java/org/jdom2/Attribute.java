@@ -182,7 +182,9 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
 	 */
-	protected Attribute() {}
+	protected Attribute() {
+		super(CType.Attribute);
+	}
 
 	/**
 	 * This will create a new <code>Attribute</code> with the
@@ -222,6 +224,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         supported types.
 	 */
 	public Attribute(final String name, final String value, final int type, final Namespace namespace) {
+		super(CType.Attribute);
 		setName(name);
 		setValue(value);
 		setAttributeType(type);

@@ -72,13 +72,19 @@ public class Text extends Content {
 	// from elharo for a description of why Java characters may not suffice
 	// long term
 	protected String value;
+	
+	protected Text(CType ctype) {
+		super(ctype);
+	}
 
 	/**
 	 * This is the protected, no-args constructor standard in all JDOM
 	 * classes. It allows subclassers to get a raw instance with no
 	 * initialization.
 	 */
-	protected Text() { }
+	protected Text() {
+		this(CType.Text);
+	}
 
 	/**
 	 * This constructor creates a new <code>Text</code> node, with the
@@ -90,6 +96,7 @@ public class Text extends Content {
 	 *         by {@link org.jdom2.Verifier#checkCharacterData})
 	 */
 	public Text(String str) {
+		this(CType.Text);
 		setText(str);
 	}
 
