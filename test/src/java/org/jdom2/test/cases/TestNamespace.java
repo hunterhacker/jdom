@@ -261,4 +261,17 @@ public final class TestNamespace {
 		assertTrue("Incorrect namespace created", ns2.toString().equals("[Namespace: prefix \"prefx\" is mapped to URI \"http://foo\"]"));
 
 	}
+	
+	@Test
+	public void testXMLNamespacePrefix() {
+		try {
+			Namespace.getNamespace("xml", "not right");
+			fail("Should not be able to redefine 'xml' prefix.");
+		} catch (IllegalNameException ine) {
+			// good
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("We expect IllegalNameException not " + e.getClass());
+		}
+	}
 }

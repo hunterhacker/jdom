@@ -157,17 +157,19 @@ public final class Namespace {
 					"Namespace URIs must be non-null and non-empty Strings");
 		}
 
-		// Handle XML namespace mislabels. If the user requested the correct
-		// namespace and prefix -- xml, http://www.w3.org/XML/1998/namespace
-		// -- then it was already returned from the preexisting namespaces.
-		// Thus any use of the xml prefix or the
-		// http://www.w3.org/XML/1998/namespace URI at this point must be
-		// incorrect. 
-		if (prefix.equals("xml")) {
-			throw new IllegalNameException(prefix, "Namespace prefix",
-					"The xml prefix can only be bound to " +
-					"http://www.w3.org/XML/1998/namespace");        
-		}
+//		Actually, the Verifier checks for xml prefixes already.
+//
+//		// Handle XML namespace mislabels. If the user requested the correct
+//		// namespace and prefix -- xml, http://www.w3.org/XML/1998/namespace
+//		// -- then it was already returned from the preexisting namespaces.
+//		// Thus any use of the xml prefix or the
+//		// http://www.w3.org/XML/1998/namespace URI at this point must be
+//		// incorrect. 
+//		if (prefix.equals("xml")) {
+//			throw new IllegalNameException(prefix, "Namespace prefix",
+//					"The xml prefix can only be bound to " +
+//					"http://www.w3.org/XML/1998/namespace");        
+//		}
 
 		// The erratum to Namespaces in XML 1.0 that suggests this 
 		// next check is controversial. Not everyone accepts it. 
