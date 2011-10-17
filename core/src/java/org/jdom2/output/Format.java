@@ -571,40 +571,29 @@ public class Format implements Cloneable {
 	 * for the child element and then off for the remainder of the parent
 	 * element.
 	 */
-	public static class TextMode {
+	public static enum TextMode {
 		/**
 		 * Mode for literal text preservation.
 		 */
-		public static final TextMode PRESERVE = new TextMode("PRESERVE");
+		PRESERVE,
 
 		/**
 		 * Mode for text trimming (left and right trim).
 		 */
-		public static final TextMode TRIM = new TextMode("TRIM");
+		TRIM,
 
 		/**
 		 * Mode for text normalization (left and right trim plus internal
 		 * whitespace is normalized to a single space.
 		 * @see org.jdom2.Element#getTextNormalize
 		 */
-		public static final TextMode NORMALIZE = new TextMode("NORMALIZE");
+		NORMALIZE,
 
 		/**
 		 * Mode for text trimming of content consisting of nothing but
 		 * whitespace but otherwise not changing output.
 		 */
-		public static final TextMode TRIM_FULL_WHITE =
-				new TextMode("TRIM_FULL_WHITE");
+		TRIM_FULL_WHITE;
 
-		private final String name;
-
-		private TextMode(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
 	}
 }
