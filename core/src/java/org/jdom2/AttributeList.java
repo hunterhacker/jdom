@@ -72,7 +72,7 @@ import java.util.*;
  * @see Text
  */
 class AttributeList extends AbstractList<Attribute>
-implements java.io.Serializable {
+implements java.io.Serializable, RandomAccess {
 
 	private static final int INITIAL_ARRAY_SIZE = 5;
 

@@ -74,7 +74,8 @@ import org.jdom2.filter.*;
  * @author  Philippe Riand
  * @author  Bradley S. Huffman
  */
-final class ContentList extends AbstractList<Content> implements java.io.Serializable {
+final class ContentList extends AbstractList<Content> 
+		implements java.io.Serializable, RandomAccess {
 
 	private static final long serialVersionUID = 1L;
 
