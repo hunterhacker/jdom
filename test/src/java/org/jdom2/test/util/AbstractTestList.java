@@ -243,6 +243,64 @@ public abstract class AbstractTestList<T> {
 		quickCheck(list, content);
 		
 		{
+			// Check the iteration code.
+			// the iterator implementation can be different to the ListIterator
+			Iterator<T> it = list.iterator();
+			try {
+				it.remove();
+				fail("Should have failed pre-next() remove()");
+			} catch (IllegalStateException ise) {
+				// good
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail("Expected IllegalStateException but got " + e.getClass());
+			}
+			int i = 0;
+			while (i < content.length) {
+				assertTrue(it.hasNext());
+				assertTrue(it.next() == content[i]);
+				it.remove();
+				try {
+					it.remove();
+					fail("Should have failed sequential remove()");
+				} catch (IllegalStateException ise) {
+					// good
+				} catch (Exception e) {
+					e.printStackTrace();
+					fail("Expected IllegalStateException but got " + e.getClass());
+				}
+				i++;
+			}
+			assertFalse(it.hasNext());
+			try {
+				it.next();
+				fail("Should have failed end-of-iteration next()");
+			} catch (NoSuchElementException nse) {
+				// good
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail("Expected IllegalStateException but got " + e.getClass());
+			}
+			
+			try {
+				it.remove();
+				fail("Should have failed after-end remove()");
+			} catch (IllegalStateException ise) {
+				// good
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail("Expected IllegalStateException but got " + e.getClass());
+			}
+			
+			for (T d : content) {
+				list.add(d);
+			}
+			
+		}
+		
+		quickCheck(list, content);
+		
+		{
 			//Read-Only List iteration through list contents.
 			for (int origin = 0; origin <= content.length; origin++) {
 				// start at every place 
@@ -1080,13 +1138,26 @@ public abstract class AbstractTestList<T> {
 		T[] sample = buildSampleContent();
 		assertTrue("Not enough sample data " + sample.length, sample.length > 2);
 		
+		list.add(sample[0]);
+		
 		ListIterator<T> it = list.listIterator();
+		Iterator<T> si = list.iterator();
+		
+		// It is important to add some content, and do a next()
+		// before testing concurrency, because some iterator methods
+		// check for the Iterator state before checking concurrency.
+		// this puts the iterator in to a valid state for remove(), set(), etc.
+		assertTrue(sample[0] == it.next());
+		assertTrue(sample[0] == si.next());
+		
 		// create a concurrent issue.
-		list.addAll(Arrays.asList(sample));
+		// we have checked for more than 2 elements so this should be fine.
+		list.add(sample[1]);
+		list.add(sample[2]);
 		
 		// hasNext() should never throw CME.
 		assertTrue(it.hasNext());
-		assertTrue(0 == it.nextIndex());
+		assertTrue(1 == it.nextIndex());
 		
 		// hasNext() should never throw CME.
 		assertTrue(it.hasNext());
@@ -1101,16 +1172,16 @@ public abstract class AbstractTestList<T> {
 		}
 
 		
-		it = list.listIterator(list.size());
-		assertTrue(sample[sample.length - 1] == it.previous());
+		it = list.listIterator(3);
+		assertTrue(sample[2] == it.previous());
 		
 		// create a concurrent issue.
-		list.remove(sample.length - 1);
+		list.remove(2);
 		
 		// hasPrevious() should never throw CME.
 		assertTrue(it.hasPrevious());
 		
-		assertTrue(sample.length - 2 == it.previousIndex());
+		assertTrue(1 == it.previousIndex());
 
 		// hasPrevious() should never throw CME.
 		assertTrue(it.hasPrevious());
@@ -1159,6 +1230,34 @@ public abstract class AbstractTestList<T> {
 			fail ("Iterators should throw ConcurrentModificationException not "
 					+ e.getClass() + ":" + e.getMessage());
 		}
+
+		
+		
+		// Now test the Simple Iterator concurrency
+		
+		// hasNext() should never throw CME.
+		assertTrue(si.hasNext());
+		
+		try {
+			si.next();
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+
+		try {
+			si.remove();
+			fail ("Should have ConcurrentModificationException");
+		} catch (ConcurrentModificationException cme) {
+			// good
+		} catch (Exception e) {
+			fail ("Iterators should throw ConcurrentModificationException not "
+					+ e.getClass() + ":" + e.getMessage());
+		}
+		
 	}
 	
 	@Test

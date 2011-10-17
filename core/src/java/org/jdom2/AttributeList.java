@@ -442,6 +442,10 @@ implements java.io.Serializable {
 		return duplicate;
 	}
 
+	@Override
+	public Iterator<Attribute> iterator() {
+		return new ALIterator();
+	}
 	/**
 	 * Return the number of items in this list
 	 *
@@ -459,4 +463,50 @@ implements java.io.Serializable {
 	public String toString() {
 		return super.toString();
 	}
+	
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	private final class ALIterator implements Iterator<Attribute> {
+		private int expect = -1;
+		private int cursor = 0;
+		private boolean canremove = false;
+		private ALIterator() {
+			expect = modCount;
+		}
+		@Override
+		public boolean hasNext() {
+			return cursor < size;
+		}
+
+		@Override
+		public Attribute next() {
+			if (modCount != expect) {
+				throw new ConcurrentModificationException("ContentList was " +
+						"modified outside of this Iterator");
+			}
+			if (cursor >= size) {
+				throw new NoSuchElementException("Iterated beyond the end of " +
+						"the ContentList.");
+			}
+			canremove = true;
+			return elementData[cursor++];
+		}
+
+		@Override
+		public void remove() {
+			if (modCount != expect) {
+				throw new ConcurrentModificationException("ContentList was " +
+						"modified outside of this Iterator");
+			}
+			if (!canremove) {
+				throw new IllegalStateException("Can only remove() content " +
+						"after a call to next()");
+			}
+			AttributeList.this.remove(--cursor);
+			expect = modCount;
+			canremove = false;
+		}
+		
+	}		
+	
 }

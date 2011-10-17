@@ -465,6 +465,11 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 	public int size() {
 		return size;
 	}
+	
+	@Override
+	public Iterator<Content> iterator() {
+		return new CLIterator();
+	}
 
 	/**
 	 * Return this list as a <code>String</code>
@@ -476,6 +481,52 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		return super.toString();
 	}
 
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	private final class CLIterator implements Iterator<Content> {
+		private int expect = -1;
+		private int cursor = 0;
+		private boolean canremove = false;
+		private CLIterator() {
+			expect = modCount;
+		}
+		@Override
+		public boolean hasNext() {
+			return cursor < size;
+		}
+
+		@Override
+		public Content next() {
+			if (modCount != expect) {
+				throw new ConcurrentModificationException("ContentList was " +
+						"modified outside of this Iterator");
+			}
+			if (cursor >= size) {
+				throw new NoSuchElementException("Iterated beyond the end of " +
+						"the ContentList.");
+			}
+			canremove = true;
+			return elementData[cursor++];
+		}
+
+		@Override
+		public void remove() {
+			if (modCount != expect) {
+				throw new ConcurrentModificationException("ContentList was " +
+						"modified outside of this Iterator");
+			}
+			if (!canremove) {
+				throw new IllegalStateException("Can only remove() content " +
+						"after a call to next()");
+			}
+			canremove = false;
+			ContentList.this.remove(--cursor);
+			expect = modCount;
+		}
+		
+		
+	}
+	
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 
@@ -891,4 +942,5 @@ final class ContentList extends AbstractList<Content> implements java.io.Seriali
 		}
 
 	}
+	
 }
