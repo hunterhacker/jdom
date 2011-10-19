@@ -153,11 +153,11 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">int</span> hash;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;68</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;69</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NamespaceKey(String prefix, String uri) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;70</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.prefix = prefix;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.uri = uri;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;72</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.hash = prefix.hashCode();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;69</td>  <td class="nbHitsCovered">&nbsp;781</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NamespaceKey(String prefix, String uri) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;70</td>  <td class="nbHitsCovered">&nbsp;781</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.prefix = prefix;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;781</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.uri = uri;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;72</td>  <td class="nbHitsCovered">&nbsp;781</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.hash = prefix.hashCode();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsCovered">&nbsp;781</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
@@ -170,13 +170,13 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> equals(Object ob) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsUncovered"><a title="Line 81: Conditional coverage 50% (1/2).">&nbsp;1619</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 81: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == ob) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsUncovered"><a title="Line 81: Conditional coverage 50% (1/2).">&nbsp;4030</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 81: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == ob) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;84</td>  <td class="nbHitsUncovered"><a title="Line 84: Conditional coverage 50% (1/2).">&nbsp;1619</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 84: Conditional coverage 50% (1/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (ob <span class="keyword">instanceof</span> NamespaceKey) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered">&nbsp;1619</td>  <td class="src"><pre class="src">&nbsp;                        NamespaceKey other = (NamespaceKey) ob;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsUncovered"><a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;1619</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">                        <span class="keyword">return</span> prefix.equals(other.prefix) &amp;&amp; uri.equals(other.uri);</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;84</td>  <td class="nbHitsUncovered"><a title="Line 84: Conditional coverage 50% (1/2).">&nbsp;4030</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 84: Conditional coverage 50% (1/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (ob <span class="keyword">instanceof</span> NamespaceKey) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered">&nbsp;4030</td>  <td class="src"><pre class="src">&nbsp;                        NamespaceKey other = (NamespaceKey) ob;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsUncovered"><a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;4030</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">                        <span class="keyword">return</span> prefix.equals(other.prefix) &amp;&amp; uri.equals(other.uri);</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;88</td>  <td class="nbHits">&nbsp;</td>
@@ -192,7 +192,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> hashCode() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsCovered">&nbsp;806</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsCovered">&nbsp;912</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> hash;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
@@ -210,6 +210,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 02/10/11 11:38 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 18/10/11 10:49 PM.</div>
 </body>
 </html>

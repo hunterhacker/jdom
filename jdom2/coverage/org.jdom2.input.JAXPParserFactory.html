@@ -245,37 +245,37 @@
   <td class="src"><pre class="src">&nbsp;                        Map&lt;String,Boolean&gt; features, Map&lt;String,Object&gt; properties) <span class="keyword">throws</span> JDOMException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        SAXParser parser = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        SAXParser parser = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Allocate and configure JAXP SAX parser factory.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        SAXParserFactory factory = SAXParserFactory.newInstance();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        factory.setValidating(validating);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        factory.setNamespaceAware(<span class="keyword">true</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        SAXParserFactory factory = SAXParserFactory.newInstance();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        factory.setValidating(validating);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        factory.setNamespaceAware(<span class="keyword">true</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">try</span> {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Allocate parser.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                                parser = factory.newSAXParser();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                                parser = factory.newSAXParser();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">catch</span> (ParserConfigurationException e) {</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> JDOMException(<span class="string">"Could not allocate JAXP SAX Parser"</span>, e);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;131</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Set user-defined JAXP properties (if any)</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;132</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        setProperty(parser, properties, JAXP_SCHEMA_LANGUAGE_PROPERTY);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;133</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                        setProperty(parser, properties, JAXP_SCHEMA_LOCATION_PROPERTY);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;132</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        setProperty(parser, properties, JAXP_SCHEMA_LANGUAGE_PROPERTY);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;133</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                        setProperty(parser, properties, JAXP_SCHEMA_LOCATION_PROPERTY);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;134</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;135</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Return configured SAX XMLReader.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> parser.getXMLReader();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> parser.getXMLReader();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">catch</span> (SAXException e) {</span></pre></td></tr>
@@ -314,7 +314,7 @@
   <td class="src"><pre class="src">&nbsp;                        Map&lt;String,Object&gt; properties, String name) <span class="keyword">throws</span> JDOMException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsCovered"><a title="Line 157: Conditional coverage 100% (2/2).">&nbsp;69</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 157: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (properties.containsKey(name)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsCovered"><a title="Line 157: Conditional coverage 100% (2/2).">&nbsp;93</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 157: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (properties.containsKey(name)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                parser.setProperty(name, properties.get(name));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
@@ -334,14 +334,14 @@
   <td class="src"><pre class="src">&nbsp;                                        name + <span class="string">" property not recognized for JAXP parser "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        parser.getClass().getName());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;171</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsCovered">&nbsp;92</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;171</td>  <td class="nbHitsCovered">&nbsp;92</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 02/10/11 11:38 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 18/10/11 10:49 PM.</div>
 </body>
 </html>

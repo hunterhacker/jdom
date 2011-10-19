@@ -12,7 +12,9 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="org.jdom2.AttributeList.html">AttributeList</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">96%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:96px"><span class="text">139/144</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">96%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:96px"><span class="text">75/78</span></div></div></td></tr></table></td><td class="value"><span class="hidden">4.277777777777778;</span>4.278</td></tr>
+  <tr><td><a href="org.jdom2.AttributeList.html">AttributeList</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">96%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:96px"><span class="text">140/145</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">96%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:96px"><span class="text">75/78</span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.9130434782608696;</span>3.913</td></tr>
+  <tr><td><a href="org.jdom2.AttributeList.html">AttributeList$1</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></td><td class="percentgraph"><div class="percentgraph"><div class="na" style="width:100px"><span class="text"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></td><td class="percentgraph"><div class="percentgraph"><div class="na" style="width:100px"><span class="text"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.9130434782608696;</span>3.913</td></tr>
+  <tr><td><a href="org.jdom2.AttributeList.html">AttributeList$ALIterator</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">22/22</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">10/10</span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.9130434782608696;</span>3.913</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -163,9 +165,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @see Text</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;73</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;74</td>  <td class="nbHitsCovered">&nbsp;18202</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">class</span> AttributeList <span class="keyword">extends</span> AbstractList&lt;Attribute&gt;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;74</td>  <td class="nbHitsCovered">&nbsp;46274</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">class</span> AttributeList <span class="keyword">extends</span> AbstractList&lt;Attribute&gt;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">implements</span> java.io.Serializable {</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="keyword">implements</span> java.io.Serializable, RandomAccess {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
@@ -198,9 +200,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * @param parent element whose attributes are to be held</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;1949</td>  <td class="src"><pre class="src">&nbsp;        AttributeList(Element parent) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered">&nbsp;1949</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.parent = parent;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;1949</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;2539</td>  <td class="src"><pre class="src">&nbsp;        AttributeList(Element parent) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered">&nbsp;2539</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.parent = parent;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;2539</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
@@ -244,9 +246,9 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> add(Attribute attribute) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;746</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered"><a title="Line 120: Conditional coverage 100% (2/2).">&nbsp;743</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 120: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (duplicate &lt; 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;733</td>  <td class="src"><pre class="src">&nbsp;                        add(size(), attribute);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;933</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered"><a title="Line 120: Conditional coverage 100% (2/2).">&nbsp;930</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 120: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (duplicate &lt; 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;920</td>  <td class="src"><pre class="src">&nbsp;                        add(size(), attribute);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
@@ -254,7 +256,7 @@
 <tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                        set(duplicate, attribute);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;125</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered">&nbsp;740</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered">&nbsp;926</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;128</td>  <td class="nbHits">&nbsp;</td>
@@ -277,7 +279,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> add(<span class="keyword">int</span> index, Attribute attribute) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsCovered"><a title="Line 138: Conditional coverage 100% (2/2).">&nbsp;2923</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 138: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (attribute.getParent() != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsCovered"><a title="Line 138: Conditional coverage 100% (2/2).">&nbsp;3118</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 138: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (attribute.getParent() != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;140</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"The attribute already has an existing parent \""</span> +</pre></td></tr>
@@ -285,21 +287,21 @@
   <td class="src"><pre class="src">&nbsp;                                                        attribute.getParent().getQualifiedName() + <span class="string">"\""</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;2887</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered"><a title="Line 144: Conditional coverage 100% (2/2).">&nbsp;2887</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 144: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (duplicate &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;3082</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered"><a title="Line 144: Conditional coverage 100% (2/2).">&nbsp;3082</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 144: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (duplicate &gt;= 0) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(<span class="string">"Cannot add duplicate attribute"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;146</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;147</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsCovered">&nbsp;2886</td>  <td class="src"><pre class="src">&nbsp;                String reason = Verifier.checkNamespaceCollision(attribute, parent);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;149</td>  <td class="nbHitsCovered"><a title="Line 149: Conditional coverage 100% (2/2).">&nbsp;2886</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 149: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;150</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(parent, attribute, reason);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsCovered">&nbsp;3081</td>  <td class="src"><pre class="src">&nbsp;                String reason = Verifier.checkNamespaceCollision(attribute, parent);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;149</td>  <td class="nbHitsCovered"><a title="Line 149: Conditional coverage 100% (2/2).">&nbsp;3081</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 149: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;150</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(parent, attribute, reason);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;151</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;152</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered"><a title="Line 153: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2885</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 153: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;size) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered"><a title="Line 153: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;3079</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 153: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;size) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;154</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;155</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">" Size: "</span> + size());</pre></td></tr>
@@ -307,21 +309,21 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;157</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                attribute.setParent(parent);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;3077</td>  <td class="src"><pre class="src">&nbsp;                attribute.setParent(parent);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                ensureCapacity(size+1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered"><a title="Line 161: Conditional coverage 100% (2/2).">&nbsp;2883</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 161: Conditional coverage 100% (2/2).">                <span class="keyword">if</span>( index==size ) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsCovered">&nbsp;1492</td>  <td class="src"><pre class="src">&nbsp;                        elementData[size++] = attribute;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsCovered">&nbsp;3077</td>  <td class="src"><pre class="src">&nbsp;                ensureCapacity(size+1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered"><a title="Line 161: Conditional coverage 100% (2/2).">&nbsp;3077</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 161: Conditional coverage 100% (2/2).">                <span class="keyword">if</span>( index==size ) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsCovered">&nbsp;1685</td>  <td class="src"><pre class="src">&nbsp;                        elementData[size++] = attribute;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;163</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;1391</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(elementData, index, elementData, index + 1, size - index);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;165</td>  <td class="nbHitsCovered">&nbsp;1391</td>  <td class="src"><pre class="src">&nbsp;                        elementData[index] = attribute;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;1391</td>  <td class="src"><pre class="src">&nbsp;                        size++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;1392</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(elementData, index, elementData, index + 1, size - index);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;165</td>  <td class="nbHitsCovered">&nbsp;1392</td>  <td class="src"><pre class="src">&nbsp;                        elementData[index] = attribute;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;1392</td>  <td class="src"><pre class="src">&nbsp;                        size++;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;167</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;169</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsCovered">&nbsp;3077</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;169</td>  <td class="nbHitsCovered">&nbsp;3077</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
@@ -342,7 +344,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;179</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> addAll(Collection&lt;? <span class="keyword">extends</span> Attribute&gt; collection) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;180</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> addAll(size(), collection);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;180</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> addAll(size(), collection);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;181</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;182</td>  <td class="nbHits">&nbsp;</td>
@@ -373,7 +375,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;195</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> addAll(<span class="keyword">int</span> index, Collection&lt;? <span class="keyword">extends</span> Attribute&gt; collection) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered"><a title="Line 196: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;79</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 196: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;size) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered"><a title="Line 196: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;80</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 196: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;size) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;198</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">" Size: "</span> + size());</pre></td></tr>
@@ -381,28 +383,28 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered"><a title="Line 201: Conditional coverage 100% (2/2).">&nbsp;77</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 201: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (collection == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered"><a title="Line 201: Conditional coverage 100% (2/2).">&nbsp;78</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 201: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (collection == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;202</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Can not add a null Collection to AttributeList"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;203</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;204</td>  <td class="nbHitsCovered"><a title="Line 204: Conditional coverage 100% (2/2).">&nbsp;75</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 204: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (collection.size() == 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;204</td>  <td class="nbHitsCovered"><a title="Line 204: Conditional coverage 100% (2/2).">&nbsp;76</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 204: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (collection.size() == 0) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;205</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;206</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;207</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                ensureCapacity(size() + collection.size());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;207</td>  <td class="nbHitsCovered">&nbsp;74</td>  <td class="src"><pre class="src">&nbsp;                ensureCapacity(size() + collection.size());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> count = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;74</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> count = 0;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;211</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;212</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                        Iterator&lt;? <span class="keyword">extends</span> Attribute&gt; i = collection.iterator();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsCovered"><a title="Line 213: Conditional coverage 100% (2/2).">&nbsp;120</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 213: Conditional coverage 100% (2/2).">                        <span class="keyword">while</span> (i.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsCovered">&nbsp;100</td>  <td class="src"><pre class="src">&nbsp;                                Attribute obj = i.next();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;215</td>  <td class="nbHitsCovered">&nbsp;66</td>  <td class="src"><pre class="src">&nbsp;                                add(index + count, obj);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                                count++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;47</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;212</td>  <td class="nbHitsCovered">&nbsp;74</td>  <td class="src"><pre class="src">&nbsp;                        Iterator&lt;? <span class="keyword">extends</span> Attribute&gt; i = collection.iterator();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsCovered"><a title="Line 213: Conditional coverage 100% (2/2).">&nbsp;128</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 213: Conditional coverage 100% (2/2).">                        <span class="keyword">while</span> (i.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsCovered">&nbsp;107</td>  <td class="src"><pre class="src">&nbsp;                                Attribute obj = i.next();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;215</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                                add(index + count, obj);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                                count++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;218</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">catch</span> (RuntimeException exception) {</pre></td></tr>
@@ -411,10 +413,10 @@
 <tr>  <td class="numLine">&nbsp;222</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> exception;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered">&nbsp;21</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;225</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;21</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;228</td>  <td class="nbHits">&nbsp;</td>
@@ -429,18 +431,18 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;233</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> clear() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsCovered"><a title="Line 234: Conditional coverage 100% (2/2).">&nbsp;85</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 234: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;235</td>  <td class="nbHitsCovered"><a title="Line 235: Conditional coverage 100% (2/2).">&nbsp;160</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 235: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;                                Attribute attribute = elementData[i];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;237</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;                                attribute.setParent(<span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsCovered"><a title="Line 234: Conditional coverage 100% (2/2).">&nbsp;87</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 234: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;235</td>  <td class="nbHitsCovered"><a title="Line 235: Conditional coverage 100% (2/2).">&nbsp;171</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 235: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;115</td>  <td class="src"><pre class="src">&nbsp;                                Attribute attribute = elementData[i];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;237</td>  <td class="nbHitsCovered">&nbsp;115</td>  <td class="src"><pre class="src">&nbsp;                                attribute.setParent(<span class="keyword">null</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                        elementData = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                        size = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                        elementData = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                        size = 0;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;243</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;243</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;244</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;245</td>  <td class="nbHits">&nbsp;</td>
@@ -511,14 +513,14 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">void</span> ensureCapacity(<span class="keyword">int</span> minCapacity) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered"><a title="Line 288: Conditional coverage 100% (2/2).">&nbsp;2959</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 288: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;375</td>  <td class="src"><pre class="src">&nbsp;                        elementData = <span class="keyword">new</span> Attribute[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered"><a title="Line 288: Conditional coverage 100% (2/2).">&nbsp;3154</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 288: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;388</td>  <td class="src"><pre class="src">&nbsp;                        elementData = <span class="keyword">new</span> Attribute[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;291</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;2584</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">int</span> oldCapacity = elementData.length;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;293</td>  <td class="nbHitsCovered"><a title="Line 293: Conditional coverage 100% (2/2).">&nbsp;2584</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 293: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (minCapacity &gt; oldCapacity) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;2766</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">int</span> oldCapacity = elementData.length;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;293</td>  <td class="nbHitsCovered"><a title="Line 293: Conditional coverage 100% (2/2).">&nbsp;2766</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 293: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (minCapacity &gt; oldCapacity) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                Attribute oldData[] = elementData;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">int</span> newCapacity = (oldCapacity * 3)/2 + 1;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered"><a title="Line 296: Conditional coverage 100% (2/2).">&nbsp;16</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 296: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (newCapacity &lt; minCapacity)</a></pre></td></tr>
@@ -529,7 +531,7 @@
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered">&nbsp;2959</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered">&nbsp;3154</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;304</td>  <td class="nbHits">&nbsp;</td>
@@ -548,15 +550,15 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;311</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Attribute get(<span class="keyword">int</span> index) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;312</td>  <td class="nbHitsCovered"><a title="Line 312: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;13353</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 312: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;=size) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered">&nbsp;1297</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;312</td>  <td class="nbHitsCovered"><a title="Line 312: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;9235</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 312: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;=size) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered">&nbsp;926</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;314</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">" Size: "</span> + size());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;315</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;12056</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> elementData[index];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;8309</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> elementData[index];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
@@ -579,12 +581,12 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;328</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        Object get(String name, Namespace namespace) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;558</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> index = indexOf(name, namespace);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;330</td>  <td class="nbHitsCovered"><a title="Line 330: Conditional coverage 100% (2/2).">&nbsp;558</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 330: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (index &lt; 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;389</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;934</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> index = indexOf(name, namespace);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;330</td>  <td class="nbHitsCovered"><a title="Line 330: Conditional coverage 100% (2/2).">&nbsp;934</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 330: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (index &lt; 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;763</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;169</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> elementData[index];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;171</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> elementData[index];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
@@ -599,21 +601,21 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">int</span> indexOf(String name, Namespace namespace) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;4429</td>  <td class="src"><pre class="src">&nbsp;                String uri = namespace.getURI();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;342</td>  <td class="nbHitsCovered"><a title="Line 342: Conditional coverage 100% (2/2).">&nbsp;4429</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 342: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered"><a title="Line 343: Conditional coverage 100% (2/2).">&nbsp;16068</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 343: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;12777</td>  <td class="src"><pre class="src">&nbsp;                                Attribute old = elementData[i];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;345</td>  <td class="nbHitsCovered">&nbsp;12777</td>  <td class="src"><pre class="src">&nbsp;                                String oldURI = old.getNamespaceURI();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;346</td>  <td class="nbHitsCovered">&nbsp;12777</td>  <td class="src"><pre class="src">&nbsp;                                String oldName = old.getName();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;347</td>  <td class="nbHitsCovered"><a title="Line 347: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;12777</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 347: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (oldURI.equals(uri) &amp;&amp; oldName.equals(name)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered">&nbsp;193</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">return</span> i;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;5188</td>  <td class="src"><pre class="src">&nbsp;                String uri = namespace.getURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;342</td>  <td class="nbHitsCovered"><a title="Line 342: Conditional coverage 100% (2/2).">&nbsp;5188</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 342: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (elementData != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered"><a title="Line 343: Conditional coverage 100% (2/2).">&nbsp;16977</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 343: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;13425</td>  <td class="src"><pre class="src">&nbsp;                                Attribute old = elementData[i];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;345</td>  <td class="nbHitsCovered">&nbsp;13425</td>  <td class="src"><pre class="src">&nbsp;                                String oldURI = old.getNamespaceURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;346</td>  <td class="nbHitsCovered">&nbsp;13425</td>  <td class="src"><pre class="src">&nbsp;                                String oldName = old.getName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;347</td>  <td class="nbHitsCovered"><a title="Line 347: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;13425</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 347: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (oldURI.equals(uri) &amp;&amp; oldName.equals(name)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered">&nbsp;195</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">return</span> i;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;350</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;351</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;4236</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> -1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;4993</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> -1;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;353</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;354</td>  <td class="nbHits">&nbsp;</td>
@@ -634,20 +636,20 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;362</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Attribute remove(<span class="keyword">int</span> index) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;363</td>  <td class="nbHitsCovered"><a title="Line 363: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2314</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 363: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;=size)</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;363</td>  <td class="nbHitsCovered"><a title="Line 363: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2485</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 363: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index&lt;0 || index&gt;=size)</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;364</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;365</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">" Size: "</span> + size());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;366</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;367</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                Attribute old = elementData[index];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;368</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                old.setParent(<span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;369</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> numMoved = size - index - 1;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;370</td>  <td class="nbHitsCovered"><a title="Line 370: Conditional coverage 100% (2/2).">&nbsp;2312</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 370: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (numMoved &gt; 0)</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;371</td>  <td class="nbHitsCovered">&nbsp;1476</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(elementData, index+1, elementData, index,numMoved);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;372</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                elementData[--size] = <span class="keyword">null</span>; <span class="comment">// Let gc do its work</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;373</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;2312</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> old;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;367</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                Attribute old = elementData[index];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;368</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                old.setParent(<span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;369</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> numMoved = size - index - 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;370</td>  <td class="nbHitsCovered"><a title="Line 370: Conditional coverage 100% (2/2).">&nbsp;2483</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 370: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (numMoved &gt; 0)</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;371</td>  <td class="nbHitsCovered">&nbsp;1590</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(elementData, index+1, elementData, index,numMoved);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;372</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                elementData[--size] = <span class="keyword">null</span>; <span class="comment">// Let gc do its work</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;373</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                modCount++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;2483</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> old;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;375</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;376</td>  <td class="nbHits">&nbsp;</td>
@@ -703,13 +705,13 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;404</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Attribute set(<span class="keyword">int</span> index, Attribute attribute) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;405</td>  <td class="nbHitsCovered"><a title="Line 405: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;255</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 405: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index &lt; 0 || index &gt;= size)</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;405</td>  <td class="nbHitsCovered"><a title="Line 405: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;256</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 405: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (index &lt; 0 || index &gt;= size)</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;406</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span> + index +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;407</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">" Size: "</span> + size());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;408</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;409</td>  <td class="nbHitsCovered"><a title="Line 409: Conditional coverage 100% (2/2).">&nbsp;253</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 409: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (attribute.getParent() != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;409</td>  <td class="nbHitsCovered"><a title="Line 409: Conditional coverage 100% (2/2).">&nbsp;254</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 409: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (attribute.getParent() != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;410</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;411</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"The attribute already has an existing parent \""</span> +</pre></td></tr>
@@ -719,27 +721,27 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;414</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;415</td>  <td class="nbHitsCovered">&nbsp;238</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;416</td>  <td class="nbHitsCovered"><a title="Line 416: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;238</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 416: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> ((duplicate &gt;= 0) &amp;&amp; (duplicate != index)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;415</td>  <td class="nbHitsCovered">&nbsp;239</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = indexOfDuplicate(attribute);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;416</td>  <td class="nbHitsCovered"><a title="Line 416: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;239</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 416: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> ((duplicate &gt;= 0) &amp;&amp; (duplicate != index)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;417</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(<span class="string">"Cannot set duplicate attribute"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;418</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;419</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;420</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                String reason = Verifier.checkNamespaceCollision(attribute, parent);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;421</td>  <td class="nbHitsCovered"><a title="Line 421: Conditional coverage 100% (2/2).">&nbsp;237</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 421: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;420</td>  <td class="nbHitsCovered">&nbsp;238</td>  <td class="src"><pre class="src">&nbsp;                String reason = Verifier.checkNamespaceCollision(attribute, parent);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;421</td>  <td class="nbHitsCovered"><a title="Line 421: Conditional coverage 100% (2/2).">&nbsp;238</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 421: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;422</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAddException(parent, attribute, reason);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;423</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;424</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;425</td>  <td class="nbHitsCovered">&nbsp;236</td>  <td class="src"><pre class="src">&nbsp;                Attribute old = elementData[index];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;426</td>  <td class="nbHitsCovered">&nbsp;236</td>  <td class="src"><pre class="src">&nbsp;                old.setParent(<span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;425</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                Attribute old = elementData[index];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;426</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                old.setParent(<span class="keyword">null</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;427</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;428</td>  <td class="nbHitsCovered">&nbsp;236</td>  <td class="src"><pre class="src">&nbsp;                elementData[index] = attribute;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;429</td>  <td class="nbHitsCovered">&nbsp;236</td>  <td class="src"><pre class="src">&nbsp;                attribute.setParent(parent);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;236</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> old;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;428</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                elementData[index] = attribute;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;429</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                attribute.setParent(parent);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> old;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;431</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;432</td>  <td class="nbHits">&nbsp;</td>
@@ -754,51 +756,128 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;437</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">int</span> indexOfDuplicate(Attribute attribute) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered">&nbsp;3871</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = -1;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;439</td>  <td class="nbHitsCovered">&nbsp;3871</td>  <td class="src"><pre class="src">&nbsp;                String name = attribute.getName();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;440</td>  <td class="nbHitsCovered">&nbsp;3868</td>  <td class="src"><pre class="src">&nbsp;                Namespace namespace = attribute.getNamespace();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;441</td>  <td class="nbHitsCovered">&nbsp;3868</td>  <td class="src"><pre class="src">&nbsp;                duplicate = indexOf(name, namespace);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;442</td>  <td class="nbHitsCovered">&nbsp;3868</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> duplicate;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered">&nbsp;4254</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> duplicate = -1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;439</td>  <td class="nbHitsCovered">&nbsp;4254</td>  <td class="src"><pre class="src">&nbsp;                String name = attribute.getName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;440</td>  <td class="nbHitsCovered">&nbsp;4251</td>  <td class="src"><pre class="src">&nbsp;                Namespace namespace = attribute.getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;441</td>  <td class="nbHitsCovered">&nbsp;4251</td>  <td class="src"><pre class="src">&nbsp;                duplicate = indexOf(name, namespace);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;442</td>  <td class="nbHitsCovered">&nbsp;4251</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> duplicate;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;443</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;444</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;445</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;446</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Return the number of items in this list</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;447</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Iterator&lt;Attribute&gt; iterator() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;447</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> ALIterator();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;448</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return The number of items in this list.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;449</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;450</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;451</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> size() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;452</td>  <td class="nbHitsCovered">&nbsp;15107</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> size;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;453</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;454</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;455</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;456</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Return this list as a &lt;code&gt;String&lt;/code&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;457</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;450</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Return the number of items in this list</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;451</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;452</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return The number of items in this list.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;453</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;458</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;454</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;459</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;64</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">super</span>.toString();</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;461</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;455</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> size() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;456</td>  <td class="nbHitsCovered">&nbsp;8420</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> size;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;457</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;458</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;459</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;460</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Return this list as a &lt;code&gt;String&lt;/code&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;461</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;462</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;463</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;464</td>  <td class="nbHitsCovered">&nbsp;64</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">super</span>.toString();</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;465</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;466</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;468</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered">&nbsp;11880</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> ALIterator <span class="keyword">implements</span> Iterator&lt;Attribute&gt; {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;470</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">int</span> expect = -1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">int</span> cursor = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;472</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">boolean</span> canremove = <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> ALIterator() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;474</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                        expect = modCount;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;475</td>  <td class="nbHitsCovered">&nbsp;7514</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;476</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;477</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> <span class="keyword">boolean</span> hasNext() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;478</td>  <td class="nbHitsCovered"><a title="Line 478: Conditional coverage 100% (2/2).">&nbsp;11103</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 478: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> cursor &lt; size;</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;479</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;480</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;481</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;482</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> Attribute next() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;483</td>  <td class="nbHitsCovered"><a title="Line 483: Conditional coverage 100% (2/2).">&nbsp;4366</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 483: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (modCount != expect) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;484</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException(<span class="string">"ContentList was "</span> +</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;485</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                <span class="string">"modified outside of this Iterator"</span>);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;486</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;487</td>  <td class="nbHitsCovered"><a title="Line 487: Conditional coverage 100% (2/2).">&nbsp;4365</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 487: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (cursor &gt;= size) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;488</td>  <td class="nbHitsCovered">&nbsp;501</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"Iterated beyond the end of "</span> +</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;489</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                <span class="string">"the ContentList."</span>);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;490</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;491</td>  <td class="nbHitsCovered">&nbsp;3864</td>  <td class="src"><pre class="src">&nbsp;                        canremove = <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;492</td>  <td class="nbHitsCovered">&nbsp;3864</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> elementData[cursor++];</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;493</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;494</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;495</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;496</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> <span class="keyword">void</span> remove() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;497</td>  <td class="nbHitsCovered"><a title="Line 497: Conditional coverage 100% (2/2).">&nbsp;634</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 497: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (modCount != expect) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;498</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException(<span class="string">"ContentList was "</span> +</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;499</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                <span class="string">"modified outside of this Iterator"</span>);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;500</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsCovered"><a title="Line 501: Conditional coverage 100% (2/2).">&nbsp;633</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 501: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!canremove) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;502</td>  <td class="nbHitsCovered">&nbsp;294</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Can only remove() content "</span> +</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;503</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                <span class="string">"after a call to next()"</span>);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;504</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsCovered">&nbsp;339</td>  <td class="src"><pre class="src">&nbsp;                        AttributeList.<span class="keyword">this</span>.remove(--cursor);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;506</td>  <td class="nbHitsCovered">&nbsp;339</td>  <td class="src"><pre class="src">&nbsp;                        expect = modCount;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;507</td>  <td class="nbHitsCovered">&nbsp;339</td>  <td class="src"><pre class="src">&nbsp;                        canremove = <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;508</td>  <td class="nbHitsCovered">&nbsp;339</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;509</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;510</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }                </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;511</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;512</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 02/10/11 11:38 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 18/10/11 10:49 PM.</div>
 </body>
 </html>

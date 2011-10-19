@@ -195,20 +195,20 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** Constructor */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;128</td>  <td class="src"><pre class="src">&nbsp;        TextBuffer() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;128</td>  <td class="src"><pre class="src">&nbsp;                array = <span class="keyword">new</span> <span class="keyword">char</span>[4096]; <span class="comment">// initial capacity</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;128</td>  <td class="src"><pre class="src">&nbsp;                arraySize = 0;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered">&nbsp;128</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;        TextBuffer() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;                array = <span class="keyword">new</span> <span class="keyword">char</span>[4096]; <span class="comment">// initial capacity</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;                arraySize = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** Append the specified text to the text value of this buffer. */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">void</span> append(<span class="keyword">char</span>[] source, <span class="keyword">int</span> start, <span class="keyword">int</span> count) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsCovered"><a title="Line 97: Conditional coverage 100% (2/2).">&nbsp;101</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 97: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefixString == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsCovered"><a title="Line 97: Conditional coverage 100% (2/2).">&nbsp;107</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 97: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefixString == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;98</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// This is the first chunk, so we'll store it in the prefix string</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;99</td>  <td class="nbHitsCovered">&nbsp;83</td>  <td class="src"><pre class="src">&nbsp;                        prefixString = <span class="keyword">new</span> String(source, start, count);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;99</td>  <td class="nbHitsCovered">&nbsp;89</td>  <td class="src"><pre class="src">&nbsp;                        prefixString = <span class="keyword">new</span> String(source, start, count);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;101</td>  <td class="nbHits">&nbsp;</td>
@@ -220,7 +220,7 @@
 <tr>  <td class="numLineCover">&nbsp;105</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                        arraySize += count;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;106</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;107</td>  <td class="nbHitsCovered">&nbsp;101</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;107</td>  <td class="nbHitsCovered">&nbsp;107</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
@@ -240,9 +240,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** Clears the text value and prepares the TextBuffer for reuse. */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">void</span> clear() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;411</td>  <td class="src"><pre class="src">&nbsp;                arraySize = 0;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;411</td>  <td class="src"><pre class="src">&nbsp;                prefixString = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;411</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;459</td>  <td class="src"><pre class="src">&nbsp;                arraySize = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;459</td>  <td class="src"><pre class="src">&nbsp;                prefixString = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;459</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
@@ -281,17 +281,17 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered"><a title="Line 146: Conditional coverage 100% (2/2).">&nbsp;408</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 146: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefixString == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;147</td>  <td class="nbHitsCovered">&nbsp;326</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">""</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered"><a title="Line 146: Conditional coverage 100% (2/2).">&nbsp;456</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 146: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefixString == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;147</td>  <td class="nbHitsCovered">&nbsp;368</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">""</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;148</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;149</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;150</td>  <td class="nbHitsCovered">&nbsp;82</td>  <td class="src"><pre class="src">&nbsp;                String str = <span class="string">""</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered"><a title="Line 151: Conditional coverage 100% (2/2).">&nbsp;82</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 151: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (arraySize == 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;150</td>  <td class="nbHitsCovered">&nbsp;88</td>  <td class="src"><pre class="src">&nbsp;                String str = <span class="string">""</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered"><a title="Line 151: Conditional coverage 100% (2/2).">&nbsp;88</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 151: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (arraySize == 0) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;152</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Char array is empty, so the text value is just prefixString.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                        str = prefixString;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered">&nbsp;79</td>  <td class="src"><pre class="src">&nbsp;                        str = prefixString;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;155</td>  <td class="nbHits">&nbsp;</td>
@@ -309,7 +309,7 @@
   <td class="src"><pre class="src">&nbsp;                        .toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;82</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> str;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;88</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> str;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;164</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
@@ -335,6 +335,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 02/10/11 11:38 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 18/10/11 10:49 PM.</div>
 </body>
 </html>
