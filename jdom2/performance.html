@@ -140,6 +140,109 @@
 		<tr><td>273.14KiB</td><td>2.26MiB</td><td>205.44ms</td><td>4.13ms</td><td>16.99ms</td><td>10.58ms</td><td>263.71ms</td><td>11.80ms</td><td>10.21ms</td></tr>
 	</table>
 	
+	<p/>
+	<hr/>
+	<p/>
+	After changing XMLOutputter
+	<br/>
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>215.00ms</td><td>4.76ms</td><td>15.88ms</td><td>11.25ms</td><td>289.41ms</td><td>12.36ms</td><td>11.07ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>214.14ms</td><td>4.95ms</td><td>16.56ms</td><td>11.56ms</td><td>288.29ms</td><td>12.83ms</td><td>11.17ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.17ms</td><td>4.46ms</td><td>16.05ms</td><td>11.98ms</td><td>287.05ms</td><td>13.19ms</td><td>10.86ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.53ms</td><td>4.99ms</td><td>15.41ms</td><td>11.65ms</td><td>290.96ms</td><td>13.06ms</td><td>10.67ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>214.61ms</td><td>4.89ms</td><td>15.72ms</td><td>11.93ms</td><td>288.84ms</td><td>12.79ms</td><td>10.87ms</td></tr>
+	</table>
+
+	<p>
+	<hr/>
+	<p/>
+	After changing ContentList.iterator()
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>214.48ms</td><td>4.76ms</td><td>14.39ms</td><td>11.36ms</td><td>78.46ms</td><td>12.52ms</td><td>10.48ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>212.97ms</td><td>5.02ms</td><td>14.52ms</td><td>11.48ms</td><td>79.25ms</td><td>12.18ms</td><td>10.36ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>212.74ms</td><td>4.47ms</td><td>14.39ms</td><td>11.21ms</td><td>79.13ms</td><td>12.08ms</td><td>10.10ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>214.59ms</td><td>4.70ms</td><td>14.39ms</td><td>11.35ms</td><td>80.56ms</td><td>11.41ms</td><td>10.06ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.37ms</td><td>4.72ms</td><td>14.14ms</td><td>11.20ms</td><td>77.79ms</td><td>11.94ms</td><td>10.13ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	After changing ArrayList.iterator()
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.31ms</td><td>3.69ms</td><td>13.54ms</td><td>10.48ms</td><td>81.45ms</td><td>11.30ms</td><td>9.92ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.81ms</td><td>3.33ms</td><td>14.01ms</td><td>10.53ms</td><td>79.76ms</td><td>11.75ms</td><td>9.74ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>214.36ms</td><td>3.36ms</td><td>13.84ms</td><td>10.57ms</td><td>79.90ms</td><td>11.77ms</td><td>9.83ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.27ms</td><td>3.40ms</td><td>14.15ms</td><td>10.08ms</td><td>80.91ms</td><td>11.37ms</td><td>10.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>213.35ms</td><td>3.56ms</td><td>14.04ms</td><td>10.94ms</td><td>80.22ms</td><td>11.44ms</td><td>9.76ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	After setting AttributeList and ContentList to RandomAccess
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>212.54ms</td><td>3.18ms</td><td>12.75ms</td><td>10.00ms</td><td>76.78ms</td><td>11.46ms</td><td>9.43ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>211.13ms</td><td>3.25ms</td><td>12.90ms</td><td>10.88ms</td><td>76.02ms</td><td>11.37ms</td><td>9.61ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>211.42ms</td><td>3.30ms</td><td>12.88ms</td><td>10.61ms</td><td>79.39ms</td><td>12.23ms</td><td>9.55ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>215.27ms</td><td>3.13ms</td><td>13.81ms</td><td>10.90ms</td><td>79.89ms</td><td>11.34ms</td><td>9.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>212.71ms</td><td>3.43ms</td><td>13.11ms</td><td>10.74ms</td><td>77.53ms</td><td>11.72ms</td><td>9.73ms</td></tr>
+	</table>
+	
+	
+	<p/>
+	<hr/>
+	<p/>
+	Tidy up access code in AbstractXMLOutputProcessor
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>206.39ms</td><td>3.01ms</td><td>12.95ms</td><td>10.10ms</td><td>72.38ms</td><td>10.99ms</td><td>9.90ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>205.61ms</td><td>3.27ms</td><td>11.84ms</td><td>10.68ms</td><td>71.95ms</td><td>11.40ms</td><td>9.47ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>206.82ms</td><td>3.03ms</td><td>12.57ms</td><td>10.31ms</td><td>70.71ms</td><td>11.28ms</td><td>9.22ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>206.31ms</td><td>3.08ms</td><td>12.42ms</td><td>10.58ms</td><td>71.95ms</td><td>11.09ms</td><td>9.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>205.56ms</td><td>3.03ms</td><td>11.65ms</td><td>10.76ms</td><td>70.62ms</td><td>12.24ms</td><td>9.30ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	Complete tidy-up work, streamline the FormatStack.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>202.18ms</td><td>3.09ms</td><td>11.07ms</td><td>8.92ms</td><td>71.70ms</td><td>9.88ms</td><td>8.48ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>198.11ms</td><td>3.18ms</td><td>10.69ms</td><td>8.68ms</td><td>71.02ms</td><td>9.62ms</td><td>7.97ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>202.21ms</td><td>2.85ms</td><td>10.60ms</td><td>8.96ms</td><td>72.62ms</td><td>9.48ms</td><td>7.99ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>198.10ms</td><td>2.94ms</td><td>11.57ms</td><td>8.95ms</td><td>69.60ms</td><td>9.51ms</td><td>7.98ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>200.84ms</td><td>2.87ms</td><td>10.56ms</td><td>8.88ms</td><td>71.33ms</td><td>10.23ms</td><td>7.76ms</td></tr>
+	</table>
+
+	
+	
+	
+	<p/>
+	<hr/>
+	<p/>
+	Completely rework the XMLOutputter
+	<a href="https://github.com/hunterhacker/jdom/commit/d50d64219eeb1fc8754a2ca4657c69accb890ebb">d50d6421...</a>
+	for all the details. This is actually run on a slightly cleaned-up version:
+	<a href="https://github.com/hunterhacker/jdom/commit/1e44f724e84d12fbfc262aef1a0ad4122fee6bba">1e44f724...</a>
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>Parse</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.55ms</td><td>3.29ms</td><td>13.04ms</td><td>9.82ms</td><td>75.92ms</td><td>10.57ms</td><td>9.33ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.72ms</td><td>3.38ms</td><td>12.47ms</td><td>9.34ms</td><td>74.77ms</td><td>10.93ms</td><td>8.42ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>208.30ms</td><td>3.38ms</td><td>12.40ms</td><td>9.43ms</td><td>75.60ms</td><td>10.37ms</td><td>9.32ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.72ms</td><td>3.41ms</td><td>12.40ms</td><td>9.82ms</td><td>73.54ms</td><td>11.03ms</td><td>9.47ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>207.10ms</td><td>3.07ms</td><td>14.23ms</td><td>9.39ms</td><td>74.92ms</td><td>10.30ms</td><td>8.85ms</td></tr>
+	</table>
+	
+	
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/hunterhacker/jdom">hunterhacker/jdom</a>
     </div>
