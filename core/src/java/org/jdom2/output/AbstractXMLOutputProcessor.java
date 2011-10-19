@@ -1592,8 +1592,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 
 		nstack.push(element);
 		try {
-			List<Attribute> attributes = element.getAttributes();
-			List<Content> content = element.getContent();
+			final List<Content> content = element.getContent();
 
 			// Print the beginning of the tag plus attributes and any
 			// necessary namespace declarations
@@ -1602,12 +1601,12 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 			write(out, element.getQualifiedName());
 
 			// Print the element's namespace, if appropriate
-			for (Namespace ns : nstack.addedForward()) {
+			for (final Namespace ns : nstack.addedForward()) {
 				printNamespace(out, fstack, ns);
 			}
 
 			// Print out attributes
-			for (Attribute attribute : attributes) {
+			for (final Attribute attribute : element.getAttributes()) {
 				printAttribute(out, fstack, attribute);
 			}
 
@@ -1630,7 +1629,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 			try {
 
 				// Check for xml:space and adjust format settings
-				String space = element.getAttributeValue("space",
+				final String space = element.getAttributeValue("space",
 						Namespace.XML_NAMESPACE);
 
 				if ("default".equals(space)) {
@@ -1640,9 +1639,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 					fstack.setTextMode(TextMode.PRESERVE);
 				}
 
-				final TextMode tmode = fstack.getTextMode();
-
-				if (TextMode.PRESERVE == tmode) {
+				if (TextMode.PRESERVE == fstack.getTextMode()) {
 					write(out, ">");
 					printContent(out, fstack, nstack, content);
 				} else {
@@ -1662,7 +1659,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 					// white-space.
 					empty = true;
 					// do the quick checks first...
-					emptyloop: for (Content c : content) {
+					emptyloop: for (final Content c : content) {
 						switch (c.getCType()) {
 							case Comment:
 							case Element:
@@ -1678,7 +1675,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 					}
 					if (empty) {
 						// do the harder check for non-whitespace.
-						textemptyloop: for (Content c : content) {
+						textemptyloop: for (final Content c : content) {
 							switch (c.getCType()) {
 								case CDATA:
 								case Text:
@@ -1787,7 +1784,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 
 		int txti = -1;
 		int index = 0;
-		for (Content c : content) {
+		for (final Content c : content) {
 			switch (c.getCType()) {
 				case Text:
 				case CDATA:
@@ -1905,7 +1902,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 
 		// OK, now we are left with just TRIM and NORMALIZE
 		// Normalize is now actually easier.
-		if (TextMode.NORMALIZE == fstack.getTextMode()) {
+		if (TextMode.NORMALIZE == mode) {
 			boolean dospace = false;
 			// we know there's at least 2 content nodes...
 			// we process the 'gaps' to see if we need spaces, and print
@@ -1914,9 +1911,9 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 			int cnt = len;
 			for (Iterator<? extends Content> li = content.listIterator(offset); cnt > 0; cnt--) {
 				boolean endspace = false;
-				Content c = li.next();
+				final Content c = li.next();
 				if (c instanceof Text) {
-					String val = ((Text) c).getValue();
+					final String val = ((Text) c).getValue();
 					if (val.length() == 0) {
 						// ignore empty text.
 						continue;
@@ -1964,7 +1961,8 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 		// as raw.
 		// we have to preserve the right-whitespace of the left content, and the
 		// left whitespace of the right content.
-		if (TextMode.TRIM == fstack.getTextMode()) {
+		// no need to check the mode, it can only be TRIM.
+		// if (TextMode.TRIM == fstack.getTextMode()) {
 
 			int lcnt = 0;
 			while (lcnt < len) {
@@ -1987,7 +1985,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 
 			if (left == right) {
 				// came down to just one value to output.
-				Content node = content.get(left);
+				final Content node = content.get(left);
 				switch (node.getCType()) {
 					case Text:
 						textEscapeTrimBoth(out, fstack, ((Text) node).getText());
@@ -2002,7 +2000,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 				}
 				return;
 			}
-			Content leftc = content.get(left);
+			final Content leftc = content.get(left);
 			switch (leftc.getCType()) {
 				case Text:
 					textEscapeTrimLeft(out, fstack, ((Text) leftc).getText());
@@ -2022,7 +2020,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 				helperRawTextType(out, fstack, li.next());
 			}
 
-			Content rightc = content.get(right);
+			final Content rightc = content.get(right);
 			switch (rightc.getCType()) {
 				case Text:
 					textEscapeTrimRight(out, fstack, ((Text) rightc).getText());
@@ -2035,7 +2033,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 				default:
 					// do nothing
 			}
-		}
+		// }
 	}
 
 	/**
@@ -2120,7 +2118,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 		assert len > 0 : "All calls to this should have *some* content.";
 
 		if (len == 1) {
-			Content node = content.get(offset);
+			final Content node = content.get(offset);
 			// Print the node
 			switch (node.getCType()) {
 				case Text:
@@ -2187,10 +2185,10 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 	 * @throws IOException
 	 *         if the output fails
 	 */
-	protected void printNamespace(Writer out, FormatStack fstack, Namespace ns)
-			throws IOException {
-		String prefix = ns.getPrefix();
-		String uri = ns.getURI();
+	protected void printNamespace(final Writer out, final FormatStack fstack, 
+			final Namespace ns)  throws IOException {
+		final String prefix = ns.getPrefix();
+		final String uri = ns.getURI();
 
 		write(out, " xmlns");
 		if (!prefix.equals("")) {
@@ -2214,8 +2212,8 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 	 * @throws IOException
 	 *         if the output fails
 	 */
-	protected void printAttribute(Writer out, FormatStack fstack,
-			Attribute attribute) throws IOException {
+	protected void printAttribute(final Writer out, final FormatStack fstack,
+			final Attribute attribute) throws IOException {
 
 		write(out, " ");
 		write(out, attribute.getQualifiedName());
@@ -2238,7 +2236,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 			final int offset, final int len) {
 		for (int i = offset + len - 1; i >= offset; i--) {
 			// do the harder check for non-whitespace.
-			Content c = content.get(i);
+			final Content c = content.get(i);
 			switch (c.getCType()) {
 				case CDATA:
 				case Text:
@@ -2267,7 +2265,7 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 	 *        The value to inspect
 	 * @return true if all characters in the input value are all whitespace
 	 */
-	protected boolean isAllWhitespace(String value) {
+	protected boolean isAllWhitespace(final String value) {
 		for (char ch : value.toCharArray()) {
 			if (!Verifier.isXMLWhitespace(ch)) {
 				return false;
