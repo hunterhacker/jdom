@@ -17,6 +17,7 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -36,16 +37,20 @@ import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
+import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.AbstractXMLOutputProcessor;
 import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputProcessor;
 import org.jdom2.output.Format.TextMode;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
+@SuppressWarnings("javadoc")
 public final class TestXMLOutputter {
 
     /**
@@ -64,9 +69,9 @@ public final class TestXMLOutputter {
       Document doc = builder.build(new StringReader("<?xml version=\"1.0\"?><root>&#x10000; &#x10000;</root>"));
       Format format = Format.getCompactFormat().setEncoding("ISO-8859-1");
       XMLOutputter outputter = new XMLOutputter(format);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      outputter.output(doc, baos);
-      String xml = baos.toString();
+      StringWriter sw = new StringWriter();
+      outputter.output(doc, sw);
+      String xml = sw.toString();
       assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + format.getLineSeparator() +
                    "<root>&#x10000; &#x10000;</root>" + format.getLineSeparator(), xml);
     }
@@ -201,10 +206,23 @@ public final class TestXMLOutputter {
 	@Test
 	public void testXMLOutputterXMLOutputter() {
 		Format mine = Format.getCompactFormat();
+		XMLOutputProcessor xoutp = new XMLOutputter().getXMLOutputProcessor();
 		mine.setEncoding("US-ASCII");
 		// double-constcut it.
 		XMLOutputter out = new XMLOutputter(new XMLOutputter(mine));
 		TestFormat.checkEquals(mine, out.getFormat());
+		assertTrue(xoutp == out.getXMLOutputProcessor());
+	}
+
+	@Test
+	public void testXMLOutputterXMLOutputProcessor() {
+		XMLOutputProcessor xoutp = new AbstractXMLOutputProcessor() {
+			// nothing;
+		};
+		// double-constrcut it.
+		XMLOutputter out = new XMLOutputter(xoutp);
+		TestFormat.checkEquals(Format.getRawFormat(), out.getFormat());
+		assertTrue(xoutp == out.getXMLOutputProcessor());
 	}
 
 	@Test
@@ -216,6 +234,19 @@ public final class TestXMLOutputter {
 		TestFormat.checkEquals(Format.getRawFormat(), out.getFormat());
 		out.setFormat(mine);
 		TestFormat.checkEquals(mine, out.getFormat());
+	}
+
+	@Test
+	public void testXMLOutputProcessor() {
+		XMLOutputProcessor xoutp = new AbstractXMLOutputProcessor() {
+			// nothing;
+		};
+		// double-constcut it.
+		XMLOutputter out = new XMLOutputter();
+		XMLOutputProcessor xop = out.getXMLOutputProcessor();
+		out.setXMLOutputProcessor(xoutp);
+		assertTrue(xoutp != xop);
+		assertTrue(xoutp == out.getXMLOutputProcessor());
 	}
 
 	@Test
@@ -332,6 +363,14 @@ public final class TestXMLOutputter {
 	}
 
 	@Test
+	public void testOutputElementCDATA() {
+		String txt = "<root><![CDATA[xx]]></root>";
+		Element root = new Element("root");
+		root.addContent(new CDATA("xx"));
+		checkOutput(root, txt, txt, txt, txt);
+	}
+
+	@Test
 	public void testOutputElementExpandEmpty() {
 		String txt = "<root></root>";
 		FormatSetup setup = new FormatSetup() {
@@ -421,6 +460,144 @@ public final class TestXMLOutputter {
 	}
 
 	@Test
+	public void testOutputElementMultiAllWhiteExpandEmpty() {
+		Element root = new Element("root");
+		root.addContent(new CDATA(" "));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("    "));
+		root.addContent(new Text(""));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("  \n \n "));
+		root.addContent(new Text("  \t "));
+		root.addContent(new Text("  "));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><![CDATA[ ]]>        \r\n \r\n   \t   </root>", 
+				"<root></root>",
+				"<root></root>",
+				"<root></root>");
+	}
+
+	@Test
+	public void testOutputElementMultiMostWhiteExpandEmpty() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new CDATA(" "));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("    "));
+		root.addContent(new Text(""));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("  \n \n "));
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text("  \t "));
+		root.addContent(new Text("  "));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><![CDATA[ ]]>        \r\n \r\n <!--Boo-->  \t   </root>", 
+				"<root><!--Boo--></root>",
+				"<root>\r\n  <!--Boo-->\r\n</root>",
+				"<root>\r\n  <!--Boo-->\r\n</root>");
+	}
+
+	@Test
+	public void testOutputElementMixedMultiCDATA() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(" "));
+		root.addContent(new CDATA("A"));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><!--Boo--> <![CDATA[A]]></root>", 
+				"<root><!--Boo--><![CDATA[A]]></root>",
+				"<root>\r\n  <!--Boo-->\r\n  <![CDATA[A]]>\r\n</root>",
+				"<root>\r\n  <!--Boo-->\r\n   <![CDATA[A]]>\r\n</root>");
+	}
+
+	@Test
+	public void testOutputElementMixedMultiEntityRef() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(" "));
+		root.addContent(new EntityRef("aer"));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><!--Boo--> &aer;</root>", 
+				"<root><!--Boo-->&aer;</root>",
+				"<root>\r\n  <!--Boo-->\r\n  &aer;\r\n</root>",
+				"<root>\r\n  <!--Boo-->\r\n   &aer;\r\n</root>");
+	}
+
+	@Test
+	public void testOutputElementMixedMultiText() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(" "));
+		root.addContent(new Text("txt"));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><!--Boo--> txt</root>", 
+				"<root><!--Boo-->txt</root>",
+				"<root>\r\n  <!--Boo-->\r\n  txt\r\n</root>",
+				"<root>\r\n  <!--Boo-->\r\n   txt\r\n</root>");
+	}
+
+	@Test
+	public void testOutputElementMixedMultiZeroText() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(""));
+		root.addContent(new Text(" "));
+		root.addContent(new Text(""));
+		root.addContent(new Text("txt"));
+		root.addContent(new Text(""));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><!--Boo--> txt</root>", 
+				"<root><!--Boo-->txt</root>",
+				"<root>\r\n  <!--Boo-->\r\n  txt\r\n</root>",
+				"<root>\r\n  <!--Boo-->\r\n   txt\r\n</root>");
+	}
+
+	@Test
 	public void testOutputElementMultiEntityLeftRight() {
 		Element root = new Element("root");
 		root.addContent(new EntityRef("erl"));
@@ -456,7 +633,7 @@ public final class TestXMLOutputter {
 		checkOutput(root,
 				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>", 
 				"<root><![CDATA[tl]]> mid <![CDATA[tr]]></root>",
-				"<root><![CDATA[tl]]>  mid  <![CDATA[tr]]></root>",
+				"<root><![CDATA[tl ]]> mid <![CDATA[ tr]]></root>",
 				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>");
 	}
 
@@ -527,8 +704,8 @@ public final class TestXMLOutputter {
 		checkOutput(doc, 
 				xmldec + "\r\n" + rtdec + "\r\n", 
 				xmldec + "\r\n" + rtdec + "\r\n",
-				xmldec + "\r\n" + rtdec + "\r\n" + "\r\n",
-				xmldec + "\r\n" + rtdec + "\r\n" + "\r\n");
+				xmldec + "\r\n" + rtdec + "\r\n",
+				xmldec + "\r\n" + rtdec + "\r\n");
 	}
 
 	@Test
@@ -546,8 +723,8 @@ public final class TestXMLOutputter {
 		checkOutput(doc, setup,
 				xmldec + "\r\n" + rtdec + "\r\n", 
 				xmldec + "\r\n" + rtdec + "\r\n",
-				xmldec + "\r\n" + rtdec + "\r\n" + "\r\n",
-				xmldec + "\r\n" + rtdec + "\r\n" + "\r\n");
+				xmldec + "\r\n" + rtdec + "\r\n",
+				xmldec + "\r\n" + rtdec + "\r\n");
 	}
 
 	@Test
@@ -564,8 +741,8 @@ public final class TestXMLOutputter {
 		checkOutput(doc, setup,
 				rtdec + "\r\n", 
 				rtdec + "\r\n",
-				rtdec + "\r\n" + "\r\n",
-				rtdec + "\r\n" + "\r\n");
+				rtdec + "\r\n",
+				rtdec + "\r\n");
 	}
 
 	@Test
@@ -588,22 +765,78 @@ public final class TestXMLOutputter {
 		checkOutput(doc, 
 				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
 				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf + lf);
+				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf,
+				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf);
+	}
+	
+	@Test
+	public void testDeepNesting() {
+		// need to get beyond 16 levels of XML.
+		DocType dt = new DocType("root");
+		Element root = new Element("root");
+		Document doc = new Document();
+		doc.addContent(dt);
+		doc.addContent(root);
+		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		String dtdec = "<!DOCTYPE root>";
+		String lf = "\r\n";
+		
+		String base = xmldec + lf + dtdec + lf;
+		StringBuilder raw = new StringBuilder(base);
+		StringBuilder pretty = new StringBuilder(base);
+		raw.append("<root>");
+		pretty.append(lf);
+		pretty.append("<root>");
+		pretty.append(lf);
+		final int depth = 40;
+		int cnt = depth;
+		Parent parent = root;
+		StringBuilder indent = new StringBuilder();
+		while (--cnt > 0) {
+			Element emt = new Element("emt");
+			parent.getContent().add(emt);
+			parent = emt;
+			raw.append("<emt>");
+			indent.append("  ");
+			pretty.append(indent.toString());
+			pretty.append("<emt>");
+			pretty.append(lf);
+		}
+		
+		parent.getContent().add(new Element("bottom"));
+		raw.append("<bottom />");
+		pretty.append(indent.toString());
+		pretty.append("  <bottom />");
+		pretty.append(lf);
+		
+		cnt = depth;
+		while (--cnt > 0) {
+			raw.append("</emt>");
+			pretty.append(indent.toString());
+			pretty.append("</emt>");
+			indent.setLength(indent.length() - 2);
+			pretty.append(lf);
+		}
+		raw.append("</root>");
+		raw.append(lf);
+		pretty.append("</root>");
+		pretty.append(lf);
+		
+		checkOutput(doc, raw.toString(), raw.toString(), pretty.toString(), pretty.toString()); 
 	}
 	
 	@Test
 	public void testOutputElementContent() {
 		Element root = new Element("root");
 		root.addContent(new Element("child"));
-		checkOutput(root, "outputElementContent", Element.class, null, "<child />", "<child />", "<child />", "<child />");
+		checkOutput(root, "outputElementContent", Element.class, null, "<child />", "<child />", "<child />\r\n", "<child />\r\n");
 	}
 
 	@Test
 	public void testOutputList() {
 		List<Object> c = new ArrayList<Object>();
 		c.add(new Element("root"));
-		checkOutput(c, "output", List.class, null, "<root />", "<root />", "<root />", "<root />");
+		checkOutput(c, "output", List.class, null, "<root />", "<root />", "<root />\r\n", "<root />\r\n");
 	}
 
 	@Test
@@ -639,7 +872,7 @@ public final class TestXMLOutputter {
 	 * formatters as the outputString(content), output(content, OutputStream)
 	 * and output(content, Writer).
 	 * 
-	 * The expectation is that the results of the threa output forms (String,
+	 * The expectation is that the results of the three output forms (String,
 	 * OutputStream, and Writer) will be identical, and that it will match
 	 * the expected value for the appropriate formatter.
 	 * 
