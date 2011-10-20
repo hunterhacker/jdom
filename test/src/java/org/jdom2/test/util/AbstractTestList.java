@@ -26,7 +26,7 @@ import org.junit.Test;
  * @author Rolf Lear
  *
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "javadoc" })
 public abstract class AbstractTestList<T> {
 	
 	/**

@@ -85,6 +85,7 @@ import org.jdom2.test.util.ListTest;
 import org.junit.Ignore;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Alltests extends junit.framework.TestCase {
 /**
  * TestFiletaxesAlltests constructor comment.

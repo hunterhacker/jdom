@@ -68,6 +68,7 @@ import static org.junit.Assert.*;
  * @author Victor Toni
  * @version 1.0.0
  */
+@SuppressWarnings("javadoc")
 public final class TestCDATA {
 
     /**

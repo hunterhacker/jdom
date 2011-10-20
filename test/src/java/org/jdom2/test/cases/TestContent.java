@@ -7,6 +7,7 @@ import org.jdom2.Text;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestContent {
 
 	@Test

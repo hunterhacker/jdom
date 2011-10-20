@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("javadoc")
 public class TestAttributeList extends AbstractTestList<Attribute> {
 	
 	private static final Element base = new Element("dummy");

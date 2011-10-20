@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.jdom2.Verifier;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestVerifierCharacters {
 
 	// Automated test built by VerifierTestBuilder

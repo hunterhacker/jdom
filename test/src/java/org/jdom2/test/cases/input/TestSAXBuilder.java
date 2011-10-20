@@ -88,6 +88,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 import static org.junit.Assert.*;
 
 
+@SuppressWarnings("javadoc")
 public final class TestSAXBuilder {
 	
 	private static final String testxml = "<?xml version=\"1.0\"?><root/>";

@@ -14,6 +14,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestDescendantIterator {
 	private static final String[] fellowship = new String[] {
 			"frodo", "sam", "pippin", "merry",

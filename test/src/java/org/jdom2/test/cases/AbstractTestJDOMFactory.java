@@ -18,6 +18,7 @@ import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public abstract class AbstractTestJDOMFactory {
 	
 	protected abstract JDOMFactory buildFactory();

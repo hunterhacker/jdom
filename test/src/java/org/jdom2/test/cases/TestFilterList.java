@@ -69,6 +69,7 @@ import org.junit.runner.JUnitCore;
 
 import java.util.*;
 
+@SuppressWarnings("javadoc")
 public final class TestFilterList {
 		Element foo;
 		Element bar;

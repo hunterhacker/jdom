@@ -6,6 +6,7 @@ import org.jdom2.Namespace;
 import org.jdom2.filter.AttributeFilter;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestAtributeFilter extends AbstractTestFilter {
 
 	@Test

@@ -23,6 +23,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.Attributes2Impl;
 import org.xml.sax.helpers.LocatorImpl;
 
+@SuppressWarnings("javadoc")
 public class TestSAXHandler {
 	
 	private class MyHandler extends SAXHandler {

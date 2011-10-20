@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
 // Do not use name ending in Exception.
+@SuppressWarnings("javadoc")
 public class TestJDOMParseExceptn {
 	
 	private final SAXParseException spe = new SAXParseException("message", "publicID", "systemID", 5, 10);

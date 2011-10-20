@@ -20,6 +20,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.output.*;
 import org.jdom2.test.util.UnitTestUtil;
 
+@SuppressWarnings("javadoc")
 public final class TestDocument {
 
 	/**

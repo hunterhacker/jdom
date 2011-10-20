@@ -80,6 +80,7 @@ import org.junit.runner.JUnitCore;
  * @author unascribed
  * @version 0.1
  */
+@SuppressWarnings("javadoc")
 public final class TestAttribute {
 
     /**

@@ -33,6 +33,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+@SuppressWarnings("javadoc")
 public class TestJDOMSource {
 
 	@Test

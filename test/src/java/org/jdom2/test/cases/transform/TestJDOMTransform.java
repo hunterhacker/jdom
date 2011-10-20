@@ -27,6 +27,7 @@ import org.jdom2.transform.JDOMSource;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestJDOMTransform {
 	
 	private static final void checkTransform(Document doc) {

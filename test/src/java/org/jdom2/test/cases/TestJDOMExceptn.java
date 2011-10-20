@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import org.jdom2.JDOMException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestJDOMExceptn {
 
 	@Test

@@ -43,6 +43,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 
 
+@SuppressWarnings("javadoc")
 public class TestSAXOutputter {
 	
     private interface SAXSetup {

@@ -6,6 +6,7 @@ import org.jdom2.Element;
 import org.jdom2.Text;
 import org.jdom2.test.util.AbstractTestList;
 
+@SuppressWarnings("javadoc")
 public class TestFilterListElement extends AbstractTestList<Element> {
 	
 	public TestFilterListElement() {

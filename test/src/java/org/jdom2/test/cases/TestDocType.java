@@ -65,6 +65,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
 
+@SuppressWarnings("javadoc")
 public final class TestDocType {
     /**
      * The main method runs all the tests in the text ui

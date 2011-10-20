@@ -12,6 +12,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestIssue008ExpandEntity {
 	
 	private final void roundTrip(boolean expand, boolean validating, String encoding, String expect) {

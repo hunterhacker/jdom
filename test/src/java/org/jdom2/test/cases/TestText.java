@@ -12,6 +12,7 @@ import org.jdom2.IllegalDataException;
 import org.jdom2.Text;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestText {
 
 	@Test

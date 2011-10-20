@@ -3,6 +3,7 @@ package org.jdom2.test.util;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("javadoc")
 public final class ListTest extends AbstractTestList<Integer> {
 
 	public ListTest() {

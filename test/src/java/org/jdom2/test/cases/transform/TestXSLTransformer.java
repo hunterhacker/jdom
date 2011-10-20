@@ -28,6 +28,7 @@ import org.jdom2.transform.XSLTransformer;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestXSLTransformer {
 	
 	private static final String xslpassthrough = 

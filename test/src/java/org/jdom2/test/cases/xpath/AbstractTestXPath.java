@@ -23,6 +23,7 @@ import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.xpath.XPath;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public abstract class AbstractTestXPath {
 	
 	private final Document doc = new Document();

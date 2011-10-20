@@ -24,6 +24,7 @@ import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
+@SuppressWarnings("javadoc")
 public class UnitTestUtil {
 	
 	public static final void testNamespaceIntro(Content content, Namespace...expect) {

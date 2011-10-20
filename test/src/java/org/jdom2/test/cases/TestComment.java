@@ -73,6 +73,7 @@ import org.jdom2.IllegalDataException;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
+@SuppressWarnings("javadoc")
 public final class TestComment {
 
 	/**

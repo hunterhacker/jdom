@@ -7,6 +7,7 @@ import org.jdom2.Element;
 import org.jdom2.test.util.AbstractTestList;
 import org.junit.Before;
 
+@SuppressWarnings("javadoc")
 public class TestContentList extends AbstractTestList<Content> {
 
 	public TestContentList() {

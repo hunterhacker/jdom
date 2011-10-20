@@ -20,6 +20,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestFilters extends AbstractTestFilter {
 	
 	

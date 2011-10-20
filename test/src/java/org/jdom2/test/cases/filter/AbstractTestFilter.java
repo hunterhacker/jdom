@@ -25,6 +25,7 @@ import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.test.util.UnitTestUtil;
 
+@SuppressWarnings("javadoc")
 public class AbstractTestFilter {
 	
 	protected static final void assertFilterNotEquals(Filter<?> a, Filter<?> b) {

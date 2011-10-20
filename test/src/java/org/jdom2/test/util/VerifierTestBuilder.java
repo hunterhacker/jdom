@@ -16,6 +16,7 @@ import org.jdom2.Verifier;
  * @author Rolf Lear
  *
  */
+@SuppressWarnings("javadoc")
 public class VerifierTestBuilder {
 
 	/**

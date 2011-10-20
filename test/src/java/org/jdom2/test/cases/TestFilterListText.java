@@ -7,6 +7,7 @@ import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.test.util.AbstractTestList;
 
+@SuppressWarnings("javadoc")
 public class TestFilterListText extends AbstractTestList<Text> {
 	
 	public TestFilterListText() {

@@ -10,6 +10,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.test.util.AbstractTestList;
 import org.junit.Before;
 
+@SuppressWarnings("javadoc")
 public class TestElementFilterList extends AbstractTestList<Element> {
 	
 	private static final Element base = new Element("dummy");

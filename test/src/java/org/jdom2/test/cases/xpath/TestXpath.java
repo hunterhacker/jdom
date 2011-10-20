@@ -11,6 +11,7 @@ import org.jdom2.xpath.XPath;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestXpath {
 	/* 
 	 * Test the static methods on the abstract class.

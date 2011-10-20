@@ -77,6 +77,7 @@ import org.jdom2.Verifier;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
+@SuppressWarnings("javadoc")
 public final class TestVerifier {
 	
 	private final char BADCHAR = (char)0x0b;

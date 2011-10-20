@@ -23,6 +23,7 @@ import junit.framework.TestSuite;
  * @author rlear
  *
  */
+@SuppressWarnings("javadoc")
 public class TestSAXComplexSchema extends TestCase {
 
 	

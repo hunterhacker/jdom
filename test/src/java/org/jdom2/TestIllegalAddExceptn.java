@@ -6,6 +6,7 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.IllegalAddException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestIllegalAddExceptn {
 	
 	@Test

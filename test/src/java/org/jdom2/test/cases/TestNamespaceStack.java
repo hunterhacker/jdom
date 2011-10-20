@@ -12,6 +12,7 @@ import org.jdom2.Namespace;
 import org.jdom2.NamespaceStack;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestNamespaceStack {
 	
 	// We do a little cheat in this test class.

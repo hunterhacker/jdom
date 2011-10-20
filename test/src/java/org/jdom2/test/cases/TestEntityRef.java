@@ -11,6 +11,7 @@ import org.jdom2.IllegalDataException;
 import org.jdom2.IllegalNameException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestEntityRef {
 
 	@Test

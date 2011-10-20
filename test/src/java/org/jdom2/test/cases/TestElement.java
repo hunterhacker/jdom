@@ -75,6 +75,7 @@ import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
+@SuppressWarnings("javadoc")
 public final class TestElement {
 
     /**

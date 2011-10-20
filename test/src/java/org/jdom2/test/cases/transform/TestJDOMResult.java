@@ -17,6 +17,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.ext.LexicalHandler;
 
+@SuppressWarnings("javadoc")
 public class TestJDOMResult {
 	
 	/* *************************************************

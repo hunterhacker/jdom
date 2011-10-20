@@ -9,6 +9,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestFormat {
 
 	public static final void checkEquals(Format a, Format b) {

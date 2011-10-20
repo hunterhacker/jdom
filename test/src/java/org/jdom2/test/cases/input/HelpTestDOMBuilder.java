@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
  * @author rolf
  *
  */
+@SuppressWarnings("javadoc")
 public class HelpTestDOMBuilder {
 
 	public static final Document getDocument(String filename, boolean xsdvalidate) throws ParserConfigurationException, SAXException, IOException {

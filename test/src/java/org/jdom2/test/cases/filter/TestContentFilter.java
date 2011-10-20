@@ -15,6 +15,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestContentFilter extends AbstractTestFilter {
 	
 	private final int[] allContent = new int[] {

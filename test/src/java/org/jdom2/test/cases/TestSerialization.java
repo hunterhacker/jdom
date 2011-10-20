@@ -67,6 +67,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
 
+@SuppressWarnings("javadoc")
 public final class TestSerialization {
 
    /**

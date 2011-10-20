@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.jdom2.transform.XSLTransformException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestXSLTransformExceptn {
 
 	@Test

@@ -18,6 +18,7 @@ import org.jdom2.ProcessingInstruction;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TestProcessingInstruction {
 
 	@Test
