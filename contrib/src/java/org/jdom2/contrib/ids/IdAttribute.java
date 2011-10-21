@@ -55,6 +55,7 @@
 package org.jdom2.contrib.ids;
 
 import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -75,7 +76,7 @@ public class IdAttribute extends Attribute {
     }
 
     public IdAttribute(String name, String value,
-                                        int type, Namespace namespace) {
+                                        AttributeType type, Namespace namespace) {
         super(name, value, type, namespace);
     }
 
@@ -83,7 +84,7 @@ public class IdAttribute extends Attribute {
         this(name, value, UNDECLARED_TYPE, Namespace.NO_NAMESPACE);
     }
 
-    public IdAttribute(String name, String value, int type) {
+    public IdAttribute(String name, String value, AttributeType type) {
         this(name, value, type, Namespace.NO_NAMESPACE);
     }
 
@@ -128,8 +129,8 @@ public class IdAttribute extends Attribute {
     }
 
     @Override
-	public Attribute setAttributeType(int type) {
-        int oldType = this.getAttributeType();
+	public Attribute setAttributeType(AttributeType type) {
+        AttributeType oldType = this.getAttributeType();
 
         if (type != oldType) {
             super.setAttributeType(type);

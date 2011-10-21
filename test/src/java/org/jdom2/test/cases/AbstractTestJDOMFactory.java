@@ -52,7 +52,7 @@ public abstract class AbstractTestJDOMFactory {
 		assertTrue("uri".equals(att.getNamespace().getURI()));
 		assertTrue(Attribute.UNDECLARED_TYPE == att.getAttributeType());
 		
-		att = buildFactory().attribute("att", "val", null);
+		att = buildFactory().attribute("att", "val", (Namespace)null);
 		assertTrue("att".equals(att.getName()));
 		assertTrue("val".equals(att.getValue()));
 		assertTrue("".equals(att.getNamespace().getURI()));
@@ -61,6 +61,23 @@ public abstract class AbstractTestJDOMFactory {
 
 	@Test
 	public void testAttributeStringStringIntNamespace() {
+		@SuppressWarnings("deprecation")
+		Attribute att = buildFactory().attribute("att", "val", Attribute.ID_TYPE.ordinal(), Namespace.getNamespace("p", "uri"));
+		assertTrue("att".equals(att.getName()));
+		assertTrue("val".equals(att.getValue()));
+		assertTrue("uri".equals(att.getNamespace().getURI()));
+		assertTrue(Attribute.ID_TYPE == att.getAttributeType());
+
+		att = buildFactory().attribute("att", "val", Attribute.ID_TYPE, null);
+		assertTrue("att".equals(att.getName()));
+		assertTrue("val".equals(att.getValue()));
+		assertTrue("".equals(att.getNamespace().getURI()));
+		assertTrue(Attribute.ID_TYPE == att.getAttributeType());
+	}
+
+
+	@Test
+	public void testAttributeStringStringAttributeTypeNamespace() {
 		Attribute att = buildFactory().attribute("att", "val", Attribute.ID_TYPE, Namespace.getNamespace("p", "uri"));
 		assertTrue("att".equals(att.getName()));
 		assertTrue("val".equals(att.getValue()));
@@ -72,8 +89,8 @@ public abstract class AbstractTestJDOMFactory {
 		assertTrue("val".equals(att.getValue()));
 		assertTrue("".equals(att.getNamespace().getURI()));
 		assertTrue(Attribute.ID_TYPE == att.getAttributeType());
-}
-
+	}
+	
 	@Test
 	public void testAttributeStringString() {
 		Attribute att = buildFactory().attribute("att", "val");
@@ -85,6 +102,16 @@ public abstract class AbstractTestJDOMFactory {
 
 	@Test
 	public void testAttributeStringStringInt() {
+		@SuppressWarnings("deprecation")
+		Attribute att = buildFactory().attribute("att", "val", Attribute.ID_TYPE.ordinal());
+		assertTrue("att".equals(att.getName()));
+		assertTrue("val".equals(att.getValue()));
+		assertTrue("".equals(att.getNamespace().getURI()));
+		assertTrue(Attribute.ID_TYPE == att.getAttributeType());
+	}
+
+	@Test
+	public void testAttributeStringStringType() {
 		Attribute att = buildFactory().attribute("att", "val", Attribute.ID_TYPE);
 		assertTrue("att".equals(att.getName()));
 		assertTrue("val".equals(att.getValue()));
@@ -265,6 +292,19 @@ public abstract class AbstractTestJDOMFactory {
 		fac.addNamespaceDeclaration(root, nsb);
 		assertTrue(root.getAdditionalNamespaces().contains(nsb));
 		assertTrue(root.getAdditionalNamespaces().contains(nsa));
+	}
+	
+	@Test
+	public void testSetRoot() {
+		JDOMFactory fac = buildFactory();
+		Document doc = fac.document(null);
+		Element root = fac.element("root");
+		assertFalse(doc.hasRootElement());
+		assertTrue(root.getParent() == null);
+		fac.setRoot(doc, root);
+		assertTrue(doc.hasRootElement());
+		assertTrue(doc.getRootElement() == root);
+		assertTrue(root.getParent() == doc);
 	}
 
 }

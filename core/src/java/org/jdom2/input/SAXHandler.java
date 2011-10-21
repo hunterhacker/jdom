@@ -72,12 +72,11 @@ import org.xml.sax.helpers.*;
  * @author  Bradley S. Huffman
  * @author  phil@triloggroup.com
  */
-public class SAXHandler extends DefaultHandler implements LexicalHandler,
-DeclHandler,
-DTDHandler {
+public class SAXHandler extends DefaultHandler
+		implements LexicalHandler, DeclHandler, DTDHandler {
 
-	/** Hash table to map SAX attribute type names to JDOM attribute types. */
-	private static final Map<String, Integer> attrNameToTypeMap = new HashMap<String, Integer>(13);
+//	/** Hash table to map SAX attribute type names to JDOM attribute types. */
+//	private static final Map<String, Integer> attrNameToTypeMap = new HashMap<String, Integer>(13);
 
 	/** <code>Document</code> object being built */
 	private Document document;
@@ -137,44 +136,44 @@ DTDHandler {
 	/** The SAX Locator object provided by the parser */
 	private Locator locator;
 
-	/**
-	 * Class initializer: Populate a table to translate SAX attribute
-	 * type names into JDOM attribute type value (integer).
-	 * <p>
-	 * <b>Note that all the mappings defined below are compliant with
-	 * the SAX 2.0 specification exception for "ENUMERATION" with is
-	 * specific to Crimson 1.1.X and Xerces 2.0.0-betaX which report
-	 * attributes of enumerated types with a type "ENUMERATION"
-	 * instead of the expected "NMTOKEN".
-	 * </p>
-	 * <p>
-	 * Note also that Xerces 1.4.X is not SAX 2.0 compliant either
-	 * but handling its case requires
-	 * {@link #getAttributeType specific code}.
-	 * </p>
-	 */
-	static {
-		attrNameToTypeMap.put("CDATA",
-				new Integer(Attribute.CDATA_TYPE));
-		attrNameToTypeMap.put("ID",
-				new Integer(Attribute.ID_TYPE));
-		attrNameToTypeMap.put("IDREF",
-				new Integer(Attribute.IDREF_TYPE));
-		attrNameToTypeMap.put("IDREFS",
-				new Integer(Attribute.IDREFS_TYPE));
-		attrNameToTypeMap.put("ENTITY",
-				new Integer(Attribute.ENTITY_TYPE));
-		attrNameToTypeMap.put("ENTITIES",
-				new Integer(Attribute.ENTITIES_TYPE));
-		attrNameToTypeMap.put("NMTOKEN",
-				new Integer(Attribute.NMTOKEN_TYPE));
-		attrNameToTypeMap.put("NMTOKENS",
-				new Integer(Attribute.NMTOKENS_TYPE));
-		attrNameToTypeMap.put("NOTATION",
-				new Integer(Attribute.NOTATION_TYPE));
-		attrNameToTypeMap.put("ENUMERATION",
-				new Integer(Attribute.ENUMERATED_TYPE));
-	}
+//	/**
+//	 * Class initializer: Populate a table to translate SAX attribute
+//	 * type names into JDOM attribute type value (integer).
+//	 * <p>
+//	 * <b>Note that all the mappings defined below are compliant with
+//	 * the SAX 2.0 specification exception for "ENUMERATION" with is
+//	 * specific to Crimson 1.1.X and Xerces 2.0.0-betaX which report
+//	 * attributes of enumerated types with a type "ENUMERATION"
+//	 * instead of the expected "NMTOKEN".
+//	 * </p>
+//	 * <p>
+//	 * Note also that Xerces 1.4.X is not SAX 2.0 compliant either
+//	 * but handling its case requires
+//	 * {@link #getAttributeType specific code}.
+//	 * </p>
+//	 */
+//	static {
+//		attrNameToTypeMap.put("CDATA",
+//				new Integer(Attribute.CDATA_TYPE));
+//		attrNameToTypeMap.put("ID",
+//				new Integer(Attribute.ID_TYPE));
+//		attrNameToTypeMap.put("IDREF",
+//				new Integer(Attribute.IDREF_TYPE));
+//		attrNameToTypeMap.put("IDREFS",
+//				new Integer(Attribute.IDREFS_TYPE));
+//		attrNameToTypeMap.put("ENTITY",
+//				new Integer(Attribute.ENTITY_TYPE));
+//		attrNameToTypeMap.put("ENTITIES",
+//				new Integer(Attribute.ENTITIES_TYPE));
+//		attrNameToTypeMap.put("NMTOKEN",
+//				new Integer(Attribute.NMTOKEN_TYPE));
+//		attrNameToTypeMap.put("NMTOKENS",
+//				new Integer(Attribute.NMTOKENS_TYPE));
+//		attrNameToTypeMap.put("NOTATION",
+//				new Integer(Attribute.NOTATION_TYPE));
+//		attrNameToTypeMap.put("ENUMERATION",
+//				new Integer(Attribute.ENUMERATED_TYPE));
+//	}
 
 	/**
 	 * This will create a new <code>SAXHandler</code> that listens to SAX
@@ -593,7 +592,7 @@ DTDHandler {
 				}
 			}
 			
-			int attType = getAttributeType(atts.getType(i));
+			AttributeType attType = AttributeType.getAttributeType(atts.getType(i));
 			String attValue = atts.getValue(i);
 			String attURI = atts.getURI(i);
 			
@@ -1038,33 +1037,6 @@ if (!inDTD) {
 					"Ill-formed XML document (multiple root elements detected)");
 		}
 		return currentElement;
-	}
-
-	/**
-	 * Returns the the JDOM Attribute type value from the SAX 2.0
-	 * attribute type string provided by the parser.
-	 *
-	 * @param typeName <code>String</code> the SAX 2.0 attribute
-	 * type string.
-	 *
-	 * @return <code>int</code> the JDOM attribute type.
-	 *
-	 * @see Attribute#setAttributeType
-	 * @see Attributes#getType
-	 */
-	private static int getAttributeType(String typeName) {
-		Integer type = attrNameToTypeMap.get(typeName);
-		if (type == null) {
-			if (typeName != null && typeName.length() > 0 &&
-					typeName.charAt(0) == '(') {
-				// Xerces 1.4.X reports attributes of enumerated type with
-				// a type string equals to the enumeration definition, i.e.
-				// starting with a parenthesis.
-				return Attribute.ENUMERATED_TYPE;
-			}
-			return Attribute.UNDECLARED_TYPE;
-		}
-		return type.intValue();
 	}
 
 	/**

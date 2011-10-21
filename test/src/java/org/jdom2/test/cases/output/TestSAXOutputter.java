@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.Content;
@@ -669,7 +670,7 @@ public class TestSAXOutputter {
     public void testOutputElementAttributes() {
     	Element emt = new Element("root");
     	emt.setAttribute("att", "val");
-    	emt.setAttribute(new Attribute("attx", "valx", Attribute.UNDECLARED_TYPE));
+    	emt.setAttribute(new Attribute("attx", "valx", AttributeType.UNDECLARED));
 		roundTrip(null, emt);
     }
     

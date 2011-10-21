@@ -66,7 +66,12 @@ import java.util.*;
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
-	public DefaultJDOMFactory() { }
+	/**
+	 * Creates a new DefaultJDOMFactory instance.
+	 */
+	public DefaultJDOMFactory() {
+		// do nothing special
+	}
 
 	// Allow Javadocs to inherit from JDOMFactory
 
@@ -76,8 +81,15 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
+	@Deprecated
 	public Attribute attribute(String name, String value,
 			int type, Namespace namespace) {
+		return new Attribute(name, value, AttributeType.byIndex(type), namespace);
+	}
+
+	@Override
+	public Attribute attribute(String name, String value,
+			AttributeType type, Namespace namespace) {
 		return new Attribute(name, value, type, namespace);
 	}
 
@@ -87,7 +99,13 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
+	@Deprecated
 	public Attribute attribute(String name, String value, int type) {
+		return new Attribute(name, value, type);
+	}
+
+	@Override
+	public Attribute attribute(String name, String value, AttributeType type) {
 		return new Attribute(name, value, type);
 	}
 

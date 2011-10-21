@@ -63,6 +63,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
 import org.jdom2.Content;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
@@ -184,7 +185,63 @@ public final class TestAttribute {
 		}
 
 		try {
-            new Attribute("test", "value", null);
+            new Attribute("test", "value", (Namespace)null);
+		} catch (Exception e) {
+        		fail("didn't handle null attribute namespace");
+		}
+	}
+
+
+    /**
+	 * Test the constructor with name, value and namespace
+	 */
+    @Test
+	public void test_TCC___String_String_int() {
+        {
+
+    		@SuppressWarnings("deprecation")
+			final Attribute attribute = new Attribute("test", "value", AttributeType.ID.ordinal());
+    		assertTrue("incorrect attribute name", attribute.getName().equals("test"));
+    		assertTrue("incoorect attribute value", attribute.getValue().equals("value"));
+    		assertTrue("incorrect Namespace", attribute.getNamespace().equals(Namespace.NO_NAMESPACE));
+
+            assertEquals("incoorect attribute type", attribute.getAttributeType(), Attribute.ID_TYPE);
+        }
+
+	}
+
+
+    /**
+	 * Test the constructor with name, value and namespace
+	 */
+    @Test
+	public void test_TCC___String_String_int_OrgJdomNamespace() {
+        {
+    		final Namespace namespace = Namespace.getNamespace("prefx", "http://some.other.place");
+
+    		@SuppressWarnings("deprecation")
+			final Attribute attribute = new Attribute("test", "value", Attribute.ID_TYPE.ordinal(), namespace);
+    		assertTrue("incorrect attribute name", attribute.getName().equals("test"));
+    		assertTrue("incoorect attribute value", attribute.getValue().equals("value"));
+    		assertTrue("incorrect Namespace", attribute.getNamespace().equals(namespace));
+
+            assertEquals("incoorect attribute type", attribute.getAttributeType(), Attribute.ID_TYPE);
+        }
+
+		//now test that the attribute cannot be created with a namespace
+		//without a prefix
+        final Namespace defaultNamespace = Namespace.getNamespace("http://some.other.place");
+		try {
+            new Attribute("test", "value", defaultNamespace);
+			fail("allowed creation of attribute with a default namespace");
+		} catch (final IllegalNameException e) {
+			// Do nothing
+		} catch (Exception e) {
+			fail("Unexpected exception " + e.getClass());
+		}
+
+		try {
+            new Attribute("test", "value", (Namespace)null);
 		} catch (Exception e) {
         		fail("didn't handle null attribute namespace");
 		}
@@ -194,15 +251,18 @@ public final class TestAttribute {
     /**
      * Test possible attribute values
      */
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     public void test_TCM__Attribute_setAttributeType_int() {
         final Attribute attribute = new Attribute("test", "value");
 
         for(int attributeType = -10; attributeType < 15; attributeType++) {
             if (
-                    Attribute.UNDECLARED_TYPE <= attributeType &&
-                    attributeType <= Attribute.ENUMERATED_TYPE
+                    Attribute.UNDECLARED_TYPE.ordinal() <= attributeType &&
+                    attributeType <= Attribute.ENUMERATED_TYPE.ordinal()
             ) {
+            	attribute.setAttributeType(attributeType);
+            	assertTrue(attribute.getAttributeType().ordinal() == attributeType);
                 continue;
             }
             try {
@@ -213,6 +273,7 @@ public final class TestAttribute {
                 // is expected
             }
             catch(final Exception exception) {
+            	exception.printStackTrace();
                 fail("unknown exception throws: "+ exception);
             }
         }
@@ -507,7 +568,7 @@ public final class TestAttribute {
      * Test that an Attribute can clone itself correctly. The test covers the
      * simple case with only name, value and a given attribute type.
      */
-    private void TCM__Object_clone__attributeType(final int attributeType) {
+    private void TCM__Object_clone__attributeType(final AttributeType attributeType) {
         final String attributeName = "test";
         final String attributeValue = "value";
 
@@ -548,7 +609,7 @@ public final class TestAttribute {
      * Test that an Attribute can clone itself correctly. The test covers the
      * case with name, value, prefix, namespace and a given attribute type.
      */
-    private void TCM__Object_clone__Namespace_attributeType(final int attributeType) {
+    private void TCM__Object_clone__Namespace_attributeType(final AttributeType attributeType) {
         final String prefix = "prefx";
         final String uri = "http://some.other.place";
 

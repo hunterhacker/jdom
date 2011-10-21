@@ -115,7 +115,13 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
+	@Deprecated
 	public Attribute attribute(String name, String value, int type, Namespace namespace) {
+		return attribute(name, value, AttributeType.byIndex(type), namespace);
+	}
+
+	@Override
+	public Attribute attribute(String name, String value, AttributeType type, Namespace namespace) {
 		Attribute a = new Attribute();
 		a.name = name;
 		a.type = type;
@@ -136,8 +142,15 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 		return a;
 	}
 
+	
 	@Override
+	@Deprecated
 	public Attribute attribute(String name, String value, int type) {
+		return attribute(name, value, AttributeType.byIndex(type));
+	}
+
+	@Override
+	public Attribute attribute(String name, String value, AttributeType type) {
 		Attribute a = new Attribute();
 		a.name = name;
 		a.type = type;

@@ -79,6 +79,8 @@ public interface JDOMFactory {
 	 *
 	 * @param name <code>String</code> name of <code>Attribute</code>.
 	 * @param value <code>String</code> value for new attribute.
+	 * @param namespace <code>Namespace</code> of the new Attribute
+	 * @return the created Attribute instance
 	 */
 	public Attribute attribute(String name, String value, Namespace namespace);
 
@@ -91,9 +93,26 @@ public interface JDOMFactory {
 	 * @param value <code>String</code> value for new attribute.
 	 * @param type <code>int</code> type for new attribute.
 	 * @param namespace <code>Namespace</code> namespace for new attribute.
+	 * @return the created Attribute instance
+	 * @deprecated Use {@link #attribute(String, String, AttributeType, Namespace)}
 	 */
+	@Deprecated
 	public Attribute attribute(String name, String value,
 			int type, Namespace namespace);
+
+	/**
+	 * This will create a new <code>Attribute</code> with the
+	 * specified (local) name, value, and type, and in the provided
+	 * <code>{@link org.jdom2.Namespace}</code>.
+	 *
+	 * @param name <code>String</code> name of <code>Attribute</code>.
+	 * @param value <code>String</code> value for new attribute.
+	 * @param type <code>AttributeType</code> type for new attribute.
+	 * @param namespace <code>Namespace</code> namespace for new attribute.
+	 * @return the created Attribute instance
+	 */
+	public Attribute attribute(String name, String value,
+			AttributeType type, Namespace namespace);
 
 	/**
 	 * This will create a new <code>Attribute</code> with the
@@ -107,6 +126,7 @@ public interface JDOMFactory {
 	 *
 	 * @param name <code>String</code> name of <code>Attribute</code>.
 	 * @param value <code>String</code> value for new attribute.
+	 * @return the created Attribute instance
 	 */
 	public Attribute attribute(String name, String value);
 
@@ -123,9 +143,29 @@ public interface JDOMFactory {
 	 * @param name <code>String</code> name of <code>Attribute</code>.
 	 * @param value <code>String</code> value for new attribute.
 	 * @param type <code>int</code> type for new attribute.
+	 * @return the created Attribute instance
+	 * @deprecated use {@link #attribute(String, String, AttributeType)}
 	 */
+	@Deprecated
 	public Attribute attribute(String name, String value, int type);
 
+	/**
+	 * This will create a new <code>Attribute</code> with the
+	 * specified (local) name, value and type, and does not place
+	 * the attribute in a <code>{@link org.jdom2.Namespace}</code>.
+	 * <p>
+	 * <b>Note</b>: This actually explicitly puts the
+	 * <code>Attribute</code> in the "empty" <code>Namespace</code>
+	 * (<code>{@link org.jdom2.Namespace#NO_NAMESPACE}</code>).
+	 * </p>
+	 *
+	 * @param name <code>String</code> name of <code>Attribute</code>.
+	 * @param value <code>String</code> value for new attribute.
+	 * @param type <code>AttributeType</code> type for new attribute.
+	 * @return the created Attribute instance
+	 */
+	public Attribute attribute(String name, String value, AttributeType type);
+	
 	// **** constructing CDATA ****
 
 	/**

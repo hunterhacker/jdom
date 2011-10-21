@@ -119,24 +119,6 @@ public class SAXOutputter {
 	private static final String DECL_HANDLER_ALT_PROPERTY =
 			"http://xml.org/sax/handlers/DeclHandler";
 
-	/**
-	 * Array to map JDOM attribute type (as entry index) to SAX
-	 * attribute type names.
-	 */
-	private static final String[] attrTypeToNameMap = new String[] {
-		"CDATA",        // Attribute.UNDEFINED_ATTRIBUTE, as per SAX 2.0 spec.
-		"CDATA",        // Attribute.CDATA_TYPE
-		"ID",           // Attribute.ID_TYPE
-		"IDREF",        // Attribute.IDREF_TYPE
-		"IDREFS",       // Attribute.IDREFS_TYPE
-		"ENTITY",       // Attribute.ENTITY_TYPE
-		"ENTITIES",     // Attribute.ENTITIES_TYPE
-		"NMTOKEN",      // Attribute.NMTOKEN_TYPE
-		"NMTOKENS",     // Attribute.NMTOKENS_TYPE
-		"NOTATION",     // Attribute.NOTATION_TYPE
-		"NMTOKEN",      // Attribute.ENUMERATED_TYPE, as per SAX 2.0 spec.
-	};
-
 	/** registered <code>ContentHandler</code> */
 	private ContentHandler contentHandler;
 
@@ -1194,11 +1176,13 @@ public class SAXOutputter {
 	 * @see org.jdom2.Attribute#getAttributeType
 	 * @see org.xml.sax.Attributes#getType
 	 */
-	private static String getAttributeTypeName(int type) {
-		if ((type < 0) || (type >= attrTypeToNameMap.length)) {
-			type = Attribute.UNDECLARED_TYPE;
+	private static String getAttributeTypeName(AttributeType type) {
+		switch (type) {
+			case UNDECLARED:
+				return "CDATA";
+			default:
+				return type.name();
 		}
-		return attrTypeToNameMap[type];
 	}
 
 	/**

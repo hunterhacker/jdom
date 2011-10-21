@@ -1225,7 +1225,7 @@ public final class TestElement {
     /**
      * Test setAttribute with a supplied name and value
      */
-    private void helper_setAttribute_String_String__attributeType(final int attributeType) {
+    private void helper_setAttribute_String_String__attributeType(final AttributeType attributeType) {
         final Element element = new Element("el");
 
         final String attributeName = "name";
@@ -1278,7 +1278,7 @@ public final class TestElement {
      * 
      * @author Victor Toni
      */
-    private void helper_setAttribute_String_String_String__attributeType(final int attributeType) {
+    private void helper_setAttribute_String_String_String__attributeType(final AttributeType attributeType) {
         try {
             final Namespace defaultNamespace = Namespace.getNamespace(null, "http://test.org/default");
             helper_setAttribute_String_String_String__attributeType(defaultNamespace, attributeType);
@@ -1299,7 +1299,7 @@ public final class TestElement {
      * 
      * @author Victor Toni
      */
-    private void helper_setAttribute_String_String_String__attributeType(final Namespace namespace, final int attributeType) {
+    private void helper_setAttribute_String_String_String__attributeType(final Namespace namespace, final AttributeType attributeType) {
         final Element element = new Element("el");
 
         final String attributeName = "name";

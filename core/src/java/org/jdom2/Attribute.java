@@ -75,95 +75,63 @@ import java.util.TreeMap;
  */
 public class Attribute extends Content implements Serializable, Cloneable {
 
-	/**
-	 * Attribute type: the attribute has not been declared or type
-	 * is unknown.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int UNDECLARED_TYPE = 0;
-
-	/**
-	 * Attribute type: the attribute value is a string.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int CDATA_TYPE = 1;
-
-	/**
-	 * Attribute type: the attribute value is a unique identifier.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int ID_TYPE = 2;
-
-	/**
-	 * Attribute type: the attribute value is a reference to a
-	 * unique identifier.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int IDREF_TYPE = 3;
-
-	/**
-	 * Attribute type: the attribute value is a list of references to
-	 * unique identifiers.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int IDREFS_TYPE = 4;
-
-	/**
-	 * Attribute type: the attribute value is the name of an entity.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int ENTITY_TYPE = 5;
-
-	/**
-	 * <p>
-	 * Attribute type: the attribute value is a list of entity names.
-	 * </p>
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int ENTITIES_TYPE = 6;
-
-	/**
-	 * Attribute type: the attribute value is a name token.
-	 * <p>
-	 * According to SAX 2.0 specification, attributes of enumerated
-	 * types should be reported as "NMTOKEN" by SAX parsers.  But the
-	 * major parsers (Xerces and Crimson) provide specific values
-	 * that permit to recognize them as {@link #ENUMERATED_TYPE}.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int NMTOKEN_TYPE = 7;
-
-	/**
-	 * Attribute type: the attribute value is a list of name tokens.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int NMTOKENS_TYPE = 8;
-
-	/**
-	 * Attribute type: the attribute value is the name of a notation.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int NOTATION_TYPE = 9;
-
-	/**
-	 * Attribute type: the attribute value is a name token from an
-	 * enumeration.
-	 *
-	 * @see #getAttributeType
-	 */
-	public final static int ENUMERATED_TYPE = 10;
-
 	// Keep the old constant names for one beta cycle to help migration
+	
+	/**
+	 * @see AttributeType#UNDECLARED
+	 */
+	public final static AttributeType UNDECLARED_TYPE = AttributeType.UNDECLARED;
+
+	/**
+	 * @see AttributeType#CDATA
+	 */
+	public final static AttributeType CDATA_TYPE = AttributeType.CDATA;
+
+	/**
+	 * @see AttributeType#ID
+	 */
+	public final static AttributeType ID_TYPE = AttributeType.ID;
+
+	/**
+	 * @see AttributeType#IDREF
+	 */
+	public final static AttributeType IDREF_TYPE = AttributeType.IDREF;
+
+	/**
+	 * @see AttributeType#IDREFS
+	 */
+	public final static AttributeType IDREFS_TYPE = AttributeType.IDREFS;
+
+	/**
+	 * @see AttributeType#ENTITY
+	 */
+	public final static AttributeType ENTITY_TYPE = AttributeType.ENTITY;
+
+	/**
+	 * @see AttributeType#ENTITIES
+	 */
+	public final static AttributeType ENTITIES_TYPE = AttributeType.ENTITIES;
+
+	/**
+	 * @see AttributeType#NMTOKEN
+	 */
+	public final static AttributeType NMTOKEN_TYPE = AttributeType.NMTOKEN;
+
+	/**
+	 * @see AttributeType#NMTOKENS
+	 */
+	public final static AttributeType NMTOKENS_TYPE = AttributeType.NMTOKENS;
+
+	/**
+	 * @see AttributeType#NOTATION
+	 */
+	public final static AttributeType NOTATION_TYPE = AttributeType.NOTATION;
+
+	/**
+	 * @see AttributeType#ENUMERATION
+	 */
+	public final static AttributeType ENUMERATED_TYPE = AttributeType.ENUMERATION;
+
 
 
 
@@ -177,7 +145,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	protected String value;
 
 	/** The type of the <code>Attribute</code> */
-	protected int type = UNDECLARED_TYPE;
+	protected AttributeType type = AttributeType.UNDECLARED;
 
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
@@ -202,7 +170,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         {@link org.jdom2.Verifier#checkCharacterData}).
 	 */
 	public Attribute(final String name, final String value, final Namespace namespace) {
-		this(name, value, UNDECLARED_TYPE, namespace);
+		this(name, value, AttributeType.UNDECLARED, namespace);
 	}
 
 	/**
@@ -222,8 +190,32 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         {@link org.jdom2.Verifier#checkCharacterData}) or
 	 *         if the given attribute type is not one of the
 	 *         supported types.
+	 * @deprecated Use Constructor with AttributeType type, not int type.
 	 */
+	@Deprecated
 	public Attribute(final String name, final String value, final int type, final Namespace namespace) {
+		this(name, value, AttributeType.byIndex(type), namespace);
+	}
+	
+	/**
+	 * This will create a new <code>Attribute</code> with the
+	 * specified (local) name, value, and type, and in the provided
+	 * <code>{@link Namespace}</code>.
+	 *
+	 * @param name <code>String</code> name of <code>Attribute</code>.
+	 * @param value <code>String</code> value for new attribute.
+	 * @param type <code>int</code> type for new attribute.
+	 * @param namespace <code>Namespace</code> namespace for new attribute.
+	 * @throws IllegalNameException if the given name is illegal as an
+	 *         attribute name or if if the new namespace is the default
+	 *         namespace. Attributes cannot be in a default namespace.
+	 * @throws IllegalDataException if the given attribute value is
+	 *         illegal character data (as determined by
+	 *         {@link org.jdom2.Verifier#checkCharacterData}) or
+	 *         if the given attribute type is not one of the
+	 *         supported types.
+	 */
+	public Attribute(final String name, final String value, final AttributeType type, final Namespace namespace) {
 		super(CType.Attribute);
 		setName(name);
 		setValue(value);
@@ -249,7 +241,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         {@link org.jdom2.Verifier#checkCharacterData}).
 	 */
 	public Attribute(final String name, final String value) {
-		this(name, value, UNDECLARED_TYPE, Namespace.NO_NAMESPACE);
+		this(name, value, AttributeType.UNDECLARED, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -272,6 +264,32 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         if the given attribute type is not one of the
 	 *         supported types.
 	 */
+	public Attribute(final String name, final String value, final AttributeType type) {
+		this(name, value, type, Namespace.NO_NAMESPACE);
+	}
+
+	/**
+	 * This will create a new <code>Attribute</code> with the
+	 * specified (local) name, value and type, and does not place
+	 * the attribute in a <code>{@link Namespace}</code>.
+	 * <p>
+	 * <b>Note</b>: This actually explicitly puts the
+	 * <code>Attribute</code> in the "empty" <code>Namespace</code>
+	 * (<code>{@link Namespace#NO_NAMESPACE}</code>).
+	 *
+	 * @param name <code>String</code> name of <code>Attribute</code>.
+	 * @param value <code>String</code> value for new attribute.
+	 * @param type <code>int</code> type for new attribute.
+	 * @throws IllegalNameException if the given name is illegal as an
+	 *         attribute name.
+	 * @throws IllegalDataException if the given attribute value is
+	 *         illegal character data (as determined by
+	 *         {@link org.jdom2.Verifier#checkCharacterData}) or
+	 *         if the given attribute type is not one of the
+	 *         supported types.
+	 * @deprecated Use {@link #Attribute(String, String, AttributeType)}
+	 */
+	@Deprecated
 	public Attribute(final String name, final String value, final int type) {
 		this(name, value, type, Namespace.NO_NAMESPACE);
 	}
@@ -470,7 +488,7 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *
 	 * @return <code>int</code> - type for this attribute.
 	 */
-	public int getAttributeType() {
+	public AttributeType getAttributeType() {
 		return type;
 	}
 
@@ -482,15 +500,26 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 * @throws IllegalDataException if the given attribute type is
 	 *         not one of the supported types.
 	 */
-	public Attribute setAttributeType(final int type) {
-		if ((type < UNDECLARED_TYPE) || (type > ENUMERATED_TYPE)) {
-			throw new IllegalDataException(String.valueOf(type),
-					"attribute", "Illegal attribute type");
-		}
-		this.type = type;
+	public Attribute setAttributeType(final AttributeType type) {
+		this.type = type == null ? AttributeType.UNDECLARED : type;
 		return this;
 	}
 
+	/**
+	 * This will set the type of the <code>Attribute</code>.
+	 *
+	 * @param type <code>int</code> type for the attribute.
+	 * @return <code>Attribute</code> - this Attribute modified.
+	 * @throws IllegalDataException if the given attribute type is
+	 *         not one of the supported types.
+	 * @deprecated use {@link #setAttributeType(AttributeType)}
+	 */
+	@Deprecated
+	public Attribute setAttributeType(final int type) {
+		setAttributeType(AttributeType.byIndex(type));
+		return this;
+	}
+	
 	/**
 	 * This returns a <code>String</code> representation of the
 	 * <code>Attribute</code>, suitable for debugging.

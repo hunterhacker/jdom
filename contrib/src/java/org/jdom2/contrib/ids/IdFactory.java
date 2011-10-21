@@ -55,6 +55,7 @@
 package org.jdom2.contrib.ids;
 
 import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
 import org.jdom2.Document;
 import org.jdom2.DocType;
 import org.jdom2.Element;
@@ -108,7 +109,7 @@ public class IdFactory extends DefaultJDOMFactory {
 
     @Override
 	public Attribute attribute(String name, String value,
-                                            int type, Namespace namespace) {
+                                            AttributeType type, Namespace namespace) {
         return new IdAttribute(name, value, type, namespace);
     }
 
@@ -118,7 +119,7 @@ public class IdFactory extends DefaultJDOMFactory {
     }
 
     @Override
-	public Attribute attribute(String name, String value, int type) {
+	public Attribute attribute(String name, String value, AttributeType type) {
         return new IdAttribute(name, value, type);
     }
 

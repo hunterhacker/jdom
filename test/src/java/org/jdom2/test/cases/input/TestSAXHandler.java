@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import javax.xml.XMLConstants;
 
 import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.DefaultJDOMFactory;
@@ -819,7 +820,7 @@ public class TestSAXHandler {
 		assertEquals("", child.getNamespaceURI());
 		assertTrue(child.getAttributes().size() == 1);
 		assertEquals("val", child.getAttributeValue("att"));
-		assertEquals(Attribute.CDATA_TYPE, child.getAttribute("att").getAttributeType());
+		assertEquals(AttributeType.CDATA, child.getAttribute("att").getAttributeType());
 	}
 
 	@Test
@@ -1169,7 +1170,7 @@ public class TestSAXHandler {
 		assertTrue(child.getAttributes().size() == 1);
 		Attribute att = child.getAttribute("att");
 		assertEquals("val", att.getValue());
-		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+		assertEquals(AttributeType.UNDECLARED, att.getAttributeType());
 	}
 
 	@Test
@@ -1194,7 +1195,7 @@ public class TestSAXHandler {
 		assertTrue(child.getAttributes().size() == 1);
 		Attribute att = child.getAttribute("att");
 		assertEquals("val", att.getValue());
-		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+		assertEquals(AttributeType.UNDECLARED, att.getAttributeType());
 	}
 
 	
@@ -1220,7 +1221,7 @@ public class TestSAXHandler {
 		assertTrue(child.getAttributes().size() == 1);
 		Attribute att = child.getAttribute("att");
 		assertEquals("val", att.getValue());
-		assertEquals(Attribute.UNDECLARED_TYPE, att.getAttributeType());
+		assertEquals(AttributeType.UNDECLARED, att.getAttributeType());
 	}
 
 	
