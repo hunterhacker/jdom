@@ -1,9 +1,9 @@
 package org.jdom2.test.util;
 
-import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -268,5 +268,34 @@ public class UnitTestUtil {
     	System.arraycopy(chars, 0, ret, 0, chars.length);
     	return new String(ret);
     }
+    
+    /**
+     * Provide a standard way to fail when we expect an exception but did not
+     * get one...
+     */
+    public static final void failNoException(Class<? extends Throwable> expect) {
+    	fail("This code was expected to produce the exception " + 
+    			expect.getName() + " but it was not thrown.");
+    }
 
+    /**
+     * Provide a standard test for checking for an exception.
+     * @param expect
+     * @param got
+     */
+    public static final void checkException(Class<? extends Throwable> expect,
+    		Throwable got) {
+    	if (expect == null) {
+        	fail("We can't expect a null exception (cryptic enough?)"); 
+    	}
+    	if (got == null) {
+    		fail("We expected an exception of type " + expect.getName() + 
+    				" but got a null value instead");
+    	}
+    	if (!expect.isInstance(got)) {
+    		got.printStackTrace();
+    		fail("We expected an exception of type " + expect.getName() + 
+    				" but got a " + got.getClass().getName() + " instead");
+    	}
+    }
 }
