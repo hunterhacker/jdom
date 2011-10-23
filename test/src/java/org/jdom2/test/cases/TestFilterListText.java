@@ -35,6 +35,11 @@ public class TestFilterListText extends AbstractTestList<Text> {
 				new Text("kidj"),
 		};
 	}
+	
+	@Override
+	public Text[] buildAdditionalContent() {
+		return new Text[] { };
+	}
 
 	@Override
 	public Text[] buildIllegalArgumentContent() {
@@ -43,10 +48,7 @@ public class TestFilterListText extends AbstractTestList<Text> {
 
 	@Override
 	public Object[] buildIllegalClassContent() {
-		return new Object[] {
-				new Element("illegal"),
-				new Object()
-		};
+		return new Object[] {};
 	}
 
 

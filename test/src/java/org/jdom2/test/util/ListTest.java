@@ -22,11 +22,16 @@ public final class ListTest extends AbstractTestList<Integer> {
 	
 	@Override
 	public Object[] buildIllegalClassContent() {
-		return new Object[0];
+		return new Object[]{};
 	}
 	
 	@Override
 	public Integer[] buildIllegalArgumentContent() {
+		return new Integer[0];
+	}
+	
+	@Override
+	public Integer[] buildAdditionalContent() {
 		return new Integer[0];
 	}
 	

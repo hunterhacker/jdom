@@ -62,6 +62,7 @@ package org.jdom2.test.cases;
  */
 
 import static org.junit.Assert.*;
+import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -1485,16 +1486,22 @@ public final class TestElement {
         addBrokenContent(newList, new Integer(7));
 
         try {
+        	// this is a sensitive test.
+        	// The first member in the newList is already in the element, so,
+        	// normally adding it would cause anissue with the child already
+        	// having a parent, and thus an IllegalAddException, so, we could
+        	// expect that, but, setContent first detaches the previous content
+        	// so, in this case, the child element first gets detached, and then
+        	// re-added... so, the effect is that we get a ClassCastException
+        	// by adding the Integer...
             element.setContent(newList);
-            fail("didn't catch bad object type in list");
-        }
-        catch (IllegalAddException e) {
-			// Do nothing
+            failNoException(ClassCastException.class);
 		} catch (Exception e) {
-			fail("Unexpected exception " + e.getClass());
+			checkException(ClassCastException.class, e);
         }
 
-        //should add content up to the point of the bad object in the list
+        //should add no content... if setContent fails it should restore previous
+        // content.
         contentList = element.getContent();
         assertEquals("wrong child element after failed add", child1, contentList.get(0));
         assertEquals("wrong child element after failed add", child2, contentList.get(1));
@@ -1509,6 +1516,34 @@ public final class TestElement {
         //nulls should reset the list
         element.removeContent();
         assertTrue("didn't reset mixed content List", element.getContent().isEmpty());
+        assertNull(child1.getParent());
+        assertNull(child2.getParent());
+        assertNull(child3.getParent());
+        assertNull(comment.getParent());
+        assertNull(cdata.getParent());
+        assertNull(pi.getParent());
+        assertNull(entity.getParent());
+        assertNull(text.getParent());
+        
+        // test an empty list clears....
+        newList.clear();
+        assertTrue(element == element.setContent(newList));
+        assertTrue(element.getContent().isEmpty());
+        assertTrue(element == element.setContent(list));
+        assertTrue(element.getContentSize() == list.size());
+        // test a null list clears.
+        newList = null;
+        assertTrue(element == element.setContent(newList));
+        assertTrue(element.getContent().isEmpty());
+        assertTrue(element == element.setContent(list));
+        assertTrue(element.getContentSize() == list.size());
+        
+        // get a 1-sized list.
+        for (int i = list.size() - 1; i >= 1; i--) {
+        	list.remove(i);
+        }
+        assertTrue(element == element.setContent(list));
+        assertTrue(element.getContentSize() == 1);
     }
 
     /**

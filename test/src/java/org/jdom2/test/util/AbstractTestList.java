@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
+import org.junit.Assume;
 import org.junit.Test;
 
 /**
@@ -68,12 +70,39 @@ public abstract class AbstractTestList<T> {
 		i_nullok = nullok;
 		i_tclass = tclass;
 	}
-	
+
+	/**
+	 * Create a list of the type to test. It should be empty.
+	 * @return the list to test.
+	 */
 	public abstract List<T> buildEmptyList();
 	
+	/**
+	 * This is sample data that should be legal in the list.
+	 * There should be at least 10 or so elements.
+	 * @return the sample data.
+	 */
 	public abstract T[] buildSampleContent();
 	
+	/**
+	 * This should contain at least one additional valid entry
+	 * that can be legally be added to the list after it is already populated
+	 * with the sample data.
+	 * @return the extra data.
+	 */
+	public abstract T[] buildAdditionalContent();
+	
+	/**
+	 * This should contain data that is of the correct generic type of the data
+	 * but has some property that makes it illegal. This can be empty.... 
+	 * @return the IllegalArgument test data.
+	 */
 	public abstract T[] buildIllegalArgumentContent();
+	/**
+	 * This list should be of content that is of the wrong class (a class not
+	 * compatible with <T>
+	 * @return the ClassCast test data.
+	 */
 	public abstract Object[] buildIllegalClassContent();
 
 	
@@ -201,7 +230,7 @@ public abstract class AbstractTestList<T> {
 	 * @param list the List<T> to exercise.
 	 * @param content the content (in the order) that we expect in the list.
 	 */
-	private final void exercise(List<T> list, T...content) {
+	protected final void exercise(List<T> list, T...content) {
 		assertTrue("List is null", list != null);
 		assertTrue("Content is null", content != null);
 		assertTrue(content.length == list.size());
@@ -248,12 +277,9 @@ public abstract class AbstractTestList<T> {
 			Iterator<T> it = list.iterator();
 			try {
 				it.remove();
-				fail("Should have failed pre-next() remove()");
-			} catch (IllegalStateException ise) {
-				// good
+				failNoException(IllegalStateException.class);
 			} catch (Exception e) {
-				e.printStackTrace();
-				fail("Expected IllegalStateException but got " + e.getClass());
+				checkException(IllegalStateException.class, e);
 			}
 			int i = 0;
 			while (i < content.length) {
@@ -262,34 +288,25 @@ public abstract class AbstractTestList<T> {
 				it.remove();
 				try {
 					it.remove();
-					fail("Should have failed sequential remove()");
-				} catch (IllegalStateException ise) {
-					// good
+					failNoException(IllegalStateException.class);
 				} catch (Exception e) {
-					e.printStackTrace();
-					fail("Expected IllegalStateException but got " + e.getClass());
+					checkException(IllegalStateException.class, e);
 				}
 				i++;
 			}
 			assertFalse(it.hasNext());
 			try {
 				it.next();
-				fail("Should have failed end-of-iteration next()");
-			} catch (NoSuchElementException nse) {
-				// good
+				failNoException(NoSuchElementException.class);
 			} catch (Exception e) {
-				e.printStackTrace();
-				fail("Expected IllegalStateException but got " + e.getClass());
+				checkException(NoSuchElementException.class, e);
 			}
 			
 			try {
 				it.remove();
-				fail("Should have failed after-end remove()");
-			} catch (IllegalStateException ise) {
-				// good
+				failNoException(IllegalStateException.class);
 			} catch (Exception e) {
-				e.printStackTrace();
-				fail("Expected IllegalStateException but got " + e.getClass());
+				checkException(IllegalStateException.class, e);
 			}
 			
 			for (T d : content) {
@@ -317,10 +334,10 @@ public abstract class AbstractTestList<T> {
 				assertTrue(li.nextIndex() == content.length);
 				assertFalse(li.hasNext());
 				try {
-					T overflow = li.next();
-					fail("We should not have been able to iterate off the list, but we got " + overflow);
-				} catch (NoSuchElementException nsee) {
-					// this is what we expect.
+					li.next();
+					failNoException(NoSuchElementException.class);
+				} catch (Exception e) {
+					checkException(NoSuchElementException.class, e);
 				}
 				
 				assertTrue(li.previousIndex() == (content.length - 1));
@@ -334,10 +351,10 @@ public abstract class AbstractTestList<T> {
 				assertTrue(li.previousIndex() == -1);
 				assertFalse(li.hasPrevious());
 				try {
-					T underflow = li.previous();
-					fail("Should not be able to iterate to before the list begins, but we got " + underflow);
-				} catch (NoSuchElementException nsee) {
-					// what we expect!
+					li.previous();
+					failNoException(NoSuchElementException.class);
+				} catch (Exception e) {
+					checkException(NoSuchElementException.class, e);
 				}
 				
 				assertTrue(li.nextIndex() == 0);
@@ -373,13 +390,9 @@ public abstract class AbstractTestList<T> {
 					assertTrue(n - 1 == li.nextIndex());
 					try {
 						li.remove();
-						fail("Should not be able to remove from the iterator " +
-								"at this point.");
-					} catch (IllegalStateException ise) {
-						// good!
+						failNoException(IllegalStateException.class);
 					} catch (Exception e) {
-						fail ("We sould get IllegalStateException, not " 
-								+ e.getClass().getName() + ": " + e.getMessage());
+						checkException(IllegalStateException.class, e);
 					}
 					li.add(emt);
 					assertTrue(p == li.previousIndex());
@@ -389,10 +402,10 @@ public abstract class AbstractTestList<T> {
 				assertTrue(li.nextIndex() == content.length);
 				assertFalse(li.hasNext());
 				try {
-					T overflow = li.next();
-					fail("We should not have been able to iterate off the list, but we got " + overflow);
-				} catch (NoSuchElementException nsee) {
-					// this is what we expect.
+					li.next();
+					failNoException(NoSuchElementException.class);
+				} catch (Exception e) {
+					checkException(NoSuchElementException.class, e);
 				}
 				
 				assertTrue(li.previousIndex() == (content.length - 1));
@@ -409,13 +422,9 @@ public abstract class AbstractTestList<T> {
 					assertTrue(n == li.nextIndex());
 					try {
 						li.remove();
-						fail("Should not be able to remove from the iterator " +
-								"at this point.");
-					} catch (IllegalStateException ise) {
-						// good!
+						failNoException(IllegalStateException.class);
 					} catch (Exception e) {
-						fail ("We sould get IllegalStateException, not " 
-								+ e.getClass().getName() + ": " + e.getMessage());
+						checkException(IllegalStateException.class, e);
 					}
 					li.add(emt);
 					assertTrue(content[i] == li.previous());
@@ -425,10 +434,10 @@ public abstract class AbstractTestList<T> {
 				assertTrue(li.previousIndex() == -1);
 				assertFalse(li.hasPrevious());
 				try {
-					T underflow = li.previous();
-					fail("Should not be able to iterate to before the list begins, but we got " + underflow);
-				} catch (NoSuchElementException nsee) {
-					// what we expect!
+					li.previous();
+					failNoException(NoSuchElementException.class);
+				} catch (Exception e) {
+					checkException(NoSuchElementException.class, e);
 				}
 				
 				assertTrue(li.nextIndex() == 0);
@@ -497,11 +506,9 @@ public abstract class AbstractTestList<T> {
 			
 			try {
 				li.set(content[0]);
-				fail("Should no be able to set unless next/previous is called.");
-			} catch (IllegalStateException ise) {
-				// good
+				failNoException(IllegalStateException.class);
 			} catch (Exception e) {
-				fail ("Expecting IllegalAddException, but got " + e.getClass().getName());
+				checkException(IllegalStateException.class, e);
 			}
 			
 			
@@ -519,11 +526,9 @@ public abstract class AbstractTestList<T> {
 			// then backward ....
 			try {
 				li.set(content[0]);
-				fail("Should no be able to set unless next/previous is called.");
-			} catch (IllegalStateException ise) {
-				// good
+				failNoException(IllegalStateException.class);
 			} catch (Exception e) {
-				fail ("Expecting IllegalAddException, but got " + e.getClass().getName());
+				checkException(IllegalStateException.class, e);
 			}
 			
 			
@@ -543,78 +548,52 @@ public abstract class AbstractTestList<T> {
 	
 	private void illegalExercise(List<T> list, T[] content, T d,
 			Class<? extends Exception> eclass) {
-		String efail = "We expect exception " + eclass.getName() + " but got nothing";
-		String cfail = "We expect exception " + eclass.getName() + " but got ";
 		
 		quickCheck(list, content);
 		
 		try {
 			list.add(d);
-			fail(efail);
+			failNoException(eclass);
 		} catch (Exception e) {
-			if (eclass.isAssignableFrom(e.getClass())) {
-				// good.
-			} else {
-				fail (cfail + e.getClass().getName());
-			}
+			checkException(eclass, e);
 		}
 		
 		try {
 			list.addAll(Collections.singleton(d));
-			fail(efail);
+			failNoException(eclass);
 		} catch (Exception e) {
-			if (eclass.isAssignableFrom(e.getClass())) {
-				// good.
-			} else {
-				fail (cfail + e.getClass().getName());
-			}
+			checkException(eclass, e);
 		}
 		
 		for (int i = list.size() - 1; i >= 0; i--) {
 			try {
 				list.set(i, d);
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 		}
 		
 		for (int i = list.size(); i >= 0; i--) {
 			try {
 				list.add(i, d);
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 
 			try {
 				list.addAll(i, Collections.singletonList(d));
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 
 			try {
 				list.addAll(i, Collections.singletonList(d));
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 		}
 
@@ -627,13 +606,9 @@ public abstract class AbstractTestList<T> {
 			assertTrue(content[i] == li.next());
 			try {
 				li.add(d);
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 			// The AbstractList class increments the cursor on the iterator
 			// even if the add fails...
@@ -648,13 +623,9 @@ public abstract class AbstractTestList<T> {
 			
 			try {
 				li.set(d);
-				fail(efail);
+				failNoException(eclass);
 			} catch (Exception e) {
-				if (eclass.isAssignableFrom(e.getClass())) {
-					// good.
-				} else {
-					fail (cfail + e.getClass().getName());
-				}
+				checkException(eclass, e);
 			}
 			// The ContentList class modifies the modcount for set()
 			// even if the set() fails...
@@ -678,7 +649,7 @@ public abstract class AbstractTestList<T> {
 		return li;
 	}
 
-	private void quickCheck(List<T> list, T[] content) {
+	protected void quickCheck(List<T> list, T[] content) {
 		// Simple iteration through the list contents.
 		Iterator<T> it = list.iterator();
 		int i = 0;
@@ -798,6 +769,74 @@ public abstract class AbstractTestList<T> {
 	}
 	
 	@Test
+	public void testIllegalAddAllInt() {
+		final T[] illegal = buildIllegalArgumentContent();
+		Assume.assumeTrue(illegal.length > 0);
+		final T[] extra = buildAdditionalContent();
+		Assume.assumeTrue(extra.length > 0);
+		final T[] content = buildSampleContent();
+		Assume.assumeTrue(content.length > 0);
+		T[] toadd = Arrays.copyOf(extra, extra.length + illegal.length);
+		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
+		
+		// right, we have legal content in 'content', and then in 'illegal' we
+		// have some legal content, and then some illegal content.
+		
+		// populate the list.
+		List<T> list = buildEmptyList();
+		assertTrue(list.addAll(0, Arrays.asList(content)));
+		quickCheck(list, content);
+		
+		// check that the first to-add can be added.
+		list.add(0, toadd[0]);
+		//then remove it again.
+		assertTrue(toadd[0] == list.remove(0));
+		
+		for (int i = 0; i <= content.length; i++) {
+		
+			quickCheck(list, content);
+			
+			// now, add the illegal, and then inspect the list...
+			try {
+				list.addAll(i, Arrays.asList(toadd));
+				failNoException(IllegalArgumentException.class);
+			} catch (Exception e) {
+				checkException(IllegalArgumentException.class, e);
+			}
+			
+			// make sure that the member that previously could be added can
+			// still be added.
+			list.add(0, toadd[0]);
+			//then remove it again.
+			assertTrue(toadd[0] == list.remove(0));
+			
+			// make sure it's all OK.
+			exercise(list, content);
+			
+			Assume.assumeTrue(content.length >= 2);
+			
+			// now check to make sure that concurrency is not affected....
+			Iterator<T> it = list.iterator();
+			// move it along at least once.....
+			assertTrue(content[0] == it.next());
+			// now do a failed addAll.
+			try {
+				list.addAll(i, Arrays.asList(toadd));
+				failNoException(IllegalArgumentException.class);
+			} catch (Exception e) {
+				checkException(IllegalArgumentException.class, e);
+			}
+			// we should be able to move the iteratoe because the modcount should
+			// not have been affected.....
+			assertTrue(content[1] == it.next());
+			
+			
+			
+		}
+		
+	}
+	
+	@Test
 	public void testClear() {
 		List<T> list = buildEmptyList();
 		assertTrue(list.addAll(Arrays.asList(buildSampleContent())));
@@ -857,22 +896,16 @@ public abstract class AbstractTestList<T> {
 			try {
 				List<T> list = buildEmptyList();
 				assertFalse(list.add(null));
-				fail("Lists that do not support null should throw NPE");
-			} catch (NullPointerException npe) {
-				// This is what we expect for lists that do no support null.
+				failNoException(NullPointerException.class);
 			} catch (Exception e) {
-				fail ("Lists that do not support null should throw NPE, not "
-						+ e.getClass() + ":" + e.getMessage());
+				checkException(NullPointerException.class, e);
 			}
 			try {
 				List<T> list = buildEmptyList();
 				list.add(0, null);
-				fail("Lists that do not support null should throw NPE");
-			} catch (NullPointerException npe) {
-				// This is what we expect for lists that do no support null.
+				failNoException(NullPointerException.class);
 			} catch (Exception e) {
-				fail ("Lists that do not support null should throw NPE, not "
-						+ e.getClass() + ":" + e.getMessage());
+				checkException(NullPointerException.class, e);
 			}
 			
 			try {
@@ -886,12 +919,9 @@ public abstract class AbstractTestList<T> {
 					data[0] = null;
 				}
 				list.addAll(0, Arrays.asList(data));
-				fail("Lists that do not support null should throw NPE");
-			} catch (NullPointerException npe) {
-				// This is what we expect for lists that do no support null.
+				failNoException(NullPointerException.class);
 			} catch (Exception e) {
-				fail ("Lists that do not support null should throw NPE, not "
-						+ e.getClass() + ":" + e.getMessage());
+				checkException(NullPointerException.class, e);
 			}
 			
 			try {
@@ -905,12 +935,9 @@ public abstract class AbstractTestList<T> {
 					data[0] = null;
 				}
 				list.addAll(Arrays.asList(data));
-				fail("Lists that do not support null should throw NPE");
-			} catch (NullPointerException npe) {
-				// This is what we expect for lists that do no support null.
+				failNoException(NullPointerException.class);
 			} catch (Exception e) {
-				fail ("Lists that do not support null should throw NPE, not "
-						+ e.getClass() + ":" + e.getMessage());
+				checkException(NullPointerException.class, e);
 			}
 			
 			
@@ -920,12 +947,9 @@ public abstract class AbstractTestList<T> {
 			List<T> list = buildEmptyList();
 			Collection<T> data = null;
 			list.addAll(0, data);
-			fail("Lists should throw NPE for null addAll collections");
-		} catch (NullPointerException npe) {
-			// This is what we expect for lists that do no support null.
+			failNoException(NullPointerException.class);
 		} catch (Exception e) {
-			fail ("Lists that do not support null should throw NPE, not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(NullPointerException.class, e);
 		}
 		
 		try {
@@ -933,12 +957,9 @@ public abstract class AbstractTestList<T> {
 			Collection<T> data = null;
 			list.addAll(Arrays.asList(buildSampleContent()));
 			list.addAll(data);
-			fail("Lists should throw NPE for null addAll collections");
-		} catch (NullPointerException npe) {
-			// This is what we expect for lists that do no support null.
+			failNoException(NullPointerException.class);
 		} catch (Exception e) {
-			fail ("Lists that do not support null should throw NPE, not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(NullPointerException.class, e);
 		}
 	}
 	
@@ -948,103 +969,73 @@ public abstract class AbstractTestList<T> {
 		try {
 			List<T> list = buildEmptyList();
 			list.add(-10, data[0]);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.add(1, data[0]);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.addAll(-10, Arrays.asList(data));
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.addAll(1, Arrays.asList(data));
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.set(-1, data[0]);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.set(1, data[0]);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.get(-1);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.get(1);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 
 		try {
 			List<T> list = buildEmptyList();
 			list.remove(-10);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 		try {
 			List<T> list = buildEmptyList();
 			list.remove(1);
-			fail("List should throw IndexOutOfBounds");
-		} catch (IndexOutOfBoundsException ioobe) {
-			// This is what we expect for lists are accessed beyond their bounds.
+			failNoException(IndexOutOfBoundsException.class);
 		} catch (Exception e) {
-			fail ("Lists should throw IndexOutOfBoundsException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(IndexOutOfBoundsException.class, e);
 		}
 	}
 	
@@ -1163,12 +1154,9 @@ public abstract class AbstractTestList<T> {
 		assertTrue(it.hasNext());
 		try {
 			it.next();
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 
 		
@@ -1187,48 +1175,36 @@ public abstract class AbstractTestList<T> {
 		assertTrue(it.hasPrevious());
 		try {
 			it.previous();
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 		
 		// hasPrevious() should never throw CME.
 		assertTrue(it.hasPrevious());
 		try {
 			it.set(sample[sample.length - 1]);
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 
 		// hasPrevious() should never throw CME.
 		assertTrue(it.hasPrevious());
 		try {
 			it.add(sample[sample.length - 1]);
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 
 		// hasPrevious() should never throw CME.
 		assertTrue(it.hasPrevious());
 		try {
 			it.remove();
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 
 		
@@ -1240,22 +1216,16 @@ public abstract class AbstractTestList<T> {
 		
 		try {
 			si.next();
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 
 		try {
 			si.remove();
-			fail ("Should have ConcurrentModificationException");
-		} catch (ConcurrentModificationException cme) {
-			// good
+			failNoException(ConcurrentModificationException.class);
 		} catch (Exception e) {
-			fail ("Iterators should throw ConcurrentModificationException not "
-					+ e.getClass() + ":" + e.getMessage());
+			checkException(ConcurrentModificationException.class, e);
 		}
 		
 	}

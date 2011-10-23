@@ -57,66 +57,73 @@ package org.jdom2;
 import java.util.*;
 
 /**
- * <code>AttributeList</code> represents legal JDOM <code>Attribute</code>
- * content.  This class is NOT PUBLIC; users should see it as a simple List
- * implementation.
- *
+ * <code>AttributeList</code> represents legal JDOM
+ * <code>{@link Attribute}</code> content.
+ * <p>
+ * This class is NOT PUBLIC; users should see it as a simple List
+ * implementation, although it behaves something like a Set because you cannot
+ * add duplicate Attributes. An attribute is considered duplicate if it has the
+ * same Namespace URI and Attribute name as another existing Attribute.
+ * 
  * @author Alex Rosen
  * @author Philippe Riand
  * @author Bradley S. Huffman
- * @see CDATA
- * @see Comment
- * @see Element
- * @see EntityRef
- * @see ProcessingInstruction
- * @see Text
+ * @author Rolf Lear
  */
-class AttributeList extends AbstractList<Attribute>
-implements java.io.Serializable, RandomAccess {
+final class AttributeList extends AbstractList<Attribute>
+		implements java.io.Serializable, RandomAccess {
 
-	private static final int INITIAL_ARRAY_SIZE = 5;
+	/** The initial size to start the backing array. */
+	private static final int INITIAL_ARRAY_SIZE = 4;
 
-	/** The backing list */
-	private Attribute elementData[];
+	/** The backing array */
+	private Attribute attributeData[];
+
+	/** The current size */
 	private int size;
 
 	/** The parent Element */
 	private Element parent;
 
 	/**
-	 * Create a new instance of the AttributeList representing
-	 * Element content
-	 *
-	 * @param parent element whose attributes are to be held
+	 * Create a new instance of the AttributeList representing <i>parent</i>
+	 * Element's Attributes
+	 * 
+	 * @param parent
+	 *        Element whose Attributes are to be held
 	 */
-	AttributeList(Element parent) {
+	AttributeList(final Element parent) {
 		this.parent = parent;
 	}
 
 	/**
-	 * Package internal method to support building from sources that are
-	 * 100% trusted.
-	 *
-	 * @param a attribute to add without any checks
-	 */ 
-	final void uncheckedAddAttribute(Attribute a) {
+	 * Package internal method to support building from sources that are 100%
+	 * trusted.
+	 * 
+	 * @param a
+	 *        an Attribute to add without any checks
+	 */
+	final void uncheckedAddAttribute(final Attribute a) {
 		a.parent = parent;
 		ensureCapacity(size + 1);
-		elementData[size++] = a;
+		attributeData[size++] = a;
 		modCount++;
 	}
 
 	/**
-	 * Add a attribute to the end of the list or replace a existing
-	 * attribute with the same name and <code>Namespace</code>.
-	 *
-	 * @param obj The object to insert into the list.
-	 * @return true (as per the general contract of Collection.add).
-	 * @throws IndexOutOfBoundsException if index < 0 || index > size()
+	 * Check and add <i>attribute</i> to the end of the list or replace an
+	 * existing <code>Attribute</code> with the same name and
+	 * <code>Namespace</code>.
+	 * 
+	 * @param attribute
+	 *        The <code>Attribute</code> to insert into the list.
+	 * @return true as specified by <code>Collection.add()</code>.
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the add
 	 */
 	@Override
-	public boolean add(Attribute attribute) {
-		int duplicate = indexOfDuplicate(attribute);
+	public boolean add(final Attribute attribute) {
+		final int duplicate = indexOfDuplicate(attribute);
 		if (duplicate < 0) {
 			add(size(), attribute);
 		}
@@ -127,20 +134,28 @@ implements java.io.Serializable, RandomAccess {
 	}
 
 	/**
-	 * Check and add the <code>Attribute</code> to this list at
-	 * the given index.
-	 *
-	 * @param index index where to add <code>Attribute</code>
-	 * @param attribute <code>Attribute</code> to add
+	 * Check and add <i>attribute</i> to this list at <i>index</i>.
+	 * 
+	 * @param index
+	 *        where to add/insert the <code>Attribute</code>
+	 * @param attribute
+	 *        <code>Attribute</code> to add
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the add
 	 */
 	@Override
-	public void add(int index, Attribute attribute) {
+	public void add(final int index, final Attribute attribute) {
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Index: " + index +
+					" Size: " + size());
+		}
+
 		if (attribute.getParent() != null) {
 			throw new IllegalAddException(
 					"The attribute already has an existing parent \"" +
 							attribute.getParent().getQualifiedName() + "\"");
 		}
-		int duplicate = indexOfDuplicate(attribute);
+		final int duplicate = indexOfDuplicate(attribute);
 		if (duplicate >= 0) {
 			throw new IllegalAddException("Cannot add duplicate attribute");
 		}
@@ -150,77 +165,91 @@ implements java.io.Serializable, RandomAccess {
 			throw new IllegalAddException(parent, attribute, reason);
 		}
 
-		if (index<0 || index>size) {
-			throw new IndexOutOfBoundsException("Index: " + index +
-					" Size: " + size());
-		}
-
 		attribute.setParent(parent);
 
-		ensureCapacity(size+1);
-		if( index==size ) {
-			elementData[size++] = attribute;
+		ensureCapacity(size + 1);
+		if (index == size) {
+			attributeData[size++] = attribute;
 		} else {
-			System.arraycopy(elementData, index, elementData, index + 1, size - index);
-			elementData[index] = attribute;
+			System.arraycopy(attributeData, index, attributeData, index + 1, 
+					size - index);
+			attributeData[index] = attribute;
 			size++;
 		}
 		modCount++;
 	}
 
 	/**
-	 * Add all the objects in the specified collection.
-	 *
-	 * @param collection The collection containing all the objects to add.
-	 * @return <code>true</code> if the list was modified as a result of
-	 * the add.
+	 * Add all the <code>Attributes</code> in <i>collection</i>.
+	 * 
+	 * @param collection
+	 *        The <code>Collection</code> of <code>Attributes</code> to add.
+	 * @return <code>true</code> if the list was modified as a result of the
+	 *         add.
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the addAll
 	 */
 	@Override
-	public boolean addAll(Collection<? extends Attribute> collection) {
+	public boolean addAll(final Collection<? extends Attribute> collection) {
 		return addAll(size(), collection);
 	}
 
 	/**
-	 * Inserts the specified collecton at the specified position in this list.
-	 * Shifts the attribute currently at that position (if any) and any
-	 * subsequent attributes to the right (adds one to their indices).
-	 *
-	 * @param index The offset to start adding the data in the collection
-	 * @param collection The collection to insert into the list.
-	 * @return <code>true</code> if the list was modified as a result of
-	 *                           the add.
-	 * throws IndexOutOfBoundsException if index < 0 || index > size()
+	 * Inserts the <code>Attributes</code> in <i>collection</i> at the specified
+	 * <i>index</i> in this list.
+	 * 
+	 * @param index
+	 *        The offset at which to start adding the <code>Attributes</code>
+	 * @param collection
+	 *        The <code>Collection</code> containing the <code>Attributes</code>
+	 *        to add.
+	 * @return <code>true</code> if the list was modified as a result of the
+	 *         add.
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the addAll
 	 */
 	@Override
-	public boolean addAll(int index, Collection<? extends Attribute> collection) {
-		if (index<0 || index>size) {
+	public boolean addAll(final int index,
+			final Collection<? extends Attribute> collection) {
+		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size());
 		}
 
 		if (collection == null) {
-			throw new NullPointerException("Can not add a null Collection to AttributeList");
+			throw new NullPointerException(
+					"Can not add a null Collection to AttributeList");
 		}
-		if (collection.size() == 0) {
+		final int addcnt = collection.size();
+		if (addcnt == 0) {
 			return false;
 		}
-		ensureCapacity(size() + collection.size());
+		if (addcnt == 1) {
+			// quick check for single-add.
+			add(index, collection.iterator().next());
+			return true;
+		}
+
+		ensureCapacity(size() + addcnt);
+
+		final int tmpmodcount = modCount;
+		boolean ok = false;
 
 		int count = 0;
 
 		try {
-			Iterator<? extends Attribute> i = collection.iterator();
-			while (i.hasNext()) {
-				Attribute obj = i.next();
-				add(index + count, obj);
+			for (Attribute att : collection) {
+				add(index + count, att);
 				count++;
 			}
-		}
-		catch (RuntimeException exception) {
-			for (int i = 0; i < count; i++) {
-				remove(index);
+			ok = true;
+		} finally {
+			if (!ok) {
+				while (--count >= 0) {
+					remove(index + count);
+				}
+				modCount = tmpmodcount;
 			}
-			throw exception;
 		}
 
 		return true;
@@ -231,120 +260,140 @@ implements java.io.Serializable, RandomAccess {
 	 */
 	@Override
 	public void clear() {
-		if (elementData != null) {
-			for (int i = 0; i < size; i++) {
-				Attribute attribute = elementData[i];
-				attribute.setParent(null);
+		if (attributeData != null) {
+			while (size > 0) {
+				size--;
+				attributeData[size].setParent(null);
+				attributeData[size] = null;
 			}
-			elementData = null;
-			size = 0;
 		}
 		modCount++;
 	}
 
 	/**
-	 * Clear the current list and set it to the contents
-	 * of the <code>Collection</code>.
-	 * object.
-	 *
-	 * @param collection The collection to use.
+	 * Clear the current list and set it to the contents of <i>collection</i>.
+	 * 
+	 * @param collection
+	 *        The <code>Collection</code> to use.
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the addAll
 	 */
-	void clearAndSet(Collection<? extends Attribute> collection) {
-		Attribute[] old = elementData;
-		int oldSize = size;
+	void clearAndSet(final Collection<? extends Attribute> collection) {
+		if (collection == null || collection.isEmpty()) {
+			clear();
+			return;
+		}
 
-		elementData = null;
+		// keep a backup in case we need to roll-back...
+		final Attribute[] old = attributeData;
+		final int oldSize = size;
+		final int oldModCount = modCount;
+
+		// clear the current system
+		// we need to detatch before we add so that we don't run in to a problem
+		// where an attribute in the to-add list is one that we are 'clearing'
+		// first.
+		while (size > 0) {
+			old[--size].setParent(null);
+		}
 		size = 0;
+		attributeData = null;
 
-		if ((collection != null) && (collection.size() != 0)) {
-			ensureCapacity(collection.size());
-			try {
-				addAll(0, collection);
-			}
-			catch (RuntimeException exception) {
-				elementData = old;
-				size = oldSize;
-				throw exception;
+		boolean ok = false;
+		try {
+			addAll(0, collection);
+			ok = true;
+		} finally {
+			if (!ok) {
+				// we have an exception pending....
+				// restore the old system.
+				// re-attach the old stuff
+				attributeData = old;
+				while (size < oldSize) {
+					attributeData[size++].setParent(parent);
+				}
+				modCount = oldModCount;
 			}
 		}
 
-		if (old != null) {
-			for (int i = 0; i < oldSize; i++) {
-				Attribute attribute = old[i];
-				attribute.setParent(null);
-			}
-		}
-		modCount++;
 	}
 
 	/**
-	 * Increases the capacity of this <code>AttributeList</code> instance,
-	 * if necessary, to ensure that it can hold at least the number of
-	 * items specified by the minimum capacity argument.
-	 *
-	 * @param minCapacity the desired minimum capacity.
+	 * Increases the capacity of this <code>AttributeList</code> instance, if
+	 * necessary, to ensure that it can hold at least the number of items
+	 * specified by the minimum capacity argument.
+	 * 
+	 * @param minCapacity
+	 *        the desired minimum capacity.
 	 */
-	private void ensureCapacity(int minCapacity) {
-		if (elementData == null) {
-			elementData = new Attribute[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
+	private void ensureCapacity(final int minCapacity) {
+		if (attributeData == null) {
+			attributeData = 
+					new Attribute[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
+			return;
+		} else if (minCapacity < attributeData.length) {
+			return;
 		}
-		else {
-			int oldCapacity = elementData.length;
-			if (minCapacity > oldCapacity) {
-				Attribute oldData[] = elementData;
-				int newCapacity = (oldCapacity * 3)/2 + 1;
-				if (newCapacity < minCapacity)
-					newCapacity = minCapacity;
-				elementData = new Attribute[newCapacity];
-				System.arraycopy(oldData, 0, elementData, 0, size);
-			}
-		}
+		// most JVM's allocate memory in multiples of 'double-words', on
+		// 64-bit it's 16-bytes, on 32-bit it's 8 bytes which all means it makes
+		// sense to increment the capacity in even values.
+		attributeData = Arrays.copyOf(attributeData,
+				((minCapacity + INITIAL_ARRAY_SIZE) >>> 1) << 1);
 	}
 
 	/**
-	 * Return the object at the specified offset.
-	 *
-	 * @param index The offset of the object.
-	 * @return The Object which was returned.
+	 * Retrieve the <code>Attribute</code> at <i>offset</i>.
+	 * 
+	 * @param index
+	 *        The position of the <code>Attribute</code> to retrieve.
+	 * @return The <code>Attribute</code> at position <i>index</i>.
 	 */
 	@Override
-	public Attribute get(int index) {
-		if (index<0 || index>=size) {
+	public Attribute get(final int index) {
+		if (index < 0 || index >= size) {
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size());
 		}
 
-		return elementData[index];
+		return attributeData[index];
 	}
 
 	/**
-	 * Return the <code>Attribute</code> with the
-	 * given name and <code>Namespace</code>.
-	 *
-	 * @param name name of attribute to return
-	 * @param namespace <code>Namespace</code> to match
+	 * Retrieve the <code>Attribute</code> with the given name and the same
+	 * <code>Namespace</code> URI as <i>namespace</i>.
+	 * 
+	 * @param name
+	 *        name of attribute to return
+	 * @param namespace
+	 *        indicate what <code>Namespace</code> URI to consider
 	 * @return the <code>Attribute</code>, or null if one doesn't exist.
 	 */
-	Object get(String name, Namespace namespace) {
-		int index = indexOf(name, namespace);
+	Object get(final String name, final Namespace namespace) {
+		final int index = indexOf(name, namespace);
 		if (index < 0) {
 			return null;
 		}
-		return elementData[index];
+		return attributeData[index];
 	}
 
 	/**
-	 * Return index of the <code>Attribute</code> with the
-	 * given name and uri.
+	 * Return index of the <code>Attribute</code> with the given <i>name</i> and
+	 * the same Namespace URI as <i>namespace</i>.
+	 * 
+	 * @param name
+	 *        name of <code>Attribute</code> to retrieve
+	 * @param namespace
+	 *        indicate what <code>Namespace</code> URI to consider
+	 * @return the index of the attribute that matches the conditions, or
+	 *         <code>-1</code> if there is none.
 	 */
-	int indexOf(String name, Namespace namespace) {
-		String uri = namespace.getURI();
-		if (elementData != null) {
+	int indexOf(final String name, final Namespace namespace) {
+		if (attributeData != null) {
+			final String uri = namespace.getURI();
 			for (int i = 0; i < size; i++) {
-				Attribute old = elementData[i];
-				String oldURI = old.getNamespaceURI();
-				String oldName = old.getName();
-				if (oldURI.equals(uri) && oldName.equals(name)) {
+				final Attribute att = attributeData[i];
+				if (att.getNamespaceURI().equals(uri) &&
+						att.getName().equals(name)) {
 					return i;
 				}
 			}
@@ -353,36 +402,39 @@ implements java.io.Serializable, RandomAccess {
 	}
 
 	/**
-	 * Remove the object at the specified offset.
-	 *
-	 * @param index The offset of the object.
-	 * @return The Object which was removed.
+	 * Remove the <code>Attribute</code> at <i>index</i>.
+	 * 
+	 * @param index
+	 *        The offset of the <code>Attribute</code> to remove.
+	 * @return The removed <code>Attribute</code>.
 	 */
 	@Override
-	public Attribute remove(int index) {
-		if (index<0 || index>=size)
+	public Attribute remove(final int index) {
+		if (index < 0 || index >= size)
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size());
 
-		Attribute old = elementData[index];
+		Attribute old = attributeData[index];
 		old.setParent(null);
-		int numMoved = size - index - 1;
-		if (numMoved > 0)
-			System.arraycopy(elementData, index+1, elementData, index,numMoved);
-		elementData[--size] = null; // Let gc do its work
+		System.arraycopy(attributeData, index + 1, attributeData, index,
+				size - index - 1);
+		attributeData[--size] = null; // Let gc do its work
 		modCount++;
 		return old;
 	}
 
 	/**
-	 * Remove the <code>Attribute</code> with the
-	 * given name and <code>Namespace</code>.
-	 *
-	 * @param namespace <code>Namespace</code> to match
+	 * Remove the <code>Attribute</code> with the specified name and the same
+	 * URI as <i>namespace</i>.
+	 * 
+	 * @param name
+	 *        name of <code>Attribute</code> to remove
+	 * @param namespace
+	 *        indicate what <code>Namespace</code> URI to consider
 	 * @return the <code>true</code> if attribute was removed,
-	 *             <code>false</code> otherwise
+	 *         <code>false</code> otherwise
 	 */
-	boolean remove(String name, Namespace namespace) {
+	boolean remove(final String name, final Namespace namespace) {
 		int index = indexOf(name, namespace);
 		if (index < 0) {
 			return false;
@@ -392,16 +444,18 @@ implements java.io.Serializable, RandomAccess {
 	}
 
 	/**
-	 * Set the object at the specified location to the supplied
-	 * object. Note: does not check for duplicate attributes.
-	 *
-	 * @param index The location to set the value to.
-	 * @param attribute The attribute to set.
-	 * @return The object which was replaced.
-	 * throws IndexOutOfBoundsException if index < 0 || index >= size()
+	 * Set the <code>Attribute</code> at <i>index</i> to be <i>attribute</i>.
+	 * 
+	 * @param index
+	 *        The location to set the value to.
+	 * @param attribute
+	 *        The <code>Attribute</code> to set.
+	 * @return The replaced <code>Attribute</code>.
+	 * @throws IllegalAddException
+	 *         if validation rules prevent the set
 	 */
 	@Override
-	public Attribute set(int index, Attribute attribute) {
+	public Attribute set(final int index, final Attribute attribute) {
 		if (index < 0 || index >= size)
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size());
@@ -422,17 +476,17 @@ implements java.io.Serializable, RandomAccess {
 			throw new IllegalAddException(parent, attribute, reason);
 		}
 
-		Attribute old = elementData[index];
+		Attribute old = attributeData[index];
 		old.setParent(null);
 
-		elementData[index] = attribute;
+		attributeData[index] = attribute;
 		attribute.setParent(parent);
 		return old;
 	}
 
 	/**
-	 * Return index of attribute with same name and Namespace, or
-	 * -1 if one doesn't exist
+	 * Return index of attribute with same name and Namespace, or -1 if one
+	 * doesn't exist
 	 */
 	private int indexOfDuplicate(Attribute attribute) {
 		int duplicate = -1;
@@ -442,14 +496,21 @@ implements java.io.Serializable, RandomAccess {
 		return duplicate;
 	}
 
+	/**
+	 * Returns an <code>Iterator</code> over the <code>Attributes</code> in this
+	 * list in the proper sequence.
+	 * 
+	 * @return an iterator.
+	 */
 	@Override
 	public Iterator<Attribute> iterator() {
 		return new ALIterator();
 	}
+
 	/**
-	 * Return the number of items in this list
-	 *
-	 * @return The number of items in this list.
+	 * Return the number of <code>Attributes</code> in this list
+	 * 
+	 * @return The number of <code>Attributes</code> in this list.
 	 */
 	@Override
 	public int size() {
@@ -463,16 +524,29 @@ implements java.io.Serializable, RandomAccess {
 	public String toString() {
 		return super.toString();
 	}
-	
-	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
-	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * */
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * */
+	/**
+	 * A fast iterator that can beat AbstractList because we can access the data
+	 * directly. This is important because so much code now uses the for-each
+	 * type loop <code>for (Attribute a : element.getAttributes()) {...}</code>,
+	 * and that uses iterator().
+	 * 
+	 * @author Rolf Lear
+	 */
 	private final class ALIterator implements Iterator<Attribute> {
+		// The modCount to expect (or throw ConcurrentModeEx)
 		private int expect = -1;
+		// the index of the next Attribute to return.
 		private int cursor = 0;
+		// whether it is legal to call remove()
 		private boolean canremove = false;
+
 		private ALIterator() {
 			expect = modCount;
 		}
+
 		@Override
 		public boolean hasNext() {
 			return cursor < size;
@@ -489,7 +563,7 @@ implements java.io.Serializable, RandomAccess {
 						"the ContentList.");
 			}
 			canremove = true;
-			return elementData[cursor++];
+			return attributeData[cursor++];
 		}
 
 		@Override
@@ -506,7 +580,7 @@ implements java.io.Serializable, RandomAccess {
 			expect = modCount;
 			canremove = false;
 		}
-		
-	}		
-	
+
+	}
+
 }

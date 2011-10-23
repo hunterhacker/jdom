@@ -94,7 +94,10 @@ final class ContentList extends AbstractList<Content>
 	/** Document or Element this list belongs to */
 	private final Parent parent;
 
-	/** Force either a Document or Element parent */
+	/** 
+	 * Force either a Document or Element parent 
+	 * @param parent the Element this ContentList belongs to. 
+	 */
 	ContentList(Parent parent) {
 		this.parent = parent;
 	}
@@ -109,8 +112,34 @@ final class ContentList extends AbstractList<Content>
 		c.parent = parent;
 		ensureCapacity(size + 1);
 		elementData[size++] = c;
-		modCount++;
+		incrementModCount();
 		dataModCount++;
+	}
+	
+	/**
+	 * In the FilterList and FilterList iterators it becomes confusing as to
+	 * which mod count is being used. This formalizes the process, and using
+	 * (s/g)etModCount() is the only thing you should see in the remainder of this
+	 * code.
+	 * @param mod the value to set.
+	 */
+	private final void setModCount(int mod) {
+		this.modCount = mod;
+	}
+	
+	/**
+	 * In the FilterList and FilterList iterators it becomes confusing as to
+	 * which mod count is being used. This formalizes the process, and using
+	 * (s/g)etModCount() is the only thing you should see in the remainder of this
+	 * code.
+	 * @return mod the value.
+	 */
+	private final int getModCount() {
+		return this.modCount;
+	}
+	
+	private final void incrementModCount() {
+		modCount++;
 	}
 	
 	private final void checkIndex(final int index, final boolean excludes) {
@@ -185,7 +214,7 @@ final class ContentList extends AbstractList<Content>
 			size++;
 		}
 		// Successful add's increment the AbstractList's modCount
-		modCount++;
+		incrementModCount();
 		dataModCount++;
 	}
 
@@ -221,40 +250,38 @@ final class ContentList extends AbstractList<Content>
 		
 		checkIndex(index, false);
 
-		int toadd = collection.size();
-		
-		if (toadd == 0) {
+		final int addcnt = collection.size();
+		if (addcnt == 0) {
 			return false;
 		}
-		
-		ensureCapacity(size() + toadd);
-
-		if (toadd == 1) {
-			// fast short-cut for a single sized collection.
+		if (addcnt == 1) {
+			// quick check for single-add.
 			add(index, collection.iterator().next());
 			return true;
 		}
 		
+		ensureCapacity(size() + addcnt);
+
+		final int tmpmodcount = getModCount();
+		final int tmpdmc = dataModCount;
+		boolean ok = false;
+
 		int count = 0;
-		Content[] tmpc = new Content[toadd];
-		int tmpmod = modCount;
-		int tmpdmc = dataModCount;
-		Content[] tmpdata = Arrays.copyOf(elementData, elementData.length);
+		
 		try {
 			for (Content c : collection) {
 				add(index + count, c);
-				// only increment the count after a successful add.
-				tmpc[count++] = c;
+				count++;
 			}
+			ok = true;
 		} finally {
-			if (count < tmpc.length) {
+			if (!ok) {
 				// something failed... remove all added content
-				// Do this the 'hard' way, just force-null the content's parent
 				while (--count >= 0) {
-					tmpc[count].setParent(null);
+					remove(index + count);
 				}
-				System.arraycopy(tmpdata, 0, elementData, 0, tmpdata.length);
-				modCount = tmpmod;
+				// restore the mod-counts.
+				setModCount(tmpmodcount);
 				dataModCount = tmpdmc;
 			}
 		}
@@ -275,7 +302,7 @@ final class ContentList extends AbstractList<Content>
 			elementData = null;
 			size = 0;
 		}
-		modCount++;
+		incrementModCount();
 		dataModCount++;
 	}
 
@@ -292,28 +319,40 @@ final class ContentList extends AbstractList<Content>
 			return;
 		}
 		
-		Content[] old = elementData;
-		int oldSize = size;
-		int oldmod = modCount;
-		int olddmc = dataModCount;
+		// keep a backup in case we need to roll-back...
+		final Content[] old = elementData;
+		final int oldSize = size;
+		final int oldModCount = getModCount();
 
+		// clear the current system
+		// we need to detach before we add so that we don't run in to a problem
+		// where a content in the to-add list is one that we are 'clearing'
+		// first.
+		while (size > 0) {
+			old[--size].setParent(null);
+		}
+		size = 0;
+		elementData = null;
+		
 		boolean ok = false;
 		try {
-			elementData = null;
-			size = 0;
-			ensureCapacity(collection.size());
-			modCount++;
-			dataModCount++;
 			addAll(0, collection);
 			ok = true;
 		} finally {
 			if (!ok) {
+				// we have an exception pending....
+				// restore the old system.
+				// we do not need to worry about the added content
+				// because the failed addAll will clear it up.
+				// re-attach the old stuff
 				elementData = old;
-				size = oldSize;
-				modCount = oldmod;
-				dataModCount = olddmc;
+				while (size < oldSize) {
+					elementData[size++].setParent(parent);
+				}
+				setModCount(oldModCount);
 			}
 		}
+		
 
 	}
 
@@ -354,8 +393,11 @@ final class ContentList extends AbstractList<Content>
 
 	/**
 	 * Return a view of this list based on the given filter.
-	 *
-	 * @param filter <code>Filter</code> for this view.
+	 * 
+	 * @param <E>
+	 *        The Generic type of the content as set by the Filter.
+	 * @param filter
+	 *        <code>Filter</code> for this view.
 	 * @return a list representing the rules of the <code>Filter</code>.
 	 */
 	<E extends Content> List<E> getView(Filter<E> filter) {
@@ -414,7 +456,7 @@ final class ContentList extends AbstractList<Content>
 		if (numMoved > 0)
 			System.arraycopy(elementData, index+1, elementData, index,numMoved);
 		elementData[--size] = null; // Let gc do its work
-		modCount++;
+		incrementModCount();
 		return old;
 	}
 
@@ -484,12 +526,22 @@ final class ContentList extends AbstractList<Content>
 
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	/**
+	 * A fast implementation of Iterator.
+	 * <p>
+	 * It is fast because it is tailored to the ContentList, and not the
+	 * flexible implementation used by AbstractList. It needs to be fast because
+	 * iterator() is used extensively in the for-each type loop.
+	 * 
+	 * @author Rolf Lear
+	 *
+	 */
 	private final class CLIterator implements Iterator<Content> {
 		private int expect = -1;
 		private int cursor = 0;
 		private boolean canremove = false;
 		private CLIterator() {
-			expect = modCount;
+			expect = getModCount();
 		}
 		@Override
 		public boolean hasNext() {
@@ -498,7 +550,7 @@ final class ContentList extends AbstractList<Content>
 
 		@Override
 		public Content next() {
-			if (modCount != expect) {
+			if (getModCount() != expect) {
 				throw new ConcurrentModificationException("ContentList was " +
 						"modified outside of this Iterator");
 			}
@@ -512,7 +564,7 @@ final class ContentList extends AbstractList<Content>
 
 		@Override
 		public void remove() {
-			if (modCount != expect) {
+			if (getModCount() != expect) {
 				throw new ConcurrentModificationException("ContentList was " +
 						"modified outside of this Iterator");
 			}
@@ -522,7 +574,7 @@ final class ContentList extends AbstractList<Content>
 			}
 			canremove = false;
 			ContentList.this.remove(--cursor);
-			expect = modCount;
+			expect = getModCount();
 		}
 		
 		
@@ -537,6 +589,7 @@ final class ContentList extends AbstractList<Content>
 	 * <p>
 	 * FilterList represents a dynamic view of the backing ContentList, changes
 	 * to the backing list are reflected in the FilterList, and visa-versa.
+	 * @param <F> The Generic type of content accepted by the underlying Filter.
 	 */
 
 	class FilterList<F extends Content> extends AbstractList<F>
@@ -546,13 +599,14 @@ final class ContentList extends AbstractList<Content>
 		final Filter<F> filter;
 		// correlate the position in the filtered list to the index in the
 		// backing ContentList.
-		int[] backingpos = new int[size + 5];
+		int[] backingpos = new int[size + INITIAL_ARRAY_SIZE];
 		int   backingsize = 0;
 		// track data modifications in the backing ContentList.
 		int xdata = -1;
 
 		/**
 		 * Create a new instance of the FilterList with the specified Filter.
+		 * @param filter The underlying Filter to use for filtering the content.
 		 */
 		FilterList(Filter<F> filter) {
 			this.filter = filter;
@@ -623,7 +677,7 @@ final class ContentList extends AbstractList<Content>
 			if (filter.matches(obj)) {
 				ContentList.this.add(adj, obj);
 				
-				// we can optimize the lazyness now by doing a partial reset on
+				// we can optimise the laziness now by doing a partial reset on
 				// the backing list... invalidate everything *after* the added
 				// content
 				if (backingpos.length <= size) {
@@ -634,10 +688,84 @@ final class ContentList extends AbstractList<Content>
 				xdata = dataModCount;
 				
 			} else {
-				throw new ClassCastException("Filter won't allow the " +
+				throw new IllegalAddException("Filter won't allow the " +
 						obj.getClass().getName() +
 						" '" + obj + "' to be added to the list");
 			}
+		}
+		
+		@Override
+		public boolean addAll(int index, Collection<? extends F> collection) {
+			if (collection == null) {
+				throw new NullPointerException("Cannot add a null collection");
+			}
+			
+			if (index < 0) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			
+			final int adj = resync(index);
+			if (adj == size && index > size()) {
+				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
+			}
+			
+			final int addcnt = collection.size();
+			if (addcnt == 0) {
+				return false;
+			}
+
+			ContentList.this.ensureCapacity(ContentList.this.size() + addcnt);
+
+			final int tmpmodcount = getModCount();
+			final int tmpdmc = dataModCount;
+			boolean ok = false;
+
+			int count = 0;
+			
+			try {
+				for (Content c : collection) {
+					if (c == null) {
+						throw new NullPointerException(
+								"Cannot add null content");
+					}
+					if (filter.matches(c)) {
+						ContentList.this.add(adj + count, c);
+						// we can optimise the laziness now by doing a partial reset on
+						// the backing list... invalidate everything *after* the added
+						// content
+						if (backingpos.length <= size) {
+							backingpos = Arrays.copyOf(backingpos, backingpos.length + 1);
+						}
+						backingpos[index + count] = adj + count;
+						backingsize = index + count + 1;
+						xdata = ContentList.this.dataModCount;
+	
+						count++;
+					} else {
+						throw new IllegalAddException("Filter won't allow the " +
+								c.getClass().getName() +
+								" '" + c + "' to be added to the list");
+						
+					}
+				}
+				ok = true;
+			} finally {
+				if (!ok) {
+					// something failed... remove all added content
+					while (--count >= 0) {
+						ContentList.this.remove(adj + count);
+					}
+					// restore the mod-counts.
+					setModCount(tmpmodcount);
+					dataModCount = tmpdmc;
+					// reset the cache... will need to redo some work on another
+					// call maybe....
+					backingsize = index;
+					xdata = tmpmodcount;
+				}
+			}
+
+			return true;
 		}
 
 		/**
@@ -688,19 +816,12 @@ final class ContentList extends AbstractList<Content>
 			if (adj == size) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			Content oldc = ContentList.this.get(adj);
-			F old = filter.filter(oldc);
-			if (old != null) {
-				ContentList.this.remove(adj);
-				// optimize the backing cache.
-				backingsize = index;
-				xdata = dataModCount;
-				return old;
-			}
-			throw new IllegalAddException("Filter won't allow the " +
-					(oldc.getClass()).getName() +
-					" '" + oldc + "' (index " + index +
-					") to be removed");
+			Content oldc = ContentList.this.remove(adj);
+			// optimise the backing cache.
+			backingsize = index;
+			xdata = dataModCount;
+			// use Filter to ensure the cast is right.
+			return filter.filter(oldc);
 		}
 
 		/**
@@ -728,7 +849,7 @@ final class ContentList extends AbstractList<Content>
 				xdata = dataModCount;
 				return oldc;
 			}
-			throw new ClassCastException("Filter won't allow index " +
+			throw new IllegalAddException("Filter won't allow index " +
 					index + " to be set to " +
 					(obj.getClass()).getName());
 		}
@@ -768,10 +889,12 @@ final class ContentList extends AbstractList<Content>
 
 		/**
 		 * Default constructor
+		 * @param flist The FilterList over which we will iterate.
+		 * @param start where in the FilterList to start iteration.
 		 */
 		FilterListIterator(final FilterList<F> flist, final int start) {
 			filterlist = flist;
-			expectedmod = modCount;
+			expectedmod = getModCount();
 			// always start list iterators in backward mode ....
 			// it makes sense... really.
 			forward = false;
@@ -792,7 +915,7 @@ final class ContentList extends AbstractList<Content>
 		}
 		
 		private void checkConcurrent() {
-			if (expectedmod != modCount) {
+			if (expectedmod != getModCount()) {
 				throw new ConcurrentModificationException("The ContentList " +
 						"supporting the FilterList this iterator is " +
 						"processing has been modified by something other " +
@@ -887,7 +1010,7 @@ final class ContentList extends AbstractList<Content>
 			
 			filterlist.add(next, obj);
 			
-			expectedmod = modCount;
+			expectedmod = getModCount();
 			
 			canremove = canset = false;
 			
@@ -918,7 +1041,7 @@ final class ContentList extends AbstractList<Content>
 			// so call nextIndex to set tmpcursor to what would come after.
 			filterlist.remove(cursor);
 			forward = false;
-			expectedmod = modCount;
+			expectedmod = getModCount();
 
 			canremove = false;
 			canset = false;
@@ -938,7 +1061,7 @@ final class ContentList extends AbstractList<Content>
 			}
 
 			filterlist.set(cursor, obj);
-			expectedmod = modCount;
+			expectedmod = getModCount();
 
 		}
 

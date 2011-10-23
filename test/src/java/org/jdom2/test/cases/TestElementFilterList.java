@@ -2,10 +2,8 @@ package org.jdom2.test.cases;
 
 import java.util.List;
 
-import org.jdom2.Comment;
 import org.jdom2.Content;
 import org.jdom2.Element;
-import org.jdom2.Text;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.test.util.AbstractTestList;
 import org.junit.Before;
@@ -36,11 +34,14 @@ public class TestElementFilterList extends AbstractTestList<Element> {
 	}
 
 	@Override
+	public Element[] buildAdditionalContent() {
+		return new Element[]{ new Element("seven"), 
+				new Element("eight")};
+	}
+
+	@Override
 	public Object[] buildIllegalClassContent() {
-		Object[] ret = new Object[] {
-				new Text("Hello"),
-				new Comment("Hello!")
-		};
+		Object[] ret = new Object[] {};
 		return ret;
 	}
 	

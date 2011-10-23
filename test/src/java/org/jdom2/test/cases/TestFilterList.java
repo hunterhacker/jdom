@@ -61,6 +61,7 @@ package org.jdom2.test.cases;
  * @version 0.1
  */
 import static org.junit.Assert.*;
+import static org.jdom2.test.util.UnitTestUtil.*;
 
 import org.jdom2.*;
 import org.junit.Before;
@@ -285,11 +286,9 @@ public final class TestFilterList {
 			@SuppressWarnings("unchecked")
 			List<Comment> tmpb = (List<Comment>)tmpa;
 			tmpb.set(1, new Comment("test"));
-			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {
-			// Do nothing
+			failNoException(IllegalAddException.class);
 		} catch (Exception e) {
-			fail("Unexpected exception " + e.getClass());
+			checkException(IllegalAddException.class, e);
 		}
 		try {
 			content.set(48, new Element("test"));
@@ -376,11 +375,9 @@ public final class TestFilterList {
 			@SuppressWarnings("unchecked")
 			List<Comment> tmpb = (List<Comment>)tmpa;
 			tmpb.add(1, new Comment("test"));
-			fail("Should have thrown an ClassCastException");
-		} catch(ClassCastException ex) {
-			// Do nothing
+			failNoException(IllegalAddException.class);
 		} catch (Exception e) {
-			fail("Unexpected exception " + e.getClass());
+			checkException(IllegalAddException.class, e);
 		}
 		try {
 			content.add(48, new Element("test"));
@@ -451,11 +448,9 @@ public final class TestFilterList {
 			@SuppressWarnings("unchecked")
 			List<Comment> tmpb = (List<Comment>)tmpa;
 			tmpb.add(new Comment("test"));
-			fail("Should have thrown a ClassCastException");
-		} catch(ClassCastException ex) {
-			// Do nothing
+			failNoException(IllegalAddException.class);
 		} catch (Exception e) {
-			fail("Unexpected exception " + e.getClass());
+			checkException(IllegalAddException.class, e);
 		}
 		try {
 			// Jump through hoops to defeat Generics
@@ -1309,4 +1304,38 @@ public final class TestFilterList {
         }
     }
 
+    @Test
+    public void testSpecialCaseLotsOfDataAdded() {
+    	// we need to ensure that the FilterList expands correctly when the
+    	// base list is expanded...
+    	Element root = new Element("root");
+    	final int size = 40;
+    	final int mid = size / 2;
+    	Element[] kids = new Element[size];
+    	for (int i = 0; i < mid; i++) {
+    		kids[i] = new Element("kid");
+    		root.addContent(kids[i]);
+    	}
+    	List<Element> kidl = root.getChildren("kid");
+    	assertTrue(kidl.size() == mid);
+    	for (int i = 0; i < mid; i++) {
+    		assertTrue(kids[i] == kidl.get(i));
+    	}
+    	
+    	// OK, here is the real test, the FilterList has been set with a base
+    	// size of 'mid', but we now add a bucnh more stuff, we need to make
+    	// sure it stays 'live' appropriately.
+    	for (int i = mid; i < size; i++) {
+    		kids[i] = new Element("kid");
+    		root.addContent(kids[i]);
+    	}
+    	
+    	// and finally, the test..... make sure the kidl contains all members.
+    	int c = 0;
+    	for (Element k : kidl) {
+    		assertTrue(kids[c++] == k);
+    	}
+    	assertTrue(c == size);
+    }
+    
 }
