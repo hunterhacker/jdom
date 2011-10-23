@@ -78,7 +78,7 @@ public final class Namespace {
 	 * Keys are <i>prefix</i>&amp;<i>URI</i>. 
 	 * Values are Namespace objects 
 	 */
-	private static HashMap<NamespaceKey, Namespace> namespaces;
+	private static final HashMap<NamespaceKey, Namespace> namespaces;
 
 	/** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
 	public static final Namespace NO_NAMESPACE = new Namespace("", "");
@@ -88,10 +88,10 @@ public final class Namespace {
 			new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
 
 	/** The prefix mapped to this namespace */
-	private String prefix;
+	private final String prefix;
 
 	/** The URI for this namespace */
-	private String uri;
+	private final String uri;
 
 	/**
 	 * This static initializer acts as a factory contructor.

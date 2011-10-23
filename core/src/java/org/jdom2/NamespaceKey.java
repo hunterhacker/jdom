@@ -69,7 +69,7 @@ final class NamespaceKey {
 	public NamespaceKey(String prefix, String uri) {
 		this.prefix = prefix;
 		this.uri = uri;
-		this.hash = prefix.hashCode();
+		this.hash = prefix.hashCode() ^ uri.hashCode();
 	}
 
 	public NamespaceKey(Namespace namespace) {
