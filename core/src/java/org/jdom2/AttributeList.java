@@ -83,7 +83,7 @@ final class AttributeList extends AbstractList<Attribute>
 	private int size;
 
 	/** The parent Element */
-	private Element parent;
+	private final Element parent;
 
 	/**
 	 * Create a new instance of the AttributeList representing <i>parent</i>
@@ -160,7 +160,7 @@ final class AttributeList extends AbstractList<Attribute>
 			throw new IllegalAddException("Cannot add duplicate attribute");
 		}
 
-		String reason = Verifier.checkNamespaceCollision(attribute, parent);
+		final String reason = Verifier.checkNamespaceCollision(attribute, parent);
 		if (reason != null) {
 			throw new IllegalAddException(parent, attribute, reason);
 		}
@@ -392,8 +392,8 @@ final class AttributeList extends AbstractList<Attribute>
 			final String uri = namespace.getURI();
 			for (int i = 0; i < size; i++) {
 				final Attribute att = attributeData[i];
-				if (att.getNamespaceURI().equals(uri) &&
-						att.getName().equals(name)) {
+				if (uri.equals(att.getNamespaceURI()) &&
+						name.equals(att.getName())) {
 					return i;
 				}
 			}
@@ -414,7 +414,7 @@ final class AttributeList extends AbstractList<Attribute>
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size());
 
-		Attribute old = attributeData[index];
+		final Attribute old = attributeData[index];
 		old.setParent(null);
 		System.arraycopy(attributeData, index + 1, attributeData, index,
 				size - index - 1);
@@ -435,7 +435,7 @@ final class AttributeList extends AbstractList<Attribute>
 	 *         <code>false</code> otherwise
 	 */
 	boolean remove(final String name, final Namespace namespace) {
-		int index = indexOf(name, namespace);
+		final int index = indexOf(name, namespace);
 		if (index < 0) {
 			return false;
 		}
@@ -466,17 +466,17 @@ final class AttributeList extends AbstractList<Attribute>
 							attribute.getParent().getQualifiedName() + "\"");
 		}
 
-		int duplicate = indexOfDuplicate(attribute);
+		final int duplicate = indexOfDuplicate(attribute);
 		if ((duplicate >= 0) && (duplicate != index)) {
 			throw new IllegalAddException("Cannot set duplicate attribute");
 		}
 
-		String reason = Verifier.checkNamespaceCollision(attribute, parent);
+		final String reason = Verifier.checkNamespaceCollision(attribute, parent);
 		if (reason != null) {
 			throw new IllegalAddException(parent, attribute, reason);
 		}
 
-		Attribute old = attributeData[index];
+		final Attribute old = attributeData[index];
 		old.setParent(null);
 
 		attributeData[index] = attribute;
@@ -488,12 +488,8 @@ final class AttributeList extends AbstractList<Attribute>
 	 * Return index of attribute with same name and Namespace, or -1 if one
 	 * doesn't exist
 	 */
-	private int indexOfDuplicate(Attribute attribute) {
-		int duplicate = -1;
-		String name = attribute.getName();
-		Namespace namespace = attribute.getNamespace();
-		duplicate = indexOf(name, namespace);
-		return duplicate;
+	private int indexOfDuplicate(final Attribute attribute) {
+		return indexOf(attribute.getName(), attribute.getNamespace());
 	}
 
 	/**
@@ -515,6 +511,11 @@ final class AttributeList extends AbstractList<Attribute>
 	@Override
 	public int size() {
 		return size;
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return size == 0;
 	}
 
 	/**

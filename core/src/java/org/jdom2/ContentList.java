@@ -63,113 +63,138 @@ import org.jdom2.filter.*;
  * content for Document or Element nodes. Users see this class as a simple List
  * implementation.
  *
- * @see     CDATA
- * @see     Comment
- * @see     Element
- * @see     EntityRef
- * @see     ProcessingInstruction
- * @see     Text
- *
- * @author  Alex Rosen
- * @author  Philippe Riand
- * @author  Bradley S. Huffman
+ * @see DocType
+ * @see CDATA
+ * @see Comment
+ * @see Element
+ * @see EntityRef
+ * @see ProcessingInstruction
+ * @see Text
+ * @author Alex Rosen
+ * @author Philippe Riand
+ * @author Bradley S. Huffman
+ * @author Rolf Lear
  */
-final class ContentList extends AbstractList<Content> 
+final class ContentList extends AbstractList<Content>
 		implements java.io.Serializable, RandomAccess {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int INITIAL_ARRAY_SIZE = 5;
+	private static final int INITIAL_ARRAY_SIZE = 4;
 
 	/** Our backing list */
-	private Content elementData[];
+	private Content elementData[] = null;
+	
+	/** The amount of valid content in elementData */
 	private int size;
 	
 	/**
-	 * modCount is used for concurrent modification,
-	 * but dataModCount is used for refreshing filters. 
+	 * Completely remove references to AbstractList.modCount because in
+	 * ContentList it is confusing. As a consequence we also need to implement
+	 * a custom ListIterator for ContentList so that we don't use any of the
+	 * AbstractList iterators which use modCount.... so we have our own 
+	 * ConcurrentModification checking.
+	 * 
+	 */
+	private transient int sizeModCount = Integer.MIN_VALUE;
+
+	/**
+	 * modCount is used for concurrent modification, but dataModCount is used
+	 * for refreshing filters.
 	 */
 	private transient int dataModCount = Integer.MIN_VALUE;
-	
+
 	/** Document or Element this list belongs to */
 	private final Parent parent;
 
-	/** 
-	 * Force either a Document or Element parent 
-	 * @param parent the Element this ContentList belongs to. 
+	/**
+	 * Force either a Document or Element parent
+	 * 
+	 * @param parent
+	 *        the Element this ContentList belongs to.
 	 */
-	ContentList(Parent parent) {
+	ContentList(final Parent parent) {
 		this.parent = parent;
 	}
 
 	/**
-	 * Package internal method to support building from sources that are
-	 * 100% trusted.
-	 *
-	 * @param c content to add without any checks
+	 * Package internal method to support building from sources that are 100%
+	 * trusted.
+	 * 
+	 * @param c
+	 *        content to add without any checks
 	 */
-	final void uncheckedAddContent(Content c) {
+	final void uncheckedAddContent(final Content c) {
 		c.parent = parent;
 		ensureCapacity(size + 1);
 		elementData[size++] = c;
-		incrementModCount();
+		incModCount();
 		dataModCount++;
 	}
-	
+
 	/**
 	 * In the FilterList and FilterList iterators it becomes confusing as to
-	 * which mod count is being used. This formalizes the process, and using
-	 * (s/g)etModCount() is the only thing you should see in the remainder of this
-	 * code.
-	 * @param mod the value to set.
+	 * which modCount is being used. This formalizes the process, and using
+	 * (set/get/inc)ModCount() is the only thing you should see in the remainder
+	 * of this code.
+	 * 
+	 * @param mod
+	 *        the value to set.
 	 */
-	private final void setModCount(int mod) {
-		this.modCount = mod;
+	private final void setModCount(final int mod) {
+		sizeModCount = mod;
 	}
-	
+
 	/**
 	 * In the FilterList and FilterList iterators it becomes confusing as to
-	 * which mod count is being used. This formalizes the process, and using
-	 * (s/g)etModCount() is the only thing you should see in the remainder of this
-	 * code.
+	 * which modCount is being used. This formalizes the process, and using
+	 * (set/get/inc)ModCount() is the only thing you should see in the remainder
+	 * of this code.
+	 * 
 	 * @return mod the value.
 	 */
 	private final int getModCount() {
-		return this.modCount;
+		return sizeModCount;
 	}
-	
-	private final void incrementModCount() {
-		modCount++;
+
+	/**
+	 * In the FilterList and FilterList iterators it becomes confusing as to
+	 * which modCount is being used. This formalizes the process, and using
+	 * (set/get/inc)ModCount() is the only thing you should see in the remainder
+	 * of this code.
+	 */
+	private final void incModCount() {
+		sizeModCount++;
 	}
-	
+
 	private final void checkIndex(final int index, final boolean excludes) {
 		final int max = excludes ? size - 1 : size;
-		
+
 		if (index < 0 || index > max) {
 			throw new IndexOutOfBoundsException("Index: " + index +
 					" Size: " + size);
 		}
 
 	}
-	
-	private final void checkPreConditions(final Content child, final int index, 
+
+	private final void checkPreConditions(final Content child, final int index,
 			final boolean replace) {
 		if (child == null) {
 			throw new NullPointerException("Cannot add null object");
 		}
-		
+
 		checkIndex(index, replace);
-		
+
 		if (child.getParent() != null) {
 			// the content to be added already has a parent.
-			Parent p = child.getParent();
+			final Parent p = child.getParent();
 			if (p instanceof Document) {
-				throw new IllegalAddException((Element)child,
+				throw new IllegalAddException((Element) child,
 						"The Content already has an existing parent document");
 			}
 			throw new IllegalAddException(
 					"The Content already has an existing parent \"" +
-							((Element)p).getQualifiedName() + "\"");
+							((Element) p).getQualifiedName() + "\"");
 		}
 
 		if (child == parent) {
@@ -179,7 +204,7 @@ final class ContentList extends AbstractList<Content>
 
 		// Detect if we have <a><b><c/></b></a> and c.add(a)
 		if ((parent instanceof Element && child instanceof Element) &&
-				((Element) child).isAncestor((Element)parent)) {
+				((Element) child).isAncestor((Element) parent)) {
 			throw new IllegalAddException(
 					"The Element cannot be added as a descendent of itself");
 		}
@@ -187,17 +212,18 @@ final class ContentList extends AbstractList<Content>
 	}
 
 	/**
-	 * Check and add the <code>Content</code> to this list at
-	 * the given index.
+	 * Check and add the <code>Content</code> to this list at the given index.
 	 * Inserts the specified object at the specified position in this list.
-	 * Shifts the object currently at that position (if any) and any
-	 * subsequent objects to the right (adds one to their indices).
-	 *
-	 * @param index index where to add <code>Element</code>
-	 * @param child <code>Content</code> to add
+	 * Shifts the object currently at that position (if any) and any subsequent
+	 * objects to the right (adds one to their indices).
+	 * 
+	 * @param index
+	 *        index where to add <code>Element</code>
+	 * @param child
+	 *        <code>Content</code> to add
 	 */
 	@Override
-	public void add(int index, Content child) {
+	public void add(final int index, final Content child) {
 		// Confirm basic sanity of child.
 		checkPreConditions(child, index, false);
 		// Check to see whether this parent believes it can contain this content
@@ -205,8 +231,8 @@ final class ContentList extends AbstractList<Content>
 
 		child.setParent(parent);
 
-		ensureCapacity(size+1);
-		if( index==size ) {
+		ensureCapacity(size + 1);
+		if (index == size) {
 			elementData[size++] = child;
 		} else {
 			System.arraycopy(elementData, index, elementData, index + 1, size - index);
@@ -214,52 +240,58 @@ final class ContentList extends AbstractList<Content>
 			size++;
 		}
 		// Successful add's increment the AbstractList's modCount
-		incrementModCount();
+		incModCount();
 		dataModCount++;
 	}
 
 	/**
 	 * Add the specified collection to the end of this list.
-	 *
-	 * @param collection The collection to add to the list.
-	 * @return <code>true</code> if the list was modified as a result of
-	 *                           the add.
+	 * 
+	 * @param collection
+	 *        The collection to add to the list.
+	 * @return <code>true</code> if the list was modified as a result of the
+	 *         add.
 	 */
 	@Override
-	public boolean addAll(Collection<? extends Content> collection) {
-		return addAll(size(), collection);
+	public boolean addAll(final Collection<? extends Content> collection) {
+		return addAll(size, collection);
 	}
 
 	/**
 	 * Inserts the specified collection at the specified position in this list.
-	 * Shifts the object currently at that position (if any) and any
-	 * subsequent objects to the right (adds one to their indices).
-	 *
-	 * @param index The offset to start adding the data in the collection
-	 * @param collection The collection to insert into the list.
-	 * @return <code>true</code> if the list was modified as a result of
-	 *                           the add.
-	 * throws IndexOutOfBoundsException if index < 0 || index > size()
+	 * Shifts the object currently at that position (if any) and any subsequent
+	 * objects to the right (adds one to their indices).
+	 * 
+	 * @param index
+	 *        The offset to start adding the data in the collection
+	 * @param collection
+	 *        The collection to insert into the list.
+	 * @return <code>true</code> if the list was modified as a result of the
+	 *         add. throws IndexOutOfBoundsException if index < 0 || index >
+	 *         size()
 	 */
 	@Override
-	public boolean addAll(int index, Collection<? extends Content> collection) {
+	public boolean addAll(final int index, 
+			final Collection<? extends Content> collection) {
 		if ((collection == null)) {
 			throw new NullPointerException(
 					"Can not add a null collection to the ContentList");
 		}
-		
+
 		checkIndex(index, false);
 
-		final int addcnt = collection.size();
-		if (addcnt == 0) {
+		if (collection.isEmpty()) {
+			// some collections are expensive to get the size of.
+			// use isEmpty().
 			return false;
 		}
+		final int addcnt = collection.size();
 		if (addcnt == 1) {
 			// quick check for single-add.
 			add(index, collection.iterator().next());
 			return true;
 		}
-		
+
 		ensureCapacity(size() + addcnt);
 
 		final int tmpmodcount = getModCount();
@@ -267,7 +299,7 @@ final class ContentList extends AbstractList<Content>
 		boolean ok = false;
 
 		int count = 0;
-		
+
 		try {
 			for (Content c : collection) {
 				add(index + count, c);
@@ -302,23 +334,23 @@ final class ContentList extends AbstractList<Content>
 			elementData = null;
 			size = 0;
 		}
-		incrementModCount();
+		incModCount();
 		dataModCount++;
 	}
 
 	/**
-	 * Clear the current list and set it to the contents
-	 * of the <code>Collection</code>.
-	 * object.
-	 *
-	 * @param collection The collection to use.
+	 * Clear the current list and set it to the contents of the
+	 * <code>Collection</code>. object.
+	 * 
+	 * @param collection
+	 *        The collection to use.
 	 */
-	void clearAndSet(Collection<? extends Content> collection) {
+	void clearAndSet(final Collection<? extends Content> collection) {
 		if (collection == null || collection.isEmpty()) {
 			clear();
 			return;
 		}
-		
+
 		// keep a backup in case we need to roll-back...
 		final Content[] old = elementData;
 		final int oldSize = size;
@@ -333,7 +365,7 @@ final class ContentList extends AbstractList<Content>
 		}
 		size = 0;
 		elementData = null;
-		
+
 		boolean ok = false;
 		try {
 			addAll(0, collection);
@@ -352,41 +384,40 @@ final class ContentList extends AbstractList<Content>
 				setModCount(oldModCount);
 			}
 		}
-		
 
 	}
 
 	/**
-	 * Increases the capacity of this <code>ContentList</code> instance,
-	 * if necessary, to ensure that it can hold at least the number of
-	 * items specified by the minimum capacity argument.
-	 *
-	 * @param minCapacity the desired minimum capacity.
+	 * Increases the capacity of this <code>ContentList</code> instance, if
+	 * necessary, to ensure that it can hold at least the number of items
+	 * specified by the minimum capacity argument.
+	 * 
+	 * @param minCapacity
+	 *        the desired minimum capacity.
 	 */
-	void ensureCapacity(int minCapacity) {
-		if( elementData==null ) {
+	void ensureCapacity(final int minCapacity) {
+		if (elementData == null) {
 			elementData = new Content[Math.max(minCapacity, INITIAL_ARRAY_SIZE)];
-		} else {
-			int oldCapacity = elementData.length;
-			if (minCapacity > oldCapacity) {
-				Object oldData[] = elementData;
-				int newCapacity = (oldCapacity * 3)/2 + 1;
-				if (newCapacity < minCapacity)
-					newCapacity = minCapacity;
-				elementData = new Content[newCapacity];
-				System.arraycopy(oldData, 0, elementData, 0, size);
-			}
+			return;
+		} else if (minCapacity < elementData.length) {
+			return;
 		}
+		// most JVM's allocate memory in multiples of 'double-words', on
+		// 64-bit it's 16-bytes, on 32-bit it's 8 bytes which all means it makes
+		// sense to increment the capacity in even values.
+		elementData = Arrays.copyOf(elementData, 
+				((minCapacity + INITIAL_ARRAY_SIZE) >>> 1) << 1);
 	}
 
 	/**
 	 * Return the object at the specified offset.
-	 *
-	 * @param index The offset of the object.
+	 * 
+	 * @param index
+	 *        The offset of the object.
 	 * @return The Object which was returned.
 	 */
 	@Override
-	public Content get(int index) {
+	public Content get(final int index) {
 		checkIndex(index, true);
 		return elementData[index];
 	}
@@ -400,19 +431,19 @@ final class ContentList extends AbstractList<Content>
 	 *        <code>Filter</code> for this view.
 	 * @return a list representing the rules of the <code>Filter</code>.
 	 */
-	<E extends Content> List<E> getView(Filter<E> filter) {
+	<E extends Content> List<E> getView(final Filter<E> filter) {
 		return new FilterList<E>(filter);
 	}
 
 	/**
-	 * Return the index of the first Element in the list.  If the parent
-	 * is a <code>Document</code> then the element is the root element.
-	 * If the list contains no Elements, it returns -1.
-	 *
+	 * Return the index of the first Element in the list. If the parent is a
+	 * <code>Document</code> then the element is the root element. If the list
+	 * contains no Elements, it returns -1.
+	 * 
 	 * @return index of first element, or -1 if one doesn't exist
 	 */
 	int indexOfFirstElement() {
-		if( elementData!=null ) {
+		if (elementData != null) {
 			for (int i = 0; i < size; i++) {
 				if (elementData[i] instanceof Element) {
 					return i;
@@ -425,9 +456,8 @@ final class ContentList extends AbstractList<Content>
 	/**
 	 * Return the index of the DocType element in the list. If the list contains
 	 * no DocType, it returns -1.
-	 *
-	 * @return                     index of the DocType, or -1 if it doesn't
-	 *                             exist
+	 * 
+	 * @return index of the DocType, or -1 if it doesn't exist
 	 */
 	int indexOfDocType() {
 		if (elementData != null) {
@@ -442,38 +472,37 @@ final class ContentList extends AbstractList<Content>
 
 	/**
 	 * Remove the object at the specified offset.
-	 *
-	 * @param index The offset of the object.
+	 * 
+	 * @param index
+	 *        The offset of the object.
 	 * @return The Object which was removed.
 	 */
 	@Override
-	public Content remove(int index) {
+	public Content remove(final int index) {
 		checkIndex(index, true);
 
-		Content old = elementData[index];
+		final Content old = elementData[index];
 		removeParent(old);
-		int numMoved = size - index - 1;
-		if (numMoved > 0)
-			System.arraycopy(elementData, index+1, elementData, index,numMoved);
+		System.arraycopy(elementData, index + 1, elementData, index, size - index - 1);
 		elementData[--size] = null; // Let gc do its work
-		incrementModCount();
+		incModCount();
 		return old;
 	}
 
-
 	/** Remove the parent of a Object */
-	private static void removeParent(Content c) {
+	private static void removeParent(final Content c) {
 		c.setParent(null);
 	}
 
 	/**
-	 * Set the object at the specified location to the supplied
-	 * object.
-	 *
-	 * @param index The location to set the value to.
-	 * @param child The location to set the value to.
-	 * @return The object which was replaced.
-	 * throws IndexOutOfBoundsException if index < 0 || index >= size()
+	 * Set the object at the specified location to the supplied object.
+	 * 
+	 * @param index
+	 *        The location to set the value to.
+	 * @param child
+	 *        The location to set the value to.
+	 * @return The object which was replaced. throws IndexOutOfBoundsException
+	 *         if index < 0 || index >= size()
 	 */
 	@Override
 	public Content set(final int index, final Content child) {
@@ -482,11 +511,11 @@ final class ContentList extends AbstractList<Content>
 
 		// Ensure the detail checks out OK too.
 		parent.canContainContent(child, index, true);
-		
+
 		/*
 		 * Do a special case of set() where we don't do a remove() then add()
-		 * because that affects the modCount. We want to do a true set().
-		 * See issue #15 
+		 * because that affects the modCount. We want to do a true set(). See
+		 * issue #15
 		 */
 
 		final Content old = elementData[index];
@@ -501,22 +530,32 @@ final class ContentList extends AbstractList<Content>
 
 	/**
 	 * Return the number of items in this list
-	 *
+	 * 
 	 * @return The number of items in this list.
 	 */
 	@Override
 	public int size() {
 		return size;
 	}
-	
+
 	@Override
 	public Iterator<Content> iterator() {
 		return new CLIterator();
 	}
+	
+	@Override
+	public ListIterator<Content> listIterator() {
+		return new CLListIterator(0);
+	}
+
+	@Override
+	public ListIterator<Content> listIterator(final int start) {
+		return new CLListIterator(start);
+	}
 
 	/**
 	 * Return this list as a <code>String</code>
-	 *
+	 * 
 	 * @return The number of items in this list.
 	 */
 	@Override
@@ -534,15 +573,16 @@ final class ContentList extends AbstractList<Content>
 	 * iterator() is used extensively in the for-each type loop.
 	 * 
 	 * @author Rolf Lear
-	 *
 	 */
 	private final class CLIterator implements Iterator<Content> {
 		private int expect = -1;
 		private int cursor = 0;
 		private boolean canremove = false;
+
 		private CLIterator() {
 			expect = getModCount();
 		}
+
 		@Override
 		public boolean hasNext() {
 			return cursor < size;
@@ -576,10 +616,203 @@ final class ContentList extends AbstractList<Content>
 			ContentList.this.remove(--cursor);
 			expect = getModCount();
 		}
-		
-		
+
 	}
-	
+
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
+	/**
+	 * A fast implementation of Iterator.
+	 * <p>
+	 * It is fast because it is tailored to the ContentList, and not the
+	 * flexible implementation used by AbstractList. It needs to be fast because
+	 * iterator() is used extensively in the for-each type loop.
+	 * 
+	 * @author Rolf Lear
+	 */
+	private final class CLListIterator implements ListIterator<Content> {
+		/** Whether this iterator is in forward or reverse. */
+		private boolean forward = false;
+		/** Whether a call to remove() is valid */
+		private boolean canremove = false;
+		/** Whether a call to set() is valid */
+		private boolean canset = false;
+
+		/** Expected modCount in our backing list */
+		private int expectedmod = -1;
+
+		private int cursor = -1;
+
+		/**
+		 * Default constructor
+		 * 
+		 * @param flist
+		 *        The FilterList over which we will iterate.
+		 * @param start
+		 *        where in the FilterList to start iteration.
+		 */
+		CLListIterator(final int start) {
+			expectedmod = getModCount();
+			// always start list iterators in backward mode ....
+			// it makes sense... really.
+			forward = false;
+
+			checkIndex(start, false);
+
+			cursor = start;
+		}
+
+		private void checkConcurrent() {
+			if (expectedmod != getModCount()) {
+				throw new ConcurrentModificationException("The ContentList " +
+						"supporting this iterator has been modified by" +
+						"something other than this Iterator.");
+			}
+		}
+
+		/**
+		 * Returns <code>true</code> if this list iterator has a next element.
+		 */
+		@Override
+		public boolean hasNext() {
+			return (forward ? cursor + 1 : cursor) < size;
+		}
+
+		/**
+		 * Returns <code>true</code> if this list iterator has more elements
+		 * when traversing the list in the reverse direction.
+		 */
+		@Override
+		public boolean hasPrevious() {
+			return (forward ? cursor : cursor - 1) >= 0;
+		}
+
+		/**
+		 * Returns the index of the element that would be returned by a
+		 * subsequent call to <code>next</code>.
+		 */
+		@Override
+		public int nextIndex() {
+			return forward ? cursor + 1 : cursor;
+		}
+
+		/**
+		 * Returns the index of the element that would be returned by a
+		 * subsequent call to <code>previous</code>. (Returns -1 if the list
+		 * iterator is at the beginning of the list.)
+		 */
+		@Override
+		public int previousIndex() {
+			return forward ? cursor : cursor - 1;
+		}
+
+		/**
+		 * Returns the next element in the list.
+		 */
+		@Override
+		public Content next() {
+			checkConcurrent();
+			final int next = forward ? cursor + 1 : cursor;
+
+			if (next >= size) {
+				throw new NoSuchElementException("next() is beyond the end of the Iterator");
+			}
+
+			cursor = next;
+			forward = true;
+			canremove = true;
+			canset = true;
+			return elementData[cursor];
+		}
+
+		/**
+		 * Returns the previous element in the list.
+		 */
+		@Override
+		public Content previous() {
+			checkConcurrent();
+			final int prev = forward ? cursor : cursor - 1;
+
+			if (prev < 0) {
+				throw new NoSuchElementException("previous() is beyond the beginning of the Iterator");
+			}
+
+			cursor = prev;
+			forward = false;
+			canremove = true;
+			canset = true;
+			return elementData[cursor];
+		}
+
+		/**
+		 * Inserts the specified element into the list .
+		 */
+		@Override
+		public void add(final Content obj) {
+			checkConcurrent();
+			// always add before what would normally be returned by next();
+			final int next = forward ? cursor + 1 : cursor;
+
+			ContentList.this.add(next, obj);
+
+			expectedmod = getModCount();
+
+			canremove = canset = false;
+
+			// a call to next() should be unaffected, so, whatever was going to
+			// be next will still be next, remember, what was going to be next
+			// has been shifted 'right' by our insert.
+			// we ensure this by setting the cursor to next(), and making it
+			// forward
+			cursor = next;
+			forward = true;
+		}
+
+		/**
+		 * Removes from the list the last element that was returned by the last
+		 * call to <code>next</code> or <code>previous</code>.
+		 */
+		@Override
+		public void remove() {
+			checkConcurrent();
+			if (!canremove)
+				throw new IllegalStateException("Can not remove an "
+						+ "element unless either next() or previous() has been called "
+						+ "since the last remove()");
+			// we are removing the last entry returned by either next() or
+			// previous().
+			// the idea is to remove it, and pretend that we used to be at the
+			// entry that happened *after* the removed entry.
+			// so, get what would be the next entry (set at tmpcursor).
+			// so call nextIndex to set tmpcursor to what would come after.
+			ContentList.this.remove(cursor);
+			forward = false;
+			expectedmod = getModCount();
+
+			canremove = false;
+			canset = false;
+		}
+
+		/**
+		 * Replaces the last element returned by <code>next</code> or
+		 * <code>previous</code> with the specified element.
+		 */
+		@Override
+		public void set(final Content obj) {
+			checkConcurrent();
+			if (!canset) {
+				throw new IllegalStateException("Can not set an element "
+						+ "unless either next() or previous() has been called since the "
+						+ "last remove() or set()");
+			}
+
+			ContentList.this.set(cursor, obj);
+			expectedmod = getModCount();
+
+		}
+
+	}
+
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * FilterList * * * * * * * * * * * * * * * */
 
@@ -589,7 +822,9 @@ final class ContentList extends AbstractList<Content>
 	 * <p>
 	 * FilterList represents a dynamic view of the backing ContentList, changes
 	 * to the backing list are reflected in the FilterList, and visa-versa.
-	 * @param <F> The Generic type of content accepted by the underlying Filter.
+	 * 
+	 * @param <F>
+	 *        The Generic type of content accepted by the underlying Filter.
 	 */
 
 	class FilterList<F extends Content> extends AbstractList<F>
@@ -600,73 +835,79 @@ final class ContentList extends AbstractList<Content>
 		// correlate the position in the filtered list to the index in the
 		// backing ContentList.
 		int[] backingpos = new int[size + INITIAL_ARRAY_SIZE];
-		int   backingsize = 0;
+		int backingsize = 0;
 		// track data modifications in the backing ContentList.
 		int xdata = -1;
 
 		/**
 		 * Create a new instance of the FilterList with the specified Filter.
-		 * @param filter The underlying Filter to use for filtering the content.
+		 * 
+		 * @param filter
+		 *        The underlying Filter to use for filtering the content.
 		 */
-		FilterList(Filter<F> filter) {
+		FilterList(final Filter<F> filter) {
 			this.filter = filter;
 		}
 
-        /**
-         * Synchronise our view to the backing list.
-         * Only synchronise the first <code>index</code> view elements. For want
-         * of a better word, we'll call this a 'Lazy' implementation.
-         * @param index how much we want to sync. Set to -1 to synchronise everything.
-         * @return the index in the backing array of the <i>index'th</i> match.
-         *         or the backing data size if there is no match for the index.
-         */
-        private final int resync(int index) {
-        	if (xdata != dataModCount) {
-        		// The underlying list was modified somehow...
-        		// we need to invalidate our research...
-        		xdata = dataModCount;
-        		backingsize = 0;
-        		if (size >= backingpos.length) {
-        			backingpos = new int[size + 1];
-        		}
-        	}
-        	
-        	if (index >= 0 && index < backingsize) {
-        		// we have already indexed far enough...
-        		// return the backing index.
-        		return backingpos[index];
-        	}
-        	
-        	// the index in the backing list of the next value to check.
-        	int bpi = 0;
-        	if (backingsize > 0) {
-        		bpi = backingpos[backingsize - 1] + 1;
-        	}
-        	
-        	while (bpi < size) {
-    			F gotit = filter.filter(elementData[bpi]);
-    			if (gotit != null) {
-    				backingpos[backingsize] = bpi;
-    				if (backingsize++ == index) {
-    					return bpi;
-    				}
-    			}
-    			bpi++;
-        	}
-        	return size;
-        }
+		/**
+		 * Synchronise our view to the backing list. Only synchronise the first
+		 * <code>index</code> view elements. For want of a better word, we'll
+		 * call this a 'Lazy' implementation.
+		 * 
+		 * @param index
+		 *        how much we want to sync. Set to -1 to synchronise everything.
+		 * @return the index in the backing array of the <i>index'th</i> match.
+		 *         or the backing data size if there is no match for the index.
+		 */
+		private final int resync(final int index) {
+			if (xdata != dataModCount) {
+				// The underlying list was modified somehow...
+				// we need to invalidate our research...
+				xdata = dataModCount;
+				backingsize = 0;
+				if (size >= backingpos.length) {
+					backingpos = new int[size + 1];
+				}
+			}
+
+			if (index >= 0 && index < backingsize) {
+				// we have already indexed far enough...
+				// return the backing index.
+				return backingpos[index];
+			}
+
+			// the index in the backing list of the next value to check.
+			int bpi = 0;
+			if (backingsize > 0) {
+				bpi = backingpos[backingsize - 1] + 1;
+			}
+
+			while (bpi < size) {
+				final F gotit = filter.filter(elementData[bpi]);
+				if (gotit != null) {
+					backingpos[backingsize] = bpi;
+					if (backingsize++ == index) {
+						return bpi;
+					}
+				}
+				bpi++;
+			}
+			return size;
+		}
 
 		/**
 		 * Inserts the specified object at the specified position in this list.
 		 * Shifts the object currently at that position (if any) and any
 		 * subsequent objects to the right (adds one to their indices).
-		 *
-		 * @param index The location to set the value to.
-		 * @param obj The object to insert into the list.
-		 * throws IndexOutOfBoundsException if index < 0 || index > size()
+		 * 
+		 * @param index
+		 *        The location to set the value to.
+		 * @param obj
+		 *        The object to insert into the list. throws
+		 *        IndexOutOfBoundsException if index < 0 || index > size()
 		 */
 		@Override
-		public void add(int index, Content obj) {
+		public void add(final int index, final Content obj) {
 			if (index < 0) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
@@ -676,7 +917,7 @@ final class ContentList extends AbstractList<Content>
 			}
 			if (filter.matches(obj)) {
 				ContentList.this.add(adj, obj);
-				
+
 				// we can optimise the laziness now by doing a partial reset on
 				// the backing list... invalidate everything *after* the added
 				// content
@@ -686,29 +927,30 @@ final class ContentList extends AbstractList<Content>
 				backingpos[index] = adj;
 				backingsize = index + 1;
 				xdata = dataModCount;
-				
+
 			} else {
 				throw new IllegalAddException("Filter won't allow the " +
 						obj.getClass().getName() +
 						" '" + obj + "' to be added to the list");
 			}
 		}
-		
+
 		@Override
-		public boolean addAll(int index, Collection<? extends F> collection) {
+		public boolean addAll(final int index, 
+				final Collection<? extends F> collection) {
 			if (collection == null) {
 				throw new NullPointerException("Cannot add a null collection");
 			}
-			
+
 			if (index < 0) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			
+
 			final int adj = resync(index);
 			if (adj == size && index > size()) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			
+
 			final int addcnt = collection.size();
 			if (addcnt == 0) {
 				return false;
@@ -721,7 +963,7 @@ final class ContentList extends AbstractList<Content>
 			boolean ok = false;
 
 			int count = 0;
-			
+
 			try {
 				for (Content c : collection) {
 					if (c == null) {
@@ -730,22 +972,24 @@ final class ContentList extends AbstractList<Content>
 					}
 					if (filter.matches(c)) {
 						ContentList.this.add(adj + count, c);
-						// we can optimise the laziness now by doing a partial reset on
-						// the backing list... invalidate everything *after* the added
+						// we can optimise the laziness now by doing a partial
+						// reset on
+						// the backing list... invalidate everything *after* the
+						// added
 						// content
 						if (backingpos.length <= size) {
-							backingpos = Arrays.copyOf(backingpos, backingpos.length + 1);
+							backingpos = Arrays.copyOf(backingpos, backingpos.length + addcnt);
 						}
 						backingpos[index + count] = adj + count;
 						backingsize = index + count + 1;
 						xdata = ContentList.this.dataModCount;
-	
+
 						count++;
 					} else {
 						throw new IllegalAddException("Filter won't allow the " +
 								c.getClass().getName() +
 								" '" + c + "' to be added to the list");
-						
+
 					}
 				}
 				ok = true;
@@ -770,16 +1014,17 @@ final class ContentList extends AbstractList<Content>
 
 		/**
 		 * Return the object at the specified offset.
-		 *
-		 * @param index The offset of the object.
+		 * 
+		 * @param index
+		 *        The offset of the object.
 		 * @return The Object which was returned.
 		 */
 		@Override
-		public F get(int index) {
+		public F get(final int index) {
 			if (index < 0) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			int adj = resync(index);
+			final int adj = resync(index);
 			if (adj == size) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
@@ -797,26 +1042,27 @@ final class ContentList extends AbstractList<Content>
 		}
 
 		@Override
-		public ListIterator<F> listIterator(int index) {
-			return new FilterListIterator<F>(this,  index);
+		public ListIterator<F> listIterator(final int index) {
+			return new FilterListIterator<F>(this, index);
 		}
 
 		/**
 		 * Remove the object at the specified offset.
-		 *
-		 * @param index The offset of the object.
+		 * 
+		 * @param index
+		 *        The offset of the object.
 		 * @return The Object which was removed.
 		 */
 		@Override
-		public F remove(int index) {
+		public F remove(final int index) {
 			if (index < 0) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			int adj = resync(index);
+			final int adj = resync(index);
 			if (adj == size) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			Content oldc = ContentList.this.remove(adj);
+			final Content oldc = ContentList.this.remove(adj);
 			// optimise the backing cache.
 			backingsize = index;
 			xdata = dataModCount;
@@ -825,26 +1071,27 @@ final class ContentList extends AbstractList<Content>
 		}
 
 		/**
-		 * Set the object at the specified location to the supplied
-		 * object.
-		 *
-		 * @param index The location to set the value to.
-		 * @param obj The location to set the value to.
-		 * @return The object which was replaced.
-		 * throws IndexOutOfBoundsException if index < 0 || index >= size()
+		 * Set the object at the specified location to the supplied object.
+		 * 
+		 * @param index
+		 *        The location to set the value to.
+		 * @param obj
+		 *        The location to set the value to.
+		 * @return The object which was replaced. throws
+		 *         IndexOutOfBoundsException if index < 0 || index >= size()
 		 */
 		@Override
-		public F set(int index, F obj) {
+		public F set(final int index, final F obj) {
 			if (index < 0) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			int adj = resync(index);
+			final int adj = resync(index);
 			if (adj == size) {
 				throw new IndexOutOfBoundsException("Index: " + index + " Size: " + size());
 			}
-			F ins = filter.filter(obj);
+			final F ins = filter.filter(obj);
 			if (ins != null) {
-				F oldc = filter.filter(ContentList.this.set(adj, ins));
+				final F oldc = filter.filter(ContentList.this.set(adj, ins));
 				// optimize the backing....
 				xdata = dataModCount;
 				return oldc;
@@ -856,7 +1103,7 @@ final class ContentList extends AbstractList<Content>
 
 		/**
 		 * Return the number of items in this list
-		 *
+		 * 
 		 * @return The number of items in this list.
 		 */
 		@Override
@@ -884,13 +1131,16 @@ final class ContentList extends AbstractList<Content>
 
 		/** Expected modCount in our backing list */
 		private int expectedmod = -1;
-		
+
 		private int cursor = -1;
 
 		/**
 		 * Default constructor
-		 * @param flist The FilterList over which we will iterate.
-		 * @param start where in the FilterList to start iteration.
+		 * 
+		 * @param flist
+		 *        The FilterList over which we will iterate.
+		 * @param start
+		 *        where in the FilterList to start iteration.
 		 */
 		FilterListIterator(final FilterList<F> flist, final int start) {
 			filterlist = flist;
@@ -902,9 +1152,9 @@ final class ContentList extends AbstractList<Content>
 			if (start < 0) {
 				throw new IndexOutOfBoundsException("Index: " + start + " Size: " + filterlist.size());
 			}
-			
-			int adj = filterlist.resync(start);
-			
+
+			final int adj = filterlist.resync(start);
+
 			if (adj == size && start > filterlist.size()) {
 				// the start point is after the end of the list.
 				// it is only allowed to be the same as size(), no larger.
@@ -913,7 +1163,7 @@ final class ContentList extends AbstractList<Content>
 
 			cursor = start;
 		}
-		
+
 		private void checkConcurrent() {
 			if (expectedmod != getModCount()) {
 				throw new ConcurrentModificationException("The ContentList " +
@@ -928,8 +1178,7 @@ final class ContentList extends AbstractList<Content>
 		 */
 		@Override
 		public boolean hasNext() {
-			int next = forward ? cursor + 1 : cursor;
-			return filterlist.resync(next) < size;
+			return filterlist.resync(forward ? cursor + 1 : cursor) < size;
 		}
 
 		/**
@@ -938,8 +1187,7 @@ final class ContentList extends AbstractList<Content>
 		 */
 		@Override
 		public boolean hasPrevious() {
-			int prev = forward ? cursor : cursor - 1;
-			return prev >= 0;
+			return (forward ? cursor : cursor - 1) >= 0;
 		}
 
 		/**
@@ -953,8 +1201,8 @@ final class ContentList extends AbstractList<Content>
 
 		/**
 		 * Returns the index of the element that would be returned by a
-		 * subsequent call to <code>previous</code>. (Returns -1 if the
-		 * list iterator is at the beginning of the list.)
+		 * subsequent call to <code>previous</code>. (Returns -1 if the list
+		 * iterator is at the beginning of the list.)
 		 */
 		@Override
 		public int previousIndex() {
@@ -967,8 +1215,8 @@ final class ContentList extends AbstractList<Content>
 		@Override
 		public F next() {
 			checkConcurrent();
-			int next = forward ? cursor + 1 : cursor;
-			
+			final int next = forward ? cursor + 1 : cursor;
+
 			if (filterlist.resync(next) >= size) {
 				throw new NoSuchElementException("next() is beyond the end of the Iterator");
 			}
@@ -986,8 +1234,8 @@ final class ContentList extends AbstractList<Content>
 		@Override
 		public F previous() {
 			checkConcurrent();
-			int prev = forward ? cursor : cursor - 1;
-			
+			final int prev = forward ? cursor : cursor - 1;
+
 			if (prev < 0) {
 				throw new NoSuchElementException("previous() is beyond the beginning of the Iterator");
 			}
@@ -1003,17 +1251,17 @@ final class ContentList extends AbstractList<Content>
 		 * Inserts the specified element into the list .
 		 */
 		@Override
-		public void add(Content obj) {
+		public void add(final Content obj) {
 			checkConcurrent();
 			// always add before what would normally be returned by next();
-			int next = forward ? cursor + 1 : cursor;
-			
+			final int next = forward ? cursor + 1 : cursor;
+
 			filterlist.add(next, obj);
-			
+
 			expectedmod = getModCount();
-			
+
 			canremove = canset = false;
-			
+
 			// a call to next() should be unaffected, so, whatever was going to
 			// be next will still be next, remember, what was going to be next
 			// has been shifted 'right' by our insert.
@@ -1024,8 +1272,8 @@ final class ContentList extends AbstractList<Content>
 		}
 
 		/**
-		 * Removes from the list the last element that was returned by
-		 * the last call to <code>next</code> or <code>previous</code>.
+		 * Removes from the list the last element that was returned by the last
+		 * call to <code>next</code> or <code>previous</code>.
 		 */
 		@Override
 		public void remove() {
@@ -1034,7 +1282,8 @@ final class ContentList extends AbstractList<Content>
 				throw new IllegalStateException("Can not remove an "
 						+ "element unless either next() or previous() has been called "
 						+ "since the last remove()");
-			// we are removing the last entry returned by either next() or previous().
+			// we are removing the last entry returned by either next() or
+			// previous().
 			// the idea is to remove it, and pretend that we used to be at the
 			// entry that happened *after* the removed entry.
 			// so, get what would be the next entry (set at tmpcursor).
@@ -1052,11 +1301,11 @@ final class ContentList extends AbstractList<Content>
 		 * <code>previous</code> with the specified element.
 		 */
 		@Override
-		public void set(F obj) {
+		public void set(final F obj) {
 			checkConcurrent();
 			if (!canset) {
 				throw new IllegalStateException("Can not set an element "
-						+ "unless either next() or previous() has been called since the " 
+						+ "unless either next() or previous() has been called since the "
 						+ "last remove() or set()");
 			}
 
@@ -1066,5 +1315,5 @@ final class ContentList extends AbstractList<Content>
 		}
 
 	}
-	
+
 }
