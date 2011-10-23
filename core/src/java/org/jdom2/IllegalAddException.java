@@ -276,8 +276,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	IllegalAddException(Element base, Namespace added, String reason) {
 		super(new StringBuffer()
 		.append("The namespace xmlns")
-		.append((added.getPrefix() == null ||
-		added.getPrefix().equals("")) ? "=" 
+		.append(added.getPrefix().equals("") ? "=" 
 				: ":" + added.getPrefix() + "=")
 				.append("\"")
 				.append(added.getURI())
