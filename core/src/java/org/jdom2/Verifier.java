@@ -80,7 +80,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason name is illegal, or
 	 *         <code>null</code> if name is OK.
 	 */
-	public static String checkElementName(String name) {
+	public static String checkElementName(final String name) {
 		// Check basic XML name rules first
 		String reason;
 		if ((reason = checkXMLName(name)) != null) {
@@ -104,7 +104,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason name is illegal, or
 	 *         <code>null</code> if name is OK.
 	 */
-	public static String checkAttributeName(String name) {
+	public static String checkAttributeName(final String name) {
 		// Check basic XML name rules first
 		String reason;
 		if ((reason = checkXMLName(name)) != null) {
@@ -144,7 +144,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason name is illegal, or
 	 *         <code>null</code> if name is OK.
 	 */
-	public static String checkCharacterData(String text) {
+	public static String checkCharacterData(final String text) {
 		if (text == null) {
 			return "A null is not a legal XML value";
 		}
@@ -159,7 +159,7 @@ final public class Verifier {
 				// Check if next char is the low-surrogate
 				i++;
 				if (i < len) {
-					char low = text.charAt(i);
+					final char low = text.charAt(i);
 					if (!isLowSurrogate(low)) {
 						return "Illegal Surrogate Pair";
 					}
@@ -193,7 +193,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason data is illegal, or
 	 *         <code>null</code> is name is OK.
 	 */
-	public static String checkCDATASection(String data) {
+	public static String checkCDATASection(final String data) {
 		String reason = null;
 		if ((reason = checkCharacterData(data)) != null) {
 			return reason;
@@ -216,14 +216,14 @@ final public class Verifier {
 	 * @return <code>String</code> reason name is illegal, or
 	 *         <code>null</code> if name is OK.
 	 */
-	public static String checkNamespacePrefix(String prefix) {
+	public static String checkNamespacePrefix(final String prefix) {
 		// Manually do rules, since URIs can be null or empty
 		if ((prefix == null) || (prefix.equals(""))) {
 			return null;
 		}
 
 		// Cannot start with a number
-		char first = prefix.charAt(0);
+		final char first = prefix.charAt(0);
 		if (isXMLDigit(first)) {
 			return "Namespace prefixes cannot begin with a number";
 		}
@@ -247,7 +247,7 @@ final public class Verifier {
 
 		// Ensure legal content
 		for (int i=0, len = prefix.length(); i<len; i++) {
-			char c = prefix.charAt(i);
+			final char c = prefix.charAt(i);
 			if (!isXMLNameCharacter(c)) {
 				return "Namespace prefixes cannot contain the character \"" +
 						c + "\"";
@@ -266,19 +266,23 @@ final public class Verifier {
 	/**
 	 * This will check the supplied name to see if it is legal for use as
 	 * a JDOM <code>{@link Namespace}</code> URI.
+	 * <p>
+	 * This is a 'light' test of URI's designed to filter out only the worst
+	 * illegal URIs. It tests only to ensure the first character is valid. A
+	 * comprehensive URI validation process would be impractical.
 	 *
 	 * @param uri <code>String</code> URI to check.
 	 * @return <code>String</code> reason name is illegal, or
 	 *         <code>null</code> if name is OK.
 	 */
-	public static String checkNamespaceURI(String uri) {
+	public static String checkNamespaceURI(final String uri) {
 		// Manually do rules, since URIs can be null or empty
 		if ((uri == null) || (uri.equals(""))) {
 			return null;
 		}
 
 		// Cannot start with a number
-		char first = uri.charAt(0);
+		final char first = uri.charAt(0);
 		if (Character.isDigit(first)) {
 			return "Namespace URIs cannot begin with a number";
 		}
@@ -308,8 +312,8 @@ final public class Verifier {
 	 * @return <code>String</code> reason for collision, or
 	 *         <code>null</code> if no collision.
 	 */
-	public static String checkNamespaceCollision(Namespace namespace,
-			Namespace other) {
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final Namespace other) {
 		String p1,p2,u1,u2,reason;
 
 		reason = null;
@@ -332,10 +336,10 @@ final public class Verifier {
 	 * @return <code>String</code> reason for collision, or
 	 *         <code>null</code> if no collision.
 	 */
-	public static String checkNamespaceCollision(Attribute attribute,
-			Element element) {
-		Namespace namespace = attribute.getNamespace();
-		String prefix = namespace.getPrefix();
+	public static String checkNamespaceCollision(final Attribute attribute,
+			final Element element) {
+		final Namespace namespace = attribute.getNamespace();
+		final String prefix = namespace.getPrefix();
 		if ("".equals(prefix)) {
 			return null;
 		}
@@ -352,8 +356,8 @@ final public class Verifier {
 	 * @return <code>String</code> reason for collision, or
 	 *         <code>null</code> if no collision.
 	 */
-	public static String checkNamespaceCollision(Namespace namespace,
-			Element element) {
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final Element element) {
 		String reason = checkNamespaceCollision(namespace,
 				element.getNamespace());
 		if (reason != null) {
@@ -383,8 +387,8 @@ final public class Verifier {
 	 * @return <code>String</code> reason for collision, or
 	 *         <code>null</code> if no collision.
 	 */
-	public static String checkNamespaceCollision(Namespace namespace,
-			Attribute attribute) {
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final Attribute attribute) {
 		String reason = null;
 		if (!attribute.getNamespace().equals(Namespace.NO_NAMESPACE)) {
 			reason = checkNamespaceCollision(namespace,
@@ -405,16 +409,16 @@ final public class Verifier {
 	 * @return <code>String</code> reason for collision, or
 	 *         <code>null</code> if no collision.
 	 */
-	public static String checkNamespaceCollision(Namespace namespace,
-			List<?> list) {
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final List<?> list) {
 		if (list == null) {
 			return null;
 		}
 
 		String reason = null;
-		Iterator<?> i = list.iterator();
+		final Iterator<?> i = list.iterator();
 		while ((reason == null) && i.hasNext()) {
-			Object obj = i.next();
+			final Object obj = i.next();
 			if (obj instanceof Attribute) {
 				reason = checkNamespaceCollision(namespace, (Attribute) obj);
 			}
@@ -440,7 +444,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason target is illegal, or
 	 *         <code>null</code> if target is OK.
 	 */
-	public static String checkProcessingInstructionTarget(String target) {
+	public static String checkProcessingInstructionTarget(final String target) {
 		// Check basic XML name rules first
 		String reason;
 		if ((reason = checkXMLName(target)) != null) {
@@ -476,9 +480,9 @@ final public class Verifier {
 	 * @return <code>String</code> reason data is illegal, or
 	 *         <code>null</code> if data is OK.
 	 */
-	public static String checkProcessingInstructionData(String data) {
+	public static String checkProcessingInstructionData(final String data) {
 		// Check basic XML name rules first
-		String reason = checkCharacterData(data);
+		final String reason = checkCharacterData(data);
 
 		if (reason == null) {
 			if (data.indexOf("?>") >= 0) {
@@ -498,7 +502,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason data is illegal, or
 	 *         <code>null</code> if data is OK.
 	 */
-	public static String checkCommentData(String data) {
+	public static String checkCommentData(final String data) {
 		String reason = null;
 		if ((reason = checkCharacterData(data)) != null) {
 			return reason;
@@ -521,13 +525,21 @@ final public class Verifier {
 	 * @param low low 16 bits
 	 * @return decoded character
 	 */
-	public static int decodeSurrogatePair(char high, char low) {
+	public static int decodeSurrogatePair(final char high, final char low) {
 		return 0x10000 + (high - 0xD800) * 0x400 + (low - 0xDC00);
 	}
 
-	// [13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] |
-	// [-'()+,./:=?;*#@$_%]
-	public static boolean isXMLPublicIDCharacter(char c) {
+	/**
+	 * This will check the supplied data to see if it is legal for use as
+	 * PublicID (in a {@link DocType} or {@link EntityRef}).
+	 * 
+	 * @param c the character to validate
+	 * @return <code>String</code> reason <i>c</i> is illegal, or
+	 *         <code>null</code> if <i>c</i> is OK.
+	 */
+	public static boolean isXMLPublicIDCharacter(final char c) {
+		// [13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] |
+		// [-'()+,./:=?;*#@$_%]
 
 		if (c >= 'a' && c <= 'z') return true;
 		if (c >= '?' && c <= 'Z') return true;
@@ -555,14 +567,14 @@ final public class Verifier {
 	 * @return <code>String</code> reason public ID is illegal, or
 	 *         <code>null</code> if public ID is OK.
 	 */
-	public static String checkPublicID(String publicID) {
+	public static String checkPublicID(final String publicID) {
 		String reason = null;
 
 		if (publicID == null) return null;
 		// This indicates there is no public ID
 
 		for (int i = 0; i < publicID.length(); i++) {
-			char c = publicID.charAt(i);
+			final char c = publicID.charAt(i);
 			if (!isXMLPublicIDCharacter(c)) {
 				reason = c + " is not a legal character in public IDs";
 				break;
@@ -581,7 +593,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason system literal is illegal, or
 	 *         <code>null</code> if system literal is OK.
 	 */
-	public static String checkSystemLiteral(String systemLiteral) {
+	public static String checkSystemLiteral(final String systemLiteral) {
 		String reason = null;
 
 		if (systemLiteral == null) return null;
@@ -607,7 +619,7 @@ final public class Verifier {
 	 * @return <code>String</code> reason the name is illegal, or
 	 *         <code>null</code> if OK.
 	 */
-	public static String checkXMLName(String name) {
+	public static String checkXMLName(final String name) {
 		// Cannot be empty or null
 		if ((name == null) || (name.length() == 0) 
 				|| (name.trim().equals(""))) {
@@ -616,14 +628,14 @@ final public class Verifier {
 
 
 		// Cannot start with a number
-		char first = name.charAt(0);
+		final char first = name.charAt(0);
 		if (!isXMLNameStartCharacter(first)) {
 			return "XML names cannot begin with the character \"" + 
 					first + "\"";
 		}
 		// Ensure legal content for non-first chars
 		for (int i=1, len = name.length(); i<len; i++) {
-			char c = name.charAt(i);
+			final char c = name.charAt(i);
 			if (!isXMLNameCharacter(c)) {
 				return "XML names cannot contain the character \"" + c + "\"";
 			}
@@ -643,14 +655,14 @@ final public class Verifier {
 	 * @return <code>String</code> reason the URI is illegal, or
 	 *         <code>null</code> if OK.
 	 */
-	public static String checkURI(String uri) {
+	public static String checkURI(final String uri) {
 		// URIs can be null or empty
 		if ((uri == null) || (uri.equals(""))) {
 			return null;
 		}
 
 		for (int i = 0; i < uri.length(); i++) {
-			char test = uri.charAt(i);
+			final char test = uri.charAt(i);
 			if (!isURICharacter(test)) {
 				String msgNumber = "0x" + Integer.toHexString(test);
 				if (test <= 0x09) msgNumber = "0x0" + Integer.toHexString(test);
@@ -658,8 +670,8 @@ final public class Verifier {
 			} // end if
 			if (test == '%') { // must be followed by two hexadecimal digits
 				try {
-					char firstDigit = uri.charAt(i+1);
-					char secondDigit = uri.charAt(i+2);
+					final char firstDigit = uri.charAt(i+1);
+					final char secondDigit = uri.charAt(i+2);
 					if (!isHexDigit(firstDigit) ||
 							!isHexDigit(secondDigit)) {
 						return "Percent signs in URIs must be followed by "
@@ -667,7 +679,7 @@ final public class Verifier {
 					}
 
 				}
-				catch (StringIndexOutOfBoundsException e) {
+				catch (final StringIndexOutOfBoundsException e) {
 					return "Percent signs in URIs must be followed by "
 							+ "exactly two hexadecimal digits.";
 				}
@@ -688,7 +700,7 @@ final public class Verifier {
 	 * @param c  to check for hex digit.
 	 * @return true if it's allowed, false otherwise.
 	 */
-	public static boolean isHexDigit(char c) {
+	public static boolean isHexDigit(final char c) {
 
 		// I suspect most characters passed to this method will be
 		// correct hexadecimal digits, so I test for the true cases
@@ -709,7 +721,7 @@ final public class Verifier {
 	 * @param ch character to check
 	 * @return true if the character is a high surrogate, false otherwise
 	 */
-	public static boolean isHighSurrogate(char ch) {
+	public static boolean isHighSurrogate(final char ch) {
 		return (ch >= 0xD800 && ch <= 0xDBFF);
 	}
 
@@ -720,7 +732,7 @@ final public class Verifier {
 	 * @param ch character to check
 	 * @return true if the character is a low surrogate, false otherwise.
 	 */
-	public static boolean isLowSurrogate(char ch) {
+	public static boolean isLowSurrogate(final char ch) {
 		return (ch >= 0xDC00 && ch <= 0xDFFF);
 	}
 
@@ -734,7 +746,7 @@ final public class Verifier {
 	 * @param c <code>char</code> to check for URI reference compliance.
 	 * @return true if it's allowed, false otherwise.
 	 */
-	public static boolean isURICharacter(char c) {
+	public static boolean isURICharacter(final char c) {
 		if (c >= 'a' && c <= 'z') return true;
 		if (c >= 'A' && c <= 'Z') return true;
 		if (c >= '0' && c <= '9') return true;
@@ -770,7 +782,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a character, 
 	 *                                false otherwise
 	 */
-	public static boolean isXMLCharacter(int c) {
+	public static boolean isXMLCharacter(final int c) {
 
 		if (c == '\n') return true;
 		if (c == '\r') return true;
@@ -793,7 +805,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a name character, 
 	 *                                false otherwise.
 	 */
-	public static boolean isXMLNameCharacter(char c) {
+	public static boolean isXMLNameCharacter(final char c) {
 
 		return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
 				|| c == '_' || c == ':' || isXMLCombiningChar(c) 
@@ -811,7 +823,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a name start character, 
 	 *                                false otherwise.
 	 */
-	public static boolean isXMLNameStartCharacter(char c) {
+	public static boolean isXMLNameStartCharacter(final char c) {
 
 		return (isXMLLetter(c) || c == '_' || c ==':');
 
@@ -826,7 +838,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's letter or digit, 
 	 *                                false otherwise.
 	 */
-	public static boolean isXMLLetterOrDigit(char c) {
+	public static boolean isXMLLetterOrDigit(final char c) {
 
 		return (isXMLLetter(c) || isXMLDigit(c));
 
@@ -839,7 +851,7 @@ final public class Verifier {
 	 * @param c <code>char</code> to check for XML name compliance.
 	 * @return <code>String</code> true if it's a letter, false otherwise.
 	 */
-	public static boolean isXMLLetter(char c) {
+	public static boolean isXMLLetter(final char c) {
 		// Note that order is very important here.  The search proceeds 
 		// from lowest to highest values, so that no searching occurs 
 		// above the character's value.  BTW, the first line is equivalent to:
@@ -1064,7 +1076,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a combining character,
 	 *         false otherwise.
 	 */
-	public static boolean isXMLCombiningChar(char c) {
+	public static boolean isXMLCombiningChar(final char c) {
 		// CombiningChar
 		if (c < 0x0300) return false;  if (c <= 0x0345) return true;
 		if (c < 0x0360) return false;  if (c <= 0x0361) return true;
@@ -1198,7 +1210,7 @@ final public class Verifier {
 	 * @param c <code>char</code> to check.
 	 * @return <code>String</code> true if it's an extender, false otherwise.
 	 */
-	public static boolean isXMLExtender(char c) {
+	public static boolean isXMLExtender(final char c) {
 
 		if (c < 0x00B6) return false;  // quick short circuit
 
@@ -1228,7 +1240,7 @@ final public class Verifier {
 	 * @param c <code>char</code> to check for XML digit compliance
 	 * @return <code>boolean</code> true if it's a digit, false otherwise
 	 */
-	public static boolean isXMLDigit(char c) {
+	public static boolean isXMLDigit(final char c) {
 
 		if (c < 0x0030) return false;  if (c <= 0x0039) return true;
 		if (c < 0x0660) return false;  if (c <= 0x0669) return true;
@@ -1261,7 +1273,7 @@ final public class Verifier {
 	 * @param c <code>char</code> to check for XML whitespace compliance
 	 * @return <code>boolean</code> true if it's a whitespace, false otherwise
 	 */
-	public static boolean isXMLWhitespace(char c) {
+	public static boolean isXMLWhitespace(final char c) {
 		if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
 			return true;
 		}
