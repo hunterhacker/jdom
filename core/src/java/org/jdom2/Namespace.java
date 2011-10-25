@@ -76,34 +76,39 @@ public final class Namespace {
 
 	/** 
 	 * Factory list of namespaces. 
-	 * Keys are <i>prefix</i>&amp;<i>URI</i>. 
+	 * Keys are <i>URI</i>&amp;<i>prefix</i>. 
 	 * Values are Namespace objects 
 	 */
 	
 	private static final ConcurrentMap<String, ConcurrentMap<String, Namespace>> 
-			namespacemap = new ConcurrentHashMap<String, ConcurrentMap<String,Namespace>>(512);
+			namespacemap = new ConcurrentHashMap
+			<String, ConcurrentMap<String,Namespace>>(512, 0.75f, 64);
 	
 	/** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
 	public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
 	/** Define a <code>Namespace</code> for the standard xml prefix. */
-	public static final Namespace XML_NAMESPACE = new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
+	public static final Namespace XML_NAMESPACE = new Namespace("xml", 
+			"http://www.w3.org/XML/1998/namespace");
 	
 	
 	static {
-		// pre-populate the map with the constant namespaces that would otherwise fail validation
-		ConcurrentMap<String,Namespace> nmap = new ConcurrentHashMap<String, Namespace>();
+		// pre-populate the map with the constant namespaces that would 
+		// otherwise fail validation
+		final ConcurrentMap<String,Namespace> nmap = 
+				new ConcurrentHashMap<String, Namespace>();
 		nmap.put(NO_NAMESPACE.getPrefix(), NO_NAMESPACE);
 		namespacemap.put(NO_NAMESPACE.getURI(), nmap);
 
-		ConcurrentMap<String,Namespace> xmap = new ConcurrentHashMap<String, Namespace>();
+		final ConcurrentMap<String,Namespace> xmap = 
+				new ConcurrentHashMap<String, Namespace>();
 		xmap.put(XML_NAMESPACE.getPrefix(), XML_NAMESPACE);
 		namespacemap.put(XML_NAMESPACE.getURI(), xmap);
 	}
 
 	/**
 	 * This will retrieve (if in existence) or create (if not) a 
-	 * <code>Namespace</code> for the supplied prefix and URI.
+	 * <code>Namespace</code> for the supplied <i>prefix</i> and <i>uri</i>.
 	 *
 	 * @param prefix <code>String</code> prefix to map to 
 	 *               <code>Namespace</code>.
@@ -111,6 +116,8 @@ public final class Namespace {
 	 * @return <code>Namespace</code> - ready to use namespace.
 	 * @throws IllegalNameException if the given prefix and uri make up
 	 *         an illegal namespace name.
+	 * @see Verifier#checkNamespacePrefix(String)
+	 * @see Verifier#checkNamespaceURI(String)
 	 */
 	public static Namespace getNamespace(final String prefix, final String uri) {
 		
@@ -130,7 +137,7 @@ public final class Namespace {
 				return NO_NAMESPACE;
 			}
 			// we have an attempt for some prefix
-			// (not "" or it would have found NO_NAMESPACE) on the "" URI
+			// (not "" or it would have found NO_NAMESPACE) on the null URI
 			throw new IllegalNameException("", "namespace",
 					"Namespace URIs must be non-null and non-empty Strings");
 		}
@@ -147,7 +154,7 @@ public final class Namespace {
 			}
 
 			urimap = new ConcurrentHashMap<String, Namespace>();
-			ConcurrentMap<String, Namespace> xmap = 
+			final ConcurrentMap<String, Namespace> xmap = 
 					namespacemap.putIfAbsent(uri, urimap);
 			
 			if (xmap != null) {
@@ -195,10 +202,10 @@ public final class Namespace {
 		
 		// OK, good bet that we have a new Namespace.
 		ns = new Namespace(pfx, uri);
-		Namespace prev = urimap.putIfAbsent(pfx, ns);
+		final Namespace prev = urimap.putIfAbsent(pfx, ns);
 		if (prev != null) {
-			// someone registered the same namespace as us while we were busy validating and stuff.
-			// use theire registered copy.
+			// someone registered the same namespace as us while we were busy 
+			// validating. Use their registered copy.
 			ns = prev;
 		}
 		return ns;
@@ -218,7 +225,7 @@ public final class Namespace {
 	 * @param uri <code>String</code> URI of new <code>Namespace</code>.
 	 * @return <code>Namespace</code> - ready to use namespace.
 	 */
-	public static Namespace getNamespace(String uri) {
+	public static Namespace getNamespace(final String uri) {
 		return getNamespace("", uri);
 	}
 
@@ -230,7 +237,7 @@ public final class Namespace {
 	 * @param prefix <code>String</code> prefix to map to this namespace.
 	 * @param uri <code>String</code> URI for namespace.
 	 */
-	private Namespace(String prefix, String uri) {
+	private Namespace(final String prefix, final String uri) {
 		this.prefix = prefix;
 		this.uri = uri;
 	}
@@ -262,7 +269,7 @@ public final class Namespace {
 	 *         this <code>Namespace</code>.
 	 */
 	@Override
-	public boolean equals(Object ob) {
+	public boolean equals(final Object ob) {
 		if (this == ob) {
 			return true;
 		}
