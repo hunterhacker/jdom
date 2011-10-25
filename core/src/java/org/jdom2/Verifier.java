@@ -291,6 +291,11 @@ final public class Verifier {
 			return "Namespace URIs cannot begin with a hyphen (-)";
 		}
 
+		// Cannot start with space...
+		if (isXMLWhitespace(first)) {
+			return "Namespace URIs cannot begin with white-space";
+		}
+
 		// If we got here, everything is OK
 		return null;
 	}

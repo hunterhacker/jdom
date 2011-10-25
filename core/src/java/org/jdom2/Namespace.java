@@ -54,7 +54,8 @@
 
 package org.jdom2;
 
-import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * An XML namespace representation, as well as a factory for creating XML
@@ -78,31 +79,26 @@ public final class Namespace {
 	 * Keys are <i>prefix</i>&amp;<i>URI</i>. 
 	 * Values are Namespace objects 
 	 */
-	private static final HashMap<NamespaceKey, Namespace> namespaces;
-
+	
+	private static final ConcurrentMap<String, ConcurrentMap<String, Namespace>> 
+			namespacemap = new ConcurrentHashMap<String, ConcurrentMap<String,Namespace>>(512);
+	
 	/** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
 	public static final Namespace NO_NAMESPACE = new Namespace("", "");
 
 	/** Define a <code>Namespace</code> for the standard xml prefix. */
-	public static final Namespace XML_NAMESPACE =
-			new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
-
-	/** The prefix mapped to this namespace */
-	private final String prefix;
-
-	/** The URI for this namespace */
-	private final String uri;
-
-	/**
-	 * This static initializer acts as a factory contructor.
-	 * It sets up storage and required initial values.
-	 */
+	public static final Namespace XML_NAMESPACE = new Namespace("xml", "http://www.w3.org/XML/1998/namespace");
+	
+	
 	static {
-		namespaces = new HashMap<NamespaceKey, Namespace>(16);
+		// pre-populate the map with the constant namespaces that would otherwise fail validation
+		ConcurrentMap<String,Namespace> nmap = new ConcurrentHashMap<String, Namespace>();
+		nmap.put(NO_NAMESPACE.getPrefix(), NO_NAMESPACE);
+		namespacemap.put(NO_NAMESPACE.getURI(), nmap);
 
-		// Add the "empty" namespace
-		namespaces.put(new NamespaceKey(NO_NAMESPACE), NO_NAMESPACE);
-		namespaces.put(new NamespaceKey(XML_NAMESPACE), XML_NAMESPACE);
+		ConcurrentMap<String,Namespace> xmap = new ConcurrentHashMap<String, Namespace>();
+		xmap.put(XML_NAMESPACE.getPrefix(), XML_NAMESPACE);
+		namespacemap.put(XML_NAMESPACE.getURI(), xmap);
 	}
 
 	/**
@@ -116,77 +112,104 @@ public final class Namespace {
 	 * @throws IllegalNameException if the given prefix and uri make up
 	 *         an illegal namespace name.
 	 */
-	public static Namespace getNamespace(String prefix, String uri) {
-		// Sanity checking
-		if ((prefix == null) || (prefix.trim().equals(""))) {
-			// Short-cut out for common case of no namespace
-			if ((uri == null) || (uri.trim().equals(""))) {
-				return NO_NAMESPACE;
-			}
-			prefix = "";
-		}
-		else if ((uri == null) || (uri.trim().equals(""))) {
-			uri = "";
-		}
+	public static Namespace getNamespace(final String prefix, final String uri) {
+		
+		// This is a rewrite of the JDOM 1 getNamespace() to use
+		// java.util.concurrent. The motivation is:
+		// 1. avoid having to create a new NamespaceKey for each query.
+		// 2. avoid a 'big' synchronisation bottleneck in the Namespace class.
+		// 3. no-memory-lookup for pre-existing Namespaces... (avoid 'new' and
+		//    most String methods that allocte memory (like trim())
 
 		// Return existing namespace if found. The preexisting namespaces
 		// should all be legal. In other words, an illegal namespace won't
 		// have been placed in this.  Thus we can do this test before
 		// verifying the URI and prefix.
-		NamespaceKey lookup = new NamespaceKey(prefix, uri);
-		Namespace preexisting;
-		synchronized (namespaces) {
-			preexisting = namespaces.get(lookup);
-		}
-		if (preexisting != null) {
-			return preexisting;
-		}
-
-		// Ensure proper naming
-		String reason;
-		if ((reason = Verifier.checkNamespacePrefix(prefix)) != null) {
-			throw new IllegalNameException(prefix, "Namespace prefix", reason);
-		}
-		if ((reason = Verifier.checkNamespaceURI(uri)) != null) {
-			throw new IllegalNameException(uri, "Namespace URI", reason);
-		}
-
-		// Unless the "empty" Namespace (no prefix and no URI), require a URI
-		if ((!prefix.equals("")) && (uri.equals(""))) {
+		if (uri == null) {
+			if (prefix == null || "".equals(prefix)) {
+				return NO_NAMESPACE;
+			}
+			// we have an attempt for some prefix
+			// (not "" or it would have found NO_NAMESPACE) on the "" URI
 			throw new IllegalNameException("", "namespace",
 					"Namespace URIs must be non-null and non-empty Strings");
 		}
 
-//		Actually, the Verifier checks for xml prefixes already.
-//
-//		// Handle XML namespace mislabels. If the user requested the correct
-//		// namespace and prefix -- xml, http://www.w3.org/XML/1998/namespace
-//		// -- then it was already returned from the preexisting namespaces.
-//		// Thus any use of the xml prefix or the
-//		// http://www.w3.org/XML/1998/namespace URI at this point must be
-//		// incorrect. 
-//		if (prefix.equals("xml")) {
-//			throw new IllegalNameException(prefix, "Namespace prefix",
-//					"The xml prefix can only be bound to " +
-//					"http://www.w3.org/XML/1998/namespace");        
-//		}
+		// must have checked for 'null' uri else namespacemap throws NPE
+		// do not 'trim' uri's any more see issue #50
+		ConcurrentMap<String, Namespace> urimap = namespacemap.get(uri);
+		if (urimap == null) {
+			// no Namespaces yet with that URI.
+			// Ensure proper naming
+			String reason;
+			if ((reason = Verifier.checkNamespaceURI(uri)) != null) {
+				throw new IllegalNameException(uri, "Namespace URI", reason);
+			}
 
+			urimap = new ConcurrentHashMap<String, Namespace>();
+			ConcurrentMap<String, Namespace> xmap = 
+					namespacemap.putIfAbsent(uri, urimap);
+			
+			if (xmap != null) {
+				// some other thread registered this URI between when we
+				// first checked, and when we got a new map created.
+				// we must use the already-registered value.
+				urimap = xmap;
+			}
+		}
+		
+		// OK, we have a container for the URI, let's search on the prefix.
+		
+		Namespace ns = urimap.get(prefix == null ? "" : prefix);
+		if (ns != null) {
+			// got one.
+			return ns;
+		}
+		
+		// OK, no namespace yet for that uri/prefix
+		// validate the prefix (the uri is already validated).
+		
+		if ("".equals(uri)) {
+			// we have an attempt for some prefix
+			// (not "" or it would have found NO_NAMESPACE) on the "" URI
+			// note, we have already done this check for 'null' uri above.
+			throw new IllegalNameException("", "namespace",
+					"Namespace URIs must be non-null and non-empty Strings");
+		}
+		
 		// The erratum to Namespaces in XML 1.0 that suggests this 
 		// next check is controversial. Not everyone accepts it. 
-		if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
+		if ("http://www.w3.org/XML/1998/namespace".equals(uri)) {
 			throw new IllegalNameException(uri, "Namespace URI",
 					"The http://www.w3.org/XML/1998/namespace must be bound to " +
-					"the xml prefix.");        
+					"only the 'xml' prefix.");        
 		}
 
-		// Finally, store and return
-		Namespace ns = new Namespace(prefix, uri);
-		synchronized (namespaces) {
-			namespaces.put(lookup, ns);
+		// no namespace found, we validate the prefix
+		final String pfx = prefix == null ? "" : prefix;
+		
+		String reason;
+		if ((reason = Verifier.checkNamespacePrefix(pfx)) != null) {
+			throw new IllegalNameException(pfx, "Namespace prefix", reason);
+		}
+		
+		// OK, good bet that we have a new Namespace.
+		ns = new Namespace(pfx, uri);
+		Namespace prev = urimap.putIfAbsent(pfx, ns);
+		if (prev != null) {
+			// someone registered the same namespace as us while we were busy validating and stuff.
+			// use theire registered copy.
+			ns = prev;
 		}
 		return ns;
 	}
 
+	/** The prefix mapped to this namespace */
+	private final String prefix;
+
+	/** The URI for this namespace */
+	private final String uri;
+	
 	/**
 	 * This will retrieve (if in existence) or create (if not) a 
 	 * <code>Namespace</code> for the supplied URI, and make it usable 
