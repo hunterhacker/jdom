@@ -54,6 +54,8 @@
 
 package org.jdom2.input;
 
+import java.util.Arrays;
+
 import org.jdom2.*;
 
 /**
@@ -72,67 +74,55 @@ import org.jdom2.*;
  * @author  Bradley S. Huffman
  * @author  Alex Rosen
  */
-class TextBuffer {
+final class TextBuffer {
 
-	/** The first part of the text value (the "prefix"). If null, the
-	 * text value is the empty string. */
-	private String prefixString;
+	/** The text value. Only the first 
+	 * <code>arraySize</code> characters are valid. */
+	private char[] array = new char[1024];
 
-	/** The rest of the text value (the "suffix"). Only the first 
-	 * code>arraySize</code> characters are valid. */
-	private char[] array;
-
-	/** The size of the rest of the text value. If zero, then only 
-	 * code>prefixString</code> contains the text value. */
-	private int arraySize;
-
+	/** The size of the text value. */
+	private int arraySize = 0;
+	
 	/** Constructor */
 	TextBuffer() {
-		array = new char[4096]; // initial capacity
-		arraySize = 0;
 	}
 
-	/** Append the specified text to the text value of this buffer. */
-	void append(char[] source, int start, int count) {
-		if (prefixString == null) {
-			// This is the first chunk, so we'll store it in the prefix string
-			prefixString = new String(source, start, count);
+	/**
+	 * Append the specified text to the text value of this buffer.
+	 * @param source The char[] data to add
+	 * @param start The offset in the data to start adding from 
+	 * @param count The number of chars to add. 
+	 */
+	void append(final char[] source, final int start, final int count) {
+		if ((count + arraySize) > array.length) {
+			array = Arrays.copyOf(array, count + arraySize);
 		}
-		else {
-			// This is a subsequent chunk, so we'll add it to the char array
-			ensureCapacity(arraySize + count);
-			System.arraycopy(source, start, array, arraySize, count);
-			arraySize += count;
-		}
+		System.arraycopy(source, start, array, arraySize, count);
+		arraySize += count;
 	}
 
-	/** Returns the size of the text value. */
+	/** 
+	 * Returns the size of the text value.
+	 * @return the number of charactes currently in the TextBuffer 
+	 */
 	int size() {
-		if (prefixString == null) {
-			return 0;
-		}
-		return prefixString.length() + arraySize;
+		return arraySize;
 	}
 
-	/** Clears the text value and prepares the TextBuffer for reuse. */
+	/** 
+	 * Clears the text value and prepares the TextBuffer for reuse.
+	 */
 	void clear() {
 		arraySize = 0;
-		prefixString = null;
 	}
 
+	/**
+	 * Inspects the character data for non-whitespace
+	 * @return true if all chars are whitespace
+	 */
 	boolean isAllWhitespace() {
-		if ((prefixString == null) || (prefixString.length() == 0)) {
-			return true;
-		}
-
-		int size = prefixString.length();
-		for(int i = 0; i < size; i++) {
-			if ( !Verifier.isXMLWhitespace(prefixString.charAt(i))) {
-				return false;
-			}
-		}
-
-		for(int i = 0; i < arraySize; i++) {
+		int i = arraySize;
+		while (--i >= 0) {
 			if ( !Verifier.isXMLWhitespace(array[i])) {
 				return false;
 			}
@@ -143,37 +133,10 @@ class TextBuffer {
 	/** Returns the text value stored in the buffer. */
 	@Override
 	public String toString() {
-		if (prefixString == null) {
+		if (arraySize == 0) {
 			return "";
 		}
-
-		String str = "";
-		if (arraySize == 0) {
-			// Char array is empty, so the text value is just prefixString.
-			str = prefixString;
-		}
-		else {
-			// Char array is not empty, so the text value is prefixString
-			// plus the char array.
-			str = new StringBuffer(prefixString.length() + arraySize)
-			.append(prefixString)
-			.append(array, 0, arraySize)
-			.toString();
-		}
-		return str;
+		return String.valueOf(array, 0, arraySize);
 	}
 
-	// Ensure that the char array has room for at least "csize" characters.
-	private void ensureCapacity(int csize) {
-		int capacity = array.length;
-		if (csize > capacity) {
-			char[] old = array;
-			int nsize = capacity;
-			while (csize > nsize) {
-				nsize += (capacity/2);
-			}
-			array = new char[nsize];
-			System.arraycopy(old, 0, array, 0, arraySize);
-		}
-	}
 }
