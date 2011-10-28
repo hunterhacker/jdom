@@ -82,9 +82,8 @@ final public class Verifier {
 	 */
 	public static String checkElementName(final String name) {
 		// Check basic XML name rules first
-		String reason;
-		if ((reason = checkXMLName(name)) != null) {
-			return reason;
+		if (checkXMLName(name) != null) {
+			return checkXMLName(name);
 		}
 
 		// No colons allowed, since elements handle this internally
@@ -106,9 +105,8 @@ final public class Verifier {
 	 */
 	public static String checkAttributeName(final String name) {
 		// Check basic XML name rules first
-		String reason;
-		if ((reason = checkXMLName(name)) != null) {
-			return reason;
+		if (checkXMLName(name) != null) {
+			return checkXMLName(name);
 		}
 
 		// No colons are allowed, since attributes handle this internally
@@ -129,8 +127,8 @@ final public class Verifier {
 	/**
 	 * This will check the supplied string to see if it only contains
 	 * characters allowed by the XML 1.0 specification. The C0 controls
-	 * (e.g. null, vertical tab, formfeed, etc.) are specifically excluded
-	 * except for carriage return, linefeed, and the horizontal tab.
+	 * (e.g. null, vertical tab, form-feed, etc.) are specifically excluded
+	 * except for carriage return, line-feed, and the horizontal tab.
 	 * Surrogates are also excluded. 
 	 * <p>
 	 * This method is useful for checking element content and attribute
@@ -148,37 +146,53 @@ final public class Verifier {
 		if (text == null) {
 			return "A null is not a legal XML value";
 		}
-
-		// Do check
-		for (int i = 0, len = text.length(); i<len; i++) {
-
-			int ch = text.charAt(i);
-
-			// Check if high part of a surrogate pair
-			if (isHighSurrogate((char) ch)) {
-				// Check if next char is the low-surrogate
-				i++;
-				if (i < len) {
-					final char low = text.charAt(i);
-					if (!isLowSurrogate(low)) {
-						return "Illegal Surrogate Pair";
+		
+		// lowx indicates we expect a low surrogate next.
+		boolean lowx = false;
+		final int len = text.length();
+		for (int i = 0; i < len; i++) {
+			// we are expecting a normal char, but may be a surrogate.
+			if (isXMLCharacter(text.charAt(i))) {
+				if (lowx) {
+					// we got a normal character, but we wanted a low surrogate
+					return String.format("Illegal Surrogate Pair 0x%04x%04x",
+							(int)text.charAt(i - 1), (int)text.charAt(i));
+				}
+			} else {
+				// the character is not a normal character.
+				// we need to sort out what it is. Neither high nor low
+				// surrogate pairs are valid characters, so they will get here.
+				
+				if (!lowx && isHighSurrogate(text.charAt(i))) {
+					// we have the valid high char of a pair.
+					// we will expect the low char on the next loop through,
+					// so mark the high char, and move on.
+					lowx = true;
+				} else if (lowx && isLowSurrogate(text.charAt(i))) {
+					// we now have the low char of a pair, decode and validate
+					int chi = decodeSurrogatePair(
+							text.charAt(i - 1), text.charAt(i));
+					if (!isXMLCharacter(chi)) {
+						// Likely this character can't be easily displayed
+						// because it's a control so we use it'd hexadecimal 
+						// representation in the reason.
+						return String.format("0x%06x is not a legal XML character",
+								chi);
 					}
-					// It's a good pair, calculate the true value of
-					// the character to then fall thru to isXMLCharacter
-					ch = decodeSurrogatePair((char) ch, low);
-				}
-				else {
-					return "Surrogate Pair Truncated";
+					lowx = false;
+				} else {
+					// Likely this character can't be easily displayed
+					// because it's a control so we use it's hexadecimal 
+					// representation in the reason.
+					return String.format("0x%04x is not a legal XML character",
+							(int)text.charAt(i));
 				}
 			}
-
-			if (!isXMLCharacter(ch)) {
-				// Likely this character can't be easily displayed
-				// because it's a control so we use it'd hexadecimal 
-				// representation in the reason.
-				return ("0x" + Integer.toHexString(ch) +
-						" is not a legal XML character");
-			}
+		}
+		
+		if (lowx) {
+			return String.format("Truncated Surrogate Pair 0x%04x????",
+					(int)text.charAt(text.length() - 1));
 		}
 
 		// If we got here, everything is OK
@@ -621,23 +635,25 @@ final public class Verifier {
 	 */
 	public static String checkXMLName(final String name) {
 		// Cannot be empty or null
-		if ((name == null) || (name.length() == 0) 
-				|| (name.trim().equals(""))) {
-			return "XML names cannot be null or empty";
+		if ((name == null)) {
+			return "XML names cannot be null";
+		}
+		
+		final int len = name.length();
+		if (len == 0) { 
+			return "XML names cannot be empty";
 		}
 
 
 		// Cannot start with a number
-		final char first = name.charAt(0);
-		if (!isXMLNameStartCharacter(first)) {
+		if (!isXMLNameStartCharacter(name.charAt(0))) {
 			return "XML names cannot begin with the character \"" + 
-					first + "\"";
+					name.charAt(0) + "\"";
 		}
 		// Ensure legal content for non-first chars
-		for (int i=1, len = name.length(); i<len; i++) {
-			final char c = name.charAt(i);
-			if (!isXMLNameCharacter(c)) {
-				return "XML names cannot contain the character \"" + c + "\"";
+		for (int i = 1; i < len; i++) {
+			if (!isXMLNameCharacter(name.charAt(i))) {
+				return "XML names cannot contain the character \"" + name.charAt(i) + "\"";
 			}
 		}
 
@@ -722,7 +738,9 @@ final public class Verifier {
 	 * @return true if the character is a high surrogate, false otherwise
 	 */
 	public static boolean isHighSurrogate(final char ch) {
-		return (ch >= 0xD800 && ch <= 0xDBFF);
+		// faster way to do it is with bit manipulation....
+		// return (ch >= 0xD800 && ch <= 0xDBFF);
+		return 0x36 == ch >>> 10;
 	}
 
 	/**
@@ -733,7 +751,9 @@ final public class Verifier {
 	 * @return true if the character is a low surrogate, false otherwise.
 	 */
 	public static boolean isLowSurrogate(final char ch) {
-		return (ch >= 0xDC00 && ch <= 0xDFFF);
+		// faster way to do it is with bit manipulation....
+		// return (ch >= 0xDC00 && ch <= 0xDFFF);
+		return 0x37 == ch >>> 10;
 	}
 
 	/**
@@ -1274,6 +1294,9 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a whitespace, false otherwise
 	 */
 	public static boolean isXMLWhitespace(final char c) {
+		// the following if is faster than switch statements.
+		// seems the implicit conversion to int is slower than
+		// the fall-through or's
 		if (c==' ' || c=='\n' || c=='\t' || c=='\r' ){
 			return true;
 		}
