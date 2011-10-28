@@ -9,6 +9,7 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
 import org.jdom2.IllegalNameException;
+import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
@@ -136,11 +137,9 @@ public class TestEntityRef {
 
 		try {
 			er.setSystemID("12" + (char)0x0c + "34");
-			fail("Should throw Exception");
-		} catch (IllegalDataException ine) {
-			// good
+			UnitTestUtil.failNoException(IllegalDataException.class);
 		} catch (Exception e) {
-			fail("Expeced IllegalNameException, but got " + e.getClass().getName());
+			UnitTestUtil.checkException(IllegalDataException.class, e);
 		}
 	}
 
