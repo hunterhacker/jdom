@@ -96,7 +96,7 @@ public class DOMBuilder {
 	public DOMBuilder() {
 	}
 
-	/*
+	/**
 	 * This sets a custom JDOMFactory for the builder.  Use this to build
 	 * the tree with your own subclasses of the JDOM classes.
 	 *
