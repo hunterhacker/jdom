@@ -45,7 +45,7 @@ import java.util.NoSuchElementException;
  *
  */
 public final class NamespaceStack implements Iterable<Namespace> {
-	
+
 	/**
 	 * Simple read-only iterator that walks an array of Namespace.
 	 * 
@@ -55,7 +55,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	private static final class ForwardWalker implements Iterator<Namespace> {
 		private final Namespace[] namespaces;
 		int cursor = 0;
-		
+
 		public ForwardWalker(Namespace[] namespaces) {
 			this.namespaces = namespaces;
 		}
@@ -77,11 +77,11 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		public void remove() {
 			throw new UnsupportedOperationException(
 					"Cannot remove Namespaces from iterator");
-			
+
 		}
 
 	}
-	
+
 	/**
 	 * Simple read-only iterator that walks an array of Namespace in reverse.
 	 * 
@@ -91,7 +91,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	private static final class BackwardWalker implements Iterator<Namespace> {
 		private final Namespace[] namespaces;
 		int cursor = -1;
-		
+
 		public BackwardWalker(Namespace[] namespaces) {
 			this.namespaces = namespaces;
 			cursor = namespaces.length - 1;
@@ -134,8 +134,8 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		}
 		@Override
 		public Iterator<Namespace> iterator() {
-			return forward ? new ForwardWalker(namespaces) 
-						   : new BackwardWalker(namespaces);
+			return forward ? new ForwardWalker(namespaces)
+					: new BackwardWalker(namespaces);
 		}
 	}
 
@@ -145,7 +145,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * @author rolf
 	 */
 	private static final class EmptyIterable
-		implements Iterable<Namespace>, Iterator<Namespace> {
+			implements Iterable<Namespace>, Iterator<Namespace> {
 		@Override
 		public Iterator<Namespace> iterator() {
 			return this;
@@ -168,12 +168,12 @@ public final class NamespaceStack implements Iterable<Namespace> {
 					"Cannot remove Namespaces from iterator");
 		}
 	}
-	
+
 	/** A simple empty Namespace Array to avoid redundant empty instances */
 	private static final Namespace[] EMPTY = new Namespace[0];
 	/** A simple Iterable instance that is always empty. Saves some memory */
 	private static final Iterable<Namespace> EMPTYITER = new EmptyIterable();
-	
+
 	/** A comparator that sorts Namespaces by their prefix. */
 	private static final Comparator<Namespace> NSCOMP = new Comparator<Namespace>() {
 		@Override
@@ -181,21 +181,21 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			return ns1.getPrefix().compareTo(ns2.getPrefix());
 		}
 	};
-	
+
 	/**
 	 * Lots of reasons for having our own binarySearch.
 	 * <ul>
 	 * <li> We can make it specific for Namespaces (using == search).
 	 * <li> There is a bug in IBM's AIX JVM in all Java's prior to (including):
-	 *      IBM J9 VM (build 2.4, J2RE 1.6.0 IBM J9 2.4 AIX ppc-32 
+	 *      IBM J9 VM (build 2.4, J2RE 1.6.0 IBM J9 2.4 AIX ppc-32
 	 *              jvmap3260-20081105_25433 (JIT enabled, AOT enabled))
 	 *      where it returns '-1' for all instances where 'from == to' instead
-	 *      of returning '-from -1'. See 
+	 *      of returning '-from -1'. See
 	 *      <a href="http://www.ibm.com/developerworks/forums/thread.jspa?threadID=351575&tstart=0">
 	 *      this description</a> for how it is broken, and pre-checking to make
 	 *      sure that <code>left &lt; right</code> for each test is a pain.
 	 * <li> Ahh, actually, we will never encounter the bug, because we always
-	 *      have a larger-than-1 scope array.... see comment inside code... 
+	 *      have a larger-than-1 scope array.... see comment inside code...
 	 * <li> It's not that complicated, really.
 	 * </ul>
 	 * @param data The Namespaces to search.
@@ -206,28 +206,28 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * 			Javadoc for Arrays.binarySearch()
 	 * 		<br><i>
 	 *      index of the search key, if it is contained in the array; otherwise,
-	 *      <code> (-(insertion point) - 1) </code>. The insertion point is 
-	 *      defined as the point at which the key would be inserted into the 
-	 *      array: the index of the first element greater than the key, or 
-	 *      a.length if all elements in the array are less than the specified 
-	 *      key. Note that this guarantees that the return value will be >= 0 
+	 *      <code> (-(insertion point) - 1) </code>. The insertion point is
+	 *      defined as the point at which the key would be inserted into the
+	 *      array: the index of the first element greater than the key, or
+	 *      a.length if all elements in the array are less than the specified
+	 *      key. Note that this guarantees that the return value will be >= 0
 	 *      if and only if the key is found.
-	 *      </i> 
+	 *      </i>
 	 */
-	private static final int binarySearch(final Namespace[] data, 
+	private static final int binarySearch(final Namespace[] data,
 			int left, int right, final Namespace key) {
 		// assume all input is valid. No need to waste time checking.
-		
-//		Because we are always searching inside of the scope array, and
-//		because there's always at least two scope members, we will always have
-//		a minimum value of 2 for 'right', and a maximum value of 1 for 'left'
-//		thus the following check is never needed.
-//		
-//		if (left >= right) {
-//			// we are searching in nothing, return the correct value
-//			// ... this is where IBM's JDK is broken - it just returns -1
-//			return -left - 1;
-//		}
+
+		//		Because we are always searching inside of the scope array, and
+		//		because there's always at least two scope members, we will always have
+		//		a minimum value of 2 for 'right', and a maximum value of 1 for 'left'
+		//		thus the following check is never needed.
+		//
+		//		if (left >= right) {
+		//			// we are searching in nothing, return the correct value
+		//			// ... this is where IBM's JDK is broken - it just returns -1
+		//			return -left - 1;
+		//		}
 		// make the right-side 'inclusive' instead of 'exclusive'
 		right--;
 
@@ -235,45 +235,45 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			// get the mid-point. See the notes on the binary-search bug...
 			// ... not that we'll ever have that many Namspaces.... ;-)
 			// http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
-		    int mid = (left + right) >>> 1;
+			final int mid = (left + right) >>> 1;
 			if (data[mid] == key) {
 				// exact namespace match.
 				return mid;
 			}
-		    int cmp = NSCOMP.compare(data[mid], key);
+			final int cmp = NSCOMP.compare(data[mid], key);
 
-		    if (cmp < 0) {
-		    	left = mid + 1;
-		    } else if (cmp > 0) {
-		    	right = mid - 1;
-		    } else {
-		    	// Namespace prefix match.
-		    	return mid;
-		    }
+			if (cmp < 0) {
+				left = mid + 1;
+			} else if (cmp > 0) {
+				right = mid - 1;
+			} else {
+				// Namespace prefix match.
+				return mid;
+			}
 		}
 		return -left - 1;
 	}
-	
+
 	/** The namespaces added to the scope at each depth */
 	private Namespace[][] added = new Namespace[10][];
 	/** The entire scope at each depth */
 	private Namespace[][] scope = new Namespace[10][];
 	/** The current depth */
 	private int depth = -1;
-	
+
 	/**
 	 * Create a NamespaceWalker ready to use as a stack.
 	 * <br>
-	 * @see {@link #push(Element) } for comprehensive notes.
+	 * @see #push(Element) for comprehensive notes.
 	 */
 	public NamespaceStack() {
 		depth++;
 		added[depth] = new Namespace[] {
 				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE};
-		
+
 		scope[depth] = added[depth];
 	}
-	
+
 	/**
 	 * Inspect the <i>scope</i> array to see whether the <i>namespace</i>
 	 * Namespace is 'new' or not. If it is 'new' then it is added to the
@@ -284,7 +284,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * @return The revised version of 'in-scope' if the scope has changed. If
 	 *         there is no modification then the same input scope will be returned.
 	 */
-	private static final Namespace[] checkNamespace(List<Namespace> store, 
+	private static final Namespace[] checkNamespace(List<Namespace> store,
 			Namespace namespace, Namespace[] scope) {
 		// Scope is always sorted as the primary namespace first, then the
 		// rest are in prefix order.
@@ -300,7 +300,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			// the prefix is the previous scope's primary prefix. This means
 			// that we know for sure that the input namespace is new-to-scope.
 			store.add(namespace);
-			Namespace[] nscope = Arrays.copyOf(scope, scope.length);
+			final Namespace[] nscope = Arrays.copyOf(scope, scope.length);
 			nscope[0] = namespace;
 			return nscope;
 		}
@@ -314,18 +314,18 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		if (ip >= 0) {
 			// a different namespace with the same prefix as us is in-scope.
 			// replace it....
-			Namespace[] nscope = Arrays.copyOf(scope, scope.length);
+			final Namespace[] nscope = Arrays.copyOf(scope, scope.length);
 			nscope[ip] = namespace;
 			return nscope;
 		}
 		// We are a new prefix in-scope.
-		Namespace[] nscope = Arrays.copyOf(scope, scope.length + 1);
+		final Namespace[] nscope = Arrays.copyOf(scope, scope.length + 1);
 		ip = - ip - 1;
 		System.arraycopy(nscope, ip, nscope, ip + 1, nscope.length - ip - 1);
 		nscope[ip] = namespace;
 		return nscope;
 	}
-	
+
 	/**
 	 * Create a new in-scope level for the Stack.
 	 * <br>
@@ -350,29 +350,29 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 *     available in the {@link #addedForward()} Iterable. The order of
 	 *     the added Namespaces follows the same rules as above: first the
 	 *     Element Namespace (only if that Namespace is actually added) followed
-	 *     by the other added namespaces in alphabetical-by-prefix order. 
+	 *     by the other added namespaces in alphabetical-by-prefix order.
 	 * <li>The same added namespaces are also available in reverse order in
 	 *     the {@link #addedReverse()} Iterable.
 	 * </ul>
-	 * @param element
+	 * @param element The element at the new level of the stack.
 	 */
 	public void push(Element element) {
-		
+
 		// how many times do you add more than 8 namespaces in one go...
 		// we can add more if we need to...
 		final List<Namespace> toadd = new ArrayList<Namespace>(8);
 		final Namespace mns = element.getNamespace();
 		// check to see whether the Namespace is new-to-scope.
 		Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);
-		for (Namespace ns : element.getAdditionalNamespaces()) {
+		for (final Namespace ns : element.getAdditionalNamespaces()) {
 			if (ns == mns) {
 				continue;
 			}
 			// check to see whether the Namespace is new-to-scope.
 			newscope = checkNamespace(toadd, ns, newscope);
 		}
-		for (Attribute a : element.getAttributes()) {
-			Namespace ns = a.getNamespace();
+		for (final Attribute a : element.getAttributes()) {
+			final Namespace ns = a.getNamespace();
 			if (ns == Namespace.NO_NAMESPACE) {
 				// Attributes are allowed to be in the NO_NAMESPACE without
 				// changing the in-scope set of the Element.... special-case
@@ -388,13 +388,13 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		// OK, we've checked the namespaces in the Element, and 'toadd' contains
 		// all namespaces that are not already in scope.
 		depth++;
-		
+
 		if (depth >= scope.length) {
 			// we need more space on the stack.
 			scope = Arrays.copyOf(scope, scope.length * 2);
 			added = Arrays.copyOf(added, scope.length);
 		}
-		
+
 		// Sort out the added namespaces.
 		if (toadd.isEmpty()) {
 			// nothing changed in the scope.
@@ -418,7 +418,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			// in it's place later in the array.
 			// we need to take the mns from later in the array, and move it
 			// to the front.
-			Namespace tmp = newscope[0];
+			final Namespace tmp = newscope[0];
 			int ip = - binarySearch(newscope, 1, newscope.length, tmp) - 1;
 			// we can be sure that (- ip - 1 ) is >= 1
 			// we also know that we want to move the data before the ip
@@ -426,17 +426,17 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			ip--;
 			System.arraycopy(newscope, 1, newscope, 0, ip);
 			newscope[ip] = tmp;
-			
+
 			ip = binarySearch(newscope, 0, newscope.length, mns);
 			// we can be sure that ip is >= 0
 			System.arraycopy(newscope, 0, newscope, 1, ip);
 			newscope[0] = mns;
 		}
-		
+
 		scope[depth] = newscope;
 		return;
 	}
-	
+
 	/**
 	 * Restore stack to the level prior to the current one. The various Iterator
 	 * methods will thus return the data at the previous level.
@@ -449,11 +449,11 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		added[depth] = null;
 		depth--;
 	}
-	
+
 	/**
 	 * Return an Iterable containing all the Namespaces introduced to the
 	 * current-level's scope.
-	 * @see {@link #push(Element)} for the details on the data order.
+	 * @see #push(Element) for the details on the data order.
 	 * @return A read-only Iterable containing added Namespaces (may be empty);
 	 */
 	public Iterable<Namespace> addedForward() {
@@ -462,11 +462,11 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		}
 		return new NamespaceIterable(added[depth], true);
 	}
-	
+
 	/**
 	 * Return an Iterable containing all the Namespaces introduced to the
 	 * current-level's scope but in reverse order to {@link #addedForward()}.
-	 * @see {@link #push(Element)} for the details on the data order.
+	 * @see #push(Element) for the details on the data order.
 	 * @return A read-only Iterable containing added Namespaces (may be empty);
 	 */
 	public Iterable<Namespace> addedReverse() {
@@ -478,12 +478,30 @@ public final class NamespaceStack implements Iterable<Namespace> {
 
 	/**
 	 * Get all the Namespaces in-scope at the current level of the stack.
-	 * @see {@link #push(Element)} for the details on the data order.
+	 * @see #push(Element) for the details on the data order.
 	 * @return A read-only Iterator containing added Namespaces (may be empty);
 	 */
 	@Override
 	public Iterator<Namespace> iterator() {
 		return new ForwardWalker(scope[depth]);
 	}
-	
+
+	/**
+	 * Inspect the current scope and return true if the specified namespace is
+	 * in scope.
+	 * @param ns The Namespace to check
+	 * @return true if the current scope contains that Namespace.
+	 */
+	public boolean isInScope(Namespace ns) {
+		if (ns == scope[depth][0]) {
+			return true;
+		}
+		final int ip = binarySearch(scope[depth], 1, scope[depth].length, ns);
+		if (ip >= 0) {
+			// we have the same prefix.
+			return ns == scope[depth][ip];
+		}
+		return false;
+	}
+
 }

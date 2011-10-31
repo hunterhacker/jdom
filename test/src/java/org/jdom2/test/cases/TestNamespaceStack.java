@@ -88,9 +88,19 @@ public class TestNamespaceStack {
 	}
 	
 	private void exercise(Element emt, NamespaceStack stack) {
-		stack.push(emt);
 		List<Namespace> scope = emt.getNamespacesInScope();
 		List<Namespace> intro = emt.getNamespacesIntroduced();
+		
+		for (Namespace ns : intro) {
+			assertFalse(stack.isInScope(ns));
+		}
+		
+		stack.push(emt);
+		
+		for (Namespace ns : intro) {
+			assertTrue(stack.isInScope(ns));
+		}
+		
 		
 		checkIterators(stack, scope, intro);
 		
