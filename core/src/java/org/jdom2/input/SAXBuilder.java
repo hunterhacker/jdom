@@ -593,7 +593,7 @@ public class SAXBuilder {
 	 * </p>
 	 *
 	 * @return <code>XMLReader</code> - resultant XMLReader object.
-	 * @throws org.jdom2.JDOMException
+	 * @throws JDOMException if the parser create fails.
 	 */
 	protected XMLReader createParser() throws JDOMException {
 		XMLReader parser = null;
@@ -668,9 +668,9 @@ public class SAXBuilder {
 	 *  internals. These features may change in future releases, so change this
 	 *  behavior at your own risk.
 	 * </p>
-	 * @param parser
-	 * @param contentHandler
-	 * @throws org.jdom2.JDOMException
+	 * @param parser the XMLReader to configure.
+	 * @param contentHandler The SAXHandler to use for the XMLReader
+	 * @throws JDOMException if configuration fails.
 	 */
 	protected void configureParser(XMLReader parser, SAXHandler contentHandler)
 			throws JDOMException {

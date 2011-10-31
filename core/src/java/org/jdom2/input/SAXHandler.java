@@ -363,12 +363,10 @@ public class SAXHandler extends DefaultHandler
 	 * @param type <code>String</code> attribute type
 	 * @param valueDefault <code>String</code> default value of attribute
 	 * @param value <code>String</code> value of attribute
-	 * @throws SAXException
 	 */
 	@Override
 	public void attributeDecl(String eName, String aName, String type,
-			String valueDefault, String value)
-					throws SAXException {
+			String valueDefault, String value) {
 
 		if (!inInternalSubset) return;
 
@@ -399,10 +397,9 @@ public class SAXHandler extends DefaultHandler
 	 *
 	 * @param name <code>String</code> name of element
 	 * @param model <code>String</code> model of the element in DTD syntax
-	 * @throws SAXException
 	 */
 	@Override
-	public void elementDecl(String name, String model) throws SAXException {
+	public void elementDecl(String name, String model) {
 		// Skip elements that come from the external subset
 		if (!inInternalSubset) return;
 
@@ -418,11 +415,9 @@ public class SAXHandler extends DefaultHandler
 	 *
 	 * @param name <code>String</code> name of entity
 	 * @param value <code>String</code> value of the entity
-	 * @throws SAXException
 	 */
 	@Override
-	public void internalEntityDecl(String name, String value)
-			throws SAXException {
+	public void internalEntityDecl(String name, String value) {
 
 		// Skip entities that come from the external subset
 		if (!inInternalSubset) return;
@@ -680,7 +675,6 @@ public class SAXHandler extends DefaultHandler
 	 * @param ch <code>char[]</code> character array with character data
 	 * @param start <code>int</code> index in array where data starts.
 	 * @param length <code>int</code> length of data.
-	 * @throws SAXException
 	 */
 	@Override
 	public void characters(char[] ch, int start, int length)
@@ -738,6 +732,7 @@ public class SAXHandler extends DefaultHandler
 	 * internals of this class.
 	 *
 	 * @param data string to flush
+	 * @throws SAXException if the state of the handler does not allow this.
 	 */
 	protected void flushCharacters(String data) throws SAXException {
 		if (data.length() == 0) {
@@ -826,10 +821,9 @@ if (!inDTD) {
 	/**
 	 * This signifies that the reading of the DTD is complete.
 	 *
-	 * @throws SAXException
 	 */
 	@Override
-	public void endDTD() throws SAXException {
+	public void endDTD() {
 
 		document.getDocType().setInternalSubset(internalSubset.toString());
 		inDTD = false;
@@ -902,10 +896,9 @@ if (!inDTD) {
 	/**
 	 * Report a CDATA section
 	 *
-	 * @throws SAXException
 	 */
 	@Override
-	public void startCDATA() throws SAXException {
+	public void startCDATA() {
 		if (suppress) return;
 
 		inCDATA = true;
@@ -931,7 +924,7 @@ if (!inDTD) {
 	 * @param ch <code>ch[]</code> array of comment characters.
 	 * @param start <code>int</code> index to start reading from.
 	 * @param length <code>int</code> length of data.
-	 * @throws SAXException
+	 * @throws SAXException if the state of the handler disallows this call
 	 */
 	@Override
 	public void comment(char[] ch, int start, int length)
@@ -986,8 +979,7 @@ if (!inDTD) {
 	 */
 	@Override
 	public void unparsedEntityDecl(String name, String publicID,
-			String systemID, String notationName)
-					throws SAXException {
+			String systemID, String notationName) {
 
 		if (!inInternalSubset) return;
 
@@ -1029,7 +1021,7 @@ if (!inDTD) {
 	 * Returns the being-parsed element.
 	 *
 	 * @return <code>Element</code> - element being built.
-	 * @throws SAXException
+	 * @throws SAXException if the state of the handler disallows this call
 	 */
 	public Element getCurrentElement() throws SAXException {
 		if (currentElement == null) {
