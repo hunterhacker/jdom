@@ -11,27 +11,68 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom2.*;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.SAXHandler;
+import org.jdom2.input.StAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPath;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.ext.DefaultHandler2;
 
+@SuppressWarnings("javadoc")
 public class PerfDoc {
 	
-	private class LoadRunnable implements TimeRunnable {
-		private final char[] data;
+	private static final class MySAXBuilder extends SAXBuilder {
+		public MySAXBuilder() {
+			super();
+		}
+		@Override
+		public XMLReader createParser() throws JDOMException {
+			return super.createParser();
+		}
+	}
+	
+	private class SAXLoadRunnable implements TimeRunnable {
+		private final int type;
 		
-		LoadRunnable(char[] indata) {
-			this.data = indata;
+		SAXLoadRunnable(int type) {
+			this.type = type;
 		}
 		
 		@Override
 		public void run() throws Exception {
-			subload(data);
+			Document doc = subload(type);
+			if (document == null) {
+				document = doc;
+			}
 		}
 	}
 	
@@ -113,7 +154,14 @@ public class PerfDoc {
 	
 	private final File infile;
 	
-	private long loadTime = -1L;
+	private long saxTime = -1L;
+	private long domTime = -1L;
+	private long staxTime = -1L;
+	private long staxETime = -1L;
+	private long saxDTime = -1L;
+	private long domDTime = -1L;
+	private long staxDTime = -1L;
+	private long staxDETime = -1L;
 	private long loadMem = -1L;
 	
 	private long dumpTime = -1L;
@@ -125,56 +173,121 @@ public class PerfDoc {
 	
 	
 	private Document document = null;
+	private final char[] chars;
 
-	public PerfDoc(File file) {
+	public PerfDoc(File file) throws IOException {
 		infile = file;
-	}
-
-	public File getFile() {
-		return infile;
-	}
-
-	public long load() throws Exception {
-		char[] chars = new char[(int)infile.length()];
+		char[] fchars = new char[(int)infile.length()];
 		int len = 0;
 		int cnt = 0;
 		FileReader fr = null;
 		try {
 			fr = new FileReader(infile);
-			while ((cnt = fr.read(chars, len, chars.length - len)) >= 0) {
-				if (cnt == 0 && len == chars.length) {
-					chars = Arrays.copyOf(chars, chars.length + 10240);
+			while ((cnt = fr.read(fchars, len, fchars.length - len)) >= 0) {
+				if (cnt == 0 && len == fchars.length) {
+					fchars = Arrays.copyOf(fchars, fchars.length + 10240);
 				}
 				len += cnt;
 			}
-			chars = Arrays.copyOf(chars, len);
+			fchars = Arrays.copyOf(fchars, len);
 		} finally {
 			if (fr != null) {
 				fr.close();
 			}
 			fr = null;
 		}
+		this.chars = fchars;
+	}
+
+	public File getFile() {
+		return infile;
+	}
+
+	public long saxLoad() throws Exception {
 		final long startmem = PerfTest.usedMem();
-		loadTime = PerfTest.timeRun( new LoadRunnable(chars) );
+		saxTime = PerfTest.timeRun(new SAXLoadRunnable(0) );
 		loadMem = PerfTest.usedMem() - startmem;
-		for (char c : chars) {
-			// need to keep chars in memory until after the usedMem test.
-			if (c == (char)0) {
-				throw new IllegalStateException();
-			}
-		}
-		return loadTime;
+		saxDTime = PerfTest.timeRun(new SAXLoadRunnable(8) );
+		return saxTime;
 	}
 	
-	public long subload(char[] chars) throws IOException, JDOMException {
+	public long domLoad() throws Exception {
+		domTime = PerfTest.timeRun( new SAXLoadRunnable(1) );
+		domDTime = PerfTest.timeRun( new SAXLoadRunnable(9) );
+		return domTime;
+	}
+	
+	public long staxLoad() throws Exception {
+		staxTime = PerfTest.timeRun( new SAXLoadRunnable(2) );
+		staxDTime = PerfTest.timeRun( new SAXLoadRunnable(10) );
+		return staxTime;
+	}
+	
+	public long staxELoad() throws Exception {
+		staxETime = PerfTest.timeRun( new SAXLoadRunnable(3) );
+		staxDETime = PerfTest.timeRun( new SAXLoadRunnable(11) );
+		return staxETime;
+	}
+	
+	public Document subload(int type) throws Exception {
 
 		CharArrayReader car = new CharArrayReader(chars);
-		SAXBuilder sax = new SAXBuilder();
-		sax.setValidation(false);
-		PerfTest.usedMem();
-		long start = System.nanoTime();
-		document = sax.build(car);
-		return System.nanoTime() - start;
+		switch (type) {
+			case 0:
+				SAXBuilder sax = new SAXBuilder();
+				sax.setFactory(new UncheckedJDOMFactory());
+				sax.setValidation(false);
+				return sax.build(car);
+			case 1:
+				DOMBuilder dom = new DOMBuilder();
+				dom.setFactory(new UncheckedJDOMFactory());
+				InputSource source = new InputSource(car);
+				return dom.build(getDocument(source, false));
+			case 2:
+				StAXBuilder stax = new StAXBuilder();
+				stax.setFactory(new UncheckedJDOMFactory());
+				XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(car);
+				return stax.build(reader);
+			case 3:
+				StAXBuilder staxe = new StAXBuilder();
+				staxe.setFactory(new UncheckedJDOMFactory());
+				XMLEventReader events = XMLInputFactory.newInstance().createXMLEventReader(car);
+				return staxe.build(events);
+			case 8:
+				MySAXBuilder dsax = new MySAXBuilder();
+				dsax.setValidation(false);
+				DefaultHandler2 def = new DefaultHandler2();
+				XMLReader sread = dsax.createParser();
+				sread.setContentHandler(def);
+				sread.setDTDHandler(def);
+				sread.setEntityResolver(def);
+				sread.setErrorHandler(def);
+				sread.setProperty("http://xml.org/sax/properties/lexical-handler",
+						def);
+				sread.parse(new InputSource(car));
+				return null;
+			case 9:
+				InputSource dsource = new InputSource(car);
+				getDocument(dsource, false);
+				return null;
+			case 10:
+				XMLStreamReader dreader = XMLInputFactory.newInstance().createXMLStreamReader(car);
+				int sum = 0;
+				while (dreader.hasNext()) {
+					sum += dreader.next();
+				}
+				System.out.println("Sum " + sum);
+				return null;
+			case 11:
+				XMLEventReader dereader = XMLInputFactory.newInstance().createXMLEventReader(car);
+				int esum = 0;
+				while (dereader.hasNext()) {
+					esum += dereader.nextEvent().getEventType();
+				}
+				System.out.println("Sum " + esum);
+				return null;
+		}
+		return null;
 	}
 	
 	public int recurse(Element emt) {
@@ -365,8 +478,8 @@ public class PerfDoc {
 		return uncheckedTime;
 	}
 	
-	public long getLoadTime() {
-		return loadTime;
+	public long getSAXLoadTime() {
+		return saxTime;
 	}
 
 
@@ -400,6 +513,28 @@ public class PerfDoc {
 		return scanTime;
 	}
 
+	
+
+	public long getSaxDTime() {
+		return saxDTime;
+	}
+
+	public long getDomDTime() {
+		return domDTime;
+	}
+
+	public long getStaxDTime() {
+		return staxDTime;
+	}
+
+	
+	public long getStaxETime() {
+		return staxETime;
+	}
+
+	public long getStaxDETime() {
+		return staxDETime;
+	}
 
 	public Document getDocument() {
 		return document;
@@ -407,8 +542,20 @@ public class PerfDoc {
 
 	@Override
 	public String toString() {
-		return String.format("PerfDoc %s mem=%d load=%d scan=%d xpath=%d dump=%d", 
-				infile.getPath(), loadMem, loadTime, scanTime, xpathTime, dumpTime);
+		return String.format("PerfDoc %s mem=%d sax=%d dom=%d stax=%d scan=%d xpath=%d dump=%d", 
+				infile.getPath(), loadMem, saxTime, domTime, staxTime, scanTime, xpathTime, dumpTime);
 	}
 	
+	private static final org.w3c.dom.Document getDocument(InputSource data, boolean xsdvalidate) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		dbf.setValidating(xsdvalidate);
+		dbf.setExpandEntityReferences(false);
+		
+		if (xsdvalidate) {
+			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		}
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		return db.parse(data);
+	}
 }
