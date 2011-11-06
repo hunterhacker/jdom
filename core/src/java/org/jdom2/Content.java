@@ -75,20 +75,39 @@ import java.util.List;
  */
 public abstract class Content implements Cloneable, Serializable {
 
+	/**
+	 * An enumeration useful for identifying content types without
+	 * having to do <code>instanceof</code> type conditionals. Tese can be used
+	 * in switch-type statements too. 
+	 */
 	public static enum CType {
+		/** Represents {@link Comment} content */
 		Comment,
+		/** Represents {@link Element} content */
 		Element,
+		/** Represents {@link ProcessingInstruction} content */
 		ProcessingInstruction,
+		/** Represents {@link EntityRef} content */
 		EntityRef,
+		/** Represents {@link Text} content */
 		Text,
+		/** Represents {@link CDATA} content */
 		CDATA,
+		/** Represents {@link DocType} content */
 		DocType,
+		/** Represents {@link Attribute} content */
 		Attribute
 	}
 	
+	/** The parent {@link Parent} of this Content */
 	protected Parent parent = null;
+	/** The content type enumerate value for this Content */
 	protected final CType ctype;
 
+	/** 
+	 * Create a new Content instance of a particular type.
+	 * @param type The {@link CType} of this Content 
+	 */
 	protected Content(CType type) {
 		ctype = type;
 	}
