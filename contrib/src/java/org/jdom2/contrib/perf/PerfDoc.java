@@ -37,7 +37,8 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.SAXHandler;
-import org.jdom2.input.StAXBuilder;
+import org.jdom2.input.StAXEventBuilder;
+import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
@@ -244,12 +245,12 @@ public class PerfDoc {
 				InputSource source = new InputSource(car);
 				return dom.build(getDocument(source, false));
 			case 2:
-				StAXBuilder stax = new StAXBuilder();
+				StAXStreamBuilder stax = new StAXStreamBuilder();
 				stax.setFactory(new UncheckedJDOMFactory());
 				XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(car);
 				return stax.build(reader);
 			case 3:
-				StAXBuilder staxe = new StAXBuilder();
+				StAXEventBuilder staxe = new StAXEventBuilder();
 				staxe.setFactory(new UncheckedJDOMFactory());
 				XMLEventReader events = XMLInputFactory.newInstance().createXMLEventReader(car);
 				return staxe.build(events);

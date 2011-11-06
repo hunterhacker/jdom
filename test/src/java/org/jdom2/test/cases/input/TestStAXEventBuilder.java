@@ -10,13 +10,13 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.StAXStreamBuilder;
+import org.jdom2.input.StAXEventBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
@@ -24,17 +24,17 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
-public class TestStAXBuilder {
+public class TestStAXEventBuilder {
 
 	@Test
 	public void testStAXBuilder() {
-		StAXStreamBuilder db = new StAXStreamBuilder();
+		StAXEventBuilder db = new StAXEventBuilder();
 		assertNotNull(db);
 	}
 
 	@Test
 	public void testFactory() {
-		StAXStreamBuilder db = new StAXStreamBuilder();
+		StAXEventBuilder db = new StAXEventBuilder();
 		assertTrue(db.getFactory() instanceof DefaultJDOMFactory);
 		DefaultJDOMFactory fac = new DefaultJDOMFactory();
 		assertFalse(db.getFactory() == fac);
@@ -105,15 +105,16 @@ public class TestStAXBuilder {
 	
 	private void checkStAX(String filename, boolean expand) {
 		try {
-			StAXStreamBuilder stxb = new StAXStreamBuilder();
-			StreamSource source = new StreamSource(new File(filename));
+			StAXEventBuilder stxb = new StAXEventBuilder();
 			XMLInputFactory inputfac = XMLInputFactory.newInstance();
 			inputfac.setProperty(
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
-			XMLStreamReader reader = inputfac.createXMLStreamReader(source);
-			Document staxbuild = stxb.build(reader);
-			Element staxroot = staxbuild.hasRootElement() ? staxbuild.getRootElement() : null;
+
+			StreamSource eventsource = new StreamSource(new File(filename));
+			XMLEventReader events = inputfac.createXMLEventReader(eventsource);
+			Document eventbuild = stxb.build(events);
+			Element eventroot = eventbuild.hasRootElement() ? eventbuild.getRootElement() : null;
 
 			SAXBuilder sb = new SAXBuilder(false);
 			sb.setExpandEntities(expand);
@@ -123,8 +124,8 @@ public class TestStAXBuilder {
 			Document saxbuild = sb.build(filename);
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
-			assertEquals("DOC SAX to StAXReader", toString(saxbuild), toString(staxbuild));
-			assertEquals("ROOT SAX to StAXReader", toString(saxroot), toString(staxroot));
+			assertEquals("DOC SAX to StAXEvent", toString(saxbuild), toString(eventbuild));
+			assertEquals("ROOT SAX to StAXEvent", toString(saxroot), toString(eventroot));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -54,19 +54,11 @@
 
 package org.jdom2.input;
 
-import java.util.Iterator;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
 
 import org.jdom2.AttributeType;
-import org.jdom2.Comment;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -74,7 +66,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
-import org.jdom2.ProcessingInstruction;
 
 /**
  * Builds a JDOM document from a StAX-based XMLStremReader.
@@ -109,7 +100,7 @@ import org.jdom2.ProcessingInstruction;
  * @author Rolf Lear
  *
  */
-public class StAXBuilder implements XMLStreamConstants {
+public class StAXStreamBuilder implements XMLStreamConstants {
 	
 	/**
 	 * Create a Document from an XMLStreamReader
@@ -256,137 +247,6 @@ public class StAXBuilder implements XMLStreamConstants {
 	}
 
 
-	/**
-	 * Create a Document from an XMLEventReader
-	 * @param factory the {@link JDOMFactory} to use
-	 * @param stream the XMLEventReader to read from
-	 * @return the parsed Document
-	 * @throws JDOMException if there is any issue
-	 * 				(XMLStreamExceptions are wrapped).
-	 */
-	private static final Document process(final JDOMFactory factory, 
-			final XMLEventReader events) throws JDOMException {
-		try {
-
-			final Document document = factory.document(null);
-			Element current = null;
-
-			XMLEvent event = events.peek();
-
-			if (XMLStreamConstants.START_DOCUMENT != event.getEventType()) {
-				throw new JDOMException("JDOM requires that XMLStreamReaders " +
-						"are at their beginning when being processed.");
-			}
-
-
-
-			while (event.getEventType() != XMLStreamConstants.END_DOCUMENT) {
-				if (event.isStartDocument()) {
-					document.setBaseURI(event.getLocation().getSystemId());
-					document.setProperty("ENCODING_SCHEME",
-							((javax.xml.stream.events.StartDocument)event).getCharacterEncodingScheme());
-					document.setProperty("STANDALONE", String.valueOf(
-							((javax.xml.stream.events.StartDocument)event).isStandalone()));
-					//						document.setProperty("ENCODING",
-					//								((StartDocument)event).getEncoding());
-				} else if (event instanceof javax.xml.stream.events.DTD) {
-					//List<?> list = (List<?>)reader.getProperty("javax.xml.stream.entities");
-					//System.out.println(list);
-					final DocType dtype = DTDParser.parse(((javax.xml.stream.events.DTD)event).getDocumentTypeDeclaration(), factory);
-					document.setDocType(dtype);
-				} else if (event.isStartElement()) {
-					final Element emt = processElement(factory, event.asStartElement());
-					if (current == null) {
-						document.setRootElement(emt);
-						final DocType dt = document.getDocType();
-						if (dt != null) {
-							dt.setElementName(emt.getName());
-						}
-					} else {
-						current.addContent(emt);
-					}
-					current = emt;
-				} else if (event.isCharacters()) {
-					final Characters chars = event.asCharacters();
-					if (chars.isCData()) {
-						current.addContent(factory.cdata(
-								((Characters)event).getData()));
-					} else {
-						current.addContent(factory.text(
-								((Characters)event).getData()));
-					}
-				} else if (event instanceof javax.xml.stream.events.Comment) {
-					final Comment comment = factory.comment(
-							((javax.xml.stream.events.Comment)event).getText());
-					if (current == null) {
-						document.addContent(comment);
-					} else {
-						current.addContent(comment);
-					}
-				} else if (event.isEntityReference()) {
-					current.addContent(factory.entityRef(
-							((javax.xml.stream.events.EntityReference)event).getName()));
-				} else if (event.isProcessingInstruction()) {
-					final ProcessingInstruction pi = factory.processingInstruction(
-							((javax.xml.stream.events.ProcessingInstruction)event).getTarget(),
-							((javax.xml.stream.events.ProcessingInstruction)event).getData());
-					if (current == null) {
-						document.addContent(pi);
-					} else {
-						current.addContent(pi);
-					}
-				} else if (event.isEndElement()) {
-					current = current.getParentElement();
-				}
-				if (events.hasNext()) {
-					event = events.nextEvent();
-				} else {
-					break;
-				}
-			}
-			return document;
-		} catch (final XMLStreamException xse) {
-			throw new JDOMException("Unable to process XMLStream. See Cause.", xse);
-		}
-	}
-
-	private static final Element processElement(final JDOMFactory factory,
-			final StartElement event) {
-		final QName qname = event.getName();
-
-		final Element element = factory.element(qname.getLocalPart(),
-				Namespace.getNamespace(qname.getPrefix(), qname.getNamespaceURI()));
-
-		// Handle attributes
-		for (final Iterator<?> it = event.getAttributes();
-				it.hasNext(); ) {
-
-			final javax.xml.stream.events.Attribute att =
-					(javax.xml.stream.events.Attribute)it.next();
-
-			final QName aqname = att.getName();
-
-			final Namespace attNs = Namespace.getNamespace(aqname.getPrefix(),
-					aqname.getNamespaceURI());
-
-			factory.setAttribute(element, factory.attribute(
-					aqname.getLocalPart(), att.getValue(),
-					AttributeType.getAttributeType(att.getDTDType()), attNs));
-		}
-
-		for (final Iterator<?> it = event.getNamespaces(); it.hasNext();) {
-			final javax.xml.stream.events.Namespace ns =
-					(javax.xml.stream.events.Namespace)it.next();
-
-			element.addNamespaceDeclaration(Namespace.getNamespace(
-					ns.getPrefix(), ns.getNamespaceURI()));
-		}
-
-		return element;
-	}
-
-	
-	
 	/** The factory to use for parsing */
 	private JDOMFactory factory = new DefaultJDOMFactory();
 	
@@ -420,20 +280,6 @@ public class StAXBuilder implements XMLStreamConstants {
 	 */
 	public Document build(XMLStreamReader reader) throws JDOMException {
 		return process(factory, reader);
-	}
-	
-	/**
-	 * This builds a document from the supplied
-	 * XMLEventReader.
-	 * <p>
-	 * The JDOMContent will be built by the current JDOMFactory.
-	 *
-	 * @param events <code>XMLEventReader</code> to read from
-	 * @return <code>Document</code> resultant Document object
-	 * @throws JDOMException when errors occur in parsing
-	 */
-	public Document build(XMLEventReader events) throws JDOMException {
-		return process(factory, events);
 	}
 	
 }
