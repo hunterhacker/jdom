@@ -62,6 +62,7 @@ import java.util.List;
  *
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
+ * @param <T> The Generic type of content returned by this Filter
  */
 public interface Filter <T> extends java.io.Serializable {
 
@@ -85,18 +86,45 @@ public interface Filter <T> extends java.io.Serializable {
 	/**
 	 * Check to see if the object matches a predefined set of rules.
 	 *
-	 * @param obj The object to verify.
+	 * @param content The object to verify.
 	 * @return <code>true</code> if the object matches a predfined 
 	 *           set of rules.
 	 */
 	public boolean matches(Object content);
 
 
+	/**
+	 * Creates an 'inverse' filter
+	 * @return a Filter that returns all content except what this Filter
+	 * 		instance would.
+	 */
 	public Filter<? extends Object> negate();
 
+	/**
+	 * Creates an ORing filter
+	 * @param filter a second Filter to OR with.
+	 * @return a new Filter instance that returns the 'union' of this filter and
+	 *      the specified filter.
+	 */
 	public Filter<? extends Object> or(Filter<?> filter);
 
+	/**
+	 * Creates an ANDing filter
+	 * @param filter a second Filter to AND with.
+	 * @return a new Filter instance that returns the 'intersection' of this
+	 *     filter and the specified filter.
+	 */
 	public Filter<?> and(Filter<?> filter);
 
+	/**
+	 * This is similar to the and(Filter) method except the generic type is
+	 * different.
+	 * @param <R> The Generic type of the retuned data is taken from the input
+	 * instance. 
+	 * @param filter The filter to refine our results with.
+	 * @return A Filter that requires content to both match our instance and the
+	 *     refining instance, but the generic type of the retuned data is based
+	 *     on the refining instance, not this instance.
+	 */
 	public <R> Filter<R> refine(Filter<R> filter);
 }

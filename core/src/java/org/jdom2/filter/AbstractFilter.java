@@ -64,6 +64,7 @@ import org.jdom2.Content;
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
+ * @param <T> The Generic type of content returned by this Filter
  */
 abstract class AbstractFilter<T> implements Filter<T> {
 

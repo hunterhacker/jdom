@@ -291,7 +291,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	/**
 	 * Check to see if the object matches according to the filter mask.
 	 *
-	 * @param content The object to verify.
+	 * @param obj The object to verify.
 	 * @return <code>true</code> if the objected matched a predfined
 	 *           set of rules.
 	 */

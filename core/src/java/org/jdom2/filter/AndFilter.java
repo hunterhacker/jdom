@@ -60,7 +60,8 @@ package org.jdom2.filter;
  * <b>and</b> operation.
  *
  * @author Bradley S. Huffman
- */
+ * @param <T> The Generic type of content returned by this Filter
+*/
 final class AndFilter<T> extends AbstractFilter<T> {
 
 	// Filter for left side of logical <b>and</b>.

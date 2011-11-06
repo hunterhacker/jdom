@@ -105,9 +105,9 @@ public class AttributeFilter extends AbstractFilter<Attribute> {
 	}
 
 	/**
-	 * Check to see if the object matches a predefined set of rules.
+	 * Check to see if the Content matches a predefined set of rules.
 	 *
-	 * @param obj The object to verify.
+	 * @param content The Content to verify.
 	 * @return <code>true</code> if the objected matched a predfined
 	 *           set of rules.
 	 */
