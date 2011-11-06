@@ -109,6 +109,7 @@ public abstract class XPath implements Serializable {
 	 * XPath expression.
 	 *
 	 * @param  path   the XPath expression to wrap.
+	 * @return an XPath instance representing the input path
 	 *
 	 * @throws JDOMException   if the XPath expression is invalid.
 	 */
