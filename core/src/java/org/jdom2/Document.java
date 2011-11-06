@@ -521,7 +521,7 @@ public class Document implements Parent {
 		return baseURI;
 	}
 
-	/*
+	/**
 	 * Replace the current child the given index with the supplied child.
 	 * <p>
 	 * In event of an exception the original content will be unchanged and
@@ -530,6 +530,7 @@ public class Document implements Parent {
 	 *
 	 * @param index - index of child to replace.
 	 * @param child - child to add.
+	 * @return this document instance
 	 * @throws IllegalAddException if the supplied child is already attached
 	 *                             or not legal content for this parent.
 	 * @throws IndexOutOfBoundsException if index is negative or greater

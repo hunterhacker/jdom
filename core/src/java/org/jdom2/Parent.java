@@ -145,6 +145,7 @@ public interface Parent extends Cloneable, Serializable {
 	 * since the underlying implement of {@link java.util.List#size} may
 	 * require walking the entire list and indexed lookups may require
 	 * starting at the beginning each time.
+	 * @param <E> The Generic type of the returned content (the Filter's type)
 	 *
 	 * @param  filter filter to apply
 	 * @return a list of the content of the parent matching the filter
@@ -164,6 +165,7 @@ public interface Parent extends Cloneable, Serializable {
 	/**
 	 * Removes from this parent all child content matching the given filter
 	 * and returns a list of the detached children.
+	 * @param <E> The Generic type of the content to remove.
 	 *
 	 * @param  filter filter to apply
 	 * @return list of the detached children matching the filter
@@ -210,6 +212,7 @@ public interface Parent extends Cloneable, Serializable {
 	 * match the filter rule.  With filters you can match only Elements,
 	 * only Comments, Elements or Comments, only Elements with a given name
 	 * and/or prefix, and so on.
+	 * @param <E> The generic type of the descendant data
 	 *
 	 * @param filter filter to select which descendants to see
 	 * @return an iterator to walk descendants that match a filter

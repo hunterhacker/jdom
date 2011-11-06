@@ -73,6 +73,11 @@ public class Text extends Content {
 	// long term
 	protected String value;
 	
+	/**
+	 * CData type extends Text, and it needs to be able to change the Content
+	 * type of this Content.
+	 * @param ctype The CType to set for this Text-based Content.
+	 */
 	protected Text(CType ctype) {
 		super(ctype);
 	}

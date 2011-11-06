@@ -61,6 +61,7 @@ import org.jdom2.filter.*;
  * Traverse a parent's children that match the supplied filter.
  *
  * @author Bradley S. Huffman
+ * @param <T> The Generic type of content returned by this FilterIterator.
  */
 class FilterIterator<T> implements Iterator<T> {
 

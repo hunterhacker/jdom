@@ -172,6 +172,7 @@ public interface JDOMFactory {
 	 * This creates the CDATA with the supplied text.
 	 *
 	 * @param str <code>String</code> content of CDATA.
+	 * @return the created CDATA instance
 	 */
 	public CDATA cdata(String str);
 
@@ -181,6 +182,7 @@ public interface JDOMFactory {
 	 * This creates the Text with the supplied text.
 	 *
 	 * @param str <code>String</code> content of Text.
+	 * @return the created Text instance
 	 */
 	public Text text(String str);
 
@@ -190,6 +192,7 @@ public interface JDOMFactory {
 	 * This creates the comment with the supplied text.
 	 *
 	 * @param text <code>String</code> content of comment.
+	 * @return the created Comment instance
 	 */
 	public Comment comment(String text);
 
@@ -206,6 +209,7 @@ public interface JDOMFactory {
 	 *        referenced DTD
 	 * @param systemID <code>String</code> system ID of
 	 *        referenced DTD
+	 * @return the created DocType instance
 	 */
 	public DocType docType(String elementName,
 			String publicID, String systemID);
@@ -219,6 +223,7 @@ public interface JDOMFactory {
 	 *        element being constrained.
 	 * @param systemID <code>String</code> system ID of
 	 *        referenced DTD
+	 * @return the created DocType instance
 	 */
 	public DocType docType(String elementName, String systemID);
 
@@ -228,6 +233,7 @@ public interface JDOMFactory {
 	 *
 	 * @param elementName <code>String</code> name of
 	 *        element being constrained.
+	 * @return the created DocType instance
 	 */
 	public DocType docType(String elementName);
 
@@ -241,6 +247,7 @@ public interface JDOMFactory {
 	 *
 	 * @param rootElement <code>Element</code> for document root.
 	 * @param docType     <code>DocType</code> declaration.
+	 * @return the created Document instance
 	 */
 	public Document document(Element rootElement, DocType docType);
 
@@ -253,6 +260,7 @@ public interface JDOMFactory {
 	 * @param rootElement <code>Element</code> for document root.
 	 * @param docType <code>DocType</code> declaration.
 	 * @param baseURI the URI from which this doucment was loaded.
+	 * @return the created Document instance
 	 */
 	public Document document(Element rootElement, DocType docType, String baseURI);
 
@@ -263,6 +271,7 @@ public interface JDOMFactory {
 	 * declaration.
 	 *
 	 * @param rootElement <code>Element</code> for document root
+	 * @return the created Document instance
 	 */
 	public Document document(Element rootElement);
 
@@ -275,6 +284,7 @@ public interface JDOMFactory {
 	 *
 	 * @param name <code>String</code> name of element.
 	 * @param namespace <code>Namespace</code> to put element in.
+	 * @return the created Element instance
 	 */
 	public Element element(String name, Namespace namespace);
 
@@ -283,6 +293,7 @@ public interface JDOMFactory {
 	 * <code>{@link org.jdom2.Namespace}</code>.
 	 *
 	 * @param name <code>String</code> name of element.
+	 * @return the created Element instance
 	 */
 	public Element element(String name);
 
@@ -296,6 +307,7 @@ public interface JDOMFactory {
 	 * @param name <code>String</code> name of element.
 	 * @param uri <code>String</code> URI for <code>Namespace</code> element
 	 *        should be in.
+	 * @return the created Element instance
 	 */
 	public Element element(String name, String uri);
 
@@ -306,8 +318,10 @@ public interface JDOMFactory {
 	 * should be in.
 	 *
 	 * @param name <code>String</code> name of element.
+	 * @param prefix the NamespacePrefic to use for this Element
 	 * @param uri <code>String</code> URI for <code>Namespace</code> element
 	 *        should be in.
+	 * @return the created Element instance
 	 */
 	public Element element(String name, String prefix, String uri);
 
@@ -320,6 +334,7 @@ public interface JDOMFactory {
 	 * @param target <code>String</code> target of PI.
 	 * @param data <code>Map</code> data for PI, in
 	 *             name/value pairs
+	 * @return the created ProcessingInstruction instance
 	 */
 	public ProcessingInstruction processingInstruction(String target,
 			Map<String,String> data);
@@ -330,6 +345,7 @@ public interface JDOMFactory {
 	 *
 	 * @param target <code>String</code> target of PI.
 	 * @param data <code>String</code> data for PI.
+	 * @return the created ProcessingInstruction instance
 	 */
 	public ProcessingInstruction processingInstruction(String target,
 			String data);
@@ -339,6 +355,7 @@ public interface JDOMFactory {
 	 * with the specified target and no data.
 	 *
 	 * @param target <code>String</code> target of PI.
+	 * @return the created ProcessingInstruction instance
 	 */
 	public ProcessingInstruction processingInstruction(String target);
 
@@ -349,6 +366,7 @@ public interface JDOMFactory {
 	 * with the supplied name.
 	 *
 	 * @param name <code>String</code> name of element.
+	 * @return the created EntityRef instance
 	 */
 	public EntityRef entityRef(String name);
 
@@ -359,6 +377,7 @@ public interface JDOMFactory {
 	 * @param name <code>String</code> name of element.
 	 * @param publicID <code>String</code> public ID of element.
 	 * @param systemID <code>String</code> system ID of element.
+	 * @return the created EntityRef instance
 	 */
 	public EntityRef entityRef(String name, String publicID, String systemID);
 
@@ -368,6 +387,7 @@ public interface JDOMFactory {
 	 *
 	 * @param name <code>String</code> name of element.
 	 * @param systemID <code>String</code> system ID of element.
+	 * @return the created EntityRef instance
 	 */
 	public EntityRef entityRef(String name, String systemID);
 
@@ -375,11 +395,31 @@ public interface JDOMFactory {
 	// List manipulation
 	// =====================================================================
 
+	/**
+	 * This will add the specified content to the specified parent instance
+	 * @param parent The {@link Parent} to add the content to.
+	 * @param content The {@link Content} to add
+	 */
 	public void addContent(Parent parent, Content content);
 
+	/**
+	 * Sets a specific Attribute on an Element
+	 * @param element The {@link Element} to set the Attribute on
+	 * @param a The {@link Attribute} to set
+	 */
 	public void setAttribute(Element element, Attribute a);
 
+	/**
+	 * Adds a namespace declaration to an Element
+	 * @param element The {@link Element} to add the Namespace to
+	 * @param additional The {@link Namespace} to add.
+	 */
 	public void addNamespaceDeclaration(Element element, Namespace additional);
 	
+	/**
+	 * Sets the 'root' Element for a Document.
+	 * @param doc The {@link Document} to set the Root Element of.
+	 * @param root The {@link Element} to set as the root.
+	 */
 	public void setRoot(Document doc, Element root);
 }
