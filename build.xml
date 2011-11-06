@@ -10,7 +10,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- Initialization target                                               -->
 	<!-- =================================================================== -->
 	<target name="init">
-		<tstamp/>
+		<tstamp >
+		    <format property="snapshot.time" pattern="yyyy.MM.dd.HH.mm" />
+		</tstamp>
 
 		<!--
       Give user a chance to override without editing this file
@@ -30,7 +32,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 		<property name="Name" value="JDOM"/>
 		<property name="name" value="jdom"/>
-		<property name="version" value="2.x-SNAPSHOT"/>
+		<property name="version" value="2.x-${snapshot.time}"/>
 		<property name="version.impl" value="${version}"/>
 		<property name="version.spec" value="2.alpha"/>
 		<property name="year" value="2011"/>
@@ -84,7 +86,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 		<property name="build.javadocs" value="${build}/apidocs"/>
 
-		<property name="package.dir" value="./package"/>
+		<property name="package" value="${build}/package"/>
 
 		<property name="coverage.out" value="${build}/coverage" />
 
@@ -249,34 +251,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 	 		description="Compiles all JDOM code (core, samples, junit, contrib)" />
 
 	<!-- =================================================================== -->
-	<!-- Creates the class package                                           -->
-	<!-- =================================================================== -->
-	<target name="package" depends="compile"
-          description="Creates the class package">
-		<fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
-		<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
-
-		<!-- Filters defined specifically for updating the manifest -->
-		<filter token="version.spec" value="${version.spec}"/>
-		<filter token="version.impl" value="${version.impl}"/>
-		<copy todir="${metainf.build}/META-INF" filtering="yes">
-			<fileset dir="${metainf}"/>
-			<fileset dir=".">
-				<include name="LICENSE.txt"/>
-			</fileset>
-		</copy>
-		<jar jarfile="${build}/${jarbase}.jar" manifest="${metainf.build}/META-INF/MANIFEST.MF">
-			<fileset dir="${core.build}" includes="**/*.class" />
-			<fileset dir="${about.build}" includes="**/*.class" />
-			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
-		</jar>
-		<jar jarfile="${build}/${jarbase}-contrib.jar" >
-			<fileset dir="${contrib.build}" includes="**/*.class" />
-			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
-		</jar>
-	</target>
-
-	<!-- =================================================================== -->
 	<!-- Creates the API documentation                                       -->
 	<!-- =================================================================== -->
 	<target name="javadoc" depends="prepare"
@@ -296,6 +270,50 @@ For instructions on how to build JDOM, please view the README.txt file.
              bottom="Copyright &#169; ${year} Jason Hunter, Brett McLaughlin. All Rights Reserved.">
 			<classpath refid="base.class.path"/>
 		</javadoc>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Creates the class package                                           -->
+	<!-- =================================================================== -->
+	<target name="package" depends="compile, javadoc"
+          description="Creates the class package">
+		<fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
+		<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
+
+		<!-- Filters defined specifically for updating the manifest -->
+		<filter token="version.spec" value="${version.spec}"/>
+		<filter token="version.impl" value="${version.impl}"/>
+		
+		<copy todir="${metainf.build}/META-INF" filtering="yes">
+			<fileset dir="${metainf}"/>
+			<fileset dir=".">
+				<include name="LICENSE.txt"/>
+			</fileset>
+		</copy>
+		
+		<jar jarfile="${package}/${jarbase}.jar" manifest="${metainf.build}/META-INF/MANIFEST.MF">
+			<fileset dir="${core.build}" includes="**/*.class" />
+			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
+		</jar>
+		<jar jarfile="${package}/${jarbase}-contrib.jar" >
+			<fileset dir="${contrib.build}" includes="**/*" />
+			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
+		</jar>
+		<jar jarfile="${package}/${jarbase}-junit.jar" >
+			<fileset dir="${junit.build}" includes="**/*" />
+			<fileset dir="${metainf.build}" excludes="**/MANIFEST.MF" />
+		</jar>
+		<jar destfile="${package}/${jarbase}-javadoc.jar" 
+			basedir="${build.javadocs}" includes="**/*" />
+		<jar jarfile="${package}/${jarbase}-sources.jar" >
+			<fileset dir="${core.src}" includes="**/*" />
+			<fileset dir="${junit.src}" includes="**/*" />
+			<fileset dir="${contrib.src}" includes="**/*" />
+		</jar>
+		<zip destfile="${package}/${jarbase}.zip">
+			<fileset dir="${package}" includes="${jarbase}*.jar" />
+			<fileset dir="${basedir}" includes="lib/**/*" />
+		</zip>
 	</target>
 
 	<!-- =================================================================== -->
@@ -409,38 +427,36 @@ For instructions on how to build JDOM, please view the README.txt file.
 	
 
 	<target name="maven.clean">
-		<delete dir="${mavendir}" />
+		<delete dir="${mavendir}" includes="**/*"/>
 	</target>
 	
-	<target name="maven.prepare" depends="package, javadoc, maven.clean">
+	<target name="maven.prepare" depends="package, maven.clean">
 		<mkdir dir="${mavendir}" />
+		<mkdir dir="${mavendir}/core" />
+		<mkdir dir="${mavendir}/test" />
+		<mkdir dir="${mavendir}/contrib" />
 	</target>
 	
 	<target name="maven.core">
 		<!-- copy the build jar -->
-		<copy todir="${mavendir}" file="${build}/${jarbase}.jar"/>
-		<!-- build the Javadoc Jar-->
-		<jar destfile="${mavendir}/${jarbase}-javadoc.jar" 
-			basedir="${build.javadocs}" includes="**/*" />
-		<!-- build the Sources Jar-->
-		<jar destfile="${mavendir}/${jarbase}-sources.jar" 
-			basedir="${core.src}" includes="**/*" />
-		
+		<copy todir="${mavendir}/core" file="${package}/${jarbase}.jar"/>
+		<copy todir="${mavendir}/core" file="${package}/${jarbase}-javadoc.jar"/>
+		<copy todir="${mavendir}/core" file="${package}/${jarbase}-sources.jar"/>
 		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/${jarbase}.pom">
+		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/core/${jarbase}.pom">
 			<filterset>
 				<filter token="artifactID" value="${name}"/>
 				<filter token="version" value="${version}" />
 			</filterset>
 		</copy>
 		
-		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}.pom"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}-sources.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${jarbase}-javadoc.jar"/>
+		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}.pom"/>
+		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}.jar"/>
+		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}-sources.jar"/>
+		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}-javadoc.jar"/>
 		
 		<jar destfile="${mavendir}/${jarbase}-maven-bundle.jar"
-			basedir="${mavendir}"
+			basedir="${mavendir}/core"
 			includes="${jarbase}*" excludes="*maven-bundle*" />
 		
 	</target>
@@ -450,31 +466,31 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="testjarbase" value="${name}-junit-${version}" />
 		
 		<!-- build the java jar -->
-		<jar destfile="${mavendir}/${testjarbase}.jar" 
+		<jar destfile="${mavendir}/test/${testjarbase}.jar" 
 			basedir="${junit.build}" includes="**/*" />
 		<!-- build the Javadoc Jar-->
-		<jar destfile="${mavendir}/${testjarbase}-javadoc.jar" 
+		<jar destfile="${mavendir}/test/${testjarbase}-javadoc.jar" 
 			basedir="maven" includes="index.html" />
 		<!-- build the Sources Jar-->
-		<jar destfile="${mavendir}/${testjarbase}-sources.jar" 
+		<jar destfile="${mavendir}/test/${testjarbase}-sources.jar" 
 			basedir="${junit.src}" includes="**/*" />
 		
 		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/${testjarbase}.pom">
+		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/test/${testjarbase}.pom">
 			<filterset>
 				<filter token="artifactID" value="${name}-junit"/>
 				<filter token="version" value="${version}" />
 			</filterset>
 		</copy>
 		
-		<exec dir="${mavendir}" command="${gpg} -abv ${testjarbase}.pom"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${testjarbase}.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${testjarbase}-sources.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${testjarbase}-javadoc.jar"/>
+		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}.pom"/>
+		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}.jar"/>
+		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}-sources.jar"/>
+		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}-javadoc.jar"/>
 		
 		<jar destfile="${mavendir}/${testjarbase}-maven-bundle.jar"
-			basedir="${mavendir}"
-			includes="${testjarbase}*" excludes="*maven-bundle*" />
+			basedir="${mavendir}/test"
+			includes="${testjarbase}*" />
 	</target>
 	
 	<target name="maven.contrib">
@@ -482,30 +498,30 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="contribjarbase" value="${name}-contrib-${version}" />
 		
 		<!-- build the java jar -->
-		<jar destfile="${mavendir}/${contribjarbase}.jar" 
+		<jar destfile="${mavendir}/contrib/${contribjarbase}.jar" 
 			basedir="${contrib.build}" includes="**/*" />
 		<!-- build the Javadoc Jar-->
-		<jar destfile="${mavendir}/${contribjarbase}-javadoc.jar" 
+		<jar destfile="${mavendir}/contrib/${contribjarbase}-javadoc.jar" 
 			basedir="maven" includes="index.html" />
 		<!-- build the Sources Jar-->
-		<jar destfile="${mavendir}/${contribjarbase}-sources.jar" 
+		<jar destfile="${mavendir}/contrib/${contribjarbase}-sources.jar" 
 			basedir="${contrib.src}" includes="**/*" />
 		
 		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/${contribjarbase}.pom">
+		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/contrib/${contribjarbase}.pom">
 			<filterset>
 				<filter token="artifactID" value="${name}-contrib"/>
 				<filter token="version" value="${version}" />
 			</filterset>
 		</copy>
 		
-		<exec dir="${mavendir}" command="${gpg} -abv ${contribjarbase}.pom"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${contribjarbase}.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${contribjarbase}-sources.jar"/>
-		<exec dir="${mavendir}" command="${gpg} -abv ${contribjarbase}-javadoc.jar"/>
+		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}.pom"/>
+		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}.jar"/>
+		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}-sources.jar"/>
+		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}-javadoc.jar"/>
 		
 		<jar destfile="${mavendir}/${contribjarbase}-maven-bundle.jar"
-			basedir="${mavendir}"
+			basedir="${mavendir}/contrib"
 			includes="${contribjarbase}*" excludes="*maven-bundle*" />
 
 	</target>
