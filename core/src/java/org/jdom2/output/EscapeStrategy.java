@@ -67,6 +67,8 @@ public interface EscapeStrategy {
 	/**
 	 * Test whether the supplied character should be formatted literally
 	 * or as a character entity.
+	 * @param ch The char to test to determine whether it should be escaped.
+	 * @return true if ch should be escaped.
 	 */
 	public boolean shouldEscape(char ch);
 }

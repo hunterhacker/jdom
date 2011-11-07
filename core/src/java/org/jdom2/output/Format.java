@@ -346,7 +346,8 @@ public class Format implements Cloneable {
 	/**
 	 * This sets the text output style.  Options are available as static
 	 * {@link TextMode} instances.  The default is {@link TextMode#PRESERVE}.
-	 *
+	 * 
+	 * @param mode The TextMode to set.
 	 * @return a pointer to this Format for chaining
 	 */
 	public Format setTextMode(Format.TextMode mode) {

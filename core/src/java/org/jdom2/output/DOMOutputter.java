@@ -116,9 +116,9 @@ public class DOMOutputter {
 	}
 
 	/**
-	 * Controls how NO_NAMESPACE nodes are handeled. If true the outputter
+	 * Controls how NO_NAMESPACE nodes are handled. If true the outputter
 	 * always creates a namespace aware DOM.
-	 * @param flag
+	 * @param flag true to force NamespaceAware
 	 */
 	public void setForceNamespaceAware(boolean flag) {
 		this.forceNamespaceAware = flag;
@@ -140,6 +140,7 @@ public class DOMOutputter {
 	 *
 	 * @param document <code>Document</code> to output.
 	 * @return an <code>org.w3c.dom.Document</code> version
+	 * @throws JDOMException if output failed.
 	 */
 	public org.w3c.dom.Document output(Document document)
 			throws JDOMException {
