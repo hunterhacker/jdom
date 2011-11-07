@@ -363,6 +363,7 @@ public class JDOMResult extends SAXResult {
 
 		/**
 		 * Public constructor.
+		 * @param factory The Factory to use to create content instances
 		 */
 		public FragmentHandler(JDOMFactory factory) {
 			super(factory);

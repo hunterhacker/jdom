@@ -63,13 +63,25 @@ import org.jdom2.JDOMException;
  */
 public class XSLTransformException extends JDOMException {
 
+	/**
+	 * A new and default XSLTransformException
+	 */
 	public XSLTransformException() {
 	}
 
+	/**
+	 * A new XSLTransformException with the specified message
+	 * @param message The message for the exception
+	 */
 	public XSLTransformException(String message) {
 		super(message);
 	}
 
+	/**
+	 * A new XSLTransformException with the specified message and cause
+	 * @param message The message for the exception
+	 * @param cause This exception's cause.
+	 */
 	public XSLTransformException(String message, Exception cause) {
 		super(message, cause);
 	}
