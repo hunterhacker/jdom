@@ -9,12 +9,14 @@ import static org.junit.Assert.fail;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
 import org.jdom2.*;
+import org.jdom2.input.DefaultStAXFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.output.Format;
@@ -114,6 +116,12 @@ public class TestStAXBuilder {
 			XMLStreamReader reader = inputfac.createXMLStreamReader(source);
 			Document staxbuild = stxb.build(reader);
 			Element staxroot = staxbuild.hasRootElement() ? staxbuild.getRootElement() : null;
+			
+			XMLStreamReader fragreader = inputfac.createXMLStreamReader(source);
+			List<Content> contentlist = stxb.buildFragments(fragreader, new DefaultStAXFilter());
+			Document fragbuild = new Document();
+			fragbuild.addContent(contentlist);
+			Element fragroot = fragbuild.getRootElement();
 
 			SAXBuilder sb = new SAXBuilder(false);
 			sb.setExpandEntities(expand);
@@ -125,6 +133,8 @@ public class TestStAXBuilder {
 			
 			assertEquals("DOC SAX to StAXReader", toString(saxbuild), toString(staxbuild));
 			assertEquals("ROOT SAX to StAXReader", toString(saxroot), toString(staxroot));
+			assertEquals("DOC SAX to StAXReader FragmentList", toString(saxbuild), toString(fragbuild));
+			assertEquals("ROOT SAX to StAXReader FragmentList", toString(saxroot), toString(fragroot));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

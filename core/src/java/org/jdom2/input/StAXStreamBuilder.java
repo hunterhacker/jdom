@@ -54,11 +54,16 @@
 
 package org.jdom2.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.AttributeType;
+import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -101,7 +106,7 @@ import org.jdom2.Namespace;
  *
  */
 public class StAXStreamBuilder implements XMLStreamConstants {
-	
+
 	/**
 	 * Create a Document from an XMLStreamReader
 	 * @param factory The {@link JDOMFactory} to use
@@ -114,16 +119,14 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 			final XMLStreamReader stream) throws JDOMException {
 		try {
 
-			final Document document = factory.document(null);
-
-			Element current = null;
-
 			int state = stream.getEventType();
 
 			if (XMLStreamConstants.START_DOCUMENT != state) {
 				throw new JDOMException("JDOM requires that XMLStreamReaders " +
 						"are at their beginning when being processed.");
 			}
+
+			final Document document = factory.document(null);
 
 
 			while (state != XMLStreamConstants.END_DOCUMENT) {
@@ -139,7 +142,7 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 						document.setProperty("ENCODING",
 								stream.getEncoding());
 						break;
-						
+
 					case DTD:
 						final DocType dtype = DTDParser.parse(
 								stream.getText(), factory);
@@ -147,61 +150,28 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 						break;
 
 					case START_ELEMENT:
-						final Element emt = processElement(factory, stream);
-						if (current == null) {
-							document.setRootElement(emt);
-							final DocType dt = document.getDocType();
-							if (dt != null) {
-								dt.setElementName(emt.getName());
-							}
-						} else {
-							current.addContent(emt);
-						}
-						current = emt;
+						document.setRootElement(processElementFragment(factory, stream));
 						break;
 
 					case END_ELEMENT:
-						current = current.getParentElement();
-						break;
-
+						throw new JDOMException("Unexpected XMLStream event at Document level: END_ELEMENT");
+					case ENTITY_REFERENCE:
+						throw new JDOMException("Unexpected XMLStream event at Document level: ENTITY_REFERENCE");
 					case CDATA:
-						if (current != null) {
-							current.addContent(factory.cdata(stream.getText()));
-						}
-						break;
-
+						throw new JDOMException("Unexpected XMLStream event at Document level: CDATA");
 					case SPACE:
+						throw new JDOMException("Unexpected XMLStream event at Document level: SPACE");
 					case CHARACTERS:
-						if (current != null) {
-							current.addContent(factory.text(stream.getText()));
-						}
-						break;
+						throw new JDOMException("Unexpected XMLStream event at Document level: CHARACTERS");
 
 					case COMMENT:
-						if (current == null) {
-							document.addContent(
-									factory.comment(stream.getText()));
-						} else {
-							current.addContent(
-									factory.comment(stream.getText()));
-						}
-						break;
-
-					case ENTITY_REFERENCE:
-						if (current != null) {
-							current.addContent(
-									factory.entityRef(stream.getLocalName()));
-						}
+						document.addContent(
+								factory.comment(stream.getText()));
 						break;
 
 					case PROCESSING_INSTRUCTION:
-						if (current == null) {
-							document.addContent(factory.processingInstruction(
-									stream.getPITarget(), stream.getPIData()));
-						} else {
-							current.addContent(factory.processingInstruction(
-									stream.getPITarget(), stream.getPIData()));
-						}
+						document.addContent(factory.processingInstruction(
+								stream.getPITarget(), stream.getPIData()));
 						break;
 
 					default:
@@ -220,6 +190,307 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 		}
 	}
 
+	private List<Content> processFragments(JDOMFactory factory, XMLStreamReader stream, StAXFilter filter) throws JDOMException {
+		
+		int state = stream.getEventType();
+
+		if (XMLStreamConstants.START_DOCUMENT != state) {
+			throw new JDOMException("JDOM requires that XMLStreamReaders " +
+					"are at their beginning when being processed.");
+		}
+		List<Content> ret = new ArrayList<Content>();
+		
+		int depth = 0;
+		String text = null;
+		
+		try {
+			while (stream.hasNext() && (state = stream.next()) != END_DOCUMENT) {
+				switch (state) {
+					case START_DOCUMENT:
+						throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state START_DOCUMENT" );
+					case END_DOCUMENT:
+						throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state END_DOCUMENT" );
+					case END_ELEMENT:
+						throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state END_ELEMENT" );
+
+					case START_ELEMENT:
+						final QName qn = stream.getName();
+						if (filter.includeElement(depth, qn.getLocalPart(), 
+								Namespace.getNamespace(qn.getPrefix(), qn.getNamespaceURI()))) {
+							ret.add(processPrunableElement(factory, stream, depth, filter));
+						} else {
+							final int back = depth;
+							depth++;
+							
+							while (depth > back && stream.hasNext()) {
+								state = stream.next();
+								if (state == START_ELEMENT) {
+									depth++;
+								} else if (state == END_ELEMENT) {
+									depth--;
+								}
+							}
+						}
+						break;
+
+					case DTD:
+						if (filter.includeDocType()) {
+							ret.add(DTDParser.parse(stream.getText(), factory));
+						}
+						break;
+
+					case CDATA:
+						if ((text = filter.includeCDATA(depth, stream.getText())) != null) {
+							ret.add(factory.cdata(text));
+						}
+						break;
+
+					case SPACE:
+					case CHARACTERS:
+						if ((text = filter.includeText(depth, stream.getText())) != null) {
+							ret.add(factory.text(text));
+						}
+						break;
+
+					case COMMENT:
+						if ((text = filter.includeComment(depth, stream.getText())) != null) {
+							ret.add(factory.comment(text));
+						}
+						break;
+
+					case ENTITY_REFERENCE:
+						if (filter.includeEntityRef(depth, stream.getLocalName())) {
+							ret.add(factory.entityRef(stream.getLocalName()));
+						}
+						break;
+
+					case PROCESSING_INSTRUCTION:
+						if (filter.includeProcessingInstruction(depth, stream.getPITarget())) {
+							ret.add(factory.processingInstruction(
+								stream.getPITarget(), stream.getPIData()));
+						}
+						break;
+
+					default:
+						throw new JDOMException("Unexpected XMLStream event " + stream.getEventType());
+				}
+			}
+		} catch (XMLStreamException e) {
+			throw new JDOMException("Unable to process fragments from XMLStreamReader.", e);
+		}
+		
+		return ret;
+	}
+
+	
+	private static final Element processPrunableElement(final JDOMFactory factory, 
+			final XMLStreamReader reader, final int topdepth, StAXFilter filter) 
+					throws XMLStreamException, JDOMException {
+
+		if (XMLStreamConstants.START_ELEMENT != reader.getEventType()) {
+			throw new JDOMException("JDOM requires that the XMLStreamReader " +
+					"is at the START_ELEMENT state when retrieving an " +
+					"Element Fragment.");
+		}
+		
+		final Element fragment = processElement(factory, reader);
+		Element current = fragment;
+		int depth = topdepth + 1;
+		String text = null;
+		while (depth > topdepth && reader.hasNext()) {
+			switch(reader.next()) {
+				case START_ELEMENT:
+					QName qn = reader.getName();
+					if (!filter.pruneElement(depth, qn.getLocalPart(), 
+							Namespace.getNamespace(
+									qn.getPrefix(), qn.getNamespaceURI()))) {
+						Element tmp = processElement(factory, reader);
+						current.addContent(tmp);
+						current = tmp;
+						depth++;
+					} else {
+						final int edepth = depth;
+						depth++;
+						int state = 0;
+						while (depth > edepth && reader.hasNext() && 
+								(state = reader.next()) != END_DOCUMENT) {
+							if (state == START_ELEMENT) {
+								depth++;
+							} else if (state == END_ELEMENT) {
+								depth--;
+							}
+						}
+					}
+					break;
+				case END_ELEMENT:
+					current = current.getParentElement();
+					depth--;
+					break;
+				case CDATA:
+					if ((text = filter.pruneCDATA(depth, reader.getText())) != null) {
+						current.addContent(factory.cdata(text));
+					}
+					break;
+
+				case SPACE:
+				case CHARACTERS:
+					if ((text = filter.pruneText(depth, reader.getText())) != null) {
+						current.addContent(factory.text(text));
+					}
+					break;
+
+				case COMMENT:
+					if ((text = filter.pruneComment(depth, reader.getText())) != null) {
+						current.addContent(factory.comment(text));
+					}
+					break;
+
+				case ENTITY_REFERENCE:
+					if (!filter.pruneEntityRef(depth, reader.getLocalName())) {
+						current.addContent(factory.entityRef(reader.getLocalName()));
+					}
+					break;
+
+				case PROCESSING_INSTRUCTION:
+					if (!filter.pruneProcessingInstruction(depth, reader.getPITarget())) {
+						current.addContent(factory.processingInstruction(
+								reader.getPITarget(), reader.getPIData()));
+					}
+					break;
+
+				default:
+					throw new JDOMException("Unexpected XMLStream event " + reader.getEventType());
+			}
+			
+		}
+		
+		return fragment;
+	}
+
+	/**
+	 * Create a Content from an XMLStreamReader
+	 * The stream is advanced to the event after the current event (or to the
+	 * event after the matching END_ELEMENT for an Element fragment).
+	 * @param factory The {@link JDOMFactory} to use
+	 * @param stream The XMLStreamReader to read from
+	 * @return the parsed Document
+	 * @throws JDOMException if there is any issue
+	 * 				(XMLStreamExceptions are wrapped).
+	 */
+	private static final Content processFragment(final JDOMFactory factory, 
+			final XMLStreamReader stream) throws JDOMException {
+		try {
+			
+			switch (stream.getEventType()) {
+
+				case START_DOCUMENT:
+					throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state START_DOCUMENT" );
+				case END_DOCUMENT:
+					throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state END_DOCUMENT" );
+				case END_ELEMENT:
+					throw new JDOMException("Illegal state for XMLStreamReader. Cannot get XML Fragment for state END_ELEMENT" );
+
+				case START_ELEMENT:
+					Element emt = processElementFragment(factory, stream);
+					stream.next();
+					return emt;
+
+				case DTD:
+					Content dt = DTDParser.parse(stream.getText(), factory);
+					stream.next();
+					return dt;
+
+				case CDATA:
+					Content cd = factory.cdata(stream.getText());
+					stream.next();
+					return cd;
+
+				case SPACE:
+				case CHARACTERS:
+					Content txt = factory.text(stream.getText());
+					stream.next();
+					return txt;
+
+				case COMMENT:
+					Content comment = factory.comment(stream.getText());
+					stream.next();
+					return comment;
+
+				case ENTITY_REFERENCE:
+					Content er = factory.entityRef(stream.getLocalName());
+					stream.next();
+					return er;
+
+				case PROCESSING_INSTRUCTION:
+					Content pi = factory.processingInstruction(
+							stream.getPITarget(), stream.getPIData());
+					stream.next();
+					return pi;
+
+				default:
+					throw new JDOMException("Unexpected XMLStream event " + stream.getEventType());
+
+			}
+		} catch (final XMLStreamException xse) {
+			throw new JDOMException("Unable to process XMLStream. See Cause.", xse);
+		}
+	}
+
+	private static final Element processElementFragment(final JDOMFactory factory, 
+			final XMLStreamReader reader) throws XMLStreamException, JDOMException {
+
+		if (XMLStreamConstants.START_ELEMENT != reader.getEventType()) {
+			throw new JDOMException("JDOM requires that the XMLStreamReader " +
+					"is at the START_ELEMENT state when retrieving an " +
+					"Element Fragment.");
+		}
+		
+		final Element fragment = processElement(factory, reader);
+		Element current = fragment;
+		int depth = 1;
+		while (depth > 0 && reader.hasNext()) {
+			switch(reader.next()) {
+				case START_ELEMENT:
+					Element tmp = processElement(factory, reader);
+					current.addContent(tmp);
+					current = tmp;
+					depth++;
+					break;
+				case END_ELEMENT:
+					current = current.getParentElement();
+					depth--;
+					break;
+				case CDATA:
+					current.addContent(factory.cdata(reader.getText()));
+					break;
+
+				case SPACE:
+				case CHARACTERS:
+					current.addContent(factory.text(reader.getText()));
+					break;
+
+				case COMMENT:
+					current.addContent(factory.comment(reader.getText()));
+					break;
+
+				case ENTITY_REFERENCE:
+					current.addContent(factory.entityRef(reader.getLocalName()));
+					break;
+
+				case PROCESSING_INSTRUCTION:
+					current.addContent(factory.processingInstruction(
+							reader.getPITarget(), reader.getPIData()));
+					break;
+
+				default:
+					throw new JDOMException("Unexpected XMLStream event " + reader.getEventType());
+			}
+			
+		}
+		
+		return fragment;
+	}
+
 	private static final Element processElement(final JDOMFactory factory, 
 			final XMLStreamReader reader) {
 
@@ -234,7 +505,7 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 					reader.getAttributeValue(i), 
 					AttributeType.getAttributeType(reader.getAttributeType(i)),
 					Namespace.getNamespace(reader.getAttributePrefix(i),
-										   reader.getAttributeNamespace(i))));
+							reader.getAttributeNamespace(i))));
 		}
 
 		// Handle Namespaces
@@ -248,14 +519,14 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 
 
 	/** The factory to use for parsing */
-	private JDOMFactory factory = new DefaultJDOMFactory();
-	
+	private JDOMFactory builderfactory = new DefaultJDOMFactory();
+
 	/**
 	 * Returns the current {@link org.jdom2.JDOMFactory} in use.
 	 * @return the factory in use
 	 */
 	public JDOMFactory getFactory() {
-		return factory;
+		return builderfactory;
 	}
 
 	/**
@@ -265,9 +536,9 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 	 * @param factory <code>JDOMFactory</code> to use
 	 */
 	public void setFactory(JDOMFactory factory) {
-		this.factory = factory;
+		this.builderfactory = factory;
 	}
-	
+
 	/**
 	 * This builds a document from the supplied
 	 * XMLStreamReader.
@@ -279,7 +550,33 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 	 * @throws JDOMException when errors occur in parsing
 	 */
 	public Document build(XMLStreamReader reader) throws JDOMException {
-		return process(factory, reader);
+		return process(builderfactory, reader);
 	}
 	
+	/**
+	 * Read the entire XMLStreamReader and from it build a list of Content that
+	 * conforms to the rules in the supplied StAXFilter.
+	 * @param reader The XMLStreamReader to parse
+	 * @param filter The Filter to use for the Content
+	 * @return a List of Content that were identified by the supplied filter
+	 * @throws JDOMException if there was a parsing problem.
+	 */
+	public List<Content> buildFragments(XMLStreamReader reader, StAXFilter filter) throws JDOMException {
+		return processFragments(builderfactory, reader, filter);
+	}
+
+	
+	/**
+	 * Read the current XML Fragment from the XMLStreamReader.
+	 * The XMLStreamReader must be at some 'content' state, it cannot be
+	 * at START_DOCUMENT, for example.
+	 * @param reader The XMLStreamReader to read the next fragment from
+	 * @return The JDOM fragment at the current position in the reader
+	 * @throws JDOMException if there is an issue with the state of the
+	 * XMLStreamReader or some other issue with the processing.
+	 */
+	public Content fragment(XMLStreamReader reader) throws JDOMException {
+		return processFragment(builderfactory, reader);
+	}
+
 }
