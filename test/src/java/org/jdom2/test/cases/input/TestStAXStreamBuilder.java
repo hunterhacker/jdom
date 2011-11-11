@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
-public class TestStAXBuilder {
+public class TestStAXStreamBuilder {
 
 	@Test
 	public void testStAXBuilder() {
