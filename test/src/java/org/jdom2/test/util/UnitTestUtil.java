@@ -298,4 +298,15 @@ public class UnitTestUtil {
     				" but got a " + got.getClass().getName() + " instead");
     	}
     }
+
+    /**
+     * Call this if you have an exception you want to fail for!
+     * @param message
+     * @param t
+     */
+	public static void failException(String message, Throwable t) {
+		AssertionError tothrow = new AssertionError(message);
+		tothrow.initCause(t);
+		throw tothrow;
+	}
 }
