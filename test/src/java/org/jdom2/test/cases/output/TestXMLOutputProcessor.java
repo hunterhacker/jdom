@@ -8,6 +8,8 @@ import java.io.Writer;
 import org.jdom2.IllegalDataException;
 import org.jdom2.output.AbstractXMLOutputProcessor;
 import org.jdom2.output.Format;
+import org.jdom2.output.FormatStack;
+
 import org.junit.Test;
 
 /**

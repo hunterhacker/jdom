@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.CharArrayWriter;
 import java.io.File;
@@ -15,15 +14,20 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jdom2.*;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import org.jdom2.Content;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.input.DefaultStAXFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
-import org.junit.Ignore;
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class TestStAXStreamBuilder {
@@ -66,6 +70,12 @@ public class TestStAXStreamBuilder {
 	}
 	
 	@Test
+	@Ignore
+	public void testDocTypeDocumentSimpleExpand() {
+		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", true);
+	}
+	
+	@Test
 	public void testComplexDocumentExpand() {
 		checkStAX("test/resources/DOMBuilder/complex.xml", true);
 	}
@@ -93,6 +103,11 @@ public class TestStAXStreamBuilder {
 	@Test
 	public void testDocTypeDocument() {
 		checkStAX("test/resources/DOMBuilder/doctype.xml", false);
+	}
+	
+	@Test
+	public void testDocTypeSimpleDocument() {
+		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", false);
 	}
 	
 	@Test
@@ -137,8 +152,7 @@ public class TestStAXStreamBuilder {
 			assertEquals("ROOT SAX to StAXReader FragmentList", toString(saxroot), toString(fragroot));
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Could not parse file '" + filename + "': " + e.getMessage());
+			UnitTestUtil.failException("Could not parse file '" + filename + "': " + e.getMessage(), e);
 		}
 	}
 	

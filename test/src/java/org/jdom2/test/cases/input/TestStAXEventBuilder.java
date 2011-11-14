@@ -14,14 +14,18 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jdom2.*;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXEventBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
-import org.junit.Ignore;
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class TestStAXEventBuilder {
@@ -59,8 +63,14 @@ public class TestStAXEventBuilder {
 	
 	@Test
 	@Ignore
+	// TODO
 	public void testDocTypeDocumentExpand() {
 		checkStAX("test/resources/DOMBuilder/doctype.xml", true);
+	}
+	
+	@Test
+	public void testDocTypeDocumentSimpleExpand() {
+		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", true);
 	}
 	
 	@Test
@@ -91,6 +101,11 @@ public class TestStAXEventBuilder {
 	@Test
 	public void testDocTypeDocument() {
 		checkStAX("test/resources/DOMBuilder/doctype.xml", false);
+	}
+	
+	@Test
+	public void testDocTypeSimpleDocument() {
+		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", false);
 	}
 	
 	@Test

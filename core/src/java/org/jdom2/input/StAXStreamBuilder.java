@@ -65,7 +65,6 @@ import javax.xml.stream.XMLStreamReader;
 import org.jdom2.AttributeType;
 import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
-import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -128,7 +127,6 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 
 			final Document document = factory.document(null);
 
-
 			while (state != XMLStreamConstants.END_DOCUMENT) {
 				switch (state) {
 
@@ -144,9 +142,8 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 						break;
 
 					case DTD:
-						final DocType dtype = DTDParser.parse(
-								stream.getText(), factory);
-						document.setDocType(dtype);
+						document.setDocType(DTDParser.parse(
+								stream.getText(), factory));
 						break;
 
 					case START_ELEMENT:
