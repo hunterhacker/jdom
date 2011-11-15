@@ -326,7 +326,7 @@ public abstract class AbstractStAXStreamProcessor implements StAXStreamProcessor
 	protected String textTrimFullWhite(final String str) {
 		int right = str.length();
 		while (--right >= 0 && Verifier.isXMLWhitespace(str.charAt(right))) {
-			right--;
+			// do nothing .. decrement is in the loop.
 		}
 		if (right < 0) {
 			return "";
@@ -454,7 +454,14 @@ public abstract class AbstractStAXStreamProcessor implements StAXStreamProcessor
 			}
 		}
 		
-		printContent(out, fstack, nstack, doc.getContent());
+		if (doc.hasRootElement()) {
+			printContent(out, fstack, nstack, doc.getContent());
+		} else {
+			final int sz = doc.getContentSize();
+			for (int i = 0; i < sz; i++) {
+				helperContentDispatcher(out, fstack, nstack, doc.getContent(i));
+			}
+		}
 		// Output final line separator
 		// We output this no matter what the newline flags say
 		if (fstack.getIndent() == null && fstack.getLineSeparator() != null) {
@@ -600,13 +607,25 @@ public abstract class AbstractStAXStreamProcessor implements StAXStreamProcessor
 				break;
 			case NORMALIZE:
 				text = textCompact(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
 			case TRIM:
 				text = textTrimBoth(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
 			case TRIM_FULL_WHITE:
 				text = textTrimFullWhite(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
+		}
+		if (text == null) {
+			return;
 		}
 		out.writeCData(text);
 	}

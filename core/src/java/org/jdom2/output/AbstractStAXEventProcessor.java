@@ -380,7 +380,7 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 	protected String textTrimFullWhite(final String str) {
 		int right = str.length();
 		while (--right >= 0 && Verifier.isXMLWhitespace(str.charAt(right))) {
-			right--;
+			// decrement is in the condition.
 		}
 		if (right < 0) {
 			return "";
@@ -494,15 +494,33 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 
 		if (fstack.isOmitDeclaration()) {
 			// this actually writes the declaration as version 1, UTF-8
-			out.add(eventfactory.createStartDocument());
+			out.add(eventfactory.createStartDocument(null, null));
 		} else if (fstack.isOmitEncoding()) {
-			out.add(eventfactory.createStartDocument("1.0"));
+			out.add(eventfactory.createStartDocument(null, "1.0"));
+			if (fstack.getLineSeparator() != null) {
+				out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+			}
 		} else {
 			out.add(eventfactory.createStartDocument(fstack.getEncoding(), "1.0"));
+			if (fstack.getLineSeparator() != null) {
+				out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+			}
 		}
 		
-		printContent(out, fstack, nstack, eventfactory, doc.getContent());
+		if (doc.hasRootElement()) {
+			printContent(out, fstack, nstack, eventfactory, doc.getContent());
+		} else {
+			final int sz = doc.getContentSize();
+			for (int i = 0; i < sz; i++) {
+				helperContentDispatcher(out, fstack, nstack, eventfactory, doc.getContent(i));
+			}
+		}
 		
+		// Output final line separator
+		// We output this no matter what the newline flags say
+		if (fstack.getIndent() == null && fstack.getLineSeparator() != null) {
+			out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+		}
 		out.add(eventfactory.createEndDocument());
 		
 	}
@@ -652,15 +670,26 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 				break;
 			case NORMALIZE:
 				text = textCompact(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
 			case TRIM:
 				text = textTrimBoth(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
 			case TRIM_FULL_WHITE:
 				text = textTrimFullWhite(text);
+				if (text.length() == 0) {
+					text = null;
+				}
 				break;
 		}
-		out.add(eventfactory.createCData(text));
+		if (text != null) {
+			out.add(eventfactory.createCData(text));
+		}
 	}
 
 	/**
@@ -841,11 +870,18 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 						try {
 							fstack.setTextMode(textmode);
 							
+							if (fstack.getLevelIndent() != null && fstack.getLineSeparator() != null) {
+								out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+							}
 							printContent(out, fstack, nstack, eventfactory, content);
 							
 						} finally {
 							fstack.pop();
 						}
+						if (fstack.getLevelIndent() != null  && fstack.getLineSeparator() != null) {
+							out.add(eventfactory.createCharacters(fstack.getLevelIndent()));
+						}
+						
 					}
 				}
 			
@@ -938,12 +974,24 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 						// 'trimming' variants, if it is all whitespace we do
 						// not want to even print the indent/newline.
 						if (!isAllWhiteSpace(content, txti, index - txti)) {
+							if (fstack.getLevelIndent() != null) {
+								out.add(eventfactory.createCharacters(fstack.getLevelIndent()));
+							}
 							helperTextType(out, fstack, eventfactory, content, txti, index - txti);
+							if (fstack.getLevelIndent() != null && fstack.getLineSeparator() != null) {
+								out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+							}
 						}
 					}
 					txti = -1;
 
+					if (fstack.getLevelIndent() != null) {
+						out.add(eventfactory.createCharacters(fstack.getLevelIndent()));
+					}
 					helperContentDispatcher(out, fstack, nstack, eventfactory, c);
+					if (fstack.getLevelIndent() != null && fstack.getLineSeparator() != null) {
+						out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+					}
 			}
 			index++;
 		}
@@ -955,7 +1003,13 @@ public abstract class AbstractStAXEventProcessor implements StAXEventProcessor {
 			// 'trimming' variants, if it is all whitespace we do
 			// not want to even print the indent/newline.
 			if (!isAllWhiteSpace(content, txti, index - txti)) {
+				if (fstack.getLevelIndent() != null) {
+					out.add(eventfactory.createCharacters(fstack.getLevelIndent()));
+				}
 				helperTextType(out, fstack, eventfactory, content, txti, index - txti);
+				if (fstack.getLevelIndent() != null && fstack.getLineSeparator() != null) {
+					out.add(eventfactory.createCharacters(fstack.getLineSeparator()));
+				}
 			}
 		}
 

@@ -987,7 +987,14 @@ public abstract class AbstractXMLOutputProcessor implements XMLOutputProcessor {
 
 		printDeclaration(out, fstack);
 
-		printContent(out, fstack, nstack, doc.getContent());
+		if (doc.hasRootElement()) {
+			printContent(out, fstack, nstack, doc.getContent());
+		} else {
+			final int sz = doc.getContentSize();
+			for (int i = 0; i < sz; i++) {
+				helperContentDispatcher(out, fstack, nstack, doc.getContent(i));
+			}
+		}
 
 		// Output final line separator
 		// We output this no matter what the newline flags say

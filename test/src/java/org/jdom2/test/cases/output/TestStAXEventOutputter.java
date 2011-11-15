@@ -9,23 +9,21 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
-import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Method;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.stream.util.XMLEventConsumer;
-import javax.xml.transform.Result;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,7 +43,6 @@ import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
-import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.UncheckedJDOMFactory;
@@ -62,10 +59,102 @@ import org.jdom2.output.StAXEventProcessor;
 import org.jdom2.output.XMLOutputter;
 
 @SuppressWarnings("javadoc")
-public final class TestStAXEventOutputter {
+public final class TestStAXEventOutputter extends AbstractTestOutputter {
 
 	private final static XMLOutputFactory soutfactory = XMLOutputFactory.newInstance();
 	private final static XMLInputFactory sinfactory = XMLInputFactory.newInstance();
+	private final static XMLEventFactory seventfactory = XMLEventFactory.newInstance();
+	
+	private static final class OutWrapper {
+		private final StringWriter swriter = new StringWriter();
+		
+		private final StAXEventOutputter stax;
+		private final XMLEventWriter xwriter;
+		private int from = 0, to = -1;
+		
+		public OutWrapper(Format format) {
+			try {
+				xwriter = soutfactory.createXMLEventWriter(swriter);
+				stax = new StAXEventOutputter(format);
+			} catch (Exception xse) {
+				throw new IllegalStateException("Cannot construct: See Cause", xse);
+			}
+		}
+		
+		@Override
+		public String toString() {
+			return to >= 0 ? swriter.getBuffer().substring(from, to) :
+				swriter.getBuffer().substring(from);
+		}
+		
+		
+		
+		public StAXEventOutputter getStax() {
+			return stax;
+		}
+
+		public void close() {
+			try {
+				xwriter.close();
+			} catch (XMLStreamException e) {
+				throw new IllegalStateException("Cannot flush(): See Cause", e);
+			}
+		}
+
+		public XMLEventWriter getStream() {
+			return xwriter;
+		}
+
+		public void setDocumentMarkFrom() {
+			try {
+				xwriter.add(seventfactory.createStartDocument());
+				xwriter.add(seventfactory.createCharacters(""));
+				xwriter.flush();
+			} catch (XMLStreamException e) {
+				throw new IllegalStateException("Cannot flush(): See Cause", e);
+			}
+			from = swriter.getBuffer().length();
+		}
+
+		public void setDocumentMarkTo() {
+			try {
+				xwriter.add(seventfactory.createCharacters(""));
+				xwriter.flush();
+				to = swriter.getBuffer().length();
+				xwriter.add(seventfactory.createEndDocument());
+			} catch (XMLStreamException e) {
+				throw new IllegalStateException("Cannot flush(): See Cause", e);
+			}
+		}
+		
+		public void setElementMarkFrom() {
+			try {
+				xwriter.add(seventfactory.createStartDocument());
+				xwriter.add(seventfactory.createStartElement("", "", "root"));
+				xwriter.add(seventfactory.createCharacters(""));
+				xwriter.flush();
+				from = swriter.getBuffer().length();
+			} catch (XMLStreamException e) {
+				throw new IllegalStateException("Cannot flush(): See Cause", e);
+			}
+		}
+
+		public void setElementMarkTo() {
+			try {
+				xwriter.add(seventfactory.createCharacters(""));
+				xwriter.flush();
+				to = swriter.getBuffer().length();
+				xwriter.add(seventfactory.createEndElement("", "", "root"));
+				xwriter.add(seventfactory.createEndDocument());
+				xwriter.flush();
+				xwriter.close();
+			} catch (XMLStreamException e) {
+				throw new IllegalStateException("Cannot flush(): See Cause", e);
+			}
+		}
+		
+	}
+	
 	
 	private static final class EventStore implements XMLEventConsumer {
 		private final ArrayList<XMLEvent> store = new ArrayList<XMLEvent>();
@@ -97,8 +186,159 @@ public final class TestStAXEventOutputter {
 			
 		}
 	}
+	
+	public TestStAXEventOutputter() {
+		super(false, false, true, true);
+	}
+	
+	
+	@Override
+	public String outputString(Format format, Document doc) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.getStax().output(doc, ow.getStream());
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
 
-    @Test
+
+
+
+	@Override
+	public String outputString(Format format, DocType doctype) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setDocumentMarkFrom();
+			ow.getStax().output(doctype, ow.getStream());
+			ow.setDocumentMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, Element element) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setDocumentMarkFrom();
+			ow.getStax().output(element, ow.getStream());
+			ow.setDocumentMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, List<? extends Content> list) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setElementMarkFrom();
+			ow.getStax().output(list, ow.getStream());
+			ow.setElementMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, CDATA cdata) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setElementMarkFrom();
+			ow.getStax().output(cdata, ow.getStream());
+			ow.setElementMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, Text text) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setElementMarkFrom();
+			ow.getStax().output(text, ow.getStream());
+			ow.setElementMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, Comment comment) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setDocumentMarkFrom();
+			ow.getStax().output(comment, ow.getStream());
+			ow.setDocumentMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, ProcessingInstruction pi) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setDocumentMarkFrom();
+			ow.getStax().output(pi, ow.getStream());
+			ow.setDocumentMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputString(Format format, EntityRef entity) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setElementMarkFrom();
+			ow.getStax().output(entity, ow.getStream());
+			ow.setElementMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public String outputElementContentString(Format format, Element element) {
+		OutWrapper ow = new OutWrapper(format);
+		try {
+			ow.setElementMarkFrom();
+			ow.getStax().outputElementContent(element, ow.getStream());
+			ow.setElementMarkTo();
+		} catch (XMLStreamException e) {
+			throw new IllegalStateException(e);
+		}
+		ow.close();
+		return ow.toString();
+	}
+
+	@Override
+	public void testOutputDocumentOmitDeclaration() {
+		// skip this test.
+	}
+
+	@Test
     public void test_HighSurrogatePair() throws XMLStreamException, IOException, JDOMException {
       SAXBuilder builder = new SAXBuilder();
       builder.setExpandEntities(true);
@@ -109,8 +349,8 @@ public final class TestStAXEventOutputter {
       EventStore es = new EventStore("ISO-8859-1");
       outputter.output(doc, es);
       String xml = es.toString();
-      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + 
-                   "<root>&#xd800;&#xdc00; &#xd800;&#xdc00;</root>", xml);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" + 
+                   "<root>&#xd800;&#xdc00; &#xd800;&#xdc00;</root>\r\n", xml);
     }
 
     @Test
@@ -123,8 +363,8 @@ public final class TestStAXEventOutputter {
       EventStore es = new EventStore("ISO-8859-1");
       outputter.output(doc, es);
       String xml = es.toString();
-      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + 
-                   "<root>&#xd800;&#xdc00; &#xd800;&#xdc00;</root>", xml);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" + 
+                   "<root>&#xd800;&#xdc00; &#xd800;&#xdc00;</root>\r\n", xml);
     }
 
     @Test
@@ -137,8 +377,8 @@ public final class TestStAXEventOutputter {
       EventStore es = new EventStore("ISO-8859-1");
       outputter.output(doc, es);
       String xml = es.toString();
-      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                   "<root att=\"&#xd800;&#xdc00; &#xd800;&#xdc00;\"></root>", xml);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" +
+                   "<root att=\"&#xd800;&#xdc00; &#xd800;&#xdc00;\"></root>\r\n", xml);
     }
 
     @Test
@@ -151,8 +391,8 @@ public final class TestStAXEventOutputter {
       EventStore es = new EventStore("ISO-8859-1");
       outputter.output(doc, es);
       String xml = es.toString();
-      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + 
-                   "<root att=\"&#xd800;&#xdc00; &#xd800;&#xdc00;\"></root>", xml);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" + 
+                   "<root att=\"&#xd800;&#xdc00; &#xd800;&#xdc00;\"></root>\r\n", xml);
     }
 
     // Construct a raw surrogate pair character and confirm it outputs hex escaped
@@ -166,8 +406,8 @@ public final class TestStAXEventOutputter {
       EventStore es = new EventStore("ISO-8859-1");
       outputter.output(doc, es);
       String xml = es.toString();
-      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                   "<root>&#xd800;&#xdc00;</root>", xml);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" +
+                   "<root>&#xd800;&#xdc00;</root>\r\n", xml);
     }
 
     // Construct a raw surrogate pair character and confirm it outputs hex escaped, when UTF-8 too
@@ -291,340 +531,6 @@ public final class TestStAXEventOutputter {
 	}
 
 	@Test
-	public void testOutputText() {
-		checkOutput(new Text(" hello  there  "), " hello  there  ", "hello there", "hello  there", " hello  there  ");
-	}
-
-	@Test
-	public void testOutputCDATA() {
-		String indata = "   hello   there  bozo !   ";
-		String rawcdata   = "<![CDATA[   hello   there  bozo !   ]]>";
-		String compdata   = "<![CDATA[hello there bozo !]]>";
-		String prettydata = "<![CDATA[hello   there  bozo !]]>";
-		String trimdata   = "<![CDATA[   hello   there  bozo !   ]]>";
-		
-		checkOutput(new CDATA(indata), rawcdata, compdata, prettydata, trimdata);
-	}
-
-	@Test
-	public void testOutputComment() {
-		String incomment = "   hello   there  bozo !   ";
-		String outcomment = "<!--" + incomment + "-->";
-		checkOutput(new Comment(incomment), outcomment, outcomment, outcomment, outcomment);
-	}
-
-	@Test
-	public void testOutputProcessingInstructionSimple() {
-		ProcessingInstruction inpi = new ProcessingInstruction("jdomtest", "");
-		String outpi = "<?jdomtest?>";
-		checkOutput(inpi, outpi, outpi, outpi, outpi);
-	}
-
-	@Test
-	public void testOutputProcessingInstructionData() {
-		String pi = "  hello   there  ";
-		ProcessingInstruction inpi = new ProcessingInstruction("jdomtest", pi);
-		String outpi = "<?jdomtest " + pi + "?>";
-		checkOutput(inpi, outpi, outpi, outpi, outpi);
-	}
-
-	@Test
-	public void testOutputEntityRef() {
-		checkOutput(new EntityRef("name", "publicID", "systemID"),
-				"&name;", "&name;", "&name;", "&name;");
-	}
-
-	@Test
-	public void testOutputElementSimple() {
-		String txt = "<root/>";
-		checkOutput(new Element("root"), txt, txt, txt, txt);
-	}
-
-	@Test
-	public void testOutputElementAttribute() {
-		String txt = "<root att=\"val\"/>";
-		checkOutput(new Element("root").setAttribute("att", "val"), txt, txt, txt, txt);
-	}
-
-	@Test
-	public void testOutputElementCDATA() {
-		String txt = "<root><![CDATA[xx]]></root>";
-		Element root = new Element("root");
-		root.addContent(new CDATA("xx"));
-		checkOutput(root, txt, txt, txt, txt);
-	}
-
-	@Test
-	public void testOutputElementExpandEmpty() {
-		String txt = "<root></root>";
-		FormatSetup setup = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(new Element("root"), setup, txt, txt, txt, txt);
-	}
-
-	@Test
-	public void testOutputElementPreserveSpace() {
-		String txt = "<root xml:space=\"preserve\">    <child xml:space=\"default\">abc</child> </root>";
-		Element root = new Element("root");
-		root.setAttribute("space", "preserve", Namespace.XML_NAMESPACE);
-		root.addContent("    ");
-		Element child = new Element("child");
-		child.setAttribute("space", "default", Namespace.XML_NAMESPACE);
-		child.addContent("abc");
-		root.addContent(child);
-		root.addContent(" ");
-		checkOutput(root, txt, txt, txt, txt);
-	}
-	
-	@Test
-	@Ignore
-	//TODO
-	public void testOutputElementIgnoreTrAXEscapingPIs() {
-		Element root = new Element("root");
-		root.addContent(new Text("&"));
-		root.addContent(new ProcessingInstruction(Result.PI_DISABLE_OUTPUT_ESCAPING, ""));
-		root.addContent(new Text(" && "));
-		root.addContent(new ProcessingInstruction(Result.PI_ENABLE_OUTPUT_ESCAPING, ""));
-		root.addContent(new Text("&"));
-		String expect = "<root>&amp; && &amp;</root>";
-		String excompact = "<root>&amp;&&&amp;</root>";
-		String expretty = "<root>\n  &amp;\n  \n  &&\n  \n  &amp;\n</root>";
-		String extfw = "<root>\n  &amp;\n  \n   && \n  \n  &amp;\n</root>";
-		checkOutput(root,
-				expect, 
-				excompact, 
-				expretty, 
-				extfw);
-	}
-	
-
-	@Test
-	public void testOutputElementMultiText() {
-		Element root = new Element("root");
-		root.addContent(new CDATA(" "));
-		root.addContent(new Text(" xx "));
-		root.addContent(new Text("yy"));
-		root.addContent(new Text("    "));
-		root.addContent(new Text("zz"));
-		root.addContent(new Text("  ww"));
-		root.addContent(new EntityRef("amp"));
-		root.addContent(new Text("vv"));
-		root.addContent(new Text("  "));
-		checkOutput(root,
-				"<root><![CDATA[ ]]> xx yy    zz  ww&amp;vv  </root>", 
-				"<root>xx yy zz ww&amp;vv</root>",
-				"<root>xx yy    zz  ww&amp;vv</root>",
-				// This should be changed with issue #31.
-				// The real value should have one additional
-				// space at the beginning and two at the end
-				// for now we leave the broken test here because it
-				// helps with the coverage reports.
-				// the next test is added to be a failing test.
-				"<root><![CDATA[ ]]> xx yy    zz  ww&amp;vv  </root>");
-	}
-
-	@Test
-	public void testOutputElementMultiAllWhite() {
-		Element root = new Element("root");
-		root.addContent(new CDATA(" "));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("    "));
-		root.addContent(new Text(""));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("  \n \n "));
-		root.addContent(new Text("  \t "));
-		root.addContent(new Text("  "));
-		checkOutput(root,
-				"<root><![CDATA[ ]]>        \n \n   \t   </root>", 
-				"<root/>",
-				"<root/>",
-				"<root/>");
-	}
-
-	@Test
-	public void testOutputElementMultiAllWhiteExpandEmpty() {
-		Element root = new Element("root");
-		root.addContent(new CDATA(" "));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("    "));
-		root.addContent(new Text(""));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("  \n \n "));
-		root.addContent(new Text("  \t "));
-		root.addContent(new Text("  "));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><![CDATA[ ]]>        \n \n   \t   </root>", 
-				"<root></root>",
-				"<root></root>",
-				"<root></root>");
-	}
-
-	@Test
-	public void testOutputElementMultiMostWhiteExpandEmpty() {
-		// this test has mixed content (text-type and not text type).
-		// and, it has a multi-text-type at the end.
-		Element root = new Element("root");
-		root.addContent(new CDATA(" "));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("    "));
-		root.addContent(new Text(""));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("  \n \n "));
-		root.addContent(new Comment("Boo"));
-		root.addContent(new Text("  \t "));
-		root.addContent(new Text("  "));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><![CDATA[ ]]>        \n \n <!--Boo-->  \t   </root>", 
-				"<root><!--Boo--></root>",
-				"<root>\n  <!--Boo-->\n</root>",
-				"<root>\n  <!--Boo-->\n</root>");
-	}
-
-	@Test
-	public void testOutputElementMixedMultiCDATA() {
-		// this test has mixed content (text-type and not text type).
-		// and, it has a multi-text-type at the end.
-		Element root = new Element("root");
-		root.addContent(new Comment("Boo"));
-		root.addContent(new Text(" "));
-		root.addContent(new CDATA("A"));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><!--Boo--> <![CDATA[A]]></root>", 
-				"<root><!--Boo--><![CDATA[A]]></root>",
-				"<root>\n  <!--Boo-->\n  <![CDATA[A]]>\n</root>",
-				"<root>\n  <!--Boo-->\n   <![CDATA[A]]>\n</root>");
-	}
-
-	@Test
-	public void testOutputElementMixedMultiEntityRef() {
-		// this test has mixed content (text-type and not text type).
-		// and, it has a multi-text-type at the end.
-		Element root = new Element("root");
-		root.addContent(new Comment("Boo"));
-		root.addContent(new Text(" "));
-		root.addContent(new EntityRef("aer"));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><!--Boo--> &aer;</root>", 
-				"<root><!--Boo-->&aer;</root>",
-				"<root>\n  <!--Boo-->\n  &aer;\n</root>",
-				"<root>\n  <!--Boo-->\n   &aer;\n</root>");
-	}
-
-	@Test
-	public void testOutputElementMixedMultiText() {
-		// this test has mixed content (text-type and not text type).
-		// and, it has a multi-text-type at the end.
-		Element root = new Element("root");
-		root.addContent(new Comment("Boo"));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("txt"));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><!--Boo--> txt</root>", 
-				"<root><!--Boo-->txt</root>",
-				"<root>\n  <!--Boo-->\n  txt\n</root>",
-				"<root>\n  <!--Boo-->\n   txt\n</root>");
-	}
-
-	@Test
-	public void testOutputElementMixedMultiZeroText() {
-		// this test has mixed content (text-type and not text type).
-		// and, it has a multi-text-type at the end.
-		Element root = new Element("root");
-		root.addContent(new Comment("Boo"));
-		root.addContent(new Text(""));
-		root.addContent(new Text(" "));
-		root.addContent(new Text(""));
-		root.addContent(new Text("txt"));
-		root.addContent(new Text(""));
-		FormatSetup fs = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setExpandEmptyElements(true);
-				fmt.setLineSeparator("\n");
-			}
-		};
-		checkOutput(root, fs,  
-				"<root><!--Boo--> txt</root>", 
-				"<root><!--Boo-->txt</root>",
-				"<root>\n  <!--Boo-->\n  txt\n</root>",
-				"<root>\n  <!--Boo-->\n   txt\n</root>");
-	}
-
-	@Test
-	public void testOutputElementMultiEntityLeftRight() {
-		Element root = new Element("root");
-		root.addContent(new EntityRef("erl"));
-		root.addContent(new Text(" "));
-		root.addContent(new Text("    "));
-		root.addContent(new EntityRef("err"));
-		checkOutput(root,
-				"<root>&erl;     &err;</root>", 
-				"<root>&erl; &err;</root>",
-				"<root>&erl;     &err;</root>",
-				"<root>&erl;     &err;</root>");
-	}
-
-	@Test
-	public void testOutputElementMultiTrimLeftRight() {
-		Element root = new Element("root");
-		root.addContent(new Text(" tl "));
-		root.addContent(new Text(" mid "));
-		root.addContent(new Text(" tr "));
-		checkOutput(root,
-				"<root> tl  mid  tr </root>", 
-				"<root>tl mid tr</root>",
-				"<root>tl  mid  tr</root>",
-				"<root> tl  mid  tr </root>");
-	}
-
-	@Test
-	public void testOutputElementMultiCDATALeftRight() {
-		Element root = new Element("root");
-		root.addContent(new CDATA(" tl "));
-		root.addContent(new Text(" mid "));
-		root.addContent(new CDATA(" tr "));
-		checkOutput(root,
-				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>", 
-				"<root><![CDATA[tl]]> mid <![CDATA[tr]]></root>",
-				"<root><![CDATA[tl ]]> mid <![CDATA[ tr]]></root>",
-				"<root><![CDATA[ tl ]]> mid <![CDATA[ tr ]]></root>");
-	}
-
-	@Test
 	public void testTrimFullWhite() throws XMLStreamException {
 		// See issue #31.
 		// https://github.com/hunterhacker/jdom/issues/31
@@ -642,193 +548,6 @@ public final class TestStAXEventOutputter {
 	}
 
 	@Test
-	public void testOutputElementNamespaces() {
-		String txt = "<ns:root xmlns:ns=\"myns\" xmlns:ans=\"attributens\" xmlns:two=\"two\" ans:att=\"val\"/>";
-		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
-		Namespace ans = Namespace.getNamespace("ans", "attributens");
-		emt.setAttribute(new Attribute("att", "val", ans));
-		emt.addNamespaceDeclaration(Namespace.getNamespace("two", "two"));
-		checkOutput(emt,
-				txt, txt, txt, txt);
-	}
-
-	@Test
-	public void testOutputDocTypeSimple() {
-		checkOutput(new DocType("root"), "<!DOCTYPE root>", "<!DOCTYPE root>", "<!DOCTYPE root>", "<!DOCTYPE root>");
-	}
-
-	@Test
-	public void testOutputDocTypeInternalSubset() {
-		String dec = "<!DOCTYPE root [\ninternal]>";
-		DocType dt = new DocType("root");
-		dt.setInternalSubset("internal");
-		checkOutput(dt, dec, dec, dec, dec);
-	}
-
-	@Test
-	public void testOutputDocTypeSystem() {
-		String dec = "<!DOCTYPE root SYSTEM \"systemID\">";
-		checkOutput(new DocType("root", "systemID"), dec, dec, dec, dec);
-	}
-
-	@Test
-	public void testOutputDocTypePublic() {
-		String dec = "<!DOCTYPE root PUBLIC \"publicID\">";
-		checkOutput(new DocType("root", "publicID", null), dec, dec, dec, dec);
-	}
-
-	@Test
-	public void testOutputDocTypePublicSystem() {
-		String dec = "<!DOCTYPE root PUBLIC \"publicID\" \"systemID\">";
-		checkOutput(new DocType("root", "publicID", "systemID"), dec, dec, dec, dec);
-	}
-
-	@Test
-	public void testOutputDocumentSimple() {
-		Document doc = new Document();
-		doc.addContent(new Element("root"));
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String rtdec = "<root/>";
-		checkOutput(doc, 
-				xmldec + "\n" + rtdec + "\n", 
-				xmldec + "\n" + rtdec + "\n",
-				xmldec + "\n" + rtdec + "\n",
-				xmldec + "\n" + rtdec + "\n");
-	}
-
-	@Test
-	public void testOutputDocumentOmitEncoding() {
-		Document doc = new Document();
-		doc.addContent(new Element("root"));
-		String xmldec = "<?xml version=\"1.0\"?>";
-		FormatSetup setup = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setOmitEncoding(true);
-			}
-		};
-		String rtdec = "<root/>";
-		checkOutput(doc, setup,
-				xmldec + "\n" + rtdec + "\n", 
-				xmldec + "\n" + rtdec + "\n",
-				xmldec + "\n" + rtdec + "\n",
-				xmldec + "\n" + rtdec + "\n");
-	}
-
-	@Test
-	@Ignore
-	public void testOutputDocumentOmitDeclaration() {
-		Document doc = new Document();
-		doc.addContent(new Element("root"));
-		FormatSetup setup = new FormatSetup() {
-			@Override
-			public void setup(Format fmt) {
-				fmt.setOmitDeclaration(true);
-			}
-		};
-		String rtdec = "<root/>";
-		checkOutput(doc, setup,
-				rtdec + "\n", 
-				rtdec + "\n",
-				rtdec + "\n",
-				rtdec + "\n");
-	}
-
-	@Test
-	public void testOutputDocumentFull() {
-		DocType dt = new DocType("root");
-		Comment comment = new Comment("comment");
-		ProcessingInstruction pi = new ProcessingInstruction("jdomtest", "");
-		Element root = new Element("root");
-		Document doc = new Document();
-		doc.addContent(dt);
-		doc.addContent(comment);
-		doc.addContent(pi);
-		doc.addContent(root);
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String dtdec = "<!DOCTYPE root>";
-		String commentdec = "<!--comment-->";
-		String pidec = "<?jdomtest?>";
-		String rtdec = "<root/>";
-		String lf = "\n";
-		checkOutput(doc, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf);
-	}
-	
-	@Test
-	public void testDeepNesting() {
-		// need to get beyond 16 levels of XML.
-		DocType dt = new DocType("root");
-		Element root = new Element("root");
-		Document doc = new Document();
-		doc.addContent(dt);
-		doc.addContent(root);
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String dtdec = "<!DOCTYPE root>";
-		String lf = "\n";
-		
-		String base = xmldec + lf + dtdec + lf;
-		StringBuilder raw = new StringBuilder(base);
-		StringBuilder pretty = new StringBuilder(base);
-		raw.append("<root>");
-		pretty.append(lf);
-		pretty.append("<root>");
-		pretty.append(lf);
-		final int depth = 40;
-		int cnt = depth;
-		Parent parent = root;
-		StringBuilder indent = new StringBuilder();
-		while (--cnt > 0) {
-			Element emt = new Element("emt");
-			parent.getContent().add(emt);
-			parent = emt;
-			raw.append("<emt>");
-			indent.append("  ");
-			pretty.append(indent.toString());
-			pretty.append("<emt>");
-			pretty.append(lf);
-		}
-		
-		parent.getContent().add(new Element("bottom"));
-		raw.append("<bottom/>");
-		pretty.append(indent.toString());
-		pretty.append("  <bottom/>");
-		pretty.append(lf);
-		
-		cnt = depth;
-		while (--cnt > 0) {
-			raw.append("</emt>");
-			pretty.append(indent.toString());
-			pretty.append("</emt>");
-			indent.setLength(indent.length() - 2);
-			pretty.append(lf);
-		}
-		raw.append("</root>");
-		raw.append(lf);
-		pretty.append("</root>");
-		pretty.append(lf);
-		
-		checkOutput(doc, raw.toString(), raw.toString(), pretty.toString(), pretty.toString()); 
-	}
-	
-	@Test
-	public void testOutputElementContent() {
-		Element root = new Element("root");
-		root.addContent(new Element("child"));
-		checkOutput(root, "outputElementContent", Element.class, null, "<child/>", "<child/>", "<child/>\n", "<child/>\n");
-	}
-
-	@Test
-	public void testOutputList() {
-		List<Object> c = new ArrayList<Object>();
-		c.add(new Element("root"));
-		checkOutput(c, "output", List.class, null, "<root/>", "<root/>", "<root/>\n", "<root/>\n");
-	}
-
-	@Test
 	public void testClone() {
 		StAXEventOutputter xo = new StAXEventOutputter();
 		assertTrue(xo != xo.clone());
@@ -841,97 +560,6 @@ public final class TestStAXEventOutputter {
 		StAXEventOutputter out = new StAXEventOutputter(fmt);
 		assertNotNull(out.toString());
 	}
-	
-	private interface FormatSetup {
-		public void setup(Format fmt);
-	}
-	
-	private void checkOutput(Object content, String raw, String compact, String pretty, String trimfw) {
-		Class<?> clazz = content.getClass();
-		checkOutput(content, "output", clazz, null, raw, compact, pretty, trimfw);
-	}
-	private void checkOutput(Object content, FormatSetup setup, String raw, String compact, String pretty, String trimfw) {
-		Class<?> clazz = content.getClass();
-		checkOutput(content, "output", clazz, setup, raw, compact, pretty, trimfw);
-	}
-	
-	/**
-	 * The following method will run the output data through each of the three base
-	 * formatters, raw, compact, and pretty. It will also run each of those
-	 * formatters as the outputString(content), output(content, OutputStream)
-	 * and output(content, Writer).
-	 * 
-	 * The expectation is that the results of the three output forms (String,
-	 * OutputStream, and Writer) will be identical, and that it will match
-	 * the expected value for the appropriate formatter.
-	 * 
-	 * @param content The content to output
-	 * @param methodprefix What the methods are called
-	 * @param clazz The class used as the parameter for the methods.
-	 * @param setup A callback mechanism to modify the formatters
-	 * @param raw  What we expect the content to look like with the RAW format
-	 * @param compact What we expect the content to look like with the COMPACT format
-	 * @param pretty What we expect the content to look like with the PRETTY format
-	 * @param trimfw What we expect the content to look like with the TRIM_FULL_WHITE format
-	 */
-	private void checkOutput(Object content, String methodprefix, Class<?> clazz, 
-			FormatSetup setup, String raw, String compact, String pretty, String trimfw) {
-		Method mstream = getMethod(methodprefix, clazz, XMLStreamWriter.class);
-		
-		String[] descn   = new String[] {"Raw", "Compact", "Pretty", "TrimFullWhite"};
-		Format ftrimfw = Format.getPrettyFormat();
-		ftrimfw.setTextMode(TextMode.TRIM_FULL_WHITE);
-		Format[] formats = new Format[] {
-				getFormat(setup, Format.getRawFormat()), 
-				getFormat(setup, Format.getCompactFormat()),
-				getFormat(setup, Format.getPrettyFormat()),
-				getFormat(setup, ftrimfw)};
-		String[] result  = new String[] {raw, compact, pretty, trimfw};
-		
-		for (int i = 0; i < 4; i++) {
-			StAXEventOutputter out = new StAXEventOutputter(formats[i]);
-			CharArrayWriter caw = new CharArrayWriter(result[i].length() + 2);
-			try {
-				if (mstream != null) {
-					XMLStreamWriter xsw = soutfactory.createXMLStreamWriter(caw);
-					mstream.invoke(out, content, xsw);
-					xsw.close();
-					String rstream = caw.toString();
-					assertEquals("output OutputStream Format " + descn[i], result[i], rstream);
-				}
-				
-			} catch (Exception e) {
-				//e.printStackTrace();
-				AssertionError ae = new AssertionError("Failed to process " + descn[i] + " on content " + clazz + ": " + e.getMessage());
-				ae.initCause(e);
-				throw ae;
-			}
-		}
-	}
-	
-	private Format getFormat(FormatSetup setup, Format input) {
-		input.setLineSeparator("\n");
-		if (setup == null) {
-			return input;
-		}
-		setup.setup(input);
-		return input;
-	}
-	
-	private Method getMethod(String name, Class<?>...classes) {
-		try {
-			return StAXEventOutputter.class.getMethod(name, classes);
-		} catch (Exception e) {
-			// ignore.
-			System.out.println("Can't find " + name + ": " + e.getMessage());
-		}
-		return null;
-	}
-	
-
-	
-	
-	
 	
 	/*
 	 * The following are borrowed from the TestSAXOutputter
