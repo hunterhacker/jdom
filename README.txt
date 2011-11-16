@@ -4,6 +4,10 @@ Introduction to the JDOM project
 Please see the JDOM web site at http://jdom.org/
 and GitHub repository at https://github.com/hunterhacker/jdom/
 
+Quick-Start for JDOM2
+=====================
+See http://hunterhacker.github.com/jdom/jdom2/ for learning about JDOM2
+
 
 How to use JDOM
 ===============
