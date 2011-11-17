@@ -8,11 +8,11 @@ import static org.junit.Assert.fail;
 
 import java.io.CharArrayWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.transform.stream.StreamSource;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -126,7 +126,7 @@ public class TestStAXEventBuilder {
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
 
-			StreamSource eventsource = new StreamSource(new File(filename));
+			FileReader eventsource = new FileReader(new File(filename));
 			XMLEventReader events = inputfac.createXMLEventReader(eventsource);
 			Document eventbuild = stxb.build(events);
 			Element eventroot = eventbuild.hasRootElement() ? eventbuild.getRootElement() : null;

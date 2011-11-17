@@ -1,8 +1,20 @@
 package org.jdom2.test.cases.input;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.NoSuchElementException;
 
 import javax.xml.XMLConstants;
+
+import org.junit.Test;
+import org.xml.sax.SAXException;
+import org.xml.sax.ext.Attributes2;
+import org.xml.sax.helpers.LocatorImpl;
 
 import org.jdom2.Attribute;
 import org.jdom2.AttributeType;
@@ -18,14 +30,145 @@ import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.filter.ContentFilter;
 import org.jdom2.input.SAXHandler;
-import org.junit.Test;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.ext.Attributes2Impl;
-import org.xml.sax.helpers.LocatorImpl;
 
 @SuppressWarnings("javadoc")
 public class TestSAXHandler {
+	
+	private static final class AttributesSingleOnly implements Attributes2 {
+
+		private final String uri, localName, qName, type, value;
+		
+		public AttributesSingleOnly(String uri, String localName, String qName, String type, String value)  {
+			this.uri = uri;
+			this.localName = localName;
+			this.qName = qName;
+			this.type = type;
+			this.value = value;
+		}
+		
+		private final boolean areEquals(Object a, Object b) {
+			if (a == null && b == null) {
+				return true;
+			}
+			if (a != null) {
+				return a.equals(b);
+			}
+			return false;
+		}
+		
+		@Override
+		public int getIndex(String puri, String plocalName) {
+			return areEquals(uri, puri) && areEquals(localName, plocalName) ?
+					0 : -1;
+		}
+
+		@Override
+		public int getIndex(String pqName) {
+			return areEquals(qName, pqName) ? 0 : -1;
+		}
+
+		@Override
+		public int getLength() {
+			return 1;
+		}
+
+		@Override
+		public String getLocalName(int index) {
+			if (index == 0) {
+				return localName;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public String getQName(int index) {
+			if (index == 0) {
+				return qName;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public String getType(int index) {
+			if (index == 0) {
+				return type;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public String getType(String puri, String plocalName) {
+			return getType(getIndex(puri, plocalName));
+		}
+
+		@Override
+		public String getType(String pqName) {
+			return getType(getIndex(pqName));
+		}
+
+		@Override
+		public String getURI(int index) {
+			if (index == 0) {
+				return uri;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public String getValue(int index) {
+			if (index == 0) {
+				return value;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public String getValue(String puri, String plocalName) {
+			return getValue(getIndex(puri, plocalName));
+		}
+
+		@Override
+		public String getValue(String pqName) {
+			return getType(getIndex(pqName));
+		}
+
+		@Override
+		public boolean isDeclared(int index) {
+			if (index == 0) {
+				return true;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public boolean isDeclared(String puri, String plocalName) {
+			return isDeclared(getIndex(puri, plocalName));
+		}
+
+		@Override
+		public boolean isDeclared(String pqName) {
+			return isDeclared(getIndex(pqName));
+		}
+
+		@Override
+		public boolean isSpecified(int index) {
+			if (index == 0) {
+				return true;
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public boolean isSpecified(String puri, String plocalName) {
+			return isSpecified(getIndex(puri, plocalName));
+		}
+
+		@Override
+		public boolean isSpecified(String pqName) {
+			return isSpecified(getIndex(pqName));
+		}
+
+	}
 	
 	private class MyHandler extends SAXHandler {
 		private MyHandler () {
@@ -37,7 +180,7 @@ public class TestSAXHandler {
 		}
 	}
 
-	private static final Attributes EMPTYATTRIBUTES = new Attributes2Impl();
+	private static final Attributes2 EMPTYATTRIBUTES = new org.xml.sax.ext.Attributes2Impl();
 
 	private static final void assertMatches(String pattern, String value) {
 		assertTrue("Pattern for assertMatches is null", pattern != null);
@@ -372,7 +515,7 @@ public class TestSAXHandler {
 			public void build(SAXHandler handler) throws SAXException {
 				handler.startEntity("entity");
 				handler.startPrefixMapping("prefix", "uri");
-				handler.startElement("", "ignore", "", new Attributes2Impl());
+				handler.startElement("", "ignore", "", EMPTYATTRIBUTES);
 				handler.endElement("", "ignore", "");
 				handler.endPrefixMapping("prefix");
 				handler.processingInstruction("target", "data");
@@ -753,7 +896,7 @@ public class TestSAXHandler {
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
-				handler.startElement("", "child", "", new Attributes2Impl());
+				handler.startElement("", "child", "", EMPTYATTRIBUTES);
 				handler.endElement("", "child", "");
 			}
 		});
@@ -770,7 +913,7 @@ public class TestSAXHandler {
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
-				handler.startElement(null, "child", "", new Attributes2Impl());
+				handler.startElement(null, "child", "", EMPTYATTRIBUTES);
 				handler.endElement(null, "child", "");
 			}
 		});
@@ -802,8 +945,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesSimple() {
 		// simple attribute.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -826,8 +968,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesNameXMLNS() {
 		// invalid xmlns attibute.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "xmlns", "xmlns", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "xmlns", "xmlns", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -848,8 +989,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesPrefixXMLNS() {
 		// invalid xmlns attibute.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "ns", "xmlns:ns", "CDATA", "uri");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "ns", "xmlns:ns", "CDATA", "uri");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -870,8 +1010,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesNoLocalName() {
 		// no-localname, but has qname.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -894,8 +1033,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesSimpleInNamespace() {
 		// normal att-in-namespace.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "pfx:att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "pfx:att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -925,8 +1063,7 @@ public class TestSAXHandler {
 		// weird att-in-namespace - no prefix.
 		// namespace of parent element matches, but no prefix.
 		// should invent a prefix (attns0)
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -955,8 +1092,7 @@ public class TestSAXHandler {
 		// namespace of parent element matches, but no prefix.
 		// also, attns0 is used by some other namespace.
 		// should invent a prefix (attns1)
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -985,8 +1121,7 @@ public class TestSAXHandler {
 	public void testElementAttributesNoPrefixNamespaceMustUseParentLevelPrefix() {
 		// weird att-in-namespace - no prefix.
 		// but there is a prefix declared for it at the parent level.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1017,8 +1152,7 @@ public class TestSAXHandler {
 		// weird att-in-namespace - no prefix.
 		// namespace of parent element matches, it has prefix.
 		// should use parent prefix (pfx)
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1049,13 +1183,12 @@ public class TestSAXHandler {
 		// weird att-in-namespace - no prefix.
 		// also, a matching prefix was overridden.
 		// should generate one (attns0).
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
 				handler.startPrefixMapping("pfx", "nsuri");
-				handler.startElement("nsuri", "middle", "pfx:middle", new Attributes2Impl());
+				handler.startElement("nsuri", "middle", "pfx:middle", EMPTYATTRIBUTES);
 				// re-define the namespace prefix with a different uri
 				handler.startElement("childuri", "child", "pfx:child", atts);
 				handler.endElement("childuri", "child", "pfx:child");
@@ -1088,13 +1221,12 @@ public class TestSAXHandler {
 		// weird att-in-namespace - no prefix.
 		// also, a matching prefix at the parent level was overridden.
 		// should generate one (attns0).
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("nsuri", "att", "att", "CDATA", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("nsuri", "att", "att", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
 				handler.startPrefixMapping("pfx", "nsuri");
-				handler.startElement("nsuri", "middle", "pfx:middle", new Attributes2Impl());
+				handler.startElement("nsuri", "middle", "pfx:middle", EMPTYATTRIBUTES);
 				// re-define the namespace prefix with a different uri
 				handler.startPrefixMapping("pfx", "ignoreuri");
 				handler.startElement("childuri", "child", "kid:child", atts);
@@ -1128,8 +1260,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesTypeIsEnumeration() {
 		// simple attribute.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "att", "att", "(val1,val2)", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "att", "att", "(val1,val2)", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1151,8 +1282,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesTypeIsUnknown() {
 		// simple attribute.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "att", "att", "poppygook", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "att", "att", "poppygook", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1176,8 +1306,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesTypeIsNull() {
 		// null attribute type.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "att", "att", null, "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "att", "att", null, "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1202,8 +1331,7 @@ public class TestSAXHandler {
 	@Test
 	public void testElementAttributesTypeIsEmptyString() {
 		// "" attribute type.
-		final Attributes2Impl atts = new Attributes2Impl();
-		atts.addAttribute("", "att", "att", "", "val");
+		final AttributesSingleOnly atts = new AttributesSingleOnly("", "att", "att", "", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
@@ -1231,7 +1359,7 @@ public class TestSAXHandler {
 			@Override
 			public void build(SAXHandler handler) throws SAXException {
 				handler.startPrefixMapping("prefix", "uri");
-				handler.startElement("uri", "child", "prefix:uri", new Attributes2Impl());
+				handler.startElement("uri", "child", "prefix:uri", EMPTYATTRIBUTES);
 				handler.endElement("uri", "child", "prefix:uri");
 				handler.endPrefixMapping("prefix");
 			}
@@ -1356,7 +1484,7 @@ public class TestSAXHandler {
 		try {
 			MyHandler handler = new MyHandler();
 			handler.startDocument();
-			handler.startElement("", "root", "root", new Attributes2Impl());
+			handler.startElement("", "root", "root", EMPTYATTRIBUTES);
 			handler.pushElement(new Element("child"));
 			handler.endElement("", "root", "root");
 			handler.endDocument();
@@ -1389,8 +1517,7 @@ public class TestSAXHandler {
 	public void testAndroidParserIssue2LocalOnly() throws SAXException {
 		SAXHandler handler = new SAXHandler();
 		handler.startDocument();
-		Attributes2Impl attrs = new Attributes2Impl();
-		attrs.addAttribute("", "attname", "", "CDATA", "val");
+		AttributesSingleOnly attrs = new AttributesSingleOnly("", "attname", "", "CDATA", "val");
 		handler.startElement("", "root", "", attrs);
 		handler.endElement("", "root", "");
 		handler.endDocument();
@@ -1406,8 +1533,7 @@ public class TestSAXHandler {
 	public void testAndroidParserIssue2QNameOnly() throws SAXException {
 		SAXHandler handler = new SAXHandler();
 		handler.startDocument();
-		Attributes2Impl attrs = new Attributes2Impl();
-		attrs.addAttribute("", "", "attname", "CDATA", "val");
+		AttributesSingleOnly attrs = new AttributesSingleOnly("", "", "attname", "CDATA", "val");
 		handler.startElement("", "", "root", attrs);
 		handler.endElement("", "root", "");
 		handler.endDocument();
@@ -1425,8 +1551,7 @@ public class TestSAXHandler {
 		// in theory, it should leave the qName empty, even for an XMLNS declaration
 		SAXHandler handler = new SAXHandler();
 		handler.startDocument();
-		Attributes2Impl attrs = new Attributes2Impl();
-		attrs.addAttribute(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "pfx", "", "CDATA", "nsuri");
+		AttributesSingleOnly attrs = new AttributesSingleOnly(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "pfx", "", "CDATA", "nsuri");
 		handler.startElement("", "", "root", attrs);
 		handler.endElement("", "root", "");
 		handler.endDocument();
