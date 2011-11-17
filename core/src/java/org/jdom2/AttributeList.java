@@ -56,6 +56,8 @@ package org.jdom2;
 
 import java.util.*;
 
+import org.jdom2.util.ArrayCopy;
+
 /**
  * <code>AttributeList</code> represents legal JDOM
  * <code>{@link Attribute}</code> content.
@@ -337,7 +339,7 @@ final class AttributeList extends AbstractList<Attribute>
 		// most JVM's allocate memory in multiples of 'double-words', on
 		// 64-bit it's 16-bytes, on 32-bit it's 8 bytes which all means it makes
 		// sense to increment the capacity in even values.
-		attributeData = Arrays.copyOf(attributeData,
+		attributeData = ArrayCopy.copyOf(attributeData,
 				((minCapacity + INITIAL_ARRAY_SIZE) >>> 1) << 1);
 	}
 

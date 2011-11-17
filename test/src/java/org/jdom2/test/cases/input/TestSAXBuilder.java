@@ -62,15 +62,24 @@ package org.jdom2.test.cases.input;
  * @author Philip Nelson
  * @version 0.5
  */
-import java.util.*;
-import java.io.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import javax.xml.XMLConstants;
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.List;
+import java.util.ResourceBundle;
 
-import org.jdom2.*;
-import org.jdom2.input.*;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -85,7 +94,16 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import static org.junit.Assert.*;
+import org.jdom2.Content;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.Document;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.UncheckedJDOMFactory;
+import org.jdom2.input.BuilderErrorHandler;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 
 @SuppressWarnings("javadoc")
@@ -169,7 +187,7 @@ public final class TestSAXBuilder {
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
-			assertTrue(reader instanceof org.apache.xerces.parsers.SAXParser);
+			assertEquals("org.apache.xerces.parsers.SAXParser", reader.getClass().getName());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -440,7 +458,7 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testSetFeature() {
-		String feature = XMLConstants.FEATURE_SECURE_PROCESSING;
+		String feature = "http://javax.xml.XMLConstants/feature/secure-processing";
 		MySAXBuilder sb = new MySAXBuilder();
 		try {
 			sb.setFeature(feature, true);

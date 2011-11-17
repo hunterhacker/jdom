@@ -1,6 +1,5 @@
 package org.jdom2.util;
 
-import java.util.Arrays;
 
 /**
  * This is a mechanism for storing and reusing unique instances of Strings.
@@ -236,7 +235,7 @@ public final class StringBin {
 		}
 		if (length == bucket.length) {
 			// there is no space for our value.
-			bucket = Arrays.copyOf(bucket, length + GROW);
+			bucket = ArrayCopy.copyOf(bucket, length + GROW);
 			buckets[bucketid] = bucket;
 		}
 		System.arraycopy(bucket, ip, bucket, ip + 1, length - ip);
@@ -267,7 +266,7 @@ public final class StringBin {
 					buckets[bucketid][0] = val;
 				} else {
 					if (buckets[bucketid].length == length) {
-						buckets[bucketid] = Arrays.copyOf(
+						buckets[bucketid] = ArrayCopy.copyOf(
 								buckets[bucketid], lengths[bucketid] + GROW);
 					}
 					buckets[bucketid][length] = val;

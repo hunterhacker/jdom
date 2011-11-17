@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.jdom2.util.ArrayCopy;
+
 
 /**
  * A high-performance stack for processing those Namespaces that are introduced
@@ -300,7 +302,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			// the prefix is the previous scope's primary prefix. This means
 			// that we know for sure that the input namespace is new-to-scope.
 			store.add(namespace);
-			final Namespace[] nscope = Arrays.copyOf(scope, scope.length);
+			final Namespace[] nscope = ArrayCopy.copyOf(scope, scope.length);
 			nscope[0] = namespace;
 			return nscope;
 		}
@@ -314,12 +316,12 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		if (ip >= 0) {
 			// a different namespace with the same prefix as us is in-scope.
 			// replace it....
-			final Namespace[] nscope = Arrays.copyOf(scope, scope.length);
+			final Namespace[] nscope = ArrayCopy.copyOf(scope, scope.length);
 			nscope[ip] = namespace;
 			return nscope;
 		}
 		// We are a new prefix in-scope.
-		final Namespace[] nscope = Arrays.copyOf(scope, scope.length + 1);
+		final Namespace[] nscope = ArrayCopy.copyOf(scope, scope.length + 1);
 		ip = - ip - 1;
 		System.arraycopy(nscope, ip, nscope, ip + 1, nscope.length - ip - 1);
 		nscope[ip] = namespace;
@@ -391,8 +393,8 @@ public final class NamespaceStack implements Iterable<Namespace> {
 
 		if (depth >= scope.length) {
 			// we need more space on the stack.
-			scope = Arrays.copyOf(scope, scope.length * 2);
-			added = Arrays.copyOf(added, scope.length);
+			scope = ArrayCopy.copyOf(scope, scope.length * 2);
+			added = ArrayCopy.copyOf(added, scope.length);
 		}
 
 		// Sort out the added namespaces.
@@ -412,7 +414,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			if (toadd.isEmpty()) {
 				// we need to make newscope a copy of the previous level's
 				// scope, because it is not yet a copy.
-				newscope = Arrays.copyOf(newscope, newscope.length);
+				newscope = ArrayCopy.copyOf(newscope, newscope.length);
 			}
 			// we need to take the Namespace at position 0, and insert it
 			// in it's place later in the array.

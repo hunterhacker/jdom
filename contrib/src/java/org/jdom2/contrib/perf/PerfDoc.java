@@ -6,18 +6,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.ext.DefaultHandler2;
 
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
@@ -42,11 +45,8 @@ import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.util.ArrayCopy;
 import org.jdom2.xpath.XPath;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.ext.DefaultHandler2;
 
 @SuppressWarnings("javadoc")
 public class PerfDoc {
@@ -186,11 +186,11 @@ public class PerfDoc {
 			fr = new FileReader(infile);
 			while ((cnt = fr.read(fchars, len, fchars.length - len)) >= 0) {
 				if (cnt == 0 && len == fchars.length) {
-					fchars = Arrays.copyOf(fchars, fchars.length + 10240);
+					fchars = ArrayCopy.copyOf(fchars, fchars.length + 10240);
 				}
 				len += cnt;
 			}
-			fchars = Arrays.copyOf(fchars, len);
+			fchars = ArrayCopy.copyOf(fchars, len);
 		} finally {
 			if (fr != null) {
 				fr.close();
@@ -554,7 +554,7 @@ public class PerfDoc {
 		dbf.setExpandEntityReferences(false);
 		
 		if (xsdvalidate) {
-			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 		}
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		return db.parse(data);

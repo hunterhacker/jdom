@@ -68,7 +68,7 @@ import org.jdom2.Parent;
  */
 class DescendantIterator implements Iterator<Content> {
 
-	private ArrayDeque<ListIterator<Content>> stack = new ArrayDeque<ListIterator<Content>>();
+	private LinkedList<ListIterator<Content>> stack = new LinkedList<ListIterator<Content>>();
 	ListIterator<Content> current = null;
 	ListIterator<Content> following = null;
 
@@ -117,7 +117,7 @@ class DescendantIterator implements Iterator<Content> {
 		if (following != null && following.hasNext()) {
 			// The last returned content is a parent with unprocessed content
 			ret = following.next();
-			stack.push(current);
+			stack.addFirst(current);
 			current = following;
 		} else if (current.hasNext()) {
 			// the last content returned has un-iterated siblings.
@@ -126,7 +126,7 @@ class DescendantIterator implements Iterator<Content> {
 			// check up the ancestry for the next unprocessed sibling...
 			while (ret == null && !stack.isEmpty()) {
 				// while we go we pop the stack.
-				current = stack.pop();
+				current = stack.removeFirst();
 				if (current.hasNext()) {
 					ret = current.next();
 				}

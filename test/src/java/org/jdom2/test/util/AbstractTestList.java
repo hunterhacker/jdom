@@ -19,6 +19,8 @@ import java.util.NoSuchElementException;
 import org.junit.Assume;
 import org.junit.Test;
 
+import org.jdom2.util.ArrayCopy;
+
 /**
  * This base class can be used to test multiple implementations of List<?>
  * It is reusable for different list types, and does the 'normal' type testing.
@@ -130,7 +132,7 @@ public abstract class AbstractTestList<T> {
 			throw new IllegalArgumentException("Can not have index " + index 
 					+ " when there are only " + content.length + " elements.");
 		}
-		T[] ret = Arrays.copyOf(content, content.length - 1);
+		T[] ret = ArrayCopy.copyOf(content, content.length - 1);
 		System.arraycopy(content, index + 1, ret, index, ret.length - index);
 		return ret;
 	}
@@ -151,7 +153,7 @@ public abstract class AbstractTestList<T> {
 		if (insert == null) {
 			throw new NullPointerException("Can not have a null insert vararg array");
 		}
-		T[] ret = Arrays.copyOf(content, content.length + insert.length);
+		T[] ret = ArrayCopy.copyOf(content, content.length + insert.length);
 		System.arraycopy(ret, index, ret, index+insert.length, content.length - index);
 		System.arraycopy(insert, 0, ret, index, insert.length);
 		return ret;
@@ -164,7 +166,7 @@ public abstract class AbstractTestList<T> {
 	 * 				order
 	 */
 	protected final T[] arrayReverse(T[] content) {
-		T[] ret = Arrays.copyOf(content, content.length);
+		T[] ret = ArrayCopy.copyOf(content, content.length);
 		for (int i = (content.length - 1) / 2; i >= 0; i--) {
 			final T tmp = ret[i];
 			ret[i] = ret[ret.length - 1 - i];
@@ -208,7 +210,7 @@ public abstract class AbstractTestList<T> {
 	 */
 	protected final int[] shuffle(final int len) {
 		if (len < SMALLSHUFFLE.length) {
-			return Arrays.copyOf(SMALLSHUFFLE[len], len);
+			return ArrayCopy.copyOf(SMALLSHUFFLE[len], len);
 		}
 		final int prime = pickPrime(len);
 		int[] ret = new int[len];
@@ -776,7 +778,7 @@ public abstract class AbstractTestList<T> {
 		Assume.assumeTrue(extra.length > 0);
 		final T[] content = buildSampleContent();
 		Assume.assumeTrue(content.length > 0);
-		T[] toadd = Arrays.copyOf(extra, extra.length + illegal.length);
+		T[] toadd = ArrayCopy.copyOf(extra, extra.length + illegal.length);
 		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
 		
 		// right, we have legal content in 'content', and then in 'illegal' we
@@ -1242,7 +1244,7 @@ public abstract class AbstractTestList<T> {
 		
 		T tmp = list.remove(0);
 		
-		T[] tmpsamp = Arrays.copyOfRange(sample, 1, sample.length);
+		T[] tmpsamp = ArrayCopy.copyOfRange(sample, 1, sample.length);
 		quickCheck(list, tmpsamp);
 
 		// get a handle on our iterator....

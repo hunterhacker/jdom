@@ -57,6 +57,7 @@ package org.jdom2;
 import java.util.*;
 
 import org.jdom2.filter.*;
+import org.jdom2.util.ArrayCopy;
 
 /**
  * A non-public list implementation holding only legal JDOM content, including
@@ -405,7 +406,7 @@ final class ContentList extends AbstractList<Content>
 		// most JVM's allocate memory in multiples of 'double-words', on
 		// 64-bit it's 16-bytes, on 32-bit it's 8 bytes which all means it makes
 		// sense to increment the capacity in even values.
-		elementData = Arrays.copyOf(elementData, 
+		elementData = ArrayCopy.copyOf(elementData, 
 				((minCapacity + INITIAL_ARRAY_SIZE) >>> 1) << 1);
 	}
 
@@ -922,7 +923,7 @@ final class ContentList extends AbstractList<Content>
 				// the backing list... invalidate everything *after* the added
 				// content
 				if (backingpos.length <= size) {
-					backingpos = Arrays.copyOf(backingpos, backingpos.length + 1);
+					backingpos = ArrayCopy.copyOf(backingpos, backingpos.length + 1);
 				}
 				backingpos[index] = adj;
 				backingsize = index + 1;
@@ -978,7 +979,7 @@ final class ContentList extends AbstractList<Content>
 						// added
 						// content
 						if (backingpos.length <= size) {
-							backingpos = Arrays.copyOf(backingpos, backingpos.length + addcnt);
+							backingpos = ArrayCopy.copyOf(backingpos, backingpos.length + addcnt);
 						}
 						backingpos[index + count] = adj + count;
 						backingsize = index + count + 1;

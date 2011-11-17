@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 
 import org.jdom2.Verifier;
+import org.jdom2.util.ArrayCopy;
 
 /**
  * This class builds jUnitTestCases for the Verifier character classes.
@@ -56,13 +56,13 @@ public class VerifierTestBuilder {
 				if (q != valid) {
 					valid = q;
 					if (flen >= flips.length) {
-						flips = Arrays.copyOf(flips, flen + 1024); 
+						flips = ArrayCopy.copyOf(flips, flen + 1024); 
 					}
 					flips[flen++] = i;
 				}
 			}
 			
-			buildTest(mname, Arrays.copyOf(flips, flen));
+			buildTest(mname, ArrayCopy.copyOf(flips, flen));
 		}
 	}
 	

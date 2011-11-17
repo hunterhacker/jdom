@@ -54,9 +54,8 @@
 
 package org.jdom2.input;
 
-import java.util.Arrays;
-
-import org.jdom2.*;
+import org.jdom2.Verifier;
+import org.jdom2.util.ArrayCopy;
 
 /**
  * A non-public utility class similar to StringBuffer but optimized for XML
@@ -95,7 +94,7 @@ final class TextBuffer {
 	 */
 	void append(final char[] source, final int start, final int count) {
 		if ((count + arraySize) > array.length) {
-			array = Arrays.copyOf(array, count + arraySize);
+			array = ArrayCopy.copyOf(array, count + arraySize);
 		}
 		System.arraycopy(source, start, array, arraySize, count);
 		arraySize += count;

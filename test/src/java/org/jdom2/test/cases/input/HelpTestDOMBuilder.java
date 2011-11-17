@@ -2,7 +2,6 @@ package org.jdom2.test.cases.input;
 
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,7 +28,7 @@ public class HelpTestDOMBuilder {
 		dbf.setExpandEntityReferences(false);
 		
 		if (xsdvalidate) {
-			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 		}
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		return db.parse(filename);

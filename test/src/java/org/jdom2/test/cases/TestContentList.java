@@ -13,6 +13,8 @@ import org.jdom2.Content;
 import org.jdom2.DocType;
 import org.jdom2.Element;
 import org.jdom2.test.util.AbstractTestList;
+import org.jdom2.util.ArrayCopy;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,7 +77,7 @@ public class TestContentList extends AbstractTestList<Content> {
 		final Content[] content = buildSampleContent();
 		Assume.assumeTrue(content.length > 0);
 		// the ' + 1' ensures a null value too!
-		Content[] toadd = Arrays.copyOf(extra, extra.length + illegal.length + 1);
+		Content[] toadd = ArrayCopy.copyOf(extra, extra.length + illegal.length + 1);
 		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
 		
 		// right, we have legal content in 'content', and then in 'illegal' we

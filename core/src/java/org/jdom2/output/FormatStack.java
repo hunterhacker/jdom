@@ -1,8 +1,7 @@
 package org.jdom2.output;
 
-import java.util.Arrays;
-
 import org.jdom2.output.Format.TextMode;
+import org.jdom2.util.ArrayCopy;
 
 /**
  * FormatStack implements a mechanism where the formatting details can be
@@ -297,11 +296,11 @@ public final class FormatStack {
 		final int prev = depth++;
 		if (depth >= capacity) {
 			capacity *= 2;
-			levelIndent = Arrays.copyOf(levelIndent, capacity);
-			levelEOL = Arrays.copyOf(levelEOL, capacity);
-			ignoreTrAXEscapingPIs = Arrays.copyOf(ignoreTrAXEscapingPIs, capacity);
-			mode = Arrays.copyOf(mode, capacity);
-			escapeOutput = Arrays.copyOf(escapeOutput, capacity);
+			levelIndent = ArrayCopy.copyOf(levelIndent, capacity);
+			levelEOL = ArrayCopy.copyOf(levelEOL, capacity);
+			ignoreTrAXEscapingPIs = ArrayCopy.copyOf(ignoreTrAXEscapingPIs, capacity);
+			mode = ArrayCopy.copyOf(mode, capacity);
+			escapeOutput = ArrayCopy.copyOf(escapeOutput, capacity);
 		}
 		levelIndent[depth] = indent == null
 				? null
