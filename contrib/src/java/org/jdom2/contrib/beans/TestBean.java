@@ -58,6 +58,7 @@ import org.jdom2.*;
 import org.jdom2.output.*;
 import java.util.*;
 
+@SuppressWarnings("javadoc")
 public class TestBean implements java.io.Serializable {
 	private String name;
 	private int age;

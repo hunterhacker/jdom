@@ -65,6 +65,7 @@ import java.text.*;
 /**
  * @author Alex Chaffee (alex@jguru.com)
  **/
+@SuppressWarnings("javadoc")
 public class DateUtils {
 
 	public static boolean debug;

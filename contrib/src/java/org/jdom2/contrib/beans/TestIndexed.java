@@ -59,6 +59,7 @@ import org.jdom2.output.*;
 import java.util.*;
 import java.beans.*;
     
+@SuppressWarnings("javadoc")
 public class TestIndexed implements java.io.Serializable {
     private String name;
     private List<String> toppings = new ArrayList<String>();

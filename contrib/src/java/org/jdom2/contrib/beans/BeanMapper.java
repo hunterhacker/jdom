@@ -162,9 +162,10 @@ import org.jdom2.Namespace;
  * @author Alex Chaffee (alex@jguru.com)
  **/
 
+@SuppressWarnings("javadoc")
 public class BeanMapper {
 
-    protected String beanPackage;
+	protected String beanPackage;
     protected Namespace namespace;
     protected boolean ignoreMissingProperties = false;
     protected boolean ignoreNullProperties = true;

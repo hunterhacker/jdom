@@ -60,6 +60,7 @@ package org.jdom2.contrib.beans;
  * @author Alex Chaffee (alex@jguru.com)
  **/
 
+@SuppressWarnings("javadoc")
 public class BeanMapperException extends Exception {
 
     public BeanMapperException(Exception rootCause) {
