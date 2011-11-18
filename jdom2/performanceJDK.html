@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+
+  <title>JDOM2 Relative JDK Performance</title>
+
+  <link rel="stylesheet" href="../jdom.css" type="text/css" />
+</head>
+
+<body>
+  <div id="container">
+
+    <h1><a href="http://github.com/hunterhacker/jdom">JDOM2</a> Relative JDK Performance</h1>
+
+    <div class="description">
+      Java manipulation of XML made easy.
+    </div>
+
+	<p />    
+    The following is a basic metric of the performance characteristics of JDOM2.
+	The identical code/classes are run in Java5, Java6, and Java7. The code is
+	compiled by Java6 JDK with a 1.5 .class target.
+    This is not meant to be a reproducable baseline, rather, it is intended to
+    give an idea of whether a change has improved or decreased the performance.
+    <p />
+	
+	For details of the actual test cases have a look at the
+	<a href="performance.html">Peformance Page</a>
+	<p />
+    
+
+	The following metrics are (currently) produced:
+    <ul>
+    <li>Input - number of bytes in the input XML files</li>	
+    <li>Mem - the amount of memory required to load the XML as a JDOM document</li>	
+    <li>SAX - The SAXBuilder.build() method is timed </li>
+    <li>SAXJ - the amount of SAX time in JDOM</li>
+	<li>DOM - The DOMBuilder.build() time
+    <li>DOMJ - the amount of DOM time in JDOM</li>
+	<li>StAXS - The StAXBuilder.build(XMLStreamReader) time
+	<li>StAXSJ - the amount ot StAXS timm in JDOM
+	<li>StAXE - The StAXBuilder.build(XMLEventReader) time
+	<li>StAXEJ - the amount ot StAXE time in JDOM
+	<li>Scan - It measures how long it takes to do a simple, and then an Element-Filtered
+	    DescendantIterator 'walk' of the document tree.</li>	
+	<li>Dump - It measures how long it takes to output the document to a 'bitbucket'
+	    in the three major Format outputs (pretty, compact, raw).</li>	
+	<li>Dupe - It measures how long it takes to recursively 'duplicate' the document
+	    by using a 'brute-force' mechanism which uses the 'new' constructors for
+	    the content. See the code for what it does.</li>	
+	<li>XPath - It measures how long it takes to do two XPath operations, one that selects
+	    all attributes with a non-existing name (expect no results). The other
+	    selects all Elements.</li>	
+	<li>Checked - It measures how long it takes to send the document back through the
+		SAXOutputter/SAXHandler using the DefaultJDOMFactory</li>	
+	<li>UnChecked - It measures how long it takes to send the document back through the
+		SAXOutputter/SAXHandler using the UncheckedJDOMFactory</li>
+	</ul>	
+	
+	The following tests were run one after the next, on my laptop.
+	<p>
+	
+	<h2>Java5 Results</h2>	
+
+	Java 1.5.0_21
+	
+	<hr/>
+	<p/>
+	Description - change me
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.98MiB</td><td>12.75ms</td><td>5.73ms</td><td>18.36ms</td><td>7.98ms</td><td>13.08ms</td><td>6.16ms</td><td>25.69ms</td><td>9.98ms</td><td>8.13ms</td><td>24.91ms</td><td>25.87ms</td><td>384.40ms</td><td>30.74ms</td><td>23.44ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.98MiB</td><td>12.53ms</td><td>5.61ms</td><td>19.13ms</td><td>8.79ms</td><td>13.21ms</td><td>5.95ms</td><td>25.61ms</td><td>10.09ms</td><td>7.83ms</td><td>24.65ms</td><td>23.70ms</td><td>377.92ms</td><td>27.90ms</td><td>22.11ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.98MiB</td><td>12.57ms</td><td>5.58ms</td><td>19.58ms</td><td>9.19ms</td><td>13.38ms</td><td>6.25ms</td><td>24.74ms</td><td>10.04ms</td><td>7.86ms</td><td>24.92ms</td><td>25.22ms</td><td>375.03ms</td><td>31.22ms</td><td>23.46ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.98MiB</td><td>12.32ms</td><td>5.44ms</td><td>17.75ms</td><td>7.53ms</td><td>12.82ms</td><td>5.37ms</td><td>23.18ms</td><td>8.10ms</td><td>7.46ms</td><td>25.11ms</td><td>22.37ms</td><td>378.41ms</td><td>31.12ms</td><td>22.99ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.98MiB</td><td>12.62ms</td><td>5.60ms</td><td>19.15ms</td><td>8.78ms</td><td>13.07ms</td><td>5.95ms</td><td>28.35ms</td><td>13.43ms</td><td>7.93ms</td><td>25.67ms</td><td>23.87ms</td><td>375.18ms</td><td>27.90ms</td><td>22.81ms</td></tr>
+	</table>	
+	
+	<h2>Java6 Results</h2>	
+
+	Java 1.6.0_26
+	
+	<hr/>
+	<p/>
+	Description - change me
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.30ms</td><td>1.41ms</td><td>7.41ms</td><td>2.59ms</td><td>5.56ms</td><td>1.24ms</td><td>10.51ms</td><td>3.19ms</td><td>3.26ms</td><td>12.82ms</td><td>10.71ms</td><td>74.05ms</td><td>12.29ms</td><td>10.40ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.42ms</td><td>1.40ms</td><td>7.29ms</td><td>1.93ms</td><td>5.57ms</td><td>0.96ms</td><td>10.35ms</td><td>3.00ms</td><td>3.31ms</td><td>13.37ms</td><td>10.86ms</td><td>73.27ms</td><td>12.24ms</td><td>9.77ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.70ms</td><td>2.18ms</td><td>7.38ms</td><td>2.78ms</td><td>5.37ms</td><td>1.16ms</td><td>9.58ms</td><td>2.40ms</td><td>3.21ms</td><td>12.49ms</td><td>11.03ms</td><td>72.08ms</td><td>12.67ms</td><td>10.07ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.07ms</td><td>1.73ms</td><td>7.36ms</td><td>2.80ms</td><td>5.59ms</td><td>1.43ms</td><td>10.68ms</td><td>3.26ms</td><td>3.46ms</td><td>13.31ms</td><td>11.00ms</td><td>72.38ms</td><td>12.23ms</td><td>10.75ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.35ms</td><td>1.69ms</td><td>7.41ms</td><td>2.72ms</td><td>5.48ms</td><td>1.09ms</td><td>10.63ms</td><td>3.54ms</td><td>3.36ms</td><td>13.28ms</td><td>11.66ms</td><td>73.99ms</td><td>12.06ms</td><td>10.55ms</td></tr>
+	</table>
+	
+	
+	<h2>Java7 Results</h2>	
+	
+	Java 1.7.0   (b147)
+	<hr/>
+	<p/>
+	Description - change me
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.76ms</td><td>1.95ms</td><td>8.52ms</td><td>3.40ms</td><td>5.73ms</td><td>1.41ms</td><td>10.29ms</td><td>3.35ms</td><td>3.43ms</td><td>13.05ms</td><td>10.53ms</td><td>31.12ms</td><td>11.82ms</td><td>10.02ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.16ms</td><td>0.60ms</td><td>7.93ms</td><td>2.85ms</td><td>5.59ms</td><td>0.91ms</td><td>10.36ms</td><td>2.96ms</td><td>3.41ms</td><td>13.39ms</td><td>10.50ms</td><td>29.80ms</td><td>13.61ms</td><td>10.26ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>4.91ms</td><td>0.83ms</td><td>8.02ms</td><td>2.83ms</td><td>6.24ms</td><td>1.78ms</td><td>9.17ms</td><td>2.15ms</td><td>3.55ms</td><td>14.17ms</td><td>10.19ms</td><td>29.96ms</td><td>11.63ms</td><td>10.40ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.20ms</td><td>1.50ms</td><td>7.99ms</td><td>3.20ms</td><td>6.04ms</td><td>2.11ms</td><td>10.41ms</td><td>3.57ms</td><td>3.33ms</td><td>13.29ms</td><td>9.90ms</td><td>29.53ms</td><td>11.15ms</td><td>9.80ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.27MiB</td><td>5.06ms</td><td>1.63ms</td><td>8.46ms</td><td>3.41ms</td><td>5.78ms</td><td>1.71ms</td><td>9.56ms</td><td>2.61ms</td><td>3.34ms</td><td>14.30ms</td><td>10.10ms</td><td>30.48ms</td><td>11.49ms</td><td>9.96ms</td></tr>
+	</table>
+
+
+	
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/hunterhacker/jdom">hunterhacker/jdom</a>
+    </div>
+
+  </div>
+
+  
+</body>
+</html>
+
+
+
+
