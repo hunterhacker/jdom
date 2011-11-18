@@ -70,6 +70,7 @@ import org.jdom2.input.SAXBuilder;
  * @author Brett McLaughlin, Jason Hunter
  * @version 1.0
  */
+@SuppressWarnings("javadoc")
 public class WarReader {
     
   public static void main(String[] args) throws IOException, JDOMException {

@@ -108,6 +108,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  * @see org.xml.sax.helpers.XMLFilterImpl
  */
+@SuppressWarnings("javadoc")
 public class XMLFilterBase extends XMLFilterImpl implements LexicalHandler
 {
 

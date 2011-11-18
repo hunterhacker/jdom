@@ -66,6 +66,7 @@ import org.jdom2.xpath.*;
  * @author Jason Hunter
  * @version 1.0
  */
+@SuppressWarnings("javadoc")
 public class XPathReader {
     
     public static void main(String[] args) throws IOException, JDOMException {

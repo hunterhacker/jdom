@@ -74,6 +74,7 @@ import org.xml.sax.XMLReader;
  *
  * @see DataFormatFilter
  */
+@SuppressWarnings("javadoc")
 public class DataUnformatFilter extends XMLFilterBase
 {
     

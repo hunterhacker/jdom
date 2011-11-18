@@ -65,6 +65,7 @@ import org.jdom2.output.SAXOutputter;
 /**
  * An XMLReader wrapper for JDOM documents.
  */
+@SuppressWarnings("javadoc")
 public class DocumentReader extends XMLReaderBase {
 
     private final Document doc;

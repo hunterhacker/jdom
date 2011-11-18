@@ -64,6 +64,7 @@ import org.jdom2.output.XMLOutputter;
  * 
  * @author  joe.bowbeer
  */
+@SuppressWarnings("javadoc")
 public class FilterTest {
 
     /** Creates new FilterTest */

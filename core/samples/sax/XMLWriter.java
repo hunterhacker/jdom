@@ -255,6 +255,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  *
  * @see XMLFilterBase
  */
+@SuppressWarnings("javadoc")
 public class XMLWriter extends XMLFilterBase
 {
 

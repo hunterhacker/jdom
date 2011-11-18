@@ -57,6 +57,7 @@ import org.jdom2.input.*;
 import org.jdom2.output.*;
 import org.jdom2.transform.*;
 
+@SuppressWarnings("javadoc")
 public class XSLTransform {
 
   public static void main(String[] args) throws Exception {

@@ -77,6 +77,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * Adapted from David Megginson's XMLFilterImpl and XMLFilterBase.
  */
+@SuppressWarnings("javadoc")
 public abstract class XMLReaderBase extends DefaultHandler
 implements LexicalHandler, XMLReader
 {

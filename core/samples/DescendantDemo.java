@@ -63,6 +63,7 @@ import org.jdom2.output.*;
 /**
  * Demonstrates the use of {@link Parent#getDescendants}.
  */
+@SuppressWarnings("javadoc")
 public class DescendantDemo {
 
     public static void main(String[] args) throws Exception {
