@@ -9,6 +9,7 @@ import org.jdom2.contrib.input.scanner.ElementScanner;
 import org.jdom2.contrib.input.scanner.ElementListener;
 
 
+@SuppressWarnings("javadoc")
 public class ElementScannerTest
 {
    public static XMLOutputter out = new XMLOutputter();

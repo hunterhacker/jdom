@@ -53,6 +53,7 @@ import org.jdom2.contrib.input.*;
  * @author Per Norrman
  *
  */
+@SuppressWarnings("javadoc")
 public class LineNumberSAXBuilderDemo
 {
 

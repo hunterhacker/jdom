@@ -70,6 +70,7 @@ import org.jdom2.Namespace;
  *
  * @author Laurent Bihanic
  */
+@SuppressWarnings("javadoc")
 public class IdElement extends Element {
 
    // Allow Javadocs to inherit from superclass

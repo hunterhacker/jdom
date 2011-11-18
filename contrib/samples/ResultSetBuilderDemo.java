@@ -47,6 +47,7 @@ import org.jdom2.output.*;
 
 import org.jdom2.contrib.input.ResultSetBuilder;
 
+@SuppressWarnings("javadoc")
 public class ResultSetBuilderDemo {
     
   // SQL tables copied from the Servlets.com ISP listing application

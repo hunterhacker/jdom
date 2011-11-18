@@ -160,6 +160,7 @@ import org.jdom2.input.SAXHandler;
  *
  * @author Laurent Bihanic
  */
+@SuppressWarnings("javadoc")
 public class ElementScanner extends XMLFilterImpl {
 
    /**

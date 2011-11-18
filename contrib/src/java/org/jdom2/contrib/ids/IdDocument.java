@@ -80,6 +80,7 @@ import org.jdom2.Element;
  *
  * @author Laurent Bihanic
  */
+@SuppressWarnings("javadoc")
 public class IdDocument extends Document {
 
    /**

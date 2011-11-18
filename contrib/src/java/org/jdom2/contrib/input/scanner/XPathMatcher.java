@@ -362,6 +362,7 @@ public abstract class XPathMatcher {
     * @param  expression   the XPath-like expression to match.
     * @param  listener     the element listener to notify when an
     *                      element matches the expression.
+    * @return a matcher.
     *
     * @throws JDOMException  if <code>expression</code> is invalid.
     */

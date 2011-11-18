@@ -59,6 +59,7 @@ import org.jdom2.contrib.output.JTreeOutputter;
  * @author Brett McLaughlin
  * @version 1.0
  */
+@SuppressWarnings("javadoc")
 public class JTreeOutputterDemo implements ActionListener {
 
     public JFrame frame;

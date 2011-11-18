@@ -67,6 +67,7 @@ import org.jdom2.Namespace;
  * @author Per Norrman
  *
  */
+@SuppressWarnings("javadoc")
 public class LineNumberElement extends Element
 {
     private int _startLine;

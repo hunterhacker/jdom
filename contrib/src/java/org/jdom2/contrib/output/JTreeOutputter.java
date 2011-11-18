@@ -70,6 +70,7 @@ import org.jdom2.Document;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
+@SuppressWarnings("javadoc")
 public class JTreeOutputter {
 
     public JTreeOutputter() {

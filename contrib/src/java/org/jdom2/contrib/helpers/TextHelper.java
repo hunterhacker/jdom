@@ -68,7 +68,8 @@ public class TextHelper {
      * internal whitespace normalized to a single space.  
      * </p>
      */
-    public static String normalize(String text) {
+    @SuppressWarnings("javadoc")
+	public static String normalize(String text) {
         char[] chars = text.toCharArray();
         char[] newChars = new char[chars.length];
         boolean white = true;

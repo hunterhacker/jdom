@@ -65,6 +65,7 @@ import org.jdom2.contrib.input.ResultSetBuilder;
  *
  * @author R.Sena (raff@aromatic.org)
  */
+@SuppressWarnings("javadoc")
 public class sxql {
 
   /**

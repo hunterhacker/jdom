@@ -69,9 +69,10 @@ import org.jdom2.Parent;
  *
  * @author Laurent Bihanic
  */
+@SuppressWarnings("javadoc")
 public class IdAttribute extends Attribute {
 
-    public IdAttribute(String name, String value, Namespace namespace) {
+	public IdAttribute(String name, String value, Namespace namespace) {
         super(name, value, namespace);
     }
 

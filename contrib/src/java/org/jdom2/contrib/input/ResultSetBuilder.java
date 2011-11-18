@@ -88,6 +88,7 @@ import org.jdom2.*;
  * @author Robert J. Munro
  * @version 0.5
  */
+@SuppressWarnings("javadoc")
 public class ResultSetBuilder {
     
     /** The ResultSet that becomes a <code>Document</code> */

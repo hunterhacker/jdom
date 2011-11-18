@@ -8,6 +8,7 @@ import org.jdom2.contrib.ids.IdDocument;
 import org.jdom2.contrib.ids.IdFactory;
 
 
+@SuppressWarnings("javadoc")
 public class TestIds {
 
    public static void main(String[] args) throws Exception {
