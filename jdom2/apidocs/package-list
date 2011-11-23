@@ -2,6 +2,7 @@ org.jdom2
 org.jdom2.adapters
 org.jdom2.filter
 org.jdom2.input
+org.jdom2.input.sax
 org.jdom2.output
 org.jdom2.transform
 org.jdom2.util
