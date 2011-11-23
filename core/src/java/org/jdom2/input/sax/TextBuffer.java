@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,112 +52,90 @@
 
  */
 
- package org.jdom2.contrib.input;
+package org.jdom2.input.sax;
 
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.DefaultJDOMFactory;
-import org.jdom2.JDOMFactory;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.SAXHandler;
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
+import org.jdom2.Verifier;
+import org.jdom2.util.ArrayCopy;
 
 /**
- * This builder works in parallell with {@link LineNumberElement} 
- * to provide each element with information on its beginning and
- * ending line number in the corresponding source. 
- * This only works for SAX parsers that supply that information, and
- * since this is optional, there are no guarantees.
- * <p>
- * Note that this builder always creates its own for each
- * build, thereby cancelling any previous call to setFactory.
- * <p>
- * All elements created are instances of {@link LineNumberElement}.
- * No other construct currently receive line number information.
- * 
- * @author Per Norrman
+ * A non-public utility class similar to StringBuffer but optimized for XML
+ * parsing where the common case is that you get only one chunk of characters
+ * per text section. TextBuffer stores the first chunk of characters in a
+ * String, which can just be returned directly if no second chunk is received.
+ * Subsequent chunks are stored in a supplemental char array (like StringBuffer
+ * uses). In this case, the returned text will be the first String chunk,
+ * concatenated with the subsequent chunks stored in the char array. This
+ * provides optimal performance in the common case, while still providing very
+ * good performance in the uncommon case. Furthermore, avoiding StringBuffer
+ * means that no extra unused char array space will be kept around after parsing
+ * is through.
  *
+ * @author  Bradley S. Huffman
+ * @author  Alex Rosen
  */
-public class LineNumberSAXBuilder extends SAXBuilder
-{
+final class TextBuffer {
+
+	/** The text value. Only the first 
+	 * <code>arraySize</code> characters are valid. */
+	private char[] array = new char[1024];
+
+	/** The size of the text value. */
+	private int arraySize = 0;
+	
+	/** Constructor */
+	TextBuffer() {
+	}
+
+	/**
+	 * Append the specified text to the text value of this buffer.
+	 * @param source The char[] data to add
+	 * @param start The offset in the data to start adding from 
+	 * @param count The number of chars to add. 
+	 */
+	void append(final char[] source, final int start, final int count) {
+		if ((count + arraySize) > array.length) {
+			array = ArrayCopy.copyOf(array, count + arraySize);
+		}
+		System.arraycopy(source, start, array, arraySize, count);
+		arraySize += count;
+	}
+
+	/** 
+	 * Returns the size of the text value.
+	 * @return the number of charactes currently in the TextBuffer 
+	 */
+	int size() {
+		return arraySize;
+	}
+
+	/** 
+	 * Clears the text value and prepares the TextBuffer for reuse.
+	 */
+	void clear() {
+		arraySize = 0;
+	}
+
+	/**
+	 * Inspects the character data for non-whitespace
+	 * @return true if all chars are whitespace
+	 */
+	boolean isAllWhitespace() {
+		int i = arraySize;
+		while (--i >= 0) {
+			if ( !Verifier.isXMLWhitespace(array[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** Returns the text value stored in the buffer. */
 	@Override
-	protected SAXHandler createContentHandler()
-	{
-		return new MySAXHandler(new MyFactory());
-	}
-
-	private class MyFactory extends DefaultJDOMFactory
-	{
-
-		@Override
-		public Element element(String name)
-		{
-			return new LineNumberElement(name);
+	public String toString() {
+		if (arraySize == 0) {
+			return "";
 		}
-
-		@Override
-		public Element element(String name, String prefix, String uri)
-		{
-			return new LineNumberElement(name, prefix, uri);
-		}
-
-		@Override
-		public Element element(String name, Namespace namespace)
-		{
-			return new LineNumberElement(name, namespace);
-		}
-        
-		@Override
-		public Element element(String name, String uri)
-		{
-			return new LineNumberElement(name, uri);
-		}
-
-	}
-
-	private class MySAXHandler extends SAXHandler
-	{
-
-		public MySAXHandler(JDOMFactory f)
-		{
-			super(f);
-		}
-
-		/** override */
-		@Override
-		public void startElement(
-			String arg0,
-			String arg1,
-			String arg2,
-			Attributes arg3)
-			throws SAXException
-		{
-			super.startElement(arg0, arg1, arg2, arg3);
-			Locator l = getDocumentLocator();
-			if (l != null)
-			{
-				((LineNumberElement) getCurrentElement()).setStartLine(
-					l.getLineNumber());
-			}
-		}
-
-		/** override */
-		@Override
-		public void endElement(String arg0, String arg1, String arg2)
-			throws SAXException
-		{
-			Locator l = getDocumentLocator();
-			if (l != null)
-			{
-				((LineNumberElement) getCurrentElement()).setEndLine(
-					l.getLineNumber());
-			}
-
-			super.endElement(arg0, arg1, arg2);
-		}
-
+		return String.valueOf(array, 0, arraySize);
 	}
 
 }

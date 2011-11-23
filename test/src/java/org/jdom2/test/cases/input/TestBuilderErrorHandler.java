@@ -2,7 +2,8 @@ package org.jdom2.test.cases.input;
 
 import static org.junit.Assert.*;
 
-import org.jdom2.input.BuilderErrorHandler;
+import org.jdom2.input.sax.BuilderErrorHandler;
+
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

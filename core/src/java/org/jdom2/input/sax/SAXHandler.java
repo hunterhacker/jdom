@@ -52,80 +52,99 @@
 
  */
 
-package org.jdom2.input;
+package org.jdom2.input.sax;
 
 import java.util.*;
 
 import javax.xml.XMLConstants;
 
 import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+
 import org.xml.sax.*;
 import org.xml.sax.ext.*;
 import org.xml.sax.helpers.*;
 
 /**
  * A support class for {@link SAXBuilder}.
+ * <p>
+ * People overriding this class are cautioned to ensure that the implementation
+ * of the cleanUp() method resets to a virgin state. The cleanUp() method will
+ * be called when this SAXHandler is reset(), which may happen multiple times
+ * between parses. The cleanUp() method must ensure that there are no references
+ * remaining to any external instances.
+ * <p>
+ * Overriding of this class is permitted to allow for different handling of SAX
+ * events. Once you have created a subclass of this, you also need to create a
+ * custom implementation of {@link SAXHandlerFactory} to supply your instances
+ * to {@link SAXBuilder}
+ * <p>
+ *  
+ * @see org.jdom2.input.sax
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
  * @author  Bradley S. Huffman
  * @author  phil@triloggroup.com
+ * @author  Rolf Lear
  */
 public class SAXHandler extends DefaultHandler
 		implements LexicalHandler, DeclHandler, DTDHandler {
 
-//	/** Hash table to map SAX attribute type names to JDOM attribute types. */
-//	private static final Map<String, Integer> attrNameToTypeMap = new HashMap<String, Integer>(13);
-
-	/** <code>Document</code> object being built */
-	private Document document;
-
-	/** <code>Element</code> object being built */
-	private Element currentElement;
-
-	/** Indicator of where in the document we are */
-	private boolean atRoot;
-
-	/** Indicator of whether we are in the DocType. Note that the DTD consists
-	 * of both the internal subset (inside the <!DOCTYPE> tag) and the
-	 * external subset (in a separate .dtd file). */
-	private boolean inDTD = false;
-
-	/** Indicator of whether we are in the internal subset */
-	private boolean inInternalSubset = false;
-
-	/** Indicator of whether we previously were in a CDATA */
-	private boolean previousCDATA = false;
-
-	/** Indicator of whether we are in a CDATA */
-	private boolean inCDATA = false;
-
-	/** Indicator of whether we should expand entities */
-	private boolean expand = true;
-
-	/** Indicator of whether we are actively suppressing (non-expanding) a
-        current entity */
-	private boolean suppress = false;
-
-	/** How many nested entities we're currently within */
-	private int entityDepth = 0;  // XXX may not be necessary anymore?
+	/** The JDOMFactory used for JDOM object creation */
+	private final JDOMFactory factory;
 
 	/** Temporary holder for namespaces that have been declared with
 	 * startPrefixMapping, but are not yet available on the element */
-	private List<Namespace> declaredNamespaces;
+	private final List<Namespace> declaredNamespaces = 
+			new ArrayList<Namespace>(32);
 
 	/** Temporary holder for the internal subset */
-	private StringBuffer internalSubset = new StringBuffer();
+	private final StringBuilder internalSubset = new StringBuilder();
 
 	/** Temporary holder for Text and CDATA */
-	private TextBuffer textBuffer = new TextBuffer();
+	private final TextBuffer textBuffer = new TextBuffer();
 
 	/** The external entities defined in this document */
-	private Map<String, String[]> externalEntities;
+	private final Map<String, String[]> externalEntities =
+			new HashMap<String, String[]>();
 
-	/** The JDOMFactory used for JDOM object creation */
-	private JDOMFactory factory;
+	/** <code>Document</code> object being built - must be cleared on reset() */
+	private Document currentDocument = null;
+
+	/** <code>Element</code> object being built - must be cleared on reset() */
+	private Element currentElement = null;
+
+	/** The SAX Locator object provided by the parser */
+	private Locator currentLocator = null;
+
+	/** Indicator of where in the document we are - must be reset() */
+	private boolean atRoot = true;
+
+	/** Indicator of whether we are in the DocType. Note that the DTD consists
+	 * of both the internal subset (inside the <!DOCTYPE> tag) and the
+	 * external subset (in a separate .dtd file). - must be reset() */
+	private boolean inDTD = false;
+
+	/** Indicator of whether we are in the internal subset - must be reset() */
+	private boolean inInternalSubset = false;
+
+	/** Indicator of whether we previously were in a CDATA - must be reset() */
+	private boolean previousCDATA = false;
+
+	/** Indicator of whether we are in a CDATA - must be reset() */
+	private boolean inCDATA = false;
+
+	/** Indicator of whether we should expand entities - must be reset() */
+	private boolean expand = true;
+
+	/** Indicator of whether we are actively suppressing (non-expanding) a
+        current entity - must be reset() */
+	private boolean suppress = false;
+
+	/** How many nested entities we're currently within - must be reset() */
+	private int entityDepth = 0;  // XXX may not be necessary anymore?
 
 	/** Whether to ignore ignorable whitespace */
 	private boolean ignoringWhite = false;
@@ -133,47 +152,6 @@ public class SAXHandler extends DefaultHandler
 	/** Whether to ignore text containing all whitespace */
 	private boolean ignoringBoundaryWhite = false;
 
-	/** The SAX Locator object provided by the parser */
-	private Locator locator;
-
-//	/**
-//	 * Class initializer: Populate a table to translate SAX attribute
-//	 * type names into JDOM attribute type value (integer).
-//	 * <p>
-//	 * <b>Note that all the mappings defined below are compliant with
-//	 * the SAX 2.0 specification exception for "ENUMERATION" with is
-//	 * specific to Crimson 1.1.X and Xerces 2.0.0-betaX which report
-//	 * attributes of enumerated types with a type "ENUMERATION"
-//	 * instead of the expected "NMTOKEN".
-//	 * </p>
-//	 * <p>
-//	 * Note also that Xerces 1.4.X is not SAX 2.0 compliant either
-//	 * but handling its case requires
-//	 * {@link #getAttributeType specific code}.
-//	 * </p>
-//	 */
-//	static {
-//		attrNameToTypeMap.put("CDATA",
-//				new Integer(Attribute.CDATA_TYPE));
-//		attrNameToTypeMap.put("ID",
-//				new Integer(Attribute.ID_TYPE));
-//		attrNameToTypeMap.put("IDREF",
-//				new Integer(Attribute.IDREF_TYPE));
-//		attrNameToTypeMap.put("IDREFS",
-//				new Integer(Attribute.IDREFS_TYPE));
-//		attrNameToTypeMap.put("ENTITY",
-//				new Integer(Attribute.ENTITY_TYPE));
-//		attrNameToTypeMap.put("ENTITIES",
-//				new Integer(Attribute.ENTITIES_TYPE));
-//		attrNameToTypeMap.put("NMTOKEN",
-//				new Integer(Attribute.NMTOKEN_TYPE));
-//		attrNameToTypeMap.put("NMTOKENS",
-//				new Integer(Attribute.NMTOKENS_TYPE));
-//		attrNameToTypeMap.put("NOTATION",
-//				new Integer(Attribute.NOTATION_TYPE));
-//		attrNameToTypeMap.put("ENUMERATION",
-//				new Integer(Attribute.ENUMERATED_TYPE));
-//	}
 
 	/**
 	 * This will create a new <code>SAXHandler</code> that listens to SAX
@@ -193,17 +171,43 @@ public class SAXHandler extends DefaultHandler
 	 * objects
 	 */
 	public SAXHandler(JDOMFactory factory) {
-		if (factory != null) {
-			this.factory = factory;
-		} else {
-			this.factory = new DefaultJDOMFactory();
-		}
-
+		this.factory = factory != null ? factory : new DefaultJDOMFactory();
+		reset();
+	}
+	
+	/**
+	 * Override this method if you are a subclasser, and you want to clear the
+	 * state of your SAXHandler instance in preparation for a new parse.
+	 */
+	protected void resetSubCLass() {
+		// override this if you subclass SAXHandler.
+		// it will be called after the base core SAXHandler is reset. 
+	}
+	
+	/**
+	 * Restore this SAXHandler to a clean state ready for another parse round.
+	 * All internal variables are cleared to an initialized state, and then the
+	 * resetSubClass() method is called to clear any methods that a subclass may
+	 * need to have reset.
+	 */
+	public final void reset() {
+		currentLocator = null;
+		currentDocument = factory.document(null);
+		currentElement = null;
 		atRoot = true;
-		declaredNamespaces = new ArrayList<Namespace>();
-		externalEntities = new HashMap<String, String[]>();
-
-		document = this.factory.document(null);
+		inDTD = false;
+		inInternalSubset = false;
+		previousCDATA = false;
+		inCDATA = false;
+		expand = true;
+		suppress = false;
+		entityDepth = 0;
+		declaredNamespaces.clear();
+		internalSubset.setLength(0);
+		textBuffer.clear();
+		externalEntities.clear();
+		ignoringWhite = false;
+		ignoringBoundaryWhite = false;
 	}
 
 	/**
@@ -215,7 +219,7 @@ public class SAXHandler extends DefaultHandler
 	 */
 	protected void pushElement(Element element) {
 		if (atRoot) {
-			document.setRootElement(element);  // XXX should we use a factory call?
+			currentDocument.setRootElement(element);  // XXX should we use a factory call?
 			atRoot = false;
 		}
 		else {
@@ -230,7 +234,7 @@ public class SAXHandler extends DefaultHandler
 	 * @return <code>Document</code> - Document that was built
 	 */
 	public Document getDocument() {
-		return document;
+		return currentDocument;
 	}
 
 	/**
@@ -326,8 +330,8 @@ public class SAXHandler extends DefaultHandler
 
 	@Override
 	public void startDocument() {
-		if (locator != null) {
-			document.setBaseURI(locator.getSystemId());
+		if (currentLocator != null) {
+			currentDocument.setBaseURI(currentLocator.getSystemId());
 		}
 	}
 
@@ -453,7 +457,7 @@ public class SAXHandler extends DefaultHandler
 		flushCharacters();
 
 		if (atRoot) {
-			factory.addContent(document, factory.processingInstruction(target, data));
+			factory.addContent(currentDocument, factory.processingInstruction(target, data));
 		} else {
 			factory.addContent(getCurrentElement(),
 					factory.processingInstruction(target, data));
@@ -550,7 +554,7 @@ public class SAXHandler extends DefaultHandler
 		flushCharacters();
 
 		if (atRoot) {
-			factory.setRoot(document, element);  // Yes, use a factory call...
+			factory.setRoot(currentDocument, element);  // Yes, use a factory call...
 			atRoot = false;
 		} else {
 			factory.addContent(getCurrentElement(), element);
@@ -813,7 +817,7 @@ if (!inDTD) {
 
 		flushCharacters(); // Is this needed here?
 
-		factory.addContent(document, factory.docType(name, publicID, systemID));
+		factory.addContent(currentDocument, factory.docType(name, publicID, systemID));
 		inDTD = true;
 		inInternalSubset = true;
 	}
@@ -825,7 +829,7 @@ if (!inDTD) {
 	@Override
 	public void endDTD() {
 
-		document.getDocType().setInternalSubset(internalSubset.toString());
+		currentDocument.getDocType().setInternalSubset(internalSubset.toString());
 		inDTD = false;
 		inInternalSubset = false;
 	}
@@ -943,7 +947,7 @@ if (!inDTD) {
 		}
 		if ((!inDTD) && (!commentText.equals(""))) {
 			if (atRoot) {
-				factory.addContent(document, factory.comment(commentText));
+				factory.addContent(currentDocument, factory.comment(commentText));
 			} else {
 				factory.addContent(getCurrentElement(), factory.comment(commentText));
 			}
@@ -1045,7 +1049,7 @@ if (!inDTD) {
 	 */
 	@Override
 	public void setDocumentLocator(Locator locator) {
-		this.locator = locator;
+		this.currentLocator = locator;
 	}
 
 	/**
@@ -1056,6 +1060,6 @@ if (!inDTD) {
 	 * the location of any SAX document event.
 	 */
 	public Locator getDocumentLocator() {
-		return locator;
+		return currentLocator;
 	}
 }

@@ -29,7 +29,7 @@ import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.filter.ContentFilter;
-import org.jdom2.input.SAXHandler;
+import org.jdom2.input.sax.SAXHandler;
 
 @SuppressWarnings("javadoc")
 public class TestSAXHandler {

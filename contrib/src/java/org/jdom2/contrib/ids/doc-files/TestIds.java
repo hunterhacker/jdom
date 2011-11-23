@@ -18,7 +18,7 @@ public class TestIds {
       }
 
       SAXBuilder builder = new SAXBuilder();
-      builder.setFactory(new IdFactory());
+      builder.setJDOMFactory(new IdFactory());
 
       IdDocument doc = (IdDocument)(builder.build(args[0]));
       Element    elt = doc.getElementById(args[1]);

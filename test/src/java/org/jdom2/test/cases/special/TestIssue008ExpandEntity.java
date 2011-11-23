@@ -23,8 +23,8 @@ public class TestIssue008ExpandEntity {
 			throw new IllegalStateException("Unable to get resource " + docloc);
 		}
 
-		SAXBuilder builder = new SAXBuilder();
-		builder.setValidation(validating);
+		SAXBuilder builder = new SAXBuilder(validating);
+		//builder.setValidation(validating);
 		builder.setExpandEntities(expand);
 		Document doc = null;
 		try {

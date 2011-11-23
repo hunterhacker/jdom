@@ -31,7 +31,6 @@ import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
-import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
@@ -39,9 +38,9 @@ import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.SAXHandler;
 import org.jdom2.input.StAXEventBuilder;
 import org.jdom2.input.StAXStreamBuilder;
+import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
@@ -50,16 +49,6 @@ import org.jdom2.xpath.XPath;
 
 @SuppressWarnings("javadoc")
 public class PerfDoc {
-	
-	private static final class MySAXBuilder extends SAXBuilder {
-		public MySAXBuilder() {
-			super();
-		}
-		@Override
-		public XMLReader createParser() throws JDOMException {
-			return super.createParser();
-		}
-	}
 	
 	private class SAXLoadRunnable implements TimeRunnable {
 		private final int type;
@@ -236,8 +225,7 @@ public class PerfDoc {
 		switch (type) {
 			case 0:
 				SAXBuilder sax = new SAXBuilder();
-				sax.setFactory(new UncheckedJDOMFactory());
-				sax.setValidation(false);
+				sax.setJDOMFactory(new UncheckedJDOMFactory());
 				return sax.build(car);
 			case 1:
 				DOMBuilder dom = new DOMBuilder();
@@ -255,10 +243,9 @@ public class PerfDoc {
 				XMLEventReader events = XMLInputFactory.newInstance().createXMLEventReader(car);
 				return staxe.build(events);
 			case 8:
-				MySAXBuilder dsax = new MySAXBuilder();
-				dsax.setValidation(false);
+				SAXBuilder dsax = new SAXBuilder();
 				DefaultHandler2 def = new DefaultHandler2();
-				XMLReader sread = dsax.createParser();
+				XMLReader sread = dsax.getXMLReaderFactory().createXMLReader();
 				sread.setContentHandler(def);
 				sread.setDTDHandler(def);
 				sread.setEntityResolver(def);

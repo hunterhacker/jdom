@@ -58,17 +58,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jdom2.DefaultJDOMFactory;
-import org.jdom2.DocType;
-import org.jdom2.Document;
-import org.jdom2.EntityRef;
-import org.jdom2.JDOMException;
-import org.jdom2.JDOMFactory;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -76,10 +69,23 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.JDOMFactory;
+import org.jdom2.input.sax.BuilderErrorHandler;
+import org.jdom2.input.sax.XMLReaderJAXPSingletons;
+import org.jdom2.input.sax.XMLReaderJDOMFactory;
+import org.jdom2.input.sax.XMLReaderSAX2Factory;
+import org.jdom2.input.sax.SAXBuilderEngine;
+import org.jdom2.input.sax.SAXEngine;
+import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.input.sax.SAXHandlerFactory;
 
 /**
  * Builds a JDOM document from files, streams, readers, URLs, or a SAX {@link
@@ -91,32 +97,75 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * document. Information about SAX can be found at <a
  * href="http://www.saxproject.org">http://www.saxproject.org</a>.
  * <p>
+ * For a description of how SAXBuilder is used, and how to customise the process
+ * you should look at the {@link org.jdom2.input.sax} package documentation.
+ * 
  * Known issues: Relative paths for a {@link DocType} or {@link EntityRef} may
  * be converted by the SAX parser into absolute paths.
  *
+ * @see org.jdom2.input.sax
+ * 
  * @author  Jason Hunter
  * @author  Brett McLaughlin
  * @author  Dan Schaffer
  * @author  Philip Nelson
  * @author  Alex Rosen
+ * @author  Rolf Lear
  */
-public class SAXBuilder {
+public class SAXBuilder implements SAXEngine {
+	
+	/**
+	 * For performance reasons it helps to use 'final' instances of classes.
+	 * This makes the SAXHandler class a 'final' class for all normal
+	 * SAXBuilders. It adds no other functionality.
+	 * 
+	 * @author Rolf Lear
+	 *
+	 */
+	private static final class DefaultSAXHandler extends SAXHandler {
+		public DefaultSAXHandler(JDOMFactory factory) {
+			super(factory);
+		}
+	}
+	
+	/**
+	 * This SAXHandlerFactory instance provides default-configured SAXHandler
+	 * instances for all non-custom situations.
+	 * 
+	 * @author Rolf Lear
+	 *
+	 */
+	private static final class DefaultSAXHandlerFactory 
+		implements SAXHandlerFactory {
+		@Override
+		public SAXHandler createSAXHandler(JDOMFactory factory) {
+			return new DefaultSAXHandler(factory);
+		}
+	}
+	
+	private static final SAXHandlerFactory DEFAULTSAXHANDLERFAC =
+			new DefaultSAXHandlerFactory();
+	
+	private static final JDOMFactory DEFAULTJDOMFAC = new DefaultJDOMFactory();
 
 	/**
-	 * Default parser class to use. This is used when no other parser
-	 * is given and JAXP isn't available.
+	 * The XMLReader pillar of SAXBuilder
 	 */
-	private static final String DEFAULT_SAX_DRIVER =
-			"org.apache.xerces.parsers.SAXParser";
+	private XMLReaderJDOMFactory readerfac = null;
+	
+	/**
+	 * The SAXHandler pillar of SAXBuilder
+	 */
+	private SAXHandlerFactory handlerfac = null;
+	
+	/** 
+	 * The JDOMFactory pillar for creating new JDOM objects
+	 */
+	private JDOMFactory jdomfac = null;
 
-	/** Whether validation should occur */
-	private boolean validate;
-
+	
 	/** Whether expansion of entities should occur */
 	private boolean expand = true;
-
-	/** Adapter class to use */
-	private String saxDriverClass;
 
 	/** ErrorHandler class to use */
 	private ErrorHandler saxErrorHandler = null;
@@ -130,9 +179,6 @@ public class SAXBuilder {
 	/** XMLFilter instance to use */
 	private XMLFilter saxXMLFilter = null;
 
-	/** The factory for creating new JDOM objects */
-	private JDOMFactory factory = new DefaultJDOMFactory();
-
 	/** Whether to ignore ignorable whitespace */
 	private boolean ignoringWhite = false;
 
@@ -145,44 +191,35 @@ public class SAXBuilder {
 	/** User-specified properties to be set on the SAX parser */
 	private HashMap<String,Object> properties = new HashMap<String, Object>(5);
 
-	/** Whether to use fast parser reconfiguration */
-	private boolean fastReconfigure = false;
-
-	/** Whether to try lexical reporting in fast parser reconfiguration */
-	private boolean skipNextLexicalReportingConfig = false;
-
-	/** Whether to to try entity expansion in fast parser reconfiguration */
-	private boolean skipNextEntityExpandConfig = false;
-
 	/**
 	 * Whether parser reuse is allowed.
 	 * <p>Default: <code>true</code></p>
 	 */
 	private boolean reuseParser = true;
-
+	
 	/** The current SAX parser, if parser reuse has been activated. */
-	private XMLReader saxParser = null;
+	private SAXEngine engine = null;
 
 	/**
-	 * Creates a new SAXBuilder which will attempt to first locate
-	 * a parser via JAXP, then will try to use a set of default
-	 * SAX Drivers. The underlying parser will not validate.
+	 * Creates a new JAXP-based SAXBuilder. The underlying parser will not
+	 * validate.
 	 */
 	public SAXBuilder() {
-		this(false);
+		this(XMLReaderJAXPSingletons.NONVALIDATING);
 	}
 
 	/**
-	 * Creates a new SAXBuilder which will attempt to first locate
-	 * a parser via JAXP, then will try to use a set of default
-	 * SAX Drivers. The underlying parser will validate or not
-	 * according to the given parameter.
+	 * Creates a new JAXP-based SAXBuilder. The underlying parser will validate
+	 * (using DTD) or not according to the given parameter. If you want Schema
+	 * validation then use SAXBuilder(JAXPXMLReaderSingleton.XSDVALIDATOR)
 	 *
-	 * @param validate <code>boolean</code> indicating if
+	 * @param validate <code>boolean</code> indicating if DTD
 	 *                 validation should occur.
 	 */
 	public SAXBuilder(boolean validate) {
-		this.validate = validate;
+		this(validate 
+				? XMLReaderJAXPSingletons.DTDVALIDATING 
+						: XMLReaderJAXPSingletons.NONVALIDATING);
 	}
 
 	/**
@@ -207,8 +244,46 @@ public class SAXBuilder {
 	 *                 validation should occur.
 	 */
 	public SAXBuilder(String saxDriverClass, boolean validate) {
-		this.saxDriverClass = saxDriverClass;
-		this.validate = validate;
+		this(new XMLReaderSAX2Factory(validate, saxDriverClass));
+	}
+
+	/**
+	 * Creates a new SAXBuilder. This is the base constructor for all other
+	 * SAXBuilder constructors: they all find a way to create a
+	 * JDOMXMLReaderFactory and then call this constructor with that factory.
+	 * <p>
+	 * @see XMLReaderJDOMFactory and its package documentation for details on
+	 * creating and using JDOMXMLReaderFactories.
+	 * @param readersouce the {@link XMLReaderJDOMFactory} that supplies
+	 * 		XMLReaders. If the value is null then a Non-Validating JAXP-based
+	 * 		SAX2.0 parser will be used.
+	 */
+	public SAXBuilder(XMLReaderJDOMFactory readersouce) {
+		this(readersouce, null, null);
+	}
+	
+	/**
+	 * Creates a new SAXBuilder. This is the base constructor for all other
+	 * SAXBuilder constructors: they all find a way to create a
+	 * JDOMXMLReaderFactory and then call this constructor with that factory.
+	 * <p>
+	 * @see XMLReaderJDOMFactory and its package documentation for details on
+	 * creating and using JDOMXMLReaderFactories.
+	 *
+	 * @param xmlreaderfactory a {@link XMLReaderJDOMFactory} that creates XMLReaders
+	 * @param handlerfactory a {@link SAXHandlerFactory} that creates SAXHandlers
+	 * @param jdomfactory a {@link JDOMFactory} that creates JDOM Content.
+	 */
+	public SAXBuilder(XMLReaderJDOMFactory xmlreaderfactory, SAXHandlerFactory handlerfactory, JDOMFactory jdomfactory) {
+		this.readerfac = xmlreaderfactory == null
+				? XMLReaderJAXPSingletons.NONVALIDATING
+				: xmlreaderfactory;
+		this.handlerfac = handlerfactory == null
+				? DEFAULTSAXHANDLERFAC
+				: handlerfactory;
+		this.jdomfac = jdomfactory == null
+				? DEFAULTJDOMFAC
+				: jdomfactory;
 	}
 
 	/**
@@ -217,15 +292,29 @@ public class SAXBuilder {
 	 * @return the driver class assigned in the constructor
 	 */
 	public String getDriverClass() {
-		return saxDriverClass;
+		if (readerfac instanceof XMLReaderSAX2Factory) {
+			return ((XMLReaderSAX2Factory)readerfac).getDriverClassName();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the current {@link org.jdom2.JDOMFactory} in use.
+	 * @return the factory in use
+	 * @deprecated is replaced by {@link #getJDOMFactory()}
+	 */
+	@Deprecated
+	public JDOMFactory getFactory() {
+		return getJDOMFactory();
 	}
 
 	/**
 	 * Returns the current {@link org.jdom2.JDOMFactory} in use.
 	 * @return the factory in use
 	 */
-	public JDOMFactory getFactory() {
-		return factory;
+	@Override
+	public JDOMFactory getJDOMFactory() {
+		return jdomfac;
 	}
 
 	/**
@@ -233,9 +322,71 @@ public class SAXBuilder {
 	 * the tree with your own subclasses of the JDOM classes.
 	 *
 	 * @param factory <code>JDOMFactory</code> to use
+	 * @deprecated use {@link #setJDOMFactory(JDOMFactory)}
 	 */
+	@Deprecated
 	public void setFactory(JDOMFactory factory) {
-		this.factory = factory;
+		setJDOMFactory(factory);
+	}
+	
+	/**
+	 * This sets a custom JDOMFactory for the builder.  Use this to build
+	 * the tree with your own subclasses of the JDOM classes.
+	 *
+	 * @param factory <code>JDOMFactory</code> to use
+	 */
+	public void setJDOMFactory(JDOMFactory factory) {
+		this.jdomfac = factory;
+		engine = null;
+	}
+	
+	/**
+	 * Get the current XMLReader factory.
+	 * @return the current JDOMXMLReaderFactory
+	 */
+	public XMLReaderJDOMFactory getXMLReaderFactory() {
+		return readerfac;
+	}
+
+	/**
+	 * Set the current XMLReader factory.
+	 * @param rfac the JDOMXMLReaderFactory to set.
+	 */
+	public void setXMLReaderFactory(XMLReaderJDOMFactory rfac) {
+		readerfac = rfac == null
+				? XMLReaderJAXPSingletons.NONVALIDATING
+				: rfac;
+		engine = null;
+	}
+	
+	
+	/**
+	 * Get the SAXHandlerFactory used to supply SAXHandlers to this SAXBuilder.
+	 * @return the current SAXHandlerFactory (never null).
+	 */
+	public SAXHandlerFactory getSAXHandlerFactory() {
+		return handlerfac;
+	}
+
+	/**
+	 * Set the SAXHandlerFactory to be used by this SAXBuilder.
+	 * @param factory the required SAXHandlerFactory. Null input will request
+	 * 		the default SAXHandlerFactory.
+	 */
+	public void setSAXHandlerFactory(SAXHandlerFactory factory) {
+		this.handlerfac = factory == null ? DEFAULTSAXHANDLERFAC : factory;
+		engine = null;
+	}
+
+	/**
+	 * Returns whether validation is to be performed during the build.
+	 *
+	 * @return whether validation is to be performed during the build
+	 * @deprecated in lieu of {@link #isValidating()}
+	 */
+	@Deprecated
+	public boolean getValidation() {
+		return isValidating();
 	}
 
 	/**
@@ -243,24 +394,47 @@ public class SAXBuilder {
 	 *
 	 * @return whether validation is to be performed during the build
 	 */
-	public boolean getValidation() {
-		return validate;
+	@Override
+	public boolean isValidating() {
+		return readerfac.isValidating();
 	}
 
 	/**
 	 * This sets validation for the builder.
+	 * <p>
+	 * <b>Do Not Use</b>
+	 * <p>
+	 * JDOM2 introduces the concept of XMLReader factories. The XMLReader is
+	 * what determines the type of validation. A simple boolean is not enough
+	 * to indicate what sort of validation is required. The
+	 * {@link #setXMLReaderFactory(XMLReaderJDOMFactory)} method provides a
+	 * means to me more specific about validation.
+	 * <p>
+	 * For backward compatibility this method has been retained, but its use is
+	 * discouraged. It does make some logical choices though. The code is
+	 * equivalent to:
+	 * <p>
+	 * <pre>setXMLReaderFactory(JAXPXMLReaderSingleton.DTDVALIDATING)</pre> for
+	 * true, and
+	 * <pre>setXMLReaderFactory(JAXPXMLReaderSingleton.NONVALIDATING)</pre> for
+	 * false.
 	 *
 	 * @param validate <code>boolean</code> indicating whether validation
 	 * should occur.
+	 * @deprecated use {@link #setXMLReaderFactory(XMLReaderJDOMFactory)} 
 	 */
+	@Deprecated
 	public void setValidation(boolean validate) {
-		this.validate = validate;
+		setXMLReaderFactory(validate 
+				? XMLReaderJAXPSingletons.DTDVALIDATING 
+				: XMLReaderJAXPSingletons.NONVALIDATING);
 	}
 
 	/**
 	 * Returns the {@link ErrorHandler} assigned, or null if none.
 	 * @return the ErrorHandler assigned, or null if none
 	 */
+	@Override
 	public ErrorHandler getErrorHandler() {
 		return saxErrorHandler;
 	}
@@ -272,6 +446,7 @@ public class SAXBuilder {
 	 */
 	public void setErrorHandler(ErrorHandler errorHandler) {
 		saxErrorHandler = errorHandler;
+		engine = null;
 	}
 
 	/**
@@ -279,6 +454,7 @@ public class SAXBuilder {
 	 *
 	 * @return the EntityResolver assigned
 	 */
+	@Override
 	public EntityResolver getEntityResolver() {
 		return saxEntityResolver;
 	}
@@ -290,6 +466,7 @@ public class SAXBuilder {
 	 */
 	public void setEntityResolver(EntityResolver entityResolver) {
 		saxEntityResolver = entityResolver;
+		engine = null;
 	}
 
 	/**
@@ -297,6 +474,7 @@ public class SAXBuilder {
 	 *
 	 * @return the DTDHandler assigned
 	 */
+	@Override
 	public DTDHandler getDTDHandler() {
 		return saxDTDHandler;
 	}
@@ -308,6 +486,7 @@ public class SAXBuilder {
 	 */
 	public void setDTDHandler(DTDHandler dtdHandler) {
 		saxDTDHandler = dtdHandler;
+		engine = null;
 	}
 
 	/**
@@ -326,6 +505,20 @@ public class SAXBuilder {
 	 */
 	public void setXMLFilter(XMLFilter xmlFilter) {
 		saxXMLFilter = xmlFilter;
+		engine = null;
+	}
+
+	/**
+	 * Returns whether element content whitespace is to be ignored during the
+	 * build.
+	 *
+	 * @return whether element content whitespace is to be ignored during the
+	 * build
+	 * @deprecated in lieu of {@link #isIgnoringElementContentWhitespace()}
+	 */
+	@Deprecated
+	public boolean getIgnoringElementContentWhitespace() {
+		return isIgnoringElementContentWhitespace();
 	}
 
 	/**
@@ -335,7 +528,8 @@ public class SAXBuilder {
 	 * @return whether element content whitespace is to be ignored during the
 	 * build
 	 */
-	public boolean getIgnoringElementContentWhitespace() {
+	@Override
+	public boolean isIgnoringElementContentWhitespace() {
 		return ignoringWhite;
 	}
 
@@ -352,6 +546,7 @@ public class SAXBuilder {
 	 */
 	public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
 		this.ignoringWhite = ignoringWhite;
+		engine = null;
 	}
 
 	/**
@@ -362,10 +557,27 @@ public class SAXBuilder {
 	 * be ignored during build.
 	 *
 	 * @see #setIgnoringBoundaryWhitespace
+	 * @deprecated in lieu of {@link #isIgnoringBoundaryWhitespace()}
 	 */
+	@Deprecated
 	public boolean getIgnoringBoundaryWhitespace() {
+		return isIgnoringBoundaryWhitespace();
+	}
+	
+	/**
+	 * Returns whether or not the parser will elminate element content
+	 * containing only whitespace.
+	 *
+	 * @return <code>boolean</code> - whether only whitespace content will
+	 * be ignored during build.
+	 *
+	 * @see #setIgnoringBoundaryWhitespace
+	 */
+	@Override
+	public boolean isIgnoringBoundaryWhitespace() {
 		return ignoringBoundaryWhite;
 	}
+	
 
 	/**
 	 * Specifies whether or not the parser should elminate boundary whitespace,
@@ -381,10 +593,62 @@ public class SAXBuilder {
 	 * whitespace.  The default is <code>false</code>.
 	 *
 	 * @param ignoringBoundaryWhite Whether to ignore whitespace-only text
-	 *  noes
+	 *  nodes
 	 */
 	public void setIgnoringBoundaryWhitespace(boolean ignoringBoundaryWhite) {
 		this.ignoringBoundaryWhite = ignoringBoundaryWhite;
+		engine = null;
+	}
+
+	/**
+	 * Returns whether or not entities are being expanded into normal text
+	 * content.
+	 *
+	 * @return whether entities are being expanded
+	 * @deprecated in lieu of {@link #isExpandEntities()}
+	 */
+	@Deprecated
+	public boolean getExpandEntities() {
+		return expand;
+	}
+
+	/**
+	 * Returns whether or not entities are being expanded into normal text
+	 * content.
+	 *
+	 * @return whether entities are being expanded
+	 */
+	@Override
+	public boolean isExpandEntities() {
+		return expand;
+	}
+	
+	/**
+	 * <p>
+	 * This sets whether or not to expand entities for the builder.
+	 * A true means to expand entities as normal content.  A false means to
+	 * leave entities unexpanded as <code>EntityRef</code> objects.  The
+	 * default is true.
+	 * </p>
+	 * <p>
+	 * When this setting is false, the internal DTD subset is retained; when
+	 * this setting is true, the internal DTD subset is not retained.
+	 * </p>
+	 * <p>
+	 * Note that Xerces (at least up to 1.4.4) has a bug where entities
+	 * in attribute values will be misreported if this flag is turned off,
+	 * resulting in entities to appear within element content.  When turning
+	 * entity expansion off either avoid entities in attribute values, or
+	 * use another parser like Crimson.
+	 * http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6111
+	 * </p>
+	 *
+	 * @param expand <code>boolean</code> indicating whether entity expansion
+	 * should occur.
+	 */
+	public void setExpandEntities(boolean expand) {
+		this.expand = expand;
+		engine = null;
 	}
 
 	/**
@@ -412,7 +676,9 @@ public class SAXBuilder {
 	 */
 	public void setReuseParser(boolean reuseParser) {
 		this.reuseParser = reuseParser;
-		this.saxParser   = null;
+		if (!reuseParser) {
+			engine = null;
+		}
 	}
 
 	/**
@@ -427,11 +693,11 @@ public class SAXBuilder {
 	 * calling this has no effect.
 	 *
 	 * @param fastReconfigure Whether to do a fast reconfiguration of the parser
+	 * @deprecated All reused Parsers are now fast-reconfigured. No need to set it.
 	 */
+	@Deprecated
 	public void setFastReconfigure(boolean fastReconfigure) {
-		if (this.reuseParser) {
-			this.fastReconfigure = fastReconfigure;
-		}
+		// do nothing
 	}
 
 	/**
@@ -453,6 +719,7 @@ public class SAXBuilder {
 	public void setFeature(String name, boolean value) {
 		// Save the specified feature for later.
 		features.put(name, value ? Boolean.TRUE : Boolean.FALSE);
+		engine = null;
 	}
 
 	/**
@@ -473,190 +740,77 @@ public class SAXBuilder {
 	public void setProperty(String name, Object value) {
 		// Save the specified property for later.
 		properties.put(name, value);
+		engine = null;
 	}
 
 	/**
-	 * This builds a document from the supplied
-	 * input source.
-	 *
-	 * @param in <code>InputSource</code> to read from
-	 * @return <code>Document</code> resultant Document object
-	 * @throws JDOMException when errors occur in parsing
-	 * @throws IOException when an I/O error prevents a document
-	 *         from being fully parsed
+	 * This method builds a SAXBuilderEngine that can be reused many times, but
+	 * not concurrently.
+	 * @return a {@link SAXBuilderEngine} representing the current state of the
+	 *  	current SAXBuilder settings.
+	 * @throws JDOMException if there is any problem initialising the engine.
 	 */
-	public Document build(InputSource in)
-			throws JDOMException, IOException {
-		SAXHandler contentHandler = null;
+	public SAXEngine buildEngine() throws JDOMException {
 
-		try {
-			// Create and configure the content handler.
-			contentHandler = createContentHandler();
-			configureContentHandler(contentHandler);
-
-			XMLReader parser = this.saxParser;
-			if (parser == null) {
-				// Create and configure the parser.
-				parser = createParser();
-
-				// Install optional filter
-				if (saxXMLFilter != null) {
-					// Connect filter chain to parser
-					XMLFilter root = saxXMLFilter;
-					while (root.getParent() instanceof XMLFilter) {
-						root = (XMLFilter)root.getParent();
-					}
-					root.setParent(parser);
-
-					// Read from filter
-					parser = saxXMLFilter;
-				}
-
-				// Configure parser
-				configureParser(parser, contentHandler);
-
-				if (reuseParser) {
-					this.saxParser = parser;
-				}
-			}
-			else {
-				// Reset content handler as SAXHandler instances cannot
-				// be reused
-				configureParser(parser, contentHandler);
-			}
-
-			// Parse the document.
-			parser.parse(in);
-
-			return contentHandler.getDocument();
-		}
-		catch (SAXParseException e) {
-			Document doc = contentHandler.getDocument();
-			if (doc.hasRootElement() == false) {
-				doc = null;
-			}
-
-			String systemId = e.getSystemId();
-			if (systemId != null) {
-				throw new JDOMParseException("Error on line " +
-						e.getLineNumber() + " of document " + systemId, e, doc);
-			}
-			throw new JDOMParseException("Error on line " +
-					e.getLineNumber(), e, doc);
-		}
-		catch (SAXException e) {
-			throw new JDOMParseException("Error in building: " +
-					e.getMessage(), e, contentHandler.getDocument());
-		}
-		finally {
-			// Explicitly nullify the handler to encourage GC
-			// It's a stack var so this shouldn't be necessary, but it
-			// seems to help on some JVMs
-			contentHandler = null;
-		}
-	}
-
-	/**
-	 * This creates the SAXHandler that will be used to build the Document.
-	 *
-	 * @return <code>SAXHandler</code> - resultant SAXHandler object.
-	 */
-	protected SAXHandler createContentHandler() {
-		SAXHandler contentHandler = new SAXHandler(factory);
-		return contentHandler;
-	}
-
-	/**
-	 * This configures the SAXHandler that will be used to build the Document.
-	 * <p>
-	 * The default implementation simply passes through some configuration
-	 * settings that were set on the SAXBuilder: setExpandEntities() and
-	 * setIgnoringElementContentWhitespace().
-	 * </p>
-	 * @param contentHandler The SAXHandler to configure
-	 */
-	protected void configureContentHandler(SAXHandler contentHandler) {
-		// Setup pass through behavior
+		// Create and configure the content handler.
+		SAXHandler contentHandler = handlerfac.createSAXHandler(jdomfac);
+		
 		contentHandler.setExpandEntities(expand);
 		contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
 		contentHandler.setIgnoringBoundaryWhitespace(ignoringBoundaryWhite);
+
+		XMLReader parser = createParser(contentHandler);
+		boolean valid = readerfac.isValidating();
+
+		return new SAXBuilderEngine(parser, contentHandler, valid);
 	}
-
+	
 	/**
-	 * This creates the XMLReader to be used for reading the XML document.
-	 * <p>
-	 * The default behavior is to (1) use the saxDriverClass, if it has been
-	 * set, (2) try to obtain a parser from JAXP, if it is available, and
-	 * (3) if all else fails, use a hard-coded default parser (currently
-	 * the Xerces parser). Subclasses may override this method to determine
-	 * the parser to use in a different way.
-	 * </p>
-	 *
-	 * @return <code>XMLReader</code> - resultant XMLReader object.
-	 * @throws JDOMException if the parser create fails.
+	 * Allow overriding classes access to the Parser before it is used in a
+	 * SAXBuilderEngine.
+	 * @param contentHandler The SAXHandler to set for the parser.
+	 * @return THe configured parser.
+	 * @throws JDOMException if there is a problem
 	 */
-	protected XMLReader createParser() throws JDOMException {
-		XMLReader parser = null;
-		if (saxDriverClass != null) {
-			// The user knows that they want to use a particular class
-			try {
-				parser = XMLReaderFactory.createXMLReader(saxDriverClass);
+	protected XMLReader createParser(SAXHandler contentHandler) throws JDOMException {
+		XMLReader parser = readerfac.createXMLReader();
 
-				// Configure parser
-				setFeaturesAndProperties(parser, true);
+		// Install optional filter
+		if (saxXMLFilter != null) {
+			// Connect filter chain to parser
+			XMLFilter root = saxXMLFilter;
+			while (root.getParent() instanceof XMLFilter) {
+				root = (XMLFilter)root.getParent();
 			}
-			catch (SAXException e) {
-				throw new JDOMException("Could not load " + saxDriverClass, e);
-			}
-		} else {
-			// Try using JAXP...
-			// Note we need JAXP 1.1, and if JAXP 1.0 is all that's
-			// available then the getXMLReader call fails and we skip
-			// to the hard coded default parser
-			// Actually, for JDOM2 we can assume JAXP1.1, this fixes a bug
-			// (issue #46), where setting an invalid value on the
-			// JAXP Properties causes an InvocationTargetException instead of
-			// a JDOMException.
-			// We no longer need the reflection to make this work
-			try {
-				parser = JAXPParserFactory.createParser(Boolean.valueOf(validate), features, properties);
+			root.setParent(parser);
 
-				// Configure parser
-				setFeaturesAndProperties(parser, false);
-			}
-			catch (JDOMException e) {
-				throw e;
-			}
-			catch (NoClassDefFoundError e) {
-				// The class loader failed to resolve the dependencies
-				// of org.jdom2.input.JAXPParserFactory. This probably means
-				// that no JAXP parser is present in its class path.
-				// => Ignore and try allocating default SAX parser instance.
-			}
-			catch (Exception e) {
-				// Ignore and try allocating default SAX parser instance.
-			}
+			// Read from filter
+			parser = saxXMLFilter;
 		}
 
-		// Check to see if we got a parser yet, if not, try to use a
-		// hard coded default
-		if (parser == null) {
-			try {
-				parser = XMLReaderFactory.createXMLReader(DEFAULT_SAX_DRIVER);
-				// System.out.println("using default " + DEFAULT_SAX_DRIVER);
-				saxDriverClass = parser.getClass().getName();
-
-				// Configure parser
-				setFeaturesAndProperties(parser, true);
-			}
-			catch (SAXException e) {
-				throw new JDOMException("Could not load default SAX parser: "
-						+ DEFAULT_SAX_DRIVER, e);
-			}
-		}
-
+		// Configure parser
+		configureParser(parser, contentHandler);
 		return parser;
 	}
+
+	
+	/**
+	 * This method retrieves (or builds) a SAXBuilderEngine that represents the
+	 * current SAXBuilder state.
+	 * @return a {@link SAXBuilderEngine} representing the current state of the
+	 *  	current SAXBuilder settings.
+	 * @throws JDOMException if there is any problem initializing the engine.
+	 */
+	private SAXEngine getEngine() throws JDOMException {
+
+		if (engine != null) {
+			return engine;
+		}
+
+		engine =  buildEngine();
+		return engine;
+	}
+
 
 	/**
 	 * This configures the XMLReader to be used for reading the XML document.
@@ -695,14 +849,22 @@ public class SAXBuilder {
 			parser.setErrorHandler(new BuilderErrorHandler());
 		}
 
-		// If fastReconfigure is enabled and we failed in the previous attempt
-		// in configuring lexical reporting, then we skip this step.  This
-		// saves the work of repeated exception handling on each parse.
-		if (!skipNextLexicalReportingConfig) {
-			boolean success = false;
+		boolean success = false;
 
+		try {
+			parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
+					contentHandler);
+			success = true;
+		} catch (SAXNotSupportedException e) {
+			// No lexical reporting available
+		} catch (SAXNotRecognizedException e) {
+			// No lexical reporting available
+		}
+
+		// Some parsers use alternate property for lexical handling (grr...)
+		if (!success) {
 			try {
-				parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
+				parser.setProperty("http://xml.org/sax/properties/lexical-handler",
 						contentHandler);
 				success = true;
 			} catch (SAXNotSupportedException e) {
@@ -710,58 +872,8 @@ public class SAXBuilder {
 			} catch (SAXNotRecognizedException e) {
 				// No lexical reporting available
 			}
-
-			// Some parsers use alternate property for lexical handling (grr...)
-			if (!success) {
-				try {
-					parser.setProperty("http://xml.org/sax/properties/lexical-handler",
-							contentHandler);
-					success = true;
-				} catch (SAXNotSupportedException e) {
-					// No lexical reporting available
-				} catch (SAXNotRecognizedException e) {
-					// No lexical reporting available
-				}
-			}
-
-			// If unable to configure this property and fastReconfigure is
-			// enabled, then setup to avoid this code path entirely next time.
-			if (!success && fastReconfigure) {
-				skipNextLexicalReportingConfig = true;
-			}
 		}
 
-		// If fastReconfigure is enabled and we failed in the previous attempt
-		// in configuring entity expansion, then skip this step.  This
-		// saves the work of repeated exception handling on each parse.
-		if (!skipNextEntityExpandConfig) {
-			boolean success = false;
-
-			// Try setting the DeclHandler if entity expansion is off
-			if (!expand) {
-				try {
-					parser.setProperty("http://xml.org/sax/properties/declaration-handler",
-							contentHandler);
-					success = true;
-				} catch (SAXNotSupportedException e) {
-					// No lexical reporting available
-				} catch (SAXNotRecognizedException e) {
-					// No lexical reporting available
-				}
-			}
-
-			/* If unable to configure this property and fastReconfigure is
-			 * enabled, then setup to avoid this code path entirely next time.
-			 */
-			if (!success && fastReconfigure) {
-				skipNextEntityExpandConfig = true;
-			}
-		}
-	}
-
-	private void setFeaturesAndProperties(XMLReader parser,
-			boolean coreFeatures)
-					throws JDOMException {
 		// Set any user-specified features on the parser.
 		for (Map.Entry<String,Boolean> me : features.entrySet()) {
 			internalSetFeature(parser, me.getKey(), me.getValue().booleanValue(), me.getKey());
@@ -770,29 +882,6 @@ public class SAXBuilder {
 		// Set any user-specified properties on the parser.
 		for (Map.Entry<String,Object> me : properties.entrySet()) {
 			internalSetProperty(parser, me.getKey(), me.getValue(), me.getKey());
-		}
-
-		if (coreFeatures) {
-			// Set validation.
-			try {
-				internalSetFeature(parser,
-						"http://xml.org/sax/features/validation",
-						validate, "Validation");
-			} catch (JDOMException e) {
-				// If validation is not supported, and the user is requesting
-				// that we don't validate, that's fine - don't throw an
-				// exception.
-				if (validate)
-					throw e;
-			}
-
-			// Setup some namespace features.
-			internalSetFeature(parser,
-					"http://xml.org/sax/features/namespaces",
-					true, "Namespaces");
-			internalSetFeature(parser,
-					"http://xml.org/sax/features/namespace-prefixes",
-					true, "Namespace prefixes");
 		}
 
 		// Set entity expansion
@@ -807,9 +896,23 @@ public class SAXBuilder {
 				parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
 			}
 		}
-		catch (SAXNotRecognizedException e) { /* Ignore... */ }
-		catch (SAXNotSupportedException  e) { /* Ignore... */ }
+		catch (SAXException e) { /* Ignore... */ }
+
+		// Try setting the DeclHandler if entity expansion is off
+		if (!expand) {
+			try {
+				parser.setProperty("http://xml.org/sax/properties/declaration-handler",
+						contentHandler);
+				success = true;
+			} catch (SAXNotSupportedException e) {
+				// No lexical reporting available
+			} catch (SAXNotRecognizedException e) {
+				// No lexical reporting available
+			}
+		}
+
 	}
+
 
 	/**
 	 * Tries to set a feature on the parser. If the feature cannot be set,
@@ -848,6 +951,30 @@ public class SAXBuilder {
 	}
 
 	/**
+	 * This builds a document from the supplied
+	 * input source.
+	 *
+	 * @param in <code>InputSource</code> to read from
+	 * @return <code>Document</code> resultant Document object
+	 * @throws JDOMException when errors occur in parsing
+	 * @throws IOException when an I/O error prevents a document
+	 *         from being fully parsed
+	 */
+	@Override
+	public Document build(InputSource in)
+			throws JDOMException, IOException {
+
+		try {
+			return getEngine().build(in);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
+
+	}
+
+	/**
 	 * <p>
 	 * This builds a document from the supplied
 	 *   input stream.
@@ -859,9 +986,16 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed.
 	 */
+	@Override
 	public Document build(InputStream in)
 			throws JDOMException, IOException {
-		return build(new InputSource(in));
+		try {
+			return getEngine().build(in);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
 	/**
@@ -876,13 +1010,15 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed
 	 */
+	@Override
 	public Document build(File file)
 			throws JDOMException, IOException {
 		try {
-			URL url = fileToURL(file);
-			return build(url);
-		} catch (MalformedURLException e) {
-			throw new JDOMException("Error in building", e);
+			return getEngine().build(file);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
 		}
 	}
 
@@ -898,10 +1034,16 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed.
 	 */
+	@Override
 	public Document build(URL url)
 			throws JDOMException, IOException {
-		String systemID = url.toExternalForm();
-		return build(new InputSource(systemID));
+		try {
+			return getEngine().build(url);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
 	/**
@@ -917,12 +1059,16 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed
 	 */
+	@Override
 	public Document build(InputStream in, String systemId)
 			throws JDOMException, IOException {
-
-		InputSource src = new InputSource(in);
-		src.setSystemId(systemId);
-		return build(src);
+		try {
+			return getEngine().build(in, systemId);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
 	/**
@@ -940,9 +1086,16 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed
 	 */
+	@Override
 	public Document build(Reader characterStream)
 			throws JDOMException, IOException {
-		return build(new InputSource(characterStream));
+		try {
+			return getEngine().build(characterStream);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
 	/**
@@ -961,12 +1114,17 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed
 	 */
+	@Override
 	public Document build(Reader characterStream, String systemId)
 			throws JDOMException, IOException {
 
-		InputSource src = new InputSource(characterStream);
-		src.setSystemId(systemId);
-		return build(src);
+		try {
+			return getEngine().build(characterStream, systemId);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
 	/**
@@ -980,57 +1138,16 @@ public class SAXBuilder {
 	 * @throws IOException when an I/O error prevents a document
 	 *         from being fully parsed
 	 */
+	@Override
 	public Document build(String systemId)
 			throws JDOMException, IOException {
-		return build(new InputSource(systemId));
+		try {
+			return getEngine().build(systemId);
+		} finally {
+			if (!reuseParser) {
+				engine = null;
+			}
+		}
 	}
 
-	/** Custom File.toUrl() implementation to handle special chars in file names
-	 *
-	 * @param file file object whose path will be converted
-	 * @return URL form of the file, with special characters handled
-	 * @throws MalformedURLException if there's a problem constructing a URL
-	 */
-	private static URL fileToURL(File file) throws MalformedURLException {
-
-		return file.getAbsoluteFile().toURI().toURL();
-
-	}
-
-	/**
-	 * Returns whether or not entities are being expanded into normal text
-	 * content.
-	 *
-	 * @return whether entities are being expanded
-	 */
-	public boolean getExpandEntities() {
-		return expand;
-	}
-
-	/**
-	 * <p>
-	 * This sets whether or not to expand entities for the builder.
-	 * A true means to expand entities as normal content.  A false means to
-	 * leave entities unexpanded as <code>EntityRef</code> objects.  The
-	 * default is true.
-	 * </p>
-	 * <p>
-	 * When this setting is false, the internal DTD subset is retained; when
-	 * this setting is true, the internal DTD subset is not retained.
-	 * </p>
-	 * <p>
-	 * Note that Xerces (at least up to 1.4.4) has a bug where entities
-	 * in attribute values will be misreported if this flag is turned off,
-	 * resulting in entities to appear within element content.  When turning
-	 * entity expansion off either avoid entities in attribute values, or
-	 * use another parser like Crimson.
-	 * http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6111
-	 * </p>
-	 *
-	 * @param expand <code>boolean</code> indicating whether entity expansion
-	 * should occur.
-	 */
-	public void setExpandEntities(boolean expand) {
-		this.expand = expand;
-	}
 }

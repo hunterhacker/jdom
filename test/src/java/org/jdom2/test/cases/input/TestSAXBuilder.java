@@ -75,8 +75,8 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
+import java.nio.CharBuffer;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -99,9 +99,12 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
+import org.jdom2.JDOMFactory;
 import org.jdom2.UncheckedJDOMFactory;
-import org.jdom2.input.BuilderErrorHandler;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.BuilderErrorHandler;
+import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.input.sax.SAXHandlerFactory;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -121,9 +124,8 @@ public final class TestSAXBuilder {
 			super(driver);
 		}
 		
-		@Override
 		public XMLReader createParser() throws JDOMException {
-			return super.createParser();
+			return createParser(new SAXHandler());
 		}
 	}
 	
@@ -142,6 +144,7 @@ public final class TestSAXBuilder {
         JUnitCore.runClasses(TestSAXBuilder.class);
     }	
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilder() {
 		SAXBuilder sb = new SAXBuilder();
@@ -151,8 +154,11 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.getValidation());
 		assertTrue(sb.getExpandEntities());		
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilderBooleanFalse() {
 		SAXBuilder sb = new SAXBuilder(false);
@@ -162,8 +168,11 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.getValidation());
 		assertTrue(sb.getExpandEntities());
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilderBooleanTrue() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -173,8 +182,11 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.getValidation());
 		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilderString() {
 		MySAXBuilder sb = new MySAXBuilder("org.apache.xerces.parsers.SAXParser");
@@ -184,6 +196,8 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.getValidation());
 		assertTrue(sb.getExpandEntities());
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -201,6 +215,8 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.getValidation());
 		assertTrue(sb.getExpandEntities());
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -212,6 +228,7 @@ public final class TestSAXBuilder {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilderStringTrue() {
 		SAXBuilder sb = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
@@ -230,12 +247,27 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertFalse(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testGetFactory() {
+	public void testGetJDOMFactory() {
+		SAXBuilder sb = new SAXBuilder(true);
+		assertNull(sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getJDOMFactory() instanceof DefaultJDOMFactory);
+		assertTrue(sb.getJDOMFactory() == sb.getFactory());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testSetJDOMFactory() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
 		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
@@ -243,24 +275,42 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.getValidation());
 		assertTrue(sb.getExpandEntities());
-		assertTrue(sb.getFactory() instanceof DefaultJDOMFactory);
-	}
-
-	@Test
-	public void testSetFactory() {
-		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
-		assertTrue(sb.getEntityResolver() == null);
-		assertTrue(sb.getDTDHandler() == null);
-		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		JDOMFactory fac = sb.getJDOMFactory();
+		assertTrue(fac instanceof DefaultJDOMFactory);
 		UncheckedJDOMFactory udf = new UncheckedJDOMFactory();
-		assertTrue(sb.getFactory() instanceof DefaultJDOMFactory);
-		sb.setFactory(udf);
-		assertTrue(sb.getFactory() == udf);
+		sb.setJDOMFactory(udf);
+		assertTrue(sb.getJDOMFactory() == udf);
+		assertTrue(sb.buildEngine().getJDOMFactory() == udf);
+		sb.setFactory(fac);
+		assertTrue(sb.getJDOMFactory() == fac);
+		assertTrue(sb.buildEngine().getJDOMFactory() == fac);
 	}
 
+	@Test
+	public void testGetSAXHandlerFactory() {
+		SAXBuilder sb = new SAXBuilder();
+		assertTrue(sb.getSAXHandlerFactory() != null);
+	}
+
+	@Test
+	public void testSetSAXHandlerFactory() {
+		SAXBuilder sb = new SAXBuilder(true);
+		SAXHandlerFactory fac = sb.getSAXHandlerFactory();
+		sb.setSAXHandlerFactory(null);
+		assertTrue(fac == sb.getSAXHandlerFactory());
+		SAXHandlerFactory fbee = new SAXHandlerFactory() {
+			@Override
+			public SAXHandler createSAXHandler(JDOMFactory factory) {
+				return new SAXHandler();
+			}
+		};
+		sb.setSAXHandlerFactory(fbee);
+		assertTrue(fbee == sb.getSAXHandlerFactory());
+		sb.setSAXHandlerFactory(null);
+		assertTrue(fac == sb.getSAXHandlerFactory());
+	}
+
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetValidation() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -269,31 +319,37 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.getValidation());
+		assertTrue(sb.isValidating());
 		assertTrue(sb.getExpandEntities());
 		
 		sb.setValidation(false);
 		assertFalse(sb.getValidation());
+		assertFalse(sb.isValidating());
 		
 		sb.setValidation(true);
 		assertTrue(sb.getValidation());
+		assertTrue(sb.isValidating());
 
 	}
 
 	@Test
-	public void testGetErrorHandler() {
+	public void testGetErrorHandler() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
 		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
+		
+		assertTrue(sb.buildEngine().getErrorHandler() instanceof BuilderErrorHandler);
 		
 		ErrorHandler handler = new BuilderErrorHandler();
 		
 		sb.setErrorHandler(handler);
 		assertTrue(handler == sb.getErrorHandler());		
+		assertTrue(handler == sb.buildEngine().getErrorHandler());
 	}
 
 	@Test
@@ -304,8 +360,8 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 
 		EntityResolver er = new EntityResolver() {
 			@Override
@@ -326,8 +382,8 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 
 		DTDHandler dtd = new DTDHandler() {
 			@Override
@@ -354,7 +410,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isExpandEntities());
 
 		XMLFilter filter = new XMLFilterImpl() {
 			@Override
@@ -395,6 +451,7 @@ public final class TestSAXBuilder {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetIgnoringElementContentWhitespace() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -403,14 +460,17 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 		sb.setIgnoringElementContentWhitespace(true);
 		assertTrue(sb.getIgnoringElementContentWhitespace());		
+		assertTrue(sb.isIgnoringElementContentWhitespace());		
 		sb.setIgnoringElementContentWhitespace(false);
 		assertFalse(sb.getIgnoringElementContentWhitespace());		
+		assertFalse(sb.isIgnoringElementContentWhitespace());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetIgnoringBoundaryWhitespace() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -419,12 +479,14 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 		sb.setIgnoringBoundaryWhitespace(true);
 		assertTrue(sb.getIgnoringBoundaryWhitespace());		
+		assertTrue(sb.isIgnoringBoundaryWhitespace());		
 		sb.setIgnoringBoundaryWhitespace(false);
 		assertFalse(sb.getIgnoringBoundaryWhitespace());		
+		assertFalse(sb.isIgnoringBoundaryWhitespace());		
 	}
 
 	@Test
@@ -435,8 +497,8 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 		
 		sb.setReuseParser(true);
 		assertTrue(sb.getReuseParser());		
@@ -557,7 +619,7 @@ public final class TestSAXBuilder {
         File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
 
         builder.setExpandEntities(true);
-        assertTrue(builder.getExpandEntities());
+        assertTrue(builder.isExpandEntities());
         
         Document doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
@@ -566,7 +628,7 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with internal entity
         builder.setExpandEntities(false);
-        assertFalse(builder.getExpandEntities());
+        assertFalse(builder.isExpandEntities());
 
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
@@ -581,7 +643,7 @@ public final class TestSAXBuilder {
         file = new File(resourceDir + "/SAXBuilderTestEntity2.xml");
 
         builder.setExpandEntities(true);
-        assertTrue(builder.getExpandEntities());
+        assertTrue(builder.isExpandEntities());
 
         doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
@@ -590,7 +652,7 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with external entity
         builder.setExpandEntities(false);
-        assertFalse(builder.getExpandEntities());
+        assertFalse(builder.isExpandEntities());
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
@@ -706,10 +768,10 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertTrue(sb.isValidating());
+		assertTrue(sb.isExpandEntities());
 		
-		sb.setFastReconfigure(true);
+//		sb.setFastReconfigure(true);
 		
 		// TODO - Now what?
 	}
@@ -741,9 +803,21 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testBuildInputSource() {
-		InputSource is = new InputSource(new CharArrayReader(testxml.toCharArray()));
 		try {
-			assertXMLMatches(null, new SAXBuilder().build(is));
+			SAXBuilder sb = new SAXBuilder();
+			InputSource is = null;
+			is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+			assertXMLMatches(null, sb.build(is));
+			is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+			assertXMLMatches(null, sb.build(is));
+			sb.setReuseParser(false);
+			is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+			assertXMLMatches(null, sb.build(is));
+			is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+			assertXMLMatches(null, sb.build(is));
+			
+			is = new InputSource(new CharArrayReader(testxml.toCharArray()));
+			assertXMLMatches(null, sb.buildEngine().build(is));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to parse document: " + e.getMessage());
@@ -752,9 +826,16 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testBuildInputStream() {
-		InputStream is = new ByteArrayInputStream(testxml.getBytes());
+		byte[] bytes = testxml.getBytes();
 		try {
-			assertXMLMatches(null, new SAXBuilder().build(is));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(null, sb.build(new ByteArrayInputStream(bytes)));
+			assertXMLMatches(null, sb.build(new ByteArrayInputStream(bytes)));
+			sb.setReuseParser(false);
+			assertXMLMatches(null, sb.build(new ByteArrayInputStream(bytes)));
+			assertXMLMatches(null, sb.build(new ByteArrayInputStream(bytes)));
+			
+			assertXMLMatches(null, sb.buildEngine().build(new ByteArrayInputStream(bytes)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to parse document: " + e.getMessage());
@@ -771,7 +852,14 @@ public final class TestSAXBuilder {
 			fw.write(testxml.toCharArray());
 			fw.flush();
 			fw.close();
-			assertXMLMatches(tmp.toURI().toString(), new SAXBuilder().build(tmp));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp));
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp));
+			sb.setReuseParser(false);
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp));
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp));
+			assertXMLMatches(tmp.toURI().toString(), sb.buildEngine().build(tmp));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
@@ -792,7 +880,14 @@ public final class TestSAXBuilder {
 			fw.write(testxml.toCharArray());
 			fw.flush();
 			fw.close();
-			assertXMLMatches(tmp.toURI().toString(), new SAXBuilder().build(tmp.toURI().toURL()));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp.toURI().toURL()));
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp.toURI().toURL()));
+			sb.setReuseParser(false);
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp.toURI().toURL()));
+			assertXMLMatches(tmp.toURI().toString(), sb.build(tmp.toURI().toURL()));
+			
+			assertXMLMatches(tmp.toURI().toString(), sb.buildEngine().build(tmp.toURI().toURL()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
@@ -805,9 +900,22 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testBuildInputStreamString() {
-		InputStream is = new ByteArrayInputStream(testxml.getBytes());
+		byte[] bytes = testxml.getBytes();
+		
 		try {
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(), new SAXBuilder().build(is, "baseID"));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+					sb.build(new ByteArrayInputStream(bytes), "baseID"));
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+					sb.build(new ByteArrayInputStream(bytes), "baseID"));
+			sb.setReuseParser(false);
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+					sb.build(new ByteArrayInputStream(bytes), "baseID"));
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+					sb.build(new ByteArrayInputStream(bytes), "baseID"));
+			
+			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+					sb.buildEngine().build(new ByteArrayInputStream(bytes), "baseID"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to parse document: " + e.getMessage());
@@ -816,9 +924,16 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testBuildReader() {
-		Reader is = new CharArrayReader(testxml.toCharArray());
+		char[] chars = testxml.toCharArray();
 		try {
-			assertXMLMatches(null, new SAXBuilder().build(is));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(null, sb.build(new CharArrayReader(chars)));
+			assertXMLMatches(null, sb.build(new CharArrayReader(chars)));
+			sb.setReuseParser(false);
+			assertXMLMatches(null, sb.build(new CharArrayReader(chars)));
+			assertXMLMatches(null, sb.build(new CharArrayReader(chars)));
+
+			assertXMLMatches(null, sb.buildEngine().build(new CharArrayReader(chars)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to parse document: " + e.getMessage());
@@ -827,9 +942,21 @@ public final class TestSAXBuilder {
 
 	@Test
 	public void testBuildReaderString() {
-		Reader is = new CharArrayReader(testxml.toCharArray());
+		char[] chars = testxml.toCharArray();
 		try {
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(), new SAXBuilder().build(is, "baseID"));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+					sb.build(new CharArrayReader(chars), "baseID"));
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+					sb.build(new CharArrayReader(chars), "baseID"));
+			sb.setReuseParser(false);
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+					sb.build(new CharArrayReader(chars), "baseID"));
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+					sb.build(new CharArrayReader(chars), "baseID"));
+			
+			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+					sb.buildEngine().build(new CharArrayReader(chars), "baseID"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to parse document: " + e.getMessage());
@@ -846,7 +973,19 @@ public final class TestSAXBuilder {
 			fw.write(testxml.toCharArray());
 			fw.flush();
 			fw.close();
-			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), new SAXBuilder().build(tmp.toString()));
+			SAXBuilder sb = new SAXBuilder();
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), 
+					sb.build(tmp.toString()));
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), 
+					sb.build(tmp.toString()));
+			sb.setReuseParser(false);
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), 
+					sb.build(tmp.toString()));
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), 
+					sb.build(tmp.toString()));
+
+			assertXMLMatches(tmp.getCanonicalFile().toURI().toURL().toString(), 
+					sb.buildEngine().build(tmp.toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to write/parse document to file '" + tmp + "': " + e.getMessage());
@@ -855,6 +994,154 @@ public final class TestSAXBuilder {
 				tmp.delete();
 			}
 		}
+	}
+	
+	@Test
+	public void testParserFactory() throws JDOMException, IOException {
+		long start = 0L, time = 0L;
+		loopParser(false, false);
+		loopParser(false, false);
+		loopParser(false, false);
+		start = System.nanoTime();
+		loopParser(false, false);
+		time = System.nanoTime() - start;
+		System.out.printf("SimpleLoop Recreate %.3fms\n", time / 1000000.0);
+		
+		loopParser(true, false);
+		loopParser(true, false);
+		loopParser(true, false);
+		start = System.nanoTime();
+		loopParser(true, false);
+		time = System.nanoTime() - start;
+		System.out.printf("SimpleLoop Reuse    %.3fms\n", time / 1000000.0);
+		
+		loopParser(true, true);
+		loopParser(true, true);
+		loopParser(true, true);
+		start = System.nanoTime();
+		loopParser(true, true);
+		time = System.nanoTime() - start;
+		System.out.printf("SimpleLoop Fast     %.3fms\n", time / 1000000.0);
+	}
+	
+	
+	private void loopParser(boolean reuse, boolean fast) throws JDOMException, IOException {
+		if (fast) {
+			System.out.println("Fast no longer means anything.");
+		}
+		SAXBuilder builderval = new SAXBuilder(true);
+		SAXBuilder buildernoval = new SAXBuilder(false);
+		builderval.setReuseParser(reuse);
+		buildernoval.setReuseParser(reuse);
+		String docstr = 
+				"<?xml version='1.0'?><!DOCTYPE root [  <!ELEMENT root  (#PCDATA)>]><root />";
+		char[] chars = docstr.toCharArray();
+		ResetReader rr = new ResetReader(chars);
+		for (int i = 0; i < 10000; i++) {
+			parseMem(builderval, rr);
+			parseMem(buildernoval, rr);
+		}
+		//JAXPFastParserFactory.printTimes();
+	}
+	
+	private void parseMem(SAXBuilder builder, ResetReader reader) throws JDOMException, IOException {
+		reader.reset();
+		Document doc = builder.build(reader);
+		assertTrue(doc.hasRootElement());
+		assertEquals("root", doc.getRootElement().getName());
+	}
+	
+	private static final class ResetReader extends Reader {
+		
+		private final char[] chars;
+		private int pos = 0;
+		
+		public ResetReader(final char[] ch) {
+			chars = ch;
+		}
+
+		@Override
+		public int read(final CharBuffer target) throws IOException {
+			final int got = chars.length - pos;
+			if (got == 0) {
+				return -1;
+			}
+			final int howmuch = target.remaining();
+			final int ret = got > howmuch ? howmuch : got;
+			target.put(chars, pos, ret);
+			pos += ret;
+			return ret;
+		}
+
+		@Override
+		public int read() throws IOException {
+			if (pos >= chars.length) {
+				return -1;
+			}
+			return chars[pos++];
+		}
+
+		@Override
+		public int read(final char[] cbuf) throws IOException {
+			final int got = chars.length - pos;
+			if (got == 0) {
+				return -1;
+			}
+			final int ret = got > cbuf.length ? cbuf.length : got;
+			System.arraycopy(chars, pos, cbuf, 0, ret);
+			pos += ret;
+			return ret;
+		}
+
+		@Override
+		public int read(final char[] cbuf, final int off, final int howmuch) throws IOException {
+			final int got = chars.length - pos;
+			if (got == 0) {
+				return -1;
+			}
+			final int ret = got > howmuch ? howmuch : got;
+			System.arraycopy(chars, pos, cbuf, off, ret);
+			pos += ret;
+			return ret;
+		}
+
+		@Override
+		public long skip(final long n) throws IOException {
+			long got = chars.length - pos;
+			if (got > n) {
+				pos += (int)n;
+				return n;
+			}
+			long ret = chars.length - pos;
+			pos = chars.length;
+			return ret;
+		}
+
+		@Override
+		public boolean ready() throws IOException {
+			return true;
+		}
+
+		@Override
+		public boolean markSupported() {
+			return false;
+		}
+
+		@Override
+		public void mark(final int readAheadLimit) throws IOException {
+			return;
+		}
+
+		@Override
+		public void reset() throws IOException {
+			pos = 0;
+		}
+
+		@Override
+		public void close() throws IOException {
+			return;
+		}
+		
 	}
 
 }

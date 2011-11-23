@@ -20,7 +20,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
-import org.jdom2.input.SAXHandler;
+import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.output.Format;
 import org.jdom2.output.JDOMLocator;
 import org.jdom2.output.SAXOutputter;

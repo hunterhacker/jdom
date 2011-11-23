@@ -58,7 +58,8 @@ public class LineNumberSAXBuilderDemo
 {
 
 	public static void main(String[] args) throws Exception {
-		SAXBuilder builder = new LineNumberSAXBuilder();
+		SAXBuilder builder = new SAXBuilder();
+		builder.setSAXHandlerFactory(LineNumberSAXHandler.SAXFACTORY);
 		Document doc = builder.build(new StringReader(xml));
 
 		for (Iterator<LineNumberElement> iter = doc.getDescendants(Filters.fclass(LineNumberElement.class));
