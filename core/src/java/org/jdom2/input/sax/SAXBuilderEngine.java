@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -75,39 +75,58 @@ import org.jdom2.JDOMFactory;
 import org.jdom2.input.JDOMParseException;
 
 /**
- * Builds a JDOM document from files, streams, readers, URLs, or a SAX {@link
- * org.xml.sax.InputSource} instance using a SAX parser. This Engine is built
- * by the SAXBuilder based on the state of the SAXBuilder when the engine was
- * produced. It is not possible to reconfigure the engine once built, but it
- * can be reused many times (but not concurrently). This makes it the fastest
- * way to process many multitudes of XML documents.
- *
- * @see org.jdom2.input.sax
+ * Builds a JDOM document from files, streams, readers, URLs, or a SAX
+ * {@link org.xml.sax.InputSource} instance using a SAX parser. This Engine is
+ * built by the SAXBuilder based on the state of the SAXBuilder when the engine
+ * was produced. It is not possible to reconfigure the engine once built, but it
+ * can be reused many times (though not concurrently). This makes it the fastest
+ * way to process many multitudes of XML documents (if those documents are all
+ * parsed the same way). If you want to process in multiple threads you can
+ * safely have one SAXBuilderEngine in each thread on the condition that:
+ * <ol>
+ * <li>The JDOMFactory is thread-safe (the JDOM-supplied JDOMFactories are)
+ * <li>There is no XMLFilter given to the SAXBuilder, or, if there is, then it
+ * is thread-safe.
+ * <li>If you have a custom {@link XMLReaderJDOMFactory} that it supplies a new
+ * instance of an XMLReader on each call (the JDOM-supplied ones all do).
+ * <li>If you have a custom {@link SAXHandlerFactory} that it supplies a new
+ * instance of a SAXHanfler on each call (the JDOM-supplied one does)
+ * </ol>
  * 
- * @author  Rolf Lear
+ * @see org.jdom2.input.sax
+ * @author Rolf Lear
  */
 public class SAXBuilderEngine implements SAXEngine {
 
-	/** The current SAX parser, if parser reuse has been activated. */
+	/** The SAX XMLReader. */
 	private final XMLReader saxParser;
-	
+
+	/** The SAXHandler */
 	private final SAXHandler saxHandler;
-	
+
+	/** indicates whether this is a validating parser */
 	private final boolean validating;
 
 	/**
 	 * Creates a new SAXBuilderEngine.
-	 * @param reader The XMLReader this Engine parses with
-	 * @param handler The SAXHandler that processes the SAX Events. 
-	 * @param validating True if this is a validating system.
+	 * 
+	 * @param reader
+	 *        The XMLReader this Engine parses with
+	 * @param handler
+	 *        The SAXHandler that processes the SAX Events.
+	 * @param validating
+	 *        True if this is a validating system.
 	 */
-	public SAXBuilderEngine(XMLReader reader, SAXHandler handler, boolean validating) {
+	public SAXBuilderEngine(final XMLReader reader, final SAXHandler handler,
+			final boolean validating) {
 		saxParser = reader;
 		saxHandler = handler;
 		this.validating = validating;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#getJDOMFactory()
 	 */
 	@Override
@@ -115,7 +134,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxHandler.getFactory();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#isValidating()
 	 */
 	@Override
@@ -123,7 +144,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return validating;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#getErrorHandler()
 	 */
 	@Override
@@ -131,7 +154,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxParser.getErrorHandler();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#getEntityResolver()
 	 */
 	@Override
@@ -139,7 +164,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxParser.getEntityResolver();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#getDTDHandler()
 	 */
 	@Override
@@ -147,7 +174,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxParser.getDTDHandler();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#isIgnoringElementContentWhitespace()
 	 */
 	@Override
@@ -155,7 +184,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxHandler.getIgnoringElementContentWhitespace();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#isIgnoringBoundaryWhitespace()
 	 */
 	@Override
@@ -163,7 +194,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxHandler.getIgnoringBoundaryWhitespace();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#isExpandEntities()
 	 */
 	@Override
@@ -171,36 +204,36 @@ public class SAXBuilderEngine implements SAXEngine {
 		return saxHandler.getExpandEntities();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(org.xml.sax.InputSource)
 	 */
 	@Override
-	public Document build(InputSource in)
+	public Document build(final InputSource in)
 			throws JDOMException, IOException {
 		try {
 			// Parse the document.
 			saxParser.parse(in);
 
 			return saxHandler.getDocument();
-		} catch (SAXParseException e) {
+		} catch (final SAXParseException e) {
 			Document doc = saxHandler.getDocument();
 			if (doc.hasRootElement() == false) {
 				doc = null;
 			}
 
-			String systemId = e.getSystemId();
+			final String systemId = e.getSystemId();
 			if (systemId != null) {
 				throw new JDOMParseException("Error on line " +
 						e.getLineNumber() + " of document " + systemId, e, doc);
 			}
 			throw new JDOMParseException("Error on line " +
 					e.getLineNumber(), e, doc);
-		}
-		catch (SAXException e) {
+		} catch (final SAXException e) {
 			throw new JDOMParseException("Error in building: " +
 					e.getMessage(), e, saxHandler.getDocument());
-		}
-		finally {
+		} finally {
 			// Explicitly nullify the handler to encourage GC
 			// It's a stack var so this shouldn't be necessary, but it
 			// seems to help on some JVMs
@@ -208,27 +241,33 @@ public class SAXBuilderEngine implements SAXEngine {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.InputStream)
 	 */
 	@Override
-	public Document build(InputStream in) throws JDOMException, IOException {
+	public Document build(final InputStream in) throws JDOMException, IOException {
 		return build(new InputSource(in));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.File)
 	 */
 	@Override
 	public Document build(final File file) throws JDOMException, IOException {
 		try {
 			return build(fileToURL(file));
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			throw new JDOMException("Error in building", e);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(java.net.URL)
 	 */
 	@Override
@@ -236,8 +275,11 @@ public class SAXBuilderEngine implements SAXEngine {
 		return build(new InputSource(url.toExternalForm()));
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.InputStream, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.InputStream,
+	 * java.lang.String)
 	 */
 	@Override
 	public Document build(final InputStream in, final String systemId)
@@ -248,7 +290,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return build(src);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.Reader)
 	 */
 	@Override
@@ -257,8 +301,11 @@ public class SAXBuilderEngine implements SAXEngine {
 		return build(new InputSource(characterStream));
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.Reader, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jdom2.input.sax.SAXEngine#build(java.io.Reader,
+	 * java.lang.String)
 	 */
 	@Override
 	public Document build(final Reader characterStream, final String systemId)
@@ -269,7 +316,9 @@ public class SAXBuilderEngine implements SAXEngine {
 		return build(src);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jdom2.input.sax.SAXEngine#build(java.lang.String)
 	 */
 	@Override
@@ -278,15 +327,17 @@ public class SAXBuilderEngine implements SAXEngine {
 		return build(new InputSource(systemId));
 	}
 
-	/** 
+	/**
 	 * Custom File.toUrl() implementation to handle special chars in file names
 	 * Actually, we can now rely on the core Java toURI function,
-	 *
-	 * @param file file object whose path will be converted
+	 * 
+	 * @param file
+	 *        file object whose path will be converted
 	 * @return URL form of the file, with special characters handled
-	 * @throws MalformedURLException if there's a problem constructing a URL
+	 * @throws MalformedURLException
+	 *         if there's a problem constructing a URL
 	 */
-	private static URL fileToURL(File file) throws MalformedURLException {
+	private static URL fileToURL(final File file) throws MalformedURLException {
 
 		return file.getAbsoluteFile().toURI().toURL();
 

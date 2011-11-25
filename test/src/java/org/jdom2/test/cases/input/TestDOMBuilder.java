@@ -15,6 +15,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.XMLReaderJAXPSingletons;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
@@ -76,11 +77,10 @@ public class TestDOMBuilder {
 			Document dombuild = db.build(domdoc);
 			Element domroot = db.build(HelpTestDOMBuilder.getRoot(domdoc));
 			
-			SAXBuilder sb = new SAXBuilder(false);
+			SAXBuilder sb = new SAXBuilder(xsdvalidate
+					? XMLReaderJAXPSingletons.XSDVALIDATING
+					: XMLReaderJAXPSingletons.NONVALIDATING );
 			sb.setExpandEntities(false);
-			sb.setFeature("http://xml.org/sax/features/namespaces", true);
-			sb.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-			sb.setFeature("http://apache.org/xml/features/validation/schema", xsdvalidate);
 			
 			Document saxbuild = sb.build(filename);
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;

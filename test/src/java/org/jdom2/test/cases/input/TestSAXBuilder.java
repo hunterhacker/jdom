@@ -82,7 +82,6 @@ import java.util.ResourceBundle;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
 import org.xml.sax.Attributes;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
@@ -105,6 +104,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.BuilderErrorHandler;
 import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
+import org.jdom2.input.sax.XMLReaderJDOMFactory;
+import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -124,8 +125,18 @@ public final class TestSAXBuilder {
 			super(driver);
 		}
 		
+		public MySAXBuilder(XMLReaderJDOMFactory fac) {
+			super(fac);
+		}
+		
+		/**
+		 * This sets and configures the parser (SAXBuilder jsut sets.
+		 */
+		@Override
 		public XMLReader createParser() throws JDOMException {
-			return createParser(new SAXHandler());
+			XMLReader reader = super.createParser();
+			configureParser(reader, new SAXHandler());
+			return reader;
 		}
 	}
 	
@@ -136,14 +147,6 @@ public final class TestSAXBuilder {
 			ResourceBundle.getBundle("org.jdom2.test.Test")
 				.getString("test.resourceRoot");
 
-    /**
-     * The main method runs all the tests in the text ui
-     */
-    public static void main (String args[]) 
-     {
-        JUnitCore.runClasses(TestSAXBuilder.class);
-    }	
-
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilder() {
@@ -152,8 +155,6 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertFalse(sb.getValidation());
-		assertTrue(sb.getExpandEntities());		
 		assertFalse(sb.isValidating());
 		assertTrue(sb.isExpandEntities());		
 	}
@@ -166,8 +167,6 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertFalse(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
 		assertFalse(sb.isValidating());
 		assertTrue(sb.isExpandEntities());		
 	}
@@ -180,8 +179,6 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
 		assertTrue(sb.isValidating());
 		assertTrue(sb.isExpandEntities());		
 	}
@@ -194,8 +191,6 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertFalse(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
 		assertFalse(sb.isValidating());
 		assertTrue(sb.isExpandEntities());		
 		try {
@@ -213,8 +208,46 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertFalse(sb.getValidation());
-		assertTrue(sb.getExpandEntities());
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
+		try {
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertTrue(reader.getClass().getName().equals("com.sun.org.apache.xerces.internal.parsers.SAXParser"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testSAXBuilderStringNew() {
+		XMLReaderSAX2Factory fac = new XMLReaderSAX2Factory(false, "org.apache.xerces.parsers.SAXParser");
+		MySAXBuilder sb = new MySAXBuilder(fac);
+		assertEquals("org.apache.xerces.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
+		assertFalse(sb.isValidating());
+		assertTrue(sb.isExpandEntities());		
+		try {
+			XMLReader reader = sb.createParser();
+			assertNotNull(reader);
+			assertEquals("org.apache.xerces.parsers.SAXParser", reader.getClass().getName());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Could not create parser: " + e.getMessage());
+		}
+
+		fac = new XMLReaderSAX2Factory(false, "com.sun.org.apache.xerces.internal.parsers.SAXParser");
+		sb = new MySAXBuilder("com.sun.org.apache.xerces.internal.parsers.SAXParser");
+		assertEquals("com.sun.org.apache.xerces.internal.parsers.SAXParser", sb.getDriverClass());
+		assertTrue(sb.getEntityResolver() == null);
+		assertTrue(sb.getDTDHandler() == null);
+		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
 		assertTrue(sb.isExpandEntities());		
 		try {
@@ -240,6 +273,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getExpandEntities());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilderStringFalse() {
 		SAXBuilder sb = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
@@ -335,7 +369,6 @@ public final class TestSAXBuilder {
 	@Test
 	public void testGetErrorHandler() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -355,7 +388,6 @@ public final class TestSAXBuilder {
 	@Test
 	public void testGetEntityResolver() {
 		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -377,7 +409,6 @@ public final class TestSAXBuilder {
 	@Test
 	public void testGetDTDHandler() {
 		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -405,7 +436,6 @@ public final class TestSAXBuilder {
 	@Test
 	public void testXMLFilter() {
 		MySAXBuilder sb = new MySAXBuilder();
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -492,7 +522,6 @@ public final class TestSAXBuilder {
 	@Test
 	public void testGetReuseParser() {
 		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -760,10 +789,10 @@ public final class TestSAXBuilder {
         }
     }
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetFastReconfigure() {
 		SAXBuilder sb = new SAXBuilder(true);
-		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
@@ -771,7 +800,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.isValidating());
 		assertTrue(sb.isExpandEntities());
 		
-//		sb.setFastReconfigure(true);
+		sb.setFastReconfigure(true);
 		
 		// TODO - Now what?
 	}

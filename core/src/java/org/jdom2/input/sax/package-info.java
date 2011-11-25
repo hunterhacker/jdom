@@ -1,3 +1,57 @@
+/*--
+
+ Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
+    provided with the distribution.
+
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact <request_AT_jdom_DOT_org>.
+
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos
+ available at http://www.jdom.org/images/logos.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
+
+ */
+
 /**
 Tools to build JDOM documents and content using SAX parsers.
 
@@ -63,7 +117,7 @@ still have the functionality to create a completely custom mechanism for setting
 the XMLReader for SAXBuilder.
 <p>
 There are two typical ways to specify and create an XMLReader
-instance: using JAXP and using the SAX2.0 API. If necessary you can also create
+instance: using JAXP, and using the SAX2.0 API. If necessary you can also create
 direct instances of XMLReader implementations using 'new' constructors, but
 each SAX implementation has different class names for their SAX drivers so doing
 raw constructors is not portable and not recommended.
@@ -86,11 +140,11 @@ JDOM exposes four factories that use JAXP to source XMLReaders. These four
 factories cover almost all conditions under which you would want a SAX parser:
 <ol>
 <li>A simple non-validating SAX parser
-<li>A validating parser that uses the DTD references in the XML to validate
+<li>A validating parser that uses the DOCTYPE references in the XML to validate
     against.
 <li>A validating parser that uses the XML Schema (XSD) references embedded in
     the XML to validate against.
-<li>A validating parser that uses an external Schema (XML Schema, RelaxNG, etc)
+<li>A validating parser that uses an external Schema (XML Schema, RelaxNG, etc.)
     to validate the XML against.
 </ol>
 The first three are all relatively simple, and are available as members of the
@@ -110,8 +164,8 @@ either the 'default' SAX 2.0 implementation or a particular SAX Driver class
 name by creating instances of the
 {@link org.jdom2.input.sax.XMLReaderSAX2Factory}.
 <p>
-JDOM does not provide a preconfigured way to do XML Schema validation though.
-SAX 2.0 API does not expose a convenient way to configure different SAX 
+JDOM does not provide a preconfigured way to do XML Schema validation through
+the SAX2.0 API though. The SAX 2.0 API does not expose a convenient way to configure different SAX 
 implementations in a consistent way, so it is up to the JDOM user to wrap the
 XMLReaderSAX2Factory in such a way that it reconfigures the XMLReader to be
 appropriate for the task at hand.
@@ -175,7 +229,9 @@ the SAXBuilder when the engine was created, and it contains the entire
 'workflow' necessary to parse the input in to JDOM content. Further, it is a
 guarantee that the XMLReader and SAXHandler instances in the SAXBuilderEngine
 are never shared with any other engine or entity (assuming that the respective
-factories never issue the same instances multiple times).
+factories never issue the same instances multiple times). There is no guarantee
+made for the JDOMFactory being unique for each SAXBuilderEngine, but JDOMFactory
+instances are supposed to be reentrant/thread-safe.
 <p>
 The 'parse' phase starts once the setup phase is complete and the
 SAXBuilderEngine has been created. The created engine is used to parse the input,
@@ -237,13 +293,26 @@ Create a DTD validating SAXBuilder and parse a document:
     SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.DTDVALIDATING);
     Document doc = sb.build(new File("file.xml"));
 </pre>
-Create an XSD (XML Schema) validating SAXBuilder and parse a document:
+Create an XSD (XML Schema) validating SAXBuilder using the XSD references inside
+the XML document and parse a document:
 <p>
 <pre>
     SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.XSDVALIDATING);
     Document doc = sb.build(new File("file.xml"));
 </pre>
 <p>
+Create an XSD (XML Schema) validating SAXBuilder using externally sourced XSD
+and parse a document (see 
+{@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory}):
+<p>
+<pre>
+    SchemaFactory schemafac =
+        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    Schema schema = schemafac.newSchema(new File("myschema.xsd"));
+    XMLReaderJDOMFactory factory = new XMLReaderJAXPSchemaFactory(schema);
+    SAXBuilder sb = new SAXBuilder();
+    Document doc = sb.build(new File("file.xml"));
+</pre>
 
-*/
+ */
 package org.jdom2.input.sax;

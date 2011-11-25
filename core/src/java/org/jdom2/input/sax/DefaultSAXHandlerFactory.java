@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2011 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -54,60 +54,31 @@
 
 package org.jdom2.input.sax;
 
-import org.xml.sax.*;
+import org.jdom2.JDOMFactory;
 
 /**
- * The standard JDOM error handler implementation.
+ * This SAXHandlerFactory instance provides default-configured SAXHandler
+ * instances for all non-custom situations.
  * 
- * @author Jason Hunter
+ * @author Rolf Lear
  */
-
-public class BuilderErrorHandler implements ErrorHandler {
-
+public final class DefaultSAXHandlerFactory
+		implements SAXHandlerFactory {
 	/**
-	 * This method is called when a warning has occurred; this indicates that
-	 * while no XML rules were broken, something appears to be incorrect or
-	 * missing. The implementation of this method here is a "no op".
+	 * For performance reasons it helps to use 'final' instances of classes.
+	 * This makes the SAXHandler class a 'final' class for all normal
+	 * SAXBuilders. It adds no other functionality.
 	 * 
-	 * @param exception
-	 *        <code>SAXParseException</code> that occurred.
-	 * @throws SAXException
-	 *         when things go wrong
+	 * @author Rolf Lear
 	 */
-	@Override
-	public void warning(SAXParseException exception) throws SAXException {
-		// nothing
+	private static final class DefaultSAXHandler extends SAXHandler {
+		public DefaultSAXHandler(final JDOMFactory factory) {
+			super(factory);
+		}
 	}
 
-	/**
-	 * This method is called in response to an error that has occurred; this
-	 * indicates that a rule was broken, typically in validation, but that
-	 * parsing could reasonably continue. The implementation of this method here
-	 * is to rethrow the exception.
-	 * 
-	 * @param exception
-	 *        <code>SAXParseException</code> that occurred.
-	 * @throws SAXException
-	 *         when things go wrong
-	 */
 	@Override
-	public void error(SAXParseException exception) throws SAXException {
-		throw exception;
-	}
-
-	/**
-	 * This method is called in response to a fatal error; this indicates that a
-	 * rule has been broken that makes continued parsing either impossible or an
-	 * almost certain waste of time. The implementation of this method here is
-	 * to rethrow the exception.
-	 * 
-	 * @param exception
-	 *        <code>SAXParseException</code> that occurred.
-	 * @throws SAXException
-	 *         when things go wrong
-	 */
-	@Override
-	public void fatalError(SAXParseException exception) throws SAXException {
-		throw exception;
+	public SAXHandler createSAXHandler(final JDOMFactory factory) {
+		return new DefaultSAXHandler(factory);
 	}
 }

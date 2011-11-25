@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2011 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -69,28 +69,34 @@ import org.jdom2.util.ArrayCopy;
  * good performance in the uncommon case. Furthermore, avoiding StringBuffer
  * means that no extra unused char array space will be kept around after parsing
  * is through.
- *
- * @author  Bradley S. Huffman
- * @author  Alex Rosen
+ * 
+ * @author Bradley S. Huffman
+ * @author Alex Rosen
  */
 final class TextBuffer {
 
-	/** The text value. Only the first 
-	 * <code>arraySize</code> characters are valid. */
+	/**
+	 * The text value. Only the first <code>arraySize</code> characters are
+	 * valid.
+	 */
 	private char[] array = new char[1024];
 
 	/** The size of the text value. */
 	private int arraySize = 0;
-	
+
 	/** Constructor */
 	TextBuffer() {
 	}
 
 	/**
 	 * Append the specified text to the text value of this buffer.
-	 * @param source The char[] data to add
-	 * @param start The offset in the data to start adding from 
-	 * @param count The number of chars to add. 
+	 * 
+	 * @param source
+	 *        The char[] data to add
+	 * @param start
+	 *        The offset in the data to start adding from
+	 * @param count
+	 *        The number of chars to add.
 	 */
 	void append(final char[] source, final int start, final int count) {
 		if ((count + arraySize) > array.length) {
@@ -100,15 +106,16 @@ final class TextBuffer {
 		arraySize += count;
 	}
 
-	/** 
+	/**
 	 * Returns the size of the text value.
-	 * @return the number of charactes currently in the TextBuffer 
+	 * 
+	 * @return the number of charactes currently in the TextBuffer
 	 */
 	int size() {
 		return arraySize;
 	}
 
-	/** 
+	/**
 	 * Clears the text value and prepares the TextBuffer for reuse.
 	 */
 	void clear() {
@@ -117,12 +124,13 @@ final class TextBuffer {
 
 	/**
 	 * Inspects the character data for non-whitespace
+	 * 
 	 * @return true if all chars are whitespace
 	 */
 	boolean isAllWhitespace() {
 		int i = arraySize;
 		while (--i >= 0) {
-			if ( !Verifier.isXMLWhitespace(array[i])) {
+			if (!Verifier.isXMLWhitespace(array[i])) {
 				return false;
 			}
 		}
