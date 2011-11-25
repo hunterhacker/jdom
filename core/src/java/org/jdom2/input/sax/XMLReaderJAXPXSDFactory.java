@@ -73,16 +73,17 @@ import org.jdom2.JDOMException;
 
 /**
  * This XMLReaderJDOMFactory class returns XMLReaders configured to validate
- * against the supplied Schema instance. The Schema could be an XSD schema or
- * some other schema supported by SAX (e.g. RelaxNG).
+ * against the supplied XML Schema (XSD) instance.
  * <p>
- * If you want to validate an XML document against the XSD references embedded
- * in the XML itself (xsdSchemaLocation) then you do not want to use this class
- * but rather use an alternate means like
- * {@link XMLReaderJAXPSingletons#XSDVALIDATING}.
- * <p>
- * See the {@link org.jdom2.input.sax package documentation} for the best
- * alternatives.
+ * This class has var-arg constructors, accepting potentially many XSD sources.
+ * It is just as simple though to have a single source:
+ * <pre>
+ * File xsdfile = new File("schema.xsd");
+ * XMLReaderJDOMFactory schemafac = new XMLReaderJAXPXSDFactory(xsdfile);
+ * SAXBuilder builder = new SAXBuilder(schemafac);
+ * File xmlfile = new File("data.xml");
+ * Document validdoc = builder.build(xmlfile);
+ * </pre>
  * 
  * @see org.jdom2.input.sax
  * @author Rolf Lear

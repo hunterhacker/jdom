@@ -16,7 +16,7 @@ import org.jdom2.input.sax.XMLReaderJAXPSingletons;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
-public class TestJAXPXMLReaderSingleton {
+public class TestXMLReaderJAXPSingleton {
 
 	@Test
 	public void testNonValidatingReader() throws JDOMException, IOException {

@@ -20,7 +20,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaderJAXPSchemaFactory;
 
 @SuppressWarnings("javadoc")
-public class TestSchemaXMLReaderFactory {
+public class TestXMLReaderSchemaFactory {
 
 	@Test
 	public void testSchemaXMLReaderFactory() throws SAXException, JDOMException {

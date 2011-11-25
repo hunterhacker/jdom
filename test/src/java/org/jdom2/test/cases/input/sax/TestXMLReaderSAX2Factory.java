@@ -13,7 +13,7 @@ import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
-public class TestSAX2XMLReaderFactory {
+public class TestXMLReaderSAX2Factory {
 
 	@Test
 	public void testSAX2XMLReaderFactoryBoolean() throws JDOMException {
