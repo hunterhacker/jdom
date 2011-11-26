@@ -56,7 +56,7 @@
  Tools to build JDOM documents and content using SAX parsers.
 
  <h2>Introduction</h2>
- Skip to the <a href="Examples">Examples</a> section for a quick bootstrap. 
+ Skip to the <a href="#Examples">Examples</a> section for a quick bootstrap. 
  <p>
  The {@link org.jdom2.input.SAXBuilder} class parses input and produces JDOM
  output. It does this using three 'pillars' of functionality, which when combined
@@ -78,8 +78,8 @@
  and the SAX handler, and SAXBuilder ensures the coordination is maintained.
 
  <h2>Setting the Pillars</h2>
- SAXBuilder provides mechanisms for stipulating what the three pillars will be
- using a number of different mechanisms:
+ SAXBuilder provides a number of different mechanisms for stipulating what the
+ three pillars will be:
  <ul>
  <li>A Constructor: {@link org.jdom2.input.SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory, org.jdom2.JDOMFactory)}
  <li>A default constructor {@link org.jdom2.input.SAXBuilder#SAXBuilder()}
@@ -136,18 +136,19 @@
  </ul>
 
  <h3>JAXP Factories</h3>
- JDOM exposes five factories that use JAXP to source XMLReaders. These four
- factories cover almost all conditions under which you would want a SAX parser:
+ JDOM exposes five factories that use JAXP to source XMLReaders. These factories
+ cover almost all conditions under which you would want a SAX parser:
  <ol>
  <li>A simple non-validating SAX parser
  <li>A validating parser that uses the DOCTYPE references in the XML to validate
  against.
  <li>A validating parser that uses the XML Schema (XSD) references embedded in
  the XML to validate against.
- <li>A validating parser that uses an external Schema (XML Schema, RelaxNG, etc.)
- to validate the XML against.
- <li>A special case of the Schema-validating factory that specialises in XML Schema (XSD) validation and
- provides an easy way to create validating XMLReaders based on single or multiple input XSD documents. 
+ <li>A validating parser that uses an external Schema (XML Schema, Relax NG,
+ etc.) to validate the XML against.
+ <li>A special case of the Schema-validating factory that specialises in XML
+ Schema (XSD) validation and provides an easy way to create validating
+ XMLReaders based on single or multiple input XSD documents. 
  </ol>
  The first three are all relatively simple, and are available as members of the
  {@link org.jdom2.input.sax.XMLReaderJAXPSingletons} enumeration. These members
@@ -161,21 +162,27 @@
  <p>
  {@link org.jdom2.input.sax.XMLReaderJAXPXSDFactory} is a special case of
  XMLReaderJAXPSchemaFactory which internally uses an efficient mechanism to
- compile Schema instances from one or many input XSD documents which can be
- sourced from multiple sources.
+ compile Schema instances from one or many input XSD documents which can come
+ from multiple sources.
 
  <h3>SAX 2.0 Factory</h3>
 
- JDOM does support using the SAX 2.0 API for creating XMLReaders though using
- either the 'default' SAX 2.0 implementation or a particular SAX Driver class
- name by creating instances of the
- {@link org.jdom2.input.sax.XMLReaderSAX2Factory}.
+ JDOM supports using the SAX 2.0 API for creating XMLReaders through using
+ either the 'default' SAX 2.0 implementation or a particular SAX Driver class.
+ SAX2.0 support is available by creating instances of the
+ {@link org.jdom2.input.sax.XMLReaderSAX2Factory} class.
  <p>
- JDOM does not provide a preconfigured way to do XML Schema validation through
- the SAX2.0 API though. The SAX 2.0 API does not expose a convenient way to configure different SAX 
- implementations in a consistent way, so it is up to the JDOM user to wrap the
- XMLReaderSAX2Factory in such a way that it reconfigures the XMLReader to be
- appropriate for the task at hand.
+ It should be noted that it is preferable to use JAXP in JDOM because it is a
+ more flexible API that allows more portable code to be created. he JAXP
+ interface in JDOM is also able to support a wider array of functionality
+ out-of-the-box, but the same functionality would require SAX-implementation
+ specific configuration.
+ <p>
+ JDOM does not provide a pre-configured way to do XML Schema validation through
+ the SAX2.0 API though. The SAX 2.0 API does not expose a convenient way to
+ configure different SAX implementations in a consistent way, so it is up to the
+ JDOM user to wrap the XMLReaderSAX2Factory in such a way that it reconfigures
+ the XMLReader to be appropriate for the task at hand.
 
  <h3>Custom Factories</h3>
  If your circumstances require it you can create your own implementation of the
