@@ -80,6 +80,7 @@ import java.nio.CharBuffer;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.Attributes;
@@ -1027,6 +1028,7 @@ public final class TestSAXBuilder {
 	
 	@Test
 	public void testParserFactory() throws JDOMException, IOException {
+		Assume.assumeNotNull(System.getProperty("org.jdom2.performance"));
 		long start = 0L, time = 0L;
 		loopParser(false, false);
 		loopParser(false, false);

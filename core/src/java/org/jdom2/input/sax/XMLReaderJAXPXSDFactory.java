@@ -57,7 +57,6 @@ package org.jdom2.input.sax;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -77,11 +76,12 @@ import org.jdom2.JDOMException;
  * <p>
  * This class has var-arg constructors, accepting potentially many XSD sources.
  * It is just as simple though to have a single source:
+ * 
  * <pre>
- * File xsdfile = new File("schema.xsd");
+ * File xsdfile = new File(&quot;schema.xsd&quot;);
  * XMLReaderJDOMFactory schemafac = new XMLReaderJAXPXSDFactory(xsdfile);
  * SAXBuilder builder = new SAXBuilder(schemafac);
- * File xmlfile = new File("data.xml");
+ * File xmlfile = new File(&quot;data.xml&quot;);
  * Document validdoc = builder.build(xmlfile);
  * </pre>
  * 
@@ -90,6 +90,13 @@ import org.jdom2.JDOMException;
  */
 public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 
+	/**
+	 * Use a Thread-Local system to manage SchemaFactory. SchemaFactory is not
+	 * thread-safe, so we need some mechanism to isolate it, and thread-local is
+	 * a logical way because it only creates an instance when needed in each
+	 * thread, and they die when the thread dies. Does not need any
+	 * synchronisation either.
+	 */
 	private static final ThreadLocal<SchemaFactory> schemafactl =
 			new ThreadLocal<SchemaFactory>() {
 				@Override
@@ -110,16 +117,22 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 *         if there is a problem with the Sources
 	 */
 	private static final Schema getSchemaFromString(String... systemID)
-			throws JDOMException, MalformedURLException {
-		if (systemID == null || systemID.length == 0) {
+			throws JDOMException {
+		if (systemID == null) {
+			throw new NullPointerException("Cannot specify a null input array");
+		}
+		if (systemID.length == 0) {
 			throw new IllegalArgumentException("You need at least one " +
 					"XSD source for an XML Schema validator");
 		}
-		URL[] urls = new URL[systemID.length];
+		Source[] urls = new Source[systemID.length];
 		for (int i = 0; i < systemID.length; i++) {
-			urls[i] = new URL(systemID[i]);
+			if (systemID[i] == null) {
+				throw new NullPointerException("Cannot specify a null SystemID");
+			}
+			urls[i] = new StreamSource(systemID[i]);
 		}
-		return getSchemaFromURL(urls);
+		return getSchemaFromSource(urls);
 	}
 
 	/**
@@ -134,20 +147,21 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 */
 	private static final Schema getSchemaFromFile(File... systemID)
 			throws JDOMException {
-		if (systemID == null || systemID.length == 0) {
+		if (systemID == null) {
+			throw new NullPointerException("Cannot specify a null input array");
+		}
+		if (systemID.length == 0) {
 			throw new IllegalArgumentException("You need at least one " +
 					"XSD source for an XML Schema validator");
 		}
-		URL[] urls = new URL[systemID.length];
+		Source[] sources = new Source[systemID.length];
 		for (int i = 0; i < systemID.length; i++) {
-			try {
-				urls[i] = systemID[i].toURI().toURL();
-			} catch (MalformedURLException e) {
-				throw new JDOMException("Unable to obtain a URL for file " +
-						systemID[i], e);
+			if (systemID[i] == null) {
+				throw new NullPointerException("Cannot specify a null SystemID");
 			}
+			sources[i] = new StreamSource(systemID[i]);
 		}
-		return getSchemaFromURL(urls);
+		return getSchemaFromSource(sources);
 	}
 
 	/**
@@ -162,34 +176,42 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 */
 	private static final Schema getSchemaFromURL(URL... systemID)
 			throws JDOMException {
-		if (systemID == null || systemID.length == 0) {
+		if (systemID == null) {
+			throw new NullPointerException("Cannot specify a null input array");
+		}
+		if (systemID.length == 0) {
 			throw new IllegalArgumentException("You need at least one " +
 					"XSD source for an XML Schema validator");
 		}
-		Source[] sources = new Source[systemID.length];
-		for (int i = 0; i < systemID.length; i++) {
-			InputStream is = null;
-			try {
-				is = systemID[i].openStream();
+		InputStream[] streams = new InputStream[systemID.length];
+		try {
+			Source[] sources = new Source[systemID.length];
+			for (int i = 0; i < systemID.length; i++) {
+				if (systemID[i] == null) {
+					throw new NullPointerException("Cannot specify a null SystemID");
+				}
+				InputStream is = null;
+				try {
+					is = systemID[i].openStream();
+				} catch (IOException e) {
+					throw new JDOMException("Unable to read Schema URL " +
+							systemID[i].toString(), e);
+				}
+				streams[i] = is;
 				sources[i] = new StreamSource(is, systemID[i].toString());
-				is.close();
-				is = null;
-			} catch (IOException e) {
-				throw new JDOMException("Unable to read Schema URL " +
-						systemID[i].toString(), e);
-			} finally {
+			}
+			return getSchemaFromSource(sources);
+		} finally {
+			for (InputStream is : streams) {
 				if (is != null) {
 					try {
 						is.close();
 					} catch (IOException ioe) {
 						// swallow it.
-						// we only get here if there is a JDOMException
-						// being thrown already.
 					}
 				}
 			}
 		}
-		return getSchemaFromSource(sources);
 	}
 
 	/**
@@ -203,7 +225,10 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 */
 	private static final Schema getSchemaFromSource(Source... sources)
 			throws JDOMException {
-		if (sources == null || sources.length == 0) {
+		if (sources == null) {
+			throw new NullPointerException("Cannot specify a null input array");
+		}
+		if (sources.length == 0) {
 			throw new IllegalArgumentException("You need at least one " +
 					"XSD Source for an XML Schema validator");
 		}
@@ -226,11 +251,9 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 * @throws JDOMException
 	 *         If the Schemas could not be loaded from the SystemIDs This will
 	 *         wrap a SAXException that contains the actual fault.
-	 * @throws MalformedURLException
-	 *         If URLs' could not be made from the SystemID values
 	 */
 	public XMLReaderJAXPXSDFactory(String... systemid)
-			throws MalformedURLException, JDOMException {
+			throws JDOMException {
 		super(getSchemaFromString(systemid));
 	}
 

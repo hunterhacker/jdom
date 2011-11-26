@@ -1,0 +1,6 @@
+<?xml version="1.0" standalone="no" ?>
+
+<root xmlns="http://www.jdom.org/schema_main" >
+  <child xmlns="http://www.jdom.org/schema_one" attribute="valueone" />
+  <child xmlns="http://www.jdom.org/schema_two" attribute="valuetwo" />
+</root>
