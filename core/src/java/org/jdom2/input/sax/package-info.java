@@ -293,7 +293,8 @@
  single SAXBuilder to create multiple SAXEngines as you need them in the pool by
  calling the <code>buildEngine()</code> method.
 
- <h2 name="Examples">Examples</h2>
+ <h2>Examples</h2>
+ <a name="Examples" />
  Create a simple SAXBuilder and parse a document:
  <p>
  <pre>
@@ -315,16 +316,26 @@
  Document doc = sb.build(new File("file.xml"));
  </pre>
  <p>
- Create an XSD (XML Schema) validating SAXBuilder using externally sourced XSD
- and parse a document (see 
- {@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory}):
+ Create an XSD (XML Schema) validating SAXBuilder the hard way (see the next
+ example for an easier way) using an external XSD and parse a document
+ (see {@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory}):
  <p>
  <pre>
  SchemaFactory schemafac =
  SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
  Schema schema = schemafac.newSchema(new File("myschema.xsd"));
  XMLReaderJDOMFactory factory = new XMLReaderJAXPSchemaFactory(schema);
- SAXBuilder sb = new SAXBuilder();
+ SAXBuilder sb = new SAXBuilder(factory);
+ Document doc = sb.build(new File("file.xml"));
+ </pre>
+ <p>
+ Create an XSD (XML Schema) validating SAXBuilder the easy way
+ (see {@link org.jdom2.input.sax.XMLReaderJAXPXSDFactory}):
+ <p>
+ <pre>
+ File xsdfile = new File("myschema.xsd");
+ XMLReaderJDOMFactory factory = new XMLReaderJAXPXSDFactory(xsdfile);
+ SAXBuilder sb = new SAXBuilder(factory);
  Document doc = sb.build(new File("file.xml"));
  </pre>
 
