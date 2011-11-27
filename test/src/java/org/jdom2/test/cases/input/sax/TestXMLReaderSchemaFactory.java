@@ -17,7 +17,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderJAXPSchemaFactory;
+import org.jdom2.input.sax.XMLReaderSchemaFactory;
 
 @SuppressWarnings("javadoc")
 public class TestXMLReaderSchemaFactory {
@@ -27,7 +27,7 @@ public class TestXMLReaderSchemaFactory {
 		SchemaFactory schemafac = 
 				SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		Schema schema = schemafac.newSchema(new File("test/resources/xsdcomplex/SAXTestComplexMain.xsd"));
-		XMLReaderJAXPSchemaFactory readerfac = new XMLReaderJAXPSchemaFactory(schema);
+		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(schema);
 		assertTrue(readerfac.isValidating());
 		assertNotNull(readerfac.createXMLReader());
 	}
@@ -37,7 +37,7 @@ public class TestXMLReaderSchemaFactory {
 		SchemaFactory schemafac = 
 				SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		Schema schema = schemafac.newSchema(new File("test/resources/xsdcomplex/SAXTestComplexMain.xsd"));
-		XMLReaderJAXPSchemaFactory readerfac = new XMLReaderJAXPSchemaFactory(schema);
+		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(schema);
 		assertTrue(readerfac.isValidating());
 		SAXBuilder builder = new SAXBuilder(readerfac);
 		Document doc = builder.build(new File("test/resources/xsdcomplex/input.xml"));

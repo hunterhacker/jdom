@@ -81,9 +81,9 @@ public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
 	 * 
 	 * @param validate
 	 *        whether to validate against the DocType
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
-	 * @see XMLReaderJAXPSingletons#DTDVALIDATING
-	 * @see XMLReaderJAXPSingletons#XSDVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#DTDVALIDATING
+	 * @see XMLReaderSingletons#XSDVALIDATING
 	 */
 	public XMLReaderSAX2Factory(boolean validate) {
 		this(validate, null);
@@ -98,9 +98,9 @@ public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
 	 *        The SAX2.0 Driver classname (null to use the SAX2.0 default parser
 	 *        searching algorithm - if you specify null you should probably be
 	 *        using JAXP anyway).
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
-	 * @see XMLReaderJAXPSingletons#DTDVALIDATING
-	 * @see XMLReaderJAXPSingletons#XSDVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#DTDVALIDATING
+	 * @see XMLReaderSingletons#XSDVALIDATING
 	 */
 	public XMLReaderSAX2Factory(final boolean validate, final String saxdriver) {
 		super();

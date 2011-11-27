@@ -71,7 +71,7 @@ import org.jdom2.JDOMException;
  * If you want to validate an XML document against the XSD references embedded
  * in the XML itself (xsdSchemaLocation) then you do not want to use this class
  * but rather use an alternate means like
- * {@link XMLReaderJAXPSingletons#XSDVALIDATING}.
+ * {@link XMLReaderSingletons#XSDVALIDATING}.
  * <p>
  * See the {@link org.jdom2.input.sax package documentation} for the best
  * alternatives.
@@ -79,7 +79,7 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public class XMLReaderJAXPSchemaFactory implements XMLReaderJDOMFactory {
+public class XMLReaderSchemaFactory implements XMLReaderJDOMFactory {
 
 	private final SAXParserFactory saxfac;
 
@@ -90,7 +90,7 @@ public class XMLReaderJAXPSchemaFactory implements XMLReaderJDOMFactory {
 	 * @param schema
 	 *        The Schema to use for validation.
 	 */
-	public XMLReaderJAXPSchemaFactory(Schema schema) {
+	public XMLReaderSchemaFactory(Schema schema) {
 		if (schema == null) {
 			throw new NullPointerException("Cannot create a " +
 					"SchemaXMLReaderFactory with a null schema");

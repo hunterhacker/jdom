@@ -84,7 +84,7 @@ import org.jdom2.input.sax.SAXBuilderEngine;
 import org.jdom2.input.sax.SAXEngine;
 import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
-import org.jdom2.input.sax.XMLReaderJAXPSingletons;
+import org.jdom2.input.sax.XMLReaderSingletons;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.input.sax.XMLReaderSAX2Factory;
 
@@ -206,7 +206,7 @@ public class SAXBuilder implements SAXEngine {
 	 * 
 	 * @see SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory,
 	 *      JDOMFactory)
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
 	 * @see DefaultSAXHandlerFactory
 	 * @see DefaultJDOMFactory
 	 */
@@ -217,12 +217,12 @@ public class SAXBuilder implements SAXEngine {
 	/**
 	 * Creates a new JAXP-based SAXBuilder. The underlying parser will validate
 	 * (using DTD) or not according to the given parameter. If you want Schema
-	 * validation then use SAXBuilder(JAXPXMLReaderSingleton.XSDVALIDATOR)
+	 * validation then use SAXBuilder(XMLReaderSingletons.XSDVALIDATOR)
 	 * 
 	 * @see SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory,
 	 *      JDOMFactory)
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
-	 * @see XMLReaderJAXPSingletons#DTDVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#DTDVALIDATING
 	 * @see DefaultSAXHandlerFactory
 	 * @see DefaultJDOMFactory
 	 * @see org.jdom2.input.sax for important details on SAXBuilder
@@ -231,8 +231,8 @@ public class SAXBuilder implements SAXEngine {
 	 */
 	public SAXBuilder(final boolean validate) {
 		this(validate
-				? XMLReaderJAXPSingletons.DTDVALIDATING
-				: XMLReaderJAXPSingletons.NONVALIDATING,
+				? XMLReaderSingletons.DTDVALIDATING
+				: XMLReaderSingletons.NONVALIDATING,
 				null, null);
 	}
 
@@ -279,7 +279,7 @@ public class SAXBuilder implements SAXEngine {
 	 * @see SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory,
 	 *      JDOMFactory)
 	 * @see XMLReaderJDOMFactory
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
 	 * @see DefaultSAXHandlerFactory
 	 * @see DefaultJDOMFactory
 	 * @see org.jdom2.input.sax for important details on SAXBuilder
@@ -300,7 +300,7 @@ public class SAXBuilder implements SAXEngine {
 	 * <p>
 	 * 
 	 * @see XMLReaderJDOMFactory
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
 	 * @see SAXHandlerFactory
 	 * @see DefaultSAXHandlerFactory
 	 * @see JDOMFactory
@@ -319,7 +319,7 @@ public class SAXBuilder implements SAXEngine {
 	public SAXBuilder(final XMLReaderJDOMFactory xmlreaderfactory, final SAXHandlerFactory handlerfactory,
 			final JDOMFactory jdomfactory) {
 		this.readerfac = xmlreaderfactory == null
-				? XMLReaderJAXPSingletons.NONVALIDATING
+				? XMLReaderSingletons.NONVALIDATING
 				: xmlreaderfactory;
 		this.handlerfac = handlerfactory == null
 				? DEFAULTSAXHANDLERFAC
@@ -407,11 +407,11 @@ public class SAXBuilder implements SAXEngine {
 	 * 
 	 * @param rfac
 	 *        the JDOMXMLReaderFactory to set. A null rfac will indicate the
-	 *        default {@link XMLReaderJAXPSingletons#NONVALIDATING}
+	 *        default {@link XMLReaderSingletons#NONVALIDATING}
 	 */
 	public void setXMLReaderFactory(final XMLReaderJDOMFactory rfac) {
 		readerfac = rfac == null
-				? XMLReaderJAXPSingletons.NONVALIDATING
+				? XMLReaderSingletons.NONVALIDATING
 				: rfac;
 		engine = null;
 	}
@@ -475,20 +475,20 @@ public class SAXBuilder implements SAXEngine {
 	 * <p>
 	 * 
 	 * <pre>
-	 * setXMLReaderFactory(XMLReaderJAXPSingletons.DTDVALIDATING)
+	 * setXMLReaderFactory(XMLReaderSingletons.DTDVALIDATING)
 	 * </pre>
 	 * 
 	 * for true, and
 	 * 
 	 * <pre>
-	 * setXMLReaderFactory(XMLReaderJAXPSingletons.NONVALIDATING)
+	 * setXMLReaderFactory(XMLReaderSingletons.NONVALIDATING)
 	 * </pre>
 	 * 
 	 * for false.
 	 * 
 	 * @see #setXMLReaderFactory(XMLReaderJDOMFactory)
-	 * @see XMLReaderJAXPSingletons#NONVALIDATING
-	 * @see XMLReaderJAXPSingletons#DTDVALIDATING
+	 * @see XMLReaderSingletons#NONVALIDATING
+	 * @see XMLReaderSingletons#DTDVALIDATING
 	 * @param validate
 	 *        <code>boolean</code> indicating whether validation should occur.
 	 * @deprecated use {@link #setXMLReaderFactory(XMLReaderJDOMFactory)}
@@ -496,8 +496,8 @@ public class SAXBuilder implements SAXEngine {
 	@Deprecated
 	public void setValidation(final boolean validate) {
 		setXMLReaderFactory(validate
-				? XMLReaderJAXPSingletons.DTDVALIDATING
-				: XMLReaderJAXPSingletons.NONVALIDATING);
+				? XMLReaderSingletons.DTDVALIDATING
+				: XMLReaderSingletons.NONVALIDATING);
 	}
 
 	/**

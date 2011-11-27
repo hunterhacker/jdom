@@ -79,7 +79,7 @@ import org.jdom2.JDOMException;
  * 
  * <pre>
  * File xsdfile = new File(&quot;schema.xsd&quot;);
- * XMLReaderJDOMFactory schemafac = new XMLReaderJAXPXSDFactory(xsdfile);
+ * XMLReaderJDOMFactory schemafac = new XMLReaderXSDFactory(xsdfile);
  * SAXBuilder builder = new SAXBuilder(schemafac);
  * File xmlfile = new File(&quot;data.xml&quot;);
  * Document validdoc = builder.build(xmlfile);
@@ -88,7 +88,7 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
+public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
 
 	/**
 	 * Use a Thread-Local system to manage SchemaFactory. SchemaFactory is not
@@ -252,7 +252,7 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 *         If the Schemas could not be loaded from the SystemIDs This will
 	 *         wrap a SAXException that contains the actual fault.
 	 */
-	public XMLReaderJAXPXSDFactory(String... systemid)
+	public XMLReaderXSDFactory(String... systemid)
 			throws JDOMException {
 		super(getSchemaFromString(systemid));
 	}
@@ -268,7 +268,7 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 *         If the Schemas could not be loaded from the SystemIDs This will
 	 *         wrap a SAXException that contains the actual fault.
 	 */
-	public XMLReaderJAXPXSDFactory(URL... systemid) throws JDOMException {
+	public XMLReaderXSDFactory(URL... systemid) throws JDOMException {
 		super(getSchemaFromURL(systemid));
 	}
 
@@ -283,7 +283,7 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 *         If the Schemas could not be loaded from the SystemIDs This will
 	 *         wrap a SAXException that contains the actual fault.
 	 */
-	public XMLReaderJAXPXSDFactory(File... systemid) throws JDOMException {
+	public XMLReaderXSDFactory(File... systemid) throws JDOMException {
 		super(getSchemaFromFile(systemid));
 	}
 
@@ -298,7 +298,7 @@ public class XMLReaderJAXPXSDFactory extends XMLReaderJAXPSchemaFactory {
 	 *         If the Schemas could not be loaded from the Sources This will
 	 *         wrap a SAXException that contains the actual fault.
 	 */
-	public XMLReaderJAXPXSDFactory(Source... sources) throws JDOMException {
+	public XMLReaderXSDFactory(Source... sources) throws JDOMException {
 		super(getSchemaFromSource(sources));
 	}
 

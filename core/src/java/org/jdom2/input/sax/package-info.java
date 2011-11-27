@@ -84,7 +84,7 @@
  <li>A Constructor: {@link org.jdom2.input.SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory, org.jdom2.JDOMFactory)}
  <li>A default constructor {@link org.jdom2.input.SAXBuilder#SAXBuilder()}
  that chooses a non-validating JAXP sourced XMLReader Factory
- {@link org.jdom2.input.sax.XMLReaderJAXPSingletons#NONVALIDATING} which it
+ {@link org.jdom2.input.sax.XMLReaderSingletons#NONVALIDATING} which it
  mates with a Default {@link org.jdom2.input.sax.SAXHandler} factory, and the 
  {@link org.jdom2.DefaultJDOMFactory}. 
  <li>A number of other constructors that mostly are for backward-compatibility
@@ -151,17 +151,17 @@
  XMLReaders based on single or multiple input XSD documents. 
  </ol>
  The first three are all relatively simple, and are available as members of the
- {@link org.jdom2.input.sax.XMLReaderJAXPSingletons} enumeration. These members
+ {@link org.jdom2.input.sax.XMLReaderSingletons} enumeration. These members
  are 'singletons' that can be used in a multi-threaded and concurrent way to
  provide XMLReaders that are configured correctly for the respective behaviour.
  <p>
  To validate using an arbitrary external Schema you can use the
- {@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory} to create an instance for
+ {@link org.jdom2.input.sax.XMLReaderSchemaFactory} to create an instance for
  the particular Schema you want to validate against. Because this requires an
  input Schema it cannot be constructed as a singleton like the others.
  <p>
- {@link org.jdom2.input.sax.XMLReaderJAXPXSDFactory} is a special case of
- XMLReaderJAXPSchemaFactory which internally uses an efficient mechanism to
+ {@link org.jdom2.input.sax.XMLReaderXSDFactory} is a special case of
+ XMLReaderSchemaFactory which internally uses an efficient mechanism to
  compile Schema instances from one or many input XSD documents which can come
  from multiple sources.
 
@@ -173,7 +173,7 @@
  {@link org.jdom2.input.sax.XMLReaderSAX2Factory} class.
  <p>
  It should be noted that it is preferable to use JAXP in JDOM because it is a
- more flexible API that allows more portable code to be created. he JAXP
+ more flexible API that allows more portable code to be created. The JAXP
  interface in JDOM is also able to support a wider array of functionality
  out-of-the-box, but the same functionality would require SAX-implementation
  specific configuration.
@@ -305,36 +305,36 @@
  Create a DTD validating SAXBuilder and parse a document:
  <p>
  <pre>
- SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.DTDVALIDATING);
+ SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.DTDVALIDATING);
  Document doc = sb.build(new File("file.xml"));
  </pre>
  Create an XSD (XML Schema) validating SAXBuilder using the XSD references inside
  the XML document and parse a document:
  <p>
  <pre>
- SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.XSDVALIDATING);
+ SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);
  Document doc = sb.build(new File("file.xml"));
  </pre>
  <p>
  Create an XSD (XML Schema) validating SAXBuilder the hard way (see the next
  example for an easier way) using an external XSD and parse a document
- (see {@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory}):
+ (see {@link org.jdom2.input.sax.XMLReaderSchemaFactory}):
  <p>
  <pre>
  SchemaFactory schemafac =
  SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
  Schema schema = schemafac.newSchema(new File("myschema.xsd"));
- XMLReaderJDOMFactory factory = new XMLReaderJAXPSchemaFactory(schema);
+ XMLReaderJDOMFactory factory = new XMLReaderSchemaFactory(schema);
  SAXBuilder sb = new SAXBuilder(factory);
  Document doc = sb.build(new File("file.xml"));
  </pre>
  <p>
  Create an XSD (XML Schema) validating SAXBuilder the easy way
- (see {@link org.jdom2.input.sax.XMLReaderJAXPXSDFactory}):
+ (see {@link org.jdom2.input.sax.XMLReaderXSDFactory}):
  <p>
  <pre>
  File xsdfile = new File("myschema.xsd");
- XMLReaderJDOMFactory factory = new XMLReaderJAXPXSDFactory(xsdfile);
+ XMLReaderJDOMFactory factory = new XMLReaderXSDFactory(xsdfile);
  SAXBuilder sb = new SAXBuilder(factory);
  Document doc = sb.build(new File("file.xml"));
  </pre>

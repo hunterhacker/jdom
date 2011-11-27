@@ -76,7 +76,7 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public enum XMLReaderJAXPSingletons implements XMLReaderJDOMFactory {
+public enum XMLReaderSingletons implements XMLReaderJDOMFactory {
 
 	/**
 	 * The non-validating singleton
@@ -99,7 +99,7 @@ public enum XMLReaderJAXPSingletons implements XMLReaderJDOMFactory {
 	private final boolean validates;
 
 	/** Private constructor */
-	private XMLReaderJAXPSingletons(int validate) {
+	private XMLReaderSingletons(int validate) {
 		SAXParserFactory fac = SAXParserFactory.newInstance();
 		boolean val = false;
 		// All JDOM parsers are namespace aware.

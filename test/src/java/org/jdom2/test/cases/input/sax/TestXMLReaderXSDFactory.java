@@ -17,12 +17,12 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderJAXPXSDFactory;
+import org.jdom2.input.sax.XMLReaderXSDFactory;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
-public class TestXMLReaderJAXPXSDFactory {
+public class TestXMLReaderXSDFactory {
 	//"./test/resources/xscomplex/multi_one.xsd",
 	
 	File filemain = new File("./test/resources/xsdcomplex/multi_main.xsd");
@@ -57,8 +57,8 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 	
 	@Test
-	public void testXMLReaderJAXPXSDFactoryStringArray() throws MalformedURLException, JDOMException {
-		XMLReaderJDOMFactory fac = new XMLReaderJAXPXSDFactory(
+	public void testXMLReaderXSDFactoryStringArray() throws MalformedURLException, JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
 				filemain.toURI().toURL().toExternalForm(),
 				fileone.toURI().toURL().toExternalForm(),
 				filetwo.toURI().toURL().toExternalForm());
@@ -66,8 +66,8 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryURLArray() throws JDOMException, MalformedURLException {
-		XMLReaderJDOMFactory fac = new XMLReaderJAXPXSDFactory(
+	public void testXMLReaderXSDFactoryURLArray() throws JDOMException, MalformedURLException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
 				filemain.toURI().toURL(),
 				fileone.toURI().toURL(),
 				filetwo.toURI().toURL());
@@ -75,8 +75,8 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryFileArray() throws JDOMException {
-		XMLReaderJDOMFactory fac = new XMLReaderJAXPXSDFactory(
+	public void testXMLReaderXSDFactoryFileArray() throws JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
 				filemain,
 				fileone,
 				filetwo);
@@ -84,8 +84,8 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactorySourceArray() throws JDOMException {
-		XMLReaderJDOMFactory fac = new XMLReaderJAXPXSDFactory(
+	public void testXMLReaderXSDFactorySourceArray() throws JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
 				new StreamSource(filemain),
 				new StreamSource(fileone),
 				new StreamSource(filetwo));
@@ -95,10 +95,10 @@ public class TestXMLReaderJAXPXSDFactory {
 	/* Broken stuff */
 	
 	@Test
-	public void testXMLReaderJAXPXSDFactoryStringNull() {
+	public void testXMLReaderXSDFactoryStringNull() {
 		try {
 			String n = null;
-			new XMLReaderJAXPXSDFactory(n);
+			new XMLReaderXSDFactory(n);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -106,10 +106,10 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryURLNull() {
+	public void testXMLReaderXSDFactoryURLNull() {
 		try {
 			URL n = null;
-			new XMLReaderJAXPXSDFactory(n);
+			new XMLReaderXSDFactory(n);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -117,10 +117,10 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryFileNull() {
+	public void testXMLReaderXSDFactoryFileNull() {
 		try {
 			File n = null;
-			new XMLReaderJAXPXSDFactory(n);
+			new XMLReaderXSDFactory(n);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -128,10 +128,10 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactorySourceNull() {
+	public void testXMLReaderXSDFactorySourceNull() {
 		try {
 			Source n = null;
-			new XMLReaderJAXPXSDFactory(n);
+			new XMLReaderXSDFactory(n);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -140,9 +140,9 @@ public class TestXMLReaderJAXPXSDFactory {
 
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryStringEmpty() {
+	public void testXMLReaderXSDFactoryStringEmpty() {
 		try {
-			new XMLReaderJAXPXSDFactory(new String[0]);
+			new XMLReaderXSDFactory(new String[0]);
 			UnitTestUtil.failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
@@ -150,9 +150,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryURLEmpty() {
+	public void testXMLReaderXSDFactoryURLEmpty() {
 		try {
-			new XMLReaderJAXPXSDFactory(new URL[0]);
+			new XMLReaderXSDFactory(new URL[0]);
 			UnitTestUtil.failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
@@ -160,9 +160,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryFileEmpty() {
+	public void testXMLReaderXSDFactoryFileEmpty() {
 		try {
-			new XMLReaderJAXPXSDFactory(new File[0]);
+			new XMLReaderXSDFactory(new File[0]);
 			UnitTestUtil.failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
@@ -170,9 +170,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactorySourceEmpty() {
+	public void testXMLReaderXSDFactorySourceEmpty() {
 		try {
-			new XMLReaderJAXPXSDFactory(new Source[0]);
+			new XMLReaderXSDFactory(new Source[0]);
 			UnitTestUtil.failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
@@ -182,9 +182,9 @@ public class TestXMLReaderJAXPXSDFactory {
 
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryStringNullArray() {
+	public void testXMLReaderXSDFactoryStringNullArray() {
 		try {
-			new XMLReaderJAXPXSDFactory((String[])null);
+			new XMLReaderXSDFactory((String[])null);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -192,9 +192,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryURLNullArray() {
+	public void testXMLReaderXSDFactoryURLNullArray() {
 		try {
-			new XMLReaderJAXPXSDFactory((URL[])null);
+			new XMLReaderXSDFactory((URL[])null);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -202,9 +202,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactoryFileNullArray() {
+	public void testXMLReaderXSDFactoryFileNullArray() {
 		try {
-			new XMLReaderJAXPXSDFactory((File[])null);
+			new XMLReaderXSDFactory((File[])null);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
@@ -212,9 +212,9 @@ public class TestXMLReaderJAXPXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderJAXPXSDFactorySourceNullArray() {
+	public void testXMLReaderXSDFactorySourceNullArray() {
 		try {
-			new XMLReaderJAXPXSDFactory((Source[])null);
+			new XMLReaderXSDFactory((Source[])null);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
