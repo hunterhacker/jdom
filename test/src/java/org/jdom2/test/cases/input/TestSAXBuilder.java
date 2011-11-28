@@ -131,7 +131,7 @@ public final class TestSAXBuilder {
 		}
 		
 		/**
-		 * This sets and configures the parser (SAXBuilder jsut sets.
+		 * This sets and configures the parser (SAXBuilder just sets).
 		 */
 		@Override
 		public XMLReader createParser() throws JDOMException {

@@ -32,7 +32,7 @@ public class TestSAXComplexSchema {
 	 * Test method for {@link org.jdom.input.SAXBuilder#build(java.io.File)}.
 	 */
 	@Test
-	public void testBuildFile() throws IOException {
+	public void testBuildFileOldWay() throws IOException {
 		SAXBuilder builder = new SAXBuilder(true);
 		builder.setFeature("http://xml.org/sax/features/namespaces", true);
 		builder.setFeature("http://xml.org/sax/features/namespace-prefixes", true);

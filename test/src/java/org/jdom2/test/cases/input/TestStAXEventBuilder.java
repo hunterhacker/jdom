@@ -133,8 +133,6 @@ public class TestStAXEventBuilder {
 
 			SAXBuilder sb = new SAXBuilder(false);
 			sb.setExpandEntities(expand);
-			sb.setFeature("http://xml.org/sax/features/namespaces", true);
-			sb.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 			
 			Document saxbuild = sb.build(filename);
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
