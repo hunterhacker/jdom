@@ -1,3 +1,57 @@
+/*--
+
+ Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions, and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions, and the disclaimer that follows
+    these conditions in the documentation and/or other materials
+    provided with the distribution.
+
+ 3. The name "JDOM" must not be used to endorse or promote products
+    derived from this software without prior written permission.  For
+    written permission, please contact <request_AT_jdom_DOT_org>.
+
+ 4. Products derived from this software may not be called "JDOM", nor
+    may "JDOM" appear in their name, without prior written permission
+    from the JDOM Project Management <request_AT_jdom_DOT_org>.
+
+ In addition, we request (but do not require) that you include in the
+ end-user documentation provided with the redistribution and/or in the
+ software itself an acknowledgement equivalent to the following:
+     "This product includes software developed by the
+      JDOM Project (http://www.jdom.org/)."
+ Alternatively, the acknowledgment may be graphical using the logos
+ available at http://www.jdom.org/images/logos.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the JDOM Project and was originally
+ created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
+ Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
+ on the JDOM Project, please see <http://www.jdom.org/>.
+
+ */
+
 package org.jdom2.util;
 
 
@@ -36,7 +90,13 @@ public final class StringBin {
 	
 	/** Default bucket-size growth factor */
 	private static final int GROW = 4;
-	/** How many buckets to start with */
+	/**
+	 * How many buckets to start with
+	 * <p>
+	 * Actually, this just sets the initial capacity which is used to calculate
+	 * the number of buckets. This implementation will turn the default capacity
+	 * of 1023 in to 
+	 */
 	private static final int DEFAULTCAP = 1023;
 	/** How big to let the largest bucket grow before a rehash */
 	private static final int MAXBUCKET = 16;
@@ -182,12 +242,12 @@ public final class StringBin {
 		 *  we use a special masking routine here. This is important.
 		 *  we always do a 16-bit shift, XOR it with the unshifted value, and
 		 *  then apply the mask.
-		 *  The reason is relatively simple, it makes rehashing much faster,
+		 *  The reason is relatively simple: it makes rehashing much faster
 		 *  because you never need to shift values in the rehash, they are always
 		 *  just appended.
 		 *  Further, there is no real need to get a true random distribution in
 		 *  the buckets... it's not important. The String.hashCode() is a good
-		 *  hash function so we do not lose much by doing it this way.
+		 *  enough hash function so we do not lose much by doing it this way.
 		 *  
 		 *  In detail:
 		 *  Normally for a bucketing/hashing system we will try to use as many
@@ -213,10 +273,11 @@ public final class StringBin {
 		final int length = lengths[bucketid];
 		if (length == 0) {
 			// start a new bucket
+			final String v = compact(value);
 			buckets[bucketid] = new String[GROW];
-			buckets[bucketid][0] = value;
+			buckets[bucketid][0] = v;
 			lengths[bucketid] = 1;
-			return value;
+			return v;
 		}
 		
 		// get the existing bucket.
@@ -239,23 +300,44 @@ public final class StringBin {
 			buckets[bucketid] = bucket;
 		}
 		System.arraycopy(bucket, ip, bucket, ip + 1, length - ip);
-		bucket[ip] = value;
+		final String v = compact(value);
+		bucket[ip] = v;
 		lengths[bucketid]++;
-		return value;
+		return v;
 	}
 	
+	/**
+	 * Store the existing values in a new and larger set of buckets.
+	 * This reduces the number of values in each bucket, which improves insert
+	 * time.
+	 * <p>
+	 * The data is stored in hashCode() order, and then alphabetically for
+	 * those instances where two String values have the same hashCode().
+	 * <p>
+	 * The bucketing hash key is calculated in a specific way that guarantees
+	 * that when we rehash there values in a bucket will be divided between
+	 * a new set of buckets, and no other source bucket will ever add values
+	 * to a bucket that we are dividing our bucket to.
+	 * <p> 
+	 * The combination of the bucket hash key, and the bucket ordering means
+	 * that during a rehash we never have to insert values in to the middle of
+	 * the bucket.
+	 */
 	private void rehash() {
 		String[][] olddata = buckets;
+		// magic numbers ... we make 4-times as many buckets.
 		mask = ((mask + 1) << 2) - 1;
 		buckets = new String[mask + 1][];
 		lengths = new int[buckets.length];
 		int hash = 0, bucketid = 0, length = 0;
 		for (String[] ob : olddata) {
 			if (ob == null) {
+				// was an empty bucket.
 				continue;
 			}
 			for (String val : ob) {
 				if (val == null) {
+					// there are no more values to rehash in this bucket.
 					break;
 				}
 				hash = val.hashCode();
@@ -274,6 +356,20 @@ public final class StringBin {
 				lengths[bucketid]++;
 			}
 		}
+	}
+	
+	/**
+	 * Compact a Java String to its smallest char[] backing array.
+	 * Java often reuses the char[] array that backs String classes. If you have
+	 * one String value and substring it, or some other methods, then instead of
+	 * creating a new char[] array it reuses the original one. This can lead to 
+	 * small String values being backed by very large arrays. We do not want to
+	 * be caching these large arrays... just the smallest.
+	 * @param input The String to compact
+	 * @return a Compacted version of the String.
+	 */
+	private static final String compact(final String input) {
+		return new String(input.toCharArray());
 	}
 	
 	/**
