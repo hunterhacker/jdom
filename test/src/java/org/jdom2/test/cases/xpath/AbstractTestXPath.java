@@ -221,18 +221,18 @@ public abstract class AbstractTestXPath {
 		checkXPath(setupXPath(xpath, variables, nsa), context, value, number, expect);
 	}
 
-	@Test
-	public void testSerialization() {
-		XPath xpath = setupXPath("//main", null);
-		XPath xser  = UnitTestUtil.deSerialize(xpath);
-		assertTrue(xpath != xser);
-		// TODO JaxenXPath has useless equals(). See issue #43
-		// Additionally, all XPath deserialization is done on the default
-		// factory... will never be equals() if the factory used to create
-		// the xpath is different.
-		// UnitTestUtil.checkEquals(xpath, xser);
-		assertEquals(xpath.toString(), xser.toString());
-	}
+//	@Test
+//	public void testSerialization() {
+//		XPath xpath = setupXPath("//main", null);
+//		XPath xser  = UnitTestUtil.deSerialize(xpath);
+//		assertTrue(xpath != xser);
+//		// TODO JaxenXPath has useless equals(). See issue #43
+//		// Additionally, all XPath deserialization is done on the default
+//		// factory... will never be equals() if the factory used to create
+//		// the xpath is different.
+//		// UnitTestUtil.checkEquals(xpath, xser);
+//		assertEquals(xpath.toString(), xser.toString());
+//	}
 	
 	@Test
 	public void testSelectDocumentDoc() {
