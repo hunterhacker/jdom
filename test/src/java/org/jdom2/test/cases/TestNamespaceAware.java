@@ -1,6 +1,7 @@
 package org.jdom2.test.cases;
 
 import org.jdom2.Attribute;
+import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.Text;
@@ -8,7 +9,7 @@ import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
-public class TestContent {
+public class TestNamespaceAware {
 
 	@Test
 	public void testNamespacesScopeSimple() {
@@ -128,6 +129,16 @@ public class TestContent {
 				
 		UnitTestUtil.testNamespaceIntro(att);
 		UnitTestUtil.testNamespaceScope(att, Namespace.NO_NAMESPACE, pfx, Namespace.XML_NAMESPACE);
+	}
+
+	@Test
+	public void testNamespacesScopeDocument() {
+		Element emt = new Element("root");
+		Document doc = new Document(emt);
+
+		UnitTestUtil.testNamespaceIntro(doc, Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE);
+		UnitTestUtil.testNamespaceScope(doc, Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE);
+				
 	}
 
 	@Test

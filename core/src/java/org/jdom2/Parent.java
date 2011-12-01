@@ -69,7 +69,7 @@ import org.jdom2.filter.Filter;
  * @author Bradley S. Huffman
  * @author Jason Hunter
  */
-public interface Parent extends Cloneable, Serializable {
+public interface Parent extends Cloneable, NamespaceAware, Serializable {
 
 	/**
 	 * Returns the number of children in this parent's content list.

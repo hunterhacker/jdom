@@ -68,7 +68,7 @@ import org.jdom2.filter.*;
  * @author  Bradley S. Huffman
  */
 public class Document implements Parent {
-
+	
 	/**
 	 * This document's content including comments, PIs, a possible
 	 * DocType, and a root element.
@@ -822,4 +822,23 @@ public class Document implements Parent {
 		}
 		
 	}
+
+	@Override
+	public List<Namespace> getNamespacesInScope() {
+		return Collections.unmodifiableList(Arrays.asList(
+				new Namespace[] {Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE}));
+	}
+
+	@Override
+	public List<Namespace> getNamespacesIntroduced() {
+		return Collections.unmodifiableList(Arrays.asList(
+				new Namespace[] {Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE}));
+	}
+
+	@Override
+	public List<Namespace> getNamespacesInherited() {
+		return Collections.emptyList();
+	}
+	
+	
 }
