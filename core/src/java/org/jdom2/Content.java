@@ -73,7 +73,7 @@ import java.util.List;
  * @author Bradley S. Huffman
  * @author Jason Hunter
  */
-public abstract class Content implements Cloneable, Serializable {
+public abstract class Content implements Cloneable, Serializable, NamespaceAware {
 
 	/**
 	 * An enumeration useful for identifying content types without
@@ -94,9 +94,7 @@ public abstract class Content implements Cloneable, Serializable {
 		/** Represents {@link CDATA} content */
 		CDATA,
 		/** Represents {@link DocType} content */
-		DocType,
-		/** Represents {@link Attribute} content */
-		Attribute
+		DocType
 	}
 	
 	/** The parent {@link Parent} of this Content */
@@ -266,6 +264,7 @@ public abstract class Content implements Cloneable, Serializable {
 	 * @return a read-only list of Namespaces.
 	 * 			The order is guaranteed to be consistent
 	 */
+	@Override
 	public List<Namespace> getNamespacesInScope() {
 		// Element class will override this method to do it differently.
 		Element emt = getParentElement();
@@ -285,6 +284,7 @@ public abstract class Content implements Cloneable, Serializable {
 	 * @return a read-only list of Namespaces.
 	 * 			The order is guaranteed to be consistent
 	 */
+	@Override
 	public List<Namespace> getNamespacesIntroduced() {
 		return Collections.emptyList();
 	}
@@ -299,6 +299,7 @@ public abstract class Content implements Cloneable, Serializable {
 	 * @return a read-only list of Namespaces.
 	 * 			The order is guaranteed to be consistent
 	 */
+	@Override
 	public List<Namespace> getNamespacesInherited() {
 		// Element class will override
 		return getNamespacesInScope();

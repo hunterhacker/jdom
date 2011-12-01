@@ -1,10 +1,10 @@
 package org.jdom2.test.cases.filter;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
-import org.jdom2.Content;
 import org.jdom2.DocType;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
@@ -82,7 +82,7 @@ public class TestContentFilter extends AbstractTestFilter {
 		cf.setDocumentContent();
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				if (c instanceof Element) {
 					return true;
 				}
@@ -110,7 +110,7 @@ public class TestContentFilter extends AbstractTestFilter {
 		cf.setElementContent();
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				if (c instanceof Element) {
 					return true;
 				}
@@ -144,7 +144,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testAllContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c != null;
 			}
 		};
@@ -158,7 +158,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testElementContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c instanceof Element;
 			}
 		};
@@ -178,7 +178,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testDocTypeContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c instanceof DocType;
 			}
 		};
@@ -189,7 +189,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testPIContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c instanceof ProcessingInstruction;
 			}
 		};
@@ -200,7 +200,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testCDATAContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c instanceof CDATA;
 			}
 		};
@@ -211,7 +211,7 @@ public class TestContentFilter extends AbstractTestFilter {
 	public void testCommentContentFilter() {
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c instanceof Comment;
 			}
 		};
@@ -258,6 +258,9 @@ public class TestContentFilter extends AbstractTestFilter {
 		exercise(cf, getDocument(), cb);
 
 		assertFilterEquals(cf, cfa);
+		
+		assertTrue(cf.filter(new Object()) == null);
+		assertTrue(cfa.filter(new Object()) == null);
 	}
 
 	@Test

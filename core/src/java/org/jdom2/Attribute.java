@@ -73,7 +73,7 @@ import java.util.TreeMap;
  * @author  Wesley Biggs
  * @author  Victor Toni
  */
-public class Attribute extends Content implements Serializable, Cloneable {
+public class Attribute implements NamespaceAware, Serializable, Cloneable {
 
 	// Keep the old constant names for one beta cycle to help migration
 	
@@ -148,10 +148,15 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	protected AttributeType type = AttributeType.UNDECLARED;
 
 	/**
+	 * The parent to which this Attribute belongs. Change it with
+	 * {@link #setParent(Element)}
+	 */
+	protected Element parent;
+
+	/**
 	 * Default, no-args constructor for implementations to use if needed.
 	 */
 	protected Attribute() {
-		super(CType.Attribute);
 	}
 
 	/**
@@ -216,7 +221,6 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *         supported types.
 	 */
 	public Attribute(final String name, final String value, final AttributeType type, final Namespace namespace) {
-		super(CType.Attribute);
 		setName(name);
 		setValue(value);
 		setAttributeType(type);
@@ -302,9 +306,16 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *
 	 * @return parent of this <code>Attribute</code>
 	 */
-	@Override
 	public Element getParent() {
-		return (Element)super.getParent();
+		return parent;
+	}
+	
+	/**
+	 * Get this Attribute's Document.
+	 * @return The document to which this Attribute is associated, may be null.
+	 */
+	public Document getDocument() {
+		return parent == null ? null : parent.getDocument();
 	}
 	
 	/**
@@ -455,7 +466,6 @@ public class Attribute extends Content implements Serializable, Cloneable {
 	 *
 	 * @return <code>String</code> - value for this attribute.
 	 */
-	@Override
 	public String getValue() {
 		return value;
 	}
@@ -541,17 +551,35 @@ public class Attribute extends Content implements Serializable, Cloneable {
 
 	@Override
 	public Attribute clone() {
-		return (Attribute) super.clone();
+		try {
+			Attribute clone = (Attribute) super.clone();
+			clone.parent = null;
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException("Clone not supported!", e);
+		}
 	}
 
-	@Override
+	/**
+	 * Detach this Attribute from its parent.
+	 * @return this Attribute (detached).
+	 */
 	public Attribute detach() {
-		return (Attribute)super.detach();
+		if (parent != null) {
+			parent.removeAttribute(this);
+		}
+		return this;
 	}
 
-	@Override
-	protected Attribute setParent(Parent parent) {
-		return (Attribute)super.setParent(parent);
+	/**
+	 * Set this Attribute's parent. This is not public!
+	 * @param parent The parent to set
+	 * @return this Attribute (state may be indeterminate depending on whether
+	 * this has been included in the Element's list yet).
+	 */
+	protected Attribute setParent(Element parent) {
+		this.parent = parent;
+		return this;
 	}
 
 	

@@ -821,8 +821,5 @@ public class Document implements Parent {
 			throw new IllegalAddException("An EntityRef is not allowed at the document root");
 		}
 		
-		if (child instanceof Attribute) {
-			throw new IllegalAddException("An Attribute is not allowed at the document root");
-		}
 	}
 }

@@ -15,7 +15,7 @@ public final class Filters {
 			new ClassFilter<Content>(Content.class);
 
 	private static final Filter<Attribute> fattribute = 
-			new ClassFilter<Attribute>(Attribute.class);
+			new AttributeFilter();
 	private static final Filter<Comment> fcomment = 
 			new ClassFilter<Comment>(Comment.class);
 	private static final Filter<CDATA> fcdata = 
@@ -60,12 +60,13 @@ public final class Filters {
 	}
 
 	/**
-	 * @param name The name for all the Attributes to have.
+	 * @param name The name for all the Attributes to have (these can be in any
+	 * Namespace).
 	 * @return a Filter that matches any {@link Attribute} data with the 
 	 * specified name.
 	 */
 	public static final Filter<Attribute> attribute(String name) {
-		return new AttributeFilter(name, Namespace.NO_NAMESPACE);
+		return new AttributeFilter(name);
 	}
 
 	/**

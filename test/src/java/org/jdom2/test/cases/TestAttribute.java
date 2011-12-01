@@ -62,9 +62,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+
 import org.jdom2.Attribute;
 import org.jdom2.AttributeType;
-import org.jdom2.Content;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -72,8 +74,6 @@ import org.jdom2.IllegalDataException;
 import org.jdom2.IllegalNameException;
 import org.jdom2.Namespace;
 import org.jdom2.test.util.UnitTestUtil;
-import org.junit.Test;
-import org.junit.runner.JUnitCore;
 
 /**
  * Test the expected behaviour of the Attribute class.
@@ -890,10 +890,10 @@ public final class TestAttribute {
     }
 
     @Test
-	public void testCloneDetatchParentAttribute() {
+	public void testDetatchCloneParentAttribute() {
 		Element parent = new Element("root");
 		Attribute content = new Attribute("att", "val");
-		parent.addContent(content);
+		parent.setAttribute(content);
 		Attribute clone = content.detach().clone();
 		assertEquals(content.getValue(), clone.getValue());
 		assertNull(content.getParent());
@@ -901,7 +901,17 @@ public final class TestAttribute {
 	}
 
     @Test
-    public void testContentCType() {
-    	assertTrue(Content.CType.Attribute == new Attribute("att", "val").getCType());
-    }
+	public void testCloneDetatchParentAttribute() {
+		Element parent = new Element("root");
+		Attribute content = new Attribute("att", "val");
+		parent.setAttribute(content);
+		Attribute clone = content.clone();
+		assertNull(clone.getParent());
+		assertEquals(parent, content.getParent());
+		assertEquals(content.getValue(), clone.getValue());
+		content.detach();
+		assertNull(content.getParent());
+		assertNull(clone.getParent());
+	}
+
 }

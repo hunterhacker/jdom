@@ -89,7 +89,8 @@ public class IdAttribute extends Attribute {
         this(name, value, type, Namespace.NO_NAMESPACE);
     }
 
-    protected Attribute setParent(Element parent) {
+    @Override
+	protected Attribute setParent(Element parent) {
         Parent oldParent = this.getParent();
 
         super.setParent(parent);

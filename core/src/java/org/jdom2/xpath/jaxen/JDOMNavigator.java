@@ -23,6 +23,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
+import org.jdom2.NamespaceAware;
 import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
@@ -47,8 +48,8 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 		nsFromContext.clear();
 
 		List<Namespace> nsl = null;
-		if (node instanceof Content) {
-			nsl = ((Content)node).getNamespacesInScope();
+		if (node instanceof NamespaceAware) {
+			nsl = ((NamespaceAware)node).getNamespacesInScope();
 		} else if (node instanceof NamespaceContainer) {
 			nsl = ((NamespaceContainer)node).getParentElement().getNamespacesInScope();
 		}
@@ -230,6 +231,9 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 		if (contextNode instanceof NamespaceContainer) {
 			return ((NamespaceContainer)contextNode).getParentElement().getDocument();
 		}
+		if (contextNode instanceof Attribute) {
+			return ((Attribute)contextNode).getDocument();
+		}
 		return ((Content)contextNode).getDocument();
 	}
 
@@ -243,6 +247,9 @@ final class JDOMNavigator extends DefaultNavigator implements NamespaceContext {
 		}
 		if (contextNode instanceof Content) {
 			return ((Content)contextNode).getParent();
+		}
+		if (contextNode instanceof Attribute) {
+			return ((Attribute)contextNode).getParent();
 		}
 		return null;
 	}

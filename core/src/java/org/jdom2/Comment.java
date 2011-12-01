@@ -146,7 +146,7 @@ public class Comment extends Content {
 	 * should be used.
 	 *
 	 * @return <code>String</code> - information about the
-	 *         <code>Attribute</code>
+	 *         <code>Comment</code>
 	 */
 	@Override
 	public String toString() {

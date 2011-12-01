@@ -918,9 +918,6 @@ public class Element extends Content implements Parent {
 	 * @return        the element on which the method was called
 	 * @throws IllegalAddException if the given child already has a parent.     */
 	public Element addContent(final Content child) {
-		if (child instanceof Attribute) {
-			return setAttribute((Attribute)child);
-		}
 		content.add(child);
 		return this;
 	}
@@ -998,9 +995,6 @@ public class Element extends Content implements Parent {
 
 	@Override
 	public boolean removeContent(final Content child) {
-		if (child instanceof Attribute) {
-			return attributes.remove(child);
-		}
 		return content.remove(child);
 	}
 
@@ -1794,10 +1788,6 @@ public class Element extends Content implements Parent {
 		if (child instanceof DocType) {
 			throw new IllegalAddException(
 					"A DocType is not allowed except at the document level");
-		}
-		if (child instanceof Attribute) {
-			throw new IllegalAddException(
-					"An Attribute can not be added, it must be set.");
 		}
 	}
 }

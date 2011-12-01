@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.Content;
@@ -20,6 +21,7 @@ import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.filter.AttributeFilter;
 import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
@@ -74,7 +76,7 @@ public class AbstractTestFilter {
 	}
 	
 	protected interface CallBack {
-		boolean isValid(Content c);
+		boolean isValid(Object c);
 	}
 	
 	protected class NegateCallBack implements CallBack {
@@ -83,7 +85,7 @@ public class AbstractTestFilter {
 			basecallback = base;
 		}
 		@Override
-		public boolean isValid(Content c) {
+		public boolean isValid(Object c) {
 			return !basecallback.isValid(c);
 		}
 	}
@@ -95,7 +97,7 @@ public class AbstractTestFilter {
 			twocallback = two;
 		}
 		@Override
-		public boolean isValid(Content c) {
+		public boolean isValid(Object c) {
 			// do not want to do short-circuit || logic.
 			// Make seperate statements
 			boolean one = onecallback.isValid(c);
@@ -111,7 +113,7 @@ public class AbstractTestFilter {
 			twocallback = two;
 		}
 		@Override
-		public boolean isValid(Content c) {
+		public boolean isValid(Object c) {
 			// do not want to do short-circuit || logic.
 			// Make seperate statements
 			boolean one = onecallback.isValid(c);
@@ -122,14 +124,14 @@ public class AbstractTestFilter {
 	
 	private class TrueCallBack implements CallBack {
 		@Override
-		public boolean isValid(Content c) {
+		public boolean isValid(Object c) {
 			return true;
 		}
 	}
 	
 	private class FalseCallBack implements CallBack {
 		@Override
-		public boolean isValid(Content c) {
+		public boolean isValid(Object c) {
 			return false;
 		}
 	}
@@ -345,5 +347,116 @@ public class AbstractTestFilter {
 		UnitTestUtil.testReadIterator(di, filtered.toArray());
 		assertEquals(filtered, ef.filter(depth));
 	}
+	
+
+	
+	
+	protected <F extends Attribute> void exerciseAtt(Filter<F> af, Parent parent, CallBack callback) {
+		assertTrue("filter is null", af != null);
+		assertTrue("list is null", parent != null);
+		assertTrue("callback is null", callback != null);
+		assertTrue(af.toString() != null); // basic test to ensure toString is run.
+		// can never match null if it returns a <F extends Content>
+		assertFalse(af.matches(null));
+		// can never match Object if it returns a <F extends Content>
+		assertFalse(af.matches(new Object()));
+		exerciseCoreAtt(af, parent, callback);
+		try {
+			Filter<?> or = af.or(null); 
+			fail  ("expected an exception from " + or);
+		} catch (RuntimeException re) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected a RuntimeException.");
+		}
+		
+		try {
+			Filter<?> and = af.and(null); 
+			fail  ("expected an exception from " + and);
+		} catch (RuntimeException re) {
+			// good
+		} catch (Exception e) {
+			fail ("Expected a RuntimeException.");
+		}
+		
+		//exerciseCoreAtt(af.negate().refine(Filters.attribute()), parent, new NegateCallBack(callback));
+		//exerciseCoreAtt(af.or(af.negate()).refine(Filters.attribute()), parent, new TrueCallBack());
+		exerciseCoreAtt(af.or(UnitTestUtil.deSerialize(af)).refine(Filters.attribute()), parent, callback);
+		//exerciseCoreAtt(af.negate().and(af).refine(Filters.attribute()), parent, new FalseCallBack());
+		exerciseCoreAtt(af.and(af).refine(Filters.attribute()), parent, callback);
+		exerciseCoreAtt(af.and(UnitTestUtil.deSerialize(af)).refine(Filters.attribute()), parent, callback);
+		
+		Filter<?> nf = af.negate();
+//		exerciseCore(nf.negate().refine(Filters.content()), parent, callback);
+//		exerciseCore(nf.or(nf.negate()).refine(Filters.content()), parent, new TrueCallBack());
+//		exerciseCore(nf.and(nf.negate()).refine(Filters.content()), parent, new FalseCallBack());
+		
+
+		Filter<?> afor = UnitTestUtil.deSerialize(af).or(nf);
+		Filter<?> bfor = nf.or(af);
+		assertFilterEquals(afor, bfor);
+		
+		Filter<?> afand = UnitTestUtil.deSerialize(af).and(nf);
+		Filter<?> bfand = nf.and(af);
+		assertFilterEquals(afand, bfand);
+		
+		assertFalse(af.equals(null));
+		assertFalse(nf.equals(null));
+		assertFalse(afor.equals(null));
+		assertFalse(bfor.equals(null));
+		assertFalse(afand.equals(null));
+		assertFalse(bfand.equals(null));
+
+	}
+	
+	private final void exerciseCoreAtt(Filter<? extends Attribute> ef, Parent parent, CallBack callback) {
+		// exercise the toString()
+		assertTrue(ef.toString() != null);
+		List<Content> cont = parent.getContent();
+		for (Content c : cont) {
+			assertTrue(parent == c.getParent());
+			if (parent instanceof Document) {
+				assertTrue(null == c.getParentElement());
+			} else {
+				assertTrue(parent == c.getParentElement());
+			}
+			boolean mat = ef.matches(c);
+			boolean cbv = callback.isValid(c);
+			if (mat != cbv) {
+				fail ("Filter " + ef + " returned " + mat 
+						+ " but isValid CallBack returned " + cbv 
+						+ " for value " + c);
+			}
+		}
+		Filter<? extends Attribute> cf = UnitTestUtil.deSerialize(ef);
+		assertFilterEquals(cf, ef);
+		AttributeFilter xf = new AttributeFilter();
+		assertFilterEquals(cf.refine(xf), ef.refine(xf));
+		assertFilterEquals(xf.refine(cf), xf.refine(ef));
+		assertFalse(ef.equals(null));
+		assertFilterNotEquals(ef, ef.negate());
+		assertFilterNotEquals(ef.refine(xf), ef.negate().refine(xf));
+		assertFilterNotEquals(xf.refine(ef), xf.refine(ef.negate()));
+		
+		List<Object> cnt = new ArrayList<Object>();
+		List<Attribute> atts = new ArrayList<Attribute>();
+		for (Iterator<Content> itc = parent.getDescendants(); itc.hasNext();) {
+			Content c = itc.next();
+			cnt.add(c);
+			if (c instanceof Element) {
+				cnt.addAll(((Element)c).getAttributes());
+				for (Attribute a : ((Element)c).getAttributes()) {
+					if (ef.matches(a)) {
+						atts.add(a);
+					}
+				}
+			}
+		}
+		
+		List<? extends Attribute> filtered = ef.filter(cnt);
+		
+		assertEquals(atts, filtered);
+	}
+	
 	
 }

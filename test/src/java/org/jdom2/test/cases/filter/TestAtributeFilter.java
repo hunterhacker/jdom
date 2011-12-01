@@ -1,7 +1,6 @@
 package org.jdom2.test.cases.filter;
 
 import org.jdom2.Attribute;
-import org.jdom2.Content;
 import org.jdom2.Namespace;
 import org.jdom2.filter.AttributeFilter;
 import org.junit.Test;
@@ -14,12 +13,12 @@ public class TestAtributeFilter extends AbstractTestFilter {
 		AttributeFilter ef = new AttributeFilter();
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c != null && c instanceof Attribute;
 			}
 		};
-		exercise(ef, getRoot(), cb);
-		exercise(ef, getDocument(), cb);
+		exerciseAtt(ef, getRoot(), cb);
+		exerciseAtt(ef, getDocument(), cb);
 	}
 
 	@Test
@@ -28,13 +27,13 @@ public class TestAtributeFilter extends AbstractTestFilter {
 		AttributeFilter ef = new AttributeFilter(name);
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Attribute) &&
 						name.equals(((Attribute)c).getName());
 			}
 		};
-		exercise(ef, getRoot(), cb);
-		exercise(ef, getDocument(), cb);
+		exerciseAtt(ef, getRoot(), cb);
+		exerciseAtt(ef, getDocument(), cb);
 	}
 
 	@Test
@@ -42,24 +41,24 @@ public class TestAtributeFilter extends AbstractTestFilter {
 		AttributeFilter efa = new AttributeFilter(Namespace.NO_NAMESPACE);
 		CallBack cba = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Attribute) &&
 						Namespace.NO_NAMESPACE.equals(((Attribute)c).getNamespace());
 			}
 		};
-		exercise(efa, getRoot(), cba);
-		exercise(efa, getDocument(), cba);
+		exerciseAtt(efa, getRoot(), cba);
+		exerciseAtt(efa, getDocument(), cba);
 
 		AttributeFilter efb = new AttributeFilter(getTestNamespace());
 		CallBack cbb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Attribute) &&
 						getTestNamespace().equals(((Attribute)c).getNamespace());
 			}
 		};
-		exercise(efb, getRoot(), cbb);
-		exercise(efb, getDocument(), cbb);
+		exerciseAtt(efb, getRoot(), cbb);
+		exerciseAtt(efb, getDocument(), cbb);
 
 
 	}
@@ -70,27 +69,27 @@ public class TestAtributeFilter extends AbstractTestFilter {
 		AttributeFilter efa = new AttributeFilter(namea, Namespace.NO_NAMESPACE);
 		CallBack cba = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Attribute) &&
 						namea.equals(((Attribute)c).getName()) && 
 						Namespace.NO_NAMESPACE.equals(((Attribute)c).getNamespace());
 			}
 		};
-		exercise(efa, getRoot(), cba);
-		exercise(efa, getDocument(), cba);
+		exerciseAtt(efa, getRoot(), cba);
+		exerciseAtt(efa, getDocument(), cba);
 
 		final String nameb = "three";
 		AttributeFilter efb = new AttributeFilter(nameb, getTestNamespace());
 		CallBack cbb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Attribute) &&
 						nameb.equals(((Attribute)c).getName()) && 
 						getTestNamespace().equals(((Attribute)c).getNamespace());
 			}
 		};
-		exercise(efb, getRoot(), cbb);
-		exercise(efb, getDocument(), cbb);
+		exerciseAtt(efb, getRoot(), cbb);
+		exerciseAtt(efb, getDocument(), cbb);
 
 	}
 

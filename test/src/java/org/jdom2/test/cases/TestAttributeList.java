@@ -167,7 +167,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		// OK, we have a list of attributes.... behind the scenes, we have an
 		// an Element too... we need the element to get the setAttributes()
 		// method which in turn accesses the clearAndSet().
-		Element myelement = list.get(0).getParentElement();
+		Element myelement = list.get(0).getParent();
 		assertNotNull(myelement);
 		
 		ArrayList<Attribute> toset = new ArrayList<Attribute>(extra.length);
@@ -217,7 +217,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		// OK, we have a list of attributes.... behind the scenes, we have an
 		// an Element too... we need the element to get the setAttributes()
 		// method which in turn accesses the clearAndSet().
-		Element myelement = list.get(0).getParentElement();
+		Element myelement = list.get(0).getParent();
 		assertNotNull(myelement);
 		
 		// check that the first to-add can be added.

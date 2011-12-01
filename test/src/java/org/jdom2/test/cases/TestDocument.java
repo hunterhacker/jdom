@@ -990,17 +990,17 @@ public final class TestDocument {
 		assertTrue(doc.toString().indexOf("tstelement") >= 0);
 	}
 
-	@Test
-	public void testDocumentAddAttribute() {
-		try {
-			List<Content> list = (new Document(new Element("root")).getContent());
-			list.add(new Attribute("att", "value"));
-			fail ("Should not be able to add Attribute to an Document's ContentList");
-		} catch (IllegalAddException iae) {
-			// good!
-		} catch (Exception e) {
-			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
-		}
-	}
+//	@Test
+//	public void testDocumentAddAttribute() {
+//		try {
+//			List<Content> list = (new Document(new Element("root")).getContent());
+//			list.add(new Attribute("att", "value"));
+//			fail ("Should not be able to add Attribute to an Document's ContentList");
+//		} catch (IllegalAddException iae) {
+//			// good!
+//		} catch (Exception e) {
+//			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
+//		}
+//	}
 	
 }

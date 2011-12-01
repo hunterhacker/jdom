@@ -2037,18 +2037,18 @@ public final class TestElement {
 		}
 	}
 	
-	@Test
-	public void testElementAddAttribute() {
-		try {
-			List<Content> list = (new Element("tag").getContent());
-			list.add(new Attribute("att", "value"));
-			fail ("Should not be able to add Attribute to an Element's ContentList");
-		} catch (IllegalAddException iae) {
-			// good!
-		} catch (Exception e) {
-			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
-		}
-	}
+//	@Test
+//	public void testElementAddAttribute() {
+//		try {
+//			List<Content> list = (new Element("tag").getContent());
+//			list.add(new Attribute("att", "value"));
+//			fail ("Should not be able to add Attribute to an Element's ContentList");
+//		} catch (IllegalAddException iae) {
+//			// good!
+//		} catch (Exception e) {
+//			fail ("We expect an IllegalAddException, but got " + e.getClass().getName());
+//		}
+//	}
 	
 	@Test
 	public void testGetNamespace() {

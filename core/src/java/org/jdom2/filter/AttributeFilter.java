@@ -65,7 +65,7 @@ import org.jdom2.*;
 public class AttributeFilter extends AbstractFilter<Attribute> {
 
 	/** The element name */
-	private String name;
+	private final String name;
 
 	/** The element namespace */
 	private transient Namespace namespace;
@@ -73,7 +73,9 @@ public class AttributeFilter extends AbstractFilter<Attribute> {
 	/**
 	 * Select only the Elements.
 	 */
-	public AttributeFilter() {}
+	public AttributeFilter() {
+		this(null,null);
+	}
 
 	/**
 	 * Select only the Elements with the supplied name in any Namespace.
@@ -81,7 +83,7 @@ public class AttributeFilter extends AbstractFilter<Attribute> {
 	 * @param name   The name of the Element.
 	 */
 	public AttributeFilter(String name) {
-		this.name   = name;
+		this(name, null);
 	}
 
 	/**
@@ -90,7 +92,7 @@ public class AttributeFilter extends AbstractFilter<Attribute> {
 	 * @param namespace The namespace the Attribute lives in.
 	 */
 	public AttributeFilter(Namespace namespace) {
-		this.namespace = namespace;
+		this(null, namespace);
 	}
 
 	/**

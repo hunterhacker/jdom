@@ -180,6 +180,11 @@ public class TestFilters extends AbstractTestFilter {
 	}
 	
 	@Test
+	public void testFClass() {
+		checkFilter(Filters.fclass(Integer.class), Integer.valueOf(123), new Object());
+	}
+	
+	@Test
 	public void testRefine() {
 		try {
 			new ContentFilter().refine(null);

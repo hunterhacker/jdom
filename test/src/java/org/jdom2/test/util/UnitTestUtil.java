@@ -20,14 +20,14 @@ import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 import org.jdom2.Attribute;
-import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.jdom2.NamespaceAware;
 
 @SuppressWarnings("javadoc")
 public class UnitTestUtil {
 	
-	public static final void testNamespaceIntro(Content content, Namespace...expect) {
+	public static final void testNamespaceIntro(NamespaceAware content, Namespace...expect) {
 		List<Namespace> intro = content.getNamespacesIntroduced();
 		List<Namespace> exp = Arrays.asList(expect);
 		
@@ -38,7 +38,7 @@ public class UnitTestUtil {
 		}
 	}
 	
-	public static final void testNamespaceScope(Content content, Namespace...expect) {
+	public static final void testNamespaceScope(NamespaceAware content, Namespace...expect) {
 		List<Namespace> introduced = content.getNamespacesIntroduced();
 		List<Namespace> inscope = new ArrayList<Namespace>(content.getNamespacesInScope());
 		List<Namespace> inherited = content.getNamespacesInherited();

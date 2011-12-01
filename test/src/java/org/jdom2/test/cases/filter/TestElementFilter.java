@@ -1,6 +1,5 @@
 package org.jdom2.test.cases.filter;
 
-import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.ElementFilter;
@@ -14,7 +13,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter ef = new ElementFilter();
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return c != null && c instanceof Element;
 			}
 		};
@@ -28,7 +27,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter ef = new ElementFilter(name);
 		CallBack cb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Element) &&
 						name.equals(((Element)c).getName());
 			}
@@ -42,7 +41,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter efa = new ElementFilter(Namespace.NO_NAMESPACE);
 		CallBack cba = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Element) &&
 						Namespace.NO_NAMESPACE.equals(((Element)c).getNamespace());
 			}
@@ -53,7 +52,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter efb = new ElementFilter(getTestNamespace());
 		CallBack cbb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Element) &&
 						getTestNamespace().equals(((Element)c).getNamespace());
 			}
@@ -70,7 +69,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter efa = new ElementFilter(namea, Namespace.NO_NAMESPACE);
 		CallBack cba = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Element) &&
 						namea.equals(((Element)c).getName()) && 
 						Namespace.NO_NAMESPACE.equals(((Element)c).getNamespace());
@@ -83,7 +82,7 @@ public class TestElementFilter extends AbstractTestFilter {
 		ElementFilter efb = new ElementFilter(nameb, getTestNamespace());
 		CallBack cbb = new CallBack() {
 			@Override
-			public boolean isValid(Content c) {
+			public boolean isValid(Object c) {
 				return (c != null) && (c instanceof Element) &&
 						nameb.equals(((Element)c).getName()) && 
 						getTestNamespace().equals(((Element)c).getNamespace());
