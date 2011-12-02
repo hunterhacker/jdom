@@ -65,6 +65,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
@@ -120,8 +121,8 @@ public class JDOMSource extends SAXSource {
 	 * not natively supporting JDOM.
 	 * </p>
 	 */
-	public final static String JDOM_FEATURE =
-			"http://org.jdom2.transform.JDOMSource/feature";
+	public final static String JDOM_FEATURE = JDOMConstants.JDOM2_FEATURE_JDOMSOURCE;
+			
 
 	/**
 	 * The XMLReader object associated to this source or

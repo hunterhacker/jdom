@@ -54,6 +54,7 @@
 
 package org.jdom2.input.sax;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.Schema;
@@ -116,7 +117,7 @@ public enum XMLReaderSingletons implements XMLReaderJDOMFactory {
 				fac.setValidating(false);
 				try {
 					SchemaFactory sfac = SchemaFactory.
-							newInstance("http://www.w3.org/2001/XMLSchema");
+							newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 					Schema schema = sfac.newSchema();
 					fac.setSchema(schema);
 					val = true;

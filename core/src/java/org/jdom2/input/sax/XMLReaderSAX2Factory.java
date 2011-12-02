@@ -58,6 +58,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 
 /**
@@ -71,7 +72,7 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
+public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory, JDOMConstants {
 
 	private final boolean validate;
 	private final String saxdriver;
@@ -115,12 +116,12 @@ public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
 					? XMLReaderFactory.createXMLReader()
 					: XMLReaderFactory.createXMLReader(saxdriver);
 			reader.setFeature(
-					"http://xml.org/sax/features/validation", validate);
+					SAX_FEATURE_VALIDATION, validate);
 			// Setup some namespace features.
 			reader.setFeature(
-					"http://xml.org/sax/features/namespaces", true);
+					SAX_FEATURE_NAMESPACES, true);
 			reader.setFeature(
-					"http://xml.org/sax/features/namespace-prefixes", true);
+					SAX_FEATURE_NAMESPACE_PREFIXES, true);
 
 			return reader;
 		} catch (SAXException e) {

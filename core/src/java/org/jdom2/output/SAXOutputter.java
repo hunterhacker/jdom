@@ -85,39 +85,7 @@ import org.xml.sax.helpers.*;
  * @author  Fred Trimble
  * @author  Bradley S. Huffman
  */
-public class SAXOutputter {
-
-	/** Shortcut for SAX namespaces core feature */
-	private static final String NAMESPACES_SAX_FEATURE =
-			"http://xml.org/sax/features/namespaces";
-
-	/** Shortcut for SAX namespace-prefixes core feature */
-	private static final String NS_PREFIXES_SAX_FEATURE =
-			"http://xml.org/sax/features/namespace-prefixes";
-
-	/** Shortcut for SAX validation core feature */
-	private static final String VALIDATION_SAX_FEATURE =
-			"http://xml.org/sax/features/validation";
-
-	/** Shortcut for SAX-ext. lexical handler property */
-	private static final String LEXICAL_HANDLER_SAX_PROPERTY =
-			"http://xml.org/sax/properties/lexical-handler";
-
-	/** Shortcut for SAX-ext. declaration handler property */
-	private static final String DECL_HANDLER_SAX_PROPERTY =
-			"http://xml.org/sax/properties/declaration-handler";
-
-	/**
-	 * Shortcut for SAX-ext. lexical handler alternate property.
-	 * Although this property URI is not the one defined by the SAX
-	 * "standard", some parsers use it instead of the official one.
-	 */
-	private static final String LEXICAL_HANDLER_ALT_PROPERTY =
-			"http://xml.org/sax/handlers/LexicalHandler";
-
-	/** Shortcut for SAX-ext. declaration handler alternate property */
-	private static final String DECL_HANDLER_ALT_PROPERTY =
-			"http://xml.org/sax/handlers/DeclHandler";
+public class SAXOutputter implements JDOMConstants {
 
 	/** registered <code>ContentHandler</code> */
 	private ContentHandler contentHandler;
@@ -419,12 +387,12 @@ public class SAXOutputter {
 	 */
 	public void setFeature(String name, boolean value)
 			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if (NS_PREFIXES_SAX_FEATURE.equals(name)) {
+		if (SAX_FEATURE_NAMESPACE_PREFIXES.equals(name)) {
 			// Namespace prefix declarations.
 			this.setReportNamespaceDeclarations(value);
 		}
 		else {
-			if (NAMESPACES_SAX_FEATURE.equals(name)) {
+			if (SAX_FEATURE_NAMESPACES.equals(name)) {
 				if (value != true) {
 					// Namespaces feature always supported by SAXOutputter.
 					throw new SAXNotSupportedException(name);
@@ -432,7 +400,7 @@ public class SAXOutputter {
 				// Else: true is OK!
 			}
 			else {
-				if (VALIDATION_SAX_FEATURE.equals(name)) {
+				if (SAX_FEATURE_VALIDATION.equals(name)) {
 					// Report DTD events.
 					this.setReportDTDEvents(value);
 				}
@@ -459,15 +427,15 @@ public class SAXOutputter {
 	 */
 	public boolean getFeature(String name)
 			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if (NS_PREFIXES_SAX_FEATURE.equals(name)) {
+		if (SAX_FEATURE_NAMESPACE_PREFIXES.equals(name)) {
 			// Namespace prefix declarations.
 			return (this.declareNamespaces);
 		}
-		if (NAMESPACES_SAX_FEATURE.equals(name)) {
+		if (SAX_FEATURE_NAMESPACES.equals(name)) {
 			// Namespaces feature always supported by SAXOutputter.
 			return (true);
 		}
-		if (VALIDATION_SAX_FEATURE.equals(name)) {
+		if (SAX_FEATURE_VALIDATION.equals(name)) {
 			// Report DTD events.
 			return (this.reportDtdEvents);
 		}
@@ -508,13 +476,13 @@ public class SAXOutputter {
 	 */
 	public void setProperty(String name, Object value)
 			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if ((LEXICAL_HANDLER_SAX_PROPERTY.equals(name)) ||
-				(LEXICAL_HANDLER_ALT_PROPERTY.equals(name))) {
+		if ((SAX_PROPERTY_LEXICAL_HANDLER.equals(name)) ||
+				(SAX_PROPERTY_LEXICAL_HANDLER_ALT.equals(name))) {
 			this.setLexicalHandler((LexicalHandler)value);
 		}
 		else {
-			if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
-					(DECL_HANDLER_ALT_PROPERTY.equals(name))) {
+			if ((SAX_PROPERTY_DECLARATION_HANDLER.equals(name)) ||
+					(SAX_PROPERTY_DECLARATION_HANDLER_ALT.equals(name))) {
 				this.setDeclHandler((DeclHandler)value);
 			}
 			else {
@@ -537,12 +505,12 @@ public class SAXOutputter {
 	 */
 	public Object getProperty(String name)
 			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if ((LEXICAL_HANDLER_SAX_PROPERTY.equals(name)) ||
-				(LEXICAL_HANDLER_ALT_PROPERTY.equals(name))) {
+		if ((SAX_PROPERTY_LEXICAL_HANDLER.equals(name)) ||
+				(SAX_PROPERTY_LEXICAL_HANDLER_ALT.equals(name))) {
 			return this.getLexicalHandler();
 		}
-		if ((DECL_HANDLER_SAX_PROPERTY.equals(name)) ||
-				(DECL_HANDLER_ALT_PROPERTY.equals(name))) {
+		if ((SAX_PROPERTY_DECLARATION_HANDLER.equals(name)) ||
+				(SAX_PROPERTY_DECLARATION_HANDLER_ALT.equals(name))) {
 			return this.getDeclHandler();
 		}
 		throw new SAXNotRecognizedException(name);
@@ -1304,12 +1272,12 @@ public class SAXOutputter {
 		}
 		if (this.getLexicalHandler() != null) {
 			try {
-				parser.setProperty(LEXICAL_HANDLER_SAX_PROPERTY,
+				parser.setProperty(SAX_PROPERTY_LEXICAL_HANDLER,
 						this.getLexicalHandler());
 			}
 			catch (SAXException ex1) {
 				try {
-					parser.setProperty(LEXICAL_HANDLER_ALT_PROPERTY,
+					parser.setProperty(SAX_PROPERTY_LEXICAL_HANDLER_ALT,
 							this.getLexicalHandler());
 				} catch (SAXException ex2) {
 					// Forget it!
@@ -1318,12 +1286,12 @@ public class SAXOutputter {
 		}
 		if (this.getDeclHandler() != null) {
 			try {
-				parser.setProperty(DECL_HANDLER_SAX_PROPERTY,
+				parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER,
 						this.getDeclHandler());
 			}
 			catch (SAXException ex1) {
 				try {
-					parser.setProperty(DECL_HANDLER_ALT_PROPERTY,
+					parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER_ALT,
 							this.getDeclHandler());
 				} catch (SAXException ex2) {
 					// Forget it!

@@ -111,7 +111,7 @@ public class JDOMResult extends SAXResult {
 	 * not natively supporting JDOM.</p>
 	 */
 	public final static String JDOM_FEATURE =
-			"http://org.jdom2.transform.JDOMResult/feature";
+			JDOMConstants.JDOM2_FEATURE_JDOMRESULT;
 
 	/**
 	 * The result of a transformation, as set by Transformer

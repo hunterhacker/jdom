@@ -76,6 +76,7 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.input.sax.BuilderErrorHandler;
@@ -133,7 +134,7 @@ import org.jdom2.input.sax.XMLReaderSAX2Factory;
  * @author Alex Rosen
  * @author Rolf Lear
  */
-public class SAXBuilder implements SAXEngine {
+public class SAXBuilder implements SAXEngine, JDOMConstants {
 
 	/** Default source of SAXHandlers */
 	private static final SAXHandlerFactory DEFAULTSAXHANDLERFAC =
@@ -971,7 +972,7 @@ public class SAXBuilder implements SAXEngine {
 		boolean success = false;
 
 		try {
-			parser.setProperty("http://xml.org/sax/handlers/LexicalHandler",
+			parser.setProperty(SAX_PROPERTY_LEXICAL_HANDLER,
 					contentHandler);
 			success = true;
 		} catch (final SAXNotSupportedException e) {
@@ -983,7 +984,7 @@ public class SAXBuilder implements SAXEngine {
 		// Some parsers use alternate property for lexical handling (grr...)
 		if (!success) {
 			try {
-				parser.setProperty("http://xml.org/sax/properties/lexical-handler",
+				parser.setProperty(SAX_PROPERTY_LEXICAL_HANDLER_ALT,
 						contentHandler);
 				success = true;
 			} catch (final SAXNotSupportedException e) {
@@ -1011,8 +1012,8 @@ public class SAXBuilder implements SAXEngine {
 		// XXX It might make sense to setEntityResolver() with a resolver
 		// that simply ignores external general entities
 		try {
-			if (parser.getFeature("http://xml.org/sax/features/external-general-entities") != expand) {
-				parser.setFeature("http://xml.org/sax/features/external-general-entities", expand);
+			if (parser.getFeature(SAX_FEATURE_EXTERNAL_ENT) != expand) {
+				parser.setFeature(SAX_FEATURE_EXTERNAL_ENT, expand);
 			}
 		} catch (final SAXException e) { /* Ignore... */
 		}
@@ -1020,7 +1021,7 @@ public class SAXBuilder implements SAXEngine {
 		// Try setting the DeclHandler if entity expansion is off
 		if (!expand) {
 			try {
-				parser.setProperty("http://xml.org/sax/properties/declaration-handler",
+				parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER,
 						contentHandler);
 				success = true;
 			} catch (final SAXNotSupportedException e) {

@@ -155,7 +155,7 @@ import org.jdom2.filter.*;
  * @author  Bradley S. Huffman
  * @author  Victor Toni
  */
-public class Element extends Content implements Parent {
+public class Element extends Content implements Parent, JDOMConstants {
 
 	private static final int INITIAL_ARRAY_SIZE = 5;
 
@@ -241,7 +241,7 @@ public class Element extends Content implements Parent {
 	 *                              namespace URI
 	 */
 	public Element(final String name, final String uri) {
-		this(name, Namespace.getNamespace("", uri));
+		this(name, Namespace.getNamespace(NS_PFX_DEFAULT, uri));
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class Element extends Content implements Parent {
 	 */
 	public Element setNamespace(Namespace namespace) {
 		if (namespace == null) {
-			namespace = Namespace.NO_NAMESPACE;
+			namespace = NO_NAMESPACE;
 		}
 
 		String reason = Verifier.checkNamespaceCollision(namespace, 
@@ -361,9 +361,9 @@ public class Element extends Content implements Parent {
 			return null;
 		}
 
-		if ("xml".equals(prefix)) {
+		if (NS_PFX_XML.equals(prefix)) {
 			// Namespace "xml" is always bound.
-			return Namespace.XML_NAMESPACE;
+			return XML_NAMESPACE;
 		}
 
 		// Check if the prefix is the prefix for this element
@@ -1080,7 +1080,7 @@ public class Element extends Content implements Parent {
 	 * @return attribute for the element
 	 */
 	public Attribute getAttribute(final String attname) {
-		return getAttribute(attname, Namespace.NO_NAMESPACE);
+		return getAttribute(attname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1108,7 +1108,7 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or null if no such attribute
 	 */
 	public String getAttributeValue(final String attname) {
-		return getAttributeValue(attname, Namespace.NO_NAMESPACE);
+		return getAttributeValue(attname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1123,7 +1123,7 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or the default if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final String def) {
-		return getAttributeValue(attname, Namespace.NO_NAMESPACE, def);
+		return getAttributeValue(attname, NO_NAMESPACE, def);
 	}
 
 	/**
@@ -1295,7 +1295,7 @@ public class Element extends Content implements Parent {
 	 * @return whether the attribute was removed
 	 */
 	public boolean removeAttribute(final String attname) {
-		return removeAttribute(attname, Namespace.NO_NAMESPACE);
+		return removeAttribute(attname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1533,7 +1533,7 @@ public class Element extends Content implements Parent {
 	 * @return all matching child elements
 	 */
 	public List<Element> getChildren(final String cname) {
-		return getChildren(cname, Namespace.NO_NAMESPACE);
+		return getChildren(cname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1586,7 +1586,7 @@ public class Element extends Content implements Parent {
 	 * @return the first matching child element, or null if not found
 	 */
 	public Element getChild(final String cname) {
-		return getChild(cname, Namespace.NO_NAMESPACE);
+		return getChild(cname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1600,7 +1600,7 @@ public class Element extends Content implements Parent {
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChild(final String cname) {
-		return removeChild(cname, Namespace.NO_NAMESPACE);
+		return removeChild(cname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1638,7 +1638,7 @@ public class Element extends Content implements Parent {
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChildren(final String cname) {
-		return removeChildren(cname, Namespace.NO_NAMESPACE);
+		return removeChildren(cname, NO_NAMESPACE);
 	}
 
 	/**
@@ -1677,7 +1677,7 @@ public class Element extends Content implements Parent {
 		// getNamespace*() methods
 
 		TreeMap<String,Namespace> namespaces = new TreeMap<String, Namespace>();
-		namespaces.put("xml", Namespace.XML_NAMESPACE);
+		namespaces.put(XML_NAMESPACE.getPrefix(), XML_NAMESPACE);
 		namespaces.put(getNamespacePrefix(), getNamespace());
 		for (Namespace ns : getAdditionalNamespaces()) {
 			if (!namespaces.containsKey(ns.getPrefix())) {
@@ -1703,7 +1703,7 @@ public class Element extends Content implements Parent {
 
 		if (getParentElement() == null && !namespaces.containsKey("")) {
 			// we are the root element, and there is no 'default' namespace.
-			namespaces.put("", Namespace.NO_NAMESPACE);
+			namespaces.put(NO_NAMESPACE.getPrefix(), NO_NAMESPACE);
 		}
 
 		ArrayList<Namespace> al = new ArrayList<Namespace>(namespaces.size());
@@ -1720,7 +1720,7 @@ public class Element extends Content implements Parent {
 			ArrayList<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
 			for (Iterator<Namespace> it = ret.iterator(); it.hasNext();) {
 				Namespace ns = it.next();
-				if (ns == Namespace.NO_NAMESPACE || ns == Namespace.XML_NAMESPACE) {
+				if (ns == NO_NAMESPACE || ns == XML_NAMESPACE) {
 					continue;
 				}
 				it.remove();
@@ -1753,7 +1753,7 @@ public class Element extends Content implements Parent {
 			List<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
 			for (Iterator<Namespace> it = ret.iterator(); it.hasNext(); ) {
 				Namespace ns = it.next();
-				if (ns == Namespace.XML_NAMESPACE || ns == Namespace.NO_NAMESPACE) {
+				if (ns == XML_NAMESPACE || ns == NO_NAMESPACE) {
 					it.remove();
 				}
 			}

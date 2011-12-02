@@ -69,7 +69,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author  Jason Hunter
  * @author  Wesley Biggs
  */
-public final class Namespace {
+public final class Namespace implements JDOMConstants {
 
 	// XXX May want to use weak references to keep the maps from growing 
 	// large with extended use
@@ -85,11 +85,12 @@ public final class Namespace {
 			<String, ConcurrentMap<String,Namespace>>(512, 0.75f, 64);
 	
 	/** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
-	public static final Namespace NO_NAMESPACE = new Namespace("", "");
+	public static final Namespace NO_NAMESPACE = new Namespace(NS_PFX_DEFAULT, 
+			NS_URI_DEFAULT);
 
 	/** Define a <code>Namespace</code> for the standard xml prefix. */
-	public static final Namespace XML_NAMESPACE = new Namespace("xml", 
-			"http://www.w3.org/XML/1998/namespace");
+	public static final Namespace XML_NAMESPACE = new Namespace(NS_PFX_XML, 
+			NS_URI_XML);
 	
 	
 	static {
@@ -133,7 +134,7 @@ public final class Namespace {
 		// have been placed in this.  Thus we can do this test before
 		// verifying the URI and prefix.
 		if (uri == null) {
-			if (prefix == null || "".equals(prefix)) {
+			if (prefix == null || NS_PFX_DEFAULT.equals(prefix)) {
 				return NO_NAMESPACE;
 			}
 			// we have an attempt for some prefix
@@ -167,7 +168,7 @@ public final class Namespace {
 		
 		// OK, we have a container for the URI, let's search on the prefix.
 		
-		Namespace ns = urimap.get(prefix == null ? "" : prefix);
+		Namespace ns = urimap.get(prefix == null ? NS_PFX_DEFAULT : prefix);
 		if (ns != null) {
 			// got one.
 			return ns;
@@ -176,7 +177,7 @@ public final class Namespace {
 		// OK, no namespace yet for that uri/prefix
 		// validate the prefix (the uri is already validated).
 		
-		if ("".equals(uri)) {
+		if (NS_URI_DEFAULT.equals(uri)) {
 			// we have an attempt for some prefix
 			// (not "" or it would have found NO_NAMESPACE) on the "" URI
 			// note, we have already done this check for 'null' uri above.
@@ -186,14 +187,14 @@ public final class Namespace {
 		
 		// The erratum to Namespaces in XML 1.0 that suggests this 
 		// next check is controversial. Not everyone accepts it. 
-		if ("http://www.w3.org/XML/1998/namespace".equals(uri)) {
+		if (NS_URI_XML.equals(uri)) {
 			throw new IllegalNameException(uri, "Namespace URI",
-					"The http://www.w3.org/XML/1998/namespace must be bound to " +
-					"only the 'xml' prefix.");        
+					"The " + NS_URI_XML + " must be bound to " +
+					"only the '" + NS_PFX_XML + "' prefix.");        
 		}
 
 		// no namespace found, we validate the prefix
-		final String pfx = prefix == null ? "" : prefix;
+		final String pfx = prefix == null ? NS_PFX_DEFAULT : prefix;
 		
 		String reason;
 		if ((reason = Verifier.checkNamespacePrefix(pfx)) != null) {
@@ -226,7 +227,7 @@ public final class Namespace {
 	 * @return <code>Namespace</code> - ready to use namespace.
 	 */
 	public static Namespace getNamespace(final String uri) {
-		return getNamespace("", uri);
+		return getNamespace(NS_PFX_DEFAULT, uri);
 	}
 
 	/**

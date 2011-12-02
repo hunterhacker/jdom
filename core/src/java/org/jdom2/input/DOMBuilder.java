@@ -62,6 +62,7 @@ import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
 import org.w3c.dom.Attr;
@@ -83,7 +84,7 @@ import org.w3c.dom.NodeList;
  * @author  Dan Schaffer
  * @author  Bradley S. Huffman
  */
-public class DOMBuilder {
+public class DOMBuilder implements JDOMConstants {
 
 	/** The factory for creating new JDOM objects */
 	private JDOMFactory factory = new DefaultJDOMFactory();
@@ -163,7 +164,7 @@ public class DOMBuilder {
 
 			case Node.ELEMENT_NODE:
 				String nodeName = node.getNodeName();
-				String prefix = "";
+				String prefix = NS_PFX_DEFAULT;
 				String localName = nodeName;
 				int colon = nodeName.indexOf(':');
 				if (colon >= 0) {
@@ -175,7 +176,7 @@ public class DOMBuilder {
 				Namespace ns = null;
 				String uri = node.getNamespaceURI();
 				if (uri == null) {
-					ns = (current == null) ? Namespace.NO_NAMESPACE
+					ns = (current == null) ? NO_NAMESPACE
 							: current.getNamespace(prefix);
 				}
 				else {
@@ -200,8 +201,8 @@ public class DOMBuilder {
 					Attr att = (Attr) attributeList.item(i);
 
 					String attname = att.getName();
-					if (attname.startsWith("xmlns")) {
-						String attPrefix = "";
+					if (attname.startsWith(NS_PFX_XMLNS)) {
+						String attPrefix = NS_PFX_DEFAULT;
 						colon = attname.indexOf(':');
 						if (colon >= 0) {
 							attPrefix = attname.substring(colon + 1);
@@ -236,8 +237,8 @@ public class DOMBuilder {
 
 					String attname = att.getName();
 
-					if ( !attname.startsWith("xmlns")) {
-						String attPrefix = "";
+					if ( !attname.startsWith(NS_PFX_XMLNS)) {
+						String attPrefix = NS_PFX_DEFAULT;
 						String attLocalName = attname;
 						colon = attname.indexOf(':');
 						if (colon >= 0) {
@@ -250,8 +251,8 @@ public class DOMBuilder {
 						// Get attribute's namespace
 						Namespace attNS = null;
 						String attURI = att.getNamespaceURI(); 
-						if (attURI == null || "".equals(attURI)) {
-							attNS = Namespace.NO_NAMESPACE;
+						if (attURI == null || NS_URI_DEFAULT.equals(attURI)) {
+							attNS = NO_NAMESPACE;
 						} else {
 							// various conditions can lead here.
 							// the logical one is that we have a prefix for the

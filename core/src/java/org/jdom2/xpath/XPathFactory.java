@@ -3,6 +3,7 @@ package org.jdom2.xpath;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
@@ -36,7 +37,7 @@ import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 public abstract class XPathFactory {
 	
 	private static final String DEFAULTFACTORY =
-			System.getProperty(XPathFactory.class.getName(), null);
+			System.getProperty(JDOMConstants.JDOM2_PROPERTY_XPATH_FACTORY, null);
 	
 	/**
 	 * Create an instance of an XPathFactory using the default mechanisms
