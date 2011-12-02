@@ -1,15 +1,16 @@
 package org.jdom2.test.cases.xpath;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
+
+import org.junit.Test;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.xpath.XPath;
-import org.junit.Ignore;
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class TestXpath {
@@ -29,11 +30,10 @@ public class TestXpath {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
-	@Ignore
-	//TODO Cannot test this method because it could mess up the factory for other testing.
-	public void testSetXPathClass() {
-		fail("Not yet implemented");
+	public void testSetXPathClass() throws JDOMException {
+		XPath.setXPathClass(XPath.class);
 	}
 
 	@Test
