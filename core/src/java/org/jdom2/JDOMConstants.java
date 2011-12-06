@@ -2,6 +2,7 @@ package org.jdom2;
 
 import javax.xml.transform.TransformerFactory;
 
+import org.jdom2.output.LineSeparator;
 import org.jdom2.transform.JDOMResult;
 import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathFactory;
@@ -87,6 +88,7 @@ public interface JDOMConstants {
 	/**
 	 * Constant used to define the {@link JDOMSource} with JAXP.
 	 * Defined as '{@value}'
+	 * @see JDOMSource
 	 */
 	public static final String JDOM2_FEATURE_JDOMSOURCE = 
 			"http://jdom.org/jdom2/transform/JDOMSource/feature";
@@ -94,6 +96,7 @@ public interface JDOMConstants {
 	/**
 	 * Constant used to define the {@link JDOMResult} with {@link TransformerFactory}.
 	 * Defined as '{@value}'
+	 * @see JDOMResult
 	 */
 	public static final String JDOM2_FEATURE_JDOMRESULT = 
 			"http://jdom.org/jdom2/transform/JDOMResult/feature";
@@ -105,5 +108,14 @@ public interface JDOMConstants {
 	 */
 	public static final String JDOM2_PROPERTY_XPATH_FACTORY =
 			"org.jdom2.xpath.XPathFactory";
+	
+	/**
+	 * System Property queried to obtain an alternate default Line Separator.
+	 * <p>
+	 * Defined as '{@value}'
+	 * @see LineSeparator
+	 */
+	public static final String JDOM2_PROPERTY_LINE_SEPARATOR =
+			"org.jdom2.output.LineSeparator";
 	
 }
