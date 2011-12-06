@@ -337,23 +337,7 @@ public class JDOMXPath extends    org.jdom2.xpath.XPath {
 
 	@Override
 	public String toString() {
-		return (xPath.toString());
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof JDOMXPath) {
-			JDOMXPath x = (JDOMXPath)o;
-
-			return (super.equals(o) &&
-					xPath.toString().equals(x.xPath.toString()));
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return xPath.hashCode();
+		return (String.format("[XPath: %s]", xPath.toString()));
 	}
 
 }
