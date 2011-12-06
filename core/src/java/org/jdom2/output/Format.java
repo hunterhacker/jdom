@@ -61,18 +61,21 @@ import org.jdom2.Verifier;
 
 /**
  * Class to encapsulate XMLOutputter format options.
- * Typical users can use the standard format configurations obtained by
+ * Typically users adapt the standard format configurations obtained by
  * {@link #getRawFormat} (no whitespace changes),
  * {@link #getPrettyFormat} (whitespace beautification), and
  * {@link #getCompactFormat} (whitespace normalization).
  * <p>
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
+ * <p>
+ * <b>Note about Line Separator:</b>
  *
  * @author Jason Hunter
+ * @author Rolf Lear
  */
 public class Format implements Cloneable {
-
+	
 	/**
 	 * Returns a new Format object that performs no whitespace changes, uses
 	 * the UTF-8 encoding, doesn't expand empty elements, includes the
@@ -122,7 +125,7 @@ public class Format implements Cloneable {
 	private static final String STANDARD_INDENT = "  ";
 
 	/** standard string with which to end a line */
-	private static final String STANDARD_LINE_SEPARATOR = "\r\n";
+	private static final String STANDARD_LINE_SEPARATOR = LineSeparator.DEFAULT.value();
 
 	/** standard encoding */
 	private static final String STANDARD_ENCODING = "UTF-8";
@@ -221,6 +224,26 @@ public class Format implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * This will set the newline separator sequence.
+	 * <p>
+	 * This method differes from {@link #setLineSeparator(String)} slightly in
+	 * that, to disable end-of-line processing you should call:
+	 * <pre>
+	 * Format.setLinewSeparator(LineSeparator.NONE);
+	 * </pre>
+	 * 
+	 * @see #setLineSeparator(String) for comprehensive notes.
+	 *
+	 * @param separator {@link LineSeparator} line separator to us
+	 * @return a pointer to this Format for chaining
+	 */
+	public Format setLineSeparator(LineSeparator separator) {
+		return setLineSeparator(separator == null ? 
+				STANDARD_LINE_SEPARATOR : 
+				separator.value());
+	}
+	
 	/**
 	 * Returns the current line separator.
 	 *
