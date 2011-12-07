@@ -312,7 +312,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</jar>
 		<zip destfile="${package}/${jarbase}.zip">
 			<fileset dir="${package}" includes="${jarbase}*.jar" />
-			<fileset dir="${basedir}" includes="lib/**/*" />
+			<fileset dir="${basedir}" includes="lib/xerces* lib/jaxen* lib/xml*" />
 		</zip>
 	</target>
 
