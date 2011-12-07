@@ -275,7 +275,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<!-- Creates the class package                                           -->
 	<!-- =================================================================== -->
-	<target name="package" depends="compile, javadoc"
+	<target name="package" depends="compile, javadoc, coverage"
           description="Creates the class package">
 		<fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
 		<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
