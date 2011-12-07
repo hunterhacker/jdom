@@ -18,505 +18,695 @@
 <div class="separator">&nbsp;</div>
 <table cellspacing="0" cellpadding="0" class="src">
 <tr>  <td class="numLine">&nbsp;1</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">/**</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">/*--</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Tools to build JDOM documents and content using SAX parsers.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2011 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Introduction&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> All rights reserved.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Skip to the &lt;a href="Examples"&gt;Examples&lt;/a&gt; section for a quick bootstrap. </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;6</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Redistribution and use in source and binary forms, with or without</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;7</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The {@link org.jdom2.input.SAXBuilder} class parses input and produces JDOM</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> modification, are permitted provided that the following conditions</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;8</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">output. It does this using three 'pillars' of functionality, which when combined</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> are met:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;9</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">constitute a 'parse'.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;10</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 1. Redistributions of source code must retain the above copyright</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;11</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The three pillars are:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    notice, this list of conditions, and the following disclaimer.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;12</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;ol&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;13</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;The SAX Parser - this is a 'third-party' parser such as Xerces.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 2. Redistributions in binary form must reproduce the above copyright</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;14</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;The SAX Event Handler - which reads the data produced by the parser</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    notice, this list of conditions, and the disclaimer that follows</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;15</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;The JDOMFactory - which converts the resulting data in to JDOM content</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    these conditions in the documentation and/or other materials</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;16</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/ol&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    provided with the distribution.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;17</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">There are many different ways of parsing the document from its input state</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;18</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">(DocType-validating, etc.), and there are also different ways to interpret</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 3. The name "JDOM" must not be used to endorse or promote products</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;19</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">the SAX events. Finally there are different ways to produce JDOM Content using</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    derived from this software without prior written permission.  For</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;20</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">different implementations of the JDOMFactory.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    written permission, please contact &lt;request_AT_jdom_DOT_org&gt;.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;21</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;22</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder provides a central location where these three pillars are configured.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 4. Products derived from this software may not be called "JDOM", nor</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;23</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Some configuration settings require coordinated changes to both the SAX parser</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    may "JDOM" appear in their name, without prior written permission</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;24</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">and the SAX handler, and SAXBuilder ensures the coordination is maintained.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">    from the JDOM Project Management &lt;request_AT_jdom_DOT_org&gt;.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;25</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;26</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Setting the Pillars&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> In addition, we request (but do not require) that you include in the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;27</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder provides mechanisms for stipulating what the three pillars will be</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> end-user documentation provided with the redistribution and/or in the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;28</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">using a number of different mechanisms:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> software itself an acknowledgement equivalent to the following:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;29</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">     "This product includes software developed by the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;30</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A Constructor: {@link org.jdom2.input.SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory, org.jdom2.JDOMFactory)}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">      JDOM Project (http://www.jdom.org/)."</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;31</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A default constructor {@link org.jdom2.input.SAXBuilder#SAXBuilder()}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Alternatively, the acknowledgment may be graphical using the logos</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;32</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    that chooses a non-validating JAXP sourced XMLReader Factory</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> available at http://www.jdom.org/images/logos.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;33</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    {@link org.jdom2.input.sax.XMLReaderJAXPSingletons#NONVALIDATING} which it</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;34</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    mates with a Default {@link org.jdom2.input.sax.SAXHandler} factory, and the </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;35</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    {@link org.jdom2.DefaultJDOMFactory}. </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;36</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A number of other constructors that mostly are for backward-compatibility</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;37</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    with JDOM 1.x. These other constructors affect what </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> DISCLAIMED.  IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;38</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    {@link org.jdom2.input.sax.XMLReaderJDOMFactory} will be used but still use</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;39</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    the default SAXHandler and JDOMFactory values.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;40</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;Methods to change whatever was constructed:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;41</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">        &lt;ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;42</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">        &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setXMLReaderFactory(XMLReaderJDOMFactory)}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;43</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">        &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setSAXHandlerFactory(SAXHandlerFactory)}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;44</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">        &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setJDOMFactory(org.jdom2.JDOMFactory)}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;45</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">        &lt;/ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SUCH DAMAGE.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;46</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;47</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> This software consists of voluntary contributions made by many</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;48</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> individuals on behalf of the JDOM Project and was originally</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;49</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;The XMLReaderJDOMFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> created by Jason Hunter &lt;jhunter_AT_jdom_DOT_org&gt; and</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;50</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Brett McLaughlin &lt;brett_AT_jdom_DOT_org&gt;.  For more information</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;51</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAX parsers have been exposed as different things during the evolution of the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> on the JDOM Project, please see &lt;http://www.jdom.org/&gt;.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;52</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAX API, but in SAX2.0 they are &lt;code&gt;XMLReader&lt;/code&gt; instances. Thus</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;53</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder needs an XMLReader to process the input. To get an XMLReader the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;54</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder delegates to the {@link org.jdom2.input.sax.XMLReaderJDOMFactory}</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;55</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">by calling {@link org.jdom2.input.sax.XMLReaderJDOMFactory#createXMLReader()} </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">/**</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;56</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Tools to build JDOM documents and content using SAX parsers.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;57</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">XMLReader instances can be created in a few different ways, and also they</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;58</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">can be set to perform the SAX parse in a number of different ways. The classes</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Introduction&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;59</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">in this package are designed to make it easier and faster to locate the XMLReader</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Skip to the &lt;a href="#Examples"&gt;Examples&lt;/a&gt; section for a quick bootstrap. </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;60</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">that is suitable for the XML parsing you intend to do. At the same time, if the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;61</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">parsing you intend to do is outside the normal bounds of how JDOM is used, you</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The {@link org.jdom2.input.SAXBuilder} class parses input and produces JDOM</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;62</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">still have the functionality to create a completely custom mechanism for setting</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> output. It does this using three 'pillars' of functionality, which when combined</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;63</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">the XMLReader for SAXBuilder.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> constitute a 'parse'.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;64</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;65</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">There are two typical ways to specify and create an XMLReader</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The three pillars are:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;66</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">instance: using JAXP and using the SAX2.0 API. If necessary you can also create</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;ol&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;67</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">direct instances of XMLReader implementations using 'new' constructors, but</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;The SAX Parser - this is a 'third-party' parser such as Xerces.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;68</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">each SAX implementation has different class names for their SAX drivers so doing</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;The SAX Event Handler - which reads the data produced by the parser</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;69</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">raw constructors is not portable and not recommended.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;The JDOMFactory - which converts the resulting data in to JDOM content</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/ol&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;71</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Where possible it is recommended that you use the JAXP mechanism for obtaining</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> There are many different ways of parsing the document from its input state</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;72</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">XMLReaders because:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> (DocType-validating, etc.), and there are also different ways to interpret</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;73</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the SAX events. Finally there are different ways to produce JDOM Content using</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;It is more 'modern'.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> different implementations of the JDOMFactory.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;It provides a more consistent interface to different SAX implementations </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;It provides cleaner and more portable support for validating using the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder provides a central location where these three pillars are configured.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">                {@link javax.xml.validation.Validator} mechanisms.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Some configuration settings require coordinated changes to both the SAX parser</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;78</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;It allows you to create differently-configured 'factories' that</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> and the SAX handler, and SAXBuilder ensures the coordination is maintained.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;79</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    create XMLReaders in a pre-specified format (SAX2.0 has a single global</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    factory that creates raw XMLReader instances that then need to be</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Setting the Pillars&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;81</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    re-configured for you task). </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder provides a number of different mechanisms for stipulating what the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;82</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/ul&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> three pillars will be:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h3&gt;JAXP Factories&lt;/h3&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A Constructor: {@link org.jdom2.input.SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory, org.jdom2.JDOMFactory)}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;85</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOM exposes four factories that use JAXP to source XMLReaders. These four</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A default constructor {@link org.jdom2.input.SAXBuilder#SAXBuilder()}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;86</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">factories cover almost all conditions under which you would want a SAX parser:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> that chooses a non-validating JAXP sourced XMLReader Factory</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;ol&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderSingletons#NONVALIDATING} which it</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;88</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A simple non-validating SAX parser</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> mates with a Default {@link org.jdom2.input.sax.SAXHandler} factory, and the </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A validating parser that uses the DTD references in the XML to validate</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.DefaultJDOMFactory}. </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    against.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A number of other constructors that mostly are for backward-compatibility</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A validating parser that uses the XML Schema (XSD) references embedded in</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> with JDOM 1.x. These other constructors affect what </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    the XML to validate against.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderJDOMFactory} will be used but still use</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;li&gt;A validating parser that uses an external Schema (XML Schema, RelaxNG, etc)</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the default SAXHandler and JDOMFactory values.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    to validate the XML against.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;Methods to change whatever was constructed:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/ol&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The first three are all relatively simple, and are available as members of the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setXMLReaderFactory(XMLReaderJDOMFactory)}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.XMLReaderJAXPSingletons} enumeration. These members</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setSAXHandlerFactory(SAXHandlerFactory)}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;98</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">are 'singletons' that can be used in a multi-threaded and concurrent way to</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;{@link org.jdom2.input.SAXBuilder#setJDOMFactory(org.jdom2.JDOMFactory)}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;99</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">provide XMLReaders that are configured correctly for the respective behaviour.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;101</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">To validate using an external Schema you can use the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;102</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.XMLReaderJAXPSchemaFactory} to create an instance for</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;103</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">the particular Schema you want to validate against. Because this requires an</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;The XMLReaderJDOMFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;104</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">input Schema it cannot be constructed as a singleton like the others.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;105</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAX parsers have been exposed as different things during the evolution of the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;106</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h3&gt;SAX 2.0 Factory&lt;/h3&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAX API, but in SAX2.0 they are &lt;code&gt;XMLReader&lt;/code&gt; instances. Thus</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder needs an XMLReader to process the input. To get an XMLReader the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOM does support using the SAX 2.0 API for creating XMLReaders though using</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder delegates to the {@link org.jdom2.input.sax.XMLReaderJDOMFactory}</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">either the 'default' SAX 2.0 implementation or a particular SAX Driver class</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> by calling {@link org.jdom2.input.sax.XMLReaderJDOMFactory#createXMLReader()} </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;110</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">name by creating instances of the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.XMLReaderSAX2Factory}.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReader instances can be created in a few different ways, and also they</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;112</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> can be set to perform the SAX parse in a number of different ways. The classes</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;113</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOM does not provide a preconfigured way to do XML Schema validation though.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> in this package are designed to make it easier and faster to locate the XMLReader</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAX 2.0 API does not expose a convenient way to configure different SAX </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> that is suitable for the XML parsing you intend to do. At the same time, if the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">implementations in a consistent way, so it is up to the JDOM user to wrap the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> parsing you intend to do is outside the normal bounds of how JDOM is used, you</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;116</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">XMLReaderSAX2Factory in such a way that it reconfigures the XMLReader to be</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> still have the functionality to create a completely custom mechanism for setting</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">appropriate for the task at hand.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the XMLReader for SAXBuilder.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;119</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h3&gt;Custom Factories&lt;/h3&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> There are two typical ways to specify and create an XMLReader</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;120</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">If your circumstances require it you can create your own implementation of the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> instance: using JAXP, and using the SAX2.0 API. If necessary you can also create</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;121</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.XMLReaderJDOMFactory} to provide XMLReaders configured</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> direct instances of XMLReader implementations using 'new' constructors, but</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">as you like them. It will probably be best if you wrap an existing implementation</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> each SAX implementation has different class names for their SAX drivers so doing</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">with your custom code though in order to get the best results fastest.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> raw constructors is not portable and not recommended.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;125</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Note that the existing JDOM implementations described above all set the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Where possible it is recommended that you use the JAXP mechanism for obtaining</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">generated XMLReaders to be namespace-aware and to supply namespace-prefixes.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReaders because:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Custom implementations should also ensure that this is set unless you absolutely</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;128</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">know what you are doing.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;It is more 'modern'.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;129</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;It provides a more consistent interface to different SAX implementations </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;It provides cleaner and more portable support for validating using the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;131</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;The SAXHandlerFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link javax.xml.validation.Validator} mechanisms.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;132</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;It allows you to create differently-configured 'factories' that</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;133</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The SAXHandler interprets the SAX calls and provides the information to the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> create XMLReaders in a pre-specified format (SAX2.0 has a single global</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;134</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOMFactory to create JDOM content. SAXBuilder creates a SAXHandler from the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> factory that creates raw XMLReader instances that then need to be</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;135</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.SAXHandlerFactory} pillar. It is unusual for a JDOM</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> re-configured for you task). </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;136</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">user to need to customise the manner in which this happens, but, in the event</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/ul&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">that you do you can create a subclass of the SAXHandler class, and then create</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;138</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">an instance of the SAXHandlerFactory that returns new subclass instances.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h3&gt;JAXP Factories&lt;/h3&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;139</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">This new factory can become a pillar in SAXBuilder and supply custom SAXHandlers</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOM exposes five factories that use JAXP to source XMLReaders. These factories</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;140</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">to the parse process.  </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> cover almost all conditions under which you would want a SAX parser:</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;ol&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A simple non-validating SAX parser</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;143</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;The JDOMFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A validating parser that uses the DOCTYPE references in the XML to validate</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> against.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">There are a couple of reasons for changing the JDOMFactory pillar in SAXBuilder.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A validating parser that uses the XML Schema (XSD) references embedded in</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;146</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The default JDOMFactory used is the {@link org.jdom2.DefaultJDOMFactory}. This</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the XML to validate against.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;147</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">factory validates the values being used to create JDOM content. There is also</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A validating parser that uses an external Schema (XML Schema, Relax NG,</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;148</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">the {@link org.jdom2.UncheckedJDOMFactory} which does not validate the data, so</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> etc.) to validate the XML against.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;149</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">it should only be used if you are absolutely certain that your SAX source can</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;li&gt;A special case of the Schema-validating factory that specialises in XML</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">never provide illegal content. You may have other reasons for creating a custom</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Schema (XSD) validation and provides an easy way to create validating</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;151</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOMFactory such as if you need to create custom versions of JDOM Content like</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReaders based on single or multiple input XSD documents. </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;152</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">a custom Element subclass. </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/ol&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;153</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The first three are all relatively simple, and are available as members of the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Configuring the Pillars&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderSingletons} enumeration. These members</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;155</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> are 'singletons' that can be used in a multi-threaded and concurrent way to</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The JDOMFactory pillar is not configurable, you can only replace it entirely.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> provide XMLReaders that are configured correctly for the respective behaviour.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;157</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The other two pillars are configurable though, but you should inspect the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;158</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">getters and setters on {@link org.jdom2.input.SAXBuilder} to identify what can</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> To validate using an arbitrary external Schema you can use the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">(by default) be changed easily. Remember, if you have anything that needs to be</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderSchemaFactory} to create an instance for</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;160</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">customised beyond what SAXBuilder offers you can always replace a pillar with a</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the particular Schema you want to validate against. Because this requires an</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;161</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">custom implementation.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> input Schema it cannot be constructed as a singleton like the others.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;163</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Execution Model&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderXSDFactory} is a special case of</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;164</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Once all the pillars are set and configured to your satisfaction you can 'build'</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReaderSchemaFactory which internally uses an efficient mechanism to</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">a JDOM Document from a source. The actual parse process consists of a 'setup',</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> compile Schema instances from one or many input XSD documents which can come</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;166</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">'parse', and 'reset' phase.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> from multiple sources.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;167</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;168</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The setup process involves obtaining an XMLReader from the XMLReaderJDOMFactory</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">and a SAXHandler (configured to use the JDOMFactory) from the SAXHandlerFactory.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">These two instances are then configured to meet the settings specified on</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder, and once configured they are 'compiled' in to a SAXBuilderEngine.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The SAXBuilderEngine is a non-configurable 'embodiment' of the configuration of</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;174</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">the SAXBuilder when the engine was created, and it contains the entire</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">'workflow' necessary to parse the input in to JDOM content. Further, it is a</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">guarantee that the XMLReader and SAXHandler instances in the SAXBuilderEngine</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;177</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">are never shared with any other engine or entity (assuming that the respective</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;178</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">factories never issue the same instances multiple times).</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;179</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;180</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The 'parse' phase starts once the setup phase is complete and the</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;181</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilderEngine has been created. The created engine is used to parse the input,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;182</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">and the resulting Document is returned to the client.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;183</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;184</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">The 'reset' phase happens after the completion of the 'parse' phase, and it</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">resets the SAXBuilderEngine to its initial state, ready to process the next</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;186</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">parse request.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;168</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h3&gt;SAX 2.0 Factory&lt;/h3&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOM supports using the SAX 2.0 API for creating XMLReaders through using</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> either the 'default' SAX 2.0 implementation or a particular SAX Driver class.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAX2.0 support is available by creating instances of the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderSAX2Factory} class.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;174</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> It should be noted that it is preferable to use JAXP in JDOM because it is a</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> more flexible API that allows more portable code to be created. The JAXP</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;177</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> interface in JDOM is also able to support a wider array of functionality</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;178</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> out-of-the-box, but the same functionality would require SAX-implementation</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;179</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> specific configuration.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;180</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;181</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOM does not provide a pre-configured way to do XML Schema validation through</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;182</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the SAX2.0 API though. The SAX 2.0 API does not expose a convenient way to</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;183</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> configure different SAX implementations in a consistent way, so it is up to the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;184</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOM user to wrap the XMLReaderSAX2Factory in such a way that it reconfigures</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the XMLReader to be appropriate for the task at hand.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;186</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h3&gt;Custom Factories&lt;/h3&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;188</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Parser Reuse&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> If your circumstances require it you can create your own implementation of the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;189</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">A large amount of the effort involved in parsing the document is actually the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.XMLReaderJDOMFactory} to provide XMLReaders configured</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;190</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">creation of the XMLReader and the SAXHandler instances, as well as applying the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> as you like them. It will probably be best if you wrap an existing implementation</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;191</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">configuration to those instances (the 'setup' phase).</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> with your custom code though in order to get the best results fastest.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;192</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">JDOM2 uses the new SAXBuilderEngine to represent the state of the SAXBuilder</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Note that the existing JDOM implementations described above all set the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">at the moment prior to the parse. SAXBuilder will then 'remember' and reuse this</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> generated XMLReaders to be namespace-aware and to supply namespace-prefixes.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;195</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">exact SAXBuilderEngine until something changes in the SAXBuilder configuration.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Custom implementations should also ensure that this is set unless you absolutely</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;196</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">As soon as the configuration changes in any way the engine will be forgotten and</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> know what you are doing.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;197</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">a new one will be created when the SAXBuilder next parses a document.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;198</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;199</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">If you turn off parser reuse with</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;The SAXHandlerFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.SAXBuilder#setReuseParser(boolean)} then SAXBuilder will</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;201</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">immediately forget the engine, and it will also forget it after each build (i.e.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The SAXHandler interprets the SAX calls and provides the information to the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;202</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder will create a new SAXBuilderEngine each parse).</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOMFactory to create JDOM content. SAXBuilder creates a SAXHandler from the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;203</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.SAXHandlerFactory} pillar. It is unusual for a JDOM</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;204</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">It follows then that as long as you do not change the SAXBuilder configuration</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> user to need to customise the manner in which this happens, but, in the event</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;205</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">then the SAXBuilder will always reuse the same SAXBuilderEngine. This is very</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> that you do you can create a subclass of the SAXHandler class, and then create</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;206</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">efficient because there is no configuration management between parses, and the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> an instance of the SAXHandlerFactory that returns new subclass instances.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;207</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">procedure completely eliminates the 'setup' component for all but the first</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> This new factory can become a pillar in SAXBuilder and supply custom SAXHandlers</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">parse. </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> to the parse process.  </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;209</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2&gt;Parser Pooling&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;211</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">In order to facilitate Parser pooling it is useful to export the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;The JDOMFactory Pillar&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;212</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilderEngine as a stand-alone reusable parser. At any time you can call</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;213</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.SAXBuilder#buildEngine()} and you can get a newly</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> There are a couple of reasons for changing the JDOMFactory pillar in SAXBuilder.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;214</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">created SAXBuilderEngine instance. The SAXBuilderEngine has the same 'build'</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The default JDOMFactory used is the {@link org.jdom2.DefaultJDOMFactory}. This</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;215</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">methods as SAXBuilder, and these are exposed as the</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> factory validates the values being used to create JDOM content. There is also</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;216</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">{@link org.jdom2.input.sax.SAXEngine} interface. Both SAXBuilder and </span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the {@link org.jdom2.UncheckedJDOMFactory} which does not validate the data, so</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;217</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilderEngine implement the SAXEngine interface. Thus, if you use Parser</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> it should only be used if you are absolutely certain that your SAX source can</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;218</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">pools you can pool either the SAXBuilder or the SAXBuilderEngine in the same</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> never provide illegal content. You may have other reasons for creating a custom</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;219</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">pool.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOMFactory such as if you need to create custom versions of JDOM Content like</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;220</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> a custom Element subclass. </span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;221</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">it is most likely though that what you will want to do is to create a single</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;222</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">SAXBuilder that represents the configuration you want, and then you can use this</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Configuring the Pillars&lt;/h2&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;223</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">single SAXBuilder to create multiple SAXEngines as you need them in the pool by</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;224</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">calling the &lt;code&gt;buildEngine()&lt;/code&gt; method.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The JDOMFactory pillar is not configurable, you can only replace it entirely.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;225</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The other two pillars are configurable though, but you should inspect the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;226</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;h2 name="Examples"&gt;Examples&lt;/h2&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> getters and setters on {@link org.jdom2.input.SAXBuilder} to identify what can</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Create a simple SAXBuilder and parse a document:</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> (by default) be changed easily. Remember, if you have anything that needs to be</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;228</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> customised beyond what SAXBuilder offers you can always replace a pillar with a</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;229</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;pre&gt;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> custom implementation.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    SAXBuilder sb = new SAXBuilder();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;231</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/pre&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;233</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;234</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Create a DTD validating SAXBuilder and parse a document:</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;236</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;pre&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.DTDVALIDATING);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;239</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/pre&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;240</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">Create an XSD (XML Schema) validating SAXBuilder and parse a document:</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;242</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;pre&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;243</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    SAXBuilder sb = new SAXBuilder(XMLReaderJAXPSingletons.XSDVALIDATING);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;244</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">    Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;245</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;/pre&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;246</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">&lt;p&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;231</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Execution Model&lt;/h2&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Once all the pillars are set and configured to your satisfaction you can 'build'</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;233</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> a JDOM Document from a source. The actual parse process consists of a 'setup',</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;234</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 'parse', and 'reset' phase.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;236</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The setup process involves obtaining an XMLReader from the XMLReaderJDOMFactory</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> and a SAXHandler (configured to use the JDOMFactory) from the SAXHandlerFactory.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> These two instances are then configured to meet the settings specified on</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;239</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder, and once configured they are 'compiled' in to a SAXBuilderEngine.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;240</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The SAXBuilderEngine is a non-configurable 'embodiment' of the configuration of</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;242</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the SAXBuilder when the engine was created, and it contains the entire</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;243</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> 'workflow' necessary to parse the input in to JDOM content. Further, it is a</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;244</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> guarantee that the XMLReader and SAXHandler instances in the SAXBuilderEngine</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;245</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> are never shared with any other engine or entity (assuming that the respective</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;246</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> factories never issue the same instances multiple times). There is no guarantee</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> made for the JDOMFactory being unique for each SAXBuilderEngine, but JDOMFactory</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;248</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">*/</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> instances are supposed to be reentrant/thread-safe.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;249</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;250</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The 'parse' phase starts once the setup phase is complete and the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;251</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilderEngine has been created. The created engine is used to parse the input,</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;252</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> and the resulting Document is returned to the client.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;253</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;254</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> The 'reset' phase happens after the completion of the 'parse' phase, and it</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;255</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> resets the SAXBuilderEngine to its initial state, ready to process the next</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> parse request.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;257</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;258</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Parser Reuse&lt;/h2&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;259</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> A large amount of the effort involved in parsing the document is actually the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;260</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> creation of the XMLReader and the SAXHandler instances, as well as applying the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;261</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> configuration to those instances (the 'setup' phase).</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;262</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;263</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> JDOM2 uses the new SAXBuilderEngine to represent the state of the SAXBuilder</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;264</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> at the moment prior to the parse. SAXBuilder will then 'remember' and reuse this</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;265</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> exact SAXBuilderEngine until something changes in the SAXBuilder configuration.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;266</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> As soon as the configuration changes in any way the engine will be forgotten and</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;267</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> a new one will be created when the SAXBuilder next parses a document.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;268</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;269</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> If you turn off parser reuse with</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;270</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.SAXBuilder#setReuseParser(boolean)} then SAXBuilder will</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;271</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> immediately forget the engine, and it will also forget it after each build (i.e.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;272</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder will create a new SAXBuilderEngine each parse).</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;274</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> It follows then that as long as you do not change the SAXBuilder configuration</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;275</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> then the SAXBuilder will always reuse the same SAXBuilderEngine. This is very</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> efficient because there is no configuration management between parses, and the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;277</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> procedure completely eliminates the 'setup' component for all but the first</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> parse. </span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;280</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Parser Pooling&lt;/h2&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;281</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> In order to facilitate Parser pooling it is useful to export the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;282</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilderEngine as a stand-alone reusable parser. At any time you can call</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.SAXBuilder#buildEngine()} and you can get a newly</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;284</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> created SAXBuilderEngine instance. The SAXBuilderEngine has the same 'build'</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> methods as SAXBuilder, and these are exposed as the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;286</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> {@link org.jdom2.input.sax.SAXEngine} interface. Both SAXBuilder and </span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilderEngine implement the SAXEngine interface. Thus, if you use Parser</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;288</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> pools you can pool either the SAXBuilder or the SAXBuilderEngine in the same</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;289</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> pool.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;291</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> it is most likely though that what you will want to do is to create a single</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;292</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder that represents the configuration you want, and then you can use this</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> single SAXBuilder to create multiple SAXEngines as you need them in the pool by</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;294</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> calling the &lt;code&gt;buildEngine()&lt;/code&gt; method.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;295</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;296</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;h2&gt;Examples&lt;/h2&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;a name="Examples" /&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;298</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Create a simple SAXBuilder and parse a document:</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;299</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;300</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder sb = new SAXBuilder();</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;304</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;305</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Create a DTD validating SAXBuilder and parse a document:</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.DTDVALIDATING);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;309</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;310</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;311</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Create an XSD (XML Schema) validating SAXBuilder using the XSD references inside</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> the XML document and parse a document:</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;313</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;314</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;315</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;317</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Create an XSD (XML Schema) validating SAXBuilder the hard way (see the next</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;320</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> example for an easier way) using an external XSD and parse a document</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;321</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> (see {@link org.jdom2.input.sax.XMLReaderSchemaFactory}):</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;322</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;323</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;324</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SchemaFactory schemafac =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;325</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;326</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Schema schema = schemafac.newSchema(new File("myschema.xsd"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;327</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReaderJDOMFactory factory = new XMLReaderSchemaFactory(schema);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;328</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder sb = new SAXBuilder(factory);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;329</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;330</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;331</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Create an XSD (XML Schema) validating SAXBuilder the easy way</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;333</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> (see {@link org.jdom2.input.sax.XMLReaderXSDFactory}):</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;p&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;336</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> File xsdfile = new File("myschema.xsd");</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;337</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> XMLReaderJDOMFactory factory = new XMLReaderXSDFactory(xsdfile);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;338</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> SAXBuilder sb = new SAXBuilder(factory);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Document doc = sb.build(new File("file.xml"));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> &lt;/pre&gt;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;341</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">package</span> org.jdom2.input.sax;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;344</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 22/11/11 11:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 06/12/11 6:55 PM.</div>
 </body>
 </html>

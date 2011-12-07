@@ -27,7 +27,7 @@
     
         cur['ant.project.default-target'] = 'package';
     
-        cur['ant.project.invoked-targets'] = 'coverage';
+        cur['ant.project.invoked-targets'] = 'clean,package';
     
         cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
     
@@ -65,7 +65,7 @@
     
         cur['coverage.out'] = './build/coverage';
     
-        cur['DSTAMP'] = '20111122';
+        cur['DSTAMP'] = '20111206';
     
         cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
     
@@ -87,7 +87,7 @@
     
         cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
     
-        cur['jarbase'] = 'jdom-2.x-2011.11.22.23.07';
+        cur['jarbase'] = 'jdom-2.x-2011.12.06.18.54';
     
         cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
     
@@ -192,7 +192,7 @@
     
         cur['samples.src'] = './core/samples//';
     
-        cur['snapshot.time'] = '2011.11.22.23.07';
+        cur['snapshot.time'] = '2011.12.06.18.54';
     
         cur['sun.arch.data.model'] = '64';
     
@@ -208,7 +208,7 @@
     
         cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
     
-        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases545069928819327254.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher1167237115245566451.properties propsfile=C:\\git\\jdom\\junit7756537863176772536.properties';
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases9032599054041378168.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher155917671527360559.properties propsfile=C:\\git\\jdom\\junit8194873728478469500.properties';
     
         cur['sun.java.launcher'] = 'SUN_STANDARD';
     
@@ -218,9 +218,9 @@
     
         cur['sun.os.patch.level'] = '';
     
-        cur['TODAY'] = 'November 22 2011';
+        cur['TODAY'] = 'December 6 2011';
     
-        cur['TSTAMP'] = '2307';
+        cur['TSTAMP'] = '1854';
     
         cur['user.country'] = 'CA';
     
@@ -236,9 +236,9 @@
     
         cur['user.variant'] = '';
     
-        cur['version'] = '2.x-2011.11.22.23.07';
+        cur['version'] = '2.x-2011.12.06.18.54';
     
-        cur['version.impl'] = '2.x-2011.11.22.23.07';
+        cur['version.impl'] = '2.x-2011.12.06.18.54';
     
         cur['version.spec'] = '2.alpha';
     
@@ -289,7 +289,7 @@
 <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
 </tr>
 <tr valign="top" class="Pass">
-<td><a title="Display all tests" href="41_TestStAXStreamBuilder.html">TestStAXStreamBuilder</a></td><td><a title="Display all tests" href="41_TestStAXStreamBuilder.html">14</a></td><td>0</td><td>0</td><td>0.156</td><td>2011-11-23T04:09:04</td><td>lenny</td>
+<td><a title="Display all tests" href="41_TestStAXStreamBuilder.html">TestStAXStreamBuilder</a></td><td><a title="Display all tests" href="41_TestStAXStreamBuilder.html">14</a></td><td>0</td><td>0</td><td>0.204</td><td>2011-12-06T23:55:25</td><td>lenny</td>
 </tr>
 </table>
 <h2>Tests</h2>
@@ -301,43 +301,43 @@
 <td><a name="testFactory"></a>testFactory</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSimpleDocument"></a>testSimpleDocument</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testSimpleDocument"></a>testSimpleDocument</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAttributesDocument"></a>testAttributesDocument</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testAttributesDocument"></a>testAttributesDocument</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testNamespaceDocument"></a>testNamespaceDocument</td><td>Success</td><td></td><td>0.014</td>
+<td><a name="testNamespaceDocument"></a>testNamespaceDocument</td><td>Success</td><td></td><td>0.022</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocTypeDocument"></a>testDocTypeDocument</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testDocTypeDocument"></a>testDocTypeDocument</td><td>Success</td><td></td><td>0.007</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testComplexDocument"></a>testComplexDocument</td><td>Success</td><td></td><td>0.025</td>
+<td><a name="testComplexDocument"></a>testComplexDocument</td><td>Success</td><td></td><td>0.036</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXSDDocument"></a>testXSDDocument</td><td>Success</td><td></td><td>0.020</td>
+<td><a name="testXSDDocument"></a>testXSDDocument</td><td>Success</td><td></td><td>0.023</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testStAXBuilder"></a>testStAXBuilder</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSimpleDocumentExpand"></a>testSimpleDocumentExpand</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testSimpleDocumentExpand"></a>testSimpleDocumentExpand</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAttributesDocumentExpand"></a>testAttributesDocumentExpand</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testAttributesDocumentExpand"></a>testAttributesDocumentExpand</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testNamespaceDocumentExpand"></a>testNamespaceDocumentExpand</td><td>Success</td><td></td><td>0.013</td>
+<td><a name="testNamespaceDocumentExpand"></a>testNamespaceDocumentExpand</td><td>Success</td><td></td><td>0.026</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testComplexDocumentExpand"></a>testComplexDocumentExpand</td><td>Success</td><td></td><td>0.024</td>
+<td><a name="testComplexDocumentExpand"></a>testComplexDocumentExpand</td><td>Success</td><td></td><td>0.028</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXSDDocumentExpand"></a>testXSDDocumentExpand</td><td>Success</td><td></td><td>0.025</td>
+<td><a name="testXSDDocumentExpand"></a>testXSDDocumentExpand</td><td>Success</td><td></td><td>0.023</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocTypeSimpleDocument"></a>testDocTypeSimpleDocument</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testDocTypeSimpleDocument"></a>testDocTypeSimpleDocument</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 </table>
 <div class="Properties">
