@@ -43,12 +43,6 @@ public interface JDOMConstants {
 	/** Defined as '{@value}' */
 	public static final String NS_URI_XMLNS = "http://www.w3.org/XML/1998/namespace";
 	
-	/** Defined as {@link Namespace#NO_NAMESPACE} */
-	public static final Namespace NO_NAMESPACE = Namespace.NO_NAMESPACE;
-	/** Defined as {@link Namespace#XML_NAMESPACE} */
-	public static final Namespace XML_NAMESPACE = Namespace.XML_NAMESPACE;
-	
-	
 	
 	/** Defined as '{@value}' */
 	public static final String SAX_PROPERTY_DECLARATION_HANDLER = 

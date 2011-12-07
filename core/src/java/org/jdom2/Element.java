@@ -103,11 +103,11 @@ import org.jdom2.filter.*;
  *       can modify the set by adding and removing Attributes to the Element.
  *       <p>
  *       <b>NOTE:</b>
- *       The {@link Namespace#NO_NAMESPACE NO_NAMESPACE} Namespace is always the
+ *       The {@link Namespace#NO_NAMESPACE Namespace.NO_NAMESPACE} Namespace is always the
  *       <i>default</i> Namespace for attributes (the Namespace that has no
  *       prefix). Thus there may be a special case with this Namespace, because
  *       if there is a different <i>default</i> Namespace for the Element, then
- *       the NO_NAMESPACE Namespace is not part of the Element's in-scope
+ *       the Namespace.NO_NAMESPACE Namespace is not part of the Element's in-scope
  *       Namespace set (the Element cannot have two Namespaces in scope with the
  *       same prefix - "").
  *     </td>
@@ -135,7 +135,7 @@ import org.jdom2.filter.*;
  * </table>
  *   
  * <p>
- * Since you cannot change the XML_NAMESPACE, and the 'inherited' Namespace set
+ * Since you cannot change the Namespace.XML_NAMESPACE, and the 'inherited' Namespace set
  * is dynamic, the remaining Namespace sets are the most interesting from a JDOM
  * perspective. JDOM validates all modifications that affect the Namespaces in
  * scope for an Element. An IllegalAddException will be thrown if you attempt to
@@ -305,7 +305,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 */
 	public Element setNamespace(Namespace namespace) {
 		if (namespace == null) {
-			namespace = NO_NAMESPACE;
+			namespace = Namespace.NO_NAMESPACE;
 		}
 
 		String reason = Verifier.checkNamespaceCollision(namespace, 
@@ -363,7 +363,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 
 		if (NS_PFX_XML.equals(prefix)) {
 			// Namespace "xml" is always bound.
-			return XML_NAMESPACE;
+			return Namespace.XML_NAMESPACE;
 		}
 
 		// Check if the prefix is the prefix for this element
@@ -1080,7 +1080,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return attribute for the element
 	 */
 	public Attribute getAttribute(final String attname) {
-		return getAttribute(attname, NO_NAMESPACE);
+		return getAttribute(attname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1108,7 +1108,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return the named attribute's value, or null if no such attribute
 	 */
 	public String getAttributeValue(final String attname) {
-		return getAttributeValue(attname, NO_NAMESPACE);
+		return getAttributeValue(attname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1123,7 +1123,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return the named attribute's value, or the default if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final String def) {
-		return getAttributeValue(attname, NO_NAMESPACE, def);
+		return getAttributeValue(attname, Namespace.NO_NAMESPACE, def);
 	}
 
 	/**
@@ -1295,7 +1295,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return whether the attribute was removed
 	 */
 	public boolean removeAttribute(final String attname) {
-		return removeAttribute(attname, NO_NAMESPACE);
+		return removeAttribute(attname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1533,7 +1533,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return all matching child elements
 	 */
 	public List<Element> getChildren(final String cname) {
-		return getChildren(cname, NO_NAMESPACE);
+		return getChildren(cname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1586,7 +1586,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return the first matching child element, or null if not found
 	 */
 	public Element getChild(final String cname) {
-		return getChild(cname, NO_NAMESPACE);
+		return getChild(cname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1600,7 +1600,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChild(final String cname) {
-		return removeChild(cname, NO_NAMESPACE);
+		return removeChild(cname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1638,7 +1638,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChildren(final String cname) {
-		return removeChildren(cname, NO_NAMESPACE);
+		return removeChildren(cname, Namespace.NO_NAMESPACE);
 	}
 
 	/**
@@ -1677,7 +1677,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 		// getNamespace*() methods
 
 		TreeMap<String,Namespace> namespaces = new TreeMap<String, Namespace>();
-		namespaces.put(XML_NAMESPACE.getPrefix(), XML_NAMESPACE);
+		namespaces.put(Namespace.XML_NAMESPACE.getPrefix(), Namespace.XML_NAMESPACE);
 		namespaces.put(getNamespacePrefix(), getNamespace());
 		for (Namespace ns : getAdditionalNamespaces()) {
 			if (!namespaces.containsKey(ns.getPrefix())) {
@@ -1703,7 +1703,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 
 		if (getParentElement() == null && !namespaces.containsKey("")) {
 			// we are the root element, and there is no 'default' namespace.
-			namespaces.put(NO_NAMESPACE.getPrefix(), NO_NAMESPACE);
+			namespaces.put(Namespace.NO_NAMESPACE.getPrefix(), Namespace.NO_NAMESPACE);
 		}
 
 		ArrayList<Namespace> al = new ArrayList<Namespace>(namespaces.size());
@@ -1720,7 +1720,7 @@ public class Element extends Content implements Parent, JDOMConstants {
 			ArrayList<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
 			for (Iterator<Namespace> it = ret.iterator(); it.hasNext();) {
 				Namespace ns = it.next();
-				if (ns == NO_NAMESPACE || ns == XML_NAMESPACE) {
+				if (ns == Namespace.NO_NAMESPACE || ns == Namespace.XML_NAMESPACE) {
 					continue;
 				}
 				it.remove();
@@ -1749,11 +1749,11 @@ public class Element extends Content implements Parent, JDOMConstants {
 	@Override
 	public List<Namespace> getNamespacesIntroduced() {
 		if (getParentElement() == null) {
-			// we introduce everything... except XML_NAMESPACE
+			// we introduce everything... except Namespace.XML_NAMESPACE
 			List<Namespace> ret = new ArrayList<Namespace>(getNamespacesInScope());
 			for (Iterator<Namespace> it = ret.iterator(); it.hasNext(); ) {
 				Namespace ns = it.next();
-				if (ns == XML_NAMESPACE || ns == NO_NAMESPACE) {
+				if (ns == Namespace.XML_NAMESPACE || ns == Namespace.NO_NAMESPACE) {
 					it.remove();
 				}
 			}

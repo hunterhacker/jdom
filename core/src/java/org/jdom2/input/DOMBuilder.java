@@ -176,7 +176,7 @@ public class DOMBuilder implements JDOMConstants {
 				Namespace ns = null;
 				String uri = node.getNamespaceURI();
 				if (uri == null) {
-					ns = (current == null) ? NO_NAMESPACE
+					ns = (current == null) ? Namespace.NO_NAMESPACE
 							: current.getNamespace(prefix);
 				}
 				else {
@@ -252,7 +252,7 @@ public class DOMBuilder implements JDOMConstants {
 						Namespace attNS = null;
 						String attURI = att.getNamespaceURI(); 
 						if (attURI == null || NS_URI_DEFAULT.equals(attURI)) {
-							attNS = NO_NAMESPACE;
+							attNS = Namespace.NO_NAMESPACE;
 						} else {
 							// various conditions can lead here.
 							// the logical one is that we have a prefix for the
