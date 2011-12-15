@@ -229,7 +229,11 @@ public class SAXBuilder implements SAXEngine, JDOMConstants {
 	 * @see org.jdom2.input.sax for important details on SAXBuilder
 	 * @param validate
 	 *        <code>boolean</code> indicating if DTD validation should occur.
+	 * @deprecated use {@link SAXBuilder#SAXBuilder(XMLReaderJDOMFactory)} with 
+	 *              either {@link XMLReaderSingletons#DTDVALIDATING}
+	 *              or {@link XMLReaderSingletons#NONVALIDATING} 
 	 */
+	@Deprecated
 	public SAXBuilder(final boolean validate) {
 		this(validate
 				? XMLReaderSingletons.DTDVALIDATING
@@ -249,7 +253,10 @@ public class SAXBuilder implements SAXEngine, JDOMConstants {
 	 * @see org.jdom2.input.sax for important details on SAXBuilder
 	 * @param saxDriverClass
 	 *        <code>String</code> name of SAX Driver to use for parsing.
+	 * @deprecated use {@link SAXBuilder#SAXBuilder(XMLReaderJDOMFactory)} with 
+	 *        {@link XMLReaderSAX2Factory#XMLReaderSAX2Factory(boolean, String)}
 	 */
+	@Deprecated
 	public SAXBuilder(final String saxDriverClass) {
 		this(saxDriverClass, false);
 	}
@@ -268,7 +275,10 @@ public class SAXBuilder implements SAXEngine, JDOMConstants {
 	 *        <code>String</code> name of SAX Driver to use for parsing.
 	 * @param validate
 	 *        <code>boolean</code> indicating if validation should occur.
+	 * @deprecated use {@link SAXBuilder#SAXBuilder(XMLReaderJDOMFactory)} with 
+	 *        {@link XMLReaderSAX2Factory#XMLReaderSAX2Factory(boolean, String)}
 	 */
+	@Deprecated
 	public SAXBuilder(final String saxDriverClass, final boolean validate) {
 		this(new XMLReaderSAX2Factory(validate, saxDriverClass), null, null);
 	}
@@ -468,7 +478,7 @@ public class SAXBuilder implements SAXEngine, JDOMConstants {
 	 * what determines the type of validation. A simple boolean is not enough to
 	 * indicate what sort of validation is required. The
 	 * {@link #setXMLReaderFactory(XMLReaderJDOMFactory)} method provides a
-	 * means to me more specific about validation.
+	 * means to be more specific about validation.
 	 * <p>
 	 * For backward compatibility this method has been retained, but its use is
 	 * discouraged. It does make some logical choices though. The code is
