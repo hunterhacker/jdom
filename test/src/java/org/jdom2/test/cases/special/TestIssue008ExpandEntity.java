@@ -23,6 +23,7 @@ public class TestIssue008ExpandEntity {
 			throw new IllegalStateException("Unable to get resource " + docloc);
 		}
 
+		@SuppressWarnings("deprecation")
 		SAXBuilder builder = new SAXBuilder(validating);
 		//builder.setValidation(validating);
 		builder.setExpandEntities(expand);

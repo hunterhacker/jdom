@@ -62,6 +62,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.XMLReaderJDOMFactory;
+import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.output.XMLOutputter;
 
 // todo:
@@ -156,7 +158,8 @@ public class JDOMBean {
      */
     public void setParser(String parser) {
         this.parser = parser;
-        builder = new SAXBuilder(parser);
+        XMLReaderJDOMFactory fac = new XMLReaderSAX2Factory(false, parser);
+        builder = new SAXBuilder(fac);
     }
 
     /**

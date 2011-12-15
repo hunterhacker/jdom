@@ -56,6 +56,7 @@ import java.io.*;
 
 import org.jdom2.*;
 import org.jdom2.input.*;
+import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.output.*;
 
 /**
@@ -114,7 +115,7 @@ public class SAXBuilderDemo {
             if (saxDriverClass == null) {
                 builder = new SAXBuilder();
             } else {
-                builder = new SAXBuilder(saxDriverClass);
+                builder = new SAXBuilder(new XMLReaderSAX2Factory(false, saxDriverClass));
             }
             builder.setExpandEntities(expandEntities);
             //builder.setIgnoringBoundaryWhitespace(true);

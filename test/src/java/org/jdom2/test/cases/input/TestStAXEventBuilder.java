@@ -131,7 +131,7 @@ public class TestStAXEventBuilder {
 			Document eventbuild = stxb.build(events);
 			Element eventroot = eventbuild.hasRootElement() ? eventbuild.getRootElement() : null;
 
-			SAXBuilder sb = new SAXBuilder(false);
+			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
 			Document saxbuild = sb.build(filename);

@@ -139,7 +139,7 @@ public class TestStAXStreamBuilder {
 			fragbuild.addContent(contentlist);
 			Element fragroot = fragbuild.getRootElement();
 
-			SAXBuilder sb = new SAXBuilder(false);
+			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
 			Document saxbuild = sb.build(filename);

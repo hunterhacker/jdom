@@ -122,6 +122,7 @@ public final class TestSAXBuilder {
 			super();
 		}
 		
+		@SuppressWarnings("deprecation")
 		public MySAXBuilder(String driver) {
 			super(driver);
 		}
@@ -327,6 +328,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getSAXHandlerFactory() != null);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetSAXHandlerFactory() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -367,6 +369,7 @@ public final class TestSAXBuilder {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetErrorHandler() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -386,6 +389,7 @@ public final class TestSAXBuilder {
 		assertTrue(handler == sb.buildEngine().getErrorHandler());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetEntityResolver() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -407,6 +411,7 @@ public final class TestSAXBuilder {
 		assertTrue(er == sb.getEntityResolver());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetDTDHandler() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -520,6 +525,7 @@ public final class TestSAXBuilder {
 		assertFalse(sb.isIgnoringBoundaryWhitespace());		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetReuseParser() {
 		SAXBuilder sb = new SAXBuilder(true);
@@ -1056,6 +1062,7 @@ public final class TestSAXBuilder {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	private void loopParser(boolean reuse, boolean fast) throws JDOMException, IOException {
 		if (fast) {
 			System.out.println("Fast no longer means anything.");

@@ -31,6 +31,7 @@ public class TestSAXComplexSchema {
 	/**
 	 * Test method for {@link org.jdom.input.SAXBuilder#build(java.io.File)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testBuildFileOldWay() throws IOException {
 		SAXBuilder builder = new SAXBuilder(true);
