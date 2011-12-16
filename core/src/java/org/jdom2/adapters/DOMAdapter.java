@@ -56,13 +56,27 @@ package org.jdom2.adapters;
 
 import org.jdom2.DocType;
 import org.jdom2.JDOMException;
+import org.jdom2.output.DOMOutputter;
+
 import org.w3c.dom.Document;
 
 /**
  * Defines a standard set of adapter methods for interfacing with a DOM parser
  * and obtaining a DOM {@link org.w3c.dom.Document org.w3c.dom.Document} object.
- * Implementing classes map these calls to DOM parser-specific calls, allowing
- * any third-party parser to be used with JDOM.
+ * Instances of this interface are used by the {@link DOMOutputter} class to
+ * create a DOM output result using the org.w3c.dom.Document implementation
+ * returned by these methods.
+ * <p>
+ * You should never need to implement this interface unless you have a specific
+ * need to use something other than the default JAXP-based mechanism.
+ * <p>
+ * JDOM only provides one 'concrete' implementation of the DOMAdapter: the
+ * {@link JAXPDOMAdapter} class. That implementation is a thread-safe and
+ * efficient implementation. It can be used as a template for building your own
+ * custom DOMAdapter implementation, if you need it.
+ * <p>
+ * The {@link AbstractDOMAdapter} class could help you by implementing the
+ * DocType-based method which leverages the base createDocument() method.
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter
@@ -74,7 +88,7 @@ public interface DOMAdapter {
 	 * on a specific parser implementation.
 	 *
 	 * @return <code>Document</code> - created DOM Document.
-	 * @throws JDOMException when errors occur.
+	 * @throws JDOMException if an error occurs.
 	 */
 	public Document createDocument() throws JDOMException;
 
@@ -84,7 +98,7 @@ public interface DOMAdapter {
 	 *
 	 * @param doctype Initial <code>DocType</code> of the document.
 	 * @return <code>Document</code> - created DOM Document.
-	 * @throws JDOMException when errors occur.
+	 * @throws JDOMException if an error occurs.
 	 */
 	public Document createDocument(DocType doctype) throws JDOMException;
 }

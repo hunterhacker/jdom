@@ -54,21 +54,32 @@
 
 package org.jdom2.adapters;
 
-import java.lang.reflect.Method;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
 
 import org.jdom2.JDOMException;
-import org.w3c.dom.Document;
 
 /**
  * An adapter for any parser supporting the Sun JAXP APIs.
  * 
  * @author  Jason Hunter
+ * @author  Rolf Lear
  */
 public class JAXPDOMAdapter extends AbstractDOMAdapter {
 
 	/**
+	 * Use a Thread-local for keeping a single instance of a
+	 * DocumentBuilder in memory. Thread-safe this way.
+	 */
+	private static final ThreadLocal<DocumentBuilder> localbuilder =
+			new ThreadLocal<DocumentBuilder>();
+
+	/**
 	 * This creates an empty <code>Document</code> object based
-	 * on a specific parser implementation.
+	 * on the current JAXP parser implementation.
 	 *
 	 * @return <code>Document</code> - created DOM Document.
 	 * @throws JDOMException when errors occur in parsing.
@@ -77,35 +88,18 @@ public class JAXPDOMAdapter extends AbstractDOMAdapter {
 	public Document createDocument() 
 			throws JDOMException {
 
-		try {
-			// We need DOM Level 2 and thus JAXP 1.1.
-			// If JAXP 1.0 is all that's available then we error out.
-			Class.forName("javax.xml.transform.Transformer");
-
-			// Try JAXP 1.1 calls to build the document
-			Class<?> factoryClass =
-					Class.forName("javax.xml.parsers.DocumentBuilderFactory");
-
-			// factory = DocumentBuilderFactory.newInstance();
-			Method newParserInstance =
-					factoryClass.getMethod("newInstance");
-			Object factory = newParserInstance.invoke(null);
-
-			// jaxpParser = factory.newDocumentBuilder();
-			Method newDocBuilder =
-					factoryClass.getMethod("newDocumentBuilder");
-			Object jaxpParser  = newDocBuilder.invoke(factory);
-
-			// domDoc = jaxpParser.newDocument();
-			Class<?> parserClass = jaxpParser.getClass();
-			Method newDoc = parserClass.getMethod("newDocument");
-			org.w3c.dom.Document domDoc =
-					(org.w3c.dom.Document) newDoc.invoke(jaxpParser);
-
-			return domDoc;
-		} catch (Exception e) {
-			throw new JDOMException("Reflection failed while creating new JAXP document", e); 
+		DocumentBuilder db = localbuilder.get();
+		if (db == null) {
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				db = dbf.newDocumentBuilder();
+				localbuilder.set(db);
+			} catch (ParserConfigurationException e) {
+				throw new JDOMException("Unable to obtain a DOM parser. See cause:", e); 
+			}
 		}
-
+		return db.newDocument();
+		
 	}
+
 }

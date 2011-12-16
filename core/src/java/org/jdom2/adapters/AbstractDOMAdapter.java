@@ -64,22 +64,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
 /**
- * A DOMAdapter utility abstract base class.
+ * A DOMAdapter utility abstract base class. Uses the concrete implementation
+ * to build a org.w3c.dom.Document instance, which in turn is used to apply
+ * the DocType.
+ * <p>
+ * Special attention should be paid to the setInternalSubset protected method,
+ * which may, or may not be supported by your actual DOM implementation.
  * 
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  */
 public abstract class AbstractDOMAdapter implements DOMAdapter {
-
-	/**
-	 * This creates an empty <code>Document</code> object based
-	 * on a specific parser implementation.
-	 *
-	 * @return <code>Document</code> - created DOM Document.
-	 * @throws JDOMException when errors occur.
-	 */
-	@Override
-	public abstract Document createDocument() throws JDOMException;
 
 	/**
 	 * This creates an empty <code>Document</code> object based
