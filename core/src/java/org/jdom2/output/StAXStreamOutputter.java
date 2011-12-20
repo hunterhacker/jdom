@@ -101,6 +101,7 @@ import org.jdom2.Text;
  * {@link AbstractStAXStreamProcessor} is available to be further extended to
  * your needs if all you want to do is tweak some details.
  * 
+ * @since JDOM2
  * @author Rolf Lear
  */
 

@@ -56,20 +56,19 @@ package org.jdom2.input;
 
 import java.util.HashMap;
 
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import org.jdom2.Attribute;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.EntityRef;
 import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
-import org.w3c.dom.Attr;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
 
 /**
  * Builds a JDOM {@link org.jdom2.Document org.jdom2.Document} from a pre-existing
@@ -138,6 +137,82 @@ public class DOMBuilder implements JDOMConstants {
 		buildTree(domElement, doc, null, true);
 		return doc.getRootElement();
 	}
+	
+	/**
+	 * This will build a JDOM CDATA from an existing DOM CDATASection
+	 *
+	 * @param cdata <code> org.w3c.dom.CDATASection</code> object
+	 * @return <code>CDATA</code> - JDOM CDATA object
+	 * @since JDOM2
+	 */
+	public org.jdom2.CDATA build(org.w3c.dom.CDATASection cdata) {
+		return factory.cdata(cdata.getTextContent());
+	}
+	
+	/**
+	 * This will build a JDOM Text from an existing DOM Text
+	 *
+	 * @param text <code> org.w3c.dom.Text</code> object
+	 * @return <code>Text</code> - JDOM Text object
+	 * @since JDOM2
+	 */
+	public org.jdom2.Text build(org.w3c.dom.Text text) {
+		return factory.text(text.getTextContent());
+	}
+	
+	/**
+	 * This will build a JDOM Comment from an existing DOM Comment
+	 *
+	 * @param comment <code> org.w3c.dom.Comment</code> object
+	 * @return <code>Comment</code> - JDOM Comment object
+	 * @since JDOM2
+	 */
+	public org.jdom2.Comment build(org.w3c.dom.Comment comment) {
+		return factory.comment(comment.getTextContent());
+	}
+	
+	/**
+	 * This will build a JDOM ProcessingInstruction from an existing DOM ProcessingInstruction
+	 *
+	 * @param pi <code> org.w3c.dom.ProcessingInstruction</code> object
+	 * @return <code>ProcessingInstruction</code> - JDOM ProcessingInstruction object
+	 * @since JDOM2
+	 */
+	public org.jdom2.ProcessingInstruction build(org.w3c.dom.ProcessingInstruction pi) {
+		return factory.processingInstruction(pi.getTarget(), pi.getData());
+	}
+	
+	/**
+	 * This will build a JDOM EntityRef from an existing DOM EntityReference
+	 *
+	 * @param er <code> org.w3c.dom.EntityReference</code> object
+	 * @return <code>EnityRef</code> - JDOM EntityRef object
+	 * @since JDOM2
+	 */
+	public org.jdom2.EntityRef build(org.w3c.dom.EntityReference er) {
+		return factory.entityRef(er.getNodeName());
+	}
+	
+	/**
+	 * This will build a JDOM Element from an existing DOM Element
+	 *
+	 * @param doctype <code> org.w3c.dom.Element</code> object
+	 * @return <code>Element</code> - JDOM Element object
+	 * @since JDOM2
+	 */
+	public org.jdom2.DocType build(org.w3c.dom.DocumentType doctype) {
+		String publicID = doctype.getPublicId();
+		String systemID = doctype.getSystemId();
+		String internalDTD = doctype.getInternalSubset();
+
+		DocType docType = factory.docType(doctype.getName());
+		docType.setPublicID(publicID);
+		docType.setSystemID(systemID);
+		docType.setInternalSubset(internalDTD);
+		return docType;
+	}
+	
+	
 
 	/**
 	 * This takes a DOM <code>Node</code> and builds up
@@ -155,8 +230,8 @@ public class DOMBuilder implements JDOMConstants {
 			boolean atRoot) {
 		// Recurse through the tree
 		switch (node.getNodeType()) {
-			case Node.DOCUMENT_NODE:
-				NodeList nodes = node.getChildNodes();
+			case org.w3c.dom.Node.DOCUMENT_NODE:
+				org.w3c.dom.NodeList nodes = node.getChildNodes();
 				for (int i=0, size=nodes.getLength(); i<size; i++) {
 					buildTree(nodes.item(i), doc, current, true);
 				}
@@ -198,7 +273,7 @@ public class DOMBuilder implements JDOMConstants {
 				int attsize = attributeList.getLength();
 
 				for (int i = 0; i < attsize; i++) {
-					Attr att = (Attr) attributeList.item(i);
+					org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);
 
 					String attname = att.getName();
 					if (attname.startsWith(NS_PFX_XMLNS)) {
@@ -233,7 +308,7 @@ public class DOMBuilder implements JDOMConstants {
 
 				// Add attributes
 				for (int i = 0; i < attsize; i++) {
-					Attr att = (Attr) attributeList.item(i);
+					org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);
 
 					String attname = att.getName();
 
@@ -330,39 +405,32 @@ public class DOMBuilder implements JDOMConstants {
 				break;
 
 			case Node.TEXT_NODE:
-				String data = node.getNodeValue();
-				factory.addContent(current, factory.text(data));
+				factory.addContent(current, build((org.w3c.dom.Text)node));
 				break;
 
 			case Node.CDATA_SECTION_NODE:
-				String cdata = node.getNodeValue();
-				factory.addContent(current, factory.cdata(cdata));
+				factory.addContent(current, build((org.w3c.dom.CDATASection)node));
 				break;
 
 
 			case Node.PROCESSING_INSTRUCTION_NODE:
 				if (atRoot) {
-					factory.addContent(doc,
-							factory.processingInstruction(node.getNodeName(),
-									node.getNodeValue()));
+					factory.addContent(doc, build((org.w3c.dom.ProcessingInstruction)node));
 				} else {
-					factory.addContent(current,
-							factory.processingInstruction(node.getNodeName(),
-									node.getNodeValue()));
+					factory.addContent(current, build((org.w3c.dom.ProcessingInstruction)node));
 				}
 				break;
 
 			case Node.COMMENT_NODE:
 				if (atRoot) {
-					factory.addContent(doc, factory.comment(node.getNodeValue()));
+					factory.addContent(doc, build((org.w3c.dom.Comment)node));
 				} else {
-					factory.addContent(current, factory.comment(node.getNodeValue()));
+					factory.addContent(current, build((org.w3c.dom.Comment)node));
 				}
 				break;
 
 			case Node.ENTITY_REFERENCE_NODE:
-				EntityRef entity = factory.entityRef(node.getNodeName());
-				factory.addContent(current, entity);
+				factory.addContent(current, build((org.w3c.dom.EntityReference)node));
 				break;
 
 			case Node.ENTITY_NODE:
@@ -370,17 +438,8 @@ public class DOMBuilder implements JDOMConstants {
 						break;
 
 			case Node.DOCUMENT_TYPE_NODE:
-				DocumentType domDocType = (DocumentType)node;
-				String publicID = domDocType.getPublicId();
-				String systemID = domDocType.getSystemId();
-				String internalDTD = domDocType.getInternalSubset();
 
-				DocType docType = factory.docType(domDocType.getName());
-				docType.setPublicID(publicID);
-				docType.setSystemID(systemID);
-				docType.setInternalSubset(internalDTD);
-
-				factory.addContent(doc, docType);
+				factory.addContent(doc, build((org.w3c.dom.DocumentType)node));
 				break;
 		}
 	}

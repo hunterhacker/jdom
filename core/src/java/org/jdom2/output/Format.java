@@ -237,6 +237,7 @@ public class Format implements Cloneable {
 	 *
 	 * @param separator {@link LineSeparator} line separator to us
 	 * @return a pointer to this Format for chaining
+	 * @since JDOM2
 	 */
 	public Format setLineSeparator(LineSeparator separator) {
 		return setLineSeparator(separator == null ? 
@@ -594,6 +595,8 @@ public class Format implements Cloneable {
 	 * another xml:space with the value "default" formatting is turned back on
 	 * for the child element and then off for the remainder of the parent
 	 * element.
+	 * 
+	 * @since JDOM2
 	 */
 	public static enum TextMode {
 		/**

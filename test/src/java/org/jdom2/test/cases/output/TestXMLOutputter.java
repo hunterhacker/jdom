@@ -60,7 +60,7 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
     }
 
     public TestXMLOutputter() {
-		super(true, true, false, false);
+		super(true, true, false, false, false);
 	}
     
     private XMLOutputter getOutputter(Format format) {

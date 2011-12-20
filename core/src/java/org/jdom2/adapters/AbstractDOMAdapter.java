@@ -62,6 +62,7 @@ import org.jdom2.JDOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
+import org.w3c.dom.Element;
 
 /**
  * A DOMAdapter utility abstract base class. Uses the concrete implementation
@@ -101,9 +102,16 @@ public abstract class AbstractDOMAdapter implements DOMAdapter {
 		// Set the internal subset if possible
 		setInternalSubset(domDocType, doctype.getInternalSubset());
 
-		return domImpl.createDocument("http://temporary",
+		Document ret = domImpl.createDocument("http://temporary",
 				doctype.getElementName(),
 				domDocType);
+		
+		Element root = ret.getDocumentElement();
+		if (root != null) {
+			ret.removeChild(root);
+		}
+		
+		return ret;
 	}
 
 	/**

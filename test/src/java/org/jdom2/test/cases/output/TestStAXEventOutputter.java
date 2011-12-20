@@ -188,7 +188,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 	
 	public TestStAXEventOutputter() {
-		super(false, false, true, true);
+		super(false, false, true, true, false);
 	}
 	
 	

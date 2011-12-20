@@ -35,12 +35,14 @@ public abstract class AbstractTestOutputter {
 	private final boolean pademptyelement;
 	private final boolean forceexpand;
 	private final boolean padpi;
+	private final boolean forceplatformeol;
 
-	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand) {
+	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand, boolean forceplatformeol) {
 		this.cr2xD = cr2xD;
 		this.pademptyelement = padpreempty;
 		this.forceexpand = forceexpand;
 		this.padpi = padpi;
+		this.forceplatformeol = forceplatformeol;
 	}
 	
 	protected final String expect(String expect) {
@@ -63,6 +65,9 @@ public abstract class AbstractTestOutputter {
 			//expect = expect.replaceAll("<(\\w+)\\s+>", "<$1>");
 			expect = expect.replaceAll("<(\\w+)(\\s+.+?)?\\s+/>", "<$1$2/>");
 			expect = expect.replaceAll("<(\\w+:\\w+)(\\s+.+?)?\\s+/>", "<$1$2/>");
+		}
+		if (forceplatformeol) {
+			//expect = expect.replaceAll("\n", System.getProperty("line.separator"));
 		}
 		return expect;
 	}
@@ -217,10 +222,10 @@ public abstract class AbstractTestOutputter {
 	 */
 	public abstract String outputElementContentString(Format format, Element element);
 
-	private static final Format fraw = Format.getRawFormat();
-	private static final Format fcompact = Format.getCompactFormat();
-	private static final Format fpretty = Format.getPrettyFormat();
-	private static final Format ftfw = Format.getPrettyFormat();
+	protected static final Format fraw = Format.getRawFormat();
+	protected static final Format fcompact = Format.getCompactFormat();
+	protected static final Format fpretty = Format.getPrettyFormat();
+	protected static final Format ftfw = Format.getPrettyFormat();
 	
 	static {
 		fraw.setLineSeparator("\n");
@@ -1105,6 +1110,7 @@ public abstract class AbstractTestOutputter {
 			try {
 				mstring = (String) meth.invoke(this, formats[i], content);
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new IllegalStateException(e);
 			}
 			String msg = "outputString Format " + descn[i];

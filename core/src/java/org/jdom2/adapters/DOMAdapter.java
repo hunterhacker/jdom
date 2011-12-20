@@ -77,6 +77,15 @@ import org.w3c.dom.Document;
  * <p>
  * The {@link AbstractDOMAdapter} class could help you by implementing the
  * DocType-based method which leverages the base createDocument() method.
+ * <p>
+ * <strong>Special note for implementation of DOMAdapter</strong>: For backward
+ * compatibility with JDOM 1.x (which allows a class-name to be used to specify
+ * a DOMAdapter in the DOMOoutputter class), it is required that your
+ * implementations of DOMAdapter have a no-argument default constructor. If you
+ * require a constructor argument then you have to ensure that you use the
+ * correct (non-deprecated) mechanisms on DOMOutputter to specify your custom
+ * DOMAdapter.
+ * 
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter

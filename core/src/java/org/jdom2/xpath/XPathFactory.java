@@ -1,10 +1,8 @@
 package org.jdom2.xpath;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
+import org.jdom2.util.ReflectionConstructor;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 /**
@@ -65,27 +63,7 @@ public abstract class XPathFactory {
 	// , ClassLoader loader
 	// * @param loader The classloader to use to load the Factory class.
 	public static final XPathFactory newInstance(String factoryclass) throws JDOMException {
-		try {
-			Class<?> fclass = Class.forName(factoryclass);
-			if (!XPathFactory.class.isAssignableFrom(fclass)) {
-				throw new JDOMException("Unable to cast an XPathFactory from " + factoryclass);
-			}
-			Constructor<?> constructor = fclass.getConstructor();
-			Object o = constructor.newInstance();
-			return XPathFactory.class.cast(o);
-		} catch (ClassNotFoundException e) {
-			throw new JDOMException("Unable to locate XPathFactory " + factoryclass, e);
-		} catch (SecurityException e) {
-			throw new JDOMException("Unable to access the XPathFactory " + factoryclass, e);
-		} catch (NoSuchMethodException e) {
-			throw new JDOMException("Unable to locate the Default constructor on XPathFactory " + factoryclass, e);
-		} catch (InstantiationException e) {
-			throw new JDOMException("Unable to instantiate XPathFactory " + factoryclass, e);
-		} catch (IllegalAccessException e) {
-			throw new JDOMException("Unable to access the constructor for XPathFactory " + factoryclass, e);
-		} catch (InvocationTargetException e) {
-			throw new JDOMException("Unable to construct the XPathFactory " + factoryclass, e);
-		}
+		return ReflectionConstructor.construct(factoryclass, XPathFactory.class);
 	}
 	
 	/**

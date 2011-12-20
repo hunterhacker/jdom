@@ -63,7 +63,9 @@ import org.w3c.dom.Document;
 import org.jdom2.JDOMException;
 
 /**
- * An adapter for any parser supporting the Sun JAXP APIs.
+ * A DOMAdapter that uses JAXP to obtain a org.w3c.dom.Document instance.
+ * <p>
+ * This class is fully thread-safe.
  * 
  * @author  Jason Hunter
  * @author  Rolf Lear

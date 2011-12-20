@@ -54,19 +54,17 @@
 
 package org.jdom2.output;
 
-import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import org.w3c.dom.Attr;
 
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.Content;
-import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
@@ -78,17 +76,17 @@ import org.jdom2.Verifier;
 import org.jdom2.output.Format.TextMode;
 
 /**
- * This class provides a concrete implementation of {@link StAXStreamProcessor}
- * for supporting the {@link StAXStreamOutputter}.
+ * This class provides a concrete implementation of {@link DOMOutputProcessor}
+ * for supporting the {@link DOMOutputter}.
  * <p>
  * <h2>Overview</h2>
  * <p>
  * This class is marked abstract even though all methods are fully implemented.
  * The <code>process*(...)</code> methods are public because they match the
- * StAXStreamProcessor interface but the remaining methods are all protected.
+ * DOMOutputProcessor interface but the remaining methods are all protected.
  * <p>
- * People who want to create a custom StAXStreamProcessor for StAXStreamOutputter are
- * able to extend this class and modify any functionality they want. Before
+ * People who want to create a custom DOMOutputProcessor for DOMOutputter
+ * are able to extend this class and modify any functionality they want. Before
  * sub-classing this you should first check to see if the {@link Format} class
  * can get you the results you want.
  * <p>
@@ -101,14 +99,15 @@ import org.jdom2.output.Format.TextMode;
  * One significant feature of this implementation is that it creates and
  * maintains both a {@link NamespaceStack} and {@link FormatStack} that are
  * managed in the
- * {@link #printElement(XMLStreamWriter, FormatStack, NamespaceStack, Element)} method.
- * The stacks are pushed and popped in that method only. They significantly
- * improve the performance and readability of the code.
+ * {@link #printElement(FormatStack, NamespaceStack, org.w3c.dom.Document, Element)}
+ * method. The stacks are pushed and popped in that method only. They
+ * significantly improve the performance and readability of the code.
  * <p>
  * The NamespaceStack is only sent through to the
- * {@link #printElement(XMLStreamWriter, FormatStack, NamespaceStack, Element)} and
- * {@link #printContent(XMLStreamWriter, FormatStack, NamespaceStack, List)} methods, but
- * the FormatStack is pushed through to all print* Methods.
+ * {@link #printElement(FormatStack, NamespaceStack, org.w3c.dom.Document, Element)}
+ * and
+ * {@link #helperContent(FormatStack, NamespaceStack, org.w3c.dom.Document, org.w3c.dom.Node, List)}
+ * methods, but the FormatStack is pushed through to all print* Methods.
  * <p>
  * <h2>Text Processing</h2>
  * <p>
@@ -118,8 +117,8 @@ import org.jdom2.output.Format.TextMode;
  * {@link Text}, {@link CDATA} and {@link EntityRef} content. This will be
  * referred to as 'text-type content'
  * <p>
- * In the context of StAXStreamOutputter, {@link EntityRef} content is considered to be
- * text-type content. This happens because when XML is parsed the embedded
+ * In the context of DOMOutputter, {@link EntityRef} content is considered
+ * to be text-type content. This happens because when XML is parsed the embedded
  * entity reference tokens are (normally) expanded to their replacement text. If
  * an EntityRef content has survived to this output stage it means that it
  * cannot (or should not) be expanded. As a result, it should simply be output
@@ -135,14 +134,16 @@ import org.jdom2.output.Format.TextMode;
  * <p>
  * As a result, this class differentiates between stand-alone and consecutive
  * text-type JDOM Content. If the content is determined to be stand-alone, it is
- * fed to one of the {@link #printEntityRef(XMLStreamWriter, FormatStack, EntityRef)},
- * {@link #printCDATA(XMLStreamWriter, FormatStack, CDATA)}, or
- * {@link #printText(XMLStreamWriter, FormatStack, Text)} methods. If there is
- * consecutive text-type content it is all fed together to the
- * {@link #printTextConsecutive(XMLStreamWriter, FormatStack, List, int, int)} method.
+ * fed to one of the
+ * {@link #printEntityRef(FormatStack, org.w3c.dom.Document, EntityRef)},
+ * {@link #printCDATA(FormatStack, org.w3c.dom.Document, CDATA)}, or
+ * {@link #printText(FormatStack, org.w3c.dom.Document, Text)} methods. If there
+ * is consecutive text-type content it is all fed together to the
+ * {@link #helperTextConsecutive(FormatStack, org.w3c.dom.Document, org.w3c.dom.Node, List, int, int)}
+ * method.
  * <p>
  * The above 4 methods for printing text-type content will all use the various
- * <code>text*(...)</code> methods to produce output to the XMLStreamWriter.
+ * <code>text*(...)</code> methods to produce output to the XMLEventConsumer.
  * <p>
  * <b>Note:</b> If the Format's TextMode is PRESERVE then all text-type content
  * is considered to be stand-alone. In other words, printTextConsecutive() will
@@ -169,142 +170,106 @@ import org.jdom2.output.Format.TextMode;
  * redundancy in the class. They do nothing more than that. Have a look at the
  * source-code to see what they do. If you need them they may prove useful.
  * 
- * @see StAXStreamOutputter
- * @see StAXStreamProcessor
+ * @see DOMOutputter
+ * @see DOMOutputProcessor
  * @since JDOM2
  * @author Rolf Lear
  */
-public abstract class AbstractStAXStreamProcessor
-		extends AbstractOutputProcessor implements StAXStreamProcessor {
+public abstract class AbstractDOMOutputProcessor extends
+		AbstractOutputProcessor implements DOMOutputProcessor {
 
+	/**
+	 * This will handle adding any <code>{@link Namespace}</code> attributes to
+	 * the DOM tree.
+	 * 
+	 * @param ns
+	 *        <code>Namespace</code> to add definition of
+	 */
+	private static String getXmlnsTagFor(Namespace ns) {
+		String attrName = "xmlns";
+		if (!ns.getPrefix().equals("")) {
+			attrName += ":";
+			attrName += ns.getPrefix();
+		}
+		return attrName;
+	}
 
 	/* *******************************************
-	 * StAXStreamProcessor implementation.
+	 * DOMOutputProcessor implementation.
 	 * *******************************************
 	 */
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.Document, org.jdom2.output.Format)
-	 */
 	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final Document doc) throws XMLStreamException {
-		printDocument(out, new FormatStack(format), new NamespaceStack(), doc);
-		out.flush();
+	public org.w3c.dom.Document process(org.w3c.dom.Document basedoc,
+			Format format, Document doc) {
+		return printDocument(new FormatStack(format), new NamespaceStack(),
+				basedoc, doc);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.DocType, org.jdom2.output.Format)
-	 */
 	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final DocType doctype) throws XMLStreamException {
-		printDocType(out, new FormatStack(format), doctype);
-		out.flush();
+	public org.w3c.dom.Element process(org.w3c.dom.Document basedoc,
+			Format format, Element element) {
+		return printElement(new FormatStack(format), new NamespaceStack(),
+				basedoc, element);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.Element, org.jdom2.output.Format)
-	 */
 	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final Element element) throws XMLStreamException {
-		// If this is the root element we could pre-initialize the
-		// namespace stack with the namespaces
-		printElement(out, new FormatStack(format), new NamespaceStack(),
-				element);
-		out.flush();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * java.util.List, org.jdom2.output.Format)
-	 */
-	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final List<? extends Content> list)
-			throws XMLStreamException {
-		printContent(out, new FormatStack(format), new NamespaceStack(), list);
-		out.flush();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.CDATA, org.jdom2.output.Format)
-	 */
-	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final CDATA cdata) throws XMLStreamException {
-		printCDATA(out, new FormatStack(format), cdata);
-		out.flush();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.Text, org.jdom2.output.Format)
-	 */
-	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final Text text) throws XMLStreamException {
-		printText(out, new FormatStack(format), text);
-		out.flush();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.Comment, org.jdom2.output.Format)
-	 */
-	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final Comment comment) throws XMLStreamException {
-		printComment(out, new FormatStack(format), comment);
-		out.flush();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.ProcessingInstruction, org.jdom2.output.Format)
-	 */
-	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final ProcessingInstruction pi) throws XMLStreamException {
+	public List<org.w3c.dom.Node> process(org.w3c.dom.Document basedoc,
+			Format format, List<? extends Content> list) {
+		List<org.w3c.dom.Node> ret = new ArrayList<org.w3c.dom.Node>(
+				list.size());
 		FormatStack fstack = new FormatStack(format);
-		// Output PI verbatim, disregarding TrAX escaping PIs.
-		fstack.setIgnoreTrAXEscapingPIs(true);
-		printProcessingInstruction(out, fstack, pi);
-		out.flush();
+		NamespaceStack nstack = new NamespaceStack();
+		for (Content c : list) {
+			fstack.push();
+			try {
+				org.w3c.dom.Node node = helperContentDispatcher(fstack, nstack,
+						basedoc, c);
+				if (node != null) {
+					ret.add(node);
+				}
+			} finally {
+				fstack.pop();
+			}
+		}
+		return ret;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jdom2.output.StAXStreamProcessor#process(java.io.XMLStreamWriter,
-	 * org.jdom2.EntityRef, org.jdom2.output.Format)
-	 */
 	@Override
-	public void process(final XMLStreamWriter out, final Format format,
-			final EntityRef entity) throws XMLStreamException {
-		printEntityRef(out, new FormatStack(format), entity);
-		out.flush();
+	public org.w3c.dom.CDATASection process(org.w3c.dom.Document basedoc,
+			Format format, CDATA cdata) {
+		return printCDATA(new FormatStack(format), basedoc, cdata);
+	}
+
+	@Override
+	public org.w3c.dom.Text process(org.w3c.dom.Document basedoc,
+			Format format, Text text) {
+		return printText(new FormatStack(format), basedoc, text);
+	}
+
+	@Override
+	public org.w3c.dom.Comment process(org.w3c.dom.Document basedoc,
+			Format format, Comment comment) {
+		return printComment(new FormatStack(format), basedoc, comment);
+	}
+
+	@Override
+	public org.w3c.dom.ProcessingInstruction process(
+			org.w3c.dom.Document basedoc, Format format,
+			ProcessingInstruction pi) {
+		return printProcessingInstruction(new FormatStack(format), basedoc, pi);
+	}
+
+	@Override
+	public org.w3c.dom.EntityReference process(org.w3c.dom.Document basedoc,
+			Format format, EntityRef entity) {
+		return printEntityRef(new FormatStack(format), basedoc, entity);
+	}
+
+	@Override
+	public Attr process(org.w3c.dom.Document basedoc, Format format,
+			Attribute attribute) {
+		return printAttribute(new FormatStack(format), basedoc, attribute);
 	}
 
 	/* *******************************************
@@ -315,187 +280,139 @@ public abstract class AbstractStAXStreamProcessor
 	 * *******************************************
 	 */
 
+	private static final void addIndent(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final org.w3c.dom.Node target) {
+		final String indent = fstack.getLevelIndent();
+		if (indent != null && fstack.getLevelEOL() != null) {
+			org.w3c.dom.Text space = basedoc.createTextNode(indent);
+			target.appendChild(space);
+		}
+	}
+
+	private static final void addEOL(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final org.w3c.dom.Node target) {
+		final String eol = fstack.getLevelEOL();
+		if (eol != null && fstack.getLevelIndent() != null) {
+			org.w3c.dom.Text space = basedoc.createTextNode(eol);
+			target.appendChild(space);
+		}
+	}
+
 	/**
 	 * This will handle printing of a {@link Document}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
 	 * @param nstack
 	 *        the NamespaceStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param doc
 	 *        <code>Document</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM document converted to a DOM document.
 	 */
-	protected void printDocument(final XMLStreamWriter out, final FormatStack fstack,
-			final NamespaceStack nstack, final Document doc) throws XMLStreamException {
+	protected org.w3c.dom.Document printDocument(final FormatStack fstack,
+			final NamespaceStack nstack, final org.w3c.dom.Document basedoc,
+			final Document doc) {
 
-		if (fstack.isOmitDeclaration()) {
-			// this actually writes the declaration as version 1, UTF-8
-			out.writeStartDocument();
-			if (fstack.getLineSeparator() != null) {
-				out.writeCharacters(fstack.getLineSeparator());
-			}
-		} else if (fstack.isOmitEncoding()) {
-			out.writeStartDocument("1.0");
-			if (fstack.getLineSeparator() != null) {
-				out.writeCharacters(fstack.getLineSeparator());
-			}
-		} else {
-			out.writeStartDocument(fstack.getEncoding(), "1.0");
-			if (fstack.getLineSeparator() != null) {
-				out.writeCharacters(fstack.getLineSeparator());
-			}
+		if (!fstack.isOmitDeclaration()) {
+			basedoc.setXmlVersion("1.0");
+			// addEOL(fstack, basedoc, basedoc);
 		}
-		
-		if (doc.hasRootElement()) {
-			printContent(out, fstack, nstack, doc.getContent());
-		} else {
-			final int sz = doc.getContentSize();
-			for (int i = 0; i < sz; i++) {
-				helperContentDispatcher(out, fstack, nstack, doc.getContent(i));
+
+		final int sz = doc.getContentSize();
+		for (int i = 0; i < sz; i++) {
+			org.w3c.dom.Node n = helperContentDispatcher(fstack, nstack,
+					basedoc, doc.getContent(i));
+			if (n != null) {
+				basedoc.appendChild(n);
+				// add a newline after each content... if newlines are needed.
+				// addEOL(fstack, basedoc, basedoc);
 			}
+
 		}
+
 		// Output final line separator
 		// We output this no matter what the newline flags say
-		if (fstack.getIndent() == null && fstack.getLineSeparator() != null) {
-			out.writeCharacters(fstack.getLineSeparator());
-		}
-		
-		out.writeEndDocument();
-		
-	}
+		// if (fstack.getIndent() == null && fstack.getLineSeparator() != null)
+		// {
+		// org.w3c.dom.Text newline =
+		// basedoc.createTextNode(fstack.getLineSeparator());
+		// basedoc.appendChild(newline);
+		// }
 
-	/**
-	 * This will handle printing of a {@link DocType}.
-	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
-	 * @param fstack
-	 *        the FormatStack
-	 * @param docType
-	 *        <code>DocType</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
-	 */
-	protected void printDocType(final XMLStreamWriter out, final FormatStack fstack,
-			final DocType docType) throws XMLStreamException {
-
-		final String publicID = docType.getPublicID();
-		final String systemID = docType.getSystemID();
-		final String internalSubset = docType.getInternalSubset();
-		boolean hasPublic = false;
-
-		// Declaration is never indented.
-		// write(out, fstack.getLevelIndent());
-		
-		StringWriter sw = new StringWriter();
-
-		sw.write("<!DOCTYPE ");
-		sw.write(docType.getElementName());
-		if (publicID != null) {
-			sw.write(" PUBLIC \"");
-			sw.write(publicID);
-			sw.write("\"");
-			hasPublic = true;
-		}
-		if (systemID != null) {
-			if (!hasPublic) {
-				sw.write(" SYSTEM");
-			}
-			sw.write(" \"");
-			sw.write(systemID);
-			sw.write("\"");
-		}
-		if ((internalSubset != null) && (!internalSubset.equals(""))) {
-			sw.write(" [");
-			sw.write(fstack.getLineSeparator());
-			sw.write(docType.getInternalSubset());
-			sw.write("]");
-		}
-		sw.write(">");
-		
-		// DocType does not write it's own EOL
-		// for compatibility reasons. Only
-		// when output from inside a Content set.
-		// write(out, fstack.getLineSeparator());
-		out.writeDTD(sw.toString());
+		return basedoc;
 	}
 
 	/**
 	 * This will handle printing of a {@link ProcessingInstruction}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param pi
 	 *        <code>ProcessingInstruction</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM ProcessingInstruction converted to a DOM
+	 *         ProcessingInstruction.
 	 */
-	protected void printProcessingInstruction(final XMLStreamWriter out,
-			final FormatStack fstack, final ProcessingInstruction pi)
-			throws XMLStreamException {
+	protected org.w3c.dom.ProcessingInstruction printProcessingInstruction(
+			final FormatStack fstack, final org.w3c.dom.Document basedoc,
+			final ProcessingInstruction pi) {
 		String target = pi.getTarget();
 		String rawData = pi.getData();
-		if (rawData != null && rawData.trim().length() > 0) {
-			out.writeProcessingInstruction(target, rawData);
-		} else {
-			out.writeProcessingInstruction(target);
+		if (rawData == null || rawData.trim().length() == 0) {
+			rawData = "";
 		}
+		return basedoc.createProcessingInstruction(target, rawData);
 	}
 
 	/**
 	 * This will handle printing of a {@link Comment}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param comment
 	 *        <code>Comment</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM Comment converted to a DOM Comment
 	 */
-	protected void printComment(final XMLStreamWriter out, final FormatStack fstack,
-			final Comment comment) throws XMLStreamException {
-		out.writeComment(comment.getText());
+	protected org.w3c.dom.Comment printComment(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final Comment comment) {
+		return basedoc.createComment(comment.getText());
 	}
 
 	/**
 	 * This will handle printing of an {@link EntityRef}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param entity
 	 *        <code>EntotyRef</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM EntityRef converted to a DOM EntityReference
 	 */
-	protected void printEntityRef(final XMLStreamWriter out, final FormatStack fstack,
-			final EntityRef entity) throws XMLStreamException {
-		out.writeEntityRef(entity.getName());
+	protected org.w3c.dom.EntityReference printEntityRef(
+			final FormatStack fstack, final org.w3c.dom.Document basedoc,
+			final EntityRef entity) {
+		return basedoc.createEntityReference(entity.getName());
 	}
 
 	/**
 	 * This will handle printing of a {@link CDATA}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param cdata
 	 *        <code>CDATA</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM CDATA converted to a DOM CDATASection
 	 */
-	protected void printCDATA(final XMLStreamWriter out, final FormatStack fstack,
-			final CDATA cdata) throws XMLStreamException {
+	protected org.w3c.dom.CDATASection printCDATA(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final CDATA cdata) {
 		// CDATAs are treated like text, not indented/newline content.
 		String text = cdata.getText();
 		switch (fstack.getTextMode()) {
@@ -520,26 +437,25 @@ public abstract class AbstractStAXStreamProcessor
 				}
 				break;
 		}
-		if (text == null) {
-			return;
+		if (text != null) {
+			return basedoc.createCDATASection(text);
 		}
-		out.writeCData(text);
+		return null;
 	}
 
 	/**
 	 * This will handle printing of a {@link Text}.
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param text
 	 *        <code>Text</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM Text converted to a DOM Text
 	 */
-	protected void printText(final XMLStreamWriter out, final FormatStack fstack,
-			final Text text) throws XMLStreamException {
+	protected org.w3c.dom.Text printText(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final Text text) {
 		String str = text.getText();
 		switch (fstack.getTextMode()) {
 			case PRESERVE:
@@ -554,7 +470,29 @@ public abstract class AbstractStAXStreamProcessor
 				str = textTrimFullWhite(str);
 				break;
 		}
-		out.writeCharacters(str);
+		if (str != null) {
+			return basedoc.createTextNode(str);
+		}
+		return null;
+	}
+
+	/**
+	 * This will handle printing of a {@link Attribute}.
+	 * 
+	 * @param fstack
+	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
+	 * @param attribute
+	 *        <code>Attribute</code> to write.
+	 * @return The input JDOM Attribute converted to a DOM Attr
+	 */
+	protected org.w3c.dom.Attr printAttribute(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final Attribute attribute) {
+		org.w3c.dom.Attr attr = basedoc.createAttributeNS(
+				attribute.getNamespaceURI(), attribute.getQualifiedName());
+		attr.setValue(attribute.getValue());
+		return attr;
 	}
 
 	/**
@@ -579,62 +517,69 @@ public abstract class AbstractStAXStreamProcessor
 	 * <li>There is just a single text-type content then delegate to that
 	 * content's print method
 	 * <li>There is only text-type content (more than one though) then delegate
-	 * to {@link #printTextConsecutive(XMLStreamWriter, FormatStack, List, int, int)}
+	 * to
+	 * {@link #helperTextConsecutive(FormatStack, org.w3c.dom.Document, org.w3c.dom.Node, List, int, int)}
 	 * <li>There is content other than just text-type content, then delegate to
-	 * {@link #printContent(XMLStreamWriter, FormatStack, NamespaceStack, List)}
+	 * {@link #helperContent(FormatStack, NamespaceStack, org.w3c.dom.Document, org.w3c.dom.Node, List)}
 	 * </ol>
 	 * <p>
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
 	 * @param nstack
 	 *        the NamespaceStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param element
 	 *        <code>Element</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
+	 * @return The input JDOM Element converted to a DOM Element
 	 */
-	protected void printElement(final XMLStreamWriter out, final FormatStack fstack,
-			final NamespaceStack nstack, final Element element) throws XMLStreamException {
+	protected org.w3c.dom.Element printElement(final FormatStack fstack,
+			final NamespaceStack nstack, final org.w3c.dom.Document basedoc,
+			final Element element) {
 
 		nstack.push(element);
 		try {
-			
+
 			TextMode textmode = fstack.getTextMode();
-			
+
 			// Check for xml:space and adjust format settings
 			final String space = element.getAttributeValue("space",
 					Namespace.XML_NAMESPACE);
 
 			if ("default".equals(space)) {
 				textmode = fstack.getDefaultMode();
-			}
-			else if ("preserve".equals(space)) {
+			} else if ("preserve".equals(space)) {
 				textmode = TextMode.PRESERVE;
 			}
 
+			org.w3c.dom.Element ret = basedoc.createElementNS(
+					element.getNamespaceURI(), element.getQualifiedName());
+
+			for (Namespace ns : nstack.addedForward()) {
+				if (ns == Namespace.XML_NAMESPACE) {
+					continue;
+				}
+				ret.setAttribute(getXmlnsTagFor(ns), ns.getURI());
+			}
+
+			for (Attribute att : element.getAttributes()) {
+				ret.setAttributeNodeNS(printAttribute(fstack, basedoc, att));
+			}
+
 			final List<Content> content = element.getContent();
-			
-			// Three conditions that determine the required output.
-			// do we have an expanded element( <emt></emt> or an single <emt />
-			// if there is any printable content, or if expandempty is set
-			// then we must expand.
-			boolean expandit = fstack.isExpandEmptyElements();
-			
+
 			// is there only text content
 			// text content is Text/CDATA/EntityRef
 			boolean textonly = true;
 			// is the text content only whitespace.
 			// whiteonly is obvious....
 			boolean whiteonly = true;
-			
+
 			for (Content k : content) {
 				if (k instanceof Text) {
 					if (whiteonly) {
 						if (textmode == TextMode.PRESERVE) {
-							expandit = true;
 							whiteonly = false;
 						} else {
 							// look for non-whitespace.
@@ -643,7 +588,6 @@ public abstract class AbstractStAXStreamProcessor
 							while (--cc >= 0) {
 								if (!Verifier.isXMLWhitespace(val.charAt(cc))) {
 									// found non-whitespace;
-									expandit = true;
 									whiteonly = false;
 									break;
 								}
@@ -651,7 +595,6 @@ public abstract class AbstractStAXStreamProcessor
 						}
 					}
 				} else {
-					expandit = true;
 					whiteonly = false;
 					if (!(k instanceof EntityRef)) {
 						textonly = false;
@@ -659,98 +602,40 @@ public abstract class AbstractStAXStreamProcessor
 						break;
 					}
 				}
-				if (expandit && !whiteonly && !textonly) {
+				if (!whiteonly && !textonly) {
 					break;
 				}
 			}
-			if (!expandit) {
-				// implies:
-				//      fstack.isExpandEmpty... is false
-				// and       content.isEmpty()
-				//       or      textonly == true
-				//           and preserve == false
-				//           and whiteonly == true
-				
-				Namespace ns = element.getNamespace();
-				if (ns == Namespace.NO_NAMESPACE) {
-					out.writeEmptyElement(element.getName());
-				} else if ("".equals(ns.getPrefix())) {
-					out.writeEmptyElement("", element.getName(), ns.getURI());
-				} else {
-					out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
-				}
-				
-				// Print the element's namespace, if appropriate
-				for (final Namespace nsd : nstack.addedForward()) {
-					printNamespace(out, fstack, nsd);
-				}
-	
-				// Print out attributes
-				for (final Attribute attribute : element.getAttributes()) {
-					printAttribute(out, fstack, attribute);
-				}
-				
-				out.writeCharacters("");
 
-			} else {
-				Namespace ns = element.getNamespace();
-				if (ns == Namespace.NO_NAMESPACE) {
-					out.writeStartElement(element.getName());
-				} else if ("".equals(ns.getPrefix())) {
-					out.writeStartElement(ns.getURI(), element.getName());
-				} else {
-					out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
-				}
-				
-				// Print the element's namespace, if appropriate
-				for (final Namespace nsd : nstack.addedForward()) {
-					printNamespace(out, fstack, nsd);
-				}
-	
-				// Print out attributes
-				for (final Attribute attribute : element.getAttributes()) {
-					printAttribute(out, fstack, attribute);
-				}
-				
-				// OK, now we print out the meat of the Element
-				if (!content.isEmpty()) {
-					if (textonly) {
-						if (!whiteonly) {
-							fstack.push();
-							try {
-								fstack.setTextMode(textmode);
-								helperTextType(out, fstack, content, 0, content.size());
-							} finally {
-								fstack.pop();
-							}
-						}
-					} else {
+			// OK, now we print out the meat of the Element
+			if (!content.isEmpty()) {
+				if (textonly) {
+					if (!whiteonly) {
 						fstack.push();
 						try {
 							fstack.setTextMode(textmode);
-							if (fstack.getLevelEOL() != null) {
-								out.writeCharacters(fstack.getLevelEOL());
-							}
-							
-							printContent(out, fstack, nstack, content);
-							
+							helperTextType(fstack, basedoc, ret, content, 0,
+									content.size());
 						} finally {
 							fstack.pop();
 						}
-						if (fstack.getLevelIndent() != null) {
-							out.writeCharacters(fstack.getLevelIndent());
-						}
 					}
-				}
-			
-				out.writeEndElement();
-				
-				
+				} else {
+					fstack.push();
+					try {
+						fstack.setTextMode(textmode);
+						addEOL(fstack, basedoc, ret);
+						helperContent(fstack, nstack, basedoc, ret, content);
 
+					} finally {
+						fstack.pop();
+					}
+					addIndent(fstack, basedoc, ret);
+
+				}
 			}
-		
-			
-		
+
+			return ret;
 
 		} finally {
 			nstack.pop();
@@ -772,28 +657,26 @@ public abstract class AbstractStAXStreamProcessor
 	 * <li>identify one of the three types (consecutive, stand-alone, non-text)
 	 * <li>do indent if any is specified.
 	 * <li>send the type to the respective print* handler (e.g.
-	 * {@link #printTextConsecutive(XMLStreamWriter, FormatStack, List, int, int)},
-	 * {@link #printCDATA(XMLStreamWriter, FormatStack, CDATA)}, or
-	 * {@link #printComment(XMLStreamWriter, FormatStack, Comment)},
+	 * {@link #helperTextConsecutive(FormatStack, org.w3c.dom.Document, org.w3c.dom.Node, List, int, int)}, {@link #printCDATA(FormatStack, org.w3c.dom.Document, CDATA)}, or
+	 * {@link #printComment(FormatStack, org.w3c.dom.Document, Comment)},
 	 * <li>do a newline if one is specified.
 	 * <li>loop back to 1. until there's no more content to process.
 	 * </ol>
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
 	 * @param nstack
 	 *        the NamespaceStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
+	 * @param target
+	 *        the DOM node this content should be appended to.
 	 * @param content
 	 *        <code>List</code> of <code>Content</code> to write.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
 	 */
-	protected void printContent(final XMLStreamWriter out,
-			final FormatStack fstack, final NamespaceStack nstack,
-			final List<? extends Content> content)
-			throws XMLStreamException {
+	protected void helperContent(final FormatStack fstack,
+			final NamespaceStack nstack, final org.w3c.dom.Document basedoc,
+			final org.w3c.dom.Node target, final List<? extends Content> content) {
 
 		// Basic theory of operation is as follows:
 		// 0. raw-print for PRESERVE.
@@ -802,7 +685,11 @@ public abstract class AbstractStAXStreamProcessor
 		// Do not do any newlines before or after content.
 		if (fstack.getTextMode() == TextMode.PRESERVE) {
 			for (Content c : content) {
-				helperContentDispatcher(out, fstack, nstack, c);
+				org.w3c.dom.Node n = helperContentDispatcher(fstack, nstack,
+						basedoc, c);
+				if (n != null) {
+					target.appendChild(n);
+				}
 			}
 			return;
 		}
@@ -831,24 +718,18 @@ public abstract class AbstractStAXStreamProcessor
 						// 'trimming' variants, if it is all whitespace we do
 						// not want to even print the indent/newline.
 						if (!isAllWhiteSpace(content, txti, index - txti)) {
-							if (fstack.getLevelIndent() != null) {
-								out.writeCharacters(fstack.getLevelIndent());
-							}
-							helperTextType(out, fstack, content, txti, index - txti);
-							if (fstack.getLevelEOL() != null) {
-								out.writeCharacters(fstack.getLevelEOL());
-							}
+							addIndent(fstack, basedoc, target);
+							helperTextType(fstack, basedoc, target, content,
+									txti, index - txti);
+							addEOL(fstack, basedoc, target);
 						}
 					}
 					txti = -1;
 
-					if (fstack.getLevelIndent() != null) {
-						out.writeCharacters(fstack.getLevelIndent());
-					}
-					helperContentDispatcher(out, fstack, nstack, c);
-					if (fstack.getLevelEOL() != null) {
-						out.writeCharacters(fstack.getLevelEOL());
-					}
+					addIndent(fstack, basedoc, target);
+					target.appendChild(helperContentDispatcher(fstack, nstack,
+							basedoc, c));
+					addEOL(fstack, basedoc, target);
 			}
 			index++;
 		}
@@ -860,13 +741,10 @@ public abstract class AbstractStAXStreamProcessor
 			// 'trimming' variants, if it is all whitespace we do
 			// not want to even print the indent/newline.
 			if (!isAllWhiteSpace(content, txti, index - txti)) {
-				if (fstack.getLevelIndent() != null) {
-					out.writeCharacters(fstack.getLevelIndent());
-				}
-				helperTextType(out, fstack, content, txti, index - txti);
-				if (fstack.getLevelEOL() != null) {
-					out.writeCharacters(fstack.getLevelEOL());
-				}
+				addIndent(fstack, basedoc, target);
+				helperTextType(fstack, basedoc, target, content, txti, index
+						- txti);
+				addEOL(fstack, basedoc, target);
 			}
 		}
 
@@ -881,25 +759,26 @@ public abstract class AbstractStAXStreamProcessor
 	 * <p>
 	 * It is a requirement for this method that at least one of the specified
 	 * text-type instances has non-whitespace, or, put the other way, if all
-	 * specified text-type values are all white-space only, then you may
-	 * get odd looking XML (empty lines). 
+	 * specified text-type values are all white-space only, then you may get odd
+	 * looking XML (empty lines).
 	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
 	 * @param fstack
 	 *        the FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
+	 * @param target
+	 *        The DOM nodes the text content will be added to.
 	 * @param content
 	 *        <code>List</code> of <code>Content</code> to write.
 	 * @param offset
 	 *        index of first content node (inclusive).
 	 * @param len
 	 *        number of nodes that are text-type.
-	 * @throws XMLStreamException
-	 *         if the destination XMLStreamWriter fails
 	 */
-	protected void printTextConsecutive(final XMLStreamWriter out, FormatStack fstack,
-			final List<? extends Content> content,
-			final int offset, final int len) throws XMLStreamException {
+	protected void helperTextConsecutive(FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final org.w3c.dom.Node target,
+			final List<? extends Content> content, final int offset,
+			final int len) {
 
 		// we are guaranteed that len >= 2
 		assert len >= 2 : "Need at least two text-types to be 'Consecutive'";
@@ -924,9 +803,9 @@ public abstract class AbstractStAXStreamProcessor
 			// Right, if we find text, we print it all.
 			// If we don't we print nothing.
 			int cnt = len;
-			for (ListIterator<? extends Content> li =
-					content.listIterator(offset); cnt > 0; cnt--) {
-				helperRawTextType(out, fstack, li.next());
+			for (ListIterator<? extends Content> li = content
+					.listIterator(offset); cnt > 0; cnt--) {
+				helperRawTextType(fstack, basedoc, target, li.next());
 			}
 			return;
 		}
@@ -957,27 +836,33 @@ public abstract class AbstractStAXStreamProcessor
 						}
 						continue;
 					}
-					if (!first && !dospace &&
-							Verifier.isXMLWhitespace(val.charAt(0))) {
+					if (!first && !dospace
+							&& Verifier.isXMLWhitespace(val.charAt(0))) {
 						// we are between content, and need to put in a space.
 						dospace = true;
 					}
-					endspace = Verifier.isXMLWhitespace(val.charAt(val.length() - 1));
+					endspace = Verifier
+							.isXMLWhitespace(val.charAt(val.length() - 1));
 				}
 				first = false;
 				if (dospace) {
-					out.writeCharacters(" ");
+					target.appendChild(basedoc.createTextNode(" "));
 				}
 
 				switch (c.getCType()) {
 					case Text:
-						out.writeCharacters(textCompact(((Text) c).getText()));
+						target.appendChild(basedoc
+								.createTextNode(textCompact(((Text) c)
+										.getText())));
 						break;
 					case CDATA:
-						out.writeCData(textCompact(((Text) c).getText()));
+						target.appendChild(basedoc
+								.createCDATASection(textCompact(((Text) c)
+										.getText())));
 						break;
 					case EntityRef:
-						out.writeEntityRef(((EntityRef) c).getName());
+						target.appendChild(printEntityRef(fstack, basedoc,
+								(EntityRef) c));
 					default:
 						// do nothing
 				}
@@ -998,22 +883,23 @@ public abstract class AbstractStAXStreamProcessor
 			int lcnt = 0;
 			while (lcnt < len) {
 				Content node = content.get(offset + lcnt);
-				if (!(node instanceof Text) || !isAllWhitespace(node.getValue())) {
+				if (!(node instanceof Text)
+						|| !isAllWhitespace(node.getValue())) {
 					break;
 				}
 				lcnt++;
 			}
-			
+
 			if (lcnt == len) {
 				return;
 			}
-			
-			
+
 			final int left = offset + lcnt;
 			int rcnt = len - 1;
 			while (rcnt > lcnt) {
 				Content node = content.get(offset + rcnt);
-				if (!(node instanceof Text) || !isAllWhitespace(node.getValue())) {
+				if (!(node instanceof Text)
+						|| !isAllWhitespace(node.getValue())) {
 					break;
 				}
 				rcnt--;
@@ -1025,13 +911,18 @@ public abstract class AbstractStAXStreamProcessor
 				final Content node = content.get(left);
 				switch (node.getCType()) {
 					case Text:
-						out.writeCharacters(textTrimBoth(((Text) node).getText()));
+						target.appendChild(basedoc
+								.createTextNode(textTrimBoth(((Text) node)
+										.getText())));
 						break;
 					case CDATA:
-						out.writeCData(textTrimBoth(((CDATA) node).getText()));
+						target.appendChild(basedoc
+								.createCDATASection(textTrimBoth(((CDATA) node)
+										.getText())));
 						break;
 					case EntityRef:
-						out.writeEntityRef(((EntityRef) node).getName());
+						target.appendChild(printEntityRef(fstack, basedoc,
+								(EntityRef) node));
 					default:
 						// do nothing
 				}
@@ -1040,33 +931,43 @@ public abstract class AbstractStAXStreamProcessor
 			final Content leftc = content.get(left);
 			switch (leftc.getCType()) {
 				case Text:
-					out.writeCharacters(textTrimLeft(((Text) leftc).getText()));
+					target.appendChild(basedoc
+							.createTextNode(textTrimLeft(((Text) leftc)
+									.getText())));
 					break;
 				case CDATA:
-					out.writeCData(textTrimLeft(((CDATA) leftc).getText()));
+					target.appendChild(basedoc
+							.createCDATASection(textTrimLeft(((CDATA) leftc)
+									.getText())));
 					break;
 				case EntityRef:
-					out.writeEntityRef(((EntityRef) leftc).getName());
+					target.appendChild(printEntityRef(fstack, basedoc,
+							(EntityRef) leftc));
 				default:
 					// do nothing
 			}
 
 			int cnt = right - left - 1;
-			for (ListIterator<? extends Content> li =
-					content.listIterator(left + 1); cnt > 0; cnt--) {
-				helperRawTextType(out, fstack, li.next());
+			for (ListIterator<? extends Content> li = content
+					.listIterator(left + 1); cnt > 0; cnt--) {
+				helperRawTextType(fstack, basedoc, target, li.next());
 			}
 
 			final Content rightc = content.get(right);
 			switch (rightc.getCType()) {
 				case Text:
-					out.writeCharacters(textTrimRight(((Text) rightc).getText()));
+					target.appendChild(basedoc
+							.createTextNode(textTrimRight(((Text) rightc)
+									.getText())));
 					break;
 				case CDATA:
-					out.writeCData(textTrimRight(((CDATA) rightc).getText()));
+					target.appendChild(basedoc
+							.createCDATASection(textTrimRight(((CDATA) rightc)
+									.getText())));
 					break;
 				case EntityRef:
-					out.writeEntityRef(((EntityRef) rightc).getName());
+					target.appendChild(printEntityRef(fstack, basedoc,
+							(EntityRef) rightc));
 				default:
 					// do nothing
 			}
@@ -1081,18 +982,22 @@ public abstract class AbstractStAXStreamProcessor
 			final Content rightc = content.get(offset + i);
 			switch (rightc.getCType()) {
 				case Text:
-					out.writeCharacters(((Text) rightc).getText());
+					target.appendChild(basedoc.createTextNode(((Text) rightc)
+							.getText()));
 					break;
 				case CDATA:
-					out.writeCData(((CDATA) rightc).getText());
+					target.appendChild(basedoc
+							.createCDATASection(((CDATA) rightc).getText()));
 					break;
 				case EntityRef:
-					out.writeEntityRef(((EntityRef) rightc).getName());
+					target.appendChild(printEntityRef(fstack, basedoc,
+							(EntityRef) rightc));
 				default:
 					// do nothing
 			}
 		}
-		//assert TextMode.PRESERVE != mode : "PRESERVE text-types are not Consecutive";
+		// assert TextMode.PRESERVE != mode :
+		// "PRESERVE text-types are not Consecutive";
 	}
 
 	/**
@@ -1100,49 +1005,38 @@ public abstract class AbstractStAXStreamProcessor
 	 * simply determines what content is passed in, and dispatches it to the
 	 * correct print* method.
 	 * 
-	 * @param out
-	 *        The destination to write to.
 	 * @param fstack
 	 *        The current FormatStack
 	 * @param nstack
 	 *        the NamespaceStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
 	 * @param content
 	 *        The content to dispatch
-	 * @throws XMLStreamException
-	 *         if the output fails
+	 * @return the input JDOM Content converted to a DOM Node.
 	 */
-	protected void helperContentDispatcher(final XMLStreamWriter out,
+	protected org.w3c.dom.Node helperContentDispatcher(
 			final FormatStack fstack, final NamespaceStack nstack,
-			final Content content) throws XMLStreamException {
+			final org.w3c.dom.Document basedoc, final Content content) {
 		switch (content.getCType()) {
 			case CDATA:
-				printCDATA(out, fstack, (CDATA) content);
-				break;
+				return printCDATA(fstack, basedoc, (CDATA) content);
 			case Comment:
-				printComment(out, fstack, (Comment) content);
-				break;
+				return printComment(fstack, basedoc, (Comment) content);
 			case Element:
-				printElement(out, fstack, nstack, (Element) content);
-				break;
+				return printElement(fstack, nstack, basedoc, (Element) content);
 			case EntityRef:
-				printEntityRef(out, fstack, (EntityRef) content);
-				break;
+				return printEntityRef(fstack, basedoc, (EntityRef) content);
 			case ProcessingInstruction:
-				printProcessingInstruction(out, fstack,
+				return printProcessingInstruction(fstack, basedoc,
 						(ProcessingInstruction) content);
-				break;
 			case Text:
-				printText(out, fstack, (Text) content);
-				break;
+				return printText(fstack, basedoc, (Text) content);
 			case DocType:
-				printDocType(out, fstack, (DocType) content);
-				if (fstack.getLineSeparator() != null) {
-					out.writeCharacters(fstack.getLineSeparator());
-				}
-				break;
+				return null;
 			default:
-				throw new IllegalStateException(
-						"Unexpected Content " + content.getCType());
+				throw new IllegalStateException("Unexpected Content "
+						+ content.getCType());
 		}
 	}
 
@@ -1154,51 +1048,57 @@ public abstract class AbstractStAXStreamProcessor
 	 * <p>
 	 * It is a requirement for this method that at least one of the specified
 	 * text-type instances has non-whitespace, or, put the other way, if all
-	 * specified text-type values are all white-space only, then you may
-	 * get odd looking XML (empty lines). 
+	 * specified text-type values are all white-space only, then you may get odd
+	 * looking XML (empty lines).
 	 * <p>
 	 * Odd things can happen too if the len is <= 0;
 	 * 
-	 * @param out
-	 *        where to write
 	 * @param fstack
 	 *        the current FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
+	 * @param target
+	 *        The target to add the nodes to.
 	 * @param content
 	 *        The list of Content to process
 	 * @param offset
 	 *        The offset of the first text-type content in the sequence
 	 * @param len
 	 *        the number of text-type content in the sequence
-	 * @throws XMLStreamException
-	 *         if the output fails.
 	 */
-	protected final void helperTextType(final XMLStreamWriter out,
-			final FormatStack fstack, final List<? extends Content> content,
-			final int offset, final int len) throws XMLStreamException {
+	protected final void helperTextType(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final org.w3c.dom.Node target,
+			final List<? extends Content> content, final int offset,
+			final int len) {
 
 		assert len > 0 : "All calls to this should have *some* content.";
 
 		if (len == 1) {
 			final Content node = content.get(offset);
+			org.w3c.dom.Node domnode = null;
 			// Print the node
 			switch (node.getCType()) {
 				case Text:
-					printText(out, fstack, (Text) node);
+					domnode = printText(fstack, basedoc, (Text) node);
 					break;
 				case CDATA:
-					printCDATA(out, fstack, (CDATA) node);
+					domnode = printCDATA(fstack, basedoc, (CDATA) node);
 					break;
 				case EntityRef:
-					printEntityRef(out, fstack, (EntityRef) node);
+					domnode = printEntityRef(fstack, basedoc, (EntityRef) node);
 				default:
 					// do nothing
+			}
+			// snould never be nul coming from here... but just in case.
+			if (domnode != null) {
+				target.appendChild(domnode);
 			}
 		} else {
 			// we have text content we need to print.
 			// we also know that we are 'mixed' content
 			// so the text content should be indented.
 			// Additionally
-			printTextConsecutive(out, fstack, content, offset, len);
+			helperTextConsecutive(fstack, basedoc, target, content, offset, len);
 		}
 	}
 
@@ -1208,74 +1108,33 @@ public abstract class AbstractStAXStreamProcessor
 	 * dispatches it to the correct text method (textEscapeRaw, textCDATARaw, or
 	 * textEntityRef).
 	 * 
-	 * @param out
-	 *        The destination to write to.
 	 * @param fstack
 	 *        The current FormatStack
+	 * @param basedoc
+	 *        The org.w3c.dom.Document for creating DOM Nodes
+	 * @param target
+	 *        The DOM nodes the text content will be added to.
 	 * @param content
 	 *        The content to dispatch
-	 * @throws XMLStreamException
-	 *         if the output fails
 	 */
-	protected final void helperRawTextType(final XMLStreamWriter out,
-			final FormatStack fstack, final Content content) throws XMLStreamException {
+	protected final void helperRawTextType(final FormatStack fstack,
+			final org.w3c.dom.Document basedoc, final org.w3c.dom.Node target,
+			final Content content) {
 		switch (content.getCType()) {
 			case Text:
-				out.writeCharacters(((Text) content).getText());
+				target.appendChild(basedoc.createTextNode(content.getValue()));
 				break;
 			case CDATA:
-				out.writeCData(((CDATA) content).getText());
+				target.appendChild(basedoc.createCDATASection(content
+						.getValue()));
 				break;
 			case EntityRef:
-				out.writeEntityRef(((EntityRef) content).getName());
+				target.appendChild(basedoc
+						.createEntityReference(((EntityRef) content).getName()));
+				break;
 			default:
 				// do nothing
 		}
 	}
 
-	/**
-	 * This will handle printing of any needed <code>{@link Namespace}</code>
-	 * declarations.
-	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
-	 * @param fstack
-	 *        The current FormatStack
-	 * @param ns
-	 *        <code>Namespace</code> to print definition of
-	 * @throws XMLStreamException
-	 *         if the output fails
-	 */
-	protected void printNamespace(final XMLStreamWriter out, final FormatStack fstack, 
-			final Namespace ns)  throws XMLStreamException {
-		final String prefix = ns.getPrefix();
-		final String uri = ns.getURI();
-		
-		out.writeNamespace(prefix, uri);
-	}
-
-	/**
-	 * This will handle printing of an <code>{@link Attribute}</code>.
-	 * 
-	 * @param out
-	 *        <code>XMLStreamWriter</code> to use.
-	 * @param fstack
-	 *        The current FormatStack
-	 * @param attribute
-	 *        <code>Attribute</code> to output
-	 * @throws XMLStreamException
-	 *         if the output fails
-	 */
-	protected void printAttribute(final XMLStreamWriter out, final FormatStack fstack,
-			final Attribute attribute) throws XMLStreamException {
-
-		final Namespace ns = attribute.getNamespace();
-		if (ns == Namespace.NO_NAMESPACE) {
-			out.writeAttribute(attribute.getName(), attribute.getValue());
-		} else {
-			out.writeAttribute(ns.getPrefix(), ns.getURI(), 
-					attribute.getName(), attribute.getValue());
-		}
-	}
-	
 }

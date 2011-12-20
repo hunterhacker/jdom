@@ -52,7 +52,6 @@
 
  */
 
-
 package org.jdom2.output;
 
 import java.util.List;
@@ -66,332 +65,553 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.adapters.DOMAdapter;
-
+import org.jdom2.adapters.JAXPDOMAdapter;
+import org.jdom2.util.ReflectionConstructor;
 
 /**
- * Outputs a JDOM {@link org.jdom2.Document org.jdom2.Document} as a DOM {@link
- * org.w3c.dom.Document org.w3c.dom.Document}.
- *
- * @author  Brett McLaughlin
- * @author  Jason Hunter
- * @author  Matthew Merlo
- * @author  Dan Schaffer
- * @author  Yusuf Goolamabbas
- * @author  Bradley S. Huffman
+ * Outputs a JDOM {@link org.jdom2.Document org.jdom2.Document} as a DOM
+ * {@link org.w3c.dom.Document org.w3c.dom.Document}. Also provides methods to
+ * output other types of JDOM Content in the equivalent DOM nodes.
+ * <p>
+ * There are two versions of most functions, one that creates an independent DOM
+ * node using the DOMAdapter to create a new org.w3c.dom.Document. The other
+ * version creates the new DOM Nodes using the supplied org.w3c.dom.Document
+ * instance.
+ * 
+ * @author Brett McLaughlin
+ * @author Jason Hunter
+ * @author Matthew Merlo
+ * @author Dan Schaffer
+ * @author Yusuf Goolamabbas
+ * @author Bradley S. Huffman
+ * @author Rolf lear
  */
 public class DOMOutputter {
 
+	/**
+	 * Create a final/concrete instance of the AbstractDOMOutputProcessor.
+	 * Making it final improves performance.
+	 * 
+	 * @author Rolf Lear
+	 */
+	private static final class DefaultDOMOutputProcessor extends
+			AbstractDOMOutputProcessor {
+		// add nothing except make it final.
+	}
+
 	/** Default adapter class */
-	private static final String DEFAULT_ADAPTER_CLASS =
-			"org.jdom2.adapters.XercesDOMAdapter";
+	private static final DOMAdapter DEFAULT_ADAPTER = new JAXPDOMAdapter();
+
+	private static final DOMOutputProcessor DEFAULT_PROCESSOR = new DefaultDOMOutputProcessor();
 
 	/** Adapter to use for interfacing with the DOM implementation */
-	private String adapterClass;
+	private DOMAdapter adapter;
 
-	/** Output a DOM with namespaces but just the empty namespace */
-	private boolean forceNamespaceAware;
+	private Format format;
+
+	private DOMOutputProcessor processor;
 
 	/**
-	 * This creates a new DOMOutputter which will attempt to first locate
-	 * a DOM implementation to use via JAXP, and if JAXP does not exist or
-	 * there's a problem, will fall back to the default parser.
+	 * This creates a new DOMOutputter which will attempt to first locate a DOM
+	 * implementation to use via JAXP, and if JAXP does not exist or there's a
+	 * problem, will fall back to the default parser.
 	 */
 	public DOMOutputter() {
-		// nothing
+		this(null, null, null);
+	}
+
+	/**
+	 * This creates a new DOMOutputter which uses the defalt (JAXP) DOM
+	 * implementation but with a custom processor.
+	 * 
+	 * @param processor
+	 *        the custom processor to use.
+     * @since JDOM2
+	 */
+	public DOMOutputter(DOMOutputProcessor processor) {
+		this(null, null, processor);
+	}
+
+	/**
+	 * The complete constructor for specifying a custom DOMAdaptor, Format, and
+	 * DOMOutputProcessor.
+	 * 
+	 * @param adapter
+	 *        The adapter to use to create the base Document instance (null
+	 *        implies the default).
+	 * @param format
+	 *        The output Format to use (null implies the default).
+	 * @param processor
+	 *        The custom mechanism for doing the output (null implies the
+	 *        default).
+	 * @since JDOM2
+	 */
+	public DOMOutputter(DOMAdapter adapter, Format format,
+			DOMOutputProcessor processor) {
+		this.adapter = adapter == null ? DEFAULT_ADAPTER : adapter;
+		this.format = format == null ? Format.getRawFormat() : format;
+		this.processor = processor == null ? DEFAULT_PROCESSOR : processor;
 	}
 
 	/**
 	 * This creates a new DOMOutputter using the specified DOMAdapter
 	 * implementation as a way to choose the underlying parser.
-	 *
-	 * @param adapterClass <code>String</code> name of class
-	 *                     to use for DOM output
+	 * 
+	 * @param adapterClass
+	 *        <code>String</code> name of class to use for DOM output
+	 * @throws IllegalArgumentException
+	 *         if the adapter could not be instantiated. (it should be
+	 *         JDOMException, but that would require a change to this deprecated
+	 *         method's signature...
+	 * @deprecated use {@link DOMOutputter#DOMOutputter(DOMAdapter)} instead.
 	 */
+	@Deprecated
 	public DOMOutputter(String adapterClass) {
-		this.adapterClass = adapterClass;
+		if (adapterClass == null) {
+			adapter = DEFAULT_ADAPTER;
+		} else {
+			try {
+				adapter = ReflectionConstructor.construct(adapterClass,
+						DOMAdapter.class);
+			} catch (JDOMException e) {
+				throw new IllegalArgumentException("Unable to create a "
+						+ "DOMAdapter from " + adapterClass, e);
+			}
+		}
 	}
 
 	/**
-	 * Controls how NO_NAMESPACE nodes are handled. If true the outputter
-	 * always creates a namespace aware DOM.
-	 * @param flag true to force NamespaceAware
+	 * This creates a new DOMOutputter using the specified DOMAdapter
+	 * implementation as a way to choose the underlying parser.
+	 * <p>
+	 * If the specified adapter is not thread-safe then the user should ensure
+	 * that the adapter instance is never shared between multiple DOMOutputters.
+	 * The default DOMAdapter {@link JAXPDOMAdapter} is thread-safe.
+	 * 
+	 * @param adapter
+	 *        the DOMAdapter instance to use for creating the base
+	 *        org.w3c.dom.Document Specify the null value to get the default
+	 *        adapter.
+	 * @since JDOM2
 	 */
+	public DOMOutputter(DOMAdapter adapter) {
+		this.adapter = adapter == null ? DEFAULT_ADAPTER : adapter;
+	}
+
+	/**
+	 * Get the DOMAdapter currently set for this DOMOutputter.
+	 * 
+	 * @return the current DOMAdapter.
+	 * @since JDOM2
+	 */
+	public DOMAdapter getDOMAdapter() {
+		return adapter;
+	}
+
+	/**
+	 * Set the DOMAdapter currently set for this DOMOutputter.
+	 * 
+	 * @param adapter
+	 *        the new DOMAdapter to use (null implies the default).
+	 * @since JDOM2
+	 */
+	public void setDOMAdapter(DOMAdapter adapter) {
+		this.adapter = adapter == null ? DEFAULT_ADAPTER : adapter;
+	}
+
+	/**
+	 * Get the Format instance currently used by this DOMOutputter.
+	 * 
+	 * @return the current Format instance
+	 * @since JDOM2
+	 */
+	public Format getFormat() {
+		return format;
+	}
+
+	/**
+	 * Set a new Format instance for this DOMOutputter
+	 * 
+	 * @param format
+	 *        the new Format instance to use (null implies the default)
+	 * @since JDOM2
+	 */
+	public void setFormat(Format format) {
+		this.format = format == null ? Format.getRawFormat() : format;
+	}
+
+	/**
+	 * Get the current DOMOutputProcessor
+	 * 
+	 * @return the current DOMOutputProcessor
+	 * @since JDOM2
+	 */
+	public DOMOutputProcessor getDOMOutputProcessor() {
+		return processor;
+	}
+
+	/**
+	 * Set a new DOMOutputProcessor for this DOMOutputter.
+	 * 
+	 * @param processor
+	 *        the new processor to set (null implies the default)
+	 * @since JDOM2
+	 */
+	public void setDOMOutputProcessor(DOMOutputProcessor processor) {
+		this.processor = processor == null ? DEFAULT_PROCESSOR : processor;
+	}
+
+	/**
+	 * Controls how NO_NAMESPACE nodes are handled. If true the outputter always
+	 * creates a namespace aware DOM.
+	 * 
+	 * @param flag
+	 *        true to force NamespaceAware
+	 * @deprecated All DOMOutputters are now always NamespaceAware.
+	 */
+	@Deprecated
 	public void setForceNamespaceAware(boolean flag) {
-		this.forceNamespaceAware = flag;
+		// do nothing
 	}
 
 	/**
-	 * Returns whether DOMs will be constructed with namespaces even when
-	 * the source document has elements all in the empty namespace.
+	 * Returns whether DOMs will be constructed with namespaces even when the
+	 * source document has elements all in the empty namespace.
+	 * 
 	 * @return the forceNamespaceAware flag value
+	 * @deprecated All DOMOutputters are always NamesapceAware. Always true.
 	 */
+	@Deprecated
 	public boolean getForceNamespaceAware() {
-		return forceNamespaceAware;
+		return true;
 	}
 
 	/**
-	 * This converts the JDOM <code>Document</code> parameter to a 
-	 * DOM Document, returning the DOM version.  The DOM implementation
-	 * is the one chosen in the constructor.
-	 *
-	 * @param document <code>Document</code> to output.
+	 * This converts the JDOM <code>Document</code> parameter to a DOM Document,
+	 * returning the DOM version. The DOM implementation is the one supplied by
+	 * the current DOMAdapter.
+	 * 
+	 * @param document
+	 *        <code>Document</code> to output.
 	 * @return an <code>org.w3c.dom.Document</code> version
-	 * @throws JDOMException if output failed.
+	 * @throws JDOMException
+	 *         if output failed.
 	 */
-	public org.w3c.dom.Document output(Document document)
-			throws JDOMException {
-
-		org.w3c.dom.Document domDoc = null;
-		try {
-			// Assign DOCTYPE during construction
-			DocType dt = document.getDocType();
-			domDoc = createDOMDocument(dt);
-
-			// Check for existing root element which may have been
-			// automatically added by the DOM Document construction
-			// (if there is a DocType)
-			org.w3c.dom.Element autoroot = domDoc.getDocumentElement();
-			if (autoroot != null) {
-				// remove the automatically added root element.
-				// If we leave this attached it will/may mess up the order
-				// of content on the DOM Document node.
-				domDoc.removeChild(autoroot);
-			}
-
-			// Add content
-			for (Content node : document.getContent()) {
-
-				if (node instanceof Element) {
-					org.w3c.dom.Element domElement =
-							output((Element) node, domDoc);
-					domDoc.appendChild(domElement); // normal case
-				}
-				else if (node instanceof Comment) {
-					Comment comment = (Comment) node;
-					org.w3c.dom.Comment domComment =
-							domDoc.createComment(comment.getText());
-					domDoc.appendChild(domComment);
-				}
-				else if (node instanceof ProcessingInstruction) {
-					ProcessingInstruction pi = 
-							(ProcessingInstruction) node;
-					org.w3c.dom.ProcessingInstruction domPI =
-							domDoc.createProcessingInstruction(
-									pi.getTarget(), pi.getData());
-					domDoc.appendChild(domPI);
-				}
-				else if (node instanceof DocType) {
-					// We already dealt with the DocType above
-				}
-				else {
-					throw new JDOMException(
-							"Document contained top-level content with type:" +
-									node.getClass().getName());
-				}
-			}
-		}
-		catch (Throwable e) {
-			throw new JDOMException("Exception outputting Document", e);
-		}
-
-		return domDoc;
-	}
-
-	private org.w3c.dom.Document createDOMDocument(DocType dt)
-			throws JDOMException {
-		if (adapterClass != null) {
-			// The user knows that they want to use a particular impl
-			try {
-				DOMAdapter adapter =
-						(DOMAdapter)Class.forName(adapterClass).newInstance();
-				// System.out.println("using specific " + adapterClass);
-				return adapter.createDocument(dt);
-			}
-			catch (ClassNotFoundException e) {
-				// e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				// e.printStackTrace();
-			}
-			catch (InstantiationException e) {
-				// e.printStackTrace();
-			}
-		}
-		else {
-			// Try using JAXP...
-			try {
-				DOMAdapter adapter =
-						(DOMAdapter)Class.forName(
-								"org.jdom2.adapters.JAXPDOMAdapter").newInstance();
-				// System.out.println("using JAXP");
-				return adapter.createDocument(dt);
-			}
-			catch (ClassNotFoundException e) {
-				// e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				// e.printStackTrace();
-			}
-			catch (InstantiationException e) {
-				// e.printStackTrace();
-			}
-		}
-
-		// If no DOM doc yet, try to use a hard coded default
-		try {
-			DOMAdapter adapter = (DOMAdapter)
-					Class.forName(DEFAULT_ADAPTER_CLASS).newInstance();
-			return adapter.createDocument(dt);
-			// System.out.println("Using default " +
-			//   DEFAULT_ADAPTER_CLASS);
-		}
-		catch (ClassNotFoundException e) {
-			// e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			// e.printStackTrace();
-		}
-		catch (InstantiationException e) {
-			// e.printStackTrace();
-		}
-
-		throw new JDOMException("No JAXP or default parser available");
-
-	}
-
-	private org.w3c.dom.Element output(Element element,
-			org.w3c.dom.Document domDoc)
-					throws JDOMException {
-		try {
-
-			org.w3c.dom.Element domElement = null;
-			if (element.getNamespace() == Namespace.NO_NAMESPACE) {
-				// No namespace, use createElement
-				domElement = forceNamespaceAware ?
-						domDoc.createElementNS(null, element.getQualifiedName())
-						: domDoc.createElement(element.getQualifiedName());            }
-			else {
-				domElement = domDoc.createElementNS(
-						element.getNamespaceURI(),
-						element.getQualifiedName());
-			}
-
-			List<Namespace> nsq = element.getNamespacesIntroduced();
-
-			// Add namespace attributes, beginning with the element's own
-			// Do this only if it's not the XML namespace and it's
-			// not the NO_NAMESPACE with the prefix "" not yet mapped
-			// (we do output xmlns="" if the "" prefix was already used 
-			// and we need to reclaim it for the NO_NAMESPACE)
-			for (Namespace ns : nsq) {
-				if (ns == Namespace.XML_NAMESPACE) {
-					continue;
-				}
-				domElement.setAttribute(getXmlnsTagFor(ns), ns.getURI());
-			}
-
-
-			// Add attributes to the DOM element
-			for (Attribute attribute : element.getAttributes()) {
-				domElement.setAttributeNode(output(attribute, domDoc));
-			}
-
-			// Add content to the DOM element
-			for (Content node : element.getContent()) {
-
-				if (node instanceof Element) {
-					Element e = (Element) node;
-					org.w3c.dom.Element domElt = output(e, domDoc);
-					domElement.appendChild(domElt);
-				}
-				else if (node instanceof CDATA) {
-					CDATA cdata = (CDATA) node;
-					org.w3c.dom.CDATASection domCdata =
-							domDoc.createCDATASection(cdata.getText());
-					domElement.appendChild(domCdata);
-				}
-				else if (node instanceof Text) {
-					Text text = (Text) node;
-					org.w3c.dom.Text domText =
-							domDoc.createTextNode(text.getText());
-					domElement.appendChild(domText);
-				}
-				else if (node instanceof Comment) {
-					Comment comment = (Comment) node;
-					org.w3c.dom.Comment domComment =
-							domDoc.createComment(comment.getText());
-					domElement.appendChild(domComment);
-				}
-				else if (node instanceof ProcessingInstruction) {
-					ProcessingInstruction pi = 
-							(ProcessingInstruction) node;
-					org.w3c.dom.ProcessingInstruction domPI =
-							domDoc.createProcessingInstruction(
-									pi.getTarget(), pi.getData());
-					domElement.appendChild(domPI);
-				}
-				else if (node instanceof EntityRef) {
-					EntityRef entity = (EntityRef) node;
-					org.w3c.dom.EntityReference domEntity =
-							domDoc.createEntityReference(entity.getName());
-					domElement.appendChild(domEntity);
-				}
-				else {
-					throw new JDOMException(
-							"Element contained content with type:" +
-									node.getClass().getName());
-				}
-			}
-
-			return domElement;
-		}
-		catch (Exception e) {
-			throw new JDOMException("Exception outputting Element " +
-					element.getQualifiedName(), e);
-		}
-	}
-
-	private org.w3c.dom.Attr output(Attribute attribute,
-			org.w3c.dom.Document domDoc)
-					throws JDOMException {
-		org.w3c.dom.Attr domAttr = null;
-		try {
-			if (attribute.getNamespace() == Namespace.NO_NAMESPACE) {
-				// No namespace, use createAttribute
-				if (forceNamespaceAware) {
-					domAttr = domDoc.createAttributeNS(null, attribute.getQualifiedName());
-				} else {
-					domAttr = domDoc.createAttribute(attribute.getQualifiedName());
-				}
-			}
-			else {
-				domAttr = domDoc.createAttributeNS(attribute.getNamespaceURI(),
-						attribute.getQualifiedName());
-			}
-			domAttr.setValue(attribute.getValue());
-		} catch (Exception e) {
-			throw new JDOMException("Exception outputting Attribute " +
-					attribute.getQualifiedName(), e);
-		}
-		return domAttr;
+	public org.w3c.dom.Document output(Document document) throws JDOMException {
+		return processor.process(adapter.createDocument(document.getDocType()),
+				format, document);
 	}
 
 	/**
-	 * This will handle adding any <code>{@link Namespace}</code>
-	 * attributes to the DOM tree.
-	 *
-	 * @param ns <code>Namespace</code> to add definition of
+	 * This converts the JDOM <code>DocType</code> parameter to a DOM DocumentType,
+	 * returning the DOM version. The DOM implementation is the one supplied by
+	 * the current DOMAdapter.
+	 * <p>
+	 * Unlike the other DOM Nodes, you cannot use a DOM Document to simply create a DOM DocumentType Node,
+	 * it has to be created at the same time as the DOM Document instance. As a result, there is no
+	 * version of this method that takes a DOM Document instance. 
+	 * 
+	 * @param doctype
+	 *        <code>DocType</code> to output.
+	 * @return an <code>org.w3c.dom.DocumentType</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
 	 */
-	private static String getXmlnsTagFor(Namespace ns) {
-		String attrName = "xmlns";
-		if (!ns.getPrefix().equals("")) {
-			attrName += ":";
-			attrName += ns.getPrefix();
-		}
-		return attrName;
+	public org.w3c.dom.DocumentType output(DocType doctype) throws JDOMException {
+		return adapter.createDocument(doctype).getDoctype();
 	}
+
+	/**
+	 * This converts the JDOM <code>Element</code> parameter to a DOM Element,
+	 * returning the DOM version. The DOM Node will be linked to an independent
+	 * DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param element
+	 *        <code>Element</code> to output.
+	 * @return an <code>org.w3c.dom.Element</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 */
+	public org.w3c.dom.Element output(Element element) throws JDOMException {
+		return processor.process(adapter.createDocument(), format, element);
+	}
+
+	/**
+	 * This converts the JDOM <code>Text</code> parameter to a DOM Text Node,
+	 * returning the DOM version. The DOM Node will be linked to an independent
+	 * DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param text
+	 *        <code>Text</code> to output.
+	 * @return an <code>org.w3c.dom.Text</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Text output(Text text) throws JDOMException {
+		return processor.process(adapter.createDocument(), format, text);
+	}
+
+	/**
+	 * This converts the JDOM <code>CDATA</code> parameter to a DOM CDATASection
+	 * Node, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param cdata
+	 *        <code>CDATA</code> to output.
+	 * @return an <code>org.w3c.dom.CDATASection</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.CDATASection output(CDATA cdata) throws JDOMException {
+		return processor.process(adapter.createDocument(), format, cdata);
+	}
+
+	/**
+	 * This converts the JDOM <code>ProcessingInstruction</code> parameter to a
+	 * DOM ProcessingInstruction, returning the DOM version. The DOM Node will
+	 * be linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param pi
+	 *        <code>ProcessingInstruction</code> to output.
+	 * @return an <code>org.w3c.dom.Element</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.ProcessingInstruction output(ProcessingInstruction pi)
+			throws JDOMException {
+		return processor.process(adapter.createDocument(), format, pi);
+	}
+
+	/**
+	 * This converts the JDOM <code>ProcessingInstruction</code> parameter to a
+	 * DOM ProcessingInstruction, returning the DOM version. The DOM Node will
+	 * be linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param comment
+	 *        <code>Comment</code> to output.
+	 * @return an <code>org.w3c.dom.Comment</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Comment output(Comment comment) throws JDOMException {
+		return processor.process(adapter.createDocument(), format, comment);
+	}
+
+	/**
+	 * This converts the JDOM <code>EntityRef</code> parameter to a DOM
+	 * EntityReference Node, returning the DOM version. The DOM Node will be
+	 * linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param entity
+	 *        <code>EntityRef</code> to output.
+	 * @return an <code>org.w3c.dom.EntityReference</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.EntityReference output(EntityRef entity)
+			throws JDOMException {
+		return processor.process(adapter.createDocument(), format, entity);
+	}
+
+	/**
+	 * This converts the JDOM <code>Attribute</code> parameter to a DOM Attr
+	 * Node, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param attribute
+	 *        <code>Attribute</code> to output.
+	 * @return an <code>org.w3c.dom.Attr</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Attr output(Attribute attribute) throws JDOMException {
+		return processor.process(adapter.createDocument(), format, attribute);
+	}
+
+	/**
+	 * This converts the JDOM <code>Attribute</code> parameter to a DOM Attr
+	 * Node, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param list
+	 *        <code>Attribute</code> to output.
+	 * @return an <code>org.w3c.dom.Attr</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public List<org.w3c.dom.Node> output(List<? extends Content> list)
+			throws JDOMException {
+		return processor.process(adapter.createDocument(), format, list);
+	}
+
+	/**
+	 * This converts the JDOM <code>Element</code> parameter to a DOM Element,
+	 * returning the DOM version. The DOM Node will be linked to an independent
+	 * DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param element
+	 *        <code>Element</code> to output.
+	 * @return an <code>org.w3c.dom.Element</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Element output(org.w3c.dom.Document basedoc,
+			Element element) throws JDOMException {
+		return processor.process(basedoc, format, element);
+	}
+
+	/**
+	 * This converts the JDOM <code>Text</code> parameter to a DOM Text Node,
+	 * returning the DOM version. The DOM Node will be linked to an independent
+	 * DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param text
+	 *        <code>Text</code> to output.
+	 * @return an <code>org.w3c.dom.Text</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Text output(org.w3c.dom.Document basedoc, Text text)
+			throws JDOMException {
+		return processor.process(basedoc, format, text);
+	}
+
+	/**
+	 * This converts the JDOM <code>CDATA</code> parameter to a DOM CDATASection
+	 * Node, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param cdata
+	 *        <code>CDATA</code> to output.
+	 * @return an <code>org.w3c.dom.CDATASection</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.CDATASection output(org.w3c.dom.Document basedoc,
+			CDATA cdata) throws JDOMException {
+		return processor.process(basedoc, format, cdata);
+	}
+
+	/**
+	 * This converts the JDOM <code>ProcessingInstruction</code> parameter to a
+	 * DOM ProcessingInstruction, returning the DOM version. The DOM Node will
+	 * be linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param pi
+	 *        <code>ProcessingInstruction</code> to output.
+	 * @return an <code>org.w3c.dom.Element</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.ProcessingInstruction output(
+			org.w3c.dom.Document basedoc, ProcessingInstruction pi)
+			throws JDOMException {
+		return processor.process(basedoc, format, pi);
+	}
+
+	/**
+	 * This converts the JDOM <code>ProcessingInstruction</code> parameter to a
+	 * DOM ProcessingInstruction, returning the DOM version. The DOM Node will
+	 * be linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param comment
+	 *        <code>Comment</code> to output.
+	 * @return an <code>org.w3c.dom.Comment</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Comment output(org.w3c.dom.Document basedoc,
+			Comment comment) throws JDOMException {
+		return processor.process(basedoc, format, comment);
+	}
+
+	/**
+	 * This converts the JDOM <code>EntityRef</code> parameter to a DOM
+	 * EntityReference Node, returning the DOM version. The DOM Node will be
+	 * linked to an independent DOM Document instance supplied by the current
+	 * DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param entity
+	 *        <code>EntityRef</code> to output.
+	 * @return an <code>org.w3c.dom.EntityReference</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.EntityReference output(org.w3c.dom.Document basedoc,
+			EntityRef entity) throws JDOMException {
+		return processor.process(basedoc, format, entity);
+	}
+
+	/**
+	 * This converts the JDOM <code>Attribute</code> parameter to a DOM Attr
+	 * Node, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param attribute
+	 *        <code>Attribute</code> to output.
+	 * @return an <code>org.w3c.dom.Attr</code> version
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public org.w3c.dom.Attr output(org.w3c.dom.Document basedoc,
+			Attribute attribute) throws JDOMException {
+		return processor.process(basedoc, format, attribute);
+	}
+
+	/**
+	 * This converts the list of JDOM <code>Content</code> in to a list of DOM
+	 * Nodes, returning the DOM version. The DOM Node will be linked to an
+	 * independent DOM Document instance supplied by the current DOMAdapter
+	 * 
+	 * @param basedoc
+	 *        The DOM Document to use for creating DOM Nodes.
+	 * @param list
+	 *        of JDOM Content to output.
+	 * @return a List of <code>org.w3c.dom.Node</code>
+	 * @throws JDOMException
+	 *         if output failed.
+	 * @since JDOM2
+	 */
+	public List<org.w3c.dom.Node> output(org.w3c.dom.Document basedoc,
+			List<? extends Content> list) throws JDOMException {
+		return processor.process(basedoc, format, list);
+	}
+
 }
