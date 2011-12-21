@@ -12,7 +12,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderSingletons;
+import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -20,7 +20,7 @@ public class TestXMLReaderSingletons {
 
 	@Test
 	public void testNonValidatingReader() throws JDOMException, IOException {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.NONVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.NONVALIDATING);
 		assertFalse(builder.isValidating());
 		Document doc = builder.build("test/resources/DOMBuilder/attributes.xml");
 		assertEquals("root", doc.getRootElement().getName());
@@ -28,7 +28,7 @@ public class TestXMLReaderSingletons {
 
 	@Test
 	public void testDTDValidatingReader() throws JDOMException, IOException {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.DTDVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.DTDVALIDATING);
 		assertTrue(builder.isValidating());
 		Document doc = builder.build("test/resources/DOMBuilder/doctype.xml");
 		assertEquals("root", doc.getRootElement().getName());
@@ -36,7 +36,7 @@ public class TestXMLReaderSingletons {
 
 	@Test
 	public void testDTDValidatingReaderFails() {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.DTDVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.DTDVALIDATING);
 		assertTrue(builder.isValidating());
 		try {
 			builder.build("test/resources/DOMBuilder/attributes.xml");
@@ -48,7 +48,7 @@ public class TestXMLReaderSingletons {
 
 	@Test
 	public void testXSDValidatingReader() throws JDOMException, IOException {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		assertTrue(builder.isValidating());
 		Document doc = builder.build(new File("test/resources/xsdcomplex/input.xml"));
 		assertEquals("test", doc.getRootElement().getName());
@@ -64,7 +64,7 @@ public class TestXMLReaderSingletons {
 
 	@Test
 	public void testXSDValidatingReaderFails() {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		assertTrue(builder.isValidating());
 		try {
 			builder.build("test/resources/DOMBuilder/attributes.xml");

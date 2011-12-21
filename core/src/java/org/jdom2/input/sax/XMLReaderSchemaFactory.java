@@ -71,7 +71,7 @@ import org.jdom2.JDOMException;
  * If you want to validate an XML document against the XSD references embedded
  * in the XML itself (xsdSchemaLocation) then you do not want to use this class
  * but rather use an alternate means like
- * {@link XMLReaderSingletons#XSDVALIDATING}.
+ * {@link XMLReaders#XSDVALIDATING}.
  * <p>
  * See the {@link org.jdom2.input.sax package documentation} for the best
  * alternatives.

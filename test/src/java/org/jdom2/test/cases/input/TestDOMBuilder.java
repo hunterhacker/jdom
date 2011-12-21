@@ -15,7 +15,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderSingletons;
+import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
@@ -78,8 +78,8 @@ public class TestDOMBuilder {
 			Element domroot = db.build(HelpTestDOMBuilder.getRoot(domdoc));
 			
 			SAXBuilder sb = new SAXBuilder(xsdvalidate
-					? XMLReaderSingletons.XSDVALIDATING
-					: XMLReaderSingletons.NONVALIDATING );
+					? XMLReaders.XSDVALIDATING
+					: XMLReaders.NONVALIDATING );
 			sb.setExpandEntities(false);
 			
 			Document saxbuild = sb.build(filename);

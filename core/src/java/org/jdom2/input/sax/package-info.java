@@ -84,7 +84,7 @@
  <li>A Constructor: {@link org.jdom2.input.SAXBuilder#SAXBuilder(XMLReaderJDOMFactory, SAXHandlerFactory, org.jdom2.JDOMFactory)}
  <li>A default constructor {@link org.jdom2.input.SAXBuilder#SAXBuilder()}
  that chooses a non-validating JAXP sourced XMLReader Factory
- {@link org.jdom2.input.sax.XMLReaderSingletons#NONVALIDATING} which it
+ {@link org.jdom2.input.sax.XMLReaders#NONVALIDATING} which it
  mates with a Default {@link org.jdom2.input.sax.SAXHandler} factory, and the 
  {@link org.jdom2.DefaultJDOMFactory}. 
  <li>A number of other constructors that mostly are for backward-compatibility
@@ -151,7 +151,7 @@
  XMLReaders based on single or multiple input XSD documents. 
  </ol>
  The first three are all relatively simple, and are available as members of the
- {@link org.jdom2.input.sax.XMLReaderSingletons} enumeration. These members
+ {@link org.jdom2.input.sax.XMLReaders} enumeration. These members
  are 'singletons' that can be used in a multi-threaded and concurrent way to
  provide XMLReaders that are configured correctly for the respective behaviour.
  <p>
@@ -305,14 +305,14 @@
  Create a DTD validating SAXBuilder and parse a document:
  <p>
  <pre>
- SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.DTDVALIDATING);
+ SAXBuilder sb = new SAXBuilder(XMLReaders.DTDVALIDATING);
  Document doc = sb.build(new File("file.xml"));
  </pre>
  Create an XSD (XML Schema) validating SAXBuilder using the XSD references inside
  the XML document and parse a document:
  <p>
  <pre>
- SAXBuilder sb = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);
+ SAXBuilder sb = new SAXBuilder(XMLReaders.XSDVALIDATING);
  Document doc = sb.build(new File("file.xml"));
  </pre>
  <p>

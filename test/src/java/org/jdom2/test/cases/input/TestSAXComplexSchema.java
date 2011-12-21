@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderSingletons;
+import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -79,7 +79,7 @@ public class TestSAXComplexSchema {
 	 */
 	@Test
 	public void testBuildFileNewSAX() throws IOException {
-		SAXBuilder builder = new SAXBuilder(XMLReaderSingletons.XSDVALIDATING);
+		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		
 		File inputdir = new File(".");
 		URL furl = inputdir.toURI().toURL();

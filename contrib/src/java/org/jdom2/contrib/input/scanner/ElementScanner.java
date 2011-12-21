@@ -68,7 +68,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderSingletons;
+import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
@@ -319,9 +319,9 @@ public class ElementScanner extends XMLFilterImpl {
 	 */
 	public void setValidation(boolean validate) {
 		if (validate)
-			this.parserBuilder.setXMLReaderFactory(XMLReaderSingletons.DTDVALIDATING);
+			this.parserBuilder.setXMLReaderFactory(XMLReaders.DTDVALIDATING);
 		else
-			this.parserBuilder.setXMLReaderFactory(XMLReaderSingletons.NONVALIDATING);
+			this.parserBuilder.setXMLReaderFactory(XMLReaders.NONVALIDATING);
 	}
 
 	/**
