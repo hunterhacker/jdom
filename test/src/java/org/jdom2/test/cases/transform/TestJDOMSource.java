@@ -327,7 +327,7 @@ public class TestJDOMSource {
 		try {
 			reader.parse(sourceb.getInputSource());
 			fail ("Should not be able to parse garbage data 123.4");
-		} catch (SAXException se) {
+		} catch (ClassCastException se) {
 			// good!
 		} catch (Exception e) {
 			e.printStackTrace();

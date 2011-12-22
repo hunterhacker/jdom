@@ -728,6 +728,7 @@ public class TestSAXOutputter {
 		saxout.outputFragment(empty);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetLocator() throws JDOMException {
 		SAXOutputter saxout = new SAXOutputter();
