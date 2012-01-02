@@ -20,6 +20,7 @@ import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.Verifier;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 
@@ -35,14 +36,14 @@ public abstract class AbstractTestOutputter {
 	private final boolean pademptyelement;
 	private final boolean forceexpand;
 	private final boolean padpi;
-	private final boolean forceplatformeol;
+	//private final boolean rawoutsideroot;
 
-	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand, boolean forceplatformeol) {
+	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand, boolean rawoutsideroot) {
 		this.cr2xD = cr2xD;
 		this.pademptyelement = padpreempty;
 		this.forceexpand = forceexpand;
 		this.padpi = padpi;
-		this.forceplatformeol = forceplatformeol;
+		//this.rawoutsideroot = rawoutsideroot;
 	}
 	
 	protected final String expect(String expect) {
@@ -66,9 +67,69 @@ public abstract class AbstractTestOutputter {
 			expect = expect.replaceAll("<(\\w+)(\\s+.+?)?\\s+/>", "<$1$2/>");
 			expect = expect.replaceAll("<(\\w+:\\w+)(\\s+.+?)?\\s+/>", "<$1$2/>");
 		}
-		if (forceplatformeol) {
-			//expect = expect.replaceAll("\n", System.getProperty("line.separator"));
-		}
+//		if (rawoutsideroot) {
+//			// outside the root element will be raw-formatted.
+//			StringBuilder sb = new StringBuilder(expect.length());
+//			int gotstuff = 0;
+//			boolean indoctype = false;
+//			boolean gotroot = false;
+//			int depth = 0;
+//			char[] chars = expect.toCharArray();
+//			int i = 0;
+//			while (i < chars.length && Verifier.isXMLWhitespace(chars[i])) {
+//				// skip initial whitespace.
+//				i++;
+//			}
+//			for (; i < chars.length; i++) {
+//				char c = chars[i];
+//				sb.append(c);
+//				if (!gotroot) {
+//					if (c == '<') {
+//						if (depth == 0) {
+//							if (i < chars.length - 2) {
+//								if (chars[i + 1] == '?') {
+//									// PI or XML Declaration
+//									gotstuff++;
+//								} else if (chars[i + 1] == '!') {
+//									// Comment of DOCTYPE
+//									gotstuff++;
+//									if (chars[i + 2] == 'D') {
+//										// DOCTYPE
+//										indoctype = true;
+//									}
+//								} else {
+//									// root element
+//									gotroot = true;
+//								}
+//							} else {
+//								gotroot = true;
+//							}
+//						}
+//						depth++;
+//					} else if (c == '>') {
+//						depth--;
+//						if (depth == 0) {
+//							if (indoctype) {
+//								sb.append('\n');
+//								indoctype = false;
+//							}
+//							while (i+1 < chars.length && Verifier.isXMLWhitespace(chars[i + 1])) {
+//								// skip whitespace after top-level content.
+//								i++;
+//							}
+//						}
+//					}
+//				}
+//			}
+//			while (Verifier.isXMLWhitespace(sb.charAt(sb.length() - 1))) {
+//				// eliminate trailing whitespace.
+//				sb.setLength(sb.length() - 1);
+//			}
+//			if (gotstuff > 1 || (gotroot && gotstuff > 0)) {
+//				// there is multiple content stuff, need to trim the whitespace....
+//				expect = sb.toString();
+//			}
+//		}
 		return expect;
 	}
 
@@ -380,14 +441,14 @@ public abstract class AbstractTestOutputter {
 	@Test
 	public void testDocTypeSimpleISS() {
 		DocType content = new DocType("root");
-		content.setInternalSubset("internal");
-		assertEquals("<!DOCTYPE root [\ninternal]>", 
+		content.setInternalSubset("<!ENTITY name \"value\">");
+		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(fraw,     content));
-		assertEquals("<!DOCTYPE root [\ninternal]>", 
+		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(fcompact, content));
-		assertEquals("<!DOCTYPE root [\ninternal]>", 
+		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(fpretty,  content));
-		assertEquals("<!DOCTYPE root [\ninternal]>", 
+		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(ftfw,     content));
 	}
 	
@@ -986,6 +1047,10 @@ public abstract class AbstractTestOutputter {
 	
 	@Test
 	public void testDeepNesting() {
+		testDeepNestingCore(true);
+	}
+	
+	protected final void testDeepNestingCore(boolean startnewline) {
 		// need to get beyond 16 levels of XML.
 		DocType dt = new DocType("root");
 		Element root = new Element("root");
@@ -1000,7 +1065,9 @@ public abstract class AbstractTestOutputter {
 		StringBuilder raw = new StringBuilder(base);
 		StringBuilder pretty = new StringBuilder(base);
 		raw.append("<root>");
-		pretty.append(lf);
+		if (startnewline) {
+			pretty.append(lf);
+		}
 		pretty.append("<root>");
 		pretty.append(lf);
 		final int depth = 40;

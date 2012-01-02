@@ -97,6 +97,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
@@ -836,7 +837,7 @@ public final class TestSAXBuilder {
 			}
 		}
 	}
-
+	
 	@Test
 	public void testBuildInputSource() {
 		try {

@@ -295,8 +295,11 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 		// Handle root element, as well as any root level
 		// processing instructions and comments
 		// ignore DocType, if any.
-		for (Content obj : document.getContent()) {
+		
+		int sz = document.getContentSize();
+		for (int c = 0; c < sz; c++) {
 
+			Content obj = document.getContent(c);
 			// update locator
 			out.getLocator().setNode(obj);
 
@@ -762,7 +765,7 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 			// 'trimming' variants, if it is all whitespace we do
 			// not want to even print the indent/newline.
 			if (!isAllWhiteSpace(content, txti, index - txti)) {
-				printIndent(null, fstack);
+				printIndent(out, fstack);
 				helperTextType(out, fstack, content, txti, index - txti);
 				printEOL(out, fstack);
 			}

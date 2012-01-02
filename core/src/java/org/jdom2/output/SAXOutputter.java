@@ -600,7 +600,7 @@ public class SAXOutputter implements JDOMConstants {
 	 *        the new SAXOutputProcessor
 	 */
 	public void setSAXOutputProcessor(SAXOutputProcessor processor) {
-		this.processor = processor;
+		this.processor = processor == null ? DEFAULT_PROCESSOR : processor;
 	}
 
 	/**
@@ -619,7 +619,7 @@ public class SAXOutputter implements JDOMConstants {
 	 *        the new Format
 	 */
 	public void setFormat(Format format) {
-		this.format = format;
+		this.format = format == null ? Format.getRawFormat() : format;
 	}
 
 	private final SAXTarget buildTarget(Document doc) {

@@ -1,31 +1,18 @@
 package org.jdom2.test.cases.output;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jdom2.Attribute;
-import org.jdom2.AttributeType;
-import org.jdom2.CDATA;
-import org.jdom2.Comment;
-import org.jdom2.Content;
-import org.jdom2.DocType;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.EntityRef;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.ProcessingInstruction;
-import org.jdom2.Text;
-import org.jdom2.input.sax.SAXHandler;
-import org.jdom2.output.Format;
-import org.jdom2.output.JDOMLocator;
-import org.jdom2.output.SAXOutputter;
-import org.jdom2.output.XMLOutputter;
-import org.jdom2.test.util.UnitTestUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -43,15 +30,51 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 
+import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.output.AbstractSAXOutputProcessor;
+import org.jdom2.output.Format;
+import org.jdom2.output.JDOMLocator;
+import org.jdom2.output.LineSeparator;
+import org.jdom2.output.SAXOutputProcessor;
+import org.jdom2.output.SAXOutputter;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.UnitTestUtil;
+
 
 @SuppressWarnings("javadoc")
-public class TestSAXOutputter {
+public class TestSAXOutputter extends AbstractTestOutputter {
 	
     private interface SAXSetup {
     	public SAXOutputter buildOutputter(SAXHandler handler);
     }
+    
+    
 
-    private void roundTrip(Document doc) {
+    /**
+	 * @param cr2xD
+	 * @param padpreempty
+	 * @param padpi
+	 * @param forceexpand
+	 * @param forceplatformeol
+	 */
+	public TestSAXOutputter() {
+		super(true, true, false, false, true);
+	}
+
+	private void roundTrip(Document doc) {
     	roundTrip(null, doc);
     }
     
@@ -552,13 +575,13 @@ public class TestSAXOutputter {
 	}
 
 	@Test
-	public void testOutputDocumentSimple() {
+	public void testSAXOutputDocumentSimple() {
 		Document doc = new Document(new Element("root"));
 		roundTrip(doc);
 	}
 
     @Test
-    public void testOutputDocumentFull() {
+    public void testSAXOutputDocumentFull() {
     	Document doc = new Document();
     	doc.addContent(new DocType("root"));
     	doc.addContent(new Comment("This is a document"));
@@ -658,7 +681,7 @@ public class TestSAXOutputter {
     }
     
 	@Test
-	public void testOutputList() {
+	public void testSAXOutputList() {
 		List<Content> list = new ArrayList<Content>();
 		list.add(new ProcessingInstruction("jdomtest", ""));
 		list.add(new Comment("comment"));
@@ -675,7 +698,7 @@ public class TestSAXOutputter {
     }
     
     @Test
-    public void testOutputElementNamespaces() {
+    public void testSAXOutputElementNamespaces() {
 		Element emt = new Element("root", Namespace.getNamespace("ns", "myns"));
 		Namespace ans = Namespace.getNamespace("ans", "attributens");
 		emt.addNamespaceDeclaration(ans);
@@ -764,5 +787,405 @@ public class TestSAXOutputter {
 		saxout.output(doc);
 		assertTrue(coderan.get());
 	}
+	
+	
+	
+	
+	@Test
+	public void testGetSetFormat() {
+    	SAXOutputter sout = new SAXOutputter();
+    	Format def = sout.getFormat();
+    	assertTrue(def != null);
+    	Format f = Format.getPrettyFormat();
+    	sout.setFormat(f);
+    	assertTrue(f == sout.getFormat());
+    	sout.setFormat(null);
+    	TestFormat.checkEquals(def, sout.getFormat());
+	}
 
+    @Test
+    public void testGetSetDOMOutputProcessor() {
+    	SAXOutputProcessor dop = new AbstractSAXOutputProcessor() {
+    		// nothing.
+		};
+		
+    	SAXOutputter dout = new SAXOutputter();
+    	SAXOutputProcessor def = dout.getSAXOutputProcessor();
+    	assertTrue(def != null);
+    	dout.setSAXOutputProcessor(dop);
+    	assertTrue(dop == dout.getSAXOutputProcessor());
+    	dout.setSAXOutputProcessor(null);
+    	assertEquals(def, dout.getSAXOutputProcessor());
+    }
+    
+	@Override
+	public String outputString(Format format, Document doc) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		try {
+			saxout.output(doc);
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument());
+	}
+
+	@Override
+	public String outputString(Format format, DocType doctype) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		List<Content> list = new ArrayList<Content>(1);
+		list.add(doctype);
+		//list.add(new Element("root"));
+		
+		try {
+			saxout.output(list);
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getDocType());
+	}
+
+	@Override
+	public String outputString(Format format, Element element) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			saxout.output(element);
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement());
+	}
+
+	@Override
+	public String outputString(Format format, List<? extends Content> list) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(list);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputString(Format format, CDATA cdata) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(cdata);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputString(Format format, Text text) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(text);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputString(Format format, Comment comment) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(comment);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputString(Format format, ProcessingInstruction pi) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(pi);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputString(Format format, EntityRef entity) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			handler.startDocument();
+			handler.startElement("", "root", "root", new AttributesImpl());
+			saxout.outputFragment(entity);
+			handler.endElement("", "root", "root");
+			handler.endDocument();
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement().getContent());
+	}
+
+	@Override
+	public String outputElementContentString(Format format, Element element) {
+		SAXHandler handler = new SAXHandler();
+		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
+				handler, handler, handler);
+		
+		try {
+			saxout.output(element);
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not output", e);
+		}
+		XMLOutputter xout = new XMLOutputter();
+		xout.getFormat().setLineSeparator(LineSeparator.NL);
+		return xout.outputString(handler.getDocument().getRootElement());
+	}
+
+	
+	
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputElementExpandEmpty() {
+		// Can't control expand in SAXOutputter.
+	}
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputElementMultiAllWhiteExpandEmpty() {
+		// Can't control expand in SAXOutputter.
+	}
+	
+	@Test
+	@Override
+	@Ignore
+	public void testCDATAEmpty() {
+		// can't test empty CDATA in SAXHandler.
+	}
+	
+
+	@Test
+	@Ignore
+	@Override
+	public void testDocTypeSimpleISS() {
+		//Cannot preserve internal subset in DOCTYPE through the round-trip test.
+	}
+	
+	@Test
+	@Ignore
+	@Override
+	public void testDocTypePublicSystemID() {
+		//Cannot test with a SystemID because it needs to be resolved/referenced
+	}
+	
+	@Test
+	@Ignore
+	@Override
+	public void testDocTypePublicSystemIDISS() {
+		//Cannot test with a SystemID because it needs to be resolved/referenced
+		//Cannot preserve internal subset in DOCTYPE through the round-trip test.
+	}
+	
+	@Test
+	@Ignore
+	@Override
+	public void testDocTypeSystemID() {
+		//Cannot test with a SystemID because it needs to be resolved/referenced
+	}
+	
+	@Test
+	@Ignore
+	@Override
+	public void testDocTypeSystemIDISS() {
+		//Cannot preserve internal subset in DOCTYPE through the round-trip test.
+	}
+	
+	@Test
+	@Override
+	@Ignore
+	public void testDocumentDocType() {
+		// override because we can't control whitespace outside of the root element
+	}
+
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocTypeInternalSubset() {
+		//Cannot preserve internal subset in DOCTYPE through the round-trip test.
+	}
+	
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocTypeSystem() {
+		//Cannot test with a SystemID because it needs to be resolved/referenced
+	}
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocTypePublic() {
+		// cannot test with a non-resolved publicID
+	}
+	
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocTypePublicSystem() {
+		//Cannot test with a SystemID because it needs to be resolved/referenced
+	}
+
+
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocumentOmitEncoding() {
+		// Cannot test for formatting outside of root element
+	}
+
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocumentOmitDeclaration() {
+		// Cannot test for formatting outside of root element
+	}
+
+	@Test
+	@Override
+	@Ignore
+	public void testOutputDocumentFull() {
+		// need to change formatting of whitespace outside root element
+		DocType dt = new DocType("root");
+		Comment comment = new Comment("comment");
+		ProcessingInstruction pi = new ProcessingInstruction("jdomtest", "");
+		Element root = new Element("root");
+		Document doc = new Document();
+		doc.addContent(dt);
+		doc.addContent(comment);
+		doc.addContent(pi);
+		doc.addContent(root);
+		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		String dtdec = "<!DOCTYPE root>";
+		String commentdec = "<!--comment-->";
+		String pidec = "<?jdomtest?>";
+		String rtdec = "<root />";
+		String lf = "\n";
+		checkOutput(doc, 
+				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
+				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
+				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
+				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf);
+	}
+	
+
+	@Test
+	@Override
+	public void testDocumentSimple() {
+		// change expected whitespace outside root element
+		Document content = new Document();
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
+				outputString(fraw,     content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
+				outputString(fcompact, content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
+				outputString(fpretty,  content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
+				outputString(ftfw,     content));
+	}
+	
+	@Test
+	@Override
+	public void testDocumentComment() {
+		// change expected whitespace outside root element
+		Document content = new Document();
+		content.addContent(new Comment("comment"));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
+				outputString(fraw,     content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
+				outputString(fcompact, content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
+				outputString(fpretty,  content));
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n",
+				outputString(ftfw,     content));
+	}
+	
+	@Override
+	public void testDeepNesting() {
+		testDeepNestingCore(false);
+	}
+
+	@Test
+	@Override
+	@Ignore
+	public void testOutputElementContent() {
+		// cannot test the formatting of an Element's contents easily... skip it for now.
+	}
+	
 }

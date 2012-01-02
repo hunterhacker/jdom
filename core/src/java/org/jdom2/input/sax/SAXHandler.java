@@ -722,7 +722,7 @@ public class SAXHandler extends DefaultHandler
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 
-		if (suppress || (length == 0))
+		if (suppress || (length == 0 && !inCDATA))
 			return;
 
 		if (previousCDATA != inCDATA) {
