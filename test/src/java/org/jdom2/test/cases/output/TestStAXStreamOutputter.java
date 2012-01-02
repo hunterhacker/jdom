@@ -119,7 +119,7 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 	}
 	
     public TestStAXStreamOutputter() {
-		super(false, false, false, false, false);
+		super(false, false, false, false);
 	}
     
 	@Override

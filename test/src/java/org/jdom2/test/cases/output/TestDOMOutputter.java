@@ -61,7 +61,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     }
     
     public TestDOMOutputter() {
-		super(true, true, false, false, true);
+		super(true, true, false, false);
 	}
     
     @SuppressWarnings("deprecation")

@@ -71,7 +71,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	 * @param forceplatformeol
 	 */
 	public TestSAXOutputter() {
-		super(true, true, false, false, true);
+		super(true, true, false, false);
 	}
 
 	private void roundTrip(Document doc) {

@@ -20,7 +20,6 @@ import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
-import org.jdom2.Verifier;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 
@@ -38,7 +37,7 @@ public abstract class AbstractTestOutputter {
 	private final boolean padpi;
 	//private final boolean rawoutsideroot;
 
-	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand, boolean rawoutsideroot) {
+	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand) {
 		this.cr2xD = cr2xD;
 		this.pademptyelement = padpreempty;
 		this.forceexpand = forceexpand;
