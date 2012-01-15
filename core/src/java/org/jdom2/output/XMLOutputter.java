@@ -73,6 +73,9 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.output.support.AbstractXMLOutputProcessor;
+import org.jdom2.output.support.FormatStack;
+import org.jdom2.output.support.XMLOutputProcessor;
 
 /**
  * Outputs a JDOM document as a stream of bytes.
@@ -212,7 +215,8 @@ public final class XMLOutputter implements Cloneable {
 				final Format format) {
 			StringWriter sw = new StringWriter();
 			try {
-				super.textEscapeRaw(sw, new FormatStack(format), str);
+				super.textEscapedEntitiesFilter(sw, new FormatStack(format),
+						str.toCharArray(), 0, str.length());
 			} catch (IOException e) {
 				// no IOException on StringWriter....
 			}

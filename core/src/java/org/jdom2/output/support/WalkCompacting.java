@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,34 +52,101 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
-import org.xml.sax.Locator;
+import java.util.List;
+
+import org.jdom2.Content;
+import org.jdom2.Verifier;
 
 /**
- * An implementation of the SAX {@link Locator} interface that
- * exposes the JDOM node being processed by SAXOutputter.
- * <p>
- * In JDOM2 this class is demoted to an interface. The information was never
- * accurate anyway, and as an interface a specific Outputter instance can
- * instead do 'the right thing' with the locator, if needed.
- * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
- * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
- * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
- *
- * @author Laurent Bihanic
+ * This Walker implementation will produce trimmed text content.
+ * 
  * @author Rolf Lear
  *
  */
-public interface JDOMLocator extends Locator {
+public class WalkCompacting extends AbstractFormattedWalker {
 
 	/**
-	 * Returns the JDOM node being processed by SAXOutputter.
-	 *
-	 * @return the JDOM node being processed by SAXOutputter.
+	 * Create the Trimmed walker instance.
+	 * @param content The list of content to format
+	 * @param padding The indenting required.
+	 * @param eol The End-Of-Line sequence.
 	 */
-	public Object getNode();
+	public WalkCompacting(List<? extends Content> content, String padding,
+			String eol) {
+		super(content, padding, eol);
+	}
+	
+	private boolean isSpaceFirst(String text) {
+		if (text.length() > 0) {
+			return Verifier.isXMLWhitespace(text.charAt(0));
+		}
+		return false;
+	}
+	
+	private boolean isSpaceLast(String text) {
+		final int tlen = text.length();
+		if (tlen > 0 && Verifier.isXMLWhitespace(text.charAt(tlen - 1))) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	protected void analyzeMultiText(final MultiText mtext,
+			final int offset, final int len) {
+		boolean needspace = false;
+		boolean between = false;
+		
+		String ttext = null;
+		for (int i = 0; i < len; i++) {
+			final Content c = get(offset + i);
+			switch (c.getCType()) {
+				case Text :
+					ttext = c.getValue();
+					if (Verifier.isAllXMLWhitespace(ttext)) {
+						if (between && ttext.length() > 0) {
+							needspace = true;
+						}
+					} else {
+						if (between && (needspace || isSpaceFirst(ttext))) {
+							mtext.appendText(Trim.NONE, " ");
+						}
+						mtext.appendText(Trim.COMPACT, ttext);
+						between = true;
+						needspace = isSpaceLast(ttext);
+					}
+					break;
+				case CDATA :
+					ttext = c.getValue();
+					if (Verifier.isAllXMLWhitespace(ttext)) {
+						if (between && ttext.length() > 0) {
+							needspace = true;
+						}
+					} else {
+						if (between && (needspace || isSpaceFirst(ttext))) {
+							mtext.appendText(Trim.NONE, " ");
+						}
+						mtext.appendCDATA(Trim.COMPACT, ttext);
+						between = true;
+						needspace = isSpaceLast(ttext);
+					}
+					break;
+				case EntityRef:
+					// treat like any other content.
+					// raw.
+				default:
+					ttext = null;
+					if (between && needspace) {
+						mtext.appendText(Trim.NONE, " ");
+					}
+					mtext.appendRaw(c);
+					between = true;
+					needspace = false;
+					break;
+			}
+		}
+	}
 	
 }
-

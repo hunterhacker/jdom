@@ -50,12 +50,12 @@ import org.jdom2.input.DefaultStAXFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.input.sax.SAXHandler;
-import org.jdom2.output.AbstractStAXEventProcessor;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
+import org.jdom2.output.support.AbstractStAXEventProcessor;
+import org.jdom2.output.support.StAXEventProcessor;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.StAXEventOutputter;
-import org.jdom2.output.StAXEventProcessor;
 import org.jdom2.output.XMLOutputter;
 
 @SuppressWarnings("javadoc")
@@ -188,7 +188,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 	
 	public TestStAXEventOutputter() {
-		super(false, false, true, true);
+		super(false, false, true, true, false);
 	}
 	
 	

@@ -78,12 +78,14 @@ import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
-import org.jdom2.output.SAXOutputProcessor.SAXTarget;
+import org.jdom2.output.support.AbstractSAXOutputProcessor;
+import org.jdom2.output.support.SAXOutputProcessor;
+import org.jdom2.output.support.SAXTarget;
 
 /**
  * Outputs a JDOM document as a stream of SAX2 events.
  * <p>
- * Most ContentHandler callbacks are supported. Both
+ * Most ContentHandler callbacks are supported. BOTH
  * <code>ignorableWhitespace()</code> and <code>skippedEntity()</code> have not
  * been implemented. The <code>{@link JDOMLocator}</code> class returned by
  * <code>{@link #getLocator}</code> exposes the current node being operated

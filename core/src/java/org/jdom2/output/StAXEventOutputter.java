@@ -70,6 +70,9 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.output.support.AbstractStAXEventProcessor;
+import org.jdom2.output.support.StAXEventProcessor;
+import org.jdom2.output.support.XMLOutputProcessor;
 
 /**
  * Outputs a JDOM document as a StAX XMLEventConsumer of bytes.

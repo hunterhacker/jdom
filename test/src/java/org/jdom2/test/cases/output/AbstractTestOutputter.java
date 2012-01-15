@@ -35,14 +35,15 @@ public abstract class AbstractTestOutputter {
 	private final boolean pademptyelement;
 	private final boolean forceexpand;
 	private final boolean padpi;
-	//private final boolean rawoutsideroot;
+	private final boolean usesrawxmlout;
 
-	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi, boolean forceexpand) {
+	public AbstractTestOutputter(boolean cr2xD, boolean padpreempty, boolean padpi,
+			boolean forceexpand, boolean usesrawxmlout) {
 		this.cr2xD = cr2xD;
 		this.pademptyelement = padpreempty;
 		this.forceexpand = forceexpand;
 		this.padpi = padpi;
-		//this.rawoutsideroot = rawoutsideroot;
+		this.usesrawxmlout = usesrawxmlout;
 	}
 	
 	protected final String expect(String expect) {
@@ -550,9 +551,9 @@ public abstract class AbstractTestOutputter {
 	@Test
 	public void testDocumentSimple() {
 		Document content = new Document();
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
 				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
 				outputString(fcompact, content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
 				outputString(fpretty,  content));
@@ -564,9 +565,9 @@ public abstract class AbstractTestOutputter {
 	public void testDocumentDocType() {
 		Document content = new Document();
 		content.setDocType(new DocType("root"));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n", 
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
 				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n", 
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
 				outputString(fcompact, content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
 				outputString(fpretty,  content));
@@ -582,9 +583,9 @@ public abstract class AbstractTestOutputter {
 				outputString(fraw,     content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
 				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->", 
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
 				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->",
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n",
 				outputString(ftfw,     content));
 	}
 
@@ -1037,19 +1038,16 @@ public abstract class AbstractTestOutputter {
 		String pidec = "<?jdomtest?>";
 		String rtdec = "<root />";
 		String lf = "\n";
+		String dlf = usesrawxmlout ? "" : lf;
 		checkOutput(doc, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf,
-				xmldec + lf + dtdec + lf + lf + commentdec + lf + pidec  + lf + rtdec + lf);
+				xmldec + lf + dtdec + commentdec + pidec + rtdec + lf, 
+				xmldec + lf + dtdec + commentdec + pidec + rtdec + lf,
+				xmldec + lf + dtdec + dlf + commentdec + dlf + pidec  + dlf + rtdec + lf,
+				xmldec + lf + dtdec + dlf + commentdec + dlf + pidec  + dlf + rtdec + lf);
 	}
 	
 	@Test
 	public void testDeepNesting() {
-		testDeepNestingCore(true);
-	}
-	
-	protected final void testDeepNestingCore(boolean startnewline) {
 		// need to get beyond 16 levels of XML.
 		DocType dt = new DocType("root");
 		Element root = new Element("root");
@@ -1060,13 +1058,20 @@ public abstract class AbstractTestOutputter {
 		String dtdec = "<!DOCTYPE root>";
 		String lf = "\n";
 		
-		String base = xmldec + lf + dtdec + lf;
-		StringBuilder raw = new StringBuilder(base);
-		StringBuilder pretty = new StringBuilder(base);
-		raw.append("<root>");
-		if (startnewline) {
+		StringBuilder raw = new StringBuilder();
+		raw.append(xmldec).append(lf).append(dtdec);
+		StringBuilder pretty = new StringBuilder();
+		pretty.append(xmldec).append(lf).append(dtdec);
+		if (!usesrawxmlout) {
+			// most test systems use the XMLOutputter in raw mode to output
+			// the results of the conversion. In Raw mode the XMLOutputter will
+			// not make pretty content outside of the root element (but it will
+			// put the XMLDeclaration on it's own line).
+			// so, in the cases where the actual pretty format is used, we add
+			// this newline after the DocType...
 			pretty.append(lf);
 		}
+		raw.append("<root>");
 		pretty.append("<root>");
 		pretty.append(lf);
 		final int depth = 40;
@@ -1110,14 +1115,14 @@ public abstract class AbstractTestOutputter {
 	public void testOutputElementContent() {
 		Element root = new Element("root");
 		root.addContent(new Element("child"));
-		checkOutput(root, "outputElementContent", Element.class, null, "<child />", "<child />", "<child />\n", "<child />\n");
+		checkOutput(root, "outputElementContent", Element.class, null, "<child />", "<child />", "<child />", "<child />");
 	}
 
 	@Test
 	public void testOutputList() {
 		List<Object> c = new ArrayList<Object>();
 		c.add(new Element("root"));
-		checkOutput(c, "output", List.class, null, "<root />", "<root />", "<root />\n", "<root />\n");
+		checkOutput(c, "output", List.class, null, "<root />", "<root />", "<root />", "<root />");
 	}
 
 	

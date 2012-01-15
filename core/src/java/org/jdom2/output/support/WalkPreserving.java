@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,34 +52,88 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
-import org.xml.sax.Locator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.jdom2.Content;
 
 /**
- * An implementation of the SAX {@link Locator} interface that
- * exposes the JDOM node being processed by SAXOutputter.
- * <p>
- * In JDOM2 this class is demoted to an interface. The information was never
- * accurate anyway, and as an interface a specific Outputter instance can
- * instead do 'the right thing' with the locator, if needed.
- * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
- * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
- * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
- *
- * @author Laurent Bihanic
+ * This Walker implementation walks a list of Content in it's original RAW
+ * format. There is no text manipulation, and all content will be returned as
+ * the input type. In other words, next() will never be null, and text() will
+ * always be null.
+ * 
  * @author Rolf Lear
  *
  */
-public interface JDOMLocator extends Locator {
-
-	/**
-	 * Returns the JDOM node being processed by SAXOutputter.
-	 *
-	 * @return the JDOM node being processed by SAXOutputter.
-	 */
-	public Object getNode();
+public class WalkPreserving implements Walker {
 	
-}
+	private int cursor = 0;
+	private final int size;
+	private final List<? extends Content> content;
+	private final boolean alltext;
+	
+	/**
+	 * Create a Walker that preserves all content in its raw state.
+	 * @param content the content to walk.
+	 */
+	public WalkPreserving(List<? extends Content> content) {
+		super();
+		size = content.size();
+		if (size == 0) {
+			alltext = true;
+		} else {
+			boolean atext = true;
+			int i = size;
+			while (--i > 0 && atext) {
+				switch (content.get(i).getCType()) {
+					case Text :
+					case CDATA :
+					case EntityRef :
+						break;
+					default :
+						atext = false;
+				}
+			}
+			alltext = atext;
+		}
+		
+		this.content = content;
+	}
 
+	@Override
+	public boolean isAllText() {
+		return alltext;
+	}
+
+	@Override
+	public boolean hasNext() {
+		return cursor < size;
+	}
+
+	@Override
+	public Content next() {
+		if (cursor >= size) {
+			throw new NoSuchElementException("Cannot walk off end of Content");
+		}
+		return content.get(cursor++);
+	}
+
+	@Override
+	public String text() {
+		return null;
+	}
+
+	@Override
+	public boolean isCDATA() {
+		return false;
+	}
+
+	@Override
+	public boolean isAllWhiteSpace() {
+		return size == 0;
+	}
+
+}

@@ -42,10 +42,10 @@ import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.AbstractXMLOutputProcessor;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
-import org.jdom2.output.XMLOutputProcessor;
+import org.jdom2.output.support.AbstractXMLOutputProcessor;
+import org.jdom2.output.support.XMLOutputProcessor;
 import org.jdom2.output.XMLOutputter;
 
 @SuppressWarnings("javadoc")
@@ -60,7 +60,7 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
     }
 
     public TestXMLOutputter() {
-		super(true, true, false, false);
+		super(true, true, false, false, false);
 	}
     
     private XMLOutputter getOutputter(Format format) {

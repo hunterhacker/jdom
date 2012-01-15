@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -68,6 +68,8 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * This interface provides a base support for the {@link XMLOutputter}.

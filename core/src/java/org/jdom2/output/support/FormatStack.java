@@ -52,8 +52,10 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
+import org.jdom2.output.EscapeStrategy;
+import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 import org.jdom2.util.ArrayCopy;
 

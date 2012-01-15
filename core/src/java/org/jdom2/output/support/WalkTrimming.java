@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,34 +52,91 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
-import org.xml.sax.Locator;
+import java.util.List;
+
+import org.jdom2.Content;
+import org.jdom2.Text;
+import org.jdom2.Verifier;
 
 /**
- * An implementation of the SAX {@link Locator} interface that
- * exposes the JDOM node being processed by SAXOutputter.
- * <p>
- * In JDOM2 this class is demoted to an interface. The information was never
- * accurate anyway, and as an interface a specific Outputter instance can
- * instead do 'the right thing' with the locator, if needed.
- * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
- * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
- * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
- *
- * @author Laurent Bihanic
+ * This Walker implementation will produce trimmed text content.
+ * 
  * @author Rolf Lear
  *
  */
-public interface JDOMLocator extends Locator {
+public class WalkTrimming extends AbstractFormattedWalker {
 
 	/**
-	 * Returns the JDOM node being processed by SAXOutputter.
-	 *
-	 * @return the JDOM node being processed by SAXOutputter.
+	 * Create the Trimmed walker instance.
+	 * @param content The list of content to format
+	 * @param padding The indenting required.
+	 * @param eol The End-Of-Line sequence.
 	 */
-	public Object getNode();
-	
-}
+	public WalkTrimming(List<? extends Content> content, String padding,
+			String eol) {
+		super(content, padding, eol);
+	}
 
+	@Override
+	protected void analyzeMultiText(final MultiText mtext,
+			int offset, int len) {
+		
+		while (len > 0) {
+			final Content c = get(offset);
+			if (c instanceof Text) {
+				// either Text or CDATA
+				if (!Verifier.isAllXMLWhitespace(c.getValue())) {
+					break;
+				}
+			} else {
+				break;
+			}
+			offset++;
+			len--;
+		}
+		
+		while (len > 0) {
+			final Content c = get(offset + len - 1);
+			if (c instanceof Text) {
+				// either Text or CDATA
+				if (!Verifier.isAllXMLWhitespace(c.getValue())) {
+					break;
+				}
+			} else {
+				break;
+			}
+			len--;
+		}
+		
+		for (int i = 0; i < len; i++) {
+			Trim trim = Trim.NONE;
+			if (i + 1 == len) {
+				trim = Trim.RIGHT;
+			}
+			if (i == 0) {
+				trim = Trim.LEFT;
+			}
+			if (len == 1) {
+				trim = Trim.BOTH;
+			}
+			final Content c = get(offset + i);
+			switch (c.getCType()) {
+				case Text :
+					mtext.appendText(trim, c.getValue());
+					break;
+				case CDATA :
+					mtext.appendCDATA(trim, c.getValue());
+					break;
+				case EntityRef:
+					// treat like any other content.
+					// raw.
+				default:
+					mtext.appendRaw(c);
+					break;
+			}
+		}
+		
+	}
+}

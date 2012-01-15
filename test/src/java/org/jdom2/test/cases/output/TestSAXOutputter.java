@@ -44,13 +44,13 @@ import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.input.sax.SAXHandler;
-import org.jdom2.output.AbstractSAXOutputProcessor;
 import org.jdom2.output.Format;
 import org.jdom2.output.JDOMLocator;
 import org.jdom2.output.LineSeparator;
-import org.jdom2.output.SAXOutputProcessor;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.output.support.AbstractSAXOutputProcessor;
+import org.jdom2.output.support.SAXOutputProcessor;
 import org.jdom2.test.util.UnitTestUtil;
 
 
@@ -71,7 +71,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	 * @param forceplatformeol
 	 */
 	public TestSAXOutputter() {
-		super(true, true, false, false);
+		super(true, true, false, false, true);
 	}
 
 	private void roundTrip(Document doc) {
@@ -995,7 +995,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 				handler, handler, handler);
 		
 		try {
-			saxout.output(element);
+			saxout.outputFragment(element.getContent());
 		} catch (Exception e) {
 			throw new IllegalStateException("Could not output", e);
 		}
@@ -1021,14 +1021,6 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 		// Can't control expand in SAXOutputter.
 	}
 	
-	@Test
-	@Override
-	@Ignore
-	public void testCDATAEmpty() {
-		// can't test empty CDATA in SAXHandler.
-	}
-	
-
 	@Test
 	@Ignore
 	@Override
@@ -1117,75 +1109,4 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 		// Cannot test for formatting outside of root element
 	}
 
-	@Test
-	@Override
-	@Ignore
-	public void testOutputDocumentFull() {
-		// need to change formatting of whitespace outside root element
-		DocType dt = new DocType("root");
-		Comment comment = new Comment("comment");
-		ProcessingInstruction pi = new ProcessingInstruction("jdomtest", "");
-		Element root = new Element("root");
-		Document doc = new Document();
-		doc.addContent(dt);
-		doc.addContent(comment);
-		doc.addContent(pi);
-		doc.addContent(root);
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String dtdec = "<!DOCTYPE root>";
-		String commentdec = "<!--comment-->";
-		String pidec = "<?jdomtest?>";
-		String rtdec = "<root />";
-		String lf = "\n";
-		checkOutput(doc, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf);
-	}
-	
-
-	@Test
-	@Override
-	public void testDocumentSimple() {
-		// change expected whitespace outside root element
-		Document content = new Document();
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
-				outputString(ftfw,     content));
-	}
-	
-	@Test
-	@Override
-	public void testDocumentComment() {
-		// change expected whitespace outside root element
-		Document content = new Document();
-		content.addContent(new Comment("comment"));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n",
-				outputString(ftfw,     content));
-	}
-	
-	@Override
-	public void testDeepNesting() {
-		testDeepNestingCore(false);
-	}
-
-	@Test
-	@Override
-	@Ignore
-	public void testOutputElementContent() {
-		// cannot test the formatting of an Element's contents easily... skip it for now.
-	}
-	
 }

@@ -13,7 +13,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -31,18 +30,17 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
-import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.adapters.DOMAdapter;
 import org.jdom2.adapters.JAXPDOMAdapter;
 import org.jdom2.input.DOMBuilder;
-import org.jdom2.output.AbstractDOMOutputProcessor;
-import org.jdom2.output.DOMOutputProcessor;
 import org.jdom2.output.DOMOutputter;
 import org.jdom2.output.Format;
 import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.output.support.AbstractDOMOutputProcessor;
+import org.jdom2.output.support.DOMOutputProcessor;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -61,7 +59,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     }
     
     public TestDOMOutputter() {
-		super(true, true, false, false);
+		super(true, true, false, false, true);
 	}
     
     @SuppressWarnings("deprecation")
@@ -424,7 +422,6 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     			StringBuilder sb = new StringBuilder();
     			for (Object o : (List<?>)input) {
     				sb.append(nodeToString(o));
-    				sb.append("\n");
     			}
     			return sb.toString();
     		}
@@ -647,150 +644,5 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     public void testOutputDocumentOmitDeclaration() {
     	// nothing.
     }
- 
-	@Test
-	@Override
-	public void testDocumentSimple() {
-		Document content = new Document();
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n", 
-				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
-				outputString(ftfw,     content));
-	}
-	
-	@Test
-	@Override
-	public void testOutputDocumentFull() {
-		// we cannot control the whitespace before the root element... need to change the expectations.
-		DocType dt = new DocType("root");
-		Comment comment = new Comment("comment");
-		ProcessingInstruction pi = new ProcessingInstruction("jdomtest", "");
-		Element root = new Element("root");
-		Document doc = new Document();
-		doc.addContent(dt);
-		doc.addContent(comment);
-		doc.addContent(pi);
-		doc.addContent(root);
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String dtdec = "<!DOCTYPE root>";
-		String commentdec = "<!--comment-->";
-		String pidec = "<?jdomtest?>";
-		String rtdec = "<root />";
-		String lf = "\n";
-		checkOutput(doc, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf, 
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf,
-				xmldec + lf + dtdec + lf + commentdec + pidec + rtdec + lf);
-	}
-    
-	@Test
-	@Override
-	public void testDeepNesting() {
-		// cannot control whitespace prior to Root Element
-		// need to get beyond 16 levels of XML.
-		DocType dt = new DocType("root");
-		Element root = new Element("root");
-		Document doc = new Document();
-		doc.addContent(dt);
-		doc.addContent(root);
-		String xmldec = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		String dtdec = "<!DOCTYPE root>";
-		String lf = "\n";
-		
-		String base = xmldec + lf + dtdec;
-		StringBuilder raw = new StringBuilder(base + lf);
-		StringBuilder pretty = new StringBuilder(base);
-		raw.append("<root>");
-		pretty.append(lf);
-		pretty.append("<root>");
-		pretty.append(lf);
-		final int depth = 40;
-		int cnt = depth;
-		Parent parent = root;
-		StringBuilder indent = new StringBuilder();
-		while (--cnt > 0) {
-			Element emt = new Element("emt");
-			parent.getContent().add(emt);
-			parent = emt;
-			raw.append("<emt>");
-			indent.append("  ");
-			pretty.append(indent.toString());
-			pretty.append("<emt>");
-			pretty.append(lf);
-		}
-		
-		parent.getContent().add(new Element("bottom"));
-		raw.append("<bottom />");
-		pretty.append(indent.toString());
-		pretty.append("  <bottom />");
-		pretty.append(lf);
-		
-		cnt = depth;
-		while (--cnt > 0) {
-			raw.append("</emt>");
-			pretty.append(indent.toString());
-			pretty.append("</emt>");
-			indent.setLength(indent.length() - 2);
-			pretty.append(lf);
-		}
-		raw.append("</root>");
-		raw.append(lf);
-		pretty.append("</root>");
-		pretty.append(lf);
-		
-		checkOutput(doc, raw.toString(), raw.toString(), pretty.toString(), pretty.toString()); 
-	}
-	
-	@Test
-	@Override
-	public void testDocumentDocType() {
-		Document content = new Document();
-		content.setDocType(new DocType("root"));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n", 
-				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n", 
-				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n", 
-				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n\n",
-				outputString(ftfw,     content));
-	}
-	
-	@Test
-	@Override
-	public void testDocumentComment() {
-		Document content = new Document();
-		content.addContent(new Comment("comment"));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fraw,     content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fcompact, content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
-				outputString(fpretty,  content));
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n",
-				outputString(ftfw,     content));
-	}
-
-	@Test
-	@Override
-	public void testOutputElementContent() {
-		Element root = new Element("root");
-		root.addContent(new Element("child"));
-		checkOutput(root, "outputElementContent", Element.class, null, "<child />\n", "<child />\n", "<child />\n", "<child />\n");
-	}
-
-	@Test
-	@Override
-	public void testOutputList() {
-		List<Object> c = new ArrayList<Object>();
-		c.add(new Element("root"));
-		checkOutput(c, "output", List.class, null, "<root />\n", "<root />\n", "<root />\n", "<root />\n");
-	}
-
     
 }

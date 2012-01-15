@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,34 +52,71 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
-import org.xml.sax.Locator;
+import java.util.List;
+
+import org.jdom2.Content;
+import org.jdom2.Text;
+import org.jdom2.Verifier;
 
 /**
- * An implementation of the SAX {@link Locator} interface that
- * exposes the JDOM node being processed by SAXOutputter.
- * <p>
- * In JDOM2 this class is demoted to an interface. The information was never
- * accurate anyway, and as an interface a specific Outputter instance can
- * instead do 'the right thing' with the locator, if needed.
- * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
- * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
- * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
- *
- * @author Laurent Bihanic
+ * This Walker implementation will produce trimmed text content.
+ * 
  * @author Rolf Lear
  *
  */
-public interface JDOMLocator extends Locator {
+public class WalkTrimmingFullWhite extends AbstractFormattedWalker {
 
 	/**
-	 * Returns the JDOM node being processed by SAXOutputter.
-	 *
-	 * @return the JDOM node being processed by SAXOutputter.
+	 * Create the Trimmed walker instance.
+	 * @param content The list of content to format
+	 * @param padding The indenting required.
+	 * @param eol The End-Of-Line sequence.
 	 */
-	public Object getNode();
-	
-}
+	public WalkTrimmingFullWhite(List<? extends Content> content, String padding,
+			String eol) {
+		super(content, padding, eol);
+	}
 
+	@Override
+	protected void analyzeMultiText(final MultiText mtext,
+			final int offset, final int len) {
+		int ln = len;
+		while (--ln >= 0) {
+			final Content c = get(offset + ln);
+			if (c instanceof Text) {
+				// either Text or CDATA
+				if (!Verifier.isAllXMLWhitespace(c.getValue())) {
+					break;
+				}
+			} else {
+				break;
+			}
+		}
+		if (ln < 0) {
+			// all whitespace.
+			return;
+		}
+		
+		// some non-white, so return all, but merge the sequential Text items.
+		for (int i = 0; i < len; i++) {
+			final Content c = get(offset + i);
+			switch (c.getCType()) {
+				case Text :
+					mtext.appendText(Trim.NONE, c.getValue());
+					break;
+				case CDATA :
+					mtext.appendCDATA(Trim.NONE, c.getValue());
+					break;
+				case EntityRef:
+					// treat like any other content.
+					// raw.
+				default:
+					mtext.appendRaw(c);
+					break;
+			}
+		}
+		
+	}
+}

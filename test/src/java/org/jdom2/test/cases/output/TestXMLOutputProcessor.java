@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jdom2.IllegalDataException;
-import org.jdom2.output.AbstractXMLOutputProcessor;
 import org.jdom2.output.Format;
-import org.jdom2.output.FormatStack;
+import org.jdom2.output.support.AbstractXMLOutputProcessor;
+import org.jdom2.output.support.FormatStack;
 
 import org.junit.Test;
 
@@ -162,88 +162,14 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	@Test
 	public void testTextCDATARaw() throws IOException {
 		CheckWriter cw = new CheckWriter("<![CDATA[ \" ' & < > \r \n \t \uD800\uDC00 ]]>");
-		textCDATARaw(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
+		textCDATA(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
 		cw.close();
 	}
 
 	@Test
 	public void testTextCDATARawEmpty() throws IOException {
 		CheckWriter cw = new CheckWriter("<![CDATA[]]>");
-		textCDATARaw(cw, "");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATACompact() throws IOException {
-		// this is a trick one because the \t \r \n are whitespace and get
-		// compacted out.
-		CheckWriter cw = new CheckWriter("<![CDATA[\" ' & < > \uD800\uDC00]]>");
-		textCDATACompact(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATACompactEmpty() throws IOException {
-		// this is a trick one because the \t \r \n are whitespace and get
-		// compacted out.
-		CheckWriter cw = new CheckWriter("");
-		textCDATACompact(cw, "  \r \n \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimFullWhite() throws IOException {
-		CheckWriter cw = new CheckWriter("<![CDATA[ \" ' & < > \r \n \t \uD800\uDC00 ]]>");
-		textCDATATrimFullWhite(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimFullWhiteEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textCDATATrimFullWhite(cw, "  \r \n \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimBoth() throws IOException {
-		CheckWriter cw = new CheckWriter("<![CDATA[\" ' & < > \r \n \t \uD800\uDC00]]>");
-		textCDATATrimBoth(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimBothEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textCDATATrimBoth(cw, "  \r \n \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimRight() throws IOException {
-		CheckWriter cw = new CheckWriter("<![CDATA[ \" ' & < > \r \n \t \uD800\uDC00]]>");
-		textCDATATrimRight(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimRightEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textCDATATrimRight(cw, "  \r \n \t ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimLeft() throws IOException {
-		CheckWriter cw = new CheckWriter("<![CDATA[\" ' & < > \r \n \t \uD800\uDC00 ]]>");
-		textCDATATrimLeft(cw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextCDATATrimLeftEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textCDATATrimLeft(cw, "  \r \n \t  ");
+		textCDATA(cw, "");
 		cw.close();
 	}
 
@@ -300,125 +226,18 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	@Test
 	public void testTextEscapeRaw() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
-		textEscapeRaw(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
+		String s = " \" ' & < > \r \n \t \uD800\uDC00 ";
+		textEscapedEntitiesFilter(cw, fsraw, s.toCharArray(), 0, s.length());
 		cw.close();
 	}
 
 	@Test
 	public void testTextEscapeRawEmpty() throws IOException {
 		CheckWriter cw = new CheckWriter("");
-		textEscapeRaw(cw, fsraw, "");
+		textEscapedEntitiesFilter(cw, fsraw, "".toCharArray(), 0, 0);
 		cw.close();
 	}
 
-	@Test
-	public void testTextEscapeCompact() throws IOException {
-		CheckWriter cw = new CheckWriter("\" ' &amp; &lt; &gt; &#x10000;");
-		textEscapeCompact(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeCompactEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textEscapeCompact(cw, fsraw, "  \r \n   \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeCompactSurrogateErrorMid() {
-		CheckWriter cw = new CheckWriter("\" ' &amp; &lt; &gt; &#x10000;");
-		// the HighSurrogate is broken here....
-		try {
-			textEscapeCompact(cw, fsraw, " \" ' & < > \r \n \t \uD800 \uDC00 ");
-			fail("Should have missed the low surrogate...");
-		} catch (IllegalDataException ide) {
-			//good
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Expected IllegalDataException but got " + e.getClass());
-		}
-	}
-
-	@Test
-	public void testTextEscapeCompactSurrogateErrorEnd() {
-		CheckWriter cw = new CheckWriter("\" ' &amp; &lt; &gt; &#x10000;");
-		// the HighSurrogate is broken here....
-		try {
-			textEscapeCompact(cw, fsraw, " \" ' & < > \r \n \t \uD800");
-			fail("Should have missed the low surrogate...");
-		} catch (IllegalDataException ide) {
-			//good
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Expected IllegalDataException but got " + e.getClass());
-		}
-	}
-
-	@Test
-	public void testTextEscapeCompactNoEscape() throws IOException {
-		CheckWriter cw = new CheckWriter("\" ' & < > \uD800\uDC00");
-		FormatStack tmps = new FormatStack(RAW);
-		tmps.setEscapeOutput(false);
-		textEscapeCompact(cw, tmps, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimBoth() throws IOException {
-		CheckWriter cw = new CheckWriter("\" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000;");
-		textEscapeTrimBoth(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimBothEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textEscapeTrimBoth(cw, fsraw, "  \r \n \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimFullWhite() throws IOException {
-		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
-		textEscapeTrimFullWhite(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimFullWhiteEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textEscapeTrimFullWhite(cw, fsraw, "  \r \n \t  ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimRight() throws IOException {
-		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000;");
-		textEscapeTrimRight(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimRightEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textEscapeTrimRight(cw, fsraw, "  \r \n \t    ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimLeft() throws IOException {
-		CheckWriter cw = new CheckWriter("\" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
-		textEscapeTrimLeft(cw, fsraw, " \" ' & < > \r \n \t \uD800\uDC00 ");
-		cw.close();
-	}
-
-	@Test
-	public void testTextEscapeTrimLeftEmpty() throws IOException {
-		CheckWriter cw = new CheckWriter("");
-		textEscapeTrimLeft(cw, fsraw, "  \r \n \t  ");
-		cw.close();
-	}
 
 //	@Test
 //	public void testProcessWriterFormatDocument() {

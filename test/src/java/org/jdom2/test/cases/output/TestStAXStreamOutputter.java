@@ -45,12 +45,12 @@ import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.input.DefaultStAXFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXStreamBuilder;
-import org.jdom2.output.AbstractStAXStreamProcessor;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
+import org.jdom2.output.support.AbstractStAXStreamProcessor;
+import org.jdom2.output.support.StAXStreamProcessor;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.StAXStreamOutputter;
-import org.jdom2.output.StAXStreamProcessor;
 
 @SuppressWarnings("javadoc")
 public final class TestStAXStreamOutputter extends AbstractTestOutputter {
@@ -119,7 +119,7 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 	}
 	
     public TestStAXStreamOutputter() {
-		super(false, false, false, false);
+		super(false, false, false, false, false);
 	}
     
 	@Override

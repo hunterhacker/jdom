@@ -52,34 +52,58 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
-import org.xml.sax.Locator;
+import java.util.List;
+
+import org.jdom2.Content;
 
 /**
- * An implementation of the SAX {@link Locator} interface that
- * exposes the JDOM node being processed by SAXOutputter.
- * <p>
- * In JDOM2 this class is demoted to an interface. The information was never
- * accurate anyway, and as an interface a specific Outputter instance can
- * instead do 'the right thing' with the locator, if needed.
- * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
- * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
- * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
- *
- * @author Laurent Bihanic
+ * Methods common/useful for all Outputter processors.
+ * 
+ * @since JDOM2
  * @author Rolf Lear
- *
  */
-public interface JDOMLocator extends Locator {
+public abstract class AbstractOutputProcessor {
+	
+	/*
+	 * ========================================================================
+	 * Support methods for Text-content formatting. Should all be protected. The
+	 * following are used when printing Text-based data. Because of complicated
+	 * multi-sequential text sometimes the requirements are odd. All Text
+	 * content will be output using these methods, which is why there is the None
+	 * version.
+	 * ========================================================================
+	 */
 
 	/**
-	 * Returns the JDOM node being processed by SAXOutputter.
-	 *
-	 * @return the JDOM node being processed by SAXOutputter.
+	 * Create a walker to process Content List values.
+	 * <p>
+	 * If you require a custom walker to process content in a specific way
+	 * then you probably want to override this method to build the walker you
+	 * want.
+	 * 
+	 * @param fstack The current FormatStack for the walker (this should not be 
+	 * 		modified by the Walker).
+	 * @param content The list of content to walk.
+	 * @return the created walker.
 	 */
-	public Object getNode();
+	protected Walker buildWalker(FormatStack fstack, List<? extends Content> content) {
+		switch (fstack.getTextMode()) {
+			case NORMALIZE:
+				return new WalkCompacting(content, fstack.getLevelIndent(), fstack.getLevelEOL());
+			case PRESERVE:
+				return new WalkPreserving(content);
+			case TRIM:
+				return new WalkTrimming(content, fstack.getLevelIndent(), fstack.getLevelEOL());
+			case TRIM_FULL_WHITE:
+				return new WalkTrimmingFullWhite(content, fstack.getLevelIndent(), fstack.getLevelEOL());
+		}
+		// all cases should be handled in the switch statement above. If someone
+		// creates a new TextMode though, then it will create a warning in
+		// eclipse above, and the code will fall through to this 'default' raw
+		// instance.
+		return new WalkPreserving(content);
+	}
 	
 }
-

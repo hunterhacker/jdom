@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.output;
+package org.jdom2.output.support;
 
 import java.util.List;
 
@@ -65,6 +65,8 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.output.Format;
 
 /**
  * This interface provides a base support for the {@link DOMOutputter}.
