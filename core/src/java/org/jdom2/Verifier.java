@@ -1302,4 +1302,32 @@ final public class Verifier {
 		}
 		return false;
 	}
+	
+	/**
+	 * This is a utility function for determining whether a specified 
+	 * String is a whitespace character according to production 3
+	 * of the XML 1.0 specification.
+	 * <p>
+	 * This method delegates the individual calls for each character to
+	 * {@link #isXMLWhitespace(char)}.
+	 * 
+	 * @param value
+	 *        The value to inspect
+	 * @return true if all characters in the input value are all whitespace
+	 *        (or the string is the empty-string).
+	 * @since JDOM2
+	 */
+	public static final boolean isAllXMLWhitespace(final String value) {
+		// Doing the count-down instead of a count-up saves a single int
+		// variable declaration.
+		int i = value.length();
+		while (--i >= 0) {
+			if (!isXMLWhitespace(value.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
 }

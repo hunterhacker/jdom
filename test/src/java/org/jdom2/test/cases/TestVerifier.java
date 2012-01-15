@@ -591,5 +591,22 @@ public final class TestVerifier {
     	assertFalse(Verifier.isXMLCharacter(0x110000));
     	
     }
+    
+    @Test
+    public void testIsAllXMLWhitespace() {
+    	assertTrue(Verifier.isAllXMLWhitespace(""));
+    	assertTrue(Verifier.isAllXMLWhitespace(" "));
+    	assertTrue(Verifier.isAllXMLWhitespace(" \r\n\t "));
+    	try {
+    		Verifier.isAllXMLWhitespace(null);
+    		fail("Expected a NullPointerException, but it did not happen");
+    	} catch (NullPointerException npe) {
+    		// good.
+    	}
+    	assertFalse(Verifier.isAllXMLWhitespace(" a "));
+    	assertFalse(Verifier.isAllXMLWhitespace(" &nbsp; "));
+    	// \u00A0 is Non-Break space. 
+    	assertFalse(Verifier.isAllXMLWhitespace("\u00A0"));
+    }
 
 }
