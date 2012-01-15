@@ -784,7 +784,7 @@ public class SAXHandler extends DefaultHandler
 	 *         if the state of the handler does not allow this.
 	 */
 	protected void flushCharacters(String data) throws SAXException {
-		if (data.length() == 0) {
+		if (data.length() == 0 && !inCDATA) {
 			previousCDATA = inCDATA;
 			return;
 		}
@@ -965,6 +965,8 @@ public class SAXHandler extends DefaultHandler
 			return;
 
 		previousCDATA = true;
+		flushCharacters();
+		previousCDATA = false;
 		inCDATA = false;
 	}
 
