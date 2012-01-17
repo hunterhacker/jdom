@@ -849,6 +849,22 @@ final class ContentList extends AbstractList<Content>
 		FilterList(final Filter<F> filter) {
 			this.filter = filter;
 		}
+		
+		/**
+		 * Returns true if there is no content in this FilterList.
+		 * @return true if there is no content in this FilterList
+		 */
+		@Override
+		public boolean isEmpty() {
+			// More efficient implementation than default size() == 0
+			// we use resync() to accomplish the task. If there is an
+			// element 0 in this FilterList, then it is not empty!
+			// we may already have resync'd 0, which will be a fast return then,
+			// or, if we have not resync'd 0, then we only have to filter up to
+			// the first matching element to get a result (or the whole list
+			// if isEmpty() is true).
+			return resync(0) == size;
+		}
 
 		/**
 		 * Synchronise our view to the backing list. Only synchronise the first
