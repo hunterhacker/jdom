@@ -77,8 +77,32 @@ public abstract class Content implements Cloneable, Serializable, NamespaceAware
 
 	/**
 	 * An enumeration useful for identifying content types without
-	 * having to do <code>instanceof</code> type conditionals. Tese can be used
-	 * in switch-type statements too. 
+	 * having to do <code>instanceof</code> type conditionals.
+	 * <p>
+	 * <code>instanceof</code> is not a particularly safe way to test content
+	 * in JDOM because CDATA extends Text ( a CDATA instance is an
+	 * <code>instanceof</code> Text).
+	 * <p>
+	 * This CType enumeration provides a direct and sure mechanism for
+	 * identifying JDOM content.
+	 * <p>
+	 * These can be used in switch-type statements too (which is much neater
+	 * than chained if (instanceof) else if (instanceof) else .... expressions):
+	 * <p>
+	 * <pre>
+	 *    switch(content.getCType()) {
+	 *        case Text :
+	 *             .....
+	 *             break; 
+	 *        case CDATA :
+	 *             .....
+	 *             break;
+	 *        ....
+	 *    }
+	 * </pre> 
+	 * 
+	 * @author Rolf Lear
+	 * @since JDOM2
 	 */
 	public static enum CType {
 		/** Represents {@link Comment} content */

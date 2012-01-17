@@ -1,13 +1,71 @@
 <body>
 
-Classes to represent the components of an XML document.  The Verifier is a
-special class useful in ensuring well-formedness of documents.  The Parent
-interface is implemented by Document and Element exposing their commonality.
-The Content abstract class is extended by all the node types of a document
-except Document itself.
+Classes representing the components of an XML document. 
+<p>
+In addition there are the Exceptions related to JDOM processing and some classes
+useful for creating and accessing JDOM Content.
+<p>
+<h1>Core JDOM classes</h1>
+All XML in JDOM is represented in the following classes:
+<ul>
+<li> Text - regular parsed XML character content (PCDATA).
+<li> CDATA - unparsed XML text content (can contain &lt; &gt; and &amp;). Note: in JDOM, CDATA class exends Text.
+<li> Comment - XML Comments
+<li> EntityRef - Entity References (e.g. &amp;refeg; )
+<li> ProcessingInstruction - As the name suggests
+<li> DocType - The relevant details of any DOCTYPE Declaration.
+<li> Element - An XML element 
+<li> Document - A representation of a complete XML document
+</ul>
+In addition to these 8 classes there are also the Attribute and Namespace
+classes which are used to represent these respective XML structures in Element.
+In the DOM model the 'Attr' (attribute) class is considered to be a DOM 'Node'.
+In JDOM this is <strong>not</strong> the case - Attribute is not Content.
+<p>
+The XML Structure is embodied in the the concept of Parent JDOM classes and
+regular JDOM Content. Parent is an interface, and Content is an abstract class.
+The Document and Element classes are both Parent classes, Text, CDATA, Comment,
+EntityRef, ProcessingInstruction, DocType and Element are all Content. Note that
+Element is both Parent and Content.
+<p>
+To enforce XML well-formedness, Document is only allowed a restricted set of
+child content: any number of ProcessingInstructions and Comments, one DocType,
+and one Element (the 'root' element). Element is allowed any child content
+except DocType.
+<p>
+The NamespaceAware interface identifies those JDOM constructs which are
+sensitive to Namespaces, which is all 8 core types and also Attribute. In JDOM
+NamespaceAware classes are able to identify and report the Namespace Context in
+which they exist.
+<p>
 
-The JDOMFactory interface and DefaultJDOMFactory standard implementation
-provide advanced users with the ability to create subtypes of the org.jdom
-classes.
+<h1>JDOM helper classes</h1>
+<p>
+The Verifier is a special class useful in ensuring well-formedness of documents.
+It contains all the rules for ensuring the JDOM model always has well-formed
+content.
+<p>
+JDOMConstants interface contains a number of constant values that JDOM users may
+find useful when creating or manipulating JDOM structures. These are in
+addition to (but some may duplicate) the constants found in the
+javax.xml.XMLConstants class.
+<p>
+The JDOMFactory interface is primarily used when building JDOM documents from
+some source (SAX, DOM, etc.) using one of the input Builders (SAXBuilder,
+DOMBuilder, etc.). The default JDOMFactory is the DefaultJDOMFactory).
+If you have custom JDOM classes or want special treatment for content as it is
+being created you can supply you own JDOMFactory instance to the input Builder.
+Typically you would extend the DefaultJDOMFactory for this purpose. 
+The DefaultJDOMFactory ensures all XML rules are followed correctly, the
+UncheckedJDOMFactory may create JDOM content that does not follow XML
+well-formedness rules. Use the UncheckedJDOMFactory in places where you are
+certain the input is correct (perhaps the results of a document parsed by a 
+trusted third-party parser). The UncheckedJDOMParser is only marginally faster
+than the DefaultJDOMParser.
+<p>
+DescendantIterator and FilterIterator each provide an efficient mechanism for
+traversing an entire JDOM document in 'document' order. The FilterIterator
+can be 'tuned' using an input filter to return only a selection of the content.
+<p>
 
 </body>
