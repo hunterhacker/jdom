@@ -28,60 +28,60 @@ public interface JDOMConstants {
 	 * XML Namespace constants
 	 */
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_PFX_DEFAULT = "";
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_URI_DEFAULT = "";
 
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_PFX_XML = "xml";
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_URI_XML = "http://www.w3.org/XML/1998/namespace";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_PFX_XMLNS = "xmlns";
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String NS_URI_XMLNS = "http://www.w3.org/XML/1998/namespace";
 	
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_PROPERTY_DECLARATION_HANDLER = 
 			"http://xml.org/sax/properties/declaration-handler";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_PROPERTY_DECLARATION_HANDLER_ALT = 
 			"http://xml.org/sax/handlers/DeclHandler";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_PROPERTY_LEXICAL_HANDLER = 
 			"http://xml.org/sax/properties/lexical-handler";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_PROPERTY_LEXICAL_HANDLER_ALT = 
 			"http://xml.org/sax/handlers/LexicalHandler";
 
 	
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_FEATURE_EXTERNAL_ENT = 
 			"http://xml.org/sax/features/external-general-entities";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_FEATURE_VALIDATION =
 			"http://xml.org/sax/features/validation";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_FEATURE_NAMESPACES =
 			"http://xml.org/sax/features/namespaces";
 	
-	/** Defined as '{@value}' */
+	/** Defined as {@value} */
 	public static final String SAX_FEATURE_NAMESPACE_PREFIXES =
 			"http://xml.org/sax/features/namespace-prefixes";
 
 	
 	/**
 	 * Constant used to define the {@link JDOMSource} with JAXP.
-	 * Defined as '{@value}'
+	 * Defined as {@value}
 	 * @see JDOMSource
 	 */
 	public static final String JDOM2_FEATURE_JDOMSOURCE = 
@@ -89,7 +89,7 @@ public interface JDOMConstants {
 	
 	/**
 	 * Constant used to define the {@link JDOMResult} with {@link TransformerFactory}.
-	 * Defined as '{@value}'
+	 * Defined as {@value}
 	 * @see JDOMResult
 	 */
 	public static final String JDOM2_FEATURE_JDOMRESULT = 
@@ -97,7 +97,7 @@ public interface JDOMConstants {
 	
 	/**
 	 * System Property queried to obtain an alternate default XPathFactory.
-	 * Defined as '{@value}'
+	 * Defined as {@value}
 	 * @see XPathFactory
 	 */
 	public static final String JDOM2_PROPERTY_XPATH_FACTORY =
@@ -106,7 +106,7 @@ public interface JDOMConstants {
 	/**
 	 * System Property queried to obtain an alternate default Line Separator.
 	 * <p>
-	 * Defined as '{@value}'
+	 * Defined as {@value}
 	 * @see LineSeparator
 	 */
 	public static final String JDOM2_PROPERTY_LINE_SEPARATOR =
