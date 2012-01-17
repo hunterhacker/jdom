@@ -72,7 +72,6 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
 import org.jdom2.Namespace;
-import org.jdom2.NamespaceStack;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.Verifier;
@@ -80,6 +79,7 @@ import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.util.NamespaceStack;
 
 /**
  * This class provides a concrete implementation of {@link XMLOutputProcessor}

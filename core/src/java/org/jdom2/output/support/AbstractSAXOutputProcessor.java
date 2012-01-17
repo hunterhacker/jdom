@@ -85,12 +85,12 @@ import org.jdom2.EntityRef;
 import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
-import org.jdom2.NamespaceStack;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.util.NamespaceStack;
 
 /**
  * Outputs a JDOM document as a stream of SAX2 events.

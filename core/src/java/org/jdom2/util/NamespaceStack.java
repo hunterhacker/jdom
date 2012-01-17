@@ -1,4 +1,4 @@
-package org.jdom2;
+package org.jdom2.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
 
 
 /**

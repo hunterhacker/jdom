@@ -9,7 +9,8 @@ import java.util.NoSuchElementException;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.jdom2.NamespaceStack;
+import org.jdom2.util.NamespaceStack;
+
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
