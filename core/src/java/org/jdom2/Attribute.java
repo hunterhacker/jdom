@@ -72,6 +72,7 @@ import java.util.TreeMap;
  * @author  Elliotte Rusty Harold
  * @author  Wesley Biggs
  * @author  Victor Toni
+ * @author  Rolf Lear
  */
 public class Attribute implements NamespaceAware, Serializable, Cloneable {
 
@@ -716,6 +717,31 @@ public class Attribute implements NamespaceAware, Serializable, Cloneable {
 				(String) in.readObject(), (String) in.readObject());
 	}
 
+	/**
+	 * Get the namespaces that are in-scope on this Attribute.
+	 * <p>
+	 * Attribute has peculiarities that affect the in-scope Namespaces because
+	 * there are conditions in which the Attribute's scope is different to its
+	 * parent Element's scope. Specifically, if the parent Element is in a
+	 * 'default' Namespace that is not the empty Namespace (e.g.
+	 * xmlns="someurl") and this Attribute is also in the default Namespace (has
+	 * no prefix - but for Attributes that means the Namespace URL is ""), then
+	 * this Attribute has a different namespace scope from it's parent Element
+	 * because it does not include the 'someurl' Namespace.
+	 * <p>
+	 * In the above conditions (no-prefix Attribute in an Element with a
+	 * non-empty no-prefix Namespace) this Attribute effectively re-binds the ""
+	 * prefix to the "" URL, thus the Attribute 'introduces' the Namespace.
+	 * It follows then that the getNamespacesIntroduced() will return a list
+	 * with the single member {@link Namespace#NO_NAMESPACE}.
+	 * <p>
+	 * Note that the Attribute's Namespace will always be reported first.
+	 * <p>
+	 * <strong>Description copied from</strong>
+	 * {@link NamespaceAware#getNamespacesInScope()}:
+	 * <p>
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Namespace> getNamespacesInScope() {
 		if (getParent() == null) {
@@ -744,7 +770,8 @@ public class Attribute implements NamespaceAware, Serializable, Cloneable {
 	}
 
 
-	private static final List<Namespace> orderFirst(final Namespace nsa, List<Namespace> nsl) {
+	private static final List<Namespace> orderFirst(final Namespace nsa, 
+			final List<Namespace> nsl) {
 		if (nsl.get(0) == nsa) {
 			return nsl;
 		}

@@ -63,11 +63,16 @@ import java.util.concurrent.ConcurrentMap;
  * namespaces have special logic to handle serialization manually. These classes
  * call the getNamespace() method on deserialization to ensure there is one
  * unique Namespace object for any unique prefix/uri pair.
+ * <p>
+ * See {@link NamespaceAware} for additional notes on how Namespaces are
+ * 'in-scope' in JDOM content, and how those in-scope Namespaces are accessed.
  *
+ * @see NamespaceAware
  * @author  Brett McLaughlin
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
  * @author  Wesley Biggs
+ * @author  Rolf Lear
  */
 public final class Namespace implements JDOMConstants {
 

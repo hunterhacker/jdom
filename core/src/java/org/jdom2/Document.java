@@ -823,6 +823,21 @@ public class Document implements Parent {
 		
 	}
 
+	/**
+	 * Get the Namespaces that are in-scope on this Document.
+	 * <p>
+	 * Document always has exactly two Namespaces in-scope:
+	 * {@link Namespace#NO_NAMESPACE} and {@link Namespace#XML_NAMESPACE}.
+	 * <p>
+	 * These namespaces are always introduced by the Document, and thus they are
+	 * both returned by {@link #getNamespacesIntroduced()}, and additionally
+	 * {@link #getNamespacesInherited()} will always be empty.
+	 * <p>
+	 * <strong>Description copied from</strong>
+	 * {@link NamespaceAware#getNamespacesInScope()}:
+	 * <p>
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Namespace> getNamespacesInScope() {
 		return Collections.unmodifiableList(Arrays.asList(
