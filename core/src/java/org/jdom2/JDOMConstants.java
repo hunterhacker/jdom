@@ -22,7 +22,14 @@ import org.jdom2.xpath.XPathFactory;
  * @author Rolf Lear
  *
  */
-public interface JDOMConstants {
+public final class JDOMConstants {
+	
+	/**
+	 * Keep out of public reach.
+	 */
+	private JDOMConstants () {
+		// private default constructor.
+	}
 	
 	/*
 	 * XML Namespace constants

@@ -54,11 +54,12 @@
 
 package org.jdom2.input.sax;
 
+import static org.jdom2.JDOMConstants.*;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 
 /**
@@ -72,7 +73,7 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory, JDOMConstants {
+public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
 
 	private final boolean validate;
 	private final String saxdriver;

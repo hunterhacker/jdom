@@ -54,6 +54,8 @@
 
 package org.jdom2.output.support;
 
+import static org.jdom2.JDOMConstants.*;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
@@ -82,7 +84,6 @@ import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
-import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
@@ -118,7 +119,7 @@ import org.jdom2.util.NamespaceStack;
  * @author Rolf Lear
  */
 public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
-		implements SAXOutputProcessor, JDOMConstants {
+		implements SAXOutputProcessor {
 
 	private static void locate(SAXTarget out) {
 		out.getContentHandler().setDocumentLocator(out.getLocator());

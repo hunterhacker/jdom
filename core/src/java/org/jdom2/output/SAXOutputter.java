@@ -54,6 +54,8 @@
 
 package org.jdom2.output;
 
+import static org.jdom2.JDOMConstants.*;
+
 import java.util.List;
 
 import org.xml.sax.ContentHandler;
@@ -74,7 +76,6 @@ import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
-import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
@@ -105,7 +106,7 @@ import org.jdom2.output.support.SAXTarget;
  * @author Fred Trimble
  * @author Bradley S. Huffman
  */
-public class SAXOutputter implements JDOMConstants {
+public class SAXOutputter {
 
 	private static final class DefaultSAXOutputProcessor extends
 			AbstractSAXOutputProcessor {

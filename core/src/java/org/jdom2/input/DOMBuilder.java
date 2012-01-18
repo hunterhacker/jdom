@@ -54,6 +54,8 @@
 
 package org.jdom2.input;
 
+import static org.jdom2.JDOMConstants.*;
+
 import java.util.HashMap;
 
 import org.w3c.dom.NamedNodeMap;
@@ -65,7 +67,6 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
 
@@ -83,7 +84,7 @@ import org.jdom2.Namespace;
  * @author  Dan Schaffer
  * @author  Bradley S. Huffman
  */
-public class DOMBuilder implements JDOMConstants {
+public class DOMBuilder {
 
 	/** The factory for creating new JDOM objects */
 	private JDOMFactory factory = new DefaultJDOMFactory();

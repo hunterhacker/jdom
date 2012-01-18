@@ -54,10 +54,22 @@
 
 package org.jdom2;
 
-import java.io.*;
-import java.util.*;
+import static org.jdom2.JDOMConstants.NS_PFX_DEFAULT;
+import static org.jdom2.JDOMConstants.NS_PFX_XML;
 
-import org.jdom2.filter.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeMap;
+
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filter;
 
 /**
  * An XML element. Methods allow the user to get and manipulate its child
@@ -85,7 +97,7 @@ import org.jdom2.filter.*;
  * @author  Rolf Lear
  * 
  */
-public class Element extends Content implements Parent, JDOMConstants {
+public class Element extends Content implements Parent {
 
 	private static final int INITIAL_ARRAY_SIZE = 5;
 

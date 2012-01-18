@@ -54,6 +54,8 @@
 
 package org.jdom2.input;
 
+import static org.jdom2.JDOMConstants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +78,6 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
-import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.input.sax.BuilderErrorHandler;
@@ -134,7 +135,7 @@ import org.jdom2.input.sax.XMLReaderSAX2Factory;
  * @author Alex Rosen
  * @author Rolf Lear
  */
-public class SAXBuilder implements SAXEngine, JDOMConstants {
+public class SAXBuilder implements SAXEngine {
 
 	/** Default source of SAXHandlers */
 	private static final SAXHandlerFactory DEFAULTSAXHANDLERFAC =

@@ -54,6 +54,8 @@
 
 package org.jdom2;
 
+import static org.jdom2.JDOMConstants.*;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -74,7 +76,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author  Wesley Biggs
  * @author  Rolf Lear
  */
-public final class Namespace implements JDOMConstants {
+public final class Namespace {
 
 	// XXX May want to use weak references to keep the maps from growing 
 	// large with extended use
