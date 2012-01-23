@@ -55,7 +55,7 @@
 package org.jdom2;
 
 /**
- * Thrown when trying to add a illegal object to a JDOM construct.
+ * Thrown when trying to add an illegal object to a JDOM construct.
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter

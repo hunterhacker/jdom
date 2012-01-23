@@ -1409,7 +1409,7 @@ public class Element extends Content implements Parent {
 
 	/**
 	 * Returns an iterator that walks over all descendants in document order
-	 * applying the Filter to return only elements that match the filter rule.
+	 * applying the Filter to return only content that match the filter rule.
 	 * With filters you can match only Elements, only Comments, Elements or
 	 * Comments, only Elements with a given name and/or prefix, and so on.
 	 *
