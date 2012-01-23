@@ -18,22 +18,40 @@
 <th>Class</th><th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
 </tr>
 <tr valign="top" class="Failure">
-<td><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="getXPathAttributeAll"></a><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html#getXPathAttributeAll">getXPathAttributeAll</a></td><td>Failure</td><td>Failed result at position 1 for xpath '[XPath: //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
+<td><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html">TestJaxenCompiled</a></td><td><a name="getXPathAttributeAll"></a><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html#getXPathAttributeAll">getXPathAttributeAll</a></td><td>Failure</td><td>Failed result at position 1 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
 <br>
-<code>junit.framework.AssertionFailedError: Failed result at position 1 for xpath '[XPath: //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:141)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:215)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.getXPathAttributeAll(AbstractTestXPath.java:372)<br>
-</code></td><td>0.003</td>
+<code>junit.framework.AssertionFailedError: Failed result at position 1 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:232)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:263)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.getXPathAttributeAll(AbstractTestXPathCompiled.java:710)<br>
+</code></td><td>0.004</td>
 </tr>
 <tr valign="top" class="Failure">
-<td><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="testGetALLNamespaces"></a><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html#testGetALLNamespaces">testGetALLNamespaces</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPath: //c3nsa:child/namespace::*]'. expected:&lt;[Namespace: prefix "c3nsa" is mapped to URI "jdom:c3nsa"]&gt; but was:&lt;[Namespace: prefix "xml" is mapped to URI "http://www.w3.org/XML/1998/namespace"]&gt;<br>
+<td><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html">TestJaxenCompiled</a></td><td><a name="testGetALLNamespaces"></a><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html#testGetALLNamespaces">testGetALLNamespaces</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPathExpression: 4 namespaces and 0 variables for query //c3nsa:child/namespace::*]'. expected:&lt;[Namespace: prefix "c3nsa" is mapped to URI "jdom:c3nsa"]&gt; but was:&lt;[Namespace: prefix "xml" is mapped to URI "http://www.w3.org/XML/1998/namespace"]&gt;<br>
+<br>
+<code>junit.framework.AssertionFailedError: Failed result at position 0 for xpath '[XPathExpression: 4 namespaces and 0 variables for query //c3nsa:child/namespace::*]'. expected:&lt;[Namespace: prefix "c3nsa" is mapped to URI "jdom:c3nsa"]&gt; but was:&lt;[Namespace: prefix "xml" is mapped to URI "http://www.w3.org/XML/1998/namespace"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:232)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:263)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.testGetALLNamespaces(AbstractTestXPathCompiled.java:756)<br>
+</code></td><td>0.002</td>
+</tr>
+<tr valign="top" class="Failure">
+<td><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html">TestJaxenCompiled</a></td><td><a name="testAttributesNamespace"></a><a href="org/jdom2/test/cases/xpath/61_TestJaxenCompiled.html#testAttributesNamespace">testAttributesNamespace</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
+<br>
+<code>junit.framework.AssertionFailedError: Failed result at position 0 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:232)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkComplexXPath(AbstractTestXPathCompiled.java:281)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.testAttributesNamespace(AbstractTestXPathCompiled.java:763)<br>
+</code></td><td>0.002</td>
+</tr>
+<tr valign="top" class="Failure">
+<td><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="getXPathAttributeAll"></a><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html#getXPathAttributeAll">getXPathAttributeAll</a></td><td>Failure</td><td>Failed result at position 1 for xpath '[XPath: //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
+<br>
+<code>junit.framework.AssertionFailedError: Failed result at position 1 for xpath '[XPath: //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:141)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:215)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.getXPathAttributeAll(AbstractTestXPath.java:372)<br>
+</code></td><td>0.001</td>
+</tr>
+<tr valign="top" class="Failure">
+<td><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="testGetALLNamespaces"></a><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html#testGetALLNamespaces">testGetALLNamespaces</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPath: //c3nsa:child/namespace::*]'. expected:&lt;[Namespace: prefix "c3nsa" is mapped to URI "jdom:c3nsa"]&gt; but was:&lt;[Namespace: prefix "xml" is mapped to URI "http://www.w3.org/XML/1998/namespace"]&gt;<br>
 <br>
 <code>junit.framework.AssertionFailedError: Failed result at position 0 for xpath '[XPath: //c3nsa:child/namespace::*]'. expected:&lt;[Namespace: prefix "c3nsa" is mapped to URI "jdom:c3nsa"]&gt; but was:&lt;[Namespace: prefix "xml" is mapped to URI "http://www.w3.org/XML/1998/namespace"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:141)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:215)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.testGetALLNamespaces(AbstractTestXPath.java:418)<br>
 </code></td><td>0.002</td>
 </tr>
 <tr valign="top" class="Failure">
-<td><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="testAttributesNamespace"></a><a href="org/jdom2/test/cases/xpath/63_TestLocalJaxenXPath.html#testAttributesNamespace">testAttributesNamespace</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPath: //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
+<td><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html">TestLocalJaxenXPath</a></td><td><a name="testAttributesNamespace"></a><a href="org/jdom2/test/cases/xpath/62_TestLocalJaxenXPath.html#testAttributesNamespace">testAttributesNamespace</a></td><td>Failure</td><td>Failed result at position 0 for xpath '[XPath: //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
 <br>
 <code>junit.framework.AssertionFailedError: Failed result at position 0 for xpath '[XPath: //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkXPath(AbstractTestXPath.java:141)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.checkComplexXPath(AbstractTestXPath.java:221)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPath.testAttributesNamespace(AbstractTestXPath.java:425)<br>
-</code></td><td>0.001</td>
+</code></td><td>0.002</td>
 </tr>
 </table>
 </body>

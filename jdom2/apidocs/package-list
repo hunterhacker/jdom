@@ -4,7 +4,9 @@ org.jdom2.filter
 org.jdom2.input
 org.jdom2.input.sax
 org.jdom2.output
+org.jdom2.output.support
 org.jdom2.transform
 org.jdom2.util
 org.jdom2.xpath
 org.jdom2.xpath.jaxen
+org.jdom2.xpath.util
