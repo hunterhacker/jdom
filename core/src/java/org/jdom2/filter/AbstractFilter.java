@@ -56,7 +56,9 @@ package org.jdom2.filter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.RandomAccess;
 
 import org.jdom2.Content;
 
@@ -78,12 +80,29 @@ abstract class AbstractFilter<T> implements Filter<T> {
 		if (content == null) {
 			return Collections.emptyList();
 		}
-		ArrayList<T> ret = new ArrayList<T>(content.size());
-		for (Object obj : content) {
-			T c = filter(obj);
+		if (content instanceof RandomAccess) {
+			final int sz = content.size();
+			final ArrayList<T> ret = new ArrayList<T>(sz);
+			for (int i = 0; i < sz; i++) {
+				final T c = filter(content.get(i));
+				if (c != null) {
+					ret.add(c);
+				}
+			}
+			if (ret.isEmpty()) {
+				return Collections.emptyList();
+			}
+			return Collections.unmodifiableList(ret);
+		}
+		final ArrayList<T> ret = new ArrayList<T>(10);
+		for (Iterator<?> it = content.iterator(); it.hasNext(); ) {
+			final T c = filter(it.next());
 			if (c != null) {
 				ret.add(c);
 			}
+		}
+		if (ret.isEmpty()) {
+			return Collections.emptyList();
 		}
 		return Collections.unmodifiableList(ret);
 	}

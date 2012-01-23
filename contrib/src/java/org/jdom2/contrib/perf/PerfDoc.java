@@ -45,7 +45,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.util.ArrayCopy;
-import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 @SuppressWarnings("javadoc")
 public class PerfDoc {
@@ -354,11 +355,11 @@ public class PerfDoc {
 		xpathTime = PerfTest.timeRun(new TimeRunnable() {
 			@Override
 			public void run() throws Exception {
-				XPath patha = XPath.newInstance("//@null");
-				patha.selectNodes(document);
+				XPathExpression<Object> patha = XPathFactory.instance().compile("//@null");
+				patha.evaluate(document);
 				// select everything
-				XPath pathb = XPath.newInstance("//node()");
-				pathb.selectNodes(document);
+				XPathExpression<?> pathb = XPathFactory.instance().compile("//node()");
+				pathb.evaluate(document);
 			}
 		});
 		return xpathTime;

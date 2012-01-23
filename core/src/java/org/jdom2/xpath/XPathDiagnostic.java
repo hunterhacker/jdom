@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,57 +52,63 @@
 
  */
 
-package org.jdom2.xpath.jaxen;
+package org.jdom2.xpath;
 
-import java.util.HashMap;
 import java.util.List;
 
-import org.jaxen.NamespaceContext;
+/**
+ * Class representing the results of an XPath query allowing JDOM users to trace
+ * whether an item returned from an XPath query is subsequently filtered by the
+ * coercion filter attached to the {@link XPathExpression};
+ * 
+ * @author Rolf Lear
+ * @param <T>
+ *        The generic type of the results retruend by the expression.
+ */
+public interface XPathDiagnostic<T> {
+	/**
+	 * @return The context object against which the XPath query was evaluated.
+	 */
+	public Object getContext();
 
-import org.jdom2.Namespace;
-import org.jdom2.NamespaceAware;
+	/**
+	 * @return the {@link XPathExpression} instance that generated this
+	 *         diagnostic.
+	 */
+	public XPathExpression<T> getXPathExpression();
 
-final class JDOMNavigator extends JDOMCoreNavigator implements NamespaceContext {
+	/**
+	 * Returns the results as they would be returned by the regular evaluate
+	 * process (read-only).
+	 * 
+	 * @return the regular evaluated results.
+	 */
+	public List<T> getResult();
 
-	private final HashMap<String, String> nsFromContext = new HashMap<String, String>();
-	private final HashMap<String, String> nsFromUser = new HashMap<String, String>();
+	/**
+	 * Returns the XPath results which are not returned by the regular evaluate
+	 * process.
+	 * 
+	 * @return those results which were returned by the XPath query but were
+	 *         filtered out by the JDOM Filter.
+	 */
+	public List<Object> getFilteredResults();
 
-	@Override
-	void reset() {
-		super.reset();
-		nsFromContext.clear();
-	}
+	/**
+	 * Returns the XPath results before any were filtered.
+	 * 
+	 * @return those results which were returned by the XPath query before any
+	 *         filtering.
+	 */
+	public List<Object> getRawResults();
 
-	void setContext(Object node) {
-		nsFromContext.clear();
-
-		List<Namespace> nsl = null;
-		if (node instanceof NamespaceAware) {
-			nsl = ((NamespaceAware)node).getNamespacesInScope();
-		} else if (node instanceof NamespaceContainer) {
-			nsl = ((NamespaceContainer)node).getParentElement().getNamespacesInScope();
-		}
-		if (nsl != null) {
-			for (Namespace ns : nsl) {
-				nsFromContext.put(ns.getPrefix(), ns.getURI());
-			}
-		}
-	}
-
-	void includeNamespace(Namespace namespace) {
-		nsFromUser.put(namespace.getPrefix(), namespace.getURI());
-	}
-
-	@Override
-	public String translateNamespacePrefixToUri(String prefix) {
-		if (prefix == null) {
-			return null;
-		}
-		String uri = nsFromUser.get(prefix);
-		if (uri != null) {
-			return uri;
-		}
-		return nsFromContext.get(prefix);
-	}
+	/**
+	 * Indicate whether the query was evaluated as a first-only evaluation.
+	 * XPath libraries are allowed to stop processing the results after the
+	 * first result is retrieved if first-only processing is set.
+	 * 
+	 * @return true if the evaluation was a first-only evaluation.
+	 */
+	public boolean isFirstOnly();
 
 }

@@ -52,79 +52,61 @@
 
  */
 
-package org.jdom2.filter;
-
-import java.util.List;
+package org.jdom2;
 
 
 /**
- * A generalized filter to restrict visibility or mutability on a list.
+ * An general unchecked exception that JDOM classes can throw. There are a
+ * number of more specialised exceptions that JDOM throws which are subclasses
+ * of this class.
+ * <p>
+ * JDOM2 has changed a number of methods that used to throw the checked
+ * {@link JDOMException} in JDOM 1.x to instead throw a specialised unchecked
+ * exception. These changes introduce a compatibility problem: existing code
+ * could catch the JDOMException, but that exception is no longer thrown,
+ * leading to unreachable code blocks.
+ * <p>
+ * In all instances where existing JDOM 1.x code was revised in JDOM2 to throw
+ * an unchecked exception, the new unchecked exception is a subclass of this
+ * JDOMRuntimeException. As a result, where unreachable blocks arise in a 
+ * JDOM2 migration process, one alternative is to simply change the failing
+ * <code>catch (JDOMException ...)</code> to be
+ * <code>catch (JDOMRuntimeException ...)</code>
+ * <p>
  *
- * @author  Jools Enticknap
- * @author  Bradley S. Huffman
- * @param <T> The Generic type of content returned by this Filter
+ * @author  Rolf Lear
  */
-public interface Filter <T> extends java.io.Serializable {
-
+public class JDOMRuntimeException extends RuntimeException {
 
 	/**
-	 * Filter the input list of all content except that which matches the Filter.
-	 * @param content The content to filter.
-	 * @return a new read-only RandomAccess list of the filtered input content.
+	 * This will create an <code>Exception</code>.
 	 */
-	public List<T> filter(List<?> content);
+	public JDOMRuntimeException() {
+		super("Unchecked exception occurred in JDOM library.");
+	}
 
 	/**
-	 * Check to see if the content matches this Filter.
-	 * If it does, return the content cast as this filter's return type,
-	 * otherwise return null.
-	 * @param content The content to test.
-	 * @return The content if it matches the filter, cast as this Filter's type.
-	 */
-	public T filter(Object content);
-
-	/**
-	 * Check to see if the object matches a predefined set of rules.
+	 * This will create an <code>Exception</code> with the given message.
 	 *
-	 * @param content The object to verify.
-	 * @return <code>true</code> if the object matches a predfined 
-	 *           set of rules.
-	 */
-	public boolean matches(Object content);
-
-
-	/**
-	 * Creates an 'inverse' filter
-	 * @return a Filter that returns all content except what this Filter
-	 * 		instance would.
-	 */
-	public Filter<? extends Object> negate();
+	 * @param message <code>String</code> message indicating
+	 *                the problem that occurred.
+	 */    
+	public JDOMRuntimeException(String message)  {
+		super(message);
+	}
 
 	/**
-	 * Creates an ORing filter
-	 * @param filter a second Filter to OR with.
-	 * @return a new Filter instance that returns the 'union' of this filter and
-	 *      the specified filter.
-	 */
-	public Filter<? extends Object> or(Filter<?> filter);
+	 * This will create an <code>Exception</code> with the given message
+	 * and wrap another <code>Exception</code>.  This is useful when
+	 * the originating <code>Exception</code> should be held on to.
+	 *
+	 * @param message <code>String</code> message indicating
+	 *                the problem that occurred.
+	 * @param cause <code>Throwable</code> that caused this
+	 *                  to be thrown.
+	 */    
+	public JDOMRuntimeException(String message, Throwable cause)  {
+		super(message, cause);    
+	}    
 
-	/**
-	 * Creates an ANDing filter
-	 * @param filter a second Filter to AND with.
-	 * @return a new Filter instance that returns the 'intersection' of this
-	 *     filter and the specified filter.
-	 */
-	public Filter<?> and(Filter<?> filter);
-
-	/**
-	 * This is similar to the and(Filter) method except the generic type is
-	 * different.
-	 * @param <R> The Generic type of the retuned data is taken from the input
-	 * instance. 
-	 * @param filter The filter to refine our results with.
-	 * @return A Filter that requires content to both match our instance and the
-	 *     refining instance, but the generic type of the retuned data is based
-	 *     on the refining instance, not this instance.
-	 */
-	public <R> Filter<R> refine(Filter<R> filter);
 }

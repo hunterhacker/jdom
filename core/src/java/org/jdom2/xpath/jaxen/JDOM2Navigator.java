@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -54,55 +54,14 @@
 
 package org.jdom2.xpath.jaxen;
 
-import java.util.HashMap;
-import java.util.List;
+/**
+ * Simply extend the core Navigator to make it all final.
+ * 
+ * @author Rolf Lear
+ *
+ */
+final class JDOM2Navigator extends JDOMCoreNavigator {
 
-import org.jaxen.NamespaceContext;
-
-import org.jdom2.Namespace;
-import org.jdom2.NamespaceAware;
-
-final class JDOMNavigator extends JDOMCoreNavigator implements NamespaceContext {
-
-	private final HashMap<String, String> nsFromContext = new HashMap<String, String>();
-	private final HashMap<String, String> nsFromUser = new HashMap<String, String>();
-
-	@Override
-	void reset() {
-		super.reset();
-		nsFromContext.clear();
-	}
-
-	void setContext(Object node) {
-		nsFromContext.clear();
-
-		List<Namespace> nsl = null;
-		if (node instanceof NamespaceAware) {
-			nsl = ((NamespaceAware)node).getNamespacesInScope();
-		} else if (node instanceof NamespaceContainer) {
-			nsl = ((NamespaceContainer)node).getParentElement().getNamespacesInScope();
-		}
-		if (nsl != null) {
-			for (Namespace ns : nsl) {
-				nsFromContext.put(ns.getPrefix(), ns.getURI());
-			}
-		}
-	}
-
-	void includeNamespace(Namespace namespace) {
-		nsFromUser.put(namespace.getPrefix(), namespace.getURI());
-	}
-
-	@Override
-	public String translateNamespacePrefixToUri(String prefix) {
-		if (prefix == null) {
-			return null;
-		}
-		String uri = nsFromUser.get(prefix);
-		if (uri != null) {
-			return uri;
-		}
-		return nsFromContext.get(prefix);
-	}
+	// just make the class final.
 
 }

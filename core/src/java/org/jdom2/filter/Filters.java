@@ -84,6 +84,8 @@ public final class Filters {
 			new ClassFilter<Text>(Text.class);
 	private static final Filter<Element> felement = 
 			new ClassFilter<Element>(Element.class);
+	private static final Filter<Document> fdocument = 
+			new ClassFilter<Document>(Document.class);
 
 	private static final Filter<Double> fdouble = 
 			new ClassFilter<Double>(Double.class);
@@ -93,6 +95,9 @@ public final class Filters {
 
 	private static final Filter<String> fstring = 
 			new ClassFilter<String>(String.class);
+	
+	private static final Filter<Object> fpassthrough =
+			new PassThroughFilter();
 
 
 	private Filters() {
@@ -178,6 +183,13 @@ public final class Filters {
 	}
 
 	/**
+	 * @return a Filter that matches any {@link Document} data.
+	 */
+	public static final Filter<Document> document() {
+		return fdocument;
+	}
+
+	/**
 	 * @param name The name of Elements to match.
 	 * @return a Filter that matches any {@link Element} data with the specified
 	 * name.
@@ -249,5 +261,12 @@ public final class Filters {
 		return new ClassFilter<F>(clazz);
 	}
 
+	/**
+	 * Return a filter that does no filtering at all - everything matches.
+	 * @return A Pass-Through Filter.
+	 */
+	public static final Filter<Object> fpassthrough() {
+		return fpassthrough;
+	}
 
 }

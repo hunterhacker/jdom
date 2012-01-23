@@ -60,7 +60,8 @@ import java.util.regex.PatternSyntaxException;
 
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import org.xml.sax.Attributes;
 
@@ -72,7 +73,7 @@ import org.xml.sax.Attributes;
     */
    private final Pattern re;
 
-   private final XPath test;
+   private final XPathExpression<Object> test;
 
    /**
     * Creates a new XPath matcher using Jakarta RegExp regular
@@ -98,7 +99,7 @@ import org.xml.sax.Attributes;
          if (testPattern != null) {
             testPattern = "." + testPattern;
 
-            this.test = XPath.newInstance(testPattern);
+            this.test = XPathFactory.instance().compile(testPattern);
          }
          else {
             this.test = null;
@@ -160,15 +161,7 @@ public boolean match(String path, Attributes attrs) {
    @Override
 public boolean match(String path, Element elt) {
       if (this.test != null) {
-         boolean match = false;
-
-         try {
-            match = (this.test.selectNodes(elt).size() != 0);
-         }
-         catch (Exception ex1) {
-            ex1.printStackTrace();
-         }
-         return (match);
+         return !this.test.evaluate(elt).isEmpty();
       }
       return (true);
    }

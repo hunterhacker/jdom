@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,79 +52,34 @@
 
  */
 
-package org.jdom2.filter;
+ package org.jdom2.filter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.RandomAccess;
 
+final class PassThroughFilter extends AbstractFilter<Object> {
 
-/**
- * A generalized filter to restrict visibility or mutability on a list.
- *
- * @author  Jools Enticknap
- * @author  Bradley S. Huffman
- * @param <T> The Generic type of content returned by this Filter
- */
-public interface Filter <T> extends java.io.Serializable {
+	@Override
+	public Object filter(Object content) {
+		return content;
+	}
+	
+	@Override
+	public List<Object> filter(List<?> content) {
+		if (content == null || content.isEmpty()) {
+			return Collections.emptyList();
+		}
+		if (content instanceof RandomAccess) {
+			return Collections.unmodifiableList(content);
+		}
+		ArrayList<Object> ret = new ArrayList<Object>();
+		for (Iterator<?> it = content.iterator(); it.hasNext(); ) {
+			ret.add(it.next());
+		}
+		return Collections.unmodifiableList(content);
+	}
 
-
-	/**
-	 * Filter the input list of all content except that which matches the Filter.
-	 * @param content The content to filter.
-	 * @return a new read-only RandomAccess list of the filtered input content.
-	 */
-	public List<T> filter(List<?> content);
-
-	/**
-	 * Check to see if the content matches this Filter.
-	 * If it does, return the content cast as this filter's return type,
-	 * otherwise return null.
-	 * @param content The content to test.
-	 * @return The content if it matches the filter, cast as this Filter's type.
-	 */
-	public T filter(Object content);
-
-	/**
-	 * Check to see if the object matches a predefined set of rules.
-	 *
-	 * @param content The object to verify.
-	 * @return <code>true</code> if the object matches a predfined 
-	 *           set of rules.
-	 */
-	public boolean matches(Object content);
-
-
-	/**
-	 * Creates an 'inverse' filter
-	 * @return a Filter that returns all content except what this Filter
-	 * 		instance would.
-	 */
-	public Filter<? extends Object> negate();
-
-	/**
-	 * Creates an ORing filter
-	 * @param filter a second Filter to OR with.
-	 * @return a new Filter instance that returns the 'union' of this filter and
-	 *      the specified filter.
-	 */
-	public Filter<? extends Object> or(Filter<?> filter);
-
-	/**
-	 * Creates an ANDing filter
-	 * @param filter a second Filter to AND with.
-	 * @return a new Filter instance that returns the 'intersection' of this
-	 *     filter and the specified filter.
-	 */
-	public Filter<?> and(Filter<?> filter);
-
-	/**
-	 * This is similar to the and(Filter) method except the generic type is
-	 * different.
-	 * @param <R> The Generic type of the retuned data is taken from the input
-	 * instance. 
-	 * @param filter The filter to refine our results with.
-	 * @return A Filter that requires content to both match our instance and the
-	 *     refining instance, but the generic type of the retuned data is based
-	 *     on the refining instance, not this instance.
-	 */
-	public <R> Filter<R> refine(Filter<R> filter);
 }

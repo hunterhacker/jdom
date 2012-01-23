@@ -11,8 +11,9 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.jaxen.JDOMXPath;
 
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc", "deprecation"} )
 public class TestXpath {
 	/* 
 	 * Test the static methods on the abstract class.
@@ -30,35 +31,24 @@ public class TestXpath {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetXPathClass() throws JDOMException {
-		XPath.setXPathClass(XPath.class);
+		XPath.setXPathClass(JDOMXPath.class);
 	}
 
 	@Test
-	public void testSelectNodesObjectString() {
-		try {
-			Document doc = new Document(new Element("main"));
-			List<?> lst = XPath.selectNodes(doc, "/");
-			assertTrue(lst.size() == 1);
-			assertTrue(doc == lst.get(0));
-		} catch (JDOMException e) {
-			e.printStackTrace();
-			fail("Could not process XPath.selectNodes()");
-		}
+	public void testSelectNodesObjectString() throws JDOMException {
+		Document doc = new Document(new Element("main"));
+		List<?> lst = XPath.selectNodes(doc, "/");
+		assertTrue(lst.size() == 1);
+		assertTrue(doc == lst.get(0));
 	}
 
 	@Test
-	public void testSelectSingleNodeObjectString() {
-		try {
-			Document doc = new Document(new Element("main"));
-			Object ret = XPath.selectSingleNode(doc, "/");
-			assertTrue(doc == ret);
-		} catch (JDOMException e) {
-			e.printStackTrace();
-			fail("Could not process XPath.selectNodes()");
-		}
+	public void testSelectSingleNodeObjectString() throws JDOMException {
+		Document doc = new Document(new Element("main"));
+		Object ret = XPath.selectSingleNode(doc, "/");
+		assertTrue(doc == ret);
 	}
 
 }

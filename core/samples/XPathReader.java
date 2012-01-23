@@ -55,6 +55,7 @@
 import java.io.*;
 import java.util.*;
 import org.jdom2.*;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.*;
 import org.jdom2.xpath.*;
 
@@ -81,13 +82,13 @@ public class XPathReader {
         Document doc = builder.build(new File(filename));
 
         // Print servlet information
-        XPath servletPath = XPath.newInstance("//servlet");
-        List<?> servlets = servletPath.selectNodes(doc);
+        XPathExpression<Element> servletPath = XPathFactory.instance().compile("//servlet", Filters.element());
+        List<Element> servlets = servletPath.evaluate(doc);
 
         out.println("This WAR has "+ servlets.size() +" registered servlets:");
-        Iterator<?> i = servlets.iterator();
+        Iterator<Element> i = servlets.iterator();
         while (i.hasNext()) {
-            Element servlet = (Element) i.next();
+            Element servlet = i.next();
             out.print("\t" + servlet.getChild("servlet-name")
                                     .getTextTrim() +
                       " for " + servlet.getChild("servlet-class")
@@ -97,16 +98,16 @@ public class XPathReader {
         }
             
         // Print security role information
-        XPath rolePath = XPath.newInstance("//security-role/role-name/text()");
-        List<?> roleNames = rolePath.selectNodes(doc);
+        XPathExpression<Text> rolePath = XPathFactory.instance().compile("//security-role/role-name/text()", Filters.text());
+        List<Text> roleNames = rolePath.evaluate(doc);
 
         if (roleNames.size() == 0) {
             out.println("This WAR contains no roles");
         } else {
             out.println("This WAR contains " + roleNames.size() + " roles:");
-            i = roleNames.iterator();
-            while (i.hasNext()) {
-                out.println("\t" + ((Text)i.next()).getTextTrim());
+            Iterator<Text> ti = roleNames.iterator();
+            while (ti.hasNext()) {
+                out.println("\t" + ti.next().getTextTrim());
             }
         }
     }    

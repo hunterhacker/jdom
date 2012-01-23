@@ -54,12 +54,10 @@
 
 package org.jdom2;
 
-
 /**
- * The top level exception that JDOM classes can throw. Its subclasses add
- * specificity to the problems that can occur using JDOM. This single exception
- * can be caught to handle all JDOM specific problems (some methods may throw
- * {@link java.io.IOException} and such).
+ * The top level 'checked' exception that JDOM classes can throw. JDOM does
+ * throw a number of unchecked exceptions, but all the checked exceptions are
+ * descendants of this class.
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter
