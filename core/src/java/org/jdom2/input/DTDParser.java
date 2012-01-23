@@ -63,9 +63,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 
 /**
- * In StAX Reader, the DocType is available as a single string.
- * We need to harvest some data from it, as well as reformat it only to build
- * a standardized DocType instance.
+ * Parses out key information from a single String representing a DOCTYPE
+ * declaration. StAX parsers supply a single string representing the DOCTYPE and
+ * this needs to be processed to get items like the SystemID, etc. Additionally
+ * it needs to be reformatted to create a standardised representation.
  * <p>
  * The assumption is that the DTD is valid.
  * <p>
@@ -101,8 +102,8 @@ public class DTDParser {
 	 * The pattern is complicated (not as complicated as an actual parser).
 	 * 
 	 * Because the pattern is complicated this code creates a pattern 'database'
-	 * and then 'pulls' patterns from the database create the final regex. The
-	 * database patterns are pulled to transform a pattern template in to a
+	 * and then 'pulls' patterns from the database to create the final regex.
+	 * The database patterns are pulled to transform a pattern template in to a
 	 * final regular expression. This template is called the 'meta-pattern'
 	 * 
 	 * So, the pattern is not kept in it's final form, but rather it is built
@@ -117,7 +118,7 @@ public class DTDParser {
 	 * (('([^']*)')|("([^"]*)")))?)))?([\s\r\n\t]*\[(.*)\])?
 	 * [\s\r\n\t]*>[\s\r\n\t]*
 	 * 
-	 * You will agree that it's simpler to built the pattern than read it....
+	 * You will agree that it's simpler to build the pattern than to read it....
 	 * 
 	 * With the above in mind, you can easily follow the way the pattern is
 	 * built as it is simply a repeating use of some of the base constructs.

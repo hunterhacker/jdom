@@ -55,7 +55,7 @@
 package org.jdom2;
 
 /**
- * Character-based XML content. Provides a modular, parentable method of
+ * An XML character sequence. Provides a modular, parentable method of
  * representing text. Text makes no guarantees about the underlying textual
  * representation of character data, but does expose that data as a Java String.
  *

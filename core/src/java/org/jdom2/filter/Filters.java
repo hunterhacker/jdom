@@ -58,7 +58,17 @@ import org.jdom2.*;
 
 /**
  * Factory class of convenience methods to create Filter instances of common
- * types.
+ * types. Methods that return Filters that act on core JDOM classes (Element,
+ * Text, etc.) are simply named after the content they return.
+ * <p>
+ * Filters that
+ * match non-core classes (Boolean, Object, etc.) are all prefixed with the
+ * letter 'f' (for <strong>f</strong>ilter).
+ * <p>
+ * The Filter returned by {@link #fpassthrough()} is not really a filter in the
+ * sense that it will never filter anything out - everything matches. This can
+ * be useful to accomplish some tasks, for example the JDOM XPath API uses it
+ * extensively.
  * 
  * @author Rolf Lear
  *
