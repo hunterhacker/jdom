@@ -972,6 +972,12 @@ public class SAXOutputter {
             while (itr.hasNext()) {
                 Attribute att = (Attribute)itr.next();
                 ns = att.getNamespace();
+                if (ns == Namespace.NO_NAMESPACE) {
+                	// Issue #60
+                	// no-prefix attributes are always in the NO_NAMESPACE
+                	// namespace. This prefix mapping is implied for Attributes.
+                	continue;
+                }
                 String prefix = ns.getPrefix();
                 String uri = namespaces.getURI(prefix);
                 if (!ns.getURI().equals(uri)) {
