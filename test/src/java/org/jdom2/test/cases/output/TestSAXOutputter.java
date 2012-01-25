@@ -1109,4 +1109,37 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 		// Cannot test for formatting outside of root element
 	}
 
+	@Test
+	public void testNoNamespaceIssue60 () throws JDOMException {
+		Document doc = new Document();
+		Namespace ns = Namespace.getNamespace("myurl");
+		Element root = new Element("root", ns);
+		Element child = new Element("child", ns);
+		root.addContent(child);
+		doc.setRootElement(root);
+		final String[] count = new String[1];
+		
+		child.setAttribute("att", "val");
+		
+		ContentHandler ch = new DefaultHandler2() {
+			@Override
+			public void startPrefixMapping(String pfx, String uri)
+					throws SAXException {
+				if ("".equals(pfx) && "".equals(uri)) {
+					fail("Should not be firing xmlns=\"\"");
+				}
+				if (!"".equals(pfx)) {
+					fail("we should not have prefix " + pfx);
+				}
+				if (count[0] != null) {
+					fail("we should not have multiple mappings " + pfx + " -> " + uri);
+				}
+				count[0] = uri;
+			}
+		};
+		SAXOutputter saxout = new SAXOutputter(ch);
+		saxout.output(doc);
+		assertTrue("myurl".equals(count[0]));
+	}
+	
 }
