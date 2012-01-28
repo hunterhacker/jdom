@@ -329,8 +329,7 @@ public class Element extends Content implements Parent {
 		}
 
 		if (attributes != null) {
-			for (Iterator<Attribute> it = attributes.iterator(); it.hasNext();) {
-				Attribute a = it.next();
+			for (final Attribute a : attributes) {
 				if (prefix.equals(a.getNamespacePrefix())) {
 					return a.getNamespace();
 				}
@@ -1403,11 +1402,9 @@ public class Element extends Content implements Parent {
 		}
 
 		// Cloning content
-		if (content != null) {
-			for(int i = 0; i < content.size(); i++) {
-				final Content c = content.get(i);
-				element.content.add(c.clone());
-			}
+		for(int i = 0; i < content.size(); i++) {
+			final Content c = content.get(i);
+			element.content.add(c.clone());
 		}
 
 		return element;

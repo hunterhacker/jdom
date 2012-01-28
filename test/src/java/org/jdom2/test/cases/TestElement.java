@@ -364,6 +364,7 @@ public final class TestElement {
     @Test
     public void test_TCM__boolean_removeAttribute_String() {
         Element element = new Element("test");
+        assertFalse(element.removeAttribute("att"));
         Attribute att = new Attribute("anAttribute", "test");
         element.setAttribute(att);
 
@@ -374,6 +375,28 @@ public final class TestElement {
         assertTrue("attribute not removed", element.removeAttribute("anAttribute"));
         //make sure it's not there
         assertNull("attribute found after remove", element.getAttribute("anAttribute"));
+        assertFalse("non-existing attribute remove returned true", element.removeAttribute("anAttribute"));
+    }
+
+    /**
+     * Test than an Element can remove an Attribute by name
+     */
+    @Test
+    public void test_TCM__boolean_removeAttribute_Attribute() {
+        Element element = new Element("test");
+        Attribute att = new Attribute("anAttribute", "test");
+        assertFalse(element.removeAttribute(att));
+        
+        element.setAttribute(att);
+
+        //make sure it's there
+        assertNotNull("attribute not found after add", element.getAttribute("anAttribute"));
+
+        //and remove it
+        assertTrue("attribute not removed", element.removeAttribute(att));
+        //make sure it's not there
+        assertNull("attribute found after remove", element.getAttribute("anAttribute"));
+        assertFalse("non-existing attribute remove returned true", element.removeAttribute(att));
     }
 
     /**
@@ -383,6 +406,8 @@ public final class TestElement {
     public void test_TCM__boolean_removeAttribute_String_OrgJdomNamespace() {
         Element element = new Element("test");
         Namespace ns = Namespace.getNamespace("x", "urn:test");
+        assertFalse(element.removeAttribute("anAttribute", ns));
+        
         Attribute att = new Attribute("anAttribute", "test", ns);
         element.setAttribute(att);
 
@@ -1636,8 +1661,21 @@ public final class TestElement {
     @Test
     public void test_TCM__String_getAttributeValue_String() {
         Element element = new Element("el");
+        assertEquals("incorrect value returned", element.getAttributeValue("name"), null);
         element.setAttribute(new Attribute("name", "first"));
         assertEquals("incorrect value returned", element.getAttributeValue("name"), "first");
+    }
+
+    /**
+     * Test getAttributeValue by attribute name.
+     */
+    @Test
+    public void test_TCM__String_getAttributeValue_String_String() {
+        Element element = new Element("el");
+        assertEquals("incorrect value returned", element.getAttributeValue("name", ""), "");
+        element.setAttribute(new Attribute("name", "first"));
+        assertEquals("incorrect value returned", element.getAttributeValue("name", ""), "first");
+        assertEquals("incorrect value returned", element.getAttributeValue("namex", ""), "");
     }
 
     /**
@@ -1646,8 +1684,22 @@ public final class TestElement {
     @Test
     public void test_TCM__String_getAttributeValue_String_OrgJdomNamespace() {
         Element element = new Element("el");
+        assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("x", "urn:WombatsRUS")), null);
         element.setAttribute(new Attribute("name", "first", Namespace.getNamespace("x", "urn:WombatsRUS")));
         assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("x", "urn:WombatsRUS")), "first");
+        assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("y", "urn:WombatsRUS2")), null);
+    }
+
+    /**
+     * Test getAttributeValue with name and namespace
+     */
+    @Test
+    public void test_TCM__String_getAttributeValue_String_OrgJdomNamespace_String() {
+        Element element = new Element("el");
+        assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("x", "urn:WombatsRUS"), ""), "");
+        element.setAttribute(new Attribute("name", "first", Namespace.getNamespace("x", "urn:WombatsRUS")));
+        assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("x", "urn:WombatsRUS"), ""), "first");
+        assertEquals("incorrect value returned", element.getAttributeValue("name", Namespace.getNamespace("y", "urn:WombatsRUS2"), "x"), "x");
     }
 
     /**
@@ -2053,10 +2105,13 @@ public final class TestElement {
 	@Test
 	public void testGetNamespace() {
 		Element emt = new Element("mine");
+		Namespace nsa = Namespace.getNamespace("tstada", "uri");
+		emt.setAttribute("name", "value", nsa);
 		assertTrue(Namespace.NO_NAMESPACE == emt.getNamespace());
 		assertTrue(emt.getNamespace(null) == null);
 		assertTrue(emt.getNamespace("none") == null);
 		assertTrue(emt.getNamespace("xml") == Namespace.XML_NAMESPACE);
+		assertTrue(emt.getNamespace("nsa") == nsa);
 	}
 	
 	@Test
@@ -2106,6 +2161,7 @@ public final class TestElement {
 		Namespace nsa = Namespace.getNamespace("pfx","URIA");
 		Namespace nsb = Namespace.getNamespace("pfx","URIB");
 		Namespace nsc = Namespace.getNamespace("pfx","URIC");
+		Namespace nsd = Namespace.getNamespace("pfy","URID");
 
 		Element emt = new Element("emt", nsa);
 		try {
@@ -2121,8 +2177,10 @@ public final class TestElement {
 
 		// and we can change the Element's Namespace to nsc
 		emt.setNamespace(nsc);
+		assertTrue(nsc == emt.getNamespace());
 		// and back again.
 		emt.setNamespace(nsa);
+		assertTrue(nsa == emt.getNamespace());
 		
 		// further we can add nsa as an additional namespace because it is the
 		// same as the Element's namespace.
@@ -2138,6 +2196,11 @@ public final class TestElement {
 			e.printStackTrace();
 			fail("Expected IllegalAddException, but got " + e.getClass());
 		}
+		
+		// but we can change it to something with a different prefix:
+		emt.setNamespace(nsd);
+		assertTrue(nsd == emt.getNamespace());
+		
 
 	}
 	
