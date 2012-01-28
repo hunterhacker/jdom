@@ -387,7 +387,7 @@ public class Attribute implements NamespaceAware, Serializable, Cloneable {
 		final String prefix = namespace.getPrefix();
 
 		// no prefix found
-		if ((prefix == null) || ("".equals(prefix))) {
+		if ("".equals(prefix)) {
 			return getName();
 		}
 		return new StringBuilder(prefix)
