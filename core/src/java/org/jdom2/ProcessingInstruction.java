@@ -370,8 +370,9 @@ public class ProcessingInstruction extends Content {
 			//                          + name + ", '" + value+"')");
 
 			// If both a name and a value have been found, then add
-			// them to the data Map
-			if (name.length() > 0 && value != null) {
+			// them to the data Map - actually, we add an empty value if there
+			// is a valid name.
+			if (name.length() > 0) {
 				//if (data.containsKey(name)) {
 				// A repeat, that's a parse error, so return a null map
 				//return new HashMap();
