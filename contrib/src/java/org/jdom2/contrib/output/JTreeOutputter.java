@@ -120,6 +120,9 @@ public class JTreeOutputter {
     }
 
     protected void processAttributes(Element el, DefaultMutableTreeNode dmtn) {
+    	if (!el.hasAttributes()) {
+    		return;
+    	}
         Iterator<Attribute> atts = el.getAttributes().iterator();
         while (atts.hasNext()) {
             Attribute att = atts.next();

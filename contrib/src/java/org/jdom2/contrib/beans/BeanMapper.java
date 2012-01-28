@@ -500,12 +500,14 @@ public class BeanMapper {
         Set<String> alreadySet = new HashSet<String>();
         
         // map Attributes of parent first
-        for (Attribute attribute : element.getAttributes()) {
-            debug("Mapping " + attribute);
-            mapping = getMappingForAttribute(null, attribute.getName());
-            propertyName = (mapping==null) ?
-                            attribute.getName() : mapping.property;
-            setProperty(bean, propertyName, attribute.getValue());
+        if (element.hasAttributes()) {
+	        for (Attribute attribute : element.getAttributes()) {
+	            debug("Mapping " + attribute);
+	            mapping = getMappingForAttribute(null, attribute.getName());
+	            propertyName = (mapping==null) ?
+	                            attribute.getName() : mapping.property;
+	            setProperty(bean, propertyName, attribute.getValue());
+	        }
         }
 
         // map child Elements

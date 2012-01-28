@@ -370,7 +370,7 @@ final class AttributeList extends AbstractList<Attribute>
 	 *        indicate what <code>Namespace</code> URI to consider
 	 * @return the <code>Attribute</code>, or null if one doesn't exist.
 	 */
-	Object get(final String name, final Namespace namespace) {
+	Attribute get(final String name, final Namespace namespace) {
 		final int index = indexOf(name, namespace);
 		if (index < 0) {
 			return null;

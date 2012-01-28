@@ -187,6 +187,9 @@ public class UnitTestUtil {
      * @param emt The element who's Attributes we should rearrange.
      */
 	public static final void normalizeAttributes(Element emt) {
+		if (!emt.hasAttributes()) {
+			return;
+		}
 		TreeMap<String,Attribute> sorted = new TreeMap<String, Attribute>();
 		List<?> atts = emt.getAttributes();
 		for (Object o : atts.toArray()) {

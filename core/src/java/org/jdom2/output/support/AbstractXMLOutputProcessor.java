@@ -959,8 +959,10 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 			}
 
 			// Print out attributes
-			for (final Attribute attribute : element.getAttributes()) {
-				printAttribute(out, fstack, attribute);
+			if (element.hasAttributes()) {
+				for (final Attribute attribute : element.getAttributes()) {
+					printAttribute(out, fstack, attribute);
+				}
 			}
 
 			if (content.isEmpty()) {

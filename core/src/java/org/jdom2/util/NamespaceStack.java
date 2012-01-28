@@ -422,25 +422,29 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		final Namespace mns = element.getNamespace();
 		// check to see whether the Namespace is new-to-scope.
 		Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);
-		for (final Namespace ns : element.getAdditionalNamespaces()) {
-			if (ns == mns) {
-				continue;
+		if (element.hasAdditionalNamespaces()) {
+			for (final Namespace ns : element.getAdditionalNamespaces()) {
+				if (ns == mns) {
+					continue;
+				}
+				// check to see whether the Namespace is new-to-scope.
+				newscope = checkNamespace(toadd, ns, newscope);
 			}
-			// check to see whether the Namespace is new-to-scope.
-			newscope = checkNamespace(toadd, ns, newscope);
 		}
-		for (final Attribute a : element.getAttributes()) {
-			final Namespace ns = a.getNamespace();
-			if (ns == Namespace.NO_NAMESPACE) {
-				// Attributes are allowed to be in the NO_NAMESPACE without
-				// changing the in-scope set of the Element.... special-case
-				continue;
+		if (element.hasAttributes()) {
+			for (final Attribute a : element.getAttributes()) {
+				final Namespace ns = a.getNamespace();
+				if (ns == Namespace.NO_NAMESPACE) {
+					// Attributes are allowed to be in the NO_NAMESPACE without
+					// changing the in-scope set of the Element.... special-case
+					continue;
+				}
+				if (ns == mns) {
+					continue;
+				}
+				// check to see whether the Namespace is new-to-scope.
+				newscope = checkNamespace(toadd, ns, newscope);
 			}
-			if (ns == mns) {
-				continue;
-			}
-			// check to see whether the Namespace is new-to-scope.
-			newscope = checkNamespace(toadd, ns, newscope);
 		}
 
 		// OK, we've checked the namespaces in the Element, and 'toadd' contains

@@ -318,7 +318,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 
 	@Override
 	public void setAttribute(Element parent, Attribute a) {
-		parent.attributes.uncheckedAddAttribute(a);
+		parent.getAttributeList().uncheckedAddAttribute(a);
 	}
 
 	@Override

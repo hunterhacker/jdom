@@ -163,7 +163,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 
 		@Override
 		public boolean hasNext() {
-			return source.hasNext();
+			return source != null && source.hasNext();
 		}
 
 		@Override
@@ -622,19 +622,23 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 		try {
 			
 			Namespace ns = element.getNamespace();
+			Iterator<Attribute> ait = element.hasAttributes() ?
+					element.getAttributes().iterator() :
+						null;
 			if (ns == Namespace.NO_NAMESPACE) {
 				out.add(eventfactory.createStartElement("", "", element.getName(), 
-						new AttIterator(element.getAttributes().iterator(), eventfactory), 
+						new AttIterator(ait, eventfactory), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			} else if ("".equals(ns.getPrefix())) {
 				out.add(eventfactory.createStartElement("", ns.getURI(), element.getName(), 
-						new AttIterator(element.getAttributes().iterator(), eventfactory), 
+						new AttIterator(ait, eventfactory), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			} else {
 				out.add(eventfactory.createStartElement(ns.getPrefix(), ns.getURI(), element.getName(), 
-						new AttIterator(element.getAttributes().iterator(), eventfactory), 
+						new AttIterator(ait, eventfactory), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			}
+			ait = null;
 			
 			final List<Content> content = element.getContent();
 			

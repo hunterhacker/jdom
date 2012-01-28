@@ -566,11 +566,13 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 			}
 
 			// Allocate attribute list.
-			for (Attribute a : element.getAttributes()) {
-				atts.addAttribute(a.getNamespaceURI(), a.getName(),
-						a.getQualifiedName(),
-						getAttributeTypeName(a.getAttributeType()),
-						a.getValue());
+			if (element.hasAttributes()) {
+				for (Attribute a : element.getAttributes()) {
+					atts.addAttribute(a.getNamespaceURI(), a.getName(),
+							a.getQualifiedName(),
+							getAttributeTypeName(a.getAttributeType()),
+							a.getValue());
+				}
 			}
 
 			// contentHandler.startElement()

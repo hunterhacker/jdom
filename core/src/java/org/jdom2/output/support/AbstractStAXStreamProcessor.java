@@ -617,8 +617,10 @@ public abstract class AbstractStAXStreamProcessor
 				}
 	
 				// Print out attributes
-				for (final Attribute attribute : element.getAttributes()) {
-					printAttribute(out, fstack, attribute);
+				if (element.hasAttributes()) {
+					for (final Attribute attribute : element.getAttributes()) {
+						printAttribute(out, fstack, attribute);
+					}
 				}
 				
 				// OK, now we print out the meat of the Element

@@ -378,15 +378,19 @@ final public class Verifier {
 			return reason + " with the element namespace prefix";
 		}
 
-		reason = checkNamespaceCollision(namespace,
-				element.getAdditionalNamespaces());
-		if (reason != null) {
-			return reason;
+		if (element.hasAdditionalNamespaces()) {
+			reason = checkNamespaceCollision(namespace,
+					element.getAdditionalNamespaces());
+			if (reason != null) {
+				return reason;
+			}
 		}
 
-		reason = checkNamespaceCollision(namespace, element.getAttributes());
-		if (reason != null) {
-			return reason;
+		if (element.hasAttributes()) {
+			reason = checkNamespaceCollision(namespace, element.getAttributes());
+			if (reason != null) {
+				return reason;
+			}
 		}
 
 		return null;

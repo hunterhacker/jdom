@@ -99,7 +99,7 @@ public final class StringBin {
 	 */
 	private static final int DEFAULTCAP = 1023;
 	/** How big to let the largest bucket grow before a rehash */
-	private static final int MAXBUCKET = 16;
+	private static final int MAXBUCKET = 64;
 	
 	/** 
 	 * The actual buckets.

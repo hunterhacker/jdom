@@ -462,8 +462,10 @@ public abstract class AbstractDOMOutputProcessor extends
 				ret.setAttribute(getXmlnsTagFor(ns), ns.getURI());
 			}
 
-			for (Attribute att : element.getAttributes()) {
-				ret.setAttributeNodeNS(printAttribute(fstack, basedoc, att));
+			if (element.hasAttributes()) {
+				for (Attribute att : element.getAttributes()) {
+					ret.setAttributeNodeNS(printAttribute(fstack, basedoc, att));
+				}
 			}
 
 			final List<Content> content = element.getContent();

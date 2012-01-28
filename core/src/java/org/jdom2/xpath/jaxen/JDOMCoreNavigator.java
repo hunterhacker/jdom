@@ -269,7 +269,7 @@ class JDOMCoreNavigator extends DefaultNavigator {
 
 	@Override
 	public final Iterator<?> getAttributeAxisIterator(Object contextNode) throws UnsupportedAxisException {
-		if (isElement(contextNode)) {
+		if (isElement(contextNode) && ((Element)contextNode).hasAttributes()) {
 			return ((Element)contextNode).getAttributes().iterator();
 		}
 		return JaxenConstants.EMPTY_ITERATOR;

@@ -33,6 +33,7 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
+import org.jdom2.SlimJDOMFactory;
 import org.jdom2.Text;
 import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.filter.ElementFilter;
@@ -275,6 +276,10 @@ public class PerfDoc {
 				}
 				System.out.println("Sum " + esum);
 				return null;
+			case 12:
+				SAXBuilder slimsax = new SAXBuilder();
+				slimsax.setJDOMFactory(new SlimJDOMFactory());
+				return slimsax.build(car);
 		}
 		return null;
 	}
@@ -371,15 +376,19 @@ public class PerfDoc {
 			if (c instanceof Element) {
 				Element emt = (Element)c;
 				Element ne = new Element(emt.getName(), emt.getNamespacePrefix(), emt.getNamespaceURI());
-				for (Object oatt : emt.getAttributes()) {
-					Attribute att = (Attribute)oatt;
-					Attribute a = new Attribute(att.getName(), att.getValue(), 
-							att.getAttributeType(), 
-							Namespace.getNamespace(att.getNamespacePrefix(), att.getNamespaceURI()));
-					emt.setAttribute(a);
+				if (emt.hasAttributes()) {
+					for (Object oatt : emt.getAttributes()) {
+						Attribute att = (Attribute)oatt;
+						Attribute a = new Attribute(att.getName(), att.getValue(), 
+								att.getAttributeType(), 
+								Namespace.getNamespace(att.getNamespacePrefix(), att.getNamespaceURI()));
+						emt.setAttribute(a);
+					}
 				}
-				for (Object ns : emt.getAdditionalNamespaces()) {
-					ne.addNamespaceDeclaration((Namespace)ns);
+				if (emt.hasAdditionalNamespaces()) {
+					for (Object ns : emt.getAdditionalNamespaces()) {
+						ne.addNamespaceDeclaration((Namespace)ns);
+					}
 				}
 				ne.addContent(duplicateContent(emt.getContent()));
 				ret.add(ne);

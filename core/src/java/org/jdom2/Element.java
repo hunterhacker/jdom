@@ -118,7 +118,7 @@ public class Element extends Content implements Parent {
 	 *  The attributes of the element.  Subclassers have to
 	 * track attributes using their own mechanism.
 	 */
-	AttributeList attributes = new AttributeList(this);
+	AttributeList attributes = null; // = new AttributeList(this);
 
 	/**
 	 * The content of the element.  Subclassers have to
@@ -250,15 +250,20 @@ public class Element extends Content implements Parent {
 			namespace = Namespace.NO_NAMESPACE;
 		}
 
-		String reason = Verifier.checkNamespaceCollision(namespace, 
-				getAdditionalNamespaces());
-		if (reason != null) {
-			throw new IllegalAddException(this, namespace, reason);
-		}
-		for (Attribute a : getAttributes()) {
-			reason = Verifier.checkNamespaceCollision(namespace, a);
+		if (additionalNamespaces != null) {
+			final String reason = Verifier.checkNamespaceCollision(namespace, 
+					getAdditionalNamespaces());
 			if (reason != null) {
 				throw new IllegalAddException(this, namespace, reason);
+			}
+		}
+		if (hasAttributes()) {
+			for (Attribute a : getAttributes()) {
+				final String reason = 
+						Verifier.checkNamespaceCollision(namespace, a);
+				if (reason != null) {
+					throw new IllegalAddException(this, namespace, reason);
+				}
 			}
 		}
 		
@@ -996,6 +1001,42 @@ public class Element extends Content implements Parent {
 		}
 		return false;
 	}
+	
+	/**
+	 * Indicate whether this Element has any attributes.
+	 * Where possible you should call this method before calling getAttributes()
+	 * because calling getAttributes() will create the necessary Attribute List
+	 * memory structures, even if there are no Attributes attached to the
+	 * Element. Calling hasAttributes() first can save memory.
+	 * @return true if this Element has attributes.
+	 */
+	public boolean hasAttributes() {
+		return attributes != null && !attributes.isEmpty();
+	}
+	
+	/**
+	 * Indicate whether this Element has any additional Namespace declarations.
+	 * Where possible you should call this method before calling
+	 * {@link #getAdditionalNamespaces()} because calling getAttributes() will
+	 * create an unnecessary List even if there are no Additional Namespaces
+	 * attached to the Element. Calling this method first can save memory and
+	 * time.
+	 * @return true if this Element has additional Namespaces.
+	 */
+	public boolean hasAdditionalNamespaces() {
+		return additionalNamespaces != null && !additionalNamespaces.isEmpty();
+	}
+	
+	/**
+	 * Lazy initialiser for the Attribute list.
+	 * @return this Element's Attribute List (creating it if necessary).
+	 */
+	AttributeList getAttributeList() {
+		if (attributes == null) {
+			attributes = new AttributeList(this);
+		}
+		return attributes;
+	}
 
 	/**
 	 * <p>
@@ -1009,7 +1050,7 @@ public class Element extends Content implements Parent {
 	 * @return attributes for the element
 	 */
 	public List<Attribute> getAttributes() {
-		return attributes;
+		return getAttributeList();
 	}
 
 	/**
@@ -1036,7 +1077,10 @@ public class Element extends Content implements Parent {
 	 * @return attribute for the element
 	 */
 	public Attribute getAttribute(final String attname, final Namespace ns) {
-		return (Attribute) attributes.get(attname, ns);
+		if (attributes == null) {
+			return null;
+		}
+		return getAttributeList().get(attname, ns);
 	}
 
 	/**
@@ -1050,6 +1094,9 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or null if no such attribute
 	 */
 	public String getAttributeValue(final String attname) {
+		if (attributes == null) {
+			return null;
+		}
 		return getAttributeValue(attname, Namespace.NO_NAMESPACE);
 	}
 
@@ -1065,6 +1112,9 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or the default if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final String def) {
+		if (attributes == null) {
+			return def;
+		}
 		return getAttributeValue(attname, Namespace.NO_NAMESPACE, def);
 	}
 
@@ -1080,6 +1130,9 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or null if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final Namespace ns) {
+		if (attributes == null) {
+			return null;
+		}
 		return getAttributeValue(attname, ns, null);
 	}
 
@@ -1096,7 +1149,10 @@ public class Element extends Content implements Parent {
 	 * @return the named attribute's value, or the default if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final Namespace ns, final String def) {
-		final Attribute attribute = (Attribute) attributes.get(attname, ns);
+		if (attributes == null) {
+			return def;
+		}
+		final Attribute attribute = getAttributeList().get(attname, ns);
 		if (attribute == null) {
 			return def;
 		}
@@ -1148,7 +1204,7 @@ public class Element extends Content implements Parent {
 	 *         conflicting namespace prefixes.
 	 */
 	public Element setAttributes(final Collection<? extends Attribute> newAttributes) {
-		attributes.clearAndSet(newAttributes);
+		getAttributeList().clearAndSet(newAttributes);
 		return this;
 	}
 
@@ -1223,7 +1279,7 @@ public class Element extends Content implements Parent {
 	 *   namespace prefix on the element.
 	 */
 	public Element setAttribute(final Attribute attribute) {
-		attributes.add(attribute);
+		getAttributeList().add(attribute);
 		return this;
 	}
 
@@ -1252,7 +1308,10 @@ public class Element extends Content implements Parent {
 	 * @return whether the attribute was removed
 	 */
 	public boolean removeAttribute(final String attname, final Namespace ns) {
-		return attributes.remove(attname, ns);
+		if (attributes == null) {
+			return false;
+		}
+		return getAttributeList().remove(attname, ns);
 	}
 
 	/**
@@ -1264,7 +1323,10 @@ public class Element extends Content implements Parent {
 	 * @return whether the attribute was removed
 	 */
 	public boolean removeAttribute(final Attribute attribute) {
-		return attributes.remove(attribute);
+		if (attributes == null) {
+			return false;
+		}
+		return getAttributeList().remove(attribute);
 	}
 
 	/**
@@ -1325,7 +1387,7 @@ public class Element extends Content implements Parent {
 		// Reference to content list and attribute lists are copyed by
 		// super.clone() so we set it new lists if the original had lists
 		element.content = new ContentList(element);
-		element.attributes = new AttributeList(element);
+		element.attributes = attributes == null ? null : new AttributeList(element);
 
 		// Cloning attributes
 		if (attributes != null) {
@@ -1655,15 +1717,19 @@ public class Element extends Content implements Parent {
 		TreeMap<String,Namespace> namespaces = new TreeMap<String, Namespace>();
 		namespaces.put(Namespace.XML_NAMESPACE.getPrefix(), Namespace.XML_NAMESPACE);
 		namespaces.put(getNamespacePrefix(), getNamespace());
-		for (Namespace ns : getAdditionalNamespaces()) {
-			if (!namespaces.containsKey(ns.getPrefix())) {
-				namespaces.put(ns.getPrefix(), ns);
+		if (additionalNamespaces != null) {
+			for (Namespace ns : getAdditionalNamespaces()) {
+				if (!namespaces.containsKey(ns.getPrefix())) {
+					namespaces.put(ns.getPrefix(), ns);
+				}
 			}
 		}
-		for (Attribute att : getAttributes()) {
-			Namespace ns = att.getNamespace();
-			if (!namespaces.containsKey(ns.getPrefix())) {
-				namespaces.put(ns.getPrefix(), ns);
+		if (attributes != null) {
+			for (Attribute att : getAttributes()) {
+				Namespace ns = att.getNamespace();
+				if (!namespaces.containsKey(ns.getPrefix())) {
+					namespaces.put(ns.getPrefix(), ns);
+				}
 			}
 		}
 		// Right, we now have all the namespaces that are current on this ELement.
