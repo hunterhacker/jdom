@@ -77,7 +77,7 @@ import org.jdom2.xpath.util.AbstractXPathCompiled;
  * @param <T>
  *        The generic type of returned data.
  */
-public class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
+class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 		NamespaceContext, VariableContext {
 
 	/**
