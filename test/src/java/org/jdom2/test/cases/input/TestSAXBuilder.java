@@ -103,10 +103,12 @@ import org.jdom2.JDOMFactory;
 import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.BuilderErrorHandler;
+import org.jdom2.input.sax.SAXEngine;
 import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.input.sax.XMLReaderSAX2Factory;
+import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -438,6 +440,17 @@ public final class TestSAXBuilder {
 		sb.setDTDHandler(dtd);
 		assertTrue(dtd == sb.getDTDHandler());		
 	}
+	
+	@Test
+	public void testGetSetXMLReaderFactory() {
+		SAXBuilder sb = new SAXBuilder();
+		XMLReaderJDOMFactory xrjf = sb.getXMLReaderFactory();
+		assertTrue(xrjf == XMLReaders.NONVALIDATING);
+		sb.setXMLReaderFactory(XMLReaders.XSDVALIDATING);
+		assertTrue(sb.getXMLReaderFactory() == XMLReaders.XSDVALIDATING);
+		sb.setXMLReaderFactory(null);
+		assertTrue(xrjf == XMLReaders.NONVALIDATING);
+	}
 
 	@Test
 	public void testXMLFilter() {
@@ -489,7 +502,7 @@ public final class TestSAXBuilder {
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testGetIgnoringElementContentWhitespace() {
+	public void testGetIgnoringElementContentWhitespace() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
 		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
@@ -498,18 +511,27 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
 		assertTrue(sb.isExpandEntities());
+		
+		SAXEngine se = sb.buildEngine();
+		assertFalse(se.isIgnoringBoundaryWhitespace());
+		
 		sb.setIgnoringElementContentWhitespace(true);
 		assertTrue(sb.getIgnoringElementContentWhitespace());		
 		assertTrue(sb.isIgnoringElementContentWhitespace());		
+		se = sb.buildEngine();
+		assertTrue(se.isIgnoringElementContentWhitespace());
 		sb.setIgnoringElementContentWhitespace(false);
 		assertFalse(sb.getIgnoringElementContentWhitespace());		
 		assertFalse(sb.isIgnoringElementContentWhitespace());		
+		se = sb.buildEngine();
+		assertFalse(se.isIgnoringElementContentWhitespace());
 	}
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testGetIgnoringBoundaryWhitespace() {
+	public void testGetIgnoringBoundaryWhitespace() throws JDOMException {
 		SAXBuilder sb = new SAXBuilder(true);
+		SAXEngine se = sb.buildEngine();
 		assertNull(sb.getDriverClass());
 		assertTrue(sb.getEntityResolver() == null);
 		assertTrue(sb.getErrorHandler() == null);
@@ -517,12 +539,22 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
 		assertTrue(sb.isExpandEntities());
+		assertTrue(se.getEntityResolver() == null);
+		assertTrue(se.getErrorHandler() != null);
+		assertTrue(se.getDTDHandler() != null);
+		assertTrue(se.isValidating());
+		assertTrue(se.isExpandEntities());
 		sb.setIgnoringBoundaryWhitespace(true);
 		assertTrue(sb.getIgnoringBoundaryWhitespace());		
 		assertTrue(sb.isIgnoringBoundaryWhitespace());		
+		se = sb.buildEngine();
+		assertTrue(se.isIgnoringBoundaryWhitespace());		
 		sb.setIgnoringBoundaryWhitespace(false);
 		assertFalse(sb.getIgnoringBoundaryWhitespace());		
-		assertFalse(sb.isIgnoringBoundaryWhitespace());		
+		assertFalse(sb.isIgnoringBoundaryWhitespace());
+		
+		se = sb.buildEngine();
+		assertFalse(se.isIgnoringBoundaryWhitespace());
 	}
 
 	@SuppressWarnings("deprecation")

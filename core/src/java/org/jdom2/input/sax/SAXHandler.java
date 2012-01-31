@@ -212,6 +212,7 @@ public class SAXHandler extends DefaultHandler
 		externalEntities.clear();
 		ignoringWhite = false;
 		ignoringBoundaryWhite = false;
+		resetSubCLass();
 	}
 
 	/**
@@ -295,7 +296,7 @@ public class SAXHandler extends DefaultHandler
 	}
 
 	/**
-	 * Specifies whether or not the parser should elminate text() nodes
+	 * Specifies whether or not the parser should eliminate text() nodes
 	 * containing only whitespace when building the document. See
 	 * {@link SAXBuilder#setIgnoringBoundaryWhitespace(boolean)}.
 	 * 

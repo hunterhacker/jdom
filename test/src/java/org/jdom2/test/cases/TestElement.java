@@ -2111,7 +2111,7 @@ public final class TestElement {
 		assertTrue(emt.getNamespace(null) == null);
 		assertTrue(emt.getNamespace("none") == null);
 		assertTrue(emt.getNamespace("xml") == Namespace.XML_NAMESPACE);
-		assertTrue(emt.getNamespace("nsa") == nsa);
+		assertTrue(emt.getNamespace("tstada") == nsa);
 	}
 	
 	@Test

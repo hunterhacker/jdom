@@ -73,7 +73,8 @@ import java.util.List;
  * @author Bradley S. Huffman
  * @author Jason Hunter
  */
-public abstract class Content implements Cloneable, Serializable, NamespaceAware {
+public abstract class Content extends CloneBase
+		implements Cloneable, Serializable, NamespaceAware {
 
 	/**
 	 * An enumeration useful for identifying content types without
@@ -237,15 +238,9 @@ public abstract class Content implements Cloneable, Serializable, NamespaceAware
 	 */
 	@Override
 	public Content clone() {
-		try {
-			Content c = (Content)super.clone();
-			c.parent = null;
-			return c;
-		} catch (CloneNotSupportedException e) {
-			//Can not happen ....
-			//e.printStackTrace();
-			return null;
-		}
+		Content c = (Content)super.clone();
+		c.parent = null;
+		return c;
 	}
 
 	/**

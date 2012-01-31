@@ -92,6 +92,12 @@ public class SlimJDOMFactory extends DefaultJDOMFactory {
 	}
 
 
+	/**
+	 * Reset any Cached String instance data from this SlimJDOMFaxctory cache.
+	 */
+	public void clearCache() {
+		cache = new StringBin();
+	}
 
 	@Override
 	public Attribute attribute(String name, String value, Namespace namespace) {

@@ -79,7 +79,7 @@ final class PassThroughFilter extends AbstractFilter<Object> {
 		for (Iterator<?> it = content.iterator(); it.hasNext(); ) {
 			ret.add(it.next());
 		}
-		return Collections.unmodifiableList(content);
+		return Collections.unmodifiableList(ret);
 	}
 
 }

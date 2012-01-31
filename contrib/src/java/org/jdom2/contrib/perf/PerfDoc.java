@@ -33,7 +33,6 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
-import org.jdom2.SlimJDOMFactory;
 import org.jdom2.Text;
 import org.jdom2.UncheckedJDOMFactory;
 import org.jdom2.filter.ElementFilter;
@@ -197,7 +196,7 @@ public class PerfDoc {
 
 	public long saxLoad() throws Exception {
 		final long startmem = PerfTest.usedMem();
-		saxTime = PerfTest.timeRun(new SAXLoadRunnable(0) );
+		saxTime = PerfTest.timeRun(new SAXLoadRunnable(12) );
 		loadMem = PerfTest.usedMem() - startmem;
 		saxDTime = PerfTest.timeRun(new SAXLoadRunnable(8) );
 		return saxTime;
@@ -278,7 +277,8 @@ public class PerfDoc {
 				return null;
 			case 12:
 				SAXBuilder slimsax = new SAXBuilder();
-				slimsax.setJDOMFactory(new SlimJDOMFactory());
+				//slimsax.setJDOMFactory(new SlimJDOMFactory());
+				//slimsax.setFeature("http://xml.org/sax/features/string-interning", true);
 				return slimsax.build(car);
 		}
 		return null;

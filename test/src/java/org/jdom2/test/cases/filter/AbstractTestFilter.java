@@ -7,7 +7,9 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.RandomAccess;
 
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
@@ -294,8 +296,11 @@ public class AbstractTestFilter {
 	private final void exerciseCore(Filter<? extends Content> ef, Parent parent, CallBack callback) {
 		// exercise the toString()
 		assertTrue(ef.toString() != null);
+		LinkedList<Content> oc = new LinkedList<Content>();
+		ArrayList<Content> mc = new ArrayList<Content>();
 		List<Content> cont = parent.getContent();
 		for (Content c : cont) {
+			oc.add(c);
 			assertTrue(parent == c.getParent());
 			if (parent instanceof Document) {
 				assertTrue(null == c.getParentElement());
@@ -303,12 +308,21 @@ public class AbstractTestFilter {
 				assertTrue(parent == c.getParentElement());
 			}
 			boolean mat = ef.matches(c);
+			if (mat) {
+				mc.add(c);
+			}
 			boolean cbv = callback.isValid(c);
 			if (mat != cbv) {
 				fail ("Filter " + ef + " returned " + mat 
 						+ " but isValid CallBack returned " + cbv 
 						+ " for value " + c);
 			}
+		}
+		List<?> fc = ef.filter(oc);
+		assertTrue(fc instanceof RandomAccess);
+		assertTrue(fc.size() == mc.size());
+		for (int i = 0; i < fc.size(); i++) {
+			assertTrue(fc.get(i) == mc.get(i));
 		}
 		Filter<? extends Content> cf = UnitTestUtil.deSerialize(ef);
 		assertFilterEquals(cf, ef);

@@ -9,6 +9,7 @@ import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.DocType;
+import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
@@ -48,6 +49,11 @@ public class TestFilters extends AbstractTestFilter {
 	public void testContent() {
 		checkFilter(Filters.content(), new Element("tag"), new Object());
 		checkFilter(Filters.content(), new Element("tag"), null);
+	}
+
+	@Test
+	public void testDocument() {
+		checkFilter(Filters.document(), new Document(), new Object());
 	}
 
 	@Test

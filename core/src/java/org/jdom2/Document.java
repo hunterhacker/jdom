@@ -67,7 +67,7 @@ import org.jdom2.filter.*;
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
  */
-public class Document implements Parent {
+public class Document extends CloneBase implements Parent {
 	
 	/**
 	 * This document's content including comments, PIs, a possible
@@ -672,13 +672,7 @@ public class Document implements Parent {
 	 */
 	@Override
 	public Document clone() {
-		Document doc = null;
-
-		try {
-			doc = (Document) super.clone();
-		} catch (CloneNotSupportedException ce) {
-			// Can't happen
-		}
+		final Document doc = (Document) super.clone();
 
 		// The clone has a reference to this object's content list, so
 		// owerwrite with a empty list

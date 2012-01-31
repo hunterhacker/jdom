@@ -469,9 +469,7 @@ public class ProcessingInstruction extends Content {
 		// Object.clone()
 
 		// Create a new Map object for the clone (since Map isn't Cloneable)
-		if (mapData != null) {
-			pi.mapData = parseData(rawData);
-		}
+		pi.mapData = parseData(rawData);
 		return pi;
 	}
 

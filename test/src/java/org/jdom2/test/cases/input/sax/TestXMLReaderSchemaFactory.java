@@ -18,6 +18,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaderSchemaFactory;
+import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
 public class TestXMLReaderSchemaFactory {
@@ -30,6 +31,16 @@ public class TestXMLReaderSchemaFactory {
 		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(schema);
 		assertTrue(readerfac.isValidating());
 		assertNotNull(readerfac.createXMLReader());
+	}
+
+	@Test
+	public void testSchemaXMLReaderFactoryNull() {
+		try {
+			new XMLReaderSchemaFactory(null);
+			UnitTestUtil.failNoException(NullPointerException.class);
+		} catch (Exception e) {
+			UnitTestUtil.checkException(NullPointerException.class, e);
+		}
 	}
 
 	@Test

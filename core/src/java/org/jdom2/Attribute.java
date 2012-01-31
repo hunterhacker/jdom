@@ -74,7 +74,8 @@ import java.util.TreeMap;
  * @author  Victor Toni
  * @author  Rolf Lear
  */
-public class Attribute implements NamespaceAware, Serializable, Cloneable {
+public class Attribute extends CloneBase
+	implements NamespaceAware, Serializable, Cloneable {
 
 	// Keep the old constant names for one beta cycle to help migration
 	
@@ -552,13 +553,9 @@ public class Attribute implements NamespaceAware, Serializable, Cloneable {
 
 	@Override
 	public Attribute clone() {
-		try {
-			Attribute clone = (Attribute) super.clone();
-			clone.parent = null;
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException("Clone not supported!", e);
-		}
+		final Attribute clone = (Attribute) super.clone();
+		clone.parent = null;
+		return clone;
 	}
 
 	/**
