@@ -52,17 +52,19 @@
 
  */
 
-import java.io.*;
 
-import org.jdom2.*;
-import org.jdom2.input.*;
-import org.jdom2.input.sax.XMLReaderSAX2Factory;
-import org.jdom2.output.*;
+
+import java.io.IOException;
+
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * <p><code>SAXBuilderDemo</code> demonstrates how to
- *   build a JDOM <code>Document</code> using a SAX 2.0
- *   parser.
+ *   build a JDOM <code>Document</code> using a SAX parser.
  * </p>
  * 
  * @author Brett McLaughlin
@@ -78,57 +80,33 @@ public class SAXBuilderDemo {
      *   parser (an <code>XMLReader</code> implementation).
      * </p>
      *
-     * @param args <code>String[]</code>
-     *        <ul>
-     *         <li>First argument: filename of XML document to parse</li>
-     *         <li>Second argument: optional boolean on whether to expand
-     *         entities</li>
-     *         <li>Third argument: optional String name of a SAX Driver class
-     *         to use</li>
-     *        </ul>
+     * @param args <code>String[]</code> list of files to parse
      */
     public static void main(String[] args) {
-        if ((args.length < 1) || (args.length > 3)) {
-            System.out.println(
-              "Usage: java SAXBuilderDemo " +
-              "[XML document filename] ([expandEntities] [SAX Driver Class])");
+        if (args.length < 1) {
+            System.err.println(
+              "Usage: java SAXBuilderDemo file1.xml [ file2.xml [ ... ] ]");
             return;
         }
 
-        boolean expandEntities = true;
+        // Used to parse documents
+        final SAXBuilder builder = new SAXBuilder();
+        // used to output documents as String-based XML.
+        // in this case the output will be 'pretty' formatted.
+        final XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 
-        // Load filename and SAX driver class
-        String filename = args[0];
-        String saxDriverClass = null;
-        if (args.length > 1) {
-            if (args[1].equalsIgnoreCase("false")) {
-                expandEntities = false;
-            }
-            if (args.length > 2) {
-                saxDriverClass = args[2];
-            }
+        for (String filename : args) {
+	        // Create an instance of the tester and test
+	        try {
+
+	            final Document doc = builder.build(filename);
+	
+	            outputter.output(doc, System.out);
+	        } catch (JDOMException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
         }
-
-        // Create an instance of the tester and test
-        try {
-            SAXBuilder builder = null;
-            if (saxDriverClass == null) {
-                builder = new SAXBuilder();
-            } else {
-                builder = new SAXBuilder(new XMLReaderSAX2Factory(false, saxDriverClass));
-            }
-            builder.setExpandEntities(expandEntities);
-            //builder.setIgnoringBoundaryWhitespace(true);
-
-            Document doc = builder.build(filename);
-
-            XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-            //outputter.setExpandEmptyElements(true);
-            outputter.output(doc, System.out);
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }    
     }
 }

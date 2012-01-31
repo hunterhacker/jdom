@@ -52,11 +52,13 @@
 
  */
 
+
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -72,57 +74,51 @@ import org.jdom2.input.SAXBuilder;
  */
 @SuppressWarnings("javadoc")
 public class WarReader {
-    
-  public static void main(String[] args) throws IOException, JDOMException {
-    if (args.length != 1) {
-      System.err.println("Usage: java WarReader [web.xml]");
-      return;
-    }
-    String filename = args[0];
-    PrintStream out = System.out;
 
-    SAXBuilder builder = new SAXBuilder();
-    Document doc = builder.build(new File(filename));
+	public static void main(String[] args) throws IOException, JDOMException {
+		if (args.length != 1) {
+			System.err.println("Usage: java WarReader [web.xml]");
+			return;
+		}
+		String filename = args[0];
+		PrintStream out = System.out;
 
-    // Get the root element
-    Element root = doc.getRootElement();
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = builder.build(new File(filename));
 
-    // Print servlet information
-    List<Element> servlets = root.getChildren("servlet");
-    out.println("This WAR has "+ servlets.size() +" registered servlets:");
-    Iterator<Element> i = servlets.iterator();
-    while (i.hasNext()) {
-      Element servlet = i.next();
-      out.print("\t" + servlet.getChild("servlet-name")
-                              .getTextTrim() +
-                " for " + servlet.getChild("servlet-class")
-                                 .getTextTrim());
-      List<Element> initParams = servlet.getChildren("init-param");
-      out.println(" (it has " + initParams.size() + " init params)");
-    }
+		// Get the root element
+		Element root = doc.getRootElement();
 
-    // Print security role information
-    List<Element> securityRoles = root.getChildren("security-role");
-    if (securityRoles.size() == 0) {
-      out.println("This WAR contains no roles");
-    }
-    else {
-      Element securityRole = securityRoles.get(0);
-      List<Element> roleNames = securityRole.getChildren("role-name");
-      out.println("This WAR contains " + roleNames.size() + " roles:");
-      i = roleNames.iterator();
-      while (i.hasNext()) {
-        Element e = i.next();
-        out.println("\t" + e.getTextTrim());
-      }
-    }
-        
-    // Print distributed information (notice this is out of order)
-    List<Element> distrib = root.getChildren("distributed");
-    if (distrib.size() == 0) {
-      out.println("This WAR is not distributed");
-    } else {
-      out.println("This WAR is distributed");
-    }        
-  }
+		// Print servlet information
+		List<Element> servlets = root.getChildren("servlet");
+		out.println("This WAR has "+ servlets.size() +" registered servlets:");
+		for (Element servlet : servlets) {
+			out.print("\t" + servlet.getChild("servlet-name")
+					.getTextTrim() +
+					" for " + servlet.getChild("servlet-class")
+					.getTextTrim());
+			List<Element> initParams = servlet.getChildren("init-param");
+			out.println(" (it has " + initParams.size() + " init params)");
+		}
+
+		// Print security role information
+		List<Element> securityRoles = root.getChildren("security-role");
+		if (securityRoles.size() == 0) {
+			out.println("This WAR contains no roles");
+		} else {
+			Element securityRole = securityRoles.get(0);
+			List<Element> roleNames = securityRole.getChildren("role-name");
+			out.println("This WAR contains " + roleNames.size() + " roles:");
+			for (Element e : roleNames) {
+				out.println("\t" + e.getTextTrim());
+			}
+		}
+
+		// Print distributed information (notice this is out of order)
+		if (root.getChildren("distributed").isEmpty()) {
+			out.println("This WAR is not distributed");
+		} else {
+			out.println("This WAR is distributed");
+		}        
+	}
 }

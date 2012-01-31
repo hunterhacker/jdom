@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,8 @@
 
  */
 
+
+
 import java.util.*;
 
 import org.jdom2.*;
@@ -67,64 +69,76 @@ import org.jdom2.output.*;
 public class DescendantDemo {
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: java DescendantDemo [web.xml]");
+        if (args.length == 0) {
+            System.err.println(
+            		"Usage: java DescendantDemo file1.xml [file2.xml ... ]");
             return;
         }
 
-        SAXBuilder builder = new SAXBuilder();
-        Document doc = builder.build(args[0]);
+        final SAXBuilder builder = new SAXBuilder();
+        for (final String fname : args) {
+        	System.out.println("Processing file " + fname);
+        	// The String argument is considered to be a SystemID which can
+        	// be a URL, File name, a relative file path, etc.
+            final Document doc = builder.build(fname);
 
-        System.out.println("All content:");
-        Iterator<? extends Content> itr = doc.getDescendants();
-        while (itr.hasNext()) {
-            Content c = itr.next();
-            System.out.println(c);
+            System.out.println("All content:");
+            Iterator<? extends Content> itr = doc.getDescendants();
+            while (itr.hasNext()) {
+                Content c = itr.next();
+                // c.toString() gives a very brief output.
+                System.out.println(c.toString());
+            }
+
+            System.out.println();
+            System.out.println("Only elements:");
+            itr = doc.getDescendants(new ElementFilter());
+            while (itr.hasNext()) {
+                Content c = itr.next();
+                System.out.println(c);
+            }
+
+            System.out.println();
+            System.out.println("Everything that's not an element:");
+            itr = doc.getDescendants(new ElementFilter().negate().refine(Filters.content()));
+            while (itr.hasNext()) {
+                Content c = itr.next();
+                System.out.println(c);
+            }
+
+            System.out.println();
+            System.out.println("Only elements with localname of 'servlet':");
+            itr = doc.getDescendants(new ElementFilter("servlet"));
+            while (itr.hasNext()) {
+                Content c = itr.next();
+                System.out.println(c);
+            }
+
+            System.out.println();
+            System.out.println(
+                 "Only elements with localname of servlet-name or servlet-class:");
+            itr = doc.getDescendants(new ElementFilter("servlet-name")
+                                     .or(new ElementFilter("servlet-class")));
+            while (itr.hasNext()) {
+                Content c = itr.next();
+                System.out.println(c);
+            }
+
+            System.out.println();
+            System.out.println("Remove elements with localname of servlet:");
+            Iterator<Element>ite = doc.getDescendants(new ElementFilter("servlet"));
+            while (ite.hasNext()) {
+                Element e = ite.next();
+                System.out.println(e);
+                ite.remove();
+            }
+
+            System.out.println();
+            System.out.println("Dump the remaining document to console:");
+            XMLOutputter outp = new XMLOutputter();
+            outp.output(doc, System.out);
+            System.out.println();
+            System.out.println();
         }
-
-        System.out.println();
-        System.out.println("Only elements:");
-        itr = doc.getDescendants(new ElementFilter());
-        while (itr.hasNext()) {
-            Content c = itr.next();
-            System.out.println(c);
-        }
-
-        System.out.println();
-        System.out.println("Everything that's not an element:");
-        itr = doc.getDescendants(new ElementFilter().negate().refine(Filters.content()));
-        while (itr.hasNext()) {
-            Content c = itr.next();
-            System.out.println(c);
-        }
-
-        System.out.println();
-        System.out.println("Only elements with localname of servlet:");
-        itr = doc.getDescendants(new ElementFilter("servlet"));
-        while (itr.hasNext()) {
-            Content c = itr.next();
-            System.out.println(c);
-        }
-
-        System.out.println();
-        System.out.println(
-             "Only elements with localname of servlet-name or servlet-class:");
-        itr = doc.getDescendants(new ElementFilter("servlet-name")
-                                 .or(new ElementFilter("servlet-class")));
-        while (itr.hasNext()) {
-            Content c = itr.next();
-            System.out.println(c);
-        }
-
-        System.out.println();
-        System.out.println("Remove elements with localname of servlet:");
-        itr = doc.getDescendants(new ElementFilter("servlet"));
-        while (itr.hasNext()) {
-            itr.next();
-            itr.remove();
-        }
-
-        XMLOutputter outp = new XMLOutputter();
-        outp.output(doc, System.out);
     }
 }

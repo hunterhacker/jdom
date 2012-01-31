@@ -52,6 +52,8 @@
 
  */
 
+
+
 import java.io.*;
 import java.util.*;
 import org.jdom2.*;
@@ -82,13 +84,12 @@ public class XPathReader {
         Document doc = builder.build(new File(filename));
 
         // Print servlet information
-        XPathExpression<Element> servletPath = XPathFactory.instance().compile("//servlet", Filters.element());
+        XPathExpression<Element> servletPath = 
+        		XPathFactory.instance().compile("//servlet", Filters.element());
         List<Element> servlets = servletPath.evaluate(doc);
 
         out.println("This WAR has "+ servlets.size() +" registered servlets:");
-        Iterator<Element> i = servlets.iterator();
-        while (i.hasNext()) {
-            Element servlet = i.next();
+        for (Element servlet : servlets) {
             out.print("\t" + servlet.getChild("servlet-name")
                                     .getTextTrim() +
                       " for " + servlet.getChild("servlet-class")
@@ -98,16 +99,16 @@ public class XPathReader {
         }
             
         // Print security role information
-        XPathExpression<Text> rolePath = XPathFactory.instance().compile("//security-role/role-name/text()", Filters.text());
+        XPathExpression<Text> rolePath = XPathFactory.instance().compile(
+        				"//security-role/role-name/text()", Filters.text());
         List<Text> roleNames = rolePath.evaluate(doc);
 
-        if (roleNames.size() == 0) {
+        if (roleNames.isEmpty()) {
             out.println("This WAR contains no roles");
         } else {
             out.println("This WAR contains " + roleNames.size() + " roles:");
-            Iterator<Text> ti = roleNames.iterator();
-            while (ti.hasNext()) {
-                out.println("\t" + ti.next().getTextTrim());
+            for (Text t : roleNames) {
+                out.println("\t" + t.getTextTrim());
             }
         }
     }    
