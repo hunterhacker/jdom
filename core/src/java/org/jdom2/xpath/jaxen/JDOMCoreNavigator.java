@@ -93,8 +93,7 @@ class JDOMCoreNavigator extends DefaultNavigator {
 
 	@Override
 	public final XPath parseXPath(String path) throws SAXPathException {
-		XPath ret = new BaseXPath(path, this);
-		return ret;
+		return new BaseXPath(path, this);
 	}
 
 	@Override

@@ -94,6 +94,13 @@ public class TestXPathBuilder {
 		assertTrue(xpb.setNamespace("h", "hello"));
 		assertTrue(hello == xpb.getNamespace("h"));
 		
+		try {
+			xpb.getNamespace(null);
+			UnitTestUtil.failNoException(NullPointerException.class);
+		} catch (Exception e) {
+			UnitTestUtil.checkException(NullPointerException.class, e);
+		}
+		
 	}
 
 	@Test
