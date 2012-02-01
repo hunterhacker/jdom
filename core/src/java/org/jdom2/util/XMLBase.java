@@ -91,6 +91,18 @@ public final class XMLBase {
 	 * Calculate the XMLBase URI for an Element using the rules defined in the
 	 * XMLBase specification, as well as the values supplied in the xml:base
 	 * attributes on the supplied Element and the Element's ancestry.
+	 * <p>
+	 * This method
+	 * assumes that all values in <code>xml:base</code> attributes are valid URI
+	 * values according to the <code>java.net.URI</code> implementation. The
+	 * same implementation is used to resolve relative URI values, and thus this
+	 * code follows the assumptions in java.net.URI.
+	 * <p>
+	 * This technically deviates from the XMLBase spec because to fully support
+	 * legacy HTML the xml:bae attribute could contain what is called a 'LIERI'
+	 * which is a superset of true URI values, but for practical purposes JDOM
+	 * users should never encounter such values because they are not processing
+	 * raw HTML (but xhtml maybe). 
 	 * 
 	 * @param element
 	 *        The Element for which to calculate the XMLBase
@@ -117,7 +129,7 @@ public final class XMLBase {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Inaccessible constructor
 	 */
