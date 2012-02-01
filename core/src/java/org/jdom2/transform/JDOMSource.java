@@ -151,7 +151,7 @@ public class JDOMSource extends SAXSource {
 	 *                                    <code>null</code>.
 	 */
 	public JDOMSource(Document source) {
-		setDocument(source);
+		this(source, null);
 	}
 
 	/**
@@ -199,6 +199,9 @@ public class JDOMSource extends SAXSource {
 	public JDOMSource(Document source, EntityResolver resolver) {
 		setDocument(source);
 		this.resolver = resolver;
+		if (source.getBaseURI() != null) {
+			super.setSystemId(source.getBaseURI());
+		}
 	}
 
 	/**
