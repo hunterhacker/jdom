@@ -140,6 +140,8 @@ public interface XPathExpression<T> extends Cloneable {
 	public Object setVariable(String uri, String name, Object value);
 
 	/**
+	 * Get the variable value associated to the given variable name (namespace
+	 * aware).
 	 * @param uri
 	 *        the Namespace URI in which the variable name was declared.
 	 * @param name
@@ -153,6 +155,8 @@ public interface XPathExpression<T> extends Cloneable {
 	public Object getVariable(String uri, String name);
 
 	/**
+	 * Get the {@code Filter<T>} used to coerce the raw XPath results in to
+	 *         the correct Generic type.
 	 * @return the {@code Filter<T>} used to coerce the raw XPath results in to
 	 *         the correct Generic type.
 	 */
