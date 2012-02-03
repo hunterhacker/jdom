@@ -76,6 +76,85 @@
 
 	<hr/>
 	<p/>
+	Fixes for XMLText escaping
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.01ms</td><td>1.83ms</td><td>7.06ms</td><td>1.96ms</td><td>5.19ms</td><td>1.60ms</td><td>9.09ms</td><td>3.53ms</td><td>3.23ms</td><td>14.32ms</td><td>9.16ms</td><td>31.49ms</td><td>10.84ms</td><td>10.10ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.86ms</td><td>1.16ms</td><td>7.23ms</td><td>1.68ms</td><td>5.02ms</td><td>1.39ms</td><td>9.41ms</td><td>3.57ms</td><td>3.50ms</td><td>15.21ms</td><td>9.49ms</td><td>29.77ms</td><td>11.03ms</td><td>9.68ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.73ms</td><td>1.01ms</td><td>7.41ms</td><td>2.42ms</td><td>4.90ms</td><td>1.52ms</td><td>8.63ms</td><td>3.06ms</td><td>3.11ms</td><td>15.76ms</td><td>9.32ms</td><td>30.31ms</td><td>10.74ms</td><td>9.50ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.64ms</td><td>1.42ms</td><td>7.44ms</td><td>2.66ms</td><td>5.35ms</td><td>1.64ms</td><td>9.20ms</td><td>3.62ms</td><td>3.06ms</td><td>14.34ms</td><td>9.71ms</td><td>29.80ms</td><td>11.11ms</td><td>10.36ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.69ms</td><td>1.68ms</td><td>7.02ms</td><td>2.40ms</td><td>5.10ms</td><td>1.74ms</td><td>9.20ms</td><td>3.55ms</td><td>3.15ms</td><td>13.84ms</td><td>9.96ms</td><td>29.41ms</td><td>11.74ms</td><td>9.95ms</td></tr>
+	</table>
+
+
+	<hr/>
+	<p/>
+	SAX String-intern and Lazy Attributes
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>6.01ms</td><td>2.83ms</td><td>7.29ms</td><td>2.34ms</td><td>5.24ms</td><td>1.90ms</td><td>8.55ms</td><td>2.77ms</td><td>3.14ms</td><td>13.08ms</td><td>9.78ms</td><td>30.18ms</td><td>11.28ms</td><td>9.89ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>6.10ms</td><td>2.36ms</td><td>7.31ms</td><td>2.17ms</td><td>5.10ms</td><td>0.82ms</td><td>9.99ms</td><td>4.00ms</td><td>3.15ms</td><td>12.75ms</td><td>9.78ms</td><td>30.13ms</td><td>11.41ms</td><td>9.94ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>6.36ms</td><td>3.22ms</td><td>7.55ms</td><td>3.00ms</td><td>5.03ms</td><td>1.71ms</td><td>8.52ms</td><td>2.94ms</td><td>3.15ms</td><td>14.12ms</td><td>9.67ms</td><td>31.15ms</td><td>12.02ms</td><td>10.84ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.95ms</td><td>2.82ms</td><td>7.22ms</td><td>2.58ms</td><td>4.96ms</td><td>1.23ms</td><td>9.49ms</td><td>3.90ms</td><td>3.45ms</td><td>13.33ms</td><td>9.77ms</td><td>29.96ms</td><td>11.70ms</td><td>9.97ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.97ms</td><td>2.69ms</td><td>7.37ms</td><td>2.79ms</td><td>4.61ms</td><td>1.43ms</td><td>8.71ms</td><td>3.08ms</td><td>3.24ms</td><td>12.59ms</td><td>9.74ms</td><td>29.80ms</td><td>11.34ms</td><td>9.81ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	Lazy AttributeList and smart AdditionalNamespace checking too.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.58ms</td><td>1.62ms</td><td>6.91ms</td><td>2.11ms</td><td>4.59ms</td><td>1.26ms</td><td>8.30ms</td><td>2.79ms</td><td>3.11ms</td><td>12.61ms</td><td>9.36ms</td><td>29.12ms</td><td>11.08ms</td><td>9.67ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.67ms</td><td>1.30ms</td><td>7.26ms</td><td>2.69ms</td><td>4.34ms</td><td>0.77ms</td><td>8.35ms</td><td>2.71ms</td><td>3.11ms</td><td>12.28ms</td><td>10.51ms</td><td>29.17ms</td><td>11.32ms</td><td>9.93ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.42ms</td><td>1.06ms</td><td>7.19ms</td><td>2.75ms</td><td>4.50ms</td><td>1.08ms</td><td>8.95ms</td><td>3.08ms</td><td>3.11ms</td><td>12.01ms</td><td>9.44ms</td><td>29.36ms</td><td>11.50ms</td><td>9.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.67ms</td><td>1.68ms</td><td>6.84ms</td><td>2.45ms</td><td>4.44ms</td><td>1.07ms</td><td>8.47ms</td><td>2.96ms</td><td>3.17ms</td><td>12.25ms</td><td>9.47ms</td><td>29.57ms</td><td>11.48ms</td><td>9.71ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.50ms</td><td>1.49ms</td><td>6.91ms</td><td>2.51ms</td><td>4.40ms</td><td>1.12ms</td><td>8.28ms</td><td>2.80ms</td><td>3.06ms</td><td>12.13ms</td><td>10.01ms</td><td>29.23ms</td><td>11.50ms</td><td>9.68ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	Both SlimJDOMFactory and Lazy AttributeList
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.57MiB</td><td>8.02ms</td><td>5.03ms</td><td>7.26ms</td><td>2.10ms</td><td>4.84ms</td><td>1.59ms</td><td>8.25ms</td><td>2.74ms</td><td>2.97ms</td><td>12.03ms</td><td>9.31ms</td><td>28.70ms</td><td>11.20ms</td><td>9.93ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.57MiB</td><td>8.28ms</td><td>5.02ms</td><td>7.06ms</td><td>2.28ms</td><td>4.55ms</td><td>1.11ms</td><td>8.25ms</td><td>2.70ms</td><td>2.90ms</td><td>11.93ms</td><td>9.77ms</td><td>28.73ms</td><td>11.32ms</td><td>9.96ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.57MiB</td><td>7.90ms</td><td>4.61ms</td><td>6.89ms</td><td>2.35ms</td><td>4.57ms</td><td>1.25ms</td><td>8.31ms</td><td>2.78ms</td><td>2.94ms</td><td>12.46ms</td><td>9.55ms</td><td>29.30ms</td><td>11.69ms</td><td>9.80ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.57MiB</td><td>7.96ms</td><td>5.05ms</td><td>6.94ms</td><td>2.44ms</td><td>4.57ms</td><td>1.13ms</td><td>9.49ms</td><td>3.80ms</td><td>3.00ms</td><td>12.19ms</td><td>9.37ms</td><td>30.65ms</td><td>11.22ms</td><td>9.69ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.57MiB</td><td>7.74ms</td><td>4.84ms</td><td>7.26ms</td><td>2.55ms</td><td>4.72ms</td><td>1.54ms</td><td>8.28ms</td><td>2.04ms</td><td>3.02ms</td><td>11.97ms</td><td>9.60ms</td><td>28.81ms</td><td>11.38ms</td><td>9.79ms</td></tr>
+	</table>
+	
+	<hr/>
+	<p/>
+	Lazy AttributeList
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.56ms</td><td>1.58ms</td><td>6.86ms</td><td>2.05ms</td><td>5.14ms</td><td>1.59ms</td><td>9.08ms</td><td>3.14ms</td><td>3.11ms</td><td>12.85ms</td><td>9.79ms</td><td>30.04ms</td><td>13.41ms</td><td>9.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.58ms</td><td>0.78ms</td><td>7.40ms</td><td>2.00ms</td><td>4.74ms</td><td>1.41ms</td><td>8.27ms</td><td>2.74ms</td><td>3.10ms</td><td>12.57ms</td><td>9.69ms</td><td>30.01ms</td><td>11.52ms</td><td>9.94ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.50ms</td><td>1.17ms</td><td>6.96ms</td><td>2.52ms</td><td>5.07ms</td><td>1.86ms</td><td>9.25ms</td><td>3.74ms</td><td>3.11ms</td><td>12.58ms</td><td>10.08ms</td><td>30.14ms</td><td>11.29ms</td><td>9.87ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.49ms</td><td>1.30ms</td><td>6.73ms</td><td>2.33ms</td><td>4.86ms</td><td>1.17ms</td><td>8.35ms</td><td>2.82ms</td><td>3.49ms</td><td>12.41ms</td><td>9.71ms</td><td>30.05ms</td><td>11.52ms</td><td>9.83ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.60ms</td><td>1.66ms</td><td>6.90ms</td><td>2.32ms</td><td>4.70ms</td><td>1.45ms</td><td>8.25ms</td><td>2.71ms</td><td>3.10ms</td><td>12.49ms</td><td>9.54ms</td><td>30.87ms</td><td>12.33ms</td><td>11.12ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	SlimJDOMFactory
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.77MiB</td><td>8.49ms</td><td>5.26ms</td><td>7.04ms</td><td>2.20ms</td><td>5.05ms</td><td>1.72ms</td><td>8.30ms</td><td>2.59ms</td><td>2.96ms</td><td>12.36ms</td><td>9.84ms</td><td>29.84ms</td><td>11.73ms</td><td>10.17ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.77MiB</td><td>8.41ms</td><td>5.02ms</td><td>6.94ms</td><td>2.06ms</td><td>4.81ms</td><td>1.09ms</td><td>8.38ms</td><td>2.69ms</td><td>3.15ms</td><td>12.40ms</td><td>9.86ms</td><td>29.80ms</td><td>11.68ms</td><td>10.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.77MiB</td><td>8.66ms</td><td>5.56ms</td><td>6.96ms</td><td>2.42ms</td><td>4.53ms</td><td>1.12ms</td><td>8.14ms</td><td>1.90ms</td><td>2.95ms</td><td>12.48ms</td><td>10.05ms</td><td>29.79ms</td><td>11.74ms</td><td>10.40ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.77MiB</td><td>8.33ms</td><td>4.89ms</td><td>7.11ms</td><td>2.63ms</td><td>5.25ms</td><td>1.51ms</td><td>8.12ms</td><td>2.58ms</td><td>2.97ms</td><td>12.80ms</td><td>9.88ms</td><td>29.62ms</td><td>11.73ms</td><td>10.22ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.77MiB</td><td>9.01ms</td><td>6.04ms</td><td>7.34ms</td><td>2.79ms</td><td>4.57ms</td><td>1.32ms</td><td>8.07ms</td><td>2.51ms</td><td>3.08ms</td><td>12.35ms</td><td>9.90ms</td><td>30.58ms</td><td>11.95ms</td><td>10.19ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
 	Change New XPath API.
 	<br>
 	<table border="1">
