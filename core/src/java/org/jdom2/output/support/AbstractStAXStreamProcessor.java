@@ -181,7 +181,7 @@ public abstract class AbstractStAXStreamProcessor
 			final List<? extends Content> list)
 			throws XMLStreamException {
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		printContent(out, fstack, new NamespaceStack(), walker);
 		out.flush();
 	}
@@ -197,7 +197,7 @@ public abstract class AbstractStAXStreamProcessor
 			final CDATA cdata) throws XMLStreamException {
 		final List<CDATA> list = Collections.singletonList(cdata);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -220,7 +220,7 @@ public abstract class AbstractStAXStreamProcessor
 			final Text text) throws XMLStreamException {
 		final List<Text> list = Collections.singletonList(text);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -330,7 +330,7 @@ public abstract class AbstractStAXStreamProcessor
 				list.add(doc.getContent(i));
 			}
 		}
-		Walker walker = buildWalker(fstack, list);
+		Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			while (walker.hasNext()) {
 				
@@ -585,7 +585,7 @@ public abstract class AbstractStAXStreamProcessor
 				fstack.push();
 				try {
 					fstack.setTextMode(textmode);
-					walker = buildWalker(fstack, content);
+					walker = buildWalker(fstack, content, false);
 					if (!walker.hasNext()) {
 						// rip out the walker if there is no content.
 						walker = null;
@@ -626,27 +626,20 @@ public abstract class AbstractStAXStreamProcessor
 				// OK, now we print out the meat of the Element
 				if (walker != null) {
 					// we need to re-create the walker/fstack.
-					String postindent = fstack.getLevelIndent();
 					fstack.push();
 					try {
 						fstack.setTextMode(textmode);
-						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								fstack.getLevelIndent() != null) {
+						if (!walker.isAllText() && fstack.getPadBetween() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									fstack.getLevelIndent();
+							final String indent = fstack.getPadBetween();
 							printText(out, fstack, new Text(indent));
 						}
 						
 						printContent(out, fstack, nstack, walker);
 						
-						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								postindent != null) {
+						if (!walker.isAllText() && fstack.getPadLast() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									postindent;
+							final String indent = fstack.getPadLast(); 
 							printText(out, fstack, new Text(indent));
 						}
 					} finally {

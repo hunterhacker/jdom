@@ -176,8 +176,8 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	@Test
 	public void testTextEscapedEntitiesFilter() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" &#x153; ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
-		char[] data = " \" \u0153 ' & < > \r \n \t \uD800\uDC00 ".toCharArray();
-		textEscapedEntitiesFilter(cw, fsraw, data, 0, data.length);
+		String data = " \" \u0153 ' & < > \r \n \t \uD800\uDC00 ";
+		textEscapedEntitiesFilter(cw, fsraw, data);
 		cw.close();
 	}
 
@@ -186,8 +186,8 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
 		// the HighSurrogate is broken here....
 		try {
-			char[] data = " \" ' & < > \r \n \t \uD800 \uDC00 ".toCharArray();
-			textEscapedEntitiesFilter(cw, fsraw, data, 0, data.length);
+			String data = " \" ' & < > \r \n \t \uD800 \uDC00 ";
+			textEscapedEntitiesFilter(cw, fsraw, data);
 			fail("Should have missed the low surrogate...");
 		} catch (IllegalDataException ide) {
 			//good
@@ -202,8 +202,8 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
 		// the HighSurrogate is broken here....
 		try {
-			char[] data = " \" ' & < > \r \n \t \uD800".toCharArray();
-			textEscapedEntitiesFilter(cw, fsraw, data, 0, data.length);
+			String data = " \" ' & < > \r \n \t \uD800";
+			textEscapedEntitiesFilter(cw, fsraw, data);
 			fail("Should have missed the low surrogate...");
 		} catch (IllegalDataException ide) {
 			//good
@@ -216,10 +216,10 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	@Test
 	public void testTextEscapedEntitiesFilterNoEscape() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" ' & < > \r \n \t \uD800\uDC00 ");
-		char[] data = " \" ' & < > \r \n \t \uD800\uDC00 ".toCharArray();
+		String data = " \" ' & < > \r \n \t \uD800\uDC00 ";
 		FormatStack tmps = new FormatStack(RAW);
 		tmps.setEscapeOutput(false);
-		textEscapedEntitiesFilter(cw, tmps, data, 0, data.length);
+		textEscapedEntitiesFilter(cw, tmps, data);
 		cw.close();
 	}
 
@@ -227,14 +227,14 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	public void testTextEscapeRaw() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
 		String s = " \" ' & < > \r \n \t \uD800\uDC00 ";
-		textEscapedEntitiesFilter(cw, fsraw, s.toCharArray(), 0, s.length());
+		textEscapedEntitiesFilter(cw, fsraw, s);
 		cw.close();
 	}
 
 	@Test
 	public void testTextEscapeRawEmpty() throws IOException {
 		CheckWriter cw = new CheckWriter("");
-		textEscapedEntitiesFilter(cw, fsraw, "".toCharArray(), 0, 0);
+		textEscapedEntitiesFilter(cw, fsraw, "");
 		cw.close();
 	}
 

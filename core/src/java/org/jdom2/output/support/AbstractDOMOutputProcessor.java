@@ -112,7 +112,7 @@ import org.jdom2.util.NamespaceStack;
  * <p>
  * This class delegates the formatting of the content to the Walker classes
  * and you can create your own custom walker by overriding the
- * {@link #buildWalker(FormatStack, List)} method.
+ * {@link #buildWalker(FormatStack, List, boolean)} method.
  * 
  * @see DOMOutputter
  * @see DOMOutputProcessor
@@ -184,7 +184,7 @@ public abstract class AbstractDOMOutputProcessor extends
 			Format format, CDATA cdata) {
 		final List<CDATA> list = Collections.singletonList(cdata);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -203,7 +203,7 @@ public abstract class AbstractDOMOutputProcessor extends
 			Format format, Text text) {
 		final List<Text> list = Collections.singletonList(text);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -471,27 +471,24 @@ public abstract class AbstractDOMOutputProcessor extends
 			final List<Content> content = element.getContent();
 			
 			if (!content.isEmpty()) {
-				final String postindent = fstack.getLevelIndent();
 				fstack.push();
 				try {
 					fstack.setTextMode(textmode);
-					Walker walker = buildWalker(fstack, content);
+					Walker walker = buildWalker(fstack, content, false);
 					
-					if (!walker.isAllText() && fstack.getLevelEOL() != null && 
-							fstack.getLevelIndent() != null) {
+					if (!walker.isAllText() && fstack.getPadBetween() != null) {
 						// we need to newline/indent
-						org.w3c.dom.Text n = basedoc.createTextNode(
-								fstack.getLevelEOL() + fstack.getLevelIndent());
+						final org.w3c.dom.Text n = basedoc.createTextNode(
+								fstack.getPadBetween());
 						ret.appendChild(n);
 					}
 					
 					printContent(fstack, nstack, basedoc, ret, walker);
 					
-					if (!walker.isAllText() && fstack.getLevelEOL() != null && 
-							fstack.getLevelIndent() != null) {
+					if (!walker.isAllText() && fstack.getPadLast() != null) {
 						// we need to newline/indent
-						org.w3c.dom.Text n = basedoc.createTextNode(
-								fstack.getLevelEOL() + postindent);
+						final org.w3c.dom.Text n = basedoc.createTextNode(
+								fstack.getPadLast());
 						ret.appendChild(n);
 					}
 					

@@ -214,5 +214,38 @@ public class TestFormat {
 			assertTrue("Should Escape " + ch, es.shouldEscape(ch));
 		}
 	}
+	
+	private void checkTrim(String base, String both, String left, String right, String compact) {
+		assertEquals(both,    Format.trimBoth(base));
+		assertEquals(left,    Format.trimLeft(base));
+		assertEquals(right,   Format.trimRight(base));
+		assertEquals(compact, Format.compact(base));
+	}
+	
+	@Test
+	public void testTrimming() {
+		checkTrim("", "", "", "", "");
+		checkTrim(" ", "", "", "", "");
+		checkTrim("x", "x", "x", "x", "x");
+		checkTrim("foo", "foo", "foo", "foo", "foo");
+		checkTrim(" \r\n  ", "", "", "", "");
+		checkTrim(" \rx\n  ", "x", "x\n  ", " \rx", "x");
+		checkTrim(" \rx \t y\n  ", "x \t y", "x \t y\n  ", " \rx \t y", "x y");
+	}
+	
+	private void checkEscapes(String eol, String base, String txt, String att) {
+		EscapeStrategy strategy = Format.getPrettyFormat().getEscapeStrategy();
+		assertEquals(txt, Format.escapeText(strategy, eol, base));
+		assertEquals(att, Format.escapeAttribute(strategy, base));
+	}
+	
+	@Test
+	public void testEscapeText() {
+		checkEscapes(null, "", "", "");
+		checkEscapes(null, " \n ", " \n ", " &#xA; ");
+		checkEscapes("\r\n", " \n ", " \r\n ", " &#xA; ");
+		checkEscapes(null, " \" \n ", " \" \n ", " &quot; &#xA; ");
+		checkEscapes("\r\n", " \" \n ", " \" \r\n ", " &quot; &#xA; ");
+	}
 
 }

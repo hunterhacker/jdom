@@ -70,12 +70,12 @@ public class WalkCompacting extends AbstractFormattedWalker {
 	/**
 	 * Create the Trimmed walker instance.
 	 * @param content The list of content to format
-	 * @param padding The indenting required.
-	 * @param eol The End-Of-Line sequence.
+	 * @param fstack The current stack.
+	 * @param escape Whether Text values should be escaped.
 	 */
-	public WalkCompacting(List<? extends Content> content, String padding,
-			String eol) {
-		super(content, padding, eol);
+	public WalkCompacting(final List<? extends Content> content, 
+			final FormatStack fstack, final boolean escape) {
+		super(content, fstack, escape);
 	}
 	
 	private boolean isSpaceFirst(String text) {

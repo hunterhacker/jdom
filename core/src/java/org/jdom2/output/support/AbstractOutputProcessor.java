@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -86,18 +86,22 @@ public abstract class AbstractOutputProcessor {
 	 * @param fstack The current FormatStack for the walker (this should not be 
 	 * 		modified by the Walker).
 	 * @param content The list of content to walk.
+	 * @param escape If you want the Text values to be XMLEscaped then supply
+	 *      a non-null EscapeStrategy to use.
 	 * @return the created walker.
 	 */
-	protected Walker buildWalker(FormatStack fstack, List<? extends Content> content) {
+	protected Walker buildWalker(final FormatStack fstack, 
+			final List<? extends Content> content, boolean escape) {
+		
 		switch (fstack.getTextMode()) {
-			case NORMALIZE:
-				return new WalkCompacting(content, fstack.getLevelIndent(), fstack.getLevelEOL());
 			case PRESERVE:
 				return new WalkPreserving(content);
+			case NORMALIZE:
+				return new WalkCompacting(content, fstack, escape);
 			case TRIM:
-				return new WalkTrimming(content, fstack.getLevelIndent(), fstack.getLevelEOL());
+				return new WalkTrimming(content, fstack, escape);
 			case TRIM_FULL_WHITE:
-				return new WalkTrimmingFullWhite(content, fstack.getLevelIndent(), fstack.getLevelEOL());
+				return new WalkTrimmingFullWhite(content, fstack, escape);
 		}
 		// all cases should be handled in the switch statement above. If someone
 		// creates a new TextMode though, then it will create a warning in
@@ -105,5 +109,5 @@ public abstract class AbstractOutputProcessor {
 		// instance.
 		return new WalkPreserving(content);
 	}
-	
+
 }

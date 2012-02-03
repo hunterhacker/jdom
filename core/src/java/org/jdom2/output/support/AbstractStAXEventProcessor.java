@@ -242,7 +242,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 			final XMLEventFactory eventfactory, final List<? extends Content> list)
 			throws XMLStreamException {
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		printContent(out, new FormatStack(format), new NamespaceStack(), eventfactory, walker);
 	}
 
@@ -257,7 +257,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 			final XMLEventFactory eventfactory, final CDATA cdata) throws XMLStreamException {
 		final List<CDATA> list = Collections.singletonList(cdata);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -279,7 +279,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 			final XMLEventFactory eventfactory, final Text text) throws XMLStreamException {
 		final List<Text> list = Collections.singletonList(text);
 		final FormatStack fstack = new FormatStack(format);
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			final Content c = walker.next();
 			if (c == null) {
@@ -383,7 +383,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 			}
 		}
 		
-		Walker walker = buildWalker(fstack, list);
+		Walker walker = buildWalker(fstack, list, false);
 		if (walker.hasNext()) {
 			while (walker.hasNext()) {
 				
@@ -656,31 +656,24 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 					textmode = TextMode.PRESERVE;
 				}
 
-				final String postindent = fstack.getLevelIndent();
 				fstack.push();
 				try {
 					
 					fstack.setTextMode(textmode);
 					
-					final Walker walker = buildWalker(fstack, content);
+					final Walker walker = buildWalker(fstack, content, false);
 					if (walker.hasNext()) {
-						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								fstack.getLevelIndent() != null) {
+						if (!walker.isAllText() && fstack.getPadBetween() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									fstack.getLevelIndent();
+							final String indent = fstack.getPadBetween();
 							printText(out, fstack, eventfactory, new Text(indent));
 						}
 						
 						printContent(out, fstack, nstack, eventfactory, walker);
 						
-						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								fstack.getLevelIndent() != null) {
+						if (!walker.isAllText() && fstack.getPadLast() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									postindent;
+							final String indent = fstack.getPadLast(); 
 							printText(out, fstack, eventfactory, new Text(indent));
 						}
 					}

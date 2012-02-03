@@ -57,6 +57,7 @@ package org.jdom2.output;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
+import org.jdom2.IllegalDataException;
 import org.jdom2.Verifier;
 
 /**
@@ -120,6 +121,302 @@ public class Format implements Cloneable {
 		f.setTextMode(TextMode.NORMALIZE);
 		return f;
 	}
+	
+	/**
+	 * Use the XML Specification definition of whitespace to compact the
+	 * input value. The value is trimmed, and any internal XML whitespace
+	 * is replaced with a single ' ' space.
+	 * @param str The value to compact.
+	 * @return The compacted value
+	 * @since JDOM2
+	 */
+	public static final String compact(String str) {
+		int right = str.length() - 1;
+		int left = 0;
+		while (left <= right && 
+				Verifier.isXMLWhitespace(str.charAt(left))) {
+			left++;
+		}
+		while (right > left &&
+				Verifier.isXMLWhitespace(str.charAt(right))) {
+			right--;
+		}
+		
+		if (left > right) {
+			return "";
+		}
+		
+		boolean space = true;
+		final StringBuilder buffer = new StringBuilder(right - left + 1);
+		while (left <= right) {
+			final char c = str.charAt(left);
+			if (Verifier.isXMLWhitespace(c)) {
+				if (space) {
+					buffer.append(' ');
+					space = false;
+				}
+			} else {
+				buffer.append(c);
+				space = true;
+			}
+			left++;
+		}
+		return buffer.toString();
+	}
+
+	/**
+	 * Use the XML Specification definition of whitespace to Right-trim the
+	 * input value.
+	 * @param str The value to trim.
+	 * @return The value right-trimmed
+	 * @since JDOM2
+	 */
+	public static final String trimRight(String str) {
+		int right = str.length() - 1;
+		while (right >= 0 && Verifier.isXMLWhitespace(str.charAt(right))) {
+			right--;
+		}
+		if (right < 0) {
+			return "";
+		}
+		return str.substring(0, right + 1);
+	}
+
+	/**
+	 * Use the XML Specification definition of whitespace to Left-trim the
+	 * input value.
+	 * @param str The value to trim.
+	 * @return The value left-trimmed
+	 * @since JDOM2
+	 */
+	public static final String trimLeft(final String str) {
+		final int right = str.length();
+		int left = 0;
+		while (left < right && Verifier.isXMLWhitespace(str.charAt(left))) {
+			left++;
+		}
+		if (left >= right) {
+			return "";
+		}
+
+		return str.substring(left);
+	}
+
+	/**
+	 * Use the XML Specification definition of whitespace to trim the
+	 * input value.
+	 * @param str The value to trim.
+	 * @return The value trimmed
+	 * @since JDOM2
+	 */
+	public static final String trimBoth(final String str) {
+		int right = str.length() - 1;
+		while (right > 0 && Verifier.isXMLWhitespace(str.charAt(right))) {
+			right--;
+		}
+		int left = 0;
+		while (left <= right && Verifier.isXMLWhitespace(str.charAt(left))) {
+			left++;
+		}
+		if (left > right) {
+			return "";
+		}
+		return str.substring(left, right + 1);
+	}
+
+	
+	/**
+	 * This will take the three pre-defined entities in XML 1.0 ('&lt;', '&gt;',
+	 * and '&amp;' - used specifically in XML elements) as well as CR/NL, tabs,
+	 * and Quote characters which require escaping inside Attribute values and
+	 * converts their character representation to the appropriate entity
+	 * reference suitable for XML attribute content. Further, some special
+	 * characters (e.g. characters that are not valid in the current encoding)
+	 * are converted to escaped representations.
+	 * <p>
+	 * @param strategy 
+	 *        The EscapeStrategy to query.
+	 * @param value
+	 *        <code>String</code> Attribute value to escape.
+	 * @return The value appropriately escaped.
+	 * @throws IllegalDataException
+	 *         if an entity can not be escaped
+	 */
+	public static final String escapeAttribute(final EscapeStrategy strategy, 
+			final String value) {
+		
+		char highsurrogate = 0;
+		final int len = value.length();
+		final StringBuilder sb = new StringBuilder(len + 5);
+		boolean changed = false;
+		for (int i = 0; i < len; i++) {
+			final char ch = value.charAt(i);
+			if (highsurrogate > 0) {
+				if (!Verifier.isLowSurrogate(ch)) {
+					throw new IllegalDataException(
+							"Could not decode surrogate pair 0x" +
+									Integer.toHexString(highsurrogate) + " / 0x"
+									+ Integer.toHexString(ch));
+				}
+				int chp = Verifier.decodeSurrogatePair(highsurrogate, ch);
+				sb.append("&#x");
+				sb.append(Integer.toHexString(chp));
+				sb.append(';');
+				highsurrogate = 0;
+				changed = true;
+				continue;
+			}
+			switch (ch) {
+				case '<':
+					sb.append("&lt;");
+					changed = true;
+					break;
+				case '>':
+					sb.append("&gt;");
+					changed = true;
+					break;
+				case '&':
+					sb.append("&amp;");
+					changed = true;
+					break;
+				case '\r':
+					sb.append("&#xD;");
+					changed = true;
+					break;
+				case '"':
+					sb.append("&quot;");
+					changed = true;
+					break;
+				case '\t':
+					sb.append("&#x9;");
+					changed = true;
+					break;
+				case '\n':
+					sb.append("&#xA;");
+					changed = true;
+					break;
+				default:
+
+					if (strategy.shouldEscape(ch)) {
+						// make sure what we are escaping is not the
+						// beginning of a multi-byte character.
+						changed = true;
+						if (Verifier.isHighSurrogate(ch)) {
+							// this is a the high of a surrogate pair
+							highsurrogate = ch;
+						} else {
+							sb.append("&#x");
+							sb.append(Integer.toHexString(ch));
+							sb.append(';');
+						}
+					} else {
+						sb.append(ch);
+					}
+					break;
+			}
+		}
+		if (!changed) {
+			return value;
+		}
+		if (highsurrogate > 0) {
+			throw new IllegalDataException("Surrogate pair 0x" +
+					Integer.toHexString(highsurrogate) + "truncated");
+		}
+
+		return sb.toString();
+	}
+
+	
+	
+	
+	/**
+	 * This will take the three pre-defined entities in XML 1.0 ('&lt;', '&gt;',
+	 * and '&amp;' - used specifically in XML elements) and convert their
+	 * character representation to the appropriate entity reference, suitable
+	 * for XML element content. Further, some special characters (e.g.
+	 * characters that are not valid in the current encoding) are converted to
+	 * escaped representations. If the eol parameter is not null, then any
+	 * internal newlines will be replaced with the specified eol sequence.
+	 * 
+	 * @param strategy
+	 *        The EscapeStrategy
+	 * @param eol
+	 *        The End-Of-Line sequence to be used (may be null).
+	 * @param value
+	 *        The String to escape
+	 * @return The input value escaped.
+	 * @throws IllegalDataException
+	 *         if an entity can not be escaped
+	 * @since JDOM2
+	 */
+	public static final String escapeText(
+			final EscapeStrategy strategy, final String eol, 
+			final String value) {
+		final int right = value.length();
+		final StringBuilder sb = new StringBuilder(right + 5);
+		char highsurrogate = 0;
+		int idx = 0;
+		while (idx < right) {
+			final char ch = value.charAt(idx++);
+			if (highsurrogate > 0) {
+				if (!Verifier.isLowSurrogate(ch)) {
+					throw new IllegalDataException(
+							"Could not decode surrogate pair 0x" +
+									Integer.toHexString(highsurrogate) + " / 0x"
+									+ Integer.toHexString(ch));
+				}
+				int chp = Verifier.decodeSurrogatePair(highsurrogate, ch);
+				sb.append("&#x" + Integer.toHexString(chp) + ";");
+				highsurrogate = 0;
+				continue;
+			}
+			switch (ch) {
+				case '<':
+					sb.append("&lt;");
+					break;
+				case '>':
+					sb.append("&gt;");
+					break;
+				case '&':
+					sb.append("&amp;");
+					break;
+				case '\r':
+					sb.append("&#xD;");
+					break;
+				case '\n':
+					if (eol != null) {
+						sb.append(eol);
+					} else {
+						sb.append('\n');
+					}
+					break;
+				default:
+
+					if (strategy.shouldEscape(ch)) {
+						// make sure what we are escaping is not the
+						// beginning of a multi-byte character.
+						if (Verifier.isHighSurrogate(ch)) {
+							// this is a the high of a surrogate pair
+							highsurrogate = ch;
+						} else {
+							sb.append("&#x" + Integer.toHexString(ch) + ";");
+						}
+					} else {
+						sb.append(ch);
+					}
+					break;
+			}
+		}
+		if (highsurrogate > 0) {
+			throw new IllegalDataException("Surrogate pair 0x" +
+					Integer.toHexString(highsurrogate) + "truncated");
+		}
+		
+		return sb.toString();
+
+	}
+	
+	
 
 	/** standard value to indent by, if we are indenting */
 	private static final String STANDARD_INDENT = "  ";
@@ -202,17 +499,37 @@ public class Format implements Cloneable {
 	 *
 	 * <p>
 	 * Note that this only applies to newlines generated by the
-	 * outputter.  If you parse an XML document that contains newlines
-	 * embedded inside a text node, and you do not set TextMode.NORMALIZE,
-	 * then the newlines will be output
-	 * verbatim, as "\n" which is how parsers normalize them.
-	 * </p>
+	 * outputter.  All XML parsers are required to 'normalize' all the
+	 * combinations of line seperators to just '\n'. As a result, if any JDOM
+	 * component has an end-of-line-like value (e.g. '\r') in it then that value
+	 * must b he result of an escaped value in the XML source document
+	 * <code>&amp;#xD;</code> or a value explicitly set with one of the Text
+	 * value setters. Values in JDOM content that were explicitly set to be
+	 * '\r' will always be escaped on XML Output.
+	 * <p>
+	 * The actual newline separator itself though can be set with this method.
+	 * Any internal newlines in Text output will be represented by this
+	 * end-of-line sequence. For example, the following code:
+	 * <p>
+	 * <pre>
+	 *   Text txt = new Text("\r\n");
+	 *   XMLOutputter xout = new XMLOutputter();
+	 *   String result = xout.outputString(txt);
+	 * </pre>
+	 * will produce the literal String sequence "&amp;#xD;\r\n" because the
+	 * original \r is escaped to be <code>&amp;#xD;</code> and the original \n
+	 * is replaced with the JDOM default Line Separator "\r\n".
 	 *
 	 * <p>
 	 * If the format's "indent" property is null (as is the default
 	 * for the Raw and Compact formats), then this value only effects the
-	 * newlines written after the declaration and doctype.
+	 * newlines written after the declaration and doctype, as well as any
+	 * newlines embedded within existing text content. 
 	 * </p>
+	 * Setting setting the indent to be null will disable end-of-line processing
+	 * for any formatting, but will not affect substitution of embedded \n.
+	 * Setting this value to null or the empty string will disable all
+	 * end-of-line modifications.
 	 *
 	 * @see #setTextMode
 	 *
@@ -220,7 +537,7 @@ public class Format implements Cloneable {
 	 * @return a pointer to this Format for chaining
 	 */
 	public Format setLineSeparator(String separator) {
-		this.lineSeparator = separator;
+		this.lineSeparator = "".equals(separator) ? null : separator;
 		return this;
 	}
 

@@ -54,6 +54,8 @@
 
 package org.jdom2;
 
+import org.jdom2.output.Format;
+
 /**
  * An XML character sequence. Provides a modular, parentable method of
  * representing text. Text makes no guarantees about the underlying textual
@@ -122,7 +124,7 @@ public class Text extends Content {
 	 * @return trimmed text content or empty string
 	 */
 	public String getTextTrim() {
-		return getText().trim();
+		return Format.trimBoth(getText());
 	}
 
 	/**
@@ -151,26 +153,7 @@ public class Text extends Content {
 		if (str == null)
 			return EMPTY_STRING;
 
-		char[] c = str.toCharArray();
-		char[] n = new char[c.length];
-		boolean white = true;
-		int pos = 0;
-		for (int i = 0; i < c.length; i++) {
-			if (" \t\n\r".indexOf(c[i]) != -1) {
-				if (!white) {
-					n[pos++] = ' ';
-					white = true;
-				}
-			}
-			else {
-				n[pos++] = c[i];
-				white = false;
-			}
-		}
-		if (white && pos > 0) {
-			pos--;
-		}
-		return new String(n, 0, pos);
+		return Format.compact(str);
 	}
 
 	/**

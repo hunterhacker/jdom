@@ -130,7 +130,7 @@ import org.jdom2.util.NamespaceStack;
  * returned as either Text/CDATA instances or as formatted String values
  * this class sometimes uses printCDATA(...) and printText(...), and sometimes
  * uses the more direct {@link #textCDATA(Writer, String)} or
- * {@link #textEscapedEntitiesFilter(Writer, FormatStack, char[], int, int)} as
+ * {@link #textEscapedEntitiesFilter(Writer, FormatStack, String)} as
  * appropriate. In other words, subclasses should probably override these second
  * methods instead of the print methods.
  * <p>
@@ -233,7 +233,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 			final List<? extends Content> list)
 			throws IOException {
 		FormatStack fstack = new FormatStack(format); 
-		Walker walker = buildWalker(fstack, list);
+		Walker walker = buildWalker(fstack, list, true);
 		printContent(out, fstack, new NamespaceStack(), walker);
 		out.flush();
 	}
@@ -250,7 +250,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 		// we use the powers of the Walker to manage text-like content.
 		final List<CDATA> list = Collections.singletonList(cdata);
 		FormatStack fstack = new FormatStack(format); 
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, true);
 		if (walker.hasNext()) {
 			printContent(out, fstack, new NamespaceStack(), walker);
 		}
@@ -269,7 +269,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 		// we use the powers of the Walker to manage text-like content.
 		final List<Text> list = Collections.singletonList(text);
 		FormatStack fstack = new FormatStack(format); 
-		final Walker walker = buildWalker(fstack, list);
+		final Walker walker = buildWalker(fstack, list, true);
 		if (walker.hasNext()) {
 			printContent(out, fstack, new NamespaceStack(), walker);
 		}
@@ -398,69 +398,8 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 			write(out, value);
 			return;
 		}
-		final EscapeStrategy strategy = fstack.getEscapeStrategy();
-
-		char highsurrogate = 0;
-		for (char ch : value.toCharArray()) {
-			if (highsurrogate > 0) {
-				if (!Verifier.isLowSurrogate(ch)) {
-					throw new IllegalDataException(
-							"Could not decode surrogate pair 0x" +
-									Integer.toHexString(highsurrogate) + " / 0x"
-									+ Integer.toHexString(ch));
-				}
-				int chp = Verifier.decodeSurrogatePair(highsurrogate, ch);
-				write(out, "&#x");
-				write(out, Integer.toHexString(chp));
-				write(out, ';');
-				highsurrogate = 0;
-				continue;
-			}
-			switch (ch) {
-				case '<':
-					write(out, "&lt;");
-					break;
-				case '>':
-					write(out, "&gt;");
-					break;
-				case '&':
-					write(out, "&amp;");
-					break;
-				case '\r':
-					write(out, "&#xD;");
-					break;
-				case '\"':
-					write(out, "&quot;");
-					break;
-				case '\t':
-					write(out, "&#x9;");
-					break;
-				case '\n':
-					write(out, "&#xA;");
-					break;
-				default:
-
-					if (strategy.shouldEscape(ch)) {
-						// make sure what we are escaping is not the
-						// beginning of a multi-byte character.
-						if (Verifier.isHighSurrogate(ch)) {
-							// this is a the high of a surrogate pair
-							highsurrogate = ch;
-						} else {
-							write(out, "&#x");
-							write(out, Integer.toHexString(ch));
-							write(out, ';');
-						}
-					} else {
-						write(out, ch);
-					}
-					break;
-			}
-		}
-		if (highsurrogate > 0) {
-			throw new IllegalDataException("Surrogate pair 0x" +
-					Integer.toHexString(highsurrogate) + "truncated");
-		}
+		
+		write(out, Format.escapeAttribute(fstack.getEscapeStrategy(), value));
 
 	}
 
@@ -541,83 +480,23 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 	 *        The destination Writer
 	 * @param fstack
 	 *        The {@link FormatStack}
-	 * @param str
-	 *        <code>char[]</code> input to escape.
-	 * @param left
-	 *        where in the input array (inclusive) to start escaping and
-	 *        writing.
-	 * @param right
-	 *        where in the input array (exclusive) to end escaping and writing.
+	 * @param value
+	 *        <code>String</code> input to escape.
 	 * @throws IOException
 	 *         if the destination Writer fails.
 	 * @throws IllegalDataException
 	 *         if an entity can not be escaped
 	 */
 	protected void textEscapedEntitiesFilter(final Writer out,
-			final FormatStack fstack, final char[] str, final int left,
-			final int right) throws IOException {
+			final FormatStack fstack, final String value) throws IOException {
 		if (!fstack.getEscapeOutput()) {
-			int idx = left;
-			while (idx < right) {
-				textRaw(out, str[idx++]);
-			}
+			textRaw(out, value);
 			return;
 		}
 		final EscapeStrategy strategy = fstack.getEscapeStrategy();
-
-		char highsurrogate = 0;
-		int idx = left;
-		while (idx < right) {
-			char ch = str[idx++];
-			if (highsurrogate > 0) {
-				if (!Verifier.isLowSurrogate(ch)) {
-					throw new IllegalDataException(
-							"Could not decode surrogate pair 0x" +
-									Integer.toHexString(highsurrogate) + " / 0x"
-									+ Integer.toHexString(ch));
-				}
-				int chp = Verifier.decodeSurrogatePair(highsurrogate, ch);
-				textRaw(out, "&#x" + Integer.toHexString(chp) + ";");
-				highsurrogate = 0;
-				continue;
-			}
-			switch (ch) {
-				case '<':
-					textRaw(out, "&lt;");
-					break;
-				case '>':
-					textRaw(out, "&gt;");
-					break;
-				case '&':
-					textRaw(out, "&amp;");
-					break;
-				case '\r':
-					textRaw(out, "&#xD;");
-					break;
-				case '\n':
-					textRaw(out, fstack.getLineSeparator());
-					break;
-				default:
-
-					if (strategy.shouldEscape(ch)) {
-						// make sure what we are escaping is not the
-						// beginning of a multi-byte character.
-						if (Verifier.isHighSurrogate(ch)) {
-							// this is a the high of a surrogate pair
-							highsurrogate = ch;
-						} else {
-							textRaw(out, "&#x" + Integer.toHexString(ch) + ";");
-						}
-					} else {
-						textRaw(out, ch);
-					}
-					break;
-			}
-		}
-		if (highsurrogate > 0) {
-			throw new IllegalDataException("Surrogate pair 0x" +
-					Integer.toHexString(highsurrogate) + "truncated");
-		}
+		
+		textRaw(out, Format.escapeText(
+				strategy, fstack.getLineSeparator(), value));
 
 	}
 
@@ -661,7 +540,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 		
 		printDeclaration(out, fstack);
 		
-		Walker walker = buildWalker(fstack, list);
+		Walker walker = buildWalker(fstack, list, true);
 		if (walker.hasNext()) {
 			while (walker.hasNext()) {
 				
@@ -919,8 +798,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 	 */
 	protected void printText(final Writer out, final FormatStack fstack,
 			final Text text) throws IOException {
-		final String str = text.getText();
-		textEscapedEntitiesFilter(out, fstack, str.toCharArray(), 0, str.length());
+		textEscapedEntitiesFilter(out, fstack, text.getText());
 	}
 
 	/**
@@ -980,7 +858,6 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 			}
 			
 			// OK, we have real content to push.
-			final String postindent = fstack.getLevelIndent();
 			fstack.push();
 			try {
 
@@ -996,7 +873,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 				}
 				
 				// note we ensure the FStack is right before creating the walker
-				Walker walker = buildWalker(fstack, content);
+				Walker walker = buildWalker(fstack, content, true);
 				
 				if (!walker.hasNext()) {
 					// the walker has formatted out whatever content we had
@@ -1015,16 +892,14 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 				write(out, ">");
 				if (!walker.isAllText()) {
 					// we need to newline/indent
-					textRaw(out, fstack.getLevelEOL());
-					textRaw(out, fstack.getLevelIndent());
+					textRaw(out, fstack.getPadBetween());
 				}
 
 				printContent(out, fstack, nstack, walker);
 
 				if (!walker.isAllText()) {
 					// we need to newline/indent
-					textRaw(out, fstack.getLevelEOL());
-					textRaw(out, postindent);
+					textRaw(out, fstack.getPadLast());
 				}
 				write(out, "</");
 				write(out, element.getQualifiedName());
@@ -1084,8 +959,7 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 				if (walker.isCDATA()) {
 					textCDATA(out, t);
 				} else {
-					textEscapedEntitiesFilter(out, fstack, 
-							t.toCharArray(), 0, t.length());
+					textRaw(out, t);
 				}
 			} else {
 				switch(c.getCType()) {

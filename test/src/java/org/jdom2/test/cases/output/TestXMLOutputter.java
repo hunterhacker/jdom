@@ -416,6 +416,28 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
 		assertNotNull(out.toString());
 	}
 	
+	@Test
+	public void testCRNLEscaping() {
+		Document doc = new Document();
+		Element root = new Element("root");
+		Element child1 = new Element("child1");
+		Element child2 = new Element("child2");
+		Text stuff = new Text("foo");
+		root.addContent(child1);
+		root.addContent(stuff);
+		root.addContent(child2);
+		doc.setRootElement(root);
+		XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
+		String actual = xout.outputString(doc);
+		String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+				+ "<root>\r\n"
+				+ "  <child1 />\r\n"
+				+ "  foo\r\n"
+				+ "  <child2 />\r\n"
+				+ "</root>\r\n";
+		assertEquals(expect, actual);
+	}
+	
 	/**
 	 * The following method will run the output data through each of the three base
 	 * formatters, raw, compact, and pretty. It will also run each of those

@@ -213,14 +213,8 @@ public final class XMLOutputter implements Cloneable {
 		 */
 		public final String escapeElementEntities(final String str,
 				final Format format) {
-			StringWriter sw = new StringWriter();
-			try {
-				super.textEscapedEntitiesFilter(sw, new FormatStack(format),
-						str.toCharArray(), 0, str.length());
-			} catch (IOException e) {
-				// no IOException on StringWriter....
-			}
-			return sw.toString();
+			return Format.escapeText(format.getEscapeStrategy(),
+					format.getLineSeparator(), str);
 		}
 
 	}

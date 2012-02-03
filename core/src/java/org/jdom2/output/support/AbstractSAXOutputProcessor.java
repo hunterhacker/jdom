@@ -169,7 +169,7 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 		try {
 			locate(out);
 			final FormatStack fstack = new FormatStack(format);
-			final Walker walker = buildWalker(fstack, list);
+			final Walker walker = buildWalker(fstack, list, false);
 			printContent(out, fstack, new NamespaceStack(), walker);
 		} catch (SAXException se) {
 			throw new JDOMException(
@@ -184,7 +184,7 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 			locate(out);
 			final List<CDATA> list = Collections.singletonList(cdata);
 			final FormatStack fstack = new FormatStack(format);
-			final Walker walker = buildWalker(fstack, list);
+			final Walker walker = buildWalker(fstack, list, false);
 			printContent(out, fstack, new NamespaceStack(), walker);
 		} catch (SAXException se) {
 			throw new JDOMException(
@@ -199,7 +199,7 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 			locate(out);
 			final List<Text> list = Collections.singletonList(text);
 			final FormatStack fstack = new FormatStack(format);
-			final Walker walker = buildWalker(fstack, list);
+			final Walker walker = buildWalker(fstack, list, false);
 			printContent(out, fstack, new NamespaceStack(), walker);
 		} catch (SAXException se) {
 			throw new JDOMException(
@@ -271,7 +271,7 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 				}
 			}
 
-			Walker walker = buildWalker(fstack, nodes);
+			Walker walker = buildWalker(fstack, nodes, false);
 
 			printContent(out, fstack, new NamespaceStack(), walker);
 
@@ -583,8 +583,6 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 
 			// OK, now we print out the meat of the Element
 			if (!content.isEmpty()) {
-				final String postindent = fstack.getLevelIndent();
-				
 				TextMode textmode = fstack.getTextMode();
 
 				// Check for xml:space and adjust format settings
@@ -600,26 +598,23 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 				fstack.push();
 				try {
 					fstack.setTextMode(textmode);
-					Walker walker = buildWalker(fstack, content);
+					Walker walker = buildWalker(fstack, content, false);
 					if (walker.hasNext()) {
 						
-						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								fstack.getLevelIndent() != null) {
+						if (!walker.isAllText() 
+								&& fstack.getPadBetween() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									fstack.getLevelIndent();
+							final String indent = fstack.getPadBetween();
 							printText(out, fstack, new Text(indent));
 						}
 						
 						printContent(out, fstack, nstack, walker);
 						
 						if (!walker.isAllText() && 
-								fstack.getLevelEOL() != null && 
-								fstack.getLevelIndent() != null) {
+								fstack.getPadLast() != null) {
 							// we need to newline/indent
-							final String indent = fstack.getLevelEOL() + 
-									postindent;
+							final String indent = 
+									fstack.getPadLast();
 							printText(out, fstack, new Text(indent));
 						}
 						

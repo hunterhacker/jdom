@@ -199,7 +199,7 @@ public class JDOMSource extends SAXSource {
 	public JDOMSource(Document source, EntityResolver resolver) {
 		setDocument(source);
 		this.resolver = resolver;
-		if (source.getBaseURI() != null) {
+		if (source != null && source.getBaseURI() != null) {
 			super.setSystemId(source.getBaseURI());
 		}
 	}

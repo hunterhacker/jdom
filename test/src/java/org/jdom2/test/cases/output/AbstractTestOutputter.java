@@ -324,9 +324,9 @@ public abstract class AbstractTestOutputter {
 		Text content = new Text(" \r & \n \t ");
 		assertEquals(expect(" \r &amp; \n \t "), 
 				outputString(fraw,     content));
-		assertEquals("&amp;", 
+		assertEquals(expect("&amp;"), 
 				outputString(fcompact, content));
-		assertEquals("&amp;", 
+		assertEquals(expect("&amp;"), 
 				outputString(fpretty,  content));
 		assertEquals(expect(" \r &amp; \n \t "), 
 				outputString(ftfw,     content));

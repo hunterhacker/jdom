@@ -22,7 +22,9 @@ public class XSLTransform {
     XSLTransformer transformer = new XSLTransformer(sheetname);
     Document doc2 = transformer.transform(doc);
 
-    XMLOutputter outp = new XMLOutputter(Format.getPrettyFormat());
+    Format f = Format.getPrettyFormat();
+    f.setLineSeparator(LineSeparator.DOS);
+    XMLOutputter outp = new XMLOutputter(f);
     outp.output(doc2, System.out);
   }
 }

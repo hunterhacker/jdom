@@ -196,7 +196,7 @@ public class PerfDoc {
 
 	public long saxLoad() throws Exception {
 		final long startmem = PerfTest.usedMem();
-		saxTime = PerfTest.timeRun(new SAXLoadRunnable(12) );
+		saxTime = PerfTest.timeRun(new SAXLoadRunnable(0) );
 		loadMem = PerfTest.usedMem() - startmem;
 		saxDTime = PerfTest.timeRun(new SAXLoadRunnable(8) );
 		return saxTime;

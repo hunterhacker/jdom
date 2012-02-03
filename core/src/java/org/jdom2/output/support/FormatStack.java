@@ -132,6 +132,9 @@ public final class FormatStack {
 	/** The 'current' End-Of-Line */
 	private String[] levelEOL = new String[capacity];
 
+	private String[] levelEOLIndent = new String[capacity];
+	private String[] termEOLIndent  = new String[capacity];
+	
 	/**
 	 * Whether TrAX output escaping disabling/enabling PIs are ignored or
 	 * processed - default is <code>false</code>
@@ -163,8 +166,11 @@ public final class FormatStack {
 
 		levelIndent[depth] = format.getIndent() == null
 				? null : "";
-		levelEOL[depth] = format.getIndent() == null
-				? null : format.getLineSeparator();
+		levelEOL[depth] = format.getLineSeparator();
+		levelEOLIndent[depth] = levelIndent[depth] == null ?  
+				null : levelEOL[depth];
+		termEOLIndent[depth] = levelEOLIndent[depth];
+		
 		ignoreTrAXEscapingPIs[depth] = format.getIgnoreTrAXEscapingPIs();
 		mode[depth] = format.getTextMode();
 		escapeOutput[depth] = true;
@@ -183,7 +189,7 @@ public final class FormatStack {
 	public String getLineSeparator() {
 		return lineSeparator;
 	}
-
+	
 	/**
 	 * @return the original {@link Format#getEncoding()}
 	 */
@@ -275,6 +281,26 @@ public final class FormatStack {
 	}
 
 	/**
+	 * Get the end-of-line indenting sequence for before the first item in an
+	 * Element, as well as between subsequent items (but not after the last item)
+	 * @return the String EOL sequence followed by an indent. Null if it should 
+	 * be ignored
+	 */
+	public String getPadBetween() {
+		return levelEOLIndent[depth];
+	}
+
+	/**
+	 * Get the end-of-line indenting sequence for after the last item in an
+	 * Element
+	 * @return the String EOL sequence followed by an indent. Null if it should 
+	 * be ignored
+	 */
+	public String getPadLast() {
+		return termEOLIndent[depth];
+	}
+	
+	/**
 	 * Override the current depth's accumulated line indent.
 	 * 
 	 * @param indent
@@ -282,6 +308,9 @@ public final class FormatStack {
 	 */
 	public void setLevelIndent(String indent) {
 		this.levelIndent[depth] = indent;
+		levelEOLIndent[depth] = (indent == null || levelEOL[depth] == null) ?  
+				null : (levelEOL[depth] + indent);
+		
 	}
 
 	/**
@@ -323,23 +352,32 @@ public final class FormatStack {
 			case PRESERVE:
 				levelEOL[depth] = null;
 				levelIndent[depth] = null;
+				levelEOLIndent[depth] = null;
+				termEOLIndent[depth] = null;
 				break;
 			default:
 				levelEOL[depth] = lineSeparator;
-				if (indent != null) {
+				if (indent == null || lineSeparator == null) {
+					levelEOLIndent[depth] = null;
+					termEOLIndent[depth] = null;
+				} else {
 					if (depth > 0) {
-						if (levelIndent[depth - 1] == null) {
-							StringBuilder sb = new StringBuilder(indent.length() * depth);
-							for (int i = 0; i < depth; i++) {
-								sb.append(indent);
-							}
-							levelIndent[depth] = sb.toString();
-						} else {
-							levelIndent[depth] = levelIndent[depth - 1] + indent;
+						final StringBuilder sb = new StringBuilder(indent.length() * depth);
+						for (int i = 1; i < depth; i++) {
+							sb.append(indent);
 						}
+						// the start point was '1', so we are one indent
+						// short, which is just right for the term....
+						termEOLIndent[depth] = sb.toString() + 
+								lineSeparator;
+						// but we increase it once for the actual indent.
+						sb.append(indent);
+						levelIndent[depth] = sb.toString();
 					} else {
+						termEOLIndent[depth] = lineSeparator; 
 						levelIndent[depth] = "";
 					}
+					levelEOLIndent[depth] = lineSeparator + levelIndent[depth];
 				}
 		}
 	}
@@ -355,18 +393,28 @@ public final class FormatStack {
 			capacity *= 2;
 			levelIndent = ArrayCopy.copyOf(levelIndent, capacity);
 			levelEOL = ArrayCopy.copyOf(levelEOL, capacity);
+			levelEOLIndent = ArrayCopy.copyOf(levelEOLIndent, capacity);
+			termEOLIndent = ArrayCopy.copyOf(termEOLIndent, capacity);
 			ignoreTrAXEscapingPIs = ArrayCopy.copyOf(ignoreTrAXEscapingPIs, capacity);
 			mode = ArrayCopy.copyOf(mode, capacity);
 			escapeOutput = ArrayCopy.copyOf(escapeOutput, capacity);
 		}
-		levelIndent[depth] = indent == null
-				? null
-				: (levelIndent[prev] + indent);
-		levelEOL[depth] = indent == null
-				? null : lineSeparator;
+		
 		ignoreTrAXEscapingPIs[depth] = ignoreTrAXEscapingPIs[prev];
 		mode[depth] = mode[prev];
 		escapeOutput[depth] = escapeOutput[prev];
+		
+		if (levelIndent[prev] == null || levelEOL[prev] == null) {
+			levelIndent[depth] = null;
+			levelEOL[depth] = null;
+			levelEOLIndent[depth] = null;
+			termEOLIndent[depth] = null;
+		} else {
+			levelEOL[depth] = levelEOL[prev];
+			termEOLIndent[depth] = levelEOL[depth] + levelIndent[prev];
+			levelIndent[depth] = levelIndent[prev] + indent;
+			levelEOLIndent[depth] = levelEOL[depth] + levelIndent[depth];
+		}
 	}
 
 	/**
