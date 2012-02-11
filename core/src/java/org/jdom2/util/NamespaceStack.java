@@ -325,9 +325,19 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * @see #push(Element) for comprehensive notes.
 	 */
 	public NamespaceStack() {
+		this(new Namespace[] {
+				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE});
+	}
+
+	/**
+	 * Create a NamespaceWalker ready to use as a stack.
+	 * <br>
+	 * @see #push(Element) for comprehensive notes.
+	 * @param seed The namespaces to set as the top level of the stack.
+	 */
+	public NamespaceStack(Namespace[] seed) {
 		depth++;
-		added[depth] = new Namespace[] {
-				Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE};
+		added[depth] = seed;
 
 		scope[depth] = added[depth];
 	}
@@ -385,7 +395,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	}
 
 	/**
-	 * Create a new in-scope level for the Stack.
+	 * Create a new in-scope level for the Stack based on an Element.
 	 * <br>
 	 * The Namespaces associated with the input Element are used to modify the
 	 * 'in-scope' Namespaces in this NamespaceStack.
@@ -498,6 +508,69 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		scope[depth] = newscope;
 		return;
 	}
+	
+	/**
+	 * Create a new in-scope level for the Stack based on an Attribute.
+	 * 
+	 * @param att The attribute to contribute to the namespace scope.
+	 */
+	public void push(Attribute att) {
+		final List<Namespace> toadd = new ArrayList<Namespace>(1);
+		final Namespace mns = att.getNamespace();
+		// check to see whether the Namespace is new-to-scope.
+		Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);
+		
+		// OK, we've checked the namespaces in the Attribute, and 'toadd'
+		// contains all namespaces that are not already in scope.
+		depth++;
+
+		if (depth >= scope.length) {
+			// we need more space on the stack.
+			scope = ArrayCopy.copyOf(scope, scope.length * 2);
+			added = ArrayCopy.copyOf(added, scope.length);
+		}
+
+		// Sort out the added namespaces.
+		if (toadd.isEmpty()) {
+			// nothing changed in the scope.
+			added[depth] = EMPTY;
+		} else {
+			added[depth] = toadd.toArray(new Namespace[1]);
+			if (added[depth][0] == mns) {
+				Arrays.sort(added[depth], 1, added[depth].length, NSCOMP);
+			} else {
+				Arrays.sort(added[depth], NSCOMP);
+			}
+		}
+
+		if (mns != newscope[0]) {
+			if (toadd.isEmpty()) {
+				// we need to make newscope a copy of the previous level's
+				// scope, because it is not yet a copy.
+				newscope = ArrayCopy.copyOf(newscope, newscope.length);
+			}
+			// we need to take the Namespace at position 0, and insert it
+			// in it's place later in the array.
+			// we need to take the mns from later in the array, and move it
+			// to the front.
+			final Namespace tmp = newscope[0];
+			int ip = - binarySearch(newscope, 1, newscope.length, tmp) - 1;
+			// we can be sure that (- ip - 1 ) is >= 1
+			// we also know that we want to move the data before the ip
+			// backwards one spot, so the math is slightly different....
+			ip--;
+			System.arraycopy(newscope, 1, newscope, 0, ip);
+			newscope[ip] = tmp;
+
+			ip = binarySearch(newscope, 0, newscope.length, mns);
+			// we can be sure that ip is >= 0
+			System.arraycopy(newscope, 0, newscope, 1, ip);
+			newscope[0] = mns;
+		}
+
+		scope[depth] = newscope;
+		return;
+	}
 
 	/**
 	 * Restore stack to the level prior to the current one. The various Iterator
@@ -546,6 +619,15 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	@Override
 	public Iterator<Namespace> iterator() {
 		return new ForwardWalker(scope[depth]);
+	}
+	
+	/**
+	 * Return a new array instance representing the current scope.
+	 * Modifying the returned array will not affect this scope.
+	 * @return a copy of the current scope.
+	 */
+	public Namespace[] getScope() {
+		return ArrayCopy.copyOf(scope[depth], scope[depth].length);
 	}
 
 	/**

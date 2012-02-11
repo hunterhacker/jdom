@@ -312,4 +312,21 @@ public class TestNamespaceStack {
 		
 		exercise(root, new NamespaceStack());
 	}
+	
+	@Test
+	public void testSeededConstructor() {
+		Namespace x = Namespace.getNamespace("X");
+		Namespace y = Namespace.getNamespace("y", "Y");
+		Namespace[] nsa = new Namespace[] {
+				x, Namespace.XML_NAMESPACE
+		};
+		NamespaceStack nstack = new NamespaceStack(nsa);
+		checkIterable(nstack, nsa);
+		checkIterable(nstack.addedForward(), nsa);
+		Element emt = new Element("root", y);
+		emt.addNamespaceDeclaration(Namespace.NO_NAMESPACE);
+		nstack.push(emt);
+		checkIterable(nstack, y, Namespace.NO_NAMESPACE, Namespace.XML_NAMESPACE);
+		checkIterable(nstack.addedForward(), y, Namespace.NO_NAMESPACE);
+	}
 }
