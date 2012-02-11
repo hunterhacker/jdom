@@ -81,38 +81,40 @@ import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.xpath.XPathBuilder;
-import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathDiagnostic;
+import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
 @SuppressWarnings({"javadoc"})
 public abstract class AbstractTestXPathCompiled {
 	
-	private final Document doc = new Document();
+	protected final Document doc = new Document();
 	
-	private final Comment doccomment = new Comment("doc comment");
-	private final ProcessingInstruction docpi = new ProcessingInstruction("jdomtest", "doc");
+	protected final Comment doccomment = new Comment("doc comment");
+	protected final ProcessingInstruction docpi = new ProcessingInstruction("jdomtest", "doc");
 	
-	private final Element main = new Element("main");
-	private final Attribute mainatt = new Attribute("atta", "vala");
-	private final Comment maincomment = new Comment("main comment");
-	private final ProcessingInstruction mainpi = new ProcessingInstruction("jdomtest", "pi data");
-	private final Text maintext1 = new Text(" space1 ");
-	private final Element child1emt = new Element("child");
-	private final Text child1text = new Text("child1text");
-	private final Text maintext2 = new Text(" space2 ");
-	private final Element child2emt = new Element("child");
+	protected final Element main = new Element("main");
+	protected final Attribute mainatt = new Attribute("atta", "vala");
+	protected final Comment maincomment = new Comment("main comment");
+	protected final ProcessingInstruction mainpi = new ProcessingInstruction("jdomtest", "pi data");
+	protected final Text maintext1 = new Text(" space1 ");
+	protected final Element child1emt = new Element("child");
+	protected final Text child1text = new Text("child1text");
+	protected final Text maintext2 = new Text(" space2 ");
+	protected final Element child2emt = new Element("child");
 	
-	private final Namespace child3nsa = Namespace.getNamespace("c3nsa", "jdom:c3nsa");
-	private final Namespace child3nsb = Namespace.getNamespace("c3nsb", "jdom:c3nsb");
-	private final Element child3emt = new Element("child", child3nsa);
-	private final Attribute child3attint = new Attribute("intatt", "-123", child3nsb);
-	private final Attribute child3attdoub = new Attribute("doubatt", "-123.45", child3nsb);
-	private final Text child3txt = new Text("c3text");
+	protected final Namespace child3nsa = Namespace.getNamespace("c3nsa", "jdom:c3nsa");
+	protected final Namespace child3nsb = Namespace.getNamespace("c3nsb", "jdom:c3nsb");
+	protected final Element child3emt = new Element("child", child3nsa);
+	protected final Attribute child3attint = new Attribute("intatt", "-123", child3nsb);
+	protected final Attribute child3attdoub = new Attribute("doubatt", "-123.45", child3nsb);
+	protected final Text child3txt = new Text("c3text");
 	
-	private final String mainvalue = " space1 child1text space2 c3text";
+	protected final String mainvalue = " space1 child1text space2 c3text";
+	protected final boolean teststring;
 	
-	public AbstractTestXPathCompiled() {
+	public AbstractTestXPathCompiled(boolean teststring) {
+		this.teststring = teststring;
 		doc.addContent(doccomment);
 		doc.addContent(docpi);
 		doc.addContent(main);
@@ -143,7 +145,7 @@ public abstract class AbstractTestXPathCompiled {
 	 */
 	abstract XPathFactory getFactory();
 	
-	private <T> XPathExpression<T> setupXPath(Filter<T> filter, String path, Map<String, Object> variables, Object context, Namespace... namespaces) {
+	protected <T> XPathExpression<T> setupXPath(Filter<T> filter, String path, Map<String, Object> variables, Object context, Namespace... namespaces) {
 		
 		XPathBuilder<T> xpath = new XPathBuilder<T>(path, filter);
 		
@@ -211,7 +213,7 @@ public abstract class AbstractTestXPathCompiled {
 	 * @param number What we expect the xpath to resolve the result to be as an xpath 'Number' (or null to skip test);
 	 * @param expect The nodes we expect from the XPath selectNodes query
 	 */
-	private static void checkXPath(XPathExpression<?> xpath, Object context, Object...expect) {
+	protected static void checkXPath(XPathExpression<?> xpath, Object context, Object...expect) {
 		
 		// Check the selectNodes operation.
 		List<?> result = xpath.evaluate(context);
@@ -219,6 +221,54 @@ public abstract class AbstractTestXPathCompiled {
 			fail ("Got a null result from selectNodes()");
 		}
 		checkDiagnostic(xpath, context, result, xpath.diagnose(context, false));
+		
+		boolean allns = true;
+		for (Object o : expect) {
+			if (!(o instanceof Namespace)) {
+				allns = false;
+				break;
+			}
+		}
+		
+		if (allns) {
+			// we expect only Namespace results.
+			// we use different rules....
+			// for a start, we don't check on order.
+			// also, if we expect the NO_NAMESPACE, we don't complain if it is
+			// not returned.
+			int expectsize = expect.length;
+			for (Object nso : expect) {
+				Namespace ns = (Namespace)nso;
+				if (ns == Namespace.NO_NAMESPACE) {
+					boolean gotit = false;
+					for (Object o : result) {
+						if (o == ns) {
+							// got it...
+							gotit = true;
+							break;
+						}
+					}
+					if (!gotit) {
+						expectsize--;
+					}
+				} else {
+					boolean gotit = false;
+					for (Object o : result) {
+						if (o == ns) {
+							gotit = true;
+							break;
+						}
+					}
+					if (!gotit) {
+						fail("Expected to have item " + ns + " returned, but it was not");
+					}
+				}
+			}
+			if (expectsize != result.size()) {
+				fail ("We expected " + expectsize + " Namespace results. We got " + result.size());
+			}
+			return;
+		}
 				
 		String sze = result.size() == expect.length ? "" : 
 			(" Also Different Sizes: expect=" + expect.length + " actual=" + result.size());
@@ -259,9 +309,9 @@ public abstract class AbstractTestXPathCompiled {
 		
 	}
 	
-	private void checkXPath(String xpath, Object context, String value, Object...expect) {
+	protected void checkXPath(String xpath, Object context, String value, Object...expect) {
 		checkXPath(setupXPath(Filters.fpassthrough(), xpath, null, context), context, expect);
-		if (value != null) {
+		if (teststring && value != null) {
 			String npath = "string(" + xpath + ")";
 			checkXPath(setupXPath(Filters.fstring(), npath, null, context), context, value);
 		}
@@ -279,11 +329,11 @@ public abstract class AbstractTestXPathCompiled {
 				
 		Namespace[] nsa = nset.toArray(new Namespace[0]);
 		checkXPath(setupXPath(Filters.fpassthrough(), xpath, variables, context, nsa), context, expect);
-		if (value != null) {
+		if (teststring && value != null) {
 			String npath = "string(" + xpath + ")";
 			checkXPath(setupXPath(Filters.fstring(), npath, variables, context, nsa), context, value);
 		}
-		if (number != null) {
+		if (teststring && number != null) {
 			String npath = "number(" + xpath + ")";
 			checkXPath(setupXPath(Filters.fdouble(), npath, variables, context, nsa), context, number);
 		}
@@ -753,7 +803,8 @@ public abstract class AbstractTestXPathCompiled {
 	public void testGetALLNamespaces() {
 		//Namespace.NO_NAMESPACE is declared earlier in documentOrder.
 		// so it comes first.
-		checkXPath("//c3nsa:child/namespace::*", child3emt, "jdom:c3nsa", 
+		// we do not specify which Namespace should be first....
+		checkXPath("//c3nsa:child/namespace::*", child3emt, null, 
 				child3nsa, Namespace.NO_NAMESPACE, child3nsb, Namespace.XML_NAMESPACE);
 	}
 	
