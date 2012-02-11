@@ -1,4 +1,4 @@
-package org.jdom2.test.cases;
+package org.jdom2.test.cases.util;
 
 import static org.junit.Assert.*;
 
