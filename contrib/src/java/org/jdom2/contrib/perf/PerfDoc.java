@@ -356,14 +356,16 @@ public class PerfDoc {
 	}
 	
 	public long xpath() throws Exception {
+		
+		final XPathFactory fac = XPathFactory.instance();
 
 		xpathTime = PerfTest.timeRun(new TimeRunnable() {
 			@Override
 			public void run() throws Exception {
-				XPathExpression<Object> patha = XPathFactory.instance().compile("//@null");
+				XPathExpression<Object> patha = fac.compile("//@null");
 				patha.evaluate(document);
 				// select everything
-				XPathExpression<?> pathb = XPathFactory.instance().compile("//node()");
+				XPathExpression<?> pathb = fac.compile("//node()");
 				pathb.evaluate(document);
 			}
 		});
