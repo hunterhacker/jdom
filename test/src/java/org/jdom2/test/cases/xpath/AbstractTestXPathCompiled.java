@@ -966,8 +966,10 @@ public abstract class AbstractTestXPathCompiled {
 		checkXPath("self::*", child3emt, null, child3emt);
 	}
 	
-	
-	
+	@Test
+	public void testXPathOR() {
+		checkXPath("/main/node()[1] | /main/@*", child3emt, null, mainatt, maincomment);
+	}
 	
 	/* *******************************
 	 * Negative TestCases
