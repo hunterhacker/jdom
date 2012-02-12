@@ -54,12 +54,16 @@
 
 package org.jdom2.input;
 
-import static org.jdom2.JDOMConstants.*;
+import static org.jdom2.JDOMConstants.SAX_FEATURE_EXTERNAL_ENT;
+import static org.jdom2.JDOMConstants.SAX_PROPERTY_DECLARATION_HANDLER;
+import static org.jdom2.JDOMConstants.SAX_PROPERTY_LEXICAL_HANDLER;
+import static org.jdom2.JDOMConstants.SAX_PROPERTY_LEXICAL_HANDLER_ALT;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,15 +84,16 @@ import org.jdom2.Document;
 import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
+import org.jdom2.Verifier;
 import org.jdom2.input.sax.BuilderErrorHandler;
 import org.jdom2.input.sax.DefaultSAXHandlerFactory;
 import org.jdom2.input.sax.SAXBuilderEngine;
 import org.jdom2.input.sax.SAXEngine;
 import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
-import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.input.sax.XMLReaderSAX2Factory;
+import org.jdom2.input.sax.XMLReaders;
 
 /**
  * Builds a JDOM document using a SAX parser.
@@ -1282,8 +1287,43 @@ public class SAXBuilder implements SAXEngine {
 	@Override
 	public Document build(final String systemId)
 			throws JDOMException, IOException {
+		if (systemId == null) {
+			throw new NullPointerException(
+					"Unable to build a URI from a null systemID.");
+		}
 		try {
 			return getEngine().build(systemId);
+		} catch (IOException ioe) {
+			// OK, Issue #63
+			// it is common for people to pass in raw XML content instead of
+			// a SystemID. To make troubleshooting easier, we do a simple check
+			// all valid XML documents start with a '<' character.
+			// no URI ever has an '<' character.
+			// if we think an XML document was passed in, we wrap the exception
+			// Typically this problem causes a MalformedURLException to be
+			// thrown, but that is not particular specified that way. Of
+			// interest, depending on the broken systemID, you could get a
+			// FileNotFoundException which is also an IOException, which will
+			// also be processed by this handler....
+			
+			final int len = systemId.length();
+			int i = 0;
+			while (i < len && Verifier.isXMLWhitespace(systemId.charAt(i))) {
+				i++;
+			}
+			if (i < len && '<' == systemId.charAt(i)) {
+				// our systemID URI has a '<' - this is likely the problem. 
+				MalformedURLException mx = new MalformedURLException(
+						"SAXBuilder.build(String) expects the String to be " +
+						"a systemID, but in this instance it appears to be " +
+						"actual XML data.");
+				// include the original problem for accountability, and perhaps
+				// a false positive.... though very unlikely
+				mx.initCause(ioe);
+				throw mx;
+			}
+			// it is likely not an XML document - re-throw the exception  
+			throw ioe;
 		} finally {
 			if (!reuseParser) {
 				engine = null;

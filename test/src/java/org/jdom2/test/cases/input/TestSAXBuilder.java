@@ -68,6 +68,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayReader;
@@ -76,6 +77,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.nio.CharBuffer;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -1061,6 +1063,57 @@ public final class TestSAXBuilder {
 			if (tmp != null) {
 				tmp.delete();
 			}
+		}
+	}
+	
+	@Test
+	public void testBuildStringNegativeNull() {
+		SAXBuilder sb = new SAXBuilder();
+		try {
+			String n = null;
+			sb.build(n);
+			failNoException(NullPointerException.class);
+		} catch (Exception e) {
+			checkException(NullPointerException.class, e);
+		}
+	}
+	
+	@Test
+	public void testBuildStringNegativeBadURI() {
+		SAXBuilder sb = new SAXBuilder();
+		try {
+			sb.build(" `!@#$%^&*() is not a valid URI ");
+			failNoException(MalformedURLException.class);
+		} catch (Exception e) {
+			checkException(MalformedURLException.class, e);
+			if (e.getCause() != null) {
+				assertFalse(e.getCause() instanceof MalformedURLException);
+			}
+		}
+	}
+	
+	@Test
+	public void testBuildStringNegativeActualXML() {
+		SAXBuilder sb = new SAXBuilder();
+		try {
+			sb.build("<root />");
+			failNoException(IOException.class);
+		} catch (Exception e) {
+			checkException(IOException.class, e);
+			// cause should also be a MalformedURLException
+			checkException(IOException.class, e.getCause());
+		}
+	}
+	
+	@Test
+	public void testBuildStringNegativePaddedXML() {
+		SAXBuilder sb = new SAXBuilder();
+		try {
+			sb.build("   <!-- comment -->  ");
+			failNoException(IOException.class);
+		} catch (Exception e) {
+			checkException(IOException.class, e);
+			checkException(IOException.class, e.getCause());
 		}
 	}
 	
