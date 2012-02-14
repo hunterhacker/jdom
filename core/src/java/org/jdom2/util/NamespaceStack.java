@@ -74,7 +74,7 @@ import org.jdom2.Namespace;
  * 'redefines' an existing Namespace if they share the same prefix. This class
  * is intended to provide a high-performance mechanism for calculating the
  * Namespace scope for an Element, and identifying what Namespaces an Element
- * introduces in to the scope.
+ * introduces in to the scope. This is not a validation tool.
  * <p>
  * This class implements Iterable which means it can be used in the context
  * of a for-each type loop:
@@ -95,9 +95,6 @@ import org.jdom2.Namespace;
  * that the pop() is for the same element that was previously pushed. Further,
  * it does not check to make sure that the pushed() Element is the natural child
  * of the previously pushed() Element.
- * <p>
- * This is designed as a high-speed, memory efficient way to track the Namespace
- * scope and changes, not as a validation tool.
  * 
  * @author Rolf Lear
  *

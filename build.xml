@@ -199,7 +199,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</javac>
 	</target>
 
-	<target name="compile.samples" depends="compile.core"
+	<target name="compile.samples" depends="compile.core, compile.contrib"
 	          description="Compiles the sample source code">
 
 		<!-- Copy resources and stuff - everything except Java code -->
@@ -215,7 +215,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           source="${compile.source}"
 	           deprecation="${compile.deprecation}"
 			   includeantruntime="false">
-			<classpath refid="core.class.path" />
+			<classpath refid="contrib.class.path" />
 		</javac>
 	</target>
 
