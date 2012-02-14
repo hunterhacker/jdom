@@ -32,7 +32,7 @@ public class TestXMLReaderSAX2Factory {
 		assertTrue(facval.createXMLReader() != null);
 
 		facval = new XMLReaderSAX2Factory(true, 
-				com.sun.org.apache.xerces.internal.parsers.SAXParser.class.getName());
+				"com.sun.org.apache.xerces.internal.parsers.SAXParser");
 		assertTrue(facval.isValidating());
 		assertTrue(facval.createXMLReader() != null);
 		
@@ -41,7 +41,7 @@ public class TestXMLReaderSAX2Factory {
 		assertTrue(facnon.createXMLReader() != null);
 		
 		facnon = new XMLReaderSAX2Factory(false, 
-				com.sun.org.apache.xerces.internal.parsers.SAXParser.class.getName());
+				"com.sun.org.apache.xerces.internal.parsers.SAXParser");
 		assertFalse(facnon.isValidating());
 		assertTrue(facnon.createXMLReader() != null);
 	}
@@ -49,9 +49,9 @@ public class TestXMLReaderSAX2Factory {
 	@Test
 	public void testGetDriverClassName() {
 		XMLReaderSAX2Factory facnon = new XMLReaderSAX2Factory(false, 
-				com.sun.org.apache.xerces.internal.parsers.SAXParser.class.getName());
+				"com.sun.org.apache.xerces.internal.parsers.SAXParser");
 		assertFalse(facnon.isValidating());
-		assertEquals(com.sun.org.apache.xerces.internal.parsers.SAXParser.class.getName(),
+		assertEquals("com.sun.org.apache.xerces.internal.parsers.SAXParser",
 				facnon.getDriverClassName());
 	}
 	

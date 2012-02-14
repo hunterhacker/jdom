@@ -246,7 +246,7 @@ public class Schema {
      * @throws JDOMException   if errors were encountered that
      *                         prevented the validation to proceed.
      */
-    public List validate(Document doc) throws JDOMException {
+    public List<ValidationError> validate(Document doc) throws JDOMException {
         ValidationErrorHandler errorHandler = new ValidationErrorHandler();
         try {
             Verifier verifier = this.newVerifier();
@@ -274,13 +274,13 @@ public class Schema {
      * @throws JDOMException   if errors were encountered that
      *                         prevented the validation to proceed.
      */
-    public List validate(Element element) throws JDOMException {
+    public List<ValidationError> validate(Element element) throws JDOMException {
         ValidationErrorHandler errorHandler = new ValidationErrorHandler();
         try {
             Verifier verifier = this.newVerifier();
             verifier.setErrorHandler(errorHandler);
 
-            List nodes = new ArrayList();
+            List<Element> nodes = new ArrayList<Element>();
             nodes.add(element);
 
             errorHandler.setContentHandler(verifier.getVerifierHandler());
@@ -417,7 +417,7 @@ public class Schema {
      */
     private static final class ValidationErrorHandler extends XMLFilterImpl {
         /** The list of validation errors. */
-        private List errors = new LinkedList();
+        private List<ValidationError> errors = new LinkedList<ValidationError>();
         /** The JDOM locator object provided by SAXOutputter. */
         private JDOMLocator locator = null;
 
@@ -435,7 +435,8 @@ public class Schema {
          *
          * @param  parent   the parent XMLReader or XMLFilter.
          */
-        public ValidationErrorHandler(XMLReader parent) {
+        @SuppressWarnings("unused")
+		public ValidationErrorHandler(XMLReader parent) {
             super(parent);
         }
 
@@ -446,7 +447,7 @@ public class Schema {
          * @return the list of validation errors or <code>null</code>
          *         if the document is valid.
          */
-        public List getErrors() {
+        public List<ValidationError> getErrors() {
             return (this.errors.size() == 0) ? null : this.errors;
         }
 
@@ -467,7 +468,8 @@ public class Schema {
          * @param  locator   an object that can return the location of
          *                   any SAX document event.
          */
-        public void setDocumentLocator(Locator locator) {
+        @Override
+		public void setDocumentLocator(Locator locator) {
             if (locator instanceof JDOMLocator) {
                 this.locator = (JDOMLocator) locator;
             }
@@ -483,7 +485,8 @@ public class Schema {
          * @throws SAXException   any SAX exception, possibly wrapping
          *                        another exception.
          */
-        public void fatalError(SAXParseException e) throws SAXException {
+        @Override
+		public void fatalError(SAXParseException e) throws SAXException {
             this.errors.add(new ValidationError(ValidationError.FATAL,
                                                 e.getMessage(), this.getCurrentNode()));
             throw e;
@@ -499,7 +502,8 @@ public class Schema {
          * @throws SAXException   any SAX exception, possibly wrapping
          *                        another exception.
          */
-        public void error(SAXParseException e) throws SAXException {
+        @Override
+		public void error(SAXParseException e) throws SAXException {
             this.errors.add(new ValidationError(ValidationError.ERROR,
                                                 e.getMessage(), this.getCurrentNode()));
         }
@@ -514,7 +518,8 @@ public class Schema {
          * @throws SAXException   any SAX exception, possibly wrapping
          *                        another exception.
          */
-        public void warning(SAXParseException e) throws SAXException {
+        @Override
+		public void warning(SAXParseException e) throws SAXException {
             this.errors.add(new ValidationError(ValidationError.WARNING,
                                                 e.getMessage(), this.getCurrentNode()));
         }
@@ -568,7 +573,8 @@ public class Schema {
          *
          * @see java.lang.Object#hashCode()
          */
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return this.language.hashCode();
         }
 
@@ -580,7 +586,8 @@ public class Schema {
          *
          * @see java.lang.Object#toString()
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return this.language;
         }
 
@@ -596,7 +603,8 @@ public class Schema {
          *
          * @see java.lang.Object#equals(Object)
          */
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             return ((o == this) ||
                     ((o != null) && (this.hashCode() == o.hashCode()) &&
                     (this.getClass().getName().equals(o.getClass().getName()))));

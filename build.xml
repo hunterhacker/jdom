@@ -193,7 +193,8 @@ For instructions on how to build JDOM, please view the README.txt file.
            optimize="${compile.optimize}"
            target="${compile.target}"
            source="${compile.source}"
-           deprecation="${compile.deprecation}" includeantruntime="false">
+           deprecation="${compile.deprecation}"
+		   includeantruntime="false">
 			<classpath refid="base.class.path"/>
 		</javac>
 	</target>
@@ -212,7 +213,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           optimize="${compile.optimize}"
 	           target="${compile.target}"
 	           source="${compile.source}"
-	           deprecation="${compile.deprecation}">
+	           deprecation="${compile.deprecation}"
+			   includeantruntime="false">
 			<classpath refid="core.class.path" />
 		</javac>
 	</target>
@@ -231,7 +233,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 	           optimize="${compile.optimize}"
 	           target="${compile.target}"
 	           source="${compile.source}"
-	           deprecation="${compile.deprecation}">
+	           deprecation="${compile.deprecation}"
+			   includeantruntime="false">
 			<classpath refid="core.class.path" />
 		</javac>
 	</target>
@@ -244,13 +247,14 @@ For instructions on how to build JDOM, please view the README.txt file.
 			<fileset dir="${junit.src}" excludes="**/*.java" />
 		</copy>
 		
+		<!-- ignore deprecation warnings in jUnit -->
 		<javac srcdir="${junit.src}"
 	           destdir="${junit.build}"
 	           debug="${compile.debug}"
 	           optimize="${compile.optimize}"
 	           target="${compile.target}"
 	           source="${compile.source}"
-	           deprecation="${compile.deprecation}"
+	           deprecation="no"
 			   includeantruntime="false">
 			<classpath refid="contrib.class.path" />
 		</javac>

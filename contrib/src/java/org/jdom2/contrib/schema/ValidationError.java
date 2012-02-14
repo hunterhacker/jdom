@@ -141,7 +141,8 @@ public class ValidationError {
      *
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer buf = new StringBuffer();
 
         buf.append('[');
@@ -189,7 +190,8 @@ public class ValidationError {
          *
          * @see java.lang.Object#hashCode()
          */
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return this.level;
         }
 
@@ -201,7 +203,8 @@ public class ValidationError {
          *
          * @see java.lang.Object#toString()
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return "[" + this.getClass().getName() + "] " + this.level;
         }
 
@@ -218,7 +221,8 @@ public class ValidationError {
          *
          * @see java.lang.Object#equals(Object)
          */
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             return ((o == this) ||
                     ((o != null) && (this.hashCode() == o.hashCode()) &&
                     (this.getClass().getName().equals(o.getClass().getName()))));

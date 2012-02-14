@@ -13,7 +13,13 @@ import org.jdom2.JDOMException;
 import org.jdom2.xpath.XPath;
 import org.jdom2.xpath.jaxen.JDOMXPath;
 
-@SuppressWarnings({"javadoc", "deprecation"} )
+/**
+ * 
+ * @author Rolf Lear
+ * @deprecated old XPath
+ */
+@SuppressWarnings({"javadoc"} )
+@Deprecated
 public class TestXpath {
 	/* 
 	 * Test the static methods on the abstract class.

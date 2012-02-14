@@ -21,9 +21,16 @@ import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.xpath.XPath;
+
 import org.junit.Test;
 
-@SuppressWarnings({"javadoc", "deprecation"})
+/**
+ * 
+ * @author Rolf Lear
+ * @deprecated replaced by XPathExpression
+ */
+@SuppressWarnings({"javadoc"})
+@Deprecated
 public abstract class AbstractTestXPath {
 	
 	private final Document doc = new Document();
