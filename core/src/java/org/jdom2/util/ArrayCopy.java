@@ -64,6 +64,10 @@ import java.lang.reflect.Array;
  *
  */
 public final class ArrayCopy {
+	
+	private ArrayCopy() {
+		// inaccessible constructor.
+	}
 
 	/**
 	 * Arrays.copyOf(...) is a Java6 thing. This is a replacement.
@@ -89,9 +93,13 @@ public final class ArrayCopy {
 	 */
 	public static final <E> E[] copyOfRange(final E[] source, final int from, int to) {
 		final int len = to - from;
+		if (len < 0) {
+			throw new IllegalArgumentException("From(" + from + ") > To (" + to + ")");
+		}
 		@SuppressWarnings("unchecked")
 		final E[] dest = (E[])Array.newInstance(source.getClass().getComponentType(), len);
-		System.arraycopy(source, from, dest, 0, len < source.length ? len : source.length);
+		final int tocopy = from + len > source.length ? source.length - from : len;
+		System.arraycopy(source, from, dest, 0, tocopy);
 		return dest;
 	}
 

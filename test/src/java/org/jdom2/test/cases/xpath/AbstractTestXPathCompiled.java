@@ -59,6 +59,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -194,9 +195,9 @@ public abstract class AbstractTestXPathCompiled {
 		int r = 0;
 		int f = 0;
 		for (int i = 0; i < draw.size(); i++) {
-			if (dresult.get(r) == draw.get(i)) {
+			if (r < dresult.size() && dresult.get(r) == draw.get(i)) {
 				r++;
-			} else if (dfilt.get(f)== draw.get(i)) {
+			} else if (f < dfilt.size() && dfilt.get(f)== draw.get(i)) {
 				f++;
 			} else {
 				fail (draw.get(i) + " is neither a result nor a filtered (or is in the wrong place)");
@@ -230,7 +231,7 @@ public abstract class AbstractTestXPathCompiled {
 			}
 		}
 		
-		if (allns) {
+		if (allns && expect.length > 0) {
 			// we expect only Namespace results.
 			// we use different rules....
 			// for a start, we don't check on order.
@@ -971,6 +972,12 @@ public abstract class AbstractTestXPathCompiled {
 		checkXPath("/main/node()[1] | /main/@*", child3emt, null, mainatt, maincomment);
 	}
 	
+	@Test
+	public void testXPathNoMatch() {
+		checkXPath("//dummy", doc, null);
+	}
+	
+	
 	/* *******************************
 	 * Negative TestCases
 	 * ******************************* */
@@ -1030,6 +1037,37 @@ public abstract class AbstractTestXPathCompiled {
 			fail("Expected a JDOMException but got " + e.getClass());
 		}
 		
+	}
+	
+	@Test
+	public void testXPathFilteredDiagnostic() {
+		final XPathExpression<Element> xpe = 
+				setupXPath(Filters.element("child"), "//*", null, null);
+		final ArrayList<Element> res = new ArrayList<Element>();
+		res.add(child1emt);
+		res.add(child2emt);
+		// child3 is not in the NO_NAMESPACE ... res.add(child3emt);
+		final XPathDiagnostic<Element> diag = xpe.diagnose(doc, false);
+		checkDiagnostic(xpe, doc, res, diag);
+		final XPathDiagnostic<Element> diagz = xpe.diagnose(doc, true);
+		// size is zero because first result ('main') does not pass the filter.
+		assertTrue(diagz.getResult().size() == 0);
+		assertTrue(diagz.toString() != null);
+		
+		final XPathExpression<Element> xpf = 
+				setupXPath(Filters.element("main"), "//*", null, null);
+		final XPathDiagnostic<Element> diagf = xpf.diagnose(doc, false);
+		
+		assertTrue(main == diagf.getResult().get(0));
+		assertTrue(diagf.getFilteredResults().size() == 3);
+		assertTrue(child1emt == diagf.getFilteredResults().get(0));
+		assertTrue(child2emt == diagf.getFilteredResults().get(1));
+		assertTrue(child3emt == diagf.getFilteredResults().get(2));
+
+		final XPathDiagnostic<Element> diagg = xpf.diagnose(doc, true);
+		
+		assertTrue(main == diagg.getResult().get(0));
+		assertTrue(diagg.getFilteredResults().size() == 0);
 	}
 
 }

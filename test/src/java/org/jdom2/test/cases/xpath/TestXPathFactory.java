@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
@@ -30,6 +31,18 @@ public class TestXPathFactory {
 		assertTrue(xpf != XPathFactory.newInstance(JaxenXPathFactory.class.getName()));
 		XPathExpression<?> xp = xpf.compile(".");
 		Element emt = new Element("root");
+		assertTrue(emt == xp.evaluateFirst(emt));
+	}
+
+	@Test
+	public void testNewInstanceCompileNSList() {
+		XPathFactory xpf = XPathFactory.newInstance(JaxenXPathFactory.class.getName());
+		assertNotNull(xpf);
+		assertTrue(xpf != XPathFactory.newInstance(JaxenXPathFactory.class.getName()));
+		XPathExpression<?> xp = xpf.compile(".");
+		Element emt = new Element("root");
+		assertTrue(emt == xp.evaluateFirst(emt));
+		xp = xpf.compile(".", Filters.element(), null, emt.getNamespacesInScope());
 		assertTrue(emt == xp.evaluateFirst(emt));
 	}
 
