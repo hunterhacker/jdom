@@ -70,6 +70,11 @@ import org.jdom2.Namespace;
 @SuppressWarnings("javadoc")
 public class LineNumberElement extends Element
 {
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
     private int _startLine;
     private int _endLine;
     

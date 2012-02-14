@@ -19,6 +19,7 @@ public class TestEntityRef {
 	public void testEntityRef() {
 		EntityRef er = new EntityRef() {
 			// nothing
+    		private static final long serialVersionUID = 200L;
 		};
 		assertTrue(null == er.getPublicID());
 		assertTrue(null == er.getSystemID());

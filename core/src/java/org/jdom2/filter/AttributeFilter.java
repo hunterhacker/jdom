@@ -54,8 +54,8 @@
 
 package org.jdom2.filter;
 
-import java.io.*;
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.Namespace;
 
 /**
  * A Filter that only matches {@link org.jdom2.Attribute} objects.
@@ -64,11 +64,16 @@ import org.jdom2.*;
  */
 public class AttributeFilter extends AbstractFilter<Attribute> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	/** The element name */
 	private final String name;
 
 	/** The element namespace */
-	private transient Namespace namespace;
+	private final Namespace namespace;
 
 	/**
 	 * Select only the Elements.
@@ -163,34 +168,4 @@ public class AttributeFilter extends AbstractFilter<Attribute> {
 		return result;
 	}
 
-	// Support a custom Namespace serialization so no two namespace
-	// object instances may exist for the same prefix/uri pair
-	private void writeObject(ObjectOutputStream out) throws IOException {
-
-		out.defaultWriteObject();
-
-		// We use writeObject() and not writeUTF() to minimize space
-		// This allows for writing pointers to already written strings
-		if (namespace != null) {
-			out.writeObject(namespace.getPrefix());
-			out.writeObject(namespace.getURI());
-		}
-		else {
-			out.writeObject(null);
-			out.writeObject(null);
-		}
-	}
-
-	private void readObject(ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
-
-		in.defaultReadObject();
-
-		Object prefix = in.readObject();
-		Object uri = in.readObject();
-
-		if (prefix != null) {  // else leave namespace null here
-			namespace = Namespace.getNamespace((String) prefix, (String) uri);
-		}
-	}
 }

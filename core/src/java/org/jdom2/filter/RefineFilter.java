@@ -66,6 +66,11 @@ package org.jdom2.filter;
  */
 final class RefineFilter<T> extends AbstractFilter<T> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	private final Filter<?> base;
 	private final Filter<T> refiner;
 

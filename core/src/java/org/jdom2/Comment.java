@@ -63,7 +63,12 @@ package org.jdom2;
  * @author  Jason Hunter
  */
 public class Comment extends Content {
-
+	
+	/**
+	 * JDOM2 Serialization. In this case, Comment is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	/** Text of the <code>Comment</code> */
 	protected String text;
 

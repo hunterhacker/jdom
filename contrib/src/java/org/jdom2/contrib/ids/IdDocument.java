@@ -83,6 +83,11 @@ import org.jdom2.Element;
 @SuppressWarnings("javadoc")
 public class IdDocument extends Document {
 
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
    /**
     * <p>The ID lookup table for the document.</p>
     */

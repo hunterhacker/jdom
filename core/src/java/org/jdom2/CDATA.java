@@ -70,6 +70,11 @@ package org.jdom2;
 public class CDATA extends Text {
 
 	/**
+	 * JDOM 2.0.0 Serialization version. CDATA is simple
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * This is the protected, no-args constructor standard in all JDOM
 	 * classes. It allows subclassers to get a raw instance with no
 	 * initialization.

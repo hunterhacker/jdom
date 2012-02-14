@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.jdom2.JDOMRuntimeException;
 import org.jdom2.Namespace;
 import org.jdom2.util.ReflectionConstructor;
 
@@ -24,9 +23,9 @@ public class TestReflectionConstructor {
 	public void testConstructNoSuchClass() {
 		try {
 			ReflectionConstructor.construct("java.util.Junk", List.class);
-			failNoException(JDOMRuntimeException.class);
+			failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
-			checkException(JDOMRuntimeException.class, e);
+			checkException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -34,9 +33,9 @@ public class TestReflectionConstructor {
 	public void testConstructDefaultConstructor() {
 		try {
 			ReflectionConstructor.construct("java.util.Integer", Integer.class);
-			failNoException(JDOMRuntimeException.class);
+			failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
-			checkException(JDOMRuntimeException.class, e);
+			checkException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -44,9 +43,9 @@ public class TestReflectionConstructor {
 	public void testConstructNoaccessConstructor() {
 		try {
 			ReflectionConstructor.construct("org.jdom2.Namespace", Namespace.class);
-			failNoException(JDOMRuntimeException.class);
+			failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
-			checkException(JDOMRuntimeException.class, e);
+			checkException(IllegalArgumentException.class, e);
 		}
 	}
 }

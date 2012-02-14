@@ -60,6 +60,11 @@ import java.util.*;
 
 @SuppressWarnings("javadoc")
 public class TestBean implements java.io.Serializable {
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	private int age;
 	private Date birthdate;

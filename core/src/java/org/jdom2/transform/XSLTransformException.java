@@ -64,6 +64,11 @@ import org.jdom2.JDOMException;
 public class XSLTransformException extends JDOMException {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * A new and default XSLTransformException
 	 */
 	public XSLTransformException() {

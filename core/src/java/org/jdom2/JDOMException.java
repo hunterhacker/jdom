@@ -65,6 +65,11 @@ package org.jdom2;
 public class JDOMException extends Exception {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * This will create an <code>Exception</code>.
 	 */
 	public JDOMException() {

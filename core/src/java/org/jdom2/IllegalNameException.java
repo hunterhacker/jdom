@@ -64,6 +64,11 @@ package org.jdom2;
 public class IllegalNameException extends IllegalArgumentException {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * This will create an <code>Exception</code> indicating
 	 * that the specified name is illegal for the construct
 	 * it was supplied to.

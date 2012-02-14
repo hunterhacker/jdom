@@ -70,6 +70,11 @@ import org.jdom2.Content;
  */
 abstract class AbstractFilter<T> implements Filter<T> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	@Override
 	public final boolean matches(Object content) {
 		return filter(content) != null;

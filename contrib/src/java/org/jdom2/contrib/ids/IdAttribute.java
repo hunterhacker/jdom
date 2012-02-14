@@ -72,6 +72,11 @@ import org.jdom2.Parent;
 @SuppressWarnings("javadoc")
 public class IdAttribute extends Attribute {
 
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public IdAttribute(String name, String value, Namespace namespace) {
         super(name, value, namespace);
     }

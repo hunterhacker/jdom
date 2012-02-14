@@ -245,6 +245,13 @@ public class AbstractTestFilter {
 		// can never match Object if it returns a <F extends Content>
 		assertFalse(af.matches(new Object()));
 		exerciseCore(af, parent, callback);
+		
+		// test the deserialized version of the Filter.
+		final Filter<F> des = UnitTestUtil.deSerialize(af);
+		assertTrue(des != af);
+		assertFilterEquals(af, des);
+		exerciseCore(des, parent, callback);
+		
 		try {
 			Filter<?> or = af.or(null); 
 			fail  ("expected an exception from " + or);

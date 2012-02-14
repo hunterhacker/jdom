@@ -66,6 +66,11 @@ import org.xml.sax.*;
 public class JDOMParseException extends JDOMException {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * The portion of the document that was successfully built before
 	 * the parse error occurred.
 	 */

@@ -67,6 +67,11 @@ import org.jdom2.output.Format;
  */
 public class Text extends Content {
 
+	/**
+	 * JDOM2 Serialization. In this case, Text is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	static final String EMPTY_STRING = "";
 
 	/** The actual character content */

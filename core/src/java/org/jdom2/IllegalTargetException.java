@@ -63,6 +63,11 @@ package org.jdom2;
 public class IllegalTargetException extends IllegalArgumentException {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * This will create an <code>Exception</code> indicating
 	 * that the specified target is illegal for the
 	 * <code>{@link ProcessingInstruction}</code> it was supplied to.

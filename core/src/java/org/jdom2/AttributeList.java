@@ -73,7 +73,7 @@ import org.jdom2.util.ArrayCopy;
  * @author Rolf Lear
  */
 final class AttributeList extends AbstractList<Attribute>
-		implements java.io.Serializable, RandomAccess {
+		implements RandomAccess {
 
 	/** The initial size to start the backing array. */
 	private static final int INITIAL_ARRAY_SIZE = 4;

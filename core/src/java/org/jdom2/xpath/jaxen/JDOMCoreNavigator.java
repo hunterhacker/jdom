@@ -83,7 +83,12 @@ import org.jdom2.input.SAXBuilder;
 
 class JDOMCoreNavigator extends DefaultNavigator {
 
-	private final IdentityHashMap<Element, NamespaceContainer[]> emtnsmap
+	/**
+	 * Standard JDOM2 Serialization. Default mechanism.
+	 */
+	private static final long serialVersionUID = 200L;
+	
+	private transient final IdentityHashMap<Element, NamespaceContainer[]> emtnsmap
 		= new IdentityHashMap<Element, NamespaceContainer[]>();
 
 	void reset() {

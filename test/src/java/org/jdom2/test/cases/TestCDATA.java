@@ -85,6 +85,7 @@ public final class TestCDATA {
     public void test_TCC() {
         new CDATA() {
             // check protected constructor via anonymous class
+    		private static final long serialVersionUID = 200L;
         };
     }
 

@@ -73,6 +73,11 @@ import org.jdom2.Namespace;
 @SuppressWarnings("javadoc")
 public class IdElement extends Element {
 
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
    // Allow Javadocs to inherit from superclass
 
    public IdElement(String name, Namespace namespace) {

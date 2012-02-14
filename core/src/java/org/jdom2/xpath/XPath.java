@@ -76,6 +76,11 @@ import org.jdom2.*;
 public abstract class XPath implements Serializable {
 
 	/**
+	 * Standard JDOM2 Serialization. Default mechanism.
+	 */
+	private static final long serialVersionUID = 200L;
+	
+	/**
 	 * The name of the system property from which to retrieve the
 	 * name of the implementation class to use.
 	 * <p>
@@ -413,6 +418,11 @@ public abstract class XPath implements Serializable {
 	 * configured.</p>
 	 */
 	private final static class XPathString implements Serializable {
+		/**
+		 * Standard JDOM2 Serialization. Default mechanism.
+		 */
+		private static final long serialVersionUID = 200L;
+		
 		/**
 		 * The XPath expression as a string.
 		 */

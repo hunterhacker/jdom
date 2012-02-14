@@ -80,20 +80,28 @@ public final class Filters {
 
 	private static final Filter<Attribute> fattribute = 
 			new AttributeFilter();
+	
 	private static final Filter<Comment> fcomment = 
 			new ClassFilter<Comment>(Comment.class);
+	
 	private static final Filter<CDATA> fcdata = 
 			new ClassFilter<CDATA>(CDATA.class);
+	
 	private static final Filter<DocType> fdoctype = 
 			new ClassFilter<DocType>(DocType.class);
+	
 	private static final Filter<EntityRef> fentityref = 
 			new ClassFilter<EntityRef>(EntityRef.class);
+	
 	private static final Filter<ProcessingInstruction> fpi = 
 			new ClassFilter<ProcessingInstruction>(ProcessingInstruction.class);
+	
 	private static final Filter<Text> ftext = 
 			new ClassFilter<Text>(Text.class);
+	
 	private static final Filter<Element> felement = 
 			new ClassFilter<Element>(Element.class);
+	
 	private static final Filter<Document> fdocument = 
 			new ClassFilter<Document>(Document.class);
 

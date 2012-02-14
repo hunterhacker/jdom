@@ -2,6 +2,7 @@ package org.jdom2.test.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -20,9 +21,15 @@ import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 import org.jdom2.Attribute;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
 import org.jdom2.NamespaceAware;
+import org.jdom2.ProcessingInstruction;
 
 @SuppressWarnings("javadoc")
 public class UnitTestUtil {
@@ -116,7 +123,7 @@ public class UnitTestUtil {
                 objectOutputStream.writeObject(input);
             }
             catch(final IOException ioException) {
-                fail("unable to serialize object" + ioException);
+                failException("Unable to serialize object" + ioException, ioException);
             }
             finally {
                 try {
@@ -312,4 +319,95 @@ public class UnitTestUtil {
 		tothrow.initCause(t);
 		throw tothrow;
 	}
+	
+	public static final void compare(final NamespaceAware ap, final NamespaceAware bp) {
+    	assertNotNull(ap);
+    	assertNotNull(bp);
+    	assertEquals(ap.getClass(), bp.getClass());
+    	assertTrue(ap != bp);
+    	if (ap instanceof Content) {
+    		final Content a = (Content)ap;
+    		final Content b = (Content)bp;
+	    	if (a.getParent() != null) {
+	    		assertTrue(a.getParent() != b.getParent());
+	    	}
+	    	
+	    	switch (a.getCType()) {
+	    		case Text:
+	    			assertEquals(a.getValue(), b.getValue());
+	    			break;
+	    		case CDATA:
+	    			assertEquals(a.getValue(), b.getValue());
+	    			break;
+	    		case Comment:
+	    			assertEquals(((Comment)a).getText(), ((Comment)b).getText());
+	    			break;
+	    		case DocType:
+	    			DocType da = (DocType)a;
+	    			DocType db = (DocType)b;
+	    			assertEquals(da.getElementName(), db.getElementName());
+	    			assertEquals(da.getPublicID(), db.getPublicID());
+	    			assertEquals(da.getSystemID(), db.getSystemID());
+	    			assertEquals(da.getInternalSubset(), db.getInternalSubset());
+	    			break;
+	    		case Element:
+	    			Element ea = (Element)a;
+	    			Element eb = (Element)b;
+	    			assertEquals(ea.getName(), eb.getName());
+	    			compare(ea.getAttributes(), eb.getAttributes());
+	    			assertEquals(ea.getNamespacesInScope(), eb.getNamespacesInScope());
+	        		final int sz = ea.getContentSize();
+	        		assertTrue(sz == eb.getContentSize());
+	        		for (int i = 0; i < sz; i++) {
+	        			compare(ea.getContent(i), eb.getContent(i));
+	        		}
+	    			break;
+	    		case EntityRef:
+	    			assertEquals(((EntityRef)a).getName(), ((EntityRef)b).getName());
+	    			break;
+	    		case ProcessingInstruction:
+	    			ProcessingInstruction pa = (ProcessingInstruction)a;
+	    			ProcessingInstruction pb = (ProcessingInstruction)b;
+	    			assertEquals(pa.getTarget(), pb.getTarget());
+	    			assertEquals(pa.getData(), pb.getData());
+	    			break;
+	    	}
+    	} else if (ap instanceof Attribute) {
+    		compare ((Attribute)ap, (Attribute)bp);
+    	} else if (ap instanceof Document) {
+    		Document a = (Document)ap;
+    		Document b = (Document)bp;
+    		assertEquals(a.getBaseURI(), b.getBaseURI());
+    		final int sz = a.getContentSize();
+    		assertTrue(sz == b.getContentSize());
+    		for (int i = 0; i < sz; i++) {
+    			compare(a.getContent(i), b.getContent(i));
+    		}
+    	}
+    }
+    
+    
+    public static final void compare(List<Attribute> a, List<Attribute> b) {
+		assertTrue(a != b);
+		assertTrue(a.size() == b.size());
+		Iterator<Attribute> ait = a.iterator();
+		Iterator<Attribute> bit = b.iterator();
+		while (ait.hasNext() && bit.hasNext()) {
+			Attribute aa = ait.next();
+			Attribute bb = bit.next();
+			compare(aa, bb);
+		}
+		assertFalse(ait.hasNext());
+		assertFalse(bit.hasNext());
+		
+	}
+
+
+	public static final void compare(Attribute aa, Attribute bb) {
+		assertEquals(aa.getName(), bb.getName());
+		assertTrue(aa.getNamespace() == bb.getNamespace());
+		assertEquals(aa.getValue(), bb.getValue());
+	}
+
+
 }

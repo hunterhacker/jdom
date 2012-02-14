@@ -64,11 +64,16 @@ package org.jdom2.filter;
 */
 final class AndFilter<T> extends AbstractFilter<T> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	// Filter for left side of logical <b>and</b>.
-	private Filter<? extends T> left;
+	private final Filter<? extends T> left;
 
 	// Filter for right side of logical <b>and</b>.
-	private Filter<? extends T> right;
+	private final Filter<? extends T> right;
 
 	/**
 	 * Match if only both supplied filters match.

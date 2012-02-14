@@ -54,9 +54,6 @@
 
 package org.jdom2;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,6 +73,11 @@ import java.util.TreeMap;
  */
 public class Attribute extends CloneBase
 	implements NamespaceAware, Serializable, Cloneable {
+
+	/**
+	 * JDOM 2.0.0 Serialization version. Attribute is simple
+	 */
+	private static final long serialVersionUID = 200L;
 
 	// Keep the old constant names for one beta cycle to help migration
 	
@@ -141,7 +143,7 @@ public class Attribute extends CloneBase
 	protected String name;
 
 	/** The <code>{@link Namespace}</code> of the <code>Attribute</code> */
-	protected transient Namespace namespace;
+	protected Namespace namespace;
 
 	/** The value of the <code>Attribute</code> */
 	protected String value;
@@ -153,7 +155,7 @@ public class Attribute extends CloneBase
 	 * The parent to which this Attribute belongs. Change it with
 	 * {@link #setParent(Element)}
 	 */
-	protected Element parent;
+	protected transient Element parent;
 
 	/**
 	 * Default, no-args constructor for implementations to use if needed.
@@ -691,27 +693,6 @@ public class Attribute extends CloneBase
 		} else {
 			throw new DataConversionException(name, "boolean");
 		}
-	}
-
-	// Support a custom Namespace serialization so no two namespace
-	// object instances may exist for the same prefix/uri pair
-	private void writeObject(final ObjectOutputStream out) throws IOException {
-
-		out.defaultWriteObject();
-
-		// We use writeObject() and not writeUTF() to minimize space
-		// This allows for writing pointers to already written strings
-		out.writeObject(namespace.getPrefix());
-		out.writeObject(namespace.getURI());
-	}
-
-	private void readObject(final ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
-
-		in.defaultReadObject();
-
-		namespace = Namespace.getNamespace(
-				(String) in.readObject(), (String) in.readObject());
 	}
 
 	/**

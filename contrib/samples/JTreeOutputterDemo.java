@@ -191,6 +191,11 @@ public class JTreeOutputterDemo implements ActionListener {
 
 class URLDialog extends JDialog implements ActionListener {
 
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
     public String url;
     public JTextField urlField;
     public JButton okButton, cancelButton;

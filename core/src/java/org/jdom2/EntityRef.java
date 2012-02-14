@@ -64,6 +64,11 @@ package org.jdom2;
  */
 public class EntityRef extends Content {
 
+	/**
+	 * JDOM2 Serialization. In this case, EntityRef is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	/** The name of the <code>EntityRef</code> */
 	protected String name;
 

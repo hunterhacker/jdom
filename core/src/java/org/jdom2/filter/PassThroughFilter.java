@@ -61,6 +61,11 @@ import java.util.List;
 import java.util.RandomAccess;
 
 final class PassThroughFilter extends AbstractFilter<Object> {
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 
 	@Override
 	public Object filter(Object content) {

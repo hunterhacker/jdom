@@ -54,6 +54,9 @@
 
 package org.jdom2;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 import org.jdom2.filter.*;
@@ -75,7 +78,7 @@ public class Document extends CloneBase implements Parent {
 	 * Subclassers have to track content using their own
 	 * mechanism.
 	 */
-	ContentList content = new ContentList(this);
+	transient ContentList content = new ContentList(this);
 
 	/**
 	 *  See http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226/core.html#baseURIs-Considerations
@@ -83,7 +86,7 @@ public class Document extends CloneBase implements Parent {
 	protected String baseURI = null;
 
 	// Supports the setProperty/getProperty calls
-	private HashMap<String,Object> propertyMap = null;
+	private transient HashMap<String,Object> propertyMap = null;
 
 	/**
 	 * Creates a new empty document.  A document must have a root element,
@@ -850,4 +853,56 @@ public class Document extends CloneBase implements Parent {
 	}
 	
 	
+	/**
+	 * JDOM2 Serialization. In this case, DocType is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
+	 * Serialize out the Element.
+	 * 
+	 * @serialData
+	 * <strong>Document Properties are not serialized!</strong>
+	 * <p>
+	 * The Stream protocol is:
+	 * <ol>
+	 *   <li>The BaseURI using default Serialization.
+	 *   <li>The count of child Content
+	 *   <li>The actual Child Content.
+	 * </ol>
+	 * 
+	 * @param out where to write the Element to.
+	 * @throws IOException if there is a writing problem.
+	 */
+	private void writeObject(final ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		final int cs = content.size();
+		out.writeInt(cs);
+		for (int i = 0; i < cs; i++) {
+			out.writeObject(getContent(i));
+		}
+	}
+
+	/**
+	 * Read an Element off the ObjectInputStream.
+	 * 
+	 * @see #writeObject(ObjectOutputStream)
+	 * @param in where to read the Element from.
+	 * @throws IOException if there is a reading problem.
+	 * @throws ClassNotFoundException when a class cannot be found
+	 */
+	private void readObject(final ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+
+		in.defaultReadObject();
+		
+		content = new ContentList(this);
+
+		int cs = in.readInt();
+		while (--cs >= 0) {
+			addContent((Content)in.readObject());
+		}
+
+	}
+
 }

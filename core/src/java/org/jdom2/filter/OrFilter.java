@@ -64,11 +64,16 @@ import org.jdom2.Content;
  */
 final class OrFilter extends AbstractFilter<Content> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	/** Filter for left side of logical <b>or</b> */
-	private Filter<?> left;
+	private final Filter<?> left;
 
 	/** Filter for right side of logical <b>or</b> */
-	private Filter<?> right;
+	private final Filter<?> right;
 
 	/**
 	 * Match if either of the supplied filters.

@@ -98,7 +98,7 @@ public final class TestAttribute {
     @Test
     public void test_TCC() {
         final Attribute attribute = new Attribute(){
-            // anonymous class
+    		private static final long serialVersionUID = 200L;
         };
         assertTrue(null == attribute.getName());
     }
@@ -913,5 +913,15 @@ public final class TestAttribute {
 		assertNull(content.getParent());
 		assertNull(clone.getParent());
 	}
+    
+    @Test
+    public void testNullAttributeType() {
+    	Attribute att = new Attribute("att", "value", AttributeType.CDATA);
+    	assertTrue(att.getAttributeType() == AttributeType.CDATA);
+    	att.setAttributeType(null);
+    	assertTrue(att.getAttributeType() == AttributeType.UNDECLARED);
+    	att.setAttributeType(AttributeType.ID);
+    	assertTrue(att.getAttributeType() == AttributeType.ID);
+    }
 
 }

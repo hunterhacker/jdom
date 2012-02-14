@@ -64,6 +64,11 @@ import org.jdom2.NamespaceAware;
 
 final class JDOMNavigator extends JDOMCoreNavigator implements NamespaceContext {
 
+	/**
+	 * Standard JDOM2 Serialization. Default mechanism.
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	private final HashMap<String, String> nsFromContext = new HashMap<String, String>();
 	private final HashMap<String, String> nsFromUser = new HashMap<String, String>();
 

@@ -275,4 +275,5 @@ public final class TestNamespace {
 			fail("We expect IllegalNameException not " + e.getClass());
 		}
 	}
+	
 }

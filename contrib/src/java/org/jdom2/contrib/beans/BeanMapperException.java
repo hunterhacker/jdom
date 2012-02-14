@@ -63,7 +63,12 @@ package org.jdom2.contrib.beans;
 @SuppressWarnings("javadoc")
 public class BeanMapperException extends Exception {
 
-    public BeanMapperException(Exception rootCause) {
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public BeanMapperException(Exception rootCause) {
         super(rootCause);
     }
     

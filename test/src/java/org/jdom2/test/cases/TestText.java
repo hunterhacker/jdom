@@ -19,6 +19,7 @@ public class TestText {
 	public void testText() {
 		Text txt = new Text() {
 			// nothing
+    		private static final long serialVersionUID = 200L;
 		};
 		assertTrue(txt.getValue() == null);
 		assertTrue(txt.getText() == null);

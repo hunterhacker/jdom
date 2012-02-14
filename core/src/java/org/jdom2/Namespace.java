@@ -56,15 +56,14 @@ package org.jdom2;
 
 import static org.jdom2.JDOMConstants.*;
 
+import java.io.InvalidObjectException;
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
  * An XML namespace representation, as well as a factory for creating XML
- * namespace objects. Namespaces are not Serializable, however objects that use
- * namespaces have special logic to handle serialization manually. These classes
- * call the getNamespace() method on deserialization to ensure there is one
- * unique Namespace object for any unique prefix/uri pair.
+ * namespace objects.
  * <p>
  * See {@link NamespaceAware} for additional notes on how Namespaces are
  * 'in-scope' in JDOM content, and how those in-scope Namespaces are accessed.
@@ -76,10 +75,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author  Wesley Biggs
  * @author  Rolf Lear
  */
-public final class Namespace {
-
-	// XXX May want to use weak references to keep the maps from growing 
-	// large with extended use
+public final class Namespace implements Serializable {
 
 	/** 
 	 * Factory list of namespaces. 
@@ -220,10 +216,10 @@ public final class Namespace {
 	}
 
 	/** The prefix mapped to this namespace */
-	private final String prefix;
+	private final transient String prefix;
 
 	/** The URI for this namespace */
-	private final String uri;
+	private final transient String uri;
 	
 	/**
 	 * This will retrieve (if in existence) or create (if not) a 
@@ -310,4 +306,51 @@ public final class Namespace {
 	public int hashCode() {
 		return uri.hashCode();
 	}
+	
+	
+	/* *****************************************
+	 * Serialization
+	 * ***************************************** */
+	
+	/**
+	 * JDOM 2.0.0 Serialization version
+	 */
+	private static final long serialVersionUID = 200L;
+
+	private static final class NamespaceSerializationProxy 
+			implements Serializable {
+
+		private static final long serialVersionUID = 200L;
+		private final String pprefix, puri;
+		public NamespaceSerializationProxy(String pprefix, String puri) {
+			this.pprefix = pprefix;
+			this.puri = puri;
+		}
+		
+		private Object readResolve() {
+			return Namespace.getNamespace(pprefix, puri);
+		}
+		
+	}
+
+	/**
+	 * Serializes Namespace by using a proxy serialization instance.
+	 * @serialData The proxy deals with the protocol.
+	 * @return the Namespace proxy instance.
+	 */
+	private Object writeReplace() {
+		return new NamespaceSerializationProxy(prefix, uri);
+	}
+	
+	/**
+	 * Because Namespace is serialized by proxy, the reading of direct Namespace
+	 * instances is illegal and prohibited.
+	 * @return nothing.
+	 * @throws InvalidObjectException always
+	 */
+	private Object readResolve() throws InvalidObjectException {
+		throw new InvalidObjectException(
+				"Namespace is serialized through a proxy");
+	}
+	
 }

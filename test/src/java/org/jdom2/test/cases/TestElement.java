@@ -61,20 +61,45 @@ package org.jdom2.test.cases;
  * @version 0.1
  */
 
-import static org.junit.Assert.*;
-import static org.jdom2.test.util.UnitTestUtil.*;
+import static org.jdom2.test.util.UnitTestUtil.checkException;
+import static org.jdom2.test.util.UnitTestUtil.failNoException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-import org.jdom2.*;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+
+import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.IllegalAddException;
+import org.jdom2.IllegalNameException;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
 import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
-import org.junit.Test;
-import org.junit.runner.JUnitCore;
 
 @SuppressWarnings("javadoc")
 public final class TestElement {
@@ -93,6 +118,7 @@ public final class TestElement {
     public void test_TCC() {
     	Element emt = new Element() {
     		// change nothing
+    		private static final long serialVersionUID = 200L;
     	};
     	assertNull(emt.getName());
     }

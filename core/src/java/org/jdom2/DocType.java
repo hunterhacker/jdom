@@ -62,17 +62,34 @@ package org.jdom2;
  * @author Jason Hunter
  */
 public class DocType extends Content {
-
-	/** The element being constrained */
+	
+	/**
+	 * JDOM2 Serialization. In this case, DocType is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
+	/**
+	 * The element being constrained
+	 * @serialField The root element name
+	 */
 	protected String elementName;
 
-	/** The public ID of the DOCTYPE */
+	/**
+	 * The public ID of the DOCTYPE
+	 * @serialField The PublicID, may be null
+	 */
 	protected String publicID;
 
-	/** The system ID of the DOCTYPE */
+	/**
+	 * The system ID of the DOCTYPE
+	 * @serialField The SystemID, may be null
+	 */
 	protected String systemID;
 
-	/** The internal subset of the DOCTYPE */
+	/**
+	 * The internal subset of the DOCTYPE
+	 * @serialField The InternalSubset, may be null
+	 */
 	protected String internalSubset;
 
 	/**

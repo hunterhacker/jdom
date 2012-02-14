@@ -83,6 +83,7 @@ public final class TestDocType {
 	public void test_TCC() {
 		DocType theDocType = new DocType() {
 			// change nothing
+    		private static final long serialVersionUID = 200L;
 		};
 
 		assertNull("incorrect element name", theDocType.getElementName());

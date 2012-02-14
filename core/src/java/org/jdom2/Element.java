@@ -105,7 +105,7 @@ public class Element extends Content implements Parent {
 	protected String name;
 
 	/** The namespace of the element */
-	protected transient Namespace namespace;
+	protected Namespace namespace;
 
 	/** Additional namespace declarations to store on this element; useful
 	 * during output */
@@ -118,13 +118,13 @@ public class Element extends Content implements Parent {
 	 *  The attributes of the element.  Subclassers have to
 	 * track attributes using their own mechanism.
 	 */
-	AttributeList attributes = null; // = new AttributeList(this);
+	transient AttributeList attributes = null; // = new AttributeList(this);
 
 	/**
 	 * The content of the element.  Subclassers have to
 	 * track content using their own mechanism.
 	 */
-	ContentList content = new ContentList(this);
+	transient ContentList content = new ContentList(this);
 
 	/**
 	 * This protected constructor is provided in order to support an Element
@@ -1411,51 +1411,6 @@ public class Element extends Content implements Parent {
 	}
 
 
-	// Support a custom Namespace serialization so no two namespace
-	// object instances may exist for the same prefix/uri pair
-	private void writeObject(final ObjectOutputStream out) throws IOException {
-
-		out.defaultWriteObject();
-
-		// We use writeObject() and not writeUTF() to minimize space
-		// This allows for writing pointers to already written strings
-		out.writeObject(namespace.getPrefix());
-		out.writeObject(namespace.getURI());
-
-		if (additionalNamespaces == null) {
-			out.write(0);
-		}
-		else {
-			final int size = additionalNamespaces.size();
-			out.write(size);
-			for (int i = 0; i < size; i++) {
-				final Namespace additional = additionalNamespaces.get(i);
-				out.writeObject(additional.getPrefix());
-				out.writeObject(additional.getURI());
-			}
-		}
-	}
-
-	private void readObject(final ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
-
-		in.defaultReadObject();
-
-		namespace = Namespace.getNamespace(
-				(String)in.readObject(), (String)in.readObject());
-
-		final int size = in.read();
-
-		if (size != 0) {
-			additionalNamespaces = new ArrayList<Namespace>(size);
-			for (int i = 0; i < size; i++) {
-				final Namespace additional = Namespace.getNamespace(
-						(String)in.readObject(), (String)in.readObject());
-				additionalNamespaces.add(additional);
-			}
-		}
-	}
-
 	/**
 	 * Returns an iterator that walks over all descendants in document order.
 	 *
@@ -1829,4 +1784,92 @@ public class Element extends Content implements Parent {
 					"A DocType is not allowed except at the document level");
 		}
 	}
+
+
+	/**
+	 * JDOM2 Serialization. In this case, DocType is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
+	 * Serialize out the Element.
+	 * 
+	 * @serialData
+	 * The Stream protocol is:
+	 * <ol>
+	 *   <li>The Element name and Namespace using default Serialization.
+	 *   <li>The count of additional Namespace Declarations.
+	 *   <li>The actual additional Namespace Declarations.
+	 *   <li>The count of Attributes.
+	 *   <li>The actual Attributes.
+	 *   <li>The count of child Content
+	 *   <li>The actual Child Content.
+	 * </ol>
+	 * 
+	 * @param out where to write the Element to.
+	 * @throws IOException if there is a writing problem.
+	 */
+	private void writeObject(final ObjectOutputStream out) throws IOException {
+		// sends out the name and namespace.
+		out.defaultWriteObject();
+		if (hasAdditionalNamespaces()) {
+			final int ans = additionalNamespaces.size();
+			out.writeInt(ans);
+			for (int i = 0; i < ans; i++) {
+				out.writeObject(additionalNamespaces.get(i));
+			}
+		} else {
+			out.writeInt(0);
+		}
+		if (hasAttributes()) {
+			final int ans = attributes.size();
+			out.writeInt(ans);
+			for (int i = 0; i < ans; i++) {
+				out.writeObject(attributes.get(i));
+			}
+		} else {
+			out.writeInt(0);
+		}
+		
+		final int cs = content.size();
+		out.writeInt(cs);
+		for (int i = 0; i < cs; i++) {
+			out.writeObject(content.get(i));
+		}
+
+	}
+
+	/**
+	 * Read an Element off the ObjectInputStream.
+	 * 
+	 * @see #writeObject(ObjectOutputStream)
+	 * @param in where to read the Element from.
+	 * @throws IOException if there is a reading problem.
+	 * @throws ClassNotFoundException when a class cannot be found
+	 */
+	private void readObject(final ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+
+		in.defaultReadObject();
+		
+		content = new ContentList(this);
+
+		int nss = in.readInt();
+		
+		while (--nss >= 0) {
+			addNamespaceDeclaration((Namespace)in.readObject());
+		}
+		
+		int ats = in.readInt();
+		while (--ats >= 0) {
+			setAttribute((Attribute)in.readObject());
+		}
+		
+		int cs = in.readInt();
+		while (--cs >= 0) {
+			addContent((Content)in.readObject());
+		}
+
+	}
+
 }

@@ -61,6 +61,11 @@ import java.beans.*;
     
 @SuppressWarnings("javadoc")
 public class TestIndexed implements java.io.Serializable {
+    /**
+	 * Default.
+	 */
+	private static final long serialVersionUID = 1L;
+
     private String name;
     private List<String> toppings = new ArrayList<String>();
     private int[] measurements = new int[]{36, 24, 38};

@@ -25,6 +25,7 @@ public class TestProcessingInstruction {
 	public void testProcessingInstruction() {
 		ProcessingInstruction pi = new ProcessingInstruction() {
 			// nothing
+    		private static final long serialVersionUID = 200L;
 		};
 		assertTrue(null == pi.getTarget());
 		assertTrue(null == pi.getValue());

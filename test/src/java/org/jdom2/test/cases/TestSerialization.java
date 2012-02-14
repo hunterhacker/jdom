@@ -60,15 +60,28 @@ package org.jdom2.test.cases;
  * @author unascribed
  * @version 0.1
  */
-import java.util.Iterator;
-import java.util.List;
+import static org.jdom2.test.util.UnitTestUtil.compare;
+import static org.jdom2.test.util.UnitTestUtil.deSerialize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.jdom2.*;
-import org.jdom2.filter.ElementFilter;
-import org.jdom2.test.util.UnitTestUtil;
+import java.util.Iterator;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import static org.junit.Assert.*;
+
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.filter.ElementFilter;
 
 @SuppressWarnings("javadoc")
 public final class TestSerialization {
@@ -82,7 +95,7 @@ public final class TestSerialization {
 
 
     private void outAndBack(ElementFilter filter) {
-        ElementFilter filter2 = UnitTestUtil.deSerialize(filter);
+        ElementFilter filter2 = deSerialize(filter);
         assertTrue(filter.equals(filter2));
     }
 
@@ -107,68 +120,6 @@ public final class TestSerialization {
     }
     
     
-    public void compare(final Content a, final Content b) {
-    	assertNotNull(a);
-    	assertNotNull(b);
-    	assertEquals(a.getClass(), b.getClass());
-    	assertTrue(a != b);
-    	
-    	switch (a.getCType()) {
-    		case Text:
-    			assertEquals(a.getValue(), b.getValue());
-    			break;
-    		case CDATA:
-    			assertEquals(a.getValue(), b.getValue());
-    			break;
-    		case Comment:
-    			assertEquals(((Comment)a).getText(), ((Comment)b).getText());
-    			break;
-    		case DocType:
-    			DocType da = (DocType)a;
-    			DocType db = (DocType)b;
-    			assertEquals(da.getElementName(), db.getElementName());
-    			assertEquals(da.getPublicID(), db.getPublicID());
-    			assertEquals(da.getSystemID(), db.getSystemID());
-    			assertEquals(da.getInternalSubset(), db.getInternalSubset());
-    			break;
-    		case Element:
-    			Element ea = (Element)a;
-    			Element eb = (Element)b;
-    			assertEquals(ea.getName(), eb.getName());
-    			compare(ea.getAttributes(), eb.getAttributes());
-    			assertEquals(ea.getNamespacesInScope(), eb.getNamespacesInScope());
-    			break;
-    		case EntityRef:
-    			assertEquals(((EntityRef)a).getName(), ((EntityRef)b).getName());
-    			break;
-    		case ProcessingInstruction:
-    			ProcessingInstruction pa = (ProcessingInstruction)a;
-    			ProcessingInstruction pb = (ProcessingInstruction)b;
-    			assertEquals(pa.getTarget(), pb.getTarget());
-    			assertEquals(pa.getData(), pb.getData());
-    			break;
-    	}
-    }
-    
-    
-    private void compare(List<Attribute> a, List<Attribute> b) {
-		assertTrue(a != b);
-		assertTrue(a.size() == b.size());
-		Iterator<Attribute> ait = a.iterator();
-		Iterator<Attribute> bit = b.iterator();
-		while (ait.hasNext() && bit.hasNext()) {
-			Attribute aa = ait.next();
-			Attribute bb = bit.next();
-			assertEquals(aa.getName(), bb.getName());
-			assertEquals(aa.getNamespace(), bb.getNamespace());
-			assertEquals(aa.getValue(), bb.getValue());
-		}
-		assertFalse(ait.hasNext());
-		assertFalse(bit.hasNext());
-		
-	}
-
-
 	@Test
     public void testDocumentSerialization() {
 		// test serialization of all JDOM core types.
@@ -177,7 +128,7 @@ public final class TestSerialization {
 		// Additionally, test ContentList and AttributeList
     	Document doc = new Document();
     	doc.setDocType(new DocType("root", "pubid", "sysid"));
-    	doc.getDocType().setInternalSubset("internalss");
+    	doc.getDocType().setInternalSubset(" internalss  with space ");
     	doc.addContent(new Comment("doccomment1"));
     	doc.addContent(new ProcessingInstruction("target1"));
     	doc.addContent(new ProcessingInstruction("target2").setData("key=value"));
@@ -192,7 +143,7 @@ public final class TestSerialization {
     	root.addContent(new CDATA("cdata"));
     	
     	
-    	Document ser = UnitTestUtil.deSerialize(doc);
+    	Document ser = deSerialize(doc);
     	Iterator<Content> sit = ser.getDescendants();
     	Iterator<Content> dit = doc.getDescendants();
     	while (sit.hasNext() && dit.hasNext()) {
@@ -203,6 +154,20 @@ public final class TestSerialization {
     	
     }
     
-    
+    @Test
+	public void testAttribute() {
+		Element root = new Element("root");
+		Attribute att = new Attribute(
+				"name", "value", Namespace.getNamespace("ans", "attnamespace"));
+		root.setAttribute(att);
+		
+		Attribute attc = deSerialize(att);
+		
+		assertTrue(attc.getParent() == null);
+		
+		compare(att, attc);
+	}
+	
+	
     
 }

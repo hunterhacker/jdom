@@ -89,6 +89,7 @@ public final class TestComment {
 		// test creating a subclass with an anonymous instance
 		final Comment theComment = new Comment() {
 			// no modifications.
+    		private static final long serialVersionUID = 200L;
 		};
 		assertTrue(null == theComment.getText());
 	}

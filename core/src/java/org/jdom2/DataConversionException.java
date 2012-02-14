@@ -64,6 +64,11 @@ package org.jdom2;
 public class DataConversionException extends JDOMException {
 
 	/**
+	 * Standard JDOM2 Exception Serialization. Default.
+	 */
+	private static final long serialVersionUID = 200L;
+
+	/**
 	 * Constructs an exception where the named construct couldn't be converted
 	 * to the named data type.
 	 *

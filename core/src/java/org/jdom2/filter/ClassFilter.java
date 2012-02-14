@@ -63,6 +63,11 @@ package org.jdom2.filter;
  */
 final class ClassFilter<T> extends AbstractFilter<T> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	private final Class<? extends T> fclass;
 
 	/**

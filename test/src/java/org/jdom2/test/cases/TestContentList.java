@@ -5,7 +5,6 @@ import static org.jdom2.test.util.UnitTestUtil.failNoException;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.jdom2.Content;
 import org.jdom2.DocType;
 import org.jdom2.Element;
 import org.jdom2.test.util.AbstractTestList;
-import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.util.ArrayCopy;
 
 import org.junit.Assume;
@@ -136,30 +134,6 @@ public class TestContentList extends AbstractTestList<Content> {
 		// we should be able to move the iterator because the modCount should
 		// not have been affected.....
 		assertTrue(content[1] == it.next());
-	}
-	
-	@Test
-	public void testSerializable() {
-		Element root = new Element("root");
-		Element child = new Element("child");
-		root.addContent(child);
-		assertTrue(root.getContent() instanceof Serializable);
-		assertTrue(root.getChildren() instanceof Serializable);
-		
-		Serializable from = (Serializable)(root.getChildren());
-		
-		Serializable clone = UnitTestUtil.deSerialize(from);
-		
-		assertTrue(clone instanceof List);
-		
-		for (Object o : (List<?>)clone) {
-			assertTrue(o instanceof Element);
-			assertTrue(root.indexOf((Element)o) < 0);
-			// Issue #47 - broken serialization.
-			// the following should pass, but does not.
-			assertTrue(((Element)o).getParent() == null);
-		}
-		
 	}
 	
 }

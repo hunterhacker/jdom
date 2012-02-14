@@ -276,6 +276,7 @@ public final class TestVerifier {
 
 		//valid tests
 		assertNull("invalidated valid null", Verifier.checkNamespaceURI(null));
+		assertNull("invalidated valid null", Verifier.checkNamespaceURI(""));
 		assertNull("invalidated valid URI with :", Verifier.checkNamespaceURI("test" + ':' + "local"));
 		assertNull("invalidated valid URI with _", Verifier.checkNamespaceURI("test" + '_'));
 		assertNull("invalidated valid URI with .", Verifier.checkNamespaceURI("test" + '.' + "URI"));

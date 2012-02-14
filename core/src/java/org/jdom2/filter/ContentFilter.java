@@ -81,6 +81,11 @@ import org.jdom2.*;
  */
 public class ContentFilter extends AbstractFilter<Content> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	/** Mask for JDOM {@link Element} objects */
 	public static final int ELEMENT   = 1;
 

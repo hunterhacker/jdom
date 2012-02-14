@@ -69,13 +69,18 @@ import java.util.List;
  * @see org.jdom2.Parent
  * @see org.jdom2.ProcessingInstruction
  * @see org.jdom2.Text
- *
+ * 
  * @author Bradley S. Huffman
  * @author Jason Hunter
  */
 public abstract class Content extends CloneBase
-		implements Cloneable, Serializable, NamespaceAware {
+		implements Serializable, NamespaceAware {
 
+	/**
+	 * JDOM2 Serialization. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	/**
 	 * An enumeration useful for identifying content types without
 	 * having to do <code>instanceof</code> type conditionals.
@@ -122,9 +127,16 @@ public abstract class Content extends CloneBase
 		DocType
 	}
 	
-	/** The parent {@link Parent} of this Content */
-	protected Parent parent = null;
-	/** The content type enumerate value for this Content */
+	/**
+	 * The parent {@link Parent} of this Content.
+	 * Note that the field is not serialized, thus deserialized Content
+	 * instances are 'detached'
+	 */
+	protected transient Parent parent = null;
+	/**
+	 * The content type enumerate value for this Content
+	 * @serialField This is an Enum, and cannot be null.
+	 */
 	protected final CType ctype;
 
 	/** 

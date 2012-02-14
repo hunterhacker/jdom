@@ -69,6 +69,11 @@ import java.util.*;
 
 public class ProcessingInstruction extends Content {
 
+	/**
+	 * JDOM2 Serialization. In this case, ProcessingInstruction is simple. 
+	 */
+	private static final long serialVersionUID = 200L;
+	
 	/** The target of the PI */
 	protected String target;
 
@@ -76,7 +81,7 @@ public class ProcessingInstruction extends Content {
 	protected String rawData;
 
 	/** The data for the PI in name/value pairs */
-	protected Map<String,String> mapData;
+	protected transient Map<String,String> mapData;
 
 	/**
 	 * Default, no-args constructor for implementations

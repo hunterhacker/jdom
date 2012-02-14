@@ -77,9 +77,7 @@ import org.jdom2.util.ArrayCopy;
  * @author Rolf Lear
  */
 final class ContentList extends AbstractList<Content>
-		implements java.io.Serializable, RandomAccess {
-
-	private static final long serialVersionUID = 1L;
+		implements RandomAccess {
 
 	private static final int INITIAL_ARRAY_SIZE = 4;
 
@@ -828,8 +826,7 @@ final class ContentList extends AbstractList<Content>
 	 *        The Generic type of content accepted by the underlying Filter.
 	 */
 
-	class FilterList<F extends Content> extends AbstractList<F>
-			implements java.io.Serializable {
+	class FilterList<F extends Content> extends AbstractList<F> {
 
 		// The filter to apply
 		final Filter<F> filter;

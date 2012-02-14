@@ -57,8 +57,6 @@ package org.jdom2.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.jdom2.JDOMRuntimeException;
-
 /**
  * Utility class that handles constructing a class using reflection, and a
  * no-argument 'default' constructor.
@@ -75,30 +73,30 @@ public class ReflectionConstructor {
 	 * @param classname The class name of the instance to create.
 	 * @param targetclass The return type of the created instance
 	 * @return an instantiated class
-	 * @throws JDOMRuntimeException if there is a problem creating the class instance.
+	 * @throws IllegalArgumentException if there is a problem locating the class instance.
+	 * @throws IllegalStateException if there is a problem instantiating a class instance.
 	 */
-	public static final <E> E construct(String classname, Class<E> targetclass)
-			throws JDOMRuntimeException {
+	public static final <E> E construct(String classname, Class<E> targetclass) {
 		try {
 			Class<?> sclass = Class.forName(classname);
 			if (!targetclass.isAssignableFrom(sclass)) {
-				throw new JDOMRuntimeException("Class '" + classname + "' is not assignable to '" + targetclass.getName() + "'.");
+				throw new ClassCastException("Class '" + classname + "' is not assignable to '" + targetclass.getName() + "'.");
 			}
 			Constructor<?> constructor = sclass.getConstructor();
 			Object o = constructor.newInstance();
 			return targetclass.cast(o);
 		} catch (ClassNotFoundException e) {
-			throw new JDOMRuntimeException("Unable to locate class '" + classname + "'.", e);
+			throw new IllegalArgumentException("Unable to locate class '" + classname + "'.", e);
 		} catch (NoSuchMethodException e) {
-			throw new JDOMRuntimeException("Unable to locate class no-arg constructor '" + classname + "'.", e);
+			throw new IllegalArgumentException("Unable to locate class no-arg constructor '" + classname + "'.", e);
 		} catch (SecurityException e) {
-			throw new JDOMRuntimeException("Unable to access class constructor '" + classname + "'.", e);
+			throw new IllegalStateException("Unable to access class constructor '" + classname + "'.", e);
 		} catch (IllegalAccessException e) {
-			throw new JDOMRuntimeException("Unable to access class constructor '" + classname + "'.", e);
+			throw new IllegalStateException("Unable to access class constructor '" + classname + "'.", e);
 		} catch (InstantiationException e) {
-			throw new JDOMRuntimeException("Unable to instantiate class '" + classname + "'.", e);
+			throw new IllegalStateException("Unable to instantiate class '" + classname + "'.", e);
 		} catch (InvocationTargetException e) {
-			throw new JDOMRuntimeException("Unable to call class constructor '" + classname + "'.", e);
+			throw new IllegalStateException("Unable to call class constructor '" + classname + "'.", e);
 		}
 	}
 }

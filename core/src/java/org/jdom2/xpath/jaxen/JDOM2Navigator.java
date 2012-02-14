@@ -64,4 +64,9 @@ final class JDOM2Navigator extends JDOMCoreNavigator {
 
 	// just make the class final.
 
+	/**
+	 * Standard JDOM2 Serialization. Default mechanism.
+	 */
+	private static final long serialVersionUID = 200L;
+	
 }

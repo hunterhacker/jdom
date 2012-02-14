@@ -63,8 +63,13 @@ package org.jdom2.filter;
  */
 final class NegateFilter extends AbstractFilter<Object> {
 
+	/**
+	 * JDOM2 Serialization: Default mechanism
+	 */
+	private static final long serialVersionUID = 200L;
+
 	// Underlying filter.
-	private Filter<?> filter;
+	private final Filter<?> filter;
 
 	/**
 	 * Match if the supplied filter <b>does not</b> match.
