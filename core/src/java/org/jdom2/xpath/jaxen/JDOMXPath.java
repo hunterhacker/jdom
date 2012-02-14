@@ -84,6 +84,14 @@ import org.jdom2.Text;
 public class JDOMXPath extends org.jdom2.xpath.XPath {
 
 	/**
+	 * Default mechanism.
+	 * The serialization for this class is broken. It is only included here for
+	 * compatibility with JDOM 1.x
+	 */
+	private static final long serialVersionUID = 200L;
+	
+	
+	/**
 	 * The compiled XPath object to select nodes. This attribute cannot be made
 	 * final as it needs to be set upon object deserialization.
 	 */

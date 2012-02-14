@@ -81,7 +81,7 @@ public class ProcessingInstruction extends Content {
 	protected String rawData;
 
 	/** The data for the PI in name/value pairs */
-	protected transient Map<String,String> mapData;
+	protected transient Map<String,String> mapData = null;
 
 	/**
 	 * Default, no-args constructor for implementations

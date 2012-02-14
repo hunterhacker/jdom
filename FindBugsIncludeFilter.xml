@@ -1,7 +1,7 @@
 <FindBugsFilter>
 
      <Match>
-       <Package name="org.jdom2" />
+       <Package name="~org\.jdom2" />
      </Match>
      <Match>
        <Package name="~org\.jdom2\..*" />

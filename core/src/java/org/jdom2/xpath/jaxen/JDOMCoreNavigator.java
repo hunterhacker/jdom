@@ -88,7 +88,7 @@ class JDOMCoreNavigator extends DefaultNavigator {
 	 */
 	private static final long serialVersionUID = 200L;
 	
-	private transient final IdentityHashMap<Element, NamespaceContainer[]> emtnsmap
+	private transient IdentityHashMap<Element, NamespaceContainer[]> emtnsmap
 		= new IdentityHashMap<Element, NamespaceContainer[]>();
 
 	void reset() {
@@ -321,6 +321,17 @@ class JDOMCoreNavigator extends DefaultNavigator {
 			return new SingleObjectIterator(p);
 		}
 		return JaxenConstants.EMPTY_ITERATOR;
+	}
+	
+	private void readObject(java.io.ObjectInputStream in)
+		     throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		emtnsmap = new IdentityHashMap<Element, NamespaceContainer[]>();
+	}
+	
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		out.defaultWriteObject();
 	}
 
 }
