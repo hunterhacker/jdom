@@ -81,6 +81,10 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<property name="samples.src" value="${samples}/" />
 		<property name="samples.build" value="${build}/samples"/>
 
+		<!-- Do not set a stax.dir
+		     but it is available for override (for Java5 for example) -->
+		<property name="stax.dir" value="dummy" />
+		
 		<property name="lib.dir" value="./lib"/>
 		<property name="packages" value="org.jdom2.*"/>
 
@@ -115,6 +119,10 @@ For instructions on how to build JDOM, please view the README.txt file.
 			<pathelement location="${isorelax.jar}" />
 			<pathelement location="${xalan.jar}" />
 			<pathelement location="${xalanser.jar}" />
+			<!-- normally these stax jars will not be found -->
+			<!-- this is used for testing Java5 (the test sets stax.dir) -->
+			<pathelement location="${stax.dir}/jsr173_1.0_api.jar" />
+			<pathelement location="${stax.dir}/sjsxp.jar" />
 		</path>
 
 		<path id="core.class.path">
@@ -357,8 +365,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 		
 	</target>
 	
-	<target name="junit" depends="compile.core, compile.junit"
-		description="Run all the JUnit tests">
+
+	<target name="junit.nodeps" depends="init"
+		description="Run all the JUnit tests, but do not compile anything first">
 		
 		<delete dir="${junit.report}" />
 		<mkdir dir="${junit.report}" />
@@ -400,6 +409,9 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</junitreport>
 	</target>
 	
+	<target name="junit" depends="compile.core, compile.junit, junit.nodeps" 
+      description="Compile code required for JUnit, then run JUnit tests"/>
+
 	<target name="coverage" depends="coverage.setup, junit"
 		description="Run the code coverage tool.">
 		<delete dir="${coverage.out}"/>
