@@ -12,7 +12,7 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="org.jdom2.Verifier.html">Verifier</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">571/573</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">1429/1434</span></div></div></td></tr></table></td><td class="value"><span class="hidden">40.2;</span>40.2</td></tr>
+  <tr><td><a href="org.jdom2.Verifier.html">Verifier</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">571/573</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">1430/1434</span></div></div></td></tr></table></td><td class="value"><span class="hidden">40.2;</span>40.2</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -184,7 +184,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkElementName(<span class="keyword">final</span> String name) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Check basic XML name rules first</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered"><a title="Line 85: Conditional coverage 100% (2/2).">&nbsp;4253</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 85: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (checkXMLName(name) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered"><a title="Line 85: Conditional coverage 100% (2/2).">&nbsp;4940</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 85: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (checkXMLName(name) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> checkXMLName(name);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -192,7 +192,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// No colons allowed, since elements handle this internally</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered"><a title="Line 90: Conditional coverage 100% (2/2).">&nbsp;4236</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 90: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered"><a title="Line 90: Conditional coverage 100% (2/2).">&nbsp;4923</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 90: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Element names cannot contain colons"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -200,7 +200,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsCovered">&nbsp;4234</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsCovered">&nbsp;4921</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
@@ -225,7 +225,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkAttributeName(<span class="keyword">final</span> String name) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Check basic XML name rules first</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsCovered"><a title="Line 108: Conditional coverage 100% (2/2).">&nbsp;1735</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 108: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (checkXMLName(name) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsCovered"><a title="Line 108: Conditional coverage 100% (2/2).">&nbsp;2251</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 108: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (checkXMLName(name) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;109</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> checkXMLName(name);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;110</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -233,7 +233,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;112</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// No colons are allowed, since attributes handle this internally</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsCovered"><a title="Line 113: Conditional coverage 100% (2/2).">&nbsp;1717</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 113: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsCovered"><a title="Line 113: Conditional coverage 100% (2/2).">&nbsp;2233</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 113: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;114</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Attribute names cannot contain colons"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -241,7 +241,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Attribute names may not be xmlns since we do this internally too</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;118</td>  <td class="nbHitsCovered"><a title="Line 118: Conditional coverage 100% (2/2).">&nbsp;1713</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 118: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.equals(<span class="string">"xmlns"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;118</td>  <td class="nbHitsCovered"><a title="Line 118: Conditional coverage 100% (2/2).">&nbsp;2229</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 118: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (name.equals(<span class="string">"xmlns"</span>)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"An Attribute name may not be \"xmlns\"; "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;120</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"use the Namespace class to manage namespaces"</span>;</pre></td></tr>
@@ -251,7 +251,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered">&nbsp;1712</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered">&nbsp;2228</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;125</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
@@ -294,7 +294,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkCharacterData(<span class="keyword">final</span> String text) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered"><a title="Line 146: Conditional coverage 100% (2/2).">&nbsp;8795</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 146: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (text == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered"><a title="Line 146: Conditional coverage 100% (2/2).">&nbsp;10683</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 146: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (text == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;147</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"A null is not a legal XML value"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;148</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -302,13 +302,13 @@
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// lowx indicates we expect a low surrogate next.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered">&nbsp;8788</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">boolean</span> lowx = <span class="keyword">false</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered">&nbsp;8788</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span> len = text.length();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered"><a title="Line 153: Conditional coverage 100% (2/2).">&nbsp;99119</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 153: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; len; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered">&nbsp;10676</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">boolean</span> lowx = <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered">&nbsp;10676</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span> len = text.length();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered"><a title="Line 153: Conditional coverage 100% (2/2).">&nbsp;114716</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 153: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; len; i++) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we are expecting a normal char, but may be a surrogate.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsCovered"><a title="Line 155: Conditional coverage 100% (2/2).">&nbsp;90362</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 155: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (isXMLCharacter(text.charAt(i))) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;156</td>  <td class="nbHitsCovered"><a title="Line 156: Conditional coverage 100% (2/2).">&nbsp;90223</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 156: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (lowx) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsCovered"><a title="Line 155: Conditional coverage 100% (2/2).">&nbsp;104071</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 155: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (isXMLCharacter(text.charAt(i))) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;156</td>  <td class="nbHitsCovered"><a title="Line 156: Conditional coverage 100% (2/2).">&nbsp;103932</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 156: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (lowx) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;157</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="comment">// we got a normal character, but we wanted a low surrogate</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">return</span> String.format(<span class="string">"Illegal Surrogate Pair 0x%04x%04x"</span>,</pre></td></tr>
@@ -371,7 +371,7 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;192</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;193</td>  <td class="nbHitsCovered"><a title="Line 193: Conditional coverage 100% (2/2).">&nbsp;8757</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 193: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (lowx) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;193</td>  <td class="nbHitsCovered"><a title="Line 193: Conditional coverage 100% (2/2).">&nbsp;10645</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 193: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (lowx) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;194</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> String.format(<span class="string">"Truncated Surrogate Pair 0x%04x????"</span>,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;195</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        (<span class="keyword">int</span>)text.charAt(text.length() - 1));</pre></td></tr>
@@ -381,7 +381,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;198</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;199</td>  <td class="nbHitsCovered">&nbsp;8754</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;199</td>  <td class="nbHitsCovered">&nbsp;10642</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;201</td>  <td class="nbHits">&nbsp;</td>
@@ -404,14 +404,14 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkCDATASection(<span class="keyword">final</span> String data) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsCovered">&nbsp;657</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;212</td>  <td class="nbHitsCovered"><a title="Line 212: Conditional coverage 100% (2/2).">&nbsp;657</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 212: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkCharacterData(data)) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsCovered">&nbsp;658</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;212</td>  <td class="nbHitsCovered"><a title="Line 212: Conditional coverage 100% (2/2).">&nbsp;658</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 212: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkCharacterData(data)) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;214</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;215</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered"><a title="Line 216: Conditional coverage 100% (2/2).">&nbsp;648</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 216: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.indexOf(<span class="string">"]]&gt;"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered"><a title="Line 216: Conditional coverage 100% (2/2).">&nbsp;649</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 216: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.indexOf(<span class="string">"]]&gt;"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;19</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"CDATA cannot internally contain a CDATA ending "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;218</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"delimiter (]]&gt;)"</span>;</pre></td></tr>
@@ -421,7 +421,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;221</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;629</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;630</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;223</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;224</td>  <td class="nbHits">&nbsp;</td>
@@ -446,40 +446,40 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespacePrefix(<span class="keyword">final</span> String prefix) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;234</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Manually do rules, since URIs can be null or empty</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;235</td>  <td class="nbHitsCovered"><a title="Line 235: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;205</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 235: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> ((prefix == <span class="keyword">null</span>) || (prefix.equals(<span class="string">""</span>))) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;65</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;235</td>  <td class="nbHitsCovered"><a title="Line 235: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;255</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 235: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> ((prefix == <span class="keyword">null</span>) || (prefix.equals(<span class="string">""</span>))) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;83</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;239</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a number</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsCovered">&nbsp;140</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">char</span> first = prefix.charAt(0);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;241</td>  <td class="nbHitsCovered"><a title="Line 241: Conditional coverage 100% (2/2).">&nbsp;140</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 241: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isXMLDigit(first)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsCovered">&nbsp;172</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">char</span> first = prefix.charAt(0);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;241</td>  <td class="nbHitsCovered"><a title="Line 241: Conditional coverage 100% (2/2).">&nbsp;172</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 241: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isXMLDigit(first)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot begin with a number"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;243</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;244</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a $</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;245</td>  <td class="nbHitsCovered"><a title="Line 245: Conditional coverage 100% (2/2).">&nbsp;139</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 245: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'$'</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;245</td>  <td class="nbHitsCovered"><a title="Line 245: Conditional coverage 100% (2/2).">&nbsp;171</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 245: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'$'</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot begin with a dollar sign ($)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;248</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a -</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;249</td>  <td class="nbHitsCovered"><a title="Line 249: Conditional coverage 100% (2/2).">&nbsp;138</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 249: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'-'</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;249</td>  <td class="nbHitsCovered"><a title="Line 249: Conditional coverage 100% (2/2).">&nbsp;170</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 249: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'-'</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;250</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot begin with a hyphen (-)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;251</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;252</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a .</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;253</td>  <td class="nbHitsCovered"><a title="Line 253: Conditional coverage 100% (2/2).">&nbsp;137</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 253: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'.'</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;253</td>  <td class="nbHitsCovered"><a title="Line 253: Conditional coverage 100% (2/2).">&nbsp;169</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 253: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'.'</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;254</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot begin with a period (.)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;255</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with "xml" in any character case</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered"><a title="Line 257: Conditional coverage 100% (2/2).">&nbsp;136</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 257: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefix.toLowerCase().startsWith(<span class="string">"xml"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered"><a title="Line 257: Conditional coverage 100% (2/2).">&nbsp;168</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 257: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefix.toLowerCase().startsWith(<span class="string">"xml"</span>)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;258</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot begin with "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;259</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"\"xml\" in any combination of case"</span>;</pre></td></tr>
@@ -489,10 +489,10 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;262</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Ensure legal content</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;263</td>  <td class="nbHitsCovered"><a title="Line 263: Conditional coverage 100% (2/2).">&nbsp;589</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 263: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i=0, len = prefix.length(); i&lt;len; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;264</td>  <td class="nbHitsCovered">&nbsp;464</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">char</span> c = prefix.charAt(i);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;265</td>  <td class="nbHitsCovered"><a title="Line 265: Conditional coverage 100% (2/2).">&nbsp;464</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 265: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!isXMLNameCharacter(c)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot contain the character \""</span> +</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;263</td>  <td class="nbHitsCovered"><a title="Line 263: Conditional coverage 100% (2/2).">&nbsp;715</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 263: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i=0, len = prefix.length(); i&lt;len; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;264</td>  <td class="nbHitsCovered">&nbsp;560</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">char</span> c = prefix.charAt(i);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;265</td>  <td class="nbHitsCovered"><a title="Line 265: Conditional coverage 100% (2/2).">&nbsp;560</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 265: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!isXMLNameCharacter(c)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot contain the character \""</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;267</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                c + <span class="string">"\""</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;268</td>  <td class="nbHits">&nbsp;</td>
@@ -503,7 +503,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;271</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// No colons allowed</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;272</td>  <td class="nbHitsCovered"><a title="Line 272: Conditional coverage 100% (2/2).">&nbsp;125</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 272: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefix.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;272</td>  <td class="nbHitsCovered"><a title="Line 272: Conditional coverage 100% (2/2).">&nbsp;155</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 272: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (prefix.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;273</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace prefixes cannot contain colons"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;274</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -511,7 +511,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered">&nbsp;122</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered">&nbsp;152</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
@@ -544,28 +544,28 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespaceURI(<span class="keyword">final</span> String uri) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Manually do rules, since URIs can be null or empty</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsUncovered"><a title="Line 294: Conditional coverage 75% (3/4) [each condition: 100%, 50%].">&nbsp;128</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 294: Conditional coverage 75% (3/4) [each condition: 100%, 50%].">                <span class="keyword">if</span> ((uri == <span class="keyword">null</span>) || (uri.equals(<span class="string">""</span>))) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered"><a title="Line 294: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;132</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 294: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> ((uri == <span class="keyword">null</span>) || (uri.equals(<span class="string">""</span>))) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;296</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;298</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a number</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;127</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">char</span> first = uri.charAt(0);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered"><a title="Line 300: Conditional coverage 100% (2/2).">&nbsp;127</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 300: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (Character.isDigit(first)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;130</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">char</span> first = uri.charAt(0);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered"><a title="Line 300: Conditional coverage 100% (2/2).">&nbsp;130</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 300: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (Character.isDigit(first)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;301</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace URIs cannot begin with a number"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a $</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered"><a title="Line 304: Conditional coverage 100% (2/2).">&nbsp;126</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 304: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'$'</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered"><a title="Line 304: Conditional coverage 100% (2/2).">&nbsp;129</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 304: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'$'</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace URIs cannot begin with a dollar sign ($)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a -</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;308</td>  <td class="nbHitsCovered"><a title="Line 308: Conditional coverage 100% (2/2).">&nbsp;125</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 308: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'-'</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;308</td>  <td class="nbHitsCovered"><a title="Line 308: Conditional coverage 100% (2/2).">&nbsp;128</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 308: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (first == <span class="string">'-'</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace URIs cannot begin with a hyphen (-)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;310</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -573,7 +573,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with space...</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered"><a title="Line 313: Conditional coverage 100% (2/2).">&nbsp;123</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 313: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isXMLWhitespace(first)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered"><a title="Line 313: Conditional coverage 100% (2/2).">&nbsp;126</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 313: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isXMLWhitespace(first)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;314</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Namespace URIs cannot begin with white-space"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;315</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -581,7 +581,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;317</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;318</td>  <td class="nbHitsCovered">&nbsp;122</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;318</td>  <td class="nbHitsCovered">&nbsp;125</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;320</td>  <td class="nbHits">&nbsp;</td>
@@ -610,16 +610,16 @@
   <td class="src"><pre class="src">&nbsp;                String p1,p2,u1,u2,reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                reason = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                p1 = namespace.getPrefix();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                u1 = namespace.getURI();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                p2 = other.getPrefix();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                u2 = other.getURI();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered"><a title="Line 338: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2883</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 338: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (p1.equals(p2) &amp;&amp; !u1.equals(u2)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                p1 = namespace.getPrefix();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                u1 = namespace.getURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                p2 = other.getPrefix();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                u2 = other.getURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered"><a title="Line 338: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;3404</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 338: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (p1.equals(p2) &amp;&amp; !u1.equals(u2)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;339</td>  <td class="nbHitsCovered">&nbsp;146</td>  <td class="src"><pre class="src">&nbsp;                        reason = <span class="string">"The namespace prefix \""</span> + p1 + <span class="string">"\" collides"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;2883</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;3404</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
@@ -646,15 +646,15 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespaceCollision(<span class="keyword">final</span> Attribute attribute,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;354</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Element element) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;355</td>  <td class="nbHitsCovered">&nbsp;7272</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace namespace = attribute.getNamespace();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;7272</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> String prefix = namespace.getPrefix();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;357</td>  <td class="nbHitsCovered"><a title="Line 357: Conditional coverage 100% (2/2).">&nbsp;7272</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 357: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="string">""</span>.equals(prefix)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;358</td>  <td class="nbHitsCovered">&nbsp;5632</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;355</td>  <td class="nbHitsCovered">&nbsp;7791</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace namespace = attribute.getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;7791</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> String prefix = namespace.getPrefix();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;357</td>  <td class="nbHitsCovered"><a title="Line 357: Conditional coverage 100% (2/2).">&nbsp;7791</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 357: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="string">""</span>.equals(prefix)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;358</td>  <td class="nbHitsCovered">&nbsp;5806</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;359</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;360</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;361</td>  <td class="nbHitsCovered">&nbsp;1640</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> checkNamespaceCollision(namespace, element);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;361</td>  <td class="nbHitsCovered">&nbsp;1985</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> checkNamespaceCollision(namespace, element);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;362</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;363</td>  <td class="nbHits">&nbsp;</td>
@@ -681,20 +681,20 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespaceCollision(<span class="keyword">final</span> Namespace namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;374</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Element element) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;375</td>  <td class="nbHitsCovered">&nbsp;1890</td>  <td class="src"><pre class="src">&nbsp;                String reason = checkNamespaceCollision(namespace,</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;375</td>  <td class="nbHitsCovered">&nbsp;2239</td>  <td class="src"><pre class="src">&nbsp;                String reason = checkNamespaceCollision(namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;376</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                element.getNamespace());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;377</td>  <td class="nbHitsCovered"><a title="Line 377: Conditional coverage 100% (2/2).">&nbsp;1890</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 377: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;377</td>  <td class="nbHitsCovered"><a title="Line 377: Conditional coverage 100% (2/2).">&nbsp;2239</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 377: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;378</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> reason + <span class="string">" with the element namespace prefix"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;379</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;380</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;381</td>  <td class="nbHitsCovered"><a title="Line 381: Conditional coverage 100% (2/2).">&nbsp;1883</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 381: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAdditionalNamespaces()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;382</td>  <td class="nbHitsCovered">&nbsp;322</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace,</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;381</td>  <td class="nbHitsCovered"><a title="Line 381: Conditional coverage 100% (2/2).">&nbsp;2232</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 381: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAdditionalNamespaces()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;382</td>  <td class="nbHitsCovered">&nbsp;323</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;383</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        element.getAdditionalNamespaces());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;384</td>  <td class="nbHitsCovered"><a title="Line 384: Conditional coverage 100% (2/2).">&nbsp;322</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 384: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;384</td>  <td class="nbHitsCovered"><a title="Line 384: Conditional coverage 100% (2/2).">&nbsp;323</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 384: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;385</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;386</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
@@ -702,9 +702,9 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;388</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;389</td>  <td class="nbHitsCovered"><a title="Line 389: Conditional coverage 100% (2/2).">&nbsp;1880</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 389: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAttributes()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsCovered">&nbsp;1192</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace, element.getAttributes());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsCovered"><a title="Line 391: Conditional coverage 100% (2/2).">&nbsp;1192</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 391: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;389</td>  <td class="nbHitsCovered"><a title="Line 389: Conditional coverage 100% (2/2).">&nbsp;2229</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 389: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAttributes()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsCovered">&nbsp;1363</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace, element.getAttributes());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsCovered"><a title="Line 391: Conditional coverage 100% (2/2).">&nbsp;1363</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 391: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;392</td>  <td class="nbHitsCovered">&nbsp;130</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;393</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
@@ -712,7 +712,7 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;395</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsCovered">&nbsp;1750</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsCovered">&nbsp;2099</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;397</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;398</td>  <td class="nbHits">&nbsp;</td>
@@ -739,18 +739,18 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespaceCollision(<span class="keyword">final</span> Namespace namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;409</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Attribute attribute) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;410</td>  <td class="nbHitsCovered">&nbsp;5994</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;411</td>  <td class="nbHitsCovered"><a title="Line 411: Conditional coverage 100% (2/2).">&nbsp;5994</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 411: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!attribute.getNamespace().equals(Namespace.NO_NAMESPACE)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;412</td>  <td class="nbHitsCovered">&nbsp;489</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace,</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;410</td>  <td class="nbHitsCovered">&nbsp;6165</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;411</td>  <td class="nbHitsCovered"><a title="Line 411: Conditional coverage 100% (2/2).">&nbsp;6165</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 411: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!attribute.getNamespace().equals(Namespace.NO_NAMESPACE)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;412</td>  <td class="nbHitsCovered">&nbsp;660</td>  <td class="src"><pre class="src">&nbsp;                        reason = checkNamespaceCollision(namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;413</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        attribute.getNamespace());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered"><a title="Line 414: Conditional coverage 100% (2/2).">&nbsp;489</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 414: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered"><a title="Line 414: Conditional coverage 100% (2/2).">&nbsp;660</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 414: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;415</td>  <td class="nbHitsCovered">&nbsp;133</td>  <td class="src"><pre class="src">&nbsp;                                reason += <span class="string">" with an attribute namespace prefix on the element"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;416</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;417</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;418</td>  <td class="nbHitsCovered">&nbsp;5994</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;418</td>  <td class="nbHitsCovered">&nbsp;6165</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;419</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;420</td>  <td class="nbHits">&nbsp;</td>
@@ -777,27 +777,27 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkNamespaceCollision(<span class="keyword">final</span> Namespace namespace,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;431</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> List&lt;?&gt; list) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered"><a title="Line 432: Conditional coverage 100% (2/2).">&nbsp;1533</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 432: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (list == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered"><a title="Line 432: Conditional coverage 100% (2/2).">&nbsp;1705</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 432: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (list == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;434</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;435</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;436</td>  <td class="nbHitsCovered">&nbsp;1532</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;437</td>  <td class="nbHitsCovered">&nbsp;1532</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Iterator&lt;?&gt; i = list.iterator();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered"><a title="Line 438: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;8029</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 438: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">while</span> ((reason == <span class="keyword">null</span>) &amp;&amp; i.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;439</td>  <td class="nbHitsCovered">&nbsp;6497</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Object obj = i.next();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;440</td>  <td class="nbHitsCovered"><a title="Line 440: Conditional coverage 100% (2/2).">&nbsp;6497</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 440: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Attribute) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;441</td>  <td class="nbHitsCovered">&nbsp;5990</td>  <td class="src"><pre class="src">&nbsp;                                reason = checkNamespaceCollision(namespace, (Attribute) obj);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;436</td>  <td class="nbHitsCovered">&nbsp;1704</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;437</td>  <td class="nbHitsCovered">&nbsp;1704</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Iterator&lt;?&gt; i = list.iterator();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered"><a title="Line 438: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;8373</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 438: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">while</span> ((reason == <span class="keyword">null</span>) &amp;&amp; i.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;439</td>  <td class="nbHitsCovered">&nbsp;6669</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Object obj = i.next();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;440</td>  <td class="nbHitsCovered"><a title="Line 440: Conditional coverage 100% (2/2).">&nbsp;6669</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 440: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Attribute) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;441</td>  <td class="nbHitsCovered">&nbsp;6161</td>  <td class="src"><pre class="src">&nbsp;                                reason = checkNamespaceCollision(namespace, (Attribute) obj);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;442</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;443</td>  <td class="nbHitsCovered"><a title="Line 443: Conditional coverage 100% (2/2).">&nbsp;507</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 443: Conditional coverage 100% (2/2).">                        <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Element) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;443</td>  <td class="nbHitsCovered"><a title="Line 443: Conditional coverage 100% (2/2).">&nbsp;508</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 443: Conditional coverage 100% (2/2).">                        <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Element) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;444</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                reason = checkNamespaceCollision(namespace, (Element) obj);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;445</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;446</td>  <td class="nbHitsCovered"><a title="Line 446: Conditional coverage 100% (2/2).">&nbsp;506</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 446: Conditional coverage 100% (2/2).">                        <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Namespace) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;447</td>  <td class="nbHitsCovered">&nbsp;501</td>  <td class="src"><pre class="src">&nbsp;                                reason = checkNamespaceCollision(namespace, (Namespace) obj);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;448</td>  <td class="nbHitsCovered"><a title="Line 448: Conditional coverage 100% (2/2).">&nbsp;501</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 448: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;446</td>  <td class="nbHitsCovered"><a title="Line 446: Conditional coverage 100% (2/2).">&nbsp;507</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 446: Conditional coverage 100% (2/2).">                        <span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Namespace) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;447</td>  <td class="nbHitsCovered">&nbsp;502</td>  <td class="src"><pre class="src">&nbsp;                                reason = checkNamespaceCollision(namespace, (Namespace) obj);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;448</td>  <td class="nbHitsCovered"><a title="Line 448: Conditional coverage 100% (2/2).">&nbsp;502</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 448: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (reason != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                                        reason += <span class="string">" with an additional namespace declared"</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;450</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        <span class="string">" by the element"</span>;</pre></td></tr>
@@ -805,8 +805,8 @@
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;452</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;453</td>  <td class="nbHitsCovered">&nbsp;6497</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;1532</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;453</td>  <td class="nbHitsCovered">&nbsp;6669</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;1704</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;455</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;456</td>  <td class="nbHits">&nbsp;</td>
@@ -833,7 +833,7 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Check basic XML name rules first</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                String reason;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered"><a title="Line 468: Conditional coverage 100% (2/2).">&nbsp;617</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 468: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkXMLName(target)) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered"><a title="Line 468: Conditional coverage 100% (2/2).">&nbsp;960</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 468: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkXMLName(target)) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;470</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -841,7 +841,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;472</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// No colons allowed, per Namespace Specification Section 6</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsCovered"><a title="Line 473: Conditional coverage 100% (2/2).">&nbsp;600</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 473: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (target.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsCovered"><a title="Line 473: Conditional coverage 100% (2/2).">&nbsp;943</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 473: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (target.indexOf(<span class="string">":"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;474</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Processing instruction targets cannot contain colons"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;475</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -849,7 +849,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;477</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot begin with 'xml' in any case</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;478</td>  <td class="nbHitsCovered"><a title="Line 478: Conditional coverage 100% (2/2).">&nbsp;596</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 478: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (target.equalsIgnoreCase(<span class="string">"xml"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;478</td>  <td class="nbHitsCovered"><a title="Line 478: Conditional coverage 100% (2/2).">&nbsp;939</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 478: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (target.equalsIgnoreCase(<span class="string">"xml"</span>)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;479</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Processing instructions cannot have a target of "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;480</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="string">"\"xml\" in any combination of case. (Note that the "</span> +</pre></td></tr>
@@ -867,7 +867,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;487</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;488</td>  <td class="nbHitsCovered">&nbsp;594</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;488</td>  <td class="nbHitsCovered">&nbsp;937</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;489</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;490</td>  <td class="nbHits">&nbsp;</td>
@@ -896,11 +896,11 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkProcessingInstructionData(<span class="keyword">final</span> String data) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;502</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Check basic XML name rules first</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;503</td>  <td class="nbHitsCovered">&nbsp;851</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> String reason = checkCharacterData(data);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;503</td>  <td class="nbHitsCovered">&nbsp;1194</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> String reason = checkCharacterData(data);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;504</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsCovered"><a title="Line 505: Conditional coverage 100% (2/2).">&nbsp;851</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 505: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;506</td>  <td class="nbHitsCovered"><a title="Line 506: Conditional coverage 100% (2/2).">&nbsp;849</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 506: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (data.indexOf(<span class="string">"?&gt;"</span>) &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsCovered"><a title="Line 505: Conditional coverage 100% (2/2).">&nbsp;1194</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 505: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (reason == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;506</td>  <td class="nbHitsCovered"><a title="Line 506: Conditional coverage 100% (2/2).">&nbsp;1192</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 506: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (data.indexOf(<span class="string">"?&gt;"</span>) &gt;= 0) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;507</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="string">"Processing instructions cannot contain "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;508</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                <span class="string">"the string \"?&gt;\""</span>;</pre></td></tr>
@@ -910,7 +910,7 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;511</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;845</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;1188</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;513</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;514</td>  <td class="nbHits">&nbsp;</td>
@@ -933,18 +933,18 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;523</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkCommentData(<span class="keyword">final</span> String data) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;524</td>  <td class="nbHitsCovered">&nbsp;805</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;525</td>  <td class="nbHitsCovered"><a title="Line 525: Conditional coverage 100% (2/2).">&nbsp;805</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 525: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkCharacterData(data)) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;524</td>  <td class="nbHitsCovered">&nbsp;1148</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;525</td>  <td class="nbHitsCovered"><a title="Line 525: Conditional coverage 100% (2/2).">&nbsp;1148</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 525: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = checkCharacterData(data)) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;526</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> reason;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;527</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;528</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;529</td>  <td class="nbHitsCovered"><a title="Line 529: Conditional coverage 100% (2/2).">&nbsp;793</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 529: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.indexOf(<span class="string">"--"</span>) != -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;529</td>  <td class="nbHitsCovered"><a title="Line 529: Conditional coverage 100% (2/2).">&nbsp;1136</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 529: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.indexOf(<span class="string">"--"</span>) != -1) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;530</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Comments cannot contain double hyphens (--)"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;531</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;532</td>  <td class="nbHitsCovered"><a title="Line 532: Conditional coverage 100% (2/2).">&nbsp;792</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 532: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.endsWith(<span class="string">"-"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;532</td>  <td class="nbHitsCovered"><a title="Line 532: Conditional coverage 100% (2/2).">&nbsp;1135</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 532: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (data.endsWith(<span class="string">"-"</span>)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;533</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"Comment data cannot end with a hyphen."</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;534</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -952,7 +952,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;536</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If we got here, everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;537</td>  <td class="nbHitsCovered">&nbsp;791</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;537</td>  <td class="nbHitsCovered">&nbsp;1134</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;538</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;539</td>  <td class="nbHits">&nbsp;</td>
@@ -1040,10 +1040,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;588</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkPublicID(<span class="keyword">final</span> String publicID) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;589</td>  <td class="nbHitsCovered">&nbsp;608</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;589</td>  <td class="nbHitsCovered">&nbsp;610</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;590</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;591</td>  <td class="nbHitsCovered"><a title="Line 591: Conditional coverage 100% (2/2).">&nbsp;608</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 591: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (publicID == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;591</td>  <td class="nbHitsCovered"><a title="Line 591: Conditional coverage 100% (2/2).">&nbsp;610</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 591: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (publicID == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;592</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// This indicates there is no public ID</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;593</td>  <td class="nbHits">&nbsp;</td>
@@ -1084,10 +1084,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;614</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkSystemLiteral(<span class="keyword">final</span> String systemLiteral) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;615</td>  <td class="nbHitsCovered">&nbsp;609</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;615</td>  <td class="nbHitsCovered">&nbsp;611</td>  <td class="src"><pre class="src">&nbsp;                String reason = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;616</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;617</td>  <td class="nbHitsCovered"><a title="Line 617: Conditional coverage 100% (2/2).">&nbsp;609</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 617: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (systemLiteral == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;617</td>  <td class="nbHitsCovered"><a title="Line 617: Conditional coverage 100% (2/2).">&nbsp;611</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 617: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (systemLiteral == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;618</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// This indicates there is no system ID</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;619</td>  <td class="nbHits">&nbsp;</td>
@@ -1132,14 +1132,14 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String checkXMLName(<span class="keyword">final</span> String name) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;641</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot be empty or null</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;642</td>  <td class="nbHitsCovered"><a title="Line 642: Conditional coverage 100% (2/2).">&nbsp;7213</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 642: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((name == <span class="keyword">null</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;642</td>  <td class="nbHitsCovered"><a title="Line 642: Conditional coverage 100% (2/2).">&nbsp;8806</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 642: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((name == <span class="keyword">null</span>)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;643</td>  <td class="nbHitsCovered">&nbsp;15</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"XML names cannot be null"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;644</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;645</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;646</td>  <td class="nbHitsCovered">&nbsp;7198</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span> len = name.length();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;647</td>  <td class="nbHitsCovered"><a title="Line 647: Conditional coverage 100% (2/2).">&nbsp;7198</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 647: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (len == 0) { </a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;646</td>  <td class="nbHitsCovered">&nbsp;8791</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span> len = name.length();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;647</td>  <td class="nbHitsCovered"><a title="Line 647: Conditional coverage 100% (2/2).">&nbsp;8791</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 647: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (len == 0) { </a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;648</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"XML names cannot be empty"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;649</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -1149,16 +1149,16 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;652</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Cannot start with a number</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered"><a title="Line 653: Conditional coverage 100% (2/2).">&nbsp;7188</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 653: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!isXMLNameStartCharacter(name.charAt(0))) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;654</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"XML names cannot begin with the character \""</span> + </pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered"><a title="Line 653: Conditional coverage 100% (2/2).">&nbsp;8781</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 653: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!isXMLNameStartCharacter(name.charAt(0))) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;654</td>  <td class="nbHitsCovered">&nbsp;39</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="string">"XML names cannot begin with the character \""</span> + </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;655</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        name.charAt(0) + <span class="string">"\""</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;656</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;657</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Ensure legal content for non-first chars</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;658</td>  <td class="nbHitsCovered"><a title="Line 658: Conditional coverage 100% (2/2).">&nbsp;31716</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 658: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i &lt; len; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;659</td>  <td class="nbHitsCovered"><a title="Line 659: Conditional coverage 100% (2/2).">&nbsp;24597</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 659: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!isXMLNameCharacter(name.charAt(i))) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;658</td>  <td class="nbHitsCovered"><a title="Line 658: Conditional coverage 100% (2/2).">&nbsp;40785</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 658: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i &lt; len; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;659</td>  <td class="nbHitsCovered"><a title="Line 659: Conditional coverage 100% (2/2).">&nbsp;32077</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 659: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!isXMLNameCharacter(name.charAt(i))) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;660</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="string">"XML names cannot contain the character \""</span> + name.charAt(i) + <span class="string">"\""</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;661</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
@@ -1168,7 +1168,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;664</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// We got here, so everything is OK</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;665</td>  <td class="nbHitsCovered">&nbsp;7119</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;665</td>  <td class="nbHitsCovered">&nbsp;8708</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;666</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;667</td>  <td class="nbHits">&nbsp;</td>
@@ -1413,12 +1413,12 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLCharacter(<span class="keyword">final</span> <span class="keyword">int</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;810</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;811</td>  <td class="nbHitsCovered"><a title="Line 811: Conditional coverage 100% (2/2).">&nbsp;90425</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 811: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\n'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;812</td>  <td class="nbHitsCovered"><a title="Line 812: Conditional coverage 100% (2/2).">&nbsp;88147</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 812: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\r'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;813</td>  <td class="nbHitsCovered"><a title="Line 813: Conditional coverage 100% (2/2).">&nbsp;87615</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 813: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\t'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;811</td>  <td class="nbHitsCovered"><a title="Line 811: Conditional coverage 100% (2/2).">&nbsp;104134</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 811: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\n'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;812</td>  <td class="nbHitsCovered"><a title="Line 812: Conditional coverage 100% (2/2).">&nbsp;101856</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 812: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\r'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;813</td>  <td class="nbHitsCovered"><a title="Line 813: Conditional coverage 100% (2/2).">&nbsp;101324</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 813: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c == <span class="string">'\t'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;814</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;815</td>  <td class="nbHitsCovered"><a title="Line 815: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;87081</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 815: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x20) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0xD7FF) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;815</td>  <td class="nbHitsCovered"><a title="Line 815: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;100790</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 815: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x20) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0xD7FF) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;816</td>  <td class="nbHitsCovered"><a title="Line 816: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;173</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 816: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0xE000) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0xFFFD) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;817</td>  <td class="nbHitsCovered"><a title="Line 817: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;54</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 817: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x10000) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x10FFFF) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;818</td>  <td class="nbHits">&nbsp;</td>
@@ -1452,7 +1452,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLNameCharacter(<span class="keyword">final</span> <span class="keyword">char</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;833</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;834</td>  <td class="nbHitsCovered"><a title="Line 834: Conditional coverage 100% (16/16) [each condition: 100%, 100%, 100%, 100%, 100%, 100%, 100%, 100%].">&nbsp;90597</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 834: Conditional coverage 100% (16/16) [each condition: 100%, 100%, 100%, 100%, 100%, 100%, 100%, 100%].">                <span class="keyword">return</span> (isXMLLetter(c) || isXMLDigit(c) || c == <span class="string">'.'</span> || c == <span class="string">'-'</span> </a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;834</td>  <td class="nbHitsCovered"><a title="Line 834: Conditional coverage 100% (16/16) [each condition: 100%, 100%, 100%, 100%, 100%, 100%, 100%, 100%].">&nbsp;98173</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 834: Conditional coverage 100% (16/16) [each condition: 100%, 100%, 100%, 100%, 100%, 100%, 100%, 100%].">                <span class="keyword">return</span> (isXMLLetter(c) || isXMLDigit(c) || c == <span class="string">'.'</span> || c == <span class="string">'-'</span> </a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;835</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                || c == <span class="string">'_'</span> || c == <span class="string">':'</span> || isXMLCombiningChar(c) </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;836</td>  <td class="nbHits">&nbsp;</td>
@@ -1487,7 +1487,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLNameStartCharacter(<span class="keyword">final</span> <span class="keyword">char</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;851</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;852</td>  <td class="nbHitsCovered"><a title="Line 852: Conditional coverage 100% (6/6) [each condition: 100%, 100%, 100%].">&nbsp;72724</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 852: Conditional coverage 100% (6/6) [each condition: 100%, 100%, 100%].">                <span class="keyword">return</span> (isXMLLetter(c) || c == <span class="string">'_'</span> || c ==<span class="string">':'</span>);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;852</td>  <td class="nbHitsCovered"><a title="Line 852: Conditional coverage 100% (6/6) [each condition: 100%, 100%, 100%].">&nbsp;74317</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 852: Conditional coverage 100% (6/6) [each condition: 100%, 100%, 100%].">                <span class="keyword">return</span> (isXMLLetter(c) || c == <span class="string">'_'</span> || c ==<span class="string">':'</span>);</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;853</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;854</td>  <td class="nbHits">&nbsp;</td>
@@ -1549,8 +1549,8 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// if (c &gt;= 0x0041 &amp;&amp; c &lt;= 0x005A) return true;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;883</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;884</td>  <td class="nbHitsCovered"><a title="Line 884: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;294393</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 884: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0041) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x005a) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;885</td>  <td class="nbHitsCovered"><a title="Line 885: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;293731</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 885: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0061) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x007A) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;884</td>  <td class="nbHitsCovered"><a title="Line 884: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;303562</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 884: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0041) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x005a) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;885</td>  <td class="nbHitsCovered"><a title="Line 885: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;302894</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 885: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0061) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x007A) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;886</td>  <td class="nbHitsCovered"><a title="Line 886: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;261682</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 886: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x00C0) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x00D6) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;887</td>  <td class="nbHitsCovered"><a title="Line 887: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;261310</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 887: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x00D8) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x00F6) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;888</td>  <td class="nbHitsCovered"><a title="Line 888: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;261182</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 888: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x00F8) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x00FF) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
@@ -1785,7 +1785,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLCombiningChar(<span class="keyword">final</span> <span class="keyword">char</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1104</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// CombiningChar</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1105</td>  <td class="nbHitsCovered"><a title="Line 1105: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;96455</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1105: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0300) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0345) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1105</td>  <td class="nbHitsCovered"><a title="Line 1105: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;96457</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1105: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0300) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0345) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1106</td>  <td class="nbHitsCovered"><a title="Line 1106: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;95224</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1106: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0360) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0361) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1107</td>  <td class="nbHitsCovered"><a title="Line 1107: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;95168</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1107: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0483) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0486) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1108</td>  <td class="nbHitsCovered"><a title="Line 1108: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;94806</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1108: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0591) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x05A1) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
@@ -1957,7 +1957,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLExtender(<span class="keyword">final</span> <span class="keyword">char</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1238</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1239</td>  <td class="nbHitsCovered"><a title="Line 1239: Conditional coverage 100% (2/2).">&nbsp;96014</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1239: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c &lt; 0x00B6) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="comment">// quick short circuit</span></a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1239</td>  <td class="nbHitsCovered"><a title="Line 1239: Conditional coverage 100% (2/2).">&nbsp;96016</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1239: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (c &lt; 0x00B6) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="comment">// quick short circuit</span></a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1240</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1241</td>  <td class="nbHits">&nbsp;</td>
@@ -2004,8 +2004,8 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isXMLDigit(<span class="keyword">final</span> <span class="keyword">char</span> c) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1268</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1269</td>  <td class="nbHitsCovered"><a title="Line 1269: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;127947</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1269: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0030) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0039) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1270</td>  <td class="nbHitsCovered"><a title="Line 1270: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;127579</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1270: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0660) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0669) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1269</td>  <td class="nbHitsCovered"><a title="Line 1269: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;127981</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1269: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0030) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0039) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1270</td>  <td class="nbHitsCovered"><a title="Line 1270: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;127611</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1270: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0660) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x0669) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1271</td>  <td class="nbHitsCovered"><a title="Line 1271: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;124528</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1271: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x06F0) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x06F9) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1272</td>  <td class="nbHitsCovered"><a title="Line 1272: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;124292</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1272: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (c &lt; 0x0966) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="keyword">if</span> (c &lt;= 0x096F) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1273</td>  <td class="nbHits">&nbsp;</td>
@@ -2058,11 +2058,11 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// seems the implicit conversion to int is slower than</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1303</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// the fall-through or's</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1304</td>  <td class="nbHitsCovered"><a title="Line 1304: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">&nbsp;73912</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1304: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">                <span class="keyword">if</span> (c==<span class="string">' '</span> || c==<span class="string">'\n'</span> || c==<span class="string">'\t'</span> || c==<span class="string">'\r'</span> ){</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1305</td>  <td class="nbHitsCovered">&nbsp;5882</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1304</td>  <td class="nbHitsCovered"><a title="Line 1304: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">&nbsp;73922</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1304: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">                <span class="keyword">if</span> (c==<span class="string">' '</span> || c==<span class="string">'\n'</span> || c==<span class="string">'\t'</span> || c==<span class="string">'\r'</span> ){</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1305</td>  <td class="nbHitsCovered">&nbsp;5886</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1306</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1307</td>  <td class="nbHitsCovered">&nbsp;68030</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1307</td>  <td class="nbHitsCovered">&nbsp;68036</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1308</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1309</td>  <td class="nbHits">&nbsp;</td>
@@ -2120,6 +2120,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 02/02/12 10:30 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 14/02/12 7:58 PM.</div>
 </body>
 </html>
