@@ -1,14 +1,14 @@
-<project name="ant-demo" default="dist" basedir="." >
+<project name="jdom.1.x" default="dist" basedir="." >
 
 	<!-- define Maven coordinates -->
 	<property name="groupId" value="org.jdom" />
 	<property name="artifactId" value="jdom" />
-	<property name="version" value="1.x-snapshot" />
+	<property name="version" value="1.SNAPSHOT" />
 	
 	<property name="gpg" value="gpg" 
 		description="Path to the GNU gpg program for maven target"/>
 
-	<property name="dist" value="dist" />
+	<property name="dist" value="dist-${version}" />
 
 	<target name="build.core">
 		<ant dir="core" target="master" >
@@ -105,6 +105,24 @@
 			basedir="${mavendir}"
 			includes="${jarbase}*" excludes="*maven-bundle*" />
 
+		<property name="contribbase" value="jdom-contrib-${version}" />
+		
+		<copy filtering="true" file="maven-contrib.pom" tofile="${dist}/${contribbase}.pom">
+			<filterset>
+				<filter token="artifactID" value="jdom-contrib"/>
+				<filter token="version" value="${version}" />
+				<filter token="jdk" value="1.2" />
+			</filterset>
+		</copy>
+		
+		<exec dir="${mavendir}" command="${gpg} -abv ${contribbase}.pom"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${contribbase}.jar"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${contribbase}-sources.jar"/>
+		<exec dir="${mavendir}" command="${gpg} -abv ${contribbase}-javadoc.jar"/>
+		
+		<jar destfile="${mavendir}/${contribbase}-maven-bundle.jar"
+			basedir="${mavendir}"
+			includes="${contribbase}*" excludes="*maven-bundle*" />
 	</target>
 	
 

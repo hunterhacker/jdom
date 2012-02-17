@@ -237,12 +237,16 @@ These are the meaningful targets for this build file:
   <!-- =================================================================== -->
   <!-- Creates the class package                                           -->
   <!-- =================================================================== -->
-  <target name="package" depends="clean,compile">
+  <target name="package" depends="clean,compile,javadoc">
     <fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
     <fixcrlf srcdir="." includes="**/*.sh"  excludes="build*.*" eol="lf"/>
     <jar jarfile="${build.dir}/${name}.jar"
          basedir="${build.dest}"
          includes="org/**"/>
+    <jar jarfile="${build.dir}/${name}-sources.jar"
+         basedir="${build.src}" />
+    <jar jarfile="${build.dir}/${name}-javadoc.jar"
+         basedir="${build.javadocs}" />
   </target>
 
   <!-- =================================================================== -->
