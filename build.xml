@@ -9,142 +9,139 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<!-- Initialization target                                               -->
 	<!-- =================================================================== -->
-	<target name="init">
-		<tstamp >
-		    <format property="snapshot.time" pattern="yyyy.MM.dd.HH.mm" />
-		</tstamp>
+	<tstamp >
+	    <format property="snapshot.time" pattern="yyyy.MM.dd.HH.mm" />
+	</tstamp>
 
-		<!--
-      Give user a chance to override without editing this file
-      (and without using -D arguments each time they build).
-      The build properties a user is likely to override include:
-        - lib.dir            The directory where to look for the default JAR
-                             files.  Defaults to ./lib
-        - xml-apis.jar       The JAR containing the DOM, SAX and JAXP classes.
-                             Defaults to ${lib.dir}/xml-apis.jar
-        - parser.jar         The JAR containing the XML parser to use.
-                             Defaults to ${lib.dir}/xerces.jar
-        - jaxen.lib.dir      The directory containing the Jaxen JAR libraries.
-                             Defaults to ${lib.dir}
-     -->
-		<property file="${user.home}/jdom.build.properties" />
-		<property file="${basedir}/build.properties" />
+	<!--
+  Give user a chance to override without editing this file
+  (and without using -D arguments each time they build).
+  The build properties a user is likely to override include:
+    - lib.dir            The directory where to look for the default JAR
+                         files.  Defaults to ./lib
+    - xml-apis.jar       The JAR containing the DOM, SAX and JAXP classes.
+                         Defaults to ${lib.dir}/xml-apis.jar
+    - parser.jar         The JAR containing the XML parser to use.
+                         Defaults to ${lib.dir}/xerces.jar
+    - jaxen.lib.dir      The directory containing the Jaxen JAR libraries.
+                         Defaults to ${lib.dir}
+ -->
+	<property file="${user.home}/jdom.build.properties" />
+	<property file="${basedir}/build.properties" />
 
-		<property name="Name" value="JDOM"/>
-		<property name="name" value="jdom"/>
-		<property name="version" value="2.x-${snapshot.time}"/>
-		<property name="version.impl" value="${version}"/>
-		<property name="version.spec" value="2.alpha"/>
-		<property name="year" value="2011"/>
-		
-		<property name="gpg" value="gpg" 
-			description="Path to the GNU gpg program for maven target"/>
-
-		<property name="jarbase" value="${name}-${version}" />
-		
-		<property name="instrument" value="true" />
-
-		<echo message="----------- ${Name} ${version} ------------"/>
-
-		<property name="compile.debug"       value="true" />
-		<property name="compile.optimize"    value="true" />
-		<property name="compile.target"      value="1.5" />
-		<property name="compile.source"      value="1.5" />
-		<property name="compile.deprecation" value="true" />
-
-		<property name="build" value="./build"/>
-
-		<property name="core" value="./core" />
-		<property name="core.src" value="${core}/src/java" />
-		<property name="core.build" value="${build}/core" />
-
-		<property name="about" value="./core/package" />
-		<property name="about.src" value="${about}" />
-		<property name="about.build" value="${build}/about" />
-		
-		<property name="metainf" value="./core/package/META-INF" />
-		<property name="metainf.build" value="${build}/META-INF" />
-
-		<property name="contrib" value="./contrib" />
-		<property name="contrib.src" value="${contrib}/src/java" />
-		<property name="contrib.build" value="${build}/contrib" />
-
-		<property name="junit" value="./test" />
-		<property name="junit.src" value="${junit}/src/java" />
-		<property name="junit.build" value="${build}/junit" />
-		<property name="junit.xml" value="${build}/junit.xml" />
-		<property name="junit.report" value="${build}/junit.report" />
-		<property name="junit.instrumented" value="${build}/instrumented" />
-
-
-		<property name="samples" value="./core/samples/" />
-		<property name="samples.src" value="${samples}/" />
-		<property name="samples.build" value="${build}/samples"/>
-
-		<!-- Do not set a stax.dir
-		     but it is available for override (for Java5 for example) -->
-		<property name="stax.dir" value="dummy" />
-		
-		<property name="lib.dir" value="./lib"/>
-		<property name="packages" value="org.jdom2.*"/>
-
-		<property name="build.javadocs" value="${build}/apidocs"/>
-
-		<property name="package" value="${build}/package"/>
-
-		<property name="coverage.out" value="${build}/coverage" />
-
-		<property name="mavendir" value="${build}/maven" />
-
-		<filter token="year" value="${year}"/>
-		<filter token="version" value="${version}"/>
-		<filter token="date" value="${TODAY}"/>
-		<filter token="jdk" value="${compile.target}" />
-
-		<!-- Default JAR libraries -->
-		<property name="parser.jar"        value="${lib.dir}/xercesImpl.jar" />
-		<property name="xmlapi.jar"        value="${lib.dir}/xml-apis.jar" />
-		<property name="jaxen.jar"         value="${lib.dir}/jaxen-1.1.3.jar" />
-		<property name="junit.jar"         value="${lib.dir}/junit-4.8.2.jar" />
-		<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
-		<property name="xalan.jar"         value="${lib.dir}/xalan/xalan-2.7.1.jar" />
-		<property name="xalanser.jar"      value="${lib.dir}/xalan/serializer-2.7.1.jar" />
-
-		<!-- Compilation class path -->
-		<path id="base.class.path">
-			<pathelement location="${jaxen.jar}" />
-			<pathelement location="${parser.jar}" />
-			<pathelement location="${xmlapi.jar}" />
-			<pathelement location="${junit.jar}" />
-			<pathelement location="${isorelax.jar}" />
-			<pathelement location="${xalan.jar}" />
-			<pathelement location="${xalanser.jar}" />
-			<!-- normally these stax jars will not be found -->
-			<!-- this is used for testing Java5 (the test sets stax.dir) -->
-			<pathelement location="${stax.dir}/jsr173_1.0_api.jar" />
-			<pathelement location="${stax.dir}/sjsxp.jar" />
-		</path>
-
-		<path id="core.class.path">
-			<path refid="base.class.path"/>
-			<pathelement location="${core.build}"/>
-		</path>
-
-		<path id="contrib.class.path">
-			<path refid="core.class.path"/>
-			<pathelement location="${contrib.build}"/>
-		</path>
-
-		<path id="junit.class.path">
-			<pathelement location="${junit.instrumented}" />
-			<pathelement location="${junit.build}"/>
-			<path refid="contrib.class.path"/>
-			<fileset dir="${lib.dir}/cobertura" includes="*.jar" />
-		</path>
-
-	</target>
-
+	<property name="Name" value="JDOM2"/>
+	<property name="name" value="jdom2"/>
+	<property name="version" value="2.x-${snapshot.time}"/>
+	<property name="version.impl" value="${version}"/>
+	<property name="version.spec" value="2.alpha"/>
+	<property name="year" value="2011"/>
 	
+	<property name="gpg" value="gpg" 
+		description="Path to the GNU gpg program for maven target"/>
+
+	<property name="jarbase" value="${name}-${version}" />
+	
+	<property name="instrument" value="true" />
+
+	<echo message="----------- ${Name} ${version} ------------"/>
+
+	<property name="compile.debug"       value="true" />
+	<property name="compile.optimize"    value="true" />
+	<property name="compile.target"      value="1.5" />
+	<property name="compile.source"      value="1.5" />
+	<property name="compile.deprecation" value="true" />
+
+	<property name="build" value="./build"/>
+
+	<property name="core" value="./core" />
+	<property name="core.src" value="${core}/src/java" />
+	<property name="core.build" value="${build}/core" />
+
+	<property name="about" value="./core/package" />
+	<property name="about.src" value="${about}" />
+	<property name="about.build" value="${build}/about" />
+	
+	<property name="metainf" value="./core/package/META-INF" />
+	<property name="metainf.build" value="${build}/META-INF" />
+
+	<property name="contrib" value="./contrib" />
+	<property name="contrib.src" value="${contrib}/src/java" />
+	<property name="contrib.build" value="${build}/contrib" />
+
+	<property name="junit" value="./test" />
+	<property name="junit.src" value="${junit}/src/java" />
+	<property name="junit.build" value="${build}/junit" />
+	<property name="junit.xml" value="${build}/junit.xml" />
+	<property name="junit.report" value="${build}/junit.report" />
+	<property name="junit.instrumented" value="${build}/instrumented" />
+
+
+	<property name="samples" value="./core/samples/" />
+	<property name="samples.src" value="${samples}/" />
+	<property name="samples.build" value="${build}/samples"/>
+
+	<!-- Do not set a stax.dir
+	     but it is available for override (for Java5 for example) -->
+	<property name="stax.dir" value="dummy" />
+	
+	<property name="lib.dir" value="./lib"/>
+	<property name="packages" value="org.jdom2.*"/>
+
+	<property name="build.javadocs" value="${build}/apidocs"/>
+
+	<property name="package" value="${build}/package"/>
+
+	<property name="coverage.out" value="${build}/coverage" />
+
+	<property name="mavendir" value="${build}/maven" />
+
+	<filter token="year" value="${year}"/>
+	<filter token="version" value="${version}"/>
+	<filter token="date" value="${TODAY}"/>
+	<filter token="jdk" value="${compile.target}" />
+
+	<!-- Default JAR libraries -->
+	<property name="parser.jar"        value="${lib.dir}/xercesImpl.jar" />
+	<property name="xmlapi.jar"        value="${lib.dir}/xml-apis.jar" />
+	<property name="jaxen.jar"         value="${lib.dir}/jaxen-1.1.3.jar" />
+	<property name="junit.jar"         value="${lib.dir}/junit-4.8.2.jar" />
+	<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
+	<property name="xalan.jar"         value="${lib.dir}/xalan/xalan-2.7.1.jar" />
+	<property name="xalanser.jar"      value="${lib.dir}/xalan/serializer-2.7.1.jar" />
+
+	<!-- Compilation class path -->
+	<path id="base.class.path">
+		<pathelement location="${jaxen.jar}" />
+		<pathelement location="${parser.jar}" />
+		<pathelement location="${xmlapi.jar}" />
+		<pathelement location="${junit.jar}" />
+		<pathelement location="${isorelax.jar}" />
+		<pathelement location="${xalan.jar}" />
+		<pathelement location="${xalanser.jar}" />
+		<!-- normally these stax jars will not be found -->
+		<!-- this is used for testing Java5 (the test sets stax.dir) -->
+		<pathelement location="${stax.dir}/jsr173_1.0_api.jar" />
+		<pathelement location="${stax.dir}/sjsxp.jar" />
+	</path>
+
+	<path id="core.class.path">
+		<path refid="base.class.path"/>
+		<pathelement location="${core.build}"/>
+	</path>
+
+	<path id="contrib.class.path">
+		<path refid="core.class.path"/>
+		<pathelement location="${contrib.build}"/>
+	</path>
+
+	<path id="junit.class.path">
+		<pathelement location="${junit.instrumented}" />
+		<pathelement location="${junit.build}"/>
+		<path refid="contrib.class.path"/>
+		<fileset dir="${lib.dir}/cobertura" includes="*.jar" />
+	</path>
+
+
 	<!-- =================================================================== -->
 	<!-- Help on usage                                                       -->
 	<!-- =================================================================== -->
@@ -174,7 +171,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<!-- Prepares the build directory                                        -->
 	<!-- =================================================================== -->
-	<target name="prepare" depends="init">
+	<target name="prepare">
 		<mkdir dir="${build}"/>
 		<mkdir dir="${core.build}"/>
 		<mkdir dir="${about.build}"/>
@@ -340,8 +337,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<!-- Clean targets                                                       -->
 	<!-- =================================================================== -->
-	<target name="clean" depends="init"
-          description="Removes build files">
+	<target name="clean" description="Removes build files">
 		<delete dir="${build}" failonerror="false"/>
 	</target>
 
@@ -366,7 +362,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	</target>
 	
 
-	<target name="junit.nodeps" depends="init"
+	<target name="junit.nodeps"
 		description="Run all the JUnit tests, but do not compile anything first">
 		
 		<delete dir="${junit.report}" />
@@ -431,7 +427,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="src" path="core/samples"/>
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="src" path="test/resources"/>
-	<classpathentry kind="src" path="contrib/src/java" excluding="org/jdom/contrib/ids/doc-files/|org/jdom/contrib/input/scanner/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/input/scanner/doc-files/|org/jdom2/contrib/input/scanner/doc-files/|org/jdom2/contrib/schema/"/>
+	<classpathentry kind="src" path="contrib/src/java" excluding="org/jdom/contrib/ids/doc-files/|org/jdom/contrib/input/scanner/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/input/scanner/doc-files/|org/jdom2/contrib/input/scanner/doc-files/"/>
 	<classpathentry kind="src" path="contrib/samples"/>
 	<classpathentry kind="src" path="contrib/src/java/org/jdom2/contrib/ids/doc-files"/>
 	<classpathentry kind="src" path="contrib/src/java/org/jdom2/contrib/input/scanner/doc-files"/>
@@ -439,6 +435,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.3.jar"/>
+	<classpathentry kind="lib" path="contrib/lib/isorelax.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="ebuild"/>
 </classpath>
@@ -452,17 +449,15 @@ For instructions on how to build JDOM, please view the README.txt file.
 	
 
 	<target name="maven.clean">
-		<delete dir="${mavendir}" includes="**/*"/>
+		<delete dir="${mavendir}" includes="**/*" failonerror="false"/>
 	</target>
 	
-	<target name="maven.prepare" depends="package, maven.clean">
+	<target name="maven" depends="maven.clean, package"
+		description="Prepares Maven bundle to load on to Sonatype Nexus for Maven-Central">
 		<mkdir dir="${mavendir}" />
 		<mkdir dir="${mavendir}/core" />
 		<mkdir dir="${mavendir}/test" />
 		<mkdir dir="${mavendir}/contrib" />
-	</target>
-	
-	<target name="maven.core">
 		<!-- copy the build jar -->
 		<copy todir="${mavendir}/core" file="${package}/${jarbase}.jar"/>
 		<copy todir="${mavendir}/core" file="${package}/${jarbase}-javadoc.jar"/>
@@ -472,87 +467,30 @@ For instructions on how to build JDOM, please view the README.txt file.
 			<filterset>
 				<filter token="artifactID" value="${name}"/>
 				<filter token="version" value="${version}" />
+				<filter token="jdk" value="${compile.target}" />
 			</filterset>
 		</copy>
 		
-		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}.pom"/>
-		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}.jar"/>
-		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}-sources.jar"/>
-		<exec dir="${mavendir}/core" command="${gpg} -abv ${jarbase}-javadoc.jar"/>
+		<exec dir="${mavendir}/core" executable="${gpg}">
+			<arg value="-abv"/>
+			<arg value="${jarbase}.pom"/>
+		</exec>
+		<exec dir="${mavendir}/core" executable="${gpg}">
+			<arg value="-abv"/>
+			<arg value="${jarbase}.jar"/>
+		</exec>
+		<exec dir="${mavendir}/core" executable="${gpg}">
+			<arg value="-abv"/>
+			<arg value="${jarbase}-sources.jar"/>
+		</exec>
+		<exec dir="${mavendir}/core" executable="${gpg}">
+			<arg value="-abv"/>
+			<arg value="${jarbase}-javadoc.jar"/>
+		</exec>
 		
 		<jar destfile="${mavendir}/${jarbase}-maven-bundle.jar"
 			basedir="${mavendir}/core"
 			includes="${jarbase}*" excludes="*maven-bundle*" />
-		
-	</target>
-	
-	<target name="maven.tests">
-		<!-- create the tests jar -->
-		<property name="testjarbase" value="${name}-junit-${version}" />
-		
-		<!-- build the java jar -->
-		<jar destfile="${mavendir}/test/${testjarbase}.jar" 
-			basedir="${junit.build}" includes="**/*" />
-		<!-- build the Javadoc Jar-->
-		<jar destfile="${mavendir}/test/${testjarbase}-javadoc.jar" 
-			basedir="maven" includes="index.html" />
-		<!-- build the Sources Jar-->
-		<jar destfile="${mavendir}/test/${testjarbase}-sources.jar" 
-			basedir="${junit.src}" includes="**/*" />
-		
-		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/test/${testjarbase}.pom">
-			<filterset>
-				<filter token="artifactID" value="${name}-junit"/>
-				<filter token="version" value="${version}" />
-			</filterset>
-		</copy>
-		
-		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}.pom"/>
-		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}.jar"/>
-		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}-sources.jar"/>
-		<exec dir="${mavendir}/test" command="${gpg} -abv ${testjarbase}-javadoc.jar"/>
-		
-		<jar destfile="${mavendir}/${testjarbase}-maven-bundle.jar"
-			basedir="${mavendir}/test"
-			includes="${testjarbase}*" />
-	</target>
-	
-	<target name="maven.contrib">
-		<!-- create the tests jar -->
-		<property name="contribjarbase" value="${name}-contrib-${version}" />
-		
-		<!-- build the java jar -->
-		<jar destfile="${mavendir}/contrib/${contribjarbase}.jar" 
-			basedir="${contrib.build}" includes="**/*" />
-		<!-- build the Javadoc Jar-->
-		<jar destfile="${mavendir}/contrib/${contribjarbase}-javadoc.jar" 
-			basedir="maven" includes="index.html" />
-		<!-- build the Sources Jar-->
-		<jar destfile="${mavendir}/contrib/${contribjarbase}-sources.jar" 
-			basedir="${contrib.src}" includes="**/*" />
-		
-		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/contrib/${contribjarbase}.pom">
-			<filterset>
-				<filter token="artifactID" value="${name}-contrib"/>
-				<filter token="version" value="${version}" />
-			</filterset>
-		</copy>
-		
-		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}.pom"/>
-		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}.jar"/>
-		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}-sources.jar"/>
-		<exec dir="${mavendir}/contrib" command="${gpg} -abv ${contribjarbase}-javadoc.jar"/>
-		
-		<jar destfile="${mavendir}/${contribjarbase}-maven-bundle.jar"
-			basedir="${mavendir}/contrib"
-			includes="${contribjarbase}*" excludes="*maven-bundle*" />
-
-	</target>
-	
-	<target name="maven" depends="maven.prepare, maven.core, maven.tests, maven.contrib"
-		description="Prepares three bundles to load on to Sonatype Nexus for Maven-Central">
 		
 	</target>
 	
