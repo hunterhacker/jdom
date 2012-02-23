@@ -115,7 +115,7 @@ final class ContentList extends AbstractList<Content>
 	ContentList(final Parent parent) {
 		this.parent = parent;
 	}
-
+	
 	/**
 	 * Package internal method to support building from sources that are 100%
 	 * trusted.
@@ -555,13 +555,74 @@ final class ContentList extends AbstractList<Content>
 	/**
 	 * Return this list as a <code>String</code>
 	 * 
-	 * @return The number of items in this list.
+	 * @return The String representation of this list.
 	 */
 	@Override
 	public String toString() {
 		return super.toString();
 	}
+	
+	void sortInPlace(final int[] indexes) {
+		// the indexes are a discrete set of values that have no duplicates,
+		// and describe the relative order of each of them.
+		// as a result, we can do some tricks....
+		final int[] unsorted = ArrayCopy.copyOf(indexes, indexes.length);
+		Arrays.sort(unsorted);
+		final Content[] usc = new Content[unsorted.length];
+		for (int i = 0; i < usc.length; i++) {
+			usc[i] = elementData[indexes[i]];
+		}
+		// usc contains the content in their pre-sorted order....
+		for (int i = 0; i < indexes.length; i ++) {
+			elementData[unsorted[i]] = usc[i];
+		}
+	}
 
+	/**
+	 * Unlike the Arrays.binarySearch, this method never expects an
+	 * "already exists" condition, we only ever add, thus there will never
+	 * be a negative insertion-point.
+	 * @param indexes THe pointers to search within
+	 * @param len The number of pointers to search within
+	 * @param val The pointer we are checking for.
+	 * @param comp The Comparator to compare with
+	 * @return the insertion point.
+	 */
+	private final int binarySearch(final int[] indexes, final int len,
+			final int val, final Comparator<? super Content> comp) {
+		int left = 0, mid = 0, right = len - 1, cmp = 0;
+		final Content base = elementData[val];
+		while (left <= right) {
+			mid = (left + right) >>> 1;
+			cmp = comp.compare(base, elementData[indexes[mid]]);
+			if (cmp == 0) {
+				while (cmp == 0 && mid < right && comp.compare(
+						base, elementData[indexes[mid + 1]]) == 0) {
+					mid++;
+				}
+				return mid + 1;
+			} else if (cmp < 0) {
+				right = mid - 1;
+			} else {
+				left = mid + 1;
+			}
+		}
+		return left;
+	}
+	
+	final void sort(final Comparator<? super Content> comp) {
+		final int sz = size;
+		int[] indexes = new int[sz];
+		for (int i = 0 ; i < sz; i++) {
+			final int ip = binarySearch(indexes, i, i, comp);
+			if (ip < i) {
+				System.arraycopy(indexes, ip, indexes, ip+1, i - ip);
+			}
+			indexes[ip] = i;
+		}
+		sortInPlace(indexes);
+	}
+	
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * * * */
 	/**
@@ -1126,6 +1187,54 @@ final class ContentList extends AbstractList<Content>
 			return backingsize;
 		}
 
+		/**
+		 * Unlike the Arrays.binarySearch, this method never expects an
+		 * "already exists" condition, we only ever add, thus there will never
+		 * be a negative insertion-point.
+		 * @param indexes THe pointers to search within
+		 * @param len The number of pointers to search within
+		 * @param val The pointer we are checking for.
+		 * @param comp The Comparator to compare with
+		 * @return the insertion point.
+		 */
+		@SuppressWarnings("unchecked")
+		private final int fbinarySearch(final int[] indexes, final int len,
+				final int val, final Comparator<? super F> comp) {
+			int left = 0, mid = 0, right = len - 1, cmp = 0;
+			final F base = (F)elementData[backingpos[val]];
+			while (left <= right) {
+				mid = (left + right) >>> 1;
+				cmp = comp.compare(base, (F)elementData[indexes[mid]]);
+				if (cmp == 0) {
+					while (cmp == 0 && mid < right && comp.compare(
+							base, (F)elementData[indexes[mid + 1]]) == 0) {
+						mid++;
+					}
+					return mid + 1;
+				} else if (cmp < 0) {
+					right = mid - 1;
+				} else {
+					left = mid + 1;
+				}
+			}
+			return left;
+		}
+		
+
+		final void sort(final Comparator<? super F> comp) {
+			// this size() forces a full scan/update of the list.
+			final int sz = size();
+			final int[] indexes = new int[sz];
+			for (int i = 0 ; i < sz; i++) {
+				final int ip = fbinarySearch(indexes, i, i, comp);
+				if (ip < i) {
+					System.arraycopy(indexes, ip, indexes, ip+1, i - ip);
+				}
+				indexes[ip] = backingpos[i];
+			}
+			sortInPlace(indexes);
+		}
+		
 	}
 
 	/* * * * * * * * * * * * * FilterListIterator * * * * * * * * * * * */

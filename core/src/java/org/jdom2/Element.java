@@ -63,11 +63,13 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.jdom2.ContentList.FilterList;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filter;
 
@@ -1784,6 +1786,85 @@ public class Element extends Content implements Parent {
 					"A DocType is not allowed except at the document level");
 		}
 	}
+	
+	/**
+	 * Sort the contents of this Element using a mechanism that is safe for JDOM
+	 * content. See the notes on {@link #sortContent(Filter, Comparator)} for
+	 * how the algorithm works.
+	 * <p>
+	 * {@link Collections#sort(List, Comparator)} is not appropriate for sorting
+	 * the Lists returned from {@link Element#getContent()} because those are
+	 * 'live' lists, and the Collections.sort() method uses an algorithm that
+	 * adds the content in the new location before removing it from the old.
+	 * That creates validation issues with content attempting to attach to a
+	 * parent before detaching first.
+	 * <p>
+	 * This method provides a safe means to conveniently sort the content.
+	 * 
+	 * @param comparator The Comparator to use for the sorting.
+	 */
+	public void sortContent(Comparator<? super Content> comparator) {
+		content.sort(comparator);
+	}
+	
+	/**
+	 * Sort the child Elements of this Element using a mechanism that is safe
+	 * for JDOM content. Other child content will be unaffected. See the notes
+	 * on {@link #sortContent(Filter, Comparator)} for how the algorithm works.
+	 * <p>
+	 * {@link Collections#sort(List, Comparator)} is not appropriate for sorting
+	 * the Lists returned from {@link Element#getContent()} because those are
+	 * 'live' lists, and the Collections.sort() method uses an algorithm that
+	 * adds the content in the new location before removing it from the old.
+	 * This creates validation issues with content attempting to attach to a
+	 * parent before detaching first.
+	 * <p>
+	 * This method provides a safe means to conveniently sort the content.
+	 * 
+	 * @param comparator The Comparator to use for the sorting.
+	 */
+	public void sortChildren(Comparator <? super Element> comparator) {
+		((FilterList<Element>)getChildren()).sort(comparator);
+	}
+	
+	/**
+	 * Sort the child content of this Element that matches the Filter, using a
+	 * mechanism that is safe for JDOM content. Other child content (that does
+	 * not match the filter) will be unaffected.
+	 * <p>
+	 * The algorithm used for sorting affects the child content in the following
+	 * ways:
+	 * <ol>
+	 * <li>Items not matching the Filter will be unchanged. This includes the
+	 * absolute position of that content in this Element. i.e. if child content
+	 * <code>cc</code> does not match the Filter, then <code>indexOf(cc)</code>
+	 * will not be changed by this sort.
+	 * <li>Items matching the Filter will be reordered according to the
+	 * comparator. Only the relative order of the Filtered data will change.
+	 * <li>Items that compare as 'equals' using the comparator will keep the
+	 * the same relative order as before the sort. 
+	 * </ol>
+	 * <p>
+	 * {@link Collections#sort(List, Comparator)} is not appropriate for sorting
+	 * the Lists returned from {@link Element#getContent()} because those are
+	 * 'live' lists, and the Collections.sort() method uses an algorithm that
+	 * adds the content in the new location before removing it from the old.
+	 * This creates validation issues with content attempting to attach to a
+	 * parent before detaching first.
+	 * <p>
+	 * This method provides a safe means to conveniently sort the content.
+	 * @param <E> The generic type of the Filter used to select the content to
+	 * sort. 
+	 * @param filter The Filter used to select which child content to sort.
+	 * @param comparator The Comparator to use for the sorting.
+	 */
+	public <E extends Content> void sortContent(Filter<E> filter, Comparator <? super E> comparator) {
+		final FilterList<E> list = (FilterList<E>)getContent(filter);
+		list.sort(comparator);
+		
+	}
+	
+
 
 
 	/**

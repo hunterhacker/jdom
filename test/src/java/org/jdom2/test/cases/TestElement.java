@@ -75,6 +75,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -96,8 +97,10 @@ import org.jdom2.IllegalNameException;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
+import org.jdom2.Content.CType;
 import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
 
@@ -2558,4 +2561,247 @@ public final class TestElement {
     public void testContentCType() {
     	assertTrue(Content.CType.Element == new Element("root").getCType());
     }
+
+	private final Comparator<Text> alphaText = new Comparator<Text>() {
+		@Override
+		public int compare(Text o1, Text o2) {
+			return o1.getText().compareTo(o2.getText());
+		}
+	};
+
+	private final Comparator<Content> alphaContent = new Comparator<Content>() {
+		@Override
+		public int compare(Content o1, Content o2) {
+			final int ctd = o1.getCType().ordinal() - o2.getCType().ordinal();
+			if (ctd != 0) {
+				return ctd;
+			}
+			final CType ct = o1.getCType();
+			switch (ct) {
+				case Comment:
+					return ((Comment)o1).getText().compareTo(((Comment)o2).getText());
+				case CDATA:
+					return ((CDATA)o1).getText().compareTo(((CDATA)o2).getText());
+				case DocType:
+					return ((DocType)o1).getElementName()
+							.compareTo(((DocType)o2).getElementName());
+				case Element:
+					return ((Element)o1).getName()
+							.compareTo(((Element)o2).getName());
+				case ProcessingInstruction:
+					return ((ProcessingInstruction)o1).getTarget()
+							.compareTo(((ProcessingInstruction)o2).getTarget());
+				case EntityRef:
+					return ((EntityRef)o1).getName()
+							.compareTo(((EntityRef)o2).getName());
+				case Text:
+					return ((Text)o1).getText().compareTo(((Text)o2).getText());
+			}
+			return 0;
+		}
+	};
+
+	@Test
+	public void testSort() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("d"));
+		emt.addContent(new Text("c"));
+		emt.addContent(new Text("b"));
+		emt.addContent(new Text("a"));
+		assertEquals("dcba", emt.getText());
+		
+		emt.sortContent(Filters.text(), alphaText);
+		
+		assertEquals("abcd", emt.getText());
+	}
+
+	@Test
+	public void testSortOnlyContent() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("a"));
+		assertEquals("a", emt.getText());
+		emt.sortContent(alphaContent);
+		assertEquals("a", emt.getText());
+	}
+	
+	@Test
+	public void testSortOnlyFiltered() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("a"));
+		assertEquals("a", emt.getText());
+		emt.sortContent(Filters.text(), alphaText);
+		assertEquals("a", emt.getText());
+	}
+	
+	@Test
+	public void testSortAllSameContent() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		assertEquals("aaaa", emt.getText());
+		emt.sortContent(alphaContent);
+		assertEquals("aaaa", emt.getText());
+	}
+	
+	@Test
+	public void testSortAllSameFiltered() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		emt.addContent(new Text("a"));
+		assertEquals("aaaa", emt.getText());
+		emt.sortContent(Filters.text(), alphaText);
+		assertEquals("aaaa", emt.getText());
+	}
+	
+	@Test
+	public void testSortContent() {
+		Element emt = new Element("root");
+		CDATA cdata = new CDATA("XXX");
+		emt.addContent(new Text("d"));
+		emt.addContent(cdata);
+		emt.addContent(new Text("c"));
+		emt.addContent(new Text("b"));
+		emt.addContent(new Text("a"));
+		assertEquals("dXXXcba", emt.getText());
+		
+		emt.sortContent(alphaContent);
+		
+		assertEquals("abcdXXX", emt.getText());
+		assertEquals(cdata, emt.getContent(4));
+	}
+	
+	@Test
+	public void testSortElementContent() {
+		final Element emt = new Element("root");
+		final CDATA cdata = new CDATA("XXX");
+		final Element a = new Element("a");
+		final Element b = new Element("b");
+		final Element c = new Element("c");
+		final Element d = new Element("d");
+		
+		emt.addContent(d);
+		emt.addContent(cdata);
+		emt.addContent(c);
+		emt.addContent(b);
+		emt.addContent(a);
+		
+		assertTrue(emt.getContent(0) == d);
+		assertTrue(emt.getContent(1) == cdata);
+		assertTrue(emt.getContent(2) == c);
+		assertTrue(emt.getContent(3) == b);
+		assertTrue(emt.getContent(4) == a);
+		
+		emt.sortChildren(alphaContent);
+		assertTrue(emt.getContent(0) == a);
+		assertTrue(emt.getContent(1) == cdata);
+		assertTrue(emt.getContent(2) == b);
+		assertTrue(emt.getContent(3) == c);
+		assertTrue(emt.getContent(4) == d);
+		
+		emt.sortContent(alphaContent);
+		
+		assertTrue(emt.getContent(0) == a);
+		assertTrue(emt.getContent(1) == b);
+		assertTrue(emt.getContent(2) == c);
+		assertTrue(emt.getContent(3) == d);
+		assertTrue(emt.getContent(4) == cdata);
+	}
+	
+	@Test
+	public void testSortEqualsContent() {
+		Element emt = new Element("root");
+		final CDATA cdata = new CDATA("XXX");
+		final Text t1 = new Text("a");
+		final Text t2 = new Text("a");
+		final Text t3 = new Text("a");
+		final Text t4 = new Text("a");
+		emt.addContent(t1);
+		emt.addContent(cdata);
+		emt.addContent(t2);
+		emt.addContent(t3);
+		emt.addContent(t4);
+		assertEquals("aXXXaaa", emt.getText());
+		
+		emt.sortContent(alphaContent);
+		
+		assertEquals("aaaaXXX", emt.getText());
+		assertEquals(t1, emt.getContent(0));
+		assertEquals(t2, emt.getContent(1));
+		assertEquals(t3, emt.getContent(2));
+		assertEquals(t4, emt.getContent(3));
+		assertEquals(cdata, emt.getContent(4));
+	}
+	
+	@Test
+	public void testSortInterleavedContent() {
+		Element emt = new Element("root");
+		emt.addContent(new Text("d"));
+		emt.addContent(new CDATA("ZZZ"));
+		emt.addContent(new Text("c"));
+		emt.addContent(new CDATA("YYY"));
+		emt.addContent(new Text("b"));
+		emt.addContent(new CDATA("XXX"));
+		emt.addContent(new Text("a"));
+		assertEquals("dZZZcYYYbXXXa", emt.getText());
+		
+		// we can use Text comparator for CDATA too.
+		emt.sortContent(Filters.cdata(), alphaText);
+		assertEquals("dXXXcYYYbZZZa", emt.getText());
+		
+		// we can use Text comparator for CDATA too.
+		emt.sortContent(new ContentFilter(ContentFilter.TEXT), alphaContent);
+		assertEquals("aXXXbYYYcZZZd", emt.getText());
+
+		// we can use Text comparator for CDATA too.... and Filters.text() does Text and CDATA
+		emt.sortContent(Filters.text(), alphaText);
+		assertEquals("XXXYYYZZZabcd", emt.getText());
+	}
+	
+	@Test
+	public void testSortInterleavedEqualContent() {
+		Element emt = new Element("root");
+		final CDATA cd1 = new CDATA("ZZZ");
+		final CDATA cd2 = new CDATA("ZZZ");
+		final CDATA cd3 = new CDATA("ZZZ");
+		emt.addContent(new Text("d"));
+		emt.addContent(cd1);
+		emt.addContent(new Text("c"));
+		emt.addContent(cd2);
+		emt.addContent(new Text("b"));
+		emt.addContent(cd3);
+		emt.addContent(new Text("a"));
+		assertEquals("dZZZcZZZbZZZa", emt.getText());
+		
+		assertTrue(emt.getContent(1) == cd1);
+		assertTrue(emt.getContent(3) == cd2);
+		assertTrue(emt.getContent(5) == cd3);
+		
+		// we can use Text comparator for CDATA too.
+		// check sort does not reorder comp==0 content
+		emt.sortContent(Filters.cdata(), alphaText);
+		assertEquals("dZZZcZZZbZZZa", emt.getText());
+		assertTrue(emt.getContent(1) == cd1);
+		assertTrue(emt.getContent(3) == cd2);
+		assertTrue(emt.getContent(5) == cd3);
+		
+		
+		// we can use Text comparator for CDATA too.
+		emt.sortContent(new ContentFilter(ContentFilter.TEXT), alphaContent);
+		assertEquals("aZZZbZZZcZZZd", emt.getText());
+		assertTrue(emt.getContent(1) == cd1);
+		assertTrue(emt.getContent(3) == cd2);
+		assertTrue(emt.getContent(5) == cd3);
+
+		// we can use Text comparator for CDATA too.... and Filters.text() does Text and CDATA
+		emt.sortContent(Filters.text(), alphaText);
+		assertEquals("ZZZZZZZZZabcd", emt.getText());
+		assertTrue(emt.getContent(0) == cd1);
+		assertTrue(emt.getContent(1) == cd2);
+		assertTrue(emt.getContent(2) == cd3);
+	}
+
 }
