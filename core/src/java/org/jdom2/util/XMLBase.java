@@ -99,7 +99,7 @@ public final class XMLBase {
 	 * code follows the assumptions in java.net.URI.
 	 * <p>
 	 * This technically deviates from the XMLBase spec because to fully support
-	 * legacy HTML the xml:bae attribute could contain what is called a 'LIERI'
+	 * legacy HTML the xml:base attribute could contain what is called a 'LIERI'
 	 * which is a superset of true URI values, but for practical purposes JDOM
 	 * users should never encounter such values because they are not processing
 	 * raw HTML (but xhtml maybe). 
