@@ -76,7 +76,7 @@ public class IllegalTargetException extends IllegalArgumentException {
 	 * @param reason <code>String</code> message or reason target is illegal.
 	 */
 	IllegalTargetException(String target, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The target \"")
 		.append(target)
 		.append("\" is not legal for JDOM/XML Processing Instructions: ")

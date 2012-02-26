@@ -79,7 +79,7 @@ public class IllegalNameException extends IllegalArgumentException {
 	 * @param reason <code>String</code> message or reason name is illegal.
 	 */
 	IllegalNameException(String name, String construct, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The name \"")
 		.append(name)
 		.append("\" is not legal for JDOM/XML ")
@@ -100,7 +100,7 @@ public class IllegalNameException extends IllegalArgumentException {
 	 *        that <code>name</code> was supplied to.
 	 */
 	IllegalNameException(String name, String construct) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The name \"")
 		.append(name)
 		.append("\" is not legal for JDOM/XML ")

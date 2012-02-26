@@ -287,7 +287,7 @@ public class DocType extends Content {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuffer()
+		return new StringBuilder()
 		.append("[DocType: ")
 		.append(new org.jdom2.output.XMLOutputter().outputString(this))
 		.append("]")

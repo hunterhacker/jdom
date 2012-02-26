@@ -78,7 +78,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, Attribute added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The attribute \"")
 		.append(added.getQualifiedName())
 		.append("\" could not be added to the element \"")
@@ -99,7 +99,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, Element added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The element \"")
 		.append(added.getQualifiedName())
 		.append("\" could not be added as a child of \"")
@@ -118,7 +118,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The element \"")
 		.append(added.getQualifiedName())
 		.append("\" could not be added as the root of the document: ")
@@ -138,7 +138,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 */
 	IllegalAddException(Element base, ProcessingInstruction added,
 			String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The PI \"")
 		.append(added.getTarget())
 		.append("\" could not be added as content to \"")
@@ -158,7 +158,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 */
 	IllegalAddException(ProcessingInstruction added,
 			String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The PI \"")
 		.append(added.getTarget())
 		.append("\" could not be added to the top level of the document: ")
@@ -177,7 +177,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, Comment added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The comment \"")
 		.append(added.getText())
 		.append("\" could not be added as content to \"")
@@ -198,7 +198,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, CDATA added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The CDATA \"")
 		.append(added.getText())
 		.append("\" could not be added as content to \"")
@@ -220,7 +220,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, Text added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The Text \"")
 		.append(added.getText())
 		.append("\" could not be added as content to \"")
@@ -239,7 +239,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Comment added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The comment \"")
 		.append(added.getText())
 		.append("\" could not be added to the top level of the document: ")
@@ -258,7 +258,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, EntityRef added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The entity reference\"")
 		.append(added.getName())
 		.append("\" could not be added as content to \"")
@@ -279,7 +279,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(Element base, Namespace added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The namespace xmlns")
 		.append(added.getPrefix().equals("") ? "=" 
 				: ":" + added.getPrefix() + "=")
@@ -301,7 +301,7 @@ public class IllegalAddException extends IllegalArgumentException {
 	 * @param reason cause of the problem
 	 */
 	IllegalAddException(DocType added, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The DOCTYPE ")
 		.append(added.toString())
 		.append(" could not be added to the document: ")

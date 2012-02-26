@@ -121,7 +121,7 @@ final class OrFilter extends AbstractFilter<Content> {
 
 	@Override
 	public String toString() {
-		return new StringBuffer(64)
+		return new StringBuilder(64)
 		.append("[OrFilter: ")
 		.append(left.toString())
 		.append(",\n")

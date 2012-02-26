@@ -58,15 +58,15 @@ import org.jdom2.Verifier;
 import org.jdom2.util.ArrayCopy;
 
 /**
- * A non-public utility class similar to StringBuffer but optimized for XML
+ * A non-public utility class similar to StringBuilder but optimized for XML
  * parsing where the common case is that you get only one chunk of characters
  * per text section. TextBuffer stores the first chunk of characters in a
  * String, which can just be returned directly if no second chunk is received.
- * Subsequent chunks are stored in a supplemental char array (like StringBuffer
+ * Subsequent chunks are stored in a supplemental char array (like StringBuilder
  * uses). In this case, the returned text will be the first String chunk,
  * concatenated with the subsequent chunks stored in the char array. This
  * provides optimal performance in the common case, while still providing very
- * good performance in the uncommon case. Furthermore, avoiding StringBuffer
+ * good performance in the uncommon case. Furthermore, avoiding StringBuilder
  * means that no extra unused char array space will be kept around after parsing
  * is through.
  * 

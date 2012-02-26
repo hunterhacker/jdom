@@ -77,7 +77,7 @@ public class IllegalDataException extends IllegalArgumentException {
 	 * @param reason <code>String</code> message or reason data is illegal.
 	 */
 	IllegalDataException(String data, String construct, String reason) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The data \"")
 		.append(data)
 		.append("\" is not legal for a JDOM ")
@@ -97,7 +97,7 @@ public class IllegalDataException extends IllegalArgumentException {
 	 * @param construct <code>String</code> construct that data is illegal for.
 	 */
 	IllegalDataException(String data, String construct) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The data \"")
 		.append(data)
 		.append("\" is not legal for a JDOM ")

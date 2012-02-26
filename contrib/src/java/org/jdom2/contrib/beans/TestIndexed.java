@@ -112,7 +112,7 @@ public class TestIndexed implements java.io.Serializable {
 
     @Override
 	public String toString() {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         buf.append("TestIndexed[name='" + name + "'");
         for (int i = 0; i < toppings.size(); ++i) {
             buf.append(", topping=" + toppings.get(i));

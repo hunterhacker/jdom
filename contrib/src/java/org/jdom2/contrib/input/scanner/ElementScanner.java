@@ -188,7 +188,7 @@ public class ElementScanner extends XMLFilterImpl {
 	/**
 	 * The path of the being parsed element.
 	 */
-	private              StringBuffer    currentPath     = new StringBuffer();
+	private              StringBuilder    currentPath     = new StringBuilder();
 
 	/**
 	 * The matching rules active for the current path.  It includes

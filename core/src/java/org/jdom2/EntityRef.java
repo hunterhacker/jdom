@@ -232,7 +232,7 @@ public class EntityRef extends Content {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuffer()
+		return new StringBuilder()
 		.append("[EntityRef: ")
 		.append("&")
 		.append(name)

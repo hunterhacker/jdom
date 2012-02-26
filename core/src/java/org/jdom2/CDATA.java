@@ -202,7 +202,7 @@ public class CDATA extends Text {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuffer(64)
+		return new StringBuilder(64)
 		.append("[CDATA: ")
 		.append(getText())
 		.append("]")

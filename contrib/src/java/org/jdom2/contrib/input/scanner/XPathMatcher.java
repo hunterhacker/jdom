@@ -230,7 +230,7 @@ public abstract class XPathMatcher {
                      expr.substring(0, expr.lastIndexOf('[')): expr;
 
       int length = path.length();
-      StringBuffer re = new StringBuffer(2 * length);
+      StringBuilder re = new StringBuilder(2 * length);
 
       char previous = (char)0;
       for (int i=0; i<length; i++) {

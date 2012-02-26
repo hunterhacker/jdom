@@ -245,7 +245,7 @@ public class Text extends Content {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuffer(64)
+		return new StringBuilder(64)
 		.append("[Text: ")
 		.append(getText())
 		.append("]")

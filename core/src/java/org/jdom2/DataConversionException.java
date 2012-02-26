@@ -76,7 +76,7 @@ public class DataConversionException extends JDOMException {
 	 * @param dataType type the conversion was attempting to create
 	 */
 	public DataConversionException(String name, String dataType) {
-		super(new StringBuffer()
+		super(new StringBuilder()
 		.append("The XML construct ")
 		.append(name)
 		.append(" could not be converted to a ")

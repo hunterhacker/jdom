@@ -656,7 +656,7 @@ public final class TestAttribute {
 
     	try {
     		final char c= 0x11;
-    		final StringBuffer buffer = new StringBuffer("hhhh");
+    		final StringBuilder buffer = new StringBuilder("hhhh");
             buffer.setCharAt(2, c);
     		attribute.setValue(buffer.toString());
     		fail("Attribute setValue didn't catch invalid comment string");

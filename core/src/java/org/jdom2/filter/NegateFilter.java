@@ -111,7 +111,7 @@ final class NegateFilter extends AbstractFilter<Object> {
 
 	@Override
 	public String toString() {
-		return new StringBuffer(64)
+		return new StringBuilder(64)
 		.append("[NegateFilter: ")
 		.append(filter.toString())
 		.append("]")

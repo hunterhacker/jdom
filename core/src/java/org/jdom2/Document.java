@@ -621,7 +621,7 @@ public class Document extends CloneBase implements Parent {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer stringForm = new StringBuffer()
+		StringBuilder stringForm = new StringBuilder()
 		.append("[Document: ");
 
 		DocType docType = getDocType();

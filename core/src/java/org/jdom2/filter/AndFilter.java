@@ -122,7 +122,7 @@ final class AndFilter<T> extends AbstractFilter<T> {
 
 	@Override
 	public String toString() {
-		return new StringBuffer(64)
+		return new StringBuilder(64)
 		.append("[AndFilter: ")
 		.append(left.toString())
 		.append(",\n")

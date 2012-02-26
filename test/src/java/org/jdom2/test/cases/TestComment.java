@@ -186,7 +186,7 @@ public final class TestComment {
 		}
 		try {
 			char c= 0x11;
-			StringBuffer b= new StringBuffer("hhhh");
+			StringBuilder b= new StringBuilder("hhhh");
 			b.setCharAt(2, c);
 			theComment.setText(b.toString());
 			fail("Comment setText didn't catch invalid comment string");

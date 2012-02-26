@@ -209,7 +209,7 @@ public final class TestCDATA {
         cdata.setText(otherString);    
         try {
             final char c= 0x11;
-            final StringBuffer buffer = new StringBuffer("hhhh");
+            final StringBuilder buffer = new StringBuilder("hhhh");
             buffer.setCharAt(2, c);
 
             cdata.setText(buffer.toString());

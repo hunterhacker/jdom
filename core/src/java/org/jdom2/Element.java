@@ -449,7 +449,7 @@ public class Element extends Content implements Parent {
 	 */
 	@Override
 	public String getValue() {
-		final StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		for (Content child : getContent()) {
 			if (child instanceof Element || child instanceof Text) {
@@ -521,7 +521,7 @@ public class Element extends Content implements Parent {
 		}
 
 		// Else build String up
-		final StringBuffer textContent = new StringBuffer();
+		final StringBuilder textContent = new StringBuilder();
 		boolean hasText = false;
 
 		for (int i = 0; i < content.size(); i++) {
@@ -1344,7 +1344,7 @@ public class Element extends Content implements Parent {
 	 */
 	@Override
 	public String toString() {
-		final StringBuffer stringForm = new StringBuffer(64)
+		final StringBuilder stringForm = new StringBuilder(64)
 		.append("[Element: <")
 		.append(getQualifiedName());
 
