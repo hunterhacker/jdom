@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,13 @@ import java.util.*;
  *    This class contains static helper methods. 
  *    </p>
  *    @author Alex Rosen
+ *    @deprecated concept has been moved in to core:
+ *    	{@link Element#sortContent(Comparator)}
+ *    @see Element#sortChildren(Comparator)
+ *    @see Element#sortContent(Comparator)
+ *    @see Element#sortContent(org.jdom2.filter.Filter, Comparator)
  */
+@Deprecated
 public class JDOMHelper {
     /**
      * <p>
