@@ -79,7 +79,10 @@ import org.jdom2.filter.Filters;
  * of the document may invalidate the generated XPaths.</p>
  *
  * @author Laurent Bihanic
+ * @deprecated moved in to core: org.jdom2.xpath.XPathHelper
+ * @see org.jdom2.xpath.XPathHelper
  */
+@Deprecated
 public class XPathHelper {
 
     /**
