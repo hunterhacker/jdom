@@ -123,6 +123,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Content} data.
+	 * 
 	 * @return a Filter that matches any {@link Content} data.
 	 */
 	public static final Filter<Content> content() {
@@ -130,6 +132,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Attribute} data.
+	 * 
 	 * @return a Filter that matches any {@link Attribute} data.
 	 */
 	public static final Filter<Attribute> attribute() {
@@ -137,6 +141,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Attribute} data with the 
+	 * specified name.
+	 * 
 	 * @param name The name for all the Attributes to have (these can be in any
 	 * Namespace).
 	 * @return a Filter that matches any {@link Attribute} data with the 
@@ -147,6 +154,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Attribute} data with the
+	 * specified name and namespace.
+	 * 
 	 * @param name The name for all the Attributes to have.
 	 * @param ns The Namespace for all the Attributes to have.
 	 * @return a Filter that matches any {@link Attribute} data with the
@@ -157,6 +167,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Attribute} data with the
+	 * specified namespace.
+	 * 
 	 * @param ns The Namespace for all the Attributes to have.
 	 * @return a Filter that matches any {@link Attribute} data with the
 	 * specified namespace.
@@ -166,6 +179,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Comment} data.
+	 * 
 	 * @return a Filter that matches any {@link Comment} data.
 	 */
 	public static final Filter<Comment> comment() {
@@ -173,6 +188,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link CDATA} data.
+	 * 
 	 * @return a Filter that matches any {@link CDATA} data.
 	 */
 	public static final Filter<CDATA> cdata() {
@@ -180,6 +197,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link DocType} data.
+	 * 
 	 * @return a Filter that matches any {@link DocType} data.
 	 */
 	public static final Filter<DocType> doctype() {
@@ -187,6 +206,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link EntityRef} data.
+	 * 
 	 * @return a Filter that matches any {@link EntityRef} data.
 	 */
 	public static final Filter<EntityRef> entityref() {
@@ -194,6 +215,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Element} data.
+	 * 
 	 * @return a Filter that matches any {@link Element} data.
 	 */
 	public static final Filter<Element> element() {
@@ -201,6 +224,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Document} data.
+	 * 
 	 * @return a Filter that matches any {@link Document} data.
 	 */
 	public static final Filter<Document> document() {
@@ -208,6 +233,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Element} data with the specified
+	 * name.
+	 * 
 	 * @param name The name of Elements to match.
 	 * @return a Filter that matches any {@link Element} data with the specified
 	 * name.
@@ -217,6 +245,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Element} data with the specified
+	 * name and Namespace.
+	 * 
 	 * @param name The name of Elements to match.
 	 * @param ns The Namespace to match
 	 * @return a Filter that matches any {@link Element} data with the specified
@@ -227,6 +258,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Element} data with the specified
+	 * Namespace.
+	 * 
 	 * @param ns The Namespace to match
 	 * @return a Filter that matches any {@link Element} data with the specified
 	 * Namespace.
@@ -236,6 +270,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link ProcessingInstruction} data.
+	 * 
 	 * @return a Filter that matches any {@link ProcessingInstruction} data.
 	 */
 	public static final Filter<ProcessingInstruction> processinginstruction() {
@@ -243,6 +279,9 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any {@link Text} data (which includes 
+	 * {@link CDATA} since that is a subclass of Text).
+	 * 
 	 * @return a Filter that matches any {@link Text} data (which includes 
 	 * {@link CDATA} since that is a subclass of Text).
 	 */
@@ -251,6 +290,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any Boolean data.
+	 * 
 	 * @return a Filter that matches any Boolean data.
 	 */
 	public static final Filter<Boolean> fboolean() {
@@ -258,6 +299,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any String data.
+	 * 
 	 * @return a Filter that matches any String data.
 	 */
 	public static final Filter<String> fstring() {
@@ -265,6 +308,8 @@ public final class Filters {
 	}
 
 	/**
+	 * Return a Filter that matches any Double data.
+	 * 
 	 * @return a Filter that matches any Double data.
 	 */
 	public static final Filter<Double> fdouble() {
@@ -272,6 +317,8 @@ public final class Filters {
 	}
 	
 	/**
+	 * Return a Filter that matches any data of the specified Class.
+	 * 
 	 * @param <F> The generic type of the content returned by this Filter
 	 * @param clazz the Class type to match in the filter
 	 * @return a Filter that matches any data of the specified Class.
