@@ -243,7 +243,8 @@ public final class Filters {
 	}
 
 	/**
-	 * @return a Filter that matches any {@link Text} data.
+	 * @return a Filter that matches any {@link Text} data (which includes 
+	 * {@link CDATA} since that is a subclass of Text).
 	 */
 	public static final Filter<Text> text() {
 		return ftext;
