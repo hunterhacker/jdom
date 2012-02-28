@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root [ <!ELEMENT root (#PCDATA)> <!ENTITY unres 'Expand Me!' > ] >
+<root att1="val1" att2="val2" >
+  text
+	<child att="child1" xml:space="preserve"> hello Frodo Baggins! </child>
+	<child att="child2" />
+	<?jdomtest processing instruction ?>
+	<child att="child3" />
+	<child xmlns="childns" att="childns 1">
+	  <!-- ns comment 1 -->
+	</child>
+	<!-- comment  -->
+	<child att="child4" unresolved="&amp;"/>
+	<ns:child xmlns:ns="childns" att="childns 2" ns:att="childns 2">
+	    <!-- ns comment 2 -->
+		<?jdomtest processing instruction ?>
+	</ns:child>
+	&unres; some unresolved content.
+	<child att="child5" > <![CDATA[some cdata text ]]> </child>
+	<child att="child6" >
+	  <leaf att="Leaf6" />
+	</child>
+</root>
+
+
+      

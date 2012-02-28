@@ -316,6 +316,8 @@ class JDOMCoreNavigator extends DefaultNavigator {
 			p = ((Content)contextNode).getParent();
 		} else if (contextNode instanceof NamespaceContainer) {
 			p = ((NamespaceContainer)contextNode).getParentElement();
+		} else if (contextNode instanceof Attribute) {
+			p = ((Attribute)contextNode).getParent();
 		}
 		if (p != null) {
 			return new SingleObjectIterator(p);

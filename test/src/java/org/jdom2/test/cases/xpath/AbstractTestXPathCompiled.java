@@ -817,6 +817,11 @@ public abstract class AbstractTestXPathCompiled {
 	}
 	
 	@Test
+	public void testAttributeParent() {
+		checkXPath("..", mainatt, null, main);
+	}
+	
+	@Test
 	public void testXPathDefaultNamespacesFromElement() {
 		// the significance here is that the c3nsb namespace should already be
 		// available because it is in scope on the 'context' element.
