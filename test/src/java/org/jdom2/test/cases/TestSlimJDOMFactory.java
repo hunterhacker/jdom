@@ -10,6 +10,13 @@ import org.jdom2.Text;
 @SuppressWarnings("javadoc")
 public class TestSlimJDOMFactory extends AbstractTestJDOMFactory {
 
+	/**
+	 * @param located
+	 */
+	public TestSlimJDOMFactory() {
+		super(false);
+	}
+
 	@Override
 	protected JDOMFactory buildFactory() {
 		return new SlimJDOMFactory();

@@ -59,10 +59,10 @@ import java.util.*;
 /**
  * Creates the standard top-level JDOM classes (Element, Document, Comment,
  * etc). A subclass of this factory might construct custom classes.
- *
- * @author  Ken Rune Holland
- * @author  Phil Nelson
- * @author  Bradley S. Huffman
+ * 
+ * @author Ken Rune Holland
+ * @author Phil Nelson
+ * @author Bradley S. Huffman
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
@@ -82,14 +82,15 @@ public class DefaultJDOMFactory implements JDOMFactory {
 
 	@Override
 	@Deprecated
-	public Attribute attribute(String name, String value,
-			int type, Namespace namespace) {
-		return new Attribute(name, value, AttributeType.byIndex(type), namespace);
+	public Attribute attribute(String name, String value, int type,
+			Namespace namespace) {
+		return new Attribute(name, value, AttributeType.byIndex(type),
+				namespace);
 	}
 
 	@Override
-	public Attribute attribute(String name, String value,
-			AttributeType type, Namespace namespace) {
+	public Attribute attribute(String name, String value, AttributeType type,
+			Namespace namespace) {
 		return new Attribute(name, value, type, namespace);
 	}
 
@@ -108,35 +109,67 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	public Attribute attribute(String name, String value, AttributeType type) {
 		return new Attribute(name, value, type);
 	}
+	
+	@Override
+	public final CDATA cdata(String str) {
+		return cdata(-1, -1, str);
+	}
 
 	@Override
-	public CDATA cdata(String text) {
+	public CDATA cdata(final int line, final int col, final String text) {
 		return new CDATA(text);
 	}
-
+	
 	@Override
-	public Text text(String text) {
-		return new Text(text);
+	public final Text text(String str) {
+		return text(-1, -1, str);
 	}
 
 	@Override
-	public Comment comment(String text) {
+	public Text text(final int line, final int col, final String text) {
+		return new Text(text);
+	}
+	
+	@Override
+	public final Comment comment(String text) {
+		return comment(-1, -1, text);
+	}
+
+	@Override
+	public Comment comment(final int line, final int col, final String text) {
 		return new Comment(text);
 	}
 
 	@Override
-	public DocType docType(String elementName,
-			String publicID, String systemID) {
+	public final DocType docType(String elementName, String publicID, String systemID) {
+		return docType(-1, -1, elementName, publicID, systemID);
+	}
+	
+	@Override
+	public DocType docType(final int line, final int col,
+			final String elementName, String publicID, String systemID) {
 		return new DocType(elementName, publicID, systemID);
 	}
 
 	@Override
-	public DocType docType(String elementName, String systemID) {
+	public final DocType docType(String elementName, String systemID) {
+		return docType(-1, -1, elementName, systemID);
+	}
+	
+	@Override
+	public DocType docType(final int line, final int col,
+			final String elementName, String systemID) {
 		return new DocType(elementName, systemID);
+	}
+	
+	@Override
+	public final DocType docType(String elementName) {
+		return docType(-1, -1, elementName);
 	}
 
 	@Override
-	public DocType docType(String elementName) {
+	public DocType docType(final int line, final int col,
+			final String elementName) {
 		return new DocType(elementName);
 	}
 
@@ -146,7 +179,8 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public Document document(Element rootElement, DocType docType, String baseURI) {
+	public Document document(Element rootElement, DocType docType,
+			String baseURI) {
 		return new Document(rootElement, docType, baseURI);
 	}
 
@@ -156,67 +190,124 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public Element element(String name, Namespace namespace) {
+	public final Element element(String name, Namespace namespace) {
+		return element(-1, -1, name, namespace);
+	}
+	
+	@Override
+	public Element element(final int line, final int col, final String name,
+			Namespace namespace) {
 		return new Element(name, namespace);
+	}
+	
+	@Override
+	public final Element element(String name) {
+		return element(-1, -1, name);
 	}
 
 	@Override
-	public Element element(String name) {
+	public Element element(final int line, final int col, final String name) {
 		return new Element(name);
 	}
 
 	@Override
-	public Element element(String name, String uri) {
-		return new Element(name, uri);
+	public final Element element(String name, String uri) {
+		return element(-1, -1, name, uri);
 	}
 
 	@Override
-	public Element element(String name, String prefix, String uri) {
+	public Element element(final int line, final int col, final String name,
+			String uri) {
+		return new Element(name, uri);
+	}
+	
+	@Override
+	public final Element element(String name, String prefix, String uri) {
+		return element(-1, -1, name, prefix, uri);
+	}
+	
+	@Override
+	public Element element(final int line, final int col, final String name,
+			String prefix, String uri) {
 		return new Element(name, prefix, uri);
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target) {
+	public final ProcessingInstruction processingInstruction(String target) {
+		return processingInstruction(-1, -1, target);
+	}
+	
+	@Override
+	public ProcessingInstruction processingInstruction(final int line,
+			final int col, final String target) {
 		return new ProcessingInstruction(target);
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target,
-			Map<String,String> data) {
+	public final ProcessingInstruction processingInstruction(String target,
+			Map<String, String> data) {
+		return processingInstruction(-1, -1, target, data);
+	}
+	
+	@Override
+	public ProcessingInstruction processingInstruction(final int line,
+			final int col, final String target, Map<String, String> data) {
 		return new ProcessingInstruction(target, data);
 	}
-
+	
 	@Override
-	public ProcessingInstruction processingInstruction(String target,
+	public final ProcessingInstruction processingInstruction(String target,
 			String data) {
-		return new ProcessingInstruction(target, data);
+		return processingInstruction(-1, -1, target, data);
 	}
 
 	@Override
-	public EntityRef entityRef(String name) {
+	public ProcessingInstruction processingInstruction(final int line,
+			final int col, final String target, String data) {
+		return new ProcessingInstruction(target, data);
+	}
+	
+	@Override
+	public final EntityRef entityRef(String name) {
+		return entityRef(-1, -1, name);
+	}
+
+	@Override
+	public EntityRef entityRef(final int line, final int col, final String name) {
 		return new EntityRef(name);
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String publicID, String systemID) {
+	public final EntityRef entityRef(String name, String publicID, String systemID) {
+		return entityRef(-1, -1, name, publicID, systemID);
+	}
+	
+	@Override
+	public EntityRef entityRef(final int line, final int col,
+			final String name, String publicID, String systemID) {
 		return new EntityRef(name, publicID, systemID);
+	}
+	
+	@Override
+	public final EntityRef entityRef(String name, String systemID) {
+		return entityRef(-1, -1, name, systemID);
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String systemID) {
+	public EntityRef entityRef(final int line, final int col,
+			final String name, String systemID) {
 		return new EntityRef(name, systemID);
 	}
 
 	// =====================================================================
-			// List manipulation
-			// =====================================================================
+	// List manipulation
+	// =====================================================================
 
-			@Override
-			public void addContent(Parent parent, Content child) {
+	@Override
+	public void addContent(Parent parent, Content child) {
 		if (parent instanceof Document) {
 			((Document) parent).addContent(child);
-		}
-		else {
+		} else {
 			((Element) parent).addContent(child);
 		}
 	}
@@ -230,7 +321,7 @@ public class DefaultJDOMFactory implements JDOMFactory {
 	public void addNamespaceDeclaration(Element parent, Namespace additional) {
 		parent.addNamespaceDeclaration(additional);
 	}
-	
+
 	@Override
 	public void setRoot(Document doc, Element root) {
 		doc.setRootElement(root);

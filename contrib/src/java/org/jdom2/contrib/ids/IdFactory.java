@@ -133,19 +133,19 @@ public class IdFactory extends DefaultJDOMFactory {
     }
 
     @Override
-	public Element element(String name, Namespace namespace) {
+	public Element element(final int line, final int col, String name, Namespace namespace) {
         return new IdElement(name, namespace);
     }
     @Override
-	public Element element(String name) {
+	public Element element(final int line, final int col, String name) {
         return new IdElement(name);
     }
     @Override
-	public Element element(String name, String uri) {
+	public Element element(final int line, final int col, String name, String uri) {
         return new IdElement(name, uri);
     }
     @Override
-	public Element element(String name, String prefix, String uri) {
+	public Element element(final int line, final int col, String name, String prefix, String uri) {
         return new IdElement(name, prefix, uri);
     }
 }

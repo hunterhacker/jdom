@@ -176,6 +176,28 @@ public interface JDOMFactory {
 	 */
 	public CDATA cdata(String str);
 
+	/**
+	 * This creates the CDATA with the supplied text.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param str <code>String</code> content of CDATA.
+	 * @return the created CDATA instance
+	 */
+	public CDATA cdata(int line, int col, String str);
+
+	// **** constructing Text ****
+
+	/**
+	 * This creates the Text with the supplied text.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param str <code>String</code> content of Text.
+	 * @return the created Text instance
+	 */
+	public Text text(int line, int col, String str);
+
 	// **** constructing Text ****
 
 	/**
@@ -195,6 +217,16 @@ public interface JDOMFactory {
 	 * @return the created Comment instance
 	 */
 	public Comment comment(String text);
+
+	/**
+	 * This creates the comment with the supplied text.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param text <code>String</code> content of comment.
+	 * @return the created Comment instance
+	 */
+	public Comment comment(int line, int col, String text);
 
 	// **** constructing DocType
 
@@ -236,6 +268,51 @@ public interface JDOMFactory {
 	 * @return the created DocType instance
 	 */
 	public DocType docType(String elementName);
+
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and a reference to an
+	 * external DTD.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param publicID <code>String</code> public ID of
+	 *        referenced DTD
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @return the created DocType instance
+	 */
+	public DocType docType(int line, int col, String elementName,
+			String publicID, String systemID);
+
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and reference to an
+	 * external DTD.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @return the created DocType instance
+	 */
+	public DocType docType(int line, int col, String elementName, String systemID);
+
+	/**
+	 * This will create the <code>DocType</code> with
+	 * the specified element name
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @return the created DocType instance
+	 */
+	public DocType docType(int line, int col, String elementName);
 
 	// **** constructing Document
 
@@ -325,6 +402,62 @@ public interface JDOMFactory {
 	 */
 	public Element element(String name, String prefix, String uri);
 
+	/**
+	 * This will create a new <code>Element</code>
+	 * with the supplied (local) name, and define
+	 * the <code>{@link org.jdom2.Namespace}</code> to be used.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @param namespace <code>Namespace</code> to put element in.
+	 * @return the created Element instance
+	 */
+	public Element element(int line, int col, String name, Namespace namespace);
+
+	/**
+	 * This will create an <code>Element</code> in no
+	 * <code>{@link org.jdom2.Namespace}</code>.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @return the created Element instance
+	 */
+	public Element element(int line, int col, String name);
+
+	/**
+	 * This will create a new <code>Element</code> with
+	 * the supplied (local) name, and specifies the URI
+	 * of the <code>{@link org.jdom2.Namespace}</code> the <code>Element</code>
+	 * should be in, resulting it being unprefixed (in the default
+	 * namespace).
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @param uri <code>String</code> URI for <code>Namespace</code> element
+	 *        should be in.
+	 * @return the created Element instance
+	 */
+	public Element element(int line, int col, String name, String uri);
+
+	/**
+	 * This will create a new <code>Element</code> with
+	 * the supplied (local) name, and specifies the prefix and URI
+	 * of the <code>{@link org.jdom2.Namespace}</code> the <code>Element</code>
+	 * should be in.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @param prefix the NamespacePrefic to use for this Element
+	 * @param uri <code>String</code> URI for <code>Namespace</code> element
+	 *        should be in.
+	 * @return the created Element instance
+	 */
+	public Element element(int line, int col, String name, String prefix, String uri);
+
 	// **** constructing ProcessingInstruction ****
 
 	/**
@@ -359,6 +492,44 @@ public interface JDOMFactory {
 	 */
 	public ProcessingInstruction processingInstruction(String target);
 
+	/**
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target and data.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param target <code>String</code> target of PI.
+	 * @param data <code>Map</code> data for PI, in
+	 *             name/value pairs
+	 * @return the created ProcessingInstruction instance
+	 */
+	public ProcessingInstruction processingInstruction(int line, int col, String target,
+			Map<String,String> data);
+
+	/**
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target and data.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param target <code>String</code> target of PI.
+	 * @param data <code>String</code> data for PI.
+	 * @return the created ProcessingInstruction instance
+	 */
+	public ProcessingInstruction processingInstruction(int line, int col, String target,
+			String data);
+
+	/**
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target and no data.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param target <code>String</code> target of PI.
+	 * @return the created ProcessingInstruction instance
+	 */
+	public ProcessingInstruction processingInstruction(int line, int col, String target);
+
 	// **** constructing EntityRef ****
 
 	/**
@@ -390,6 +561,42 @@ public interface JDOMFactory {
 	 * @return the created EntityRef instance
 	 */
 	public EntityRef entityRef(String name, String systemID);
+
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @return the created EntityRef instance
+	 */
+	public EntityRef entityRef(int line, int col, String name);
+
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name, public ID, and system ID.
+	 *
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @param publicID <code>String</code> public ID of element.
+	 * @param systemID <code>String</code> system ID of element.
+	 * @return the created EntityRef instance
+	 */
+	public EntityRef entityRef(int line, int col, String name, String publicID, String systemID);
+
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name and system ID.
+	 * 
+	 * @param line The line on which this content begins. 
+	 * @param col  The column on the line at which this content begins.
+	 * @param name <code>String</code> name of element.
+	 * @param systemID <code>String</code> system ID of element.
+	 * @return the created EntityRef instance
+	 */
+	public EntityRef entityRef(int line, int col, String name, String systemID);
 
 	// =====================================================================
 	// List manipulation

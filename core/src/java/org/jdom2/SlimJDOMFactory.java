@@ -86,7 +86,7 @@ public class SlimJDOMFactory extends DefaultJDOMFactory {
 	 * @param cachetext should be true if you want the content of CDATA, Text,
 	 * Comment and Attribute values cached as well.
 	 */
-	public SlimJDOMFactory(boolean cachetext) {
+	public SlimJDOMFactory(final boolean cachetext) {
 		super();
 		this.cachetext = cachetext;
 	}
@@ -100,7 +100,7 @@ public class SlimJDOMFactory extends DefaultJDOMFactory {
 	}
 
 	@Override
-	public Attribute attribute(String name, String value, Namespace namespace) {
+	public Attribute attribute(final String name, final String value, final Namespace namespace) {
 		return super.attribute(cache.reuse(name), 
 				(cachetext ? cache.reuse(value) : value), 
 				namespace);
@@ -108,15 +108,15 @@ public class SlimJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	@Deprecated
-	public Attribute attribute(String name, String value, int type,
-			Namespace namespace) {
+	public Attribute attribute(final String name, final String value, final int type,
+			final Namespace namespace) {
 		return super.attribute(cache.reuse(name),
 				(cachetext ? cache.reuse(value) : value), 
 				type, namespace);
 	}
 
 	@Override
-	public Attribute attribute(String name, String value, AttributeType type,
+	public Attribute attribute(final String name, final String value, final AttributeType type,
 			Namespace namespace) {
 		return super.attribute(cache.reuse(name),
 				(cachetext ? cache.reuse(value) : value),
@@ -124,106 +124,106 @@ public class SlimJDOMFactory extends DefaultJDOMFactory {
 	}
 
 	@Override
-	public Attribute attribute(String name, String value) {
+	public Attribute attribute(final String name, final String value) {
 		return super.attribute(cache.reuse(name), 
 				(cachetext ? cache.reuse(value) : value));
 	}
 
 	@Override
 	@Deprecated
-	public Attribute attribute(String name, String value, int type) {
+	public Attribute attribute(final String name, final String value, final int type) {
 		return super.attribute(cache.reuse(name),
 				(cachetext ? cache.reuse(value) : value), 
 				type);
 	}
 
 	@Override
-	public Attribute attribute(String name, String value, AttributeType type) {
+	public Attribute attribute(final String name, final String value, final AttributeType type) {
 		return super.attribute(cache.reuse(name),
 				(cachetext ? cache.reuse(value) : value), 
 				type);
 	}
 
 	@Override
-	public CDATA cdata(String str) {
-		return super.cdata((cachetext ? cache.reuse(str) : str));
+	public CDATA cdata(final int line, final int col, final String str) {
+		return super.cdata(line, col, (cachetext ? cache.reuse(str) : str));
 	}
 
 	@Override
-	public Text text(String str) {
-		return super.text((cachetext ? cache.reuse(str) : str));
+	public Text text(final int line, final int col, final String str) {
+		return super.text(line, col, (cachetext ? cache.reuse(str) : str));
 	}
 
 	@Override
-	public Comment comment(String text) {
-		return super.comment((cachetext ? cache.reuse(text) : text));
+	public Comment comment(final int line, final int col, final String text) {
+		return super.comment(line, col, (cachetext ? cache.reuse(text) : text));
 	}
 
 	@Override
-	public DocType docType(String elementName, String publicID, String systemID) {
-		return super.docType(cache.reuse(elementName), publicID, systemID);
+	public DocType docType(final int line, final int col, final String elementName, final String publicID, final String systemID) {
+		return super.docType(line, col, cache.reuse(elementName), publicID, systemID);
 	}
 
 	@Override
-	public DocType docType(String elementName, String systemID) {
-		return super.docType(cache.reuse(elementName), systemID);
+	public DocType docType(final int line, final int col, final String elementName, final String systemID) {
+		return super.docType(line, col, cache.reuse(elementName), systemID);
 	}
 
 	@Override
-	public DocType docType(String elementName) {
-		return super.docType(cache.reuse(elementName));
+	public DocType docType(final int line, final int col, final String elementName) {
+		return super.docType(line, col, cache.reuse(elementName));
 	}
 
 	@Override
-	public Element element(String name, Namespace namespace) {
-		return super.element(cache.reuse(name), namespace);
+	public Element element(final int line, final int col, final String name, final Namespace namespace) {
+		return super.element(line, col, cache.reuse(name), namespace);
 	}
 
 	@Override
-	public Element element(String name) {
-		return super.element(cache.reuse(name));
+	public Element element(final int line, final int col, final String name) {
+		return super.element(line, col, cache.reuse(name));
 	}
 
 	@Override
-	public Element element(String name, String uri) {
-		return super.element(cache.reuse(name), uri);
+	public Element element(final int line, final int col, final String name, final String uri) {
+		return super.element(line, col, cache.reuse(name), uri);
 	}
 
 	@Override
-	public Element element(String name, String prefix, String uri) {
-		return super.element(cache.reuse(name), prefix, uri);
+	public Element element(final int line, final int col, final String name, final String prefix, final String uri) {
+		return super.element(line, col, cache.reuse(name), prefix, uri);
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target,
-			Map<String, String> data) {
-		return super.processingInstruction(cache.reuse(target), data);
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target,
+			final Map<String, String> data) {
+		return super.processingInstruction(line, col, cache.reuse(target), data);
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target,
-			String data) {
-		return super.processingInstruction(cache.reuse(target), data);
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target,
+			final String data) {
+		return super.processingInstruction(line, col, cache.reuse(target), data);
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target) {
-		return super.processingInstruction(cache.reuse(target));
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target) {
+		return super.processingInstruction(line, col, cache.reuse(target));
 	}
 
 	@Override
-	public EntityRef entityRef(String name) {
-		return super.entityRef(cache.reuse(name));
+	public EntityRef entityRef(final int line, final int col, final String name) {
+		return super.entityRef(line, col, cache.reuse(name));
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String publicID, String systemID) {
-		return super.entityRef(cache.reuse(name), publicID, systemID);
+	public EntityRef entityRef(final int line, final int col, final String name, final String publicID, final String systemID) {
+		return super.entityRef(line, col, cache.reuse(name), publicID, systemID);
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String systemID) {
-		return super.entityRef(cache.reuse(name), systemID);
+	public EntityRef entityRef(final int line, final int col, final String name, final String systemID) {
+		return super.entityRef(line, col, cache.reuse(name), systemID);
 	}
 
 }

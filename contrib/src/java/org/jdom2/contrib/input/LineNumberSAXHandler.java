@@ -98,25 +98,25 @@ public class LineNumberSAXHandler extends SAXHandler {
 	private static class MyJDOMFactory extends DefaultJDOMFactory {
 
 		@Override
-		public Element element(String name)
+		public Element element(final int line, final int col, String name)
 		{
 			return new LineNumberElement(name);
 		}
 
 		@Override
-		public Element element(String name, String prefix, String uri)
+		public Element element(final int line, final int col, String name, String prefix, String uri)
 		{
 			return new LineNumberElement(name, prefix, uri);
 		}
 
 		@Override
-		public Element element(String name, Namespace namespace)
+		public Element element(final int line, final int col, String name, Namespace namespace)
 		{
 			return new LineNumberElement(name, namespace);
 		}
 
 		@Override
-		public Element element(String name, String uri)
+		public Element element(final int line, final int col, String name, String uri)
 		{
 			return new LineNumberElement(name, uri);
 		}

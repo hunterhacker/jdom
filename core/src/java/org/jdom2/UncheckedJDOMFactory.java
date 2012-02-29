@@ -63,14 +63,14 @@ import java.util.*;
  * problems in the input will be uncaught until later when they could cause
  * infinite loops, malformed XML, or worse.  Use with extreme caution.
  */
-public class UncheckedJDOMFactory implements JDOMFactory {
+public class UncheckedJDOMFactory extends DefaultJDOMFactory {
 
 	// =====================================================================
 	// Element Factory
 	// =====================================================================
 
 	@Override
-	public Element element(String name, Namespace namespace) {
+	public Element element(final int line, final int col, final String name, Namespace namespace) {
 		Element e = new Element();
 		e.name = name;
 		if (namespace == null) {
@@ -81,7 +81,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public Element element(String name) {
+	public Element element(final int line, final int col, final String name) {
 		Element e = new Element();
 		e.name = name;
 		e.namespace = Namespace.NO_NAMESPACE;
@@ -89,12 +89,12 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public Element element(String name, String uri) {
+	public Element element(final int line, final int col, final String name, String uri) {
 		return element(name, Namespace.getNamespace("", uri));
 	}
 
 	@Override
-	public Element element(String name, String prefix, String uri) {
+	public Element element(final int line, final int col, final String name, String prefix, String uri) {
 		return element(name, Namespace.getNamespace(prefix, uri));
 	}
 
@@ -164,7 +164,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 			// =====================================================================
 
 	@Override
-	public Text text(String str) {
+	public Text text(final int line, final int col, final String str) {
 		Text t = new Text();
 		t.value = str;
 		return t;
@@ -175,7 +175,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	// =====================================================================
 
 	@Override
-	public CDATA cdata(String str) {
+	public CDATA cdata(final int line, final int col, final String str) {
 		CDATA c = new CDATA();
 		c.value = str;
 		return c;
@@ -186,7 +186,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	// =====================================================================
 
 	@Override
-	public Comment comment(String str) {
+	public Comment comment(final int line, final int col, final String str) {
 		Comment c = new Comment();
 		c.text = str;
 		return c;
@@ -197,7 +197,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	// =====================================================================
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target, Map<String,String> data) {
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target, Map<String,String> data) {
 		ProcessingInstruction p = new ProcessingInstruction();
 		p.target = target;
 		p.setData(data);
@@ -205,7 +205,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target, String data) {
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target, String data) {
 		ProcessingInstruction p = new ProcessingInstruction();
 		p.target = target;
 		p.setData(data);
@@ -213,7 +213,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public ProcessingInstruction processingInstruction(String target) {
+	public ProcessingInstruction processingInstruction(final int line, final int col, final String target) {
 		ProcessingInstruction p = new ProcessingInstruction();
 		p.target = target;
 		p.rawData = "";
@@ -225,14 +225,14 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	// =====================================================================
 
 	@Override
-	public EntityRef entityRef(String name) {
+	public EntityRef entityRef(final int line, final int col, final String name) {
 		EntityRef e = new org.jdom2.EntityRef();
 		e.name = name;
 		return e;
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String systemID) {
+	public EntityRef entityRef(final int line, final int col, final String name, String systemID) {
 		EntityRef e = new EntityRef();
 		e.name = name;
 		e.systemID = systemID;
@@ -240,7 +240,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public EntityRef entityRef(String name, String publicID, String systemID) {
+	public EntityRef entityRef(final int line, final int col, final String name, String publicID, String systemID) {
 		EntityRef e = new EntityRef();
 		e.name = name;
 		e.publicID = publicID;
@@ -253,7 +253,7 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	// =====================================================================
 
 	@Override
-	public DocType docType(String elementName, String publicID, String systemID) {
+	public DocType docType(final int line, final int col, final String elementName, String publicID, String systemID) {
 		DocType d = new DocType();
 		d.elementName = elementName;
 		d.publicID = publicID;
@@ -262,12 +262,12 @@ public class UncheckedJDOMFactory implements JDOMFactory {
 	}
 
 	@Override
-	public DocType docType(String elementName, String systemID) {
+	public DocType docType(final int line, final int col, final String elementName, String systemID) {
 		return docType(elementName, null, systemID);
 	}
 
 	@Override
-	public DocType docType(String elementName) {
+	public DocType docType(final int line, final int col, final String elementName) {
 		return docType(elementName, null, null);
 	}
 

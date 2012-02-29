@@ -54,16 +54,36 @@
 
 package org.jdom2.input.sax;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
-import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
+import org.xml.sax.Attributes;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.ext.DeclHandler;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.DefaultHandler;
 
-import org.xml.sax.*;
-import org.xml.sax.ext.*;
-import org.xml.sax.helpers.*;
+import org.jdom2.Attribute;
+import org.jdom2.AttributeType;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.JDOMFactory;
+import org.jdom2.Namespace;
+import org.jdom2.Parent;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
+import org.jdom2.input.SAXBuilder;
 
 /**
  * A support class for {@link SAXBuilder} which listens for SAX events.
@@ -79,6 +99,13 @@ import org.xml.sax.helpers.*;
  * custom implementation of {@link SAXHandlerFactory} to supply your instances
  * to {@link SAXBuilder}
  * <p>
+ * If the XMLReader producing the SAX Events supports a document Locator, then
+ * this instance will use the locator to supply the line and column data from
+ * the SAX locator to the JDOMFactory. <strong>Note:</strong> the SAX
+ * specification for the SAX Locator indicates that the line and column
+ * represent the position of the <strong>end</strong> of the SAX Event. For
+ * example, the line and column of the simple XML <code>&lt;root /&gt;</code>
+ * would be line 1, column 9.
  * 
  * @see org.jdom2.input.sax
  * @author Brett McLaughlin
@@ -88,8 +115,8 @@ import org.xml.sax.helpers.*;
  * @author phil@triloggroup.com
  * @author Rolf Lear
  */
-public class SAXHandler extends DefaultHandler
-		implements LexicalHandler, DeclHandler, DTDHandler {
+public class SAXHandler extends DefaultHandler implements LexicalHandler,
+		DeclHandler, DTDHandler {
 
 	/** The JDOMFactory used for JDOM object creation */
 	private final JDOMFactory factory;
@@ -98,8 +125,8 @@ public class SAXHandler extends DefaultHandler
 	 * Temporary holder for namespaces that have been declared with
 	 * startPrefixMapping, but are not yet available on the element
 	 */
-	private final List<Namespace> declaredNamespaces =
-			new ArrayList<Namespace>(32);
+	private final List<Namespace> declaredNamespaces = new ArrayList<Namespace>(
+			32);
 
 	/** Temporary holder for the internal subset */
 	private final StringBuilder internalSubset = new StringBuilder();
@@ -108,8 +135,7 @@ public class SAXHandler extends DefaultHandler
 	private final TextBuffer textBuffer = new TextBuffer();
 
 	/** The external entities defined in this document */
-	private final Map<String, String[]> externalEntities =
-			new HashMap<String, String[]>();
+	private final Map<String, String[]> externalEntities = new HashMap<String, String[]>();
 
 	/** <code>Document</code> object being built - must be cleared on reset() */
 	private Document currentDocument = null;
@@ -156,6 +182,8 @@ public class SAXHandler extends DefaultHandler
 
 	/** Whether to ignore text containing all whitespace */
 	private boolean ignoringBoundaryWhite = false;
+	
+	private int lastline = 0, lastcol = 0;
 
 	/**
 	 * This will create a new <code>SAXHandler</code> that listens to SAX events
@@ -174,7 +202,7 @@ public class SAXHandler extends DefaultHandler
 	 * @param factory
 	 *        <code>JDOMFactory</code> to be used for constructing objects
 	 */
-	public SAXHandler(JDOMFactory factory) {
+	public SAXHandler(final JDOMFactory factory) {
 		this.factory = factory != null ? factory : new DefaultJDOMFactory();
 		reset();
 	}
@@ -223,13 +251,12 @@ public class SAXHandler extends DefaultHandler
 	 * @param element
 	 *        root element under which content will be built
 	 */
-	protected void pushElement(Element element) {
+	protected void pushElement(final Element element) {
 		if (atRoot) {
 			currentDocument.setRootElement(element); // XXX should we use a
-														// factory call?
+			// factory call?
 			atRoot = false;
-		}
-		else {
+		} else {
 			factory.addContent(currentElement, element);
 		}
 		currentElement = element;
@@ -265,7 +292,7 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>boolean</code> indicating whether entity expansion should
 	 *        occur.
 	 */
-	public void setExpandEntities(boolean expand) {
+	public void setExpandEntities(final boolean expand) {
 		this.expand = expand;
 	}
 
@@ -291,7 +318,7 @@ public class SAXHandler extends DefaultHandler
 	 * @param ignoringWhite
 	 *        Whether to ignore ignorable whitespace
 	 */
-	public void setIgnoringElementContentWhitespace(boolean ignoringWhite) {
+	public void setIgnoringElementContentWhitespace(final boolean ignoringWhite) {
 		this.ignoringWhite = ignoringWhite;
 	}
 
@@ -303,7 +330,8 @@ public class SAXHandler extends DefaultHandler
 	 * @param ignoringBoundaryWhite
 	 *        Whether to ignore only whitespace content
 	 */
-	public void setIgnoringBoundaryWhitespace(boolean ignoringBoundaryWhite) {
+	public void setIgnoringBoundaryWhitespace(
+			final boolean ignoringBoundaryWhite) {
 		this.ignoringBoundaryWhite = ignoringBoundaryWhite;
 	}
 
@@ -352,17 +380,15 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void externalEntityDecl(String name,
-			String publicID, String systemID)
-			throws SAXException {
+	public void externalEntityDecl(final String name, final String publicID,
+			final String systemID) throws SAXException {
 		// Store the public and system ids for the name
 		externalEntities.put(name, new String[] { publicID, systemID });
 
 		if (!inInternalSubset)
 			return;
 
-		internalSubset.append("  <!ENTITY ")
-				.append(name);
+		internalSubset.append("  <!ENTITY ").append(name);
 		appendExternalId(publicID, systemID);
 		internalSubset.append(">\n");
 	}
@@ -382,30 +408,21 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> value of attribute
 	 */
 	@Override
-	public void attributeDecl(String eName, String aName, String type,
-			String valueDefault, String value) {
+	public void attributeDecl(final String eName, final String aName,
+			final String type, final String valueDefault, final String value) {
 
 		if (!inInternalSubset)
 			return;
 
-		internalSubset.append("  <!ATTLIST ")
-				.append(eName)
-				.append(' ')
-				.append(aName)
-				.append(' ')
-				.append(type)
-				.append(' ');
+		internalSubset.append("  <!ATTLIST ").append(eName).append(' ')
+				.append(aName).append(' ').append(type).append(' ');
 		if (valueDefault != null) {
 			internalSubset.append(valueDefault);
 		} else {
-			internalSubset.append('\"')
-					.append(value)
-					.append('\"');
+			internalSubset.append('\"').append(value).append('\"');
 		}
 		if ((valueDefault != null) && (valueDefault.equals("#FIXED"))) {
-			internalSubset.append(" \"")
-					.append(value)
-					.append('\"');
+			internalSubset.append(" \"").append(value).append('\"');
 		}
 		internalSubset.append(">\n");
 	}
@@ -419,16 +436,13 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> model of the element in DTD syntax
 	 */
 	@Override
-	public void elementDecl(String name, String model) {
+	public void elementDecl(final String name, final String model) {
 		// Skip elements that come from the external subset
 		if (!inInternalSubset)
 			return;
 
-		internalSubset.append("  <!ELEMENT ")
-				.append(name)
-				.append(' ')
-				.append(model)
-				.append(">\n");
+		internalSubset.append("  <!ELEMENT ").append(name).append(' ')
+				.append(model).append(">\n");
 	}
 
 	/**
@@ -440,7 +454,7 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> value of the entity
 	 */
 	@Override
-	public void internalEntityDecl(String name, String value) {
+	public void internalEntityDecl(final String name, final String value) {
 
 		// Skip entities that come from the external subset
 		if (!inInternalSubset)
@@ -452,9 +466,7 @@ public class SAXHandler extends DefaultHandler
 		} else {
 			internalSubset.append(name);
 		}
-		internalSubset.append(" \"")
-				.append(value)
-				.append("\">\n");
+		internalSubset.append(" \"").append(value).append("\">\n");
 	}
 
 	/**
@@ -471,7 +483,7 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 
 		if (suppress)
@@ -479,11 +491,15 @@ public class SAXHandler extends DefaultHandler
 
 		flushCharacters();
 
+		final ProcessingInstruction pi = (currentLocator == null) ? factory
+				.processingInstruction(target, data) : factory
+				.processingInstruction(currentLocator.getLineNumber(),
+						currentLocator.getColumnNumber(), target, data);
+
 		if (atRoot) {
-			factory.addContent(currentDocument, factory.processingInstruction(target, data));
+			factory.addContent(currentDocument, pi);
 		} else {
-			factory.addContent(getCurrentElement(),
-					factory.processingInstruction(target, data));
+			factory.addContent(getCurrentElement(), pi);
 		}
 	}
 
@@ -497,8 +513,7 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void skippedEntity(String name)
-			throws SAXException {
+	public void skippedEntity(final String name) throws SAXException {
 
 		// We don't handle parameter entity references.
 		if (name.startsWith("%"))
@@ -506,7 +521,11 @@ public class SAXHandler extends DefaultHandler
 
 		flushCharacters();
 
-		factory.addContent(getCurrentElement(), factory.entityRef(name));
+		final EntityRef er = currentLocator == null ? factory.entityRef(name)
+				: factory.entityRef(currentLocator.getLineNumber(),
+						currentLocator.getColumnNumber(), name);
+
+		factory.addContent(getCurrentElement(), er);
 	}
 
 	/**
@@ -519,13 +538,13 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> namespace URI.
 	 */
 	@Override
-	public void startPrefixMapping(String prefix, String uri)
+	public void startPrefixMapping(final String prefix, final String uri)
 			throws SAXException {
 
 		if (suppress)
 			return;
 
-		Namespace ns = Namespace.getNamespace(prefix, uri);
+		final Namespace ns = Namespace.getNamespace(prefix, uri);
 		declaredNamespaces.add(ns);
 	}
 
@@ -550,9 +569,8 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void startElement(String namespaceURI, String localName,
-			String qName, Attributes atts)
-			throws SAXException {
+	public void startElement(final String namespaceURI, String localName,
+			final String qName, final Attributes atts) throws SAXException {
 		if (suppress)
 			return;
 
@@ -560,7 +578,7 @@ public class SAXHandler extends DefaultHandler
 
 		// If QName is set, then set prefix and local name as necessary
 		if (!"".equals(qName)) {
-			int colon = qName.indexOf(':');
+			final int colon = qName.indexOf(':');
 
 			if (colon > 0) {
 				prefix = qName.substring(0, colon);
@@ -574,8 +592,12 @@ public class SAXHandler extends DefaultHandler
 		// At this point either prefix and localName are set correctly or
 		// there is an error in the parser.
 
-		Namespace namespace = Namespace.getNamespace(prefix, namespaceURI);
-		Element element = factory.element(localName, namespace);
+		final Namespace namespace = Namespace
+				.getNamespace(prefix, namespaceURI);
+		final Element element = currentLocator == null ? factory.element(
+				localName, namespace) : factory.element(
+				currentLocator.getLineNumber(),
+				currentLocator.getColumnNumber(), localName, namespace);
 
 		// Take leftover declared namespaces and add them to this element's
 		// map of namespaces
@@ -587,7 +609,7 @@ public class SAXHandler extends DefaultHandler
 
 		if (atRoot) {
 			factory.setRoot(currentDocument, element); // Yes, use a factory
-														// call...
+			// call...
 			atRoot = false;
 		} else {
 			factory.addContent(getCurrentElement(), element);
@@ -599,7 +621,7 @@ public class SAXHandler extends DefaultHandler
 
 			String attPrefix = "";
 			String attLocalName = atts.getLocalName(i);
-			String attQName = atts.getQName(i);
+			final String attQName = atts.getQName(i);
 
 			// If attribute QName is set, then set attribute prefix and
 			// attribute local name as necessary
@@ -612,7 +634,7 @@ public class SAXHandler extends DefaultHandler
 					continue;
 				}
 
-				int attColon = attQName.indexOf(':');
+				final int attColon = attQName.indexOf(':');
 
 				if (attColon > 0) {
 					attPrefix = attQName.substring(0, attColon);
@@ -624,13 +646,14 @@ public class SAXHandler extends DefaultHandler
 				}
 			}
 
-			AttributeType attType = AttributeType.getAttributeType(atts.getType(i));
-			String attValue = atts.getValue(i);
-			String attURI = atts.getURI(i);
+			final AttributeType attType = AttributeType.getAttributeType(atts
+					.getType(i));
+			final String attValue = atts.getValue(i);
+			final String attURI = atts.getURI(i);
 
-			if (XMLConstants.XMLNS_ATTRIBUTE.equals(attLocalName) ||
-					XMLConstants.XMLNS_ATTRIBUTE.equals(attPrefix) ||
-					XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(attURI)) {
+			if (XMLConstants.XMLNS_ATTRIBUTE.equals(attLocalName)
+					|| XMLConstants.XMLNS_ATTRIBUTE.equals(attPrefix)
+					|| XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(attURI)) {
 				// use the actual Namespace to check too, because, in theory, a
 				// namespace-aware parser does not need to set the qName unless
 				// the namespace-prefixes feature is set as well.
@@ -653,9 +676,10 @@ public class SAXHandler extends DefaultHandler
 				// is an attribute definition that has form="qualified".
 				// <xs:attribute name="attname" form="qualified" ... />
 				// or the schema sets attributeFormDefault="qualified"
-				HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
-				for (Namespace nss : element.getNamespacesInScope()) {
-					if (nss.getPrefix().length() > 0 && nss.getURI().equals(attURI)) {
+				final HashMap<String, Namespace> tmpmap = new HashMap<String, Namespace>();
+				for (final Namespace nss : element.getNamespacesInScope()) {
+					if (nss.getPrefix().length() > 0
+							&& nss.getURI().equals(attURI)) {
 						attPrefix = nss.getPrefix();
 						break;
 					}
@@ -675,7 +699,7 @@ public class SAXHandler extends DefaultHandler
 					// All of these things are possible.
 					// Create some sort of default prefix.
 					int cnt = 0;
-					String base = "attns";
+					final String base = "attns";
 					String pfx = base + cnt;
 					while (tmpmap.containsKey(pfx)) {
 						cnt++;
@@ -684,10 +708,10 @@ public class SAXHandler extends DefaultHandler
 					attPrefix = pfx;
 				}
 			}
-			Namespace attNs = Namespace.getNamespace(attPrefix, attURI);
+			final Namespace attNs = Namespace.getNamespace(attPrefix, attURI);
 
-			Attribute attribute = factory.attribute(attLocalName, attValue,
-					attType, attNs);
+			final Attribute attribute = factory.attribute(attLocalName,
+					attValue, attType, attNs);
 			factory.setAttribute(element, attribute);
 		}
 
@@ -700,8 +724,8 @@ public class SAXHandler extends DefaultHandler
 	 * @param element
 	 *        <code>Element</code> to read namespaces from.
 	 */
-	private void transferNamespaces(Element element) {
-		for (Namespace ns : declaredNamespaces) {
+	private void transferNamespaces(final Element element) {
+		for (final Namespace ns : declaredNamespaces) {
 			if (ns != element.getNamespace()) {
 				element.addNamespaceDeclaration(ns);
 			}
@@ -720,7 +744,7 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>int</code> length of data.
 	 */
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 
 		if (suppress || (length == 0 && !inCDATA))
@@ -731,6 +755,11 @@ public class SAXHandler extends DefaultHandler
 		}
 
 		textBuffer.append(ch, start, length);
+		
+		if (currentLocator != null) {
+			lastline = currentLocator.getLineNumber();
+			lastcol = currentLocator.getColumnNumber();
+		}
 	}
 
 	/**
@@ -748,8 +777,8 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException {
+	public void ignorableWhitespace(final char[] ch, final int start,
+			final int length) throws SAXException {
 		if (!ignoringWhite) {
 			characters(ch, start, length);
 		}
@@ -767,8 +796,7 @@ public class SAXHandler extends DefaultHandler
 			if (!textBuffer.isAllWhitespace()) {
 				flushCharacters(textBuffer.toString());
 			}
-		}
-		else {
+		} else {
 			flushCharacters(textBuffer.toString());
 		}
 		textBuffer.clear();
@@ -784,7 +812,7 @@ public class SAXHandler extends DefaultHandler
 	 * @throws SAXException
 	 *         if the state of the handler does not allow this.
 	 */
-	protected void flushCharacters(String data) throws SAXException {
+	protected void flushCharacters(final String data) throws SAXException {
 		if (data.length() == 0 && !inCDATA) {
 			previousCDATA = inCDATA;
 			return;
@@ -798,10 +826,13 @@ public class SAXHandler extends DefaultHandler
 		 */
 
 		if (previousCDATA) {
-			factory.addContent(getCurrentElement(), factory.cdata(data));
-		}
-		else {
-			factory.addContent(getCurrentElement(), factory.text(data));
+			final CDATA cdata = currentLocator == null ? factory.cdata(data)
+					: factory.cdata(lastline, lastcol, data);
+			factory.addContent(getCurrentElement(), cdata);
+		} else {
+			final Text text = currentLocator == null ? factory.text(data)
+					: factory.text(lastline, lastcol, data);
+			factory.addContent(getCurrentElement(), text);
 		}
 
 		previousCDATA = inCDATA;
@@ -823,8 +854,8 @@ public class SAXHandler extends DefaultHandler
 	 *         when things go wrong
 	 */
 	@Override
-	public void endElement(String namespaceURI, String localName,
-			String qName) throws SAXException {
+	public void endElement(final String namespaceURI, final String localName,
+			final String qName) throws SAXException {
 
 		if (suppress)
 			return;
@@ -832,18 +863,16 @@ public class SAXHandler extends DefaultHandler
 		flushCharacters();
 
 		if (!atRoot) {
-			Parent p = currentElement.getParent();
+			final Parent p = currentElement.getParent();
 			if (p instanceof Document) {
 				atRoot = true;
-			}
-			else {
+			} else {
 				currentElement = (Element) p;
 			}
-		}
-		else {
+		} else {
 			throw new SAXException(
-					"Ill-formed XML document (missing opening tag for " +
-							localName + ")");
+					"Ill-formed XML document (missing opening tag for "
+							+ localName + ")");
 		}
 	}
 
@@ -860,12 +889,16 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> system ID of DTD
 	 */
 	@Override
-	public void startDTD(String name, String publicID, String systemID)
-			throws SAXException {
+	public void startDTD(final String name, final String publicID,
+			final String systemID) throws SAXException {
 
 		flushCharacters(); // Is this needed here?
 
-		factory.addContent(currentDocument, factory.docType(name, publicID, systemID));
+		final DocType doctype = currentLocator == null ? factory.docType(name,
+				publicID, systemID) : factory.docType(
+				currentLocator.getLineNumber(),
+				currentLocator.getColumnNumber(), name, publicID, systemID);
+		factory.addContent(currentDocument, doctype);
 		inDTD = true;
 		inInternalSubset = true;
 	}
@@ -876,13 +909,14 @@ public class SAXHandler extends DefaultHandler
 	@Override
 	public void endDTD() {
 
-		currentDocument.getDocType().setInternalSubset(internalSubset.toString());
+		currentDocument.getDocType().setInternalSubset(
+				internalSubset.toString());
 		inDTD = false;
 		inInternalSubset = false;
 	}
 
 	@Override
-	public void startEntity(String name) throws SAXException {
+	public void startEntity(final String name) throws SAXException {
 		entityDepth++;
 
 		if (expand || entityDepth > 1) {
@@ -897,17 +931,14 @@ public class SAXHandler extends DefaultHandler
 		}
 
 		// Ignore DTD references, and translate the standard 5
-		if ((!inDTD) &&
-				(!name.equals("amp")) &&
-				(!name.equals("lt")) &&
-				(!name.equals("gt")) &&
-				(!name.equals("apos")) &&
-				(!name.equals("quot"))) {
+		if ((!inDTD) && (!name.equals("amp")) && (!name.equals("lt"))
+				&& (!name.equals("gt")) && (!name.equals("apos"))
+				&& (!name.equals("quot"))) {
 
 			if (!expand) {
 				String pub = null;
 				String sys = null;
-				String[] ids = externalEntities.get(name);
+				final String[] ids = externalEntities.get(name);
 				if (ids != null) {
 					pub = ids[0]; // may be null, that's OK
 					sys = ids[1]; // may be null, that's OK
@@ -922,7 +953,10 @@ public class SAXHandler extends DefaultHandler
 				 */
 				if (!atRoot) {
 					flushCharacters();
-					EntityRef entity = factory.entityRef(name, pub, sys);
+					final EntityRef entity = currentLocator == null ? factory
+							.entityRef(name, pub, sys) : factory.entityRef(
+							currentLocator.getLineNumber(),
+							currentLocator.getColumnNumber(), name, pub, sys);
 
 					// no way to tell if the entity was from an attribute or
 					// element so just assume element
@@ -934,7 +968,7 @@ public class SAXHandler extends DefaultHandler
 	}
 
 	@Override
-	public void endEntity(String name) throws SAXException {
+	public void endEntity(final String name) throws SAXException {
 		entityDepth--;
 		if (entityDepth == 0) {
 			// No way are we suppressing if not in an entity,
@@ -986,7 +1020,7 @@ public class SAXHandler extends DefaultHandler
 	 *         if the state of the handler disallows this call
 	 */
 	@Override
-	public void comment(char[] ch, int start, int length)
+	public void comment(final char[] ch, final int start, final int length)
 			throws SAXException {
 
 		if (suppress)
@@ -994,18 +1028,20 @@ public class SAXHandler extends DefaultHandler
 
 		flushCharacters();
 
-		String commentText = new String(ch, start, length);
+		final String commentText = new String(ch, start, length);
 		if (inDTD && inInternalSubset && (expand == false)) {
-			internalSubset.append("  <!--")
-					.append(commentText)
-					.append("-->\n");
+			internalSubset.append("  <!--").append(commentText).append("-->\n");
 			return;
 		}
 		if ((!inDTD) && (!commentText.equals(""))) {
+			final Comment comment = currentLocator == null ? factory
+					.comment(commentText) : factory.comment(
+					currentLocator.getLineNumber(),
+					currentLocator.getColumnNumber(), commentText);
 			if (atRoot) {
-				factory.addContent(currentDocument, factory.comment(commentText));
+				factory.addContent(currentDocument, comment);
 			} else {
-				factory.addContent(getCurrentElement(), factory.comment(commentText));
+				factory.addContent(getCurrentElement(), comment);
 			}
 		}
 	}
@@ -1021,14 +1057,13 @@ public class SAXHandler extends DefaultHandler
 	 *        the system ID of the notation
 	 */
 	@Override
-	public void notationDecl(String name, String publicID, String systemID)
-			throws SAXException {
+	public void notationDecl(final String name, final String publicID,
+			final String systemID) throws SAXException {
 
 		if (!inInternalSubset)
 			return;
 
-		internalSubset.append("  <!NOTATION ")
-				.append(name);
+		internalSubset.append("  <!NOTATION ").append(name);
 		appendExternalId(publicID, systemID);
 		internalSubset.append(">\n");
 	}
@@ -1046,17 +1081,15 @@ public class SAXHandler extends DefaultHandler
 	 *        <code>String</code> of the unparsed entity decl
 	 */
 	@Override
-	public void unparsedEntityDecl(String name, String publicID,
-			String systemID, String notationName) {
+	public void unparsedEntityDecl(final String name, final String publicID,
+			final String systemID, final String notationName) {
 
 		if (!inInternalSubset)
 			return;
 
-		internalSubset.append("  <!ENTITY ")
-				.append(name);
+		internalSubset.append("  <!ENTITY ").append(name);
 		appendExternalId(publicID, systemID);
-		internalSubset.append(" NDATA ")
-				.append(notationName);
+		internalSubset.append(" NDATA ").append(notationName);
 		internalSubset.append(">\n");
 	}
 
@@ -1069,22 +1102,17 @@ public class SAXHandler extends DefaultHandler
 	 * @param systemID
 	 *        the system ID
 	 */
-	private void appendExternalId(String publicID, String systemID) {
+	private void appendExternalId(final String publicID, final String systemID) {
 		if (publicID != null) {
-			internalSubset.append(" PUBLIC \"")
-					.append(publicID)
-					.append('\"');
+			internalSubset.append(" PUBLIC \"").append(publicID).append('\"');
 		}
 		if (systemID != null) {
 			if (publicID == null) {
 				internalSubset.append(" SYSTEM ");
-			}
-			else {
+			} else {
 				internalSubset.append(' ');
 			}
-			internalSubset.append('\"')
-					.append(systemID)
-					.append('\"');
+			internalSubset.append('\"').append(systemID).append('\"');
 		}
 	}
 
@@ -1117,7 +1145,7 @@ public class SAXHandler extends DefaultHandler
 	 *        SAX document event.
 	 */
 	@Override
-	public void setDocumentLocator(Locator locator) {
+	public void setDocumentLocator(final Locator locator) {
 		this.currentLocator = locator;
 	}
 

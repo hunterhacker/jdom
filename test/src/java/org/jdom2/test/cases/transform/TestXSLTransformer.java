@@ -191,20 +191,20 @@ public class TestXSLTransformer {
 	public void testGetSetFactory() throws JDOMException, IOException {
 		final JDOMFactory fac = new DefaultJDOMFactory() {
 			@Override
-			public Element element(String name, String prefix, String uri) {
-				return super.element("xx" + name, prefix, uri);
+			public Element element(final int line, final int col, String name, String prefix, String uri) {
+				return super.element(line, col, "xx" + name, prefix, uri);
 			}
 			@Override
-			public Element element(String name, String uri) {
-				return super.element("xx" + name, uri);
+			public Element element(final int line, final int col, String name, String uri) {
+				return super.element(line, col, "xx" + name, uri);
 			}
 			@Override
-			public Element element(String name) {
-				return super.element("xx" + name);
+			public Element element(final int line, final int col, String name) {
+				return super.element(line, col, "xx" + name);
 			}
 			@Override
-			public Element element(String name, Namespace namespace) {
-				return super.element("xx" + name, namespace);
+			public Element element(final int line, final int col, String name, Namespace namespace) {
+				return super.element(line, col, "xx" + name, namespace);
 			}
 		};
 		
