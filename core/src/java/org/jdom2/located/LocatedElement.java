@@ -64,7 +64,7 @@ import org.jdom2.Namespace;
  * @author Rolf Lear
  *
  */
-public class LElement extends Element implements Located {
+public class LocatedElement extends Element implements Located {
 	
 	/**
 	 * Creates a new element with the supplied (local) name and namespace. If
@@ -75,7 +75,7 @@ public class LElement extends Element implements Located {
 	 * @throws IllegalNameException if the given name is illegal as an element
 	 *                              name
 	 */
-	public LElement(final String name, final Namespace namespace) {
+	public LocatedElement(final String name, final Namespace namespace) {
 		super(name, namespace);
 	}
 
@@ -86,7 +86,7 @@ public class LElement extends Element implements Located {
 	 * @throws IllegalNameException if the given name is illegal as an element
 	 *                              name.
 	 */
-	public LElement(final String name) {
+	public LocatedElement(final String name) {
 		super(name);
 	}
 
@@ -101,7 +101,7 @@ public class LElement extends Element implements Located {
 	 *                              name or the given URI is illegal as a
 	 *                              namespace URI
 	 */
-	public LElement(final String name, final String uri) {
+	public LocatedElement(final String name, final String uri) {
 		super(name, uri);
 	}
 
@@ -117,7 +117,7 @@ public class LElement extends Element implements Located {
 	 *                              namespace prefix, or the given URI is
 	 *                              illegal as a namespace URI
 	 */
-	public LElement(final String name, final String prefix, final String uri) {
+	public LocatedElement(final String name, final String prefix, final String uri) {
 		super(name, prefix, uri);
 	}
 

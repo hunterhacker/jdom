@@ -54,61 +54,68 @@
 
 package org.jdom2.located;
 
-import java.util.Map;
-
-import org.jdom2.IllegalTargetException;
-import org.jdom2.ProcessingInstruction;
+import org.jdom2.DocType;
+import org.jdom2.IllegalDataException;
+import org.jdom2.IllegalNameException;
 
 /**
- * An XML processing instruction. Methods allow the user to obtain the target of
- * the PI as well as its data. The data can always be accessed as a String or,
- * if the data appears akin to an attribute list, can be retrieved as name/value
- * pairs.
+ * An XML DOCTYPE declaration.  Method allow the user to get and set the
+ * root element name, public id, and system id.
  *
- * @author  Rolf Lear
+ * @author Rolf Lear
  */
-public class LProcessingInstruction extends ProcessingInstruction implements
-		Located {
-	
+public class LocatedDocType extends DocType implements Located {
+
 	/**
-	 * This will create a new <code>ProcessingInstruction</code>
-	 * with the specified target.
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and a reference to an
+	 * external DTD.
 	 *
-	 * @param target <code>String</code> target of PI.
-	 * @throws IllegalTargetException if the given target is illegal
-	 *         as a processing instruction name.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param publicID <code>String</code> public ID of
+	 *        referenced DTD
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal or the public ID is not a legal public ID.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
 	 */
-	public LProcessingInstruction(String target) {
-		super(target);
+	public LocatedDocType(String elementName, String publicID, String systemID) {
+		super(elementName, publicID, systemID);
 	}
 
 	/**
-	 * This will create a new <code>ProcessingInstruction</code>
-	 * with the specified target and data.
+	 * This will create the <code>DocType</code> with
+	 * the specified element name and reference to an
+	 * external DTD.
 	 *
-	 * @param target <code>String</code> target of PI.
-	 * @param data <code>Map</code> data for PI, in
-	 *             name/value pairs
-	 * @throws IllegalTargetException if the given target is illegal
-	 *         as a processing instruction name.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @param systemID <code>String</code> system ID of
+	 *        referenced DTD
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
 	 */
-	public LProcessingInstruction(String target, Map<String,String> data) {
-		super(target, data);
+	public LocatedDocType(String elementName, String systemID) {
+		super(elementName, systemID);
 	}
 
 	/**
-	 * This will create a new <code>ProcessingInstruction</code>
-	 * with the specified target and data.
+	 * This will create the <code>DocType</code> with
+	 * the specified element name
 	 *
-	 * @param target <code>String</code> target of PI.
-	 * @param data <code>String</code> data for PI.
-	 * @throws IllegalTargetException if the given target is illegal
-	 *         as a processing instruction name.
+	 * @param elementName <code>String</code> name of
+	 *        element being constrained.
+	 * @throws IllegalNameException if the given root element name is not a
+	 *         legal XML element name.
 	 */
-	public LProcessingInstruction(String target, String data) {
-		super(target, data);
+	public LocatedDocType(String elementName) {
+		super(elementName);
 	}
-
 
 	/**
 	 * JDOM2 Serialization. In this case, DocType is simple. 

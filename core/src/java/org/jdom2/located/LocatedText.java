@@ -54,67 +54,29 @@
 
 package org.jdom2.located;
 
-import org.jdom2.DocType;
 import org.jdom2.IllegalDataException;
-import org.jdom2.IllegalNameException;
+import org.jdom2.Text;
 
 /**
- * An XML DOCTYPE declaration.  Method allow the user to get and set the
- * root element name, public id, and system id.
+ * An XML character sequence. Provides a modular, parentable method of
+ * representing text. Text makes no guarantees about the underlying textual
+ * representation of character data, but does expose that data as a Java String.
  *
- * @author Rolf Lear
+ * @author  Rolf Lear
  */
-public class LDocType extends DocType implements Located {
+public class LocatedText extends Text implements Located {
 
 	/**
-	 * This will create the <code>DocType</code> with
-	 * the specified element name and a reference to an
-	 * external DTD.
+	 * This constructor creates a new <code>Text</code> node, with the
+	 * supplied string value as it's character content.
 	 *
-	 * @param elementName <code>String</code> name of
-	 *        element being constrained.
-	 * @param publicID <code>String</code> public ID of
-	 *        referenced DTD
-	 * @param systemID <code>String</code> system ID of
-	 *        referenced DTD
-	 * @throws IllegalDataException if the given system ID is not a legal
-	 *         system literal or the public ID is not a legal public ID.
-	 * @throws IllegalNameException if the given root element name is not a
-	 *         legal XML element name.
+	 * @param str the node's character content.
+	 * @throws IllegalDataException if <code>str</code> contains an
+	 *         illegal character such as a vertical tab (as determined
+	 *         by {@link org.jdom2.Verifier#checkCharacterData})
 	 */
-	public LDocType(String elementName, String publicID, String systemID) {
-		super(elementName, publicID, systemID);
-	}
-
-	/**
-	 * This will create the <code>DocType</code> with
-	 * the specified element name and reference to an
-	 * external DTD.
-	 *
-	 * @param elementName <code>String</code> name of
-	 *        element being constrained.
-	 * @param systemID <code>String</code> system ID of
-	 *        referenced DTD
-	 * @throws IllegalDataException if the given system ID is not a legal
-	 *         system literal.
-	 * @throws IllegalNameException if the given root element name is not a
-	 *         legal XML element name.
-	 */
-	public LDocType(String elementName, String systemID) {
-		super(elementName, systemID);
-	}
-
-	/**
-	 * This will create the <code>DocType</code> with
-	 * the specified element name
-	 *
-	 * @param elementName <code>String</code> name of
-	 *        element being constrained.
-	 * @throws IllegalNameException if the given root element name is not a
-	 *         legal XML element name.
-	 */
-	public LDocType(String elementName) {
-		super(elementName);
+	public LocatedText(String str) {
+		super(str);
 	}
 
 	/**
@@ -144,4 +106,5 @@ public class LDocType extends DocType implements Located {
 		this.col = col;
 	}
 
+	
 }

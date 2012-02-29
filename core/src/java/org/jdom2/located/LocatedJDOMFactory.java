@@ -83,7 +83,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public CDATA cdata(int line, int col, String text) {
-		final LCDATA ret = new LCDATA(text);
+		final LocatedCDATA ret = new LocatedCDATA(text);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -91,7 +91,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public Text text(int line, int col, String text) {
-		final LText ret = new LText(text);
+		final LocatedText ret = new LocatedText(text);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -99,7 +99,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public Comment comment(int line, int col, String text) {
-		final LComment ret = new LComment(text);
+		final LocatedComment ret = new LocatedComment(text);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -108,7 +108,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public DocType docType(int line, int col, String elementName,
 			String publicID, String systemID) {
-		final LDocType ret = new LDocType(elementName, publicID, systemID);
+		final LocatedDocType ret = new LocatedDocType(elementName, publicID, systemID);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -117,7 +117,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public DocType docType(int line, int col, String elementName,
 			String systemID) {
-		final LDocType ret = new LDocType(elementName, systemID);
+		final LocatedDocType ret = new LocatedDocType(elementName, systemID);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -125,7 +125,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public DocType docType(int line, int col, String elementName) {
-		final LDocType ret = new LDocType(elementName);
+		final LocatedDocType ret = new LocatedDocType(elementName);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -133,7 +133,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public Element element(int line, int col, String name, Namespace namespace) {
-		final LElement ret = new LElement(name, namespace);
+		final LocatedElement ret = new LocatedElement(name, namespace);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -141,7 +141,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public Element element(int line, int col, String name) {
-		final LElement ret = new LElement(name);
+		final LocatedElement ret = new LocatedElement(name);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -149,7 +149,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public Element element(int line, int col, String name, String uri) {
-		final LElement ret = new LElement(name, uri);
+		final LocatedElement ret = new LocatedElement(name, uri);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -158,7 +158,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public Element element(int line, int col, String name, String prefix,
 			String uri) {
-		final LElement ret = new LElement(name, prefix, uri);
+		final LocatedElement ret = new LocatedElement(name, prefix, uri);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -167,7 +167,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public ProcessingInstruction processingInstruction(int line, int col,
 			String target) {
-		final LProcessingInstruction ret = new LProcessingInstruction(target);
+		final LocatedProcessingInstruction ret = new LocatedProcessingInstruction(target);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -176,7 +176,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public ProcessingInstruction processingInstruction(int line, int col,
 			String target, Map<String, String> data) {
-		final LProcessingInstruction ret = new LProcessingInstruction(target, data);
+		final LocatedProcessingInstruction ret = new LocatedProcessingInstruction(target, data);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -185,7 +185,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public ProcessingInstruction processingInstruction(int line, int col,
 			String target, String data) {
-		final LProcessingInstruction ret = new LProcessingInstruction(target, data);
+		final LocatedProcessingInstruction ret = new LocatedProcessingInstruction(target, data);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -193,7 +193,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public EntityRef entityRef(int line, int col, String name) {
-		final LEntityRef ret = new LEntityRef(name);
+		final LocatedEntityRef ret = new LocatedEntityRef(name);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -202,7 +202,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 	@Override
 	public EntityRef entityRef(int line, int col, String name, String publicID,
 			String systemID) {
-		final LEntityRef ret = new LEntityRef(name, publicID, systemID);
+		final LocatedEntityRef ret = new LocatedEntityRef(name, publicID, systemID);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;
@@ -210,7 +210,7 @@ public class LocatedJDOMFactory extends DefaultJDOMFactory {
 
 	@Override
 	public EntityRef entityRef(int line, int col, String name, String systemID) {
-		final LEntityRef ret = new LEntityRef(name, systemID);
+		final LocatedEntityRef ret = new LocatedEntityRef(name, systemID);
 		ret.setLine(line);
 		ret.setColumn(col);
 		return ret;

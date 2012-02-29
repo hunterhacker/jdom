@@ -54,23 +54,32 @@
 
 package org.jdom2.located;
 
-import org.jdom2.Comment;
+import org.jdom2.CDATA;
+import org.jdom2.IllegalDataException;
+import org.jdom2.Text;
 
 /**
- * An XML comment. Methods allow the user to get and set the text of the
- * comment.
+ * An XML CDATA section. Represents character-based content within an XML
+ * document that should be output within special CDATA tags. Semantically it's
+ * identical to a simple {@link Text} object, but output behavior is different.
+ * CDATA makes no guarantees about the underlying textual representation of
+ * character data, but does expose that data as a Java String.
  *
  * @author  Rolf Lear
  */
-public class LComment extends Comment implements Located {
+public class LocatedCDATA extends CDATA implements Located {
 
 	/**
-	 * This creates the comment with the supplied text.
+	 * This constructor creates a new <code>LocatedCDATA</code> node, with the
+	 * supplied string value as it's character content.
 	 *
-	 * @param text <code>String</code> content of comment.
+	 * @param str the node's character content.
+	 * @throws IllegalDataException if <code>str</code> contains an
+	 *         illegal character such as a vertical tab (as determined
+	 *         by {@link org.jdom2.Verifier#checkCharacterData})
 	 */
-	public LComment(String text) {
-		super(text);
+	public LocatedCDATA(String str) {
+		super(str);
 	}
 
 	/**

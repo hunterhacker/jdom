@@ -55,32 +55,47 @@
 package org.jdom2.located;
 
 /**
- * Implemntations of this class know about their location. In XML terms this
- * is the line and column (on that line) at which the content starts.
+ * Implementations of this class know about their location (line an column).
+ * <p>
+ * While it would seem intuitive that this represents the location where the
+ * content starts, in fact, if the data is populated by a SAX parser the line
+ * and column values represent the <strong>end</strong> of the SAX
+ * <strong>event</strong>.
+ * <p>
+ * SAX parsers may vary, but it typically means the
+ * character after the last character for Text and CDATA values, the character
+ * after EntityRef, Comment, and ProcessingInstruction data, and the character
+ * after the opening tag for Element content. For DocType content, it appears
+ * that Xerces is inconsistent in the location, with the location being set at
+ * what appears to be the start of the internal subset data (if any).
+ * <p>
+ * Finally, remember that the column value counts characters, and thus, if you
+ * have tab-indented values, the tab counts as a single character (regardless of
+ * how much it indents).
  * 
  * @author Rolf Lear
  *
  */
 public interface Located {
 	/**
-	 * Get the starting line number
-	 * @return the starting line number
+	 * Get the line number
+	 * @return the line number
 	 */
 	public int getLine();
 	/**
-	 * Get the starting column (character on the line).
-	 * @return the starting column
+	 * Get the column (character on the line).
+	 * @return the column
 	 */
 	public int getColumn();
 	
 	/**
-	 * Set the starting line number
-	 * @param line the starting line.
+	 * Set the line number
+	 * @param line the line.
 	 */
 	public void setLine(int line);
 	/**
-	 * Set the starting column (character on the line).
-	 * @param col The starting column
+	 * Set the column (character on the line).
+	 * @param col The column
 	 */
 	public void setColumn(int col);
 }

@@ -54,32 +54,59 @@
 
 package org.jdom2.located;
 
-import org.jdom2.CDATA;
+import org.jdom2.EntityRef;
 import org.jdom2.IllegalDataException;
-import org.jdom2.Text;
+import org.jdom2.IllegalNameException;
 
 /**
- * An XML CDATA section. Represents character-based content within an XML
- * document that should be output within special CDATA tags. Semantically it's
- * identical to a simple {@link Text} object, but output behavior is different.
- * CDATA makes no guarantees about the underlying textual representation of
- * character data, but does expose that data as a Java String.
+ * An XML entity reference. Methods allow the user to manage its name, public
+ * id, and system id.
  *
  * @author  Rolf Lear
  */
-public class LCDATA extends CDATA implements Located {
+public class LocatedEntityRef extends EntityRef implements Located {
 
 	/**
-	 * This constructor creates a new <code>LCDATA</code> node, with the
-	 * supplied string value as it's character content.
+	 * This will create a new <code>EntityRef</code> with the supplied name.
 	 *
-	 * @param str the node's character content.
-	 * @throws IllegalDataException if <code>str</code> contains an
-	 *         illegal character such as a vertical tab (as determined
-	 *         by {@link org.jdom2.Verifier#checkCharacterData})
+	 * @param name <code>String</code> name of element.
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
 	 */
-	public LCDATA(String str) {
-		super(str);
+	public LocatedEntityRef(String name) {
+		super(name);
+	}
+
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name and system id.
+	 *
+	 * @param name <code>String</code> name of element.
+	 * @param systemID system id of the entity reference being constructed
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal.
+	 */
+	public LocatedEntityRef(String name, String systemID) {
+		super(name, systemID);
+	}
+
+	/**
+	 * This will create a new <code>EntityRef</code>
+	 * with the supplied name, public id, and system id.
+	 *
+	 * @param name <code>String</code> name of element.
+	 * @param publicID public id of the entity reference being constructed
+	 * @param systemID system id of the entity reference being constructed
+	 * @throws IllegalDataException if the given system ID is not a legal
+	 *         system literal or the the given public ID is not a
+	 *         legal public ID
+	 * @throws IllegalNameException if the given name is not a legal
+	 *         XML name.
+	 */
+	public LocatedEntityRef(String name, String publicID, String systemID) {
+		super(name, publicID, systemID);
 	}
 
 	/**
@@ -109,5 +136,4 @@ public class LCDATA extends CDATA implements Located {
 		this.col = col;
 	}
 
-	
 }

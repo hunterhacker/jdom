@@ -54,59 +54,23 @@
 
 package org.jdom2.located;
 
-import org.jdom2.EntityRef;
-import org.jdom2.IllegalDataException;
-import org.jdom2.IllegalNameException;
+import org.jdom2.Comment;
 
 /**
- * An XML entity reference. Methods allow the user to manage its name, public
- * id, and system id.
+ * An XML comment. Methods allow the user to get and set the text of the
+ * comment.
  *
  * @author  Rolf Lear
  */
-public class LEntityRef extends EntityRef implements Located {
+public class LocatedComment extends Comment implements Located {
 
 	/**
-	 * This will create a new <code>EntityRef</code> with the supplied name.
+	 * This creates the comment with the supplied text.
 	 *
-	 * @param name <code>String</code> name of element.
-	 * @throws IllegalNameException if the given name is not a legal
-	 *         XML name.
+	 * @param text <code>String</code> content of comment.
 	 */
-	public LEntityRef(String name) {
-		super(name);
-	}
-
-	/**
-	 * This will create a new <code>EntityRef</code>
-	 * with the supplied name and system id.
-	 *
-	 * @param name <code>String</code> name of element.
-	 * @param systemID system id of the entity reference being constructed
-	 * @throws IllegalNameException if the given name is not a legal
-	 *         XML name.
-	 * @throws IllegalDataException if the given system ID is not a legal
-	 *         system literal.
-	 */
-	public LEntityRef(String name, String systemID) {
-		super(name, systemID);
-	}
-
-	/**
-	 * This will create a new <code>EntityRef</code>
-	 * with the supplied name, public id, and system id.
-	 *
-	 * @param name <code>String</code> name of element.
-	 * @param publicID public id of the entity reference being constructed
-	 * @param systemID system id of the entity reference being constructed
-	 * @throws IllegalDataException if the given system ID is not a legal
-	 *         system literal or the the given public ID is not a
-	 *         legal public ID
-	 * @throws IllegalNameException if the given name is not a legal
-	 *         XML name.
-	 */
-	public LEntityRef(String name, String publicID, String systemID) {
-		super(name, publicID, systemID);
+	public LocatedComment(String text) {
+		super(text);
 	}
 
 	/**
@@ -136,4 +100,5 @@ public class LEntityRef extends EntityRef implements Located {
 		this.col = col;
 	}
 
+	
 }

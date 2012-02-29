@@ -54,30 +54,61 @@
 
 package org.jdom2.located;
 
-import org.jdom2.IllegalDataException;
-import org.jdom2.Text;
+import java.util.Map;
+
+import org.jdom2.IllegalTargetException;
+import org.jdom2.ProcessingInstruction;
 
 /**
- * An XML character sequence. Provides a modular, parentable method of
- * representing text. Text makes no guarantees about the underlying textual
- * representation of character data, but does expose that data as a Java String.
+ * An XML processing instruction. Methods allow the user to obtain the target of
+ * the PI as well as its data. The data can always be accessed as a String or,
+ * if the data appears akin to an attribute list, can be retrieved as name/value
+ * pairs.
  *
  * @author  Rolf Lear
  */
-public class LText extends Text implements Located {
+public class LocatedProcessingInstruction extends ProcessingInstruction implements
+		Located {
+	
+	/**
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target.
+	 *
+	 * @param target <code>String</code> target of PI.
+	 * @throws IllegalTargetException if the given target is illegal
+	 *         as a processing instruction name.
+	 */
+	public LocatedProcessingInstruction(String target) {
+		super(target);
+	}
 
 	/**
-	 * This constructor creates a new <code>Text</code> node, with the
-	 * supplied string value as it's character content.
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target and data.
 	 *
-	 * @param str the node's character content.
-	 * @throws IllegalDataException if <code>str</code> contains an
-	 *         illegal character such as a vertical tab (as determined
-	 *         by {@link org.jdom2.Verifier#checkCharacterData})
+	 * @param target <code>String</code> target of PI.
+	 * @param data <code>Map</code> data for PI, in
+	 *             name/value pairs
+	 * @throws IllegalTargetException if the given target is illegal
+	 *         as a processing instruction name.
 	 */
-	public LText(String str) {
-		super(str);
+	public LocatedProcessingInstruction(String target, Map<String,String> data) {
+		super(target, data);
 	}
+
+	/**
+	 * This will create a new <code>ProcessingInstruction</code>
+	 * with the specified target and data.
+	 *
+	 * @param target <code>String</code> target of PI.
+	 * @param data <code>String</code> data for PI.
+	 * @throws IllegalTargetException if the given target is illegal
+	 *         as a processing instruction name.
+	 */
+	public LocatedProcessingInstruction(String target, String data) {
+		super(target, data);
+	}
+
 
 	/**
 	 * JDOM2 Serialization. In this case, DocType is simple. 
@@ -106,5 +137,4 @@ public class LText extends Text implements Located {
 		this.col = col;
 	}
 
-	
 }
