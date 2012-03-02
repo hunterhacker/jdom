@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+
+  <title>JDOM2 Relative JDK Performance</title>
+
+  <link rel="stylesheet" href="../jdom.css" type="text/css" />
+</head>
+
+<body>
+  <div id="container">
+
+    <h1><a href="http://github.com/hunterhacker/jdom">JDOM2</a> Relative JDOM and JDK Performance</h1>
+
+    <div class="description">
+      Java manipulation of XML made easy.
+    </div>
+
+	<p />    
+    The following is a basic metric of the performance characteristics of JDOM and JDOM2.
+	The identical code/classes are run in Java5, Java6, and Java7. The code is
+	compiled by Java6 JDK with a 1.5 .class target.
+    This is not meant to be a reproducable baseline, rather, it is intended to
+    give an idea of whether a change has improved or decreased the performance.
+    <p />
+	
+	For details of the actual test cases have a look at the
+	<a href="performance.html">Peformance Page</a>
+	<p />
+    
+
+	The following metrics are (currently) produced:
+    <ul>
+    <li>Input - number of bytes in the input XML files</li>	
+    <li>Mem - the amount of memory required to load the XML as a JDOM document</li>	
+    <li>SAX - The SAXBuilder.build() method is timed </li>
+    <li>SAXJ - the amount of SAX time in JDOM</li>
+	<li>DOM - The DOMBuilder.build() time
+    <li>DOMJ - the amount of DOM time in JDOM</li>
+	<li>StAXS - The StAXBuilder.build(XMLStreamReader) time
+	<li>StAXSJ - the amount ot StAXS timm in JDOM
+	<li>StAXE - The StAXBuilder.build(XMLEventReader) time
+	<li>StAXEJ - the amount ot StAXE time in JDOM
+	<li>Scan - It measures how long it takes to do a simple, and then an Element-Filtered
+	    DescendantIterator 'walk' of the document tree.</li>	
+	<li>Dump - It measures how long it takes to output the document to a 'bitbucket'
+	    in the three major Format outputs (pretty, compact, raw).</li>	
+	<li>Dupe - It measures how long it takes to recursively 'duplicate' the document
+	    by using a 'brute-force' mechanism which uses the 'new' constructors for
+	    the content. See the code for what it does.</li>	
+	<li>XPath - It measures how long it takes to do two XPath operations, one that selects
+	    all attributes with a non-existing name (expect no results). The other
+	    selects all Elements.</li>	
+	<li>Checked - It measures how long it takes to send the document back through the
+		SAXOutputter/SAXHandler using the DefaultJDOMFactory</li>	
+	<li>UnChecked - It measures how long it takes to send the document back through the
+		SAXOutputter/SAXHandler using the UncheckedJDOMFactory</li>
+	</ul>	
+	
+	The following tests were run one after the next, on my laptop.
+	The code running the test is the same code that was used for the performance regression monitoring of JDOM2.
+	This code was back-ported to support JDOM 1.1.3 (with some obvious limitations including StAX results).
+	The 
+	<p>
+	
+	Out of interest, the standard JDOM2 performance test uses an XPath expresson of "//node()" as one of it's tests.
+	This does not work on JDOM 1.1.3 (not yet sure why - but it returns no results). So, I changed it to be "//." and that works on both JDOM2 and 1.1.3.
+	Thus, all comparative tests use "//." (and "//null") for the XPath performance test.
+	But, the performance is very different.... between "//node()" and "//.":
+	<hr/>
+	<p/>
+	JDOM2 - JRE7 with With XPath "//null" and "//node()" - 19841 results form hamlet.xml (includes the Document).
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.05ms</td><td>1.74ms</td><td>7.56ms</td><td>1.61ms</td><td>5.47ms</td><td>1.86ms</td><td>9.21ms</td><td>3.27ms</td><td>3.35ms</td><td>14.88ms</td><td>9.17ms</td><td>29.40ms</td><td>11.76ms</td><td>9.59ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.54ms</td><td>1.57ms</td><td>7.55ms</td><td>2.35ms</td><td>5.08ms</td><td>1.32ms</td><td>9.73ms</td><td>3.74ms</td><td>3.22ms</td><td>14.34ms</td><td>8.92ms</td><td>29.44ms</td><td>11.71ms</td><td>9.83ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.42ms</td><td>2.05ms</td><td>7.13ms</td><td>2.63ms</td><td>4.93ms</td><td>1.51ms</td><td>9.04ms</td><td>3.12ms</td><td>3.05ms</td><td>14.05ms</td><td>10.01ms</td><td>29.24ms</td><td>12.06ms</td><td>9.74ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.79ms</td><td>1.39ms</td><td>7.75ms</td><td>3.10ms</td><td>5.30ms</td><td>1.68ms</td><td>9.35ms</td><td>2.51ms</td><td>3.16ms</td><td>14.87ms</td><td>9.52ms</td><td>29.35ms</td><td>11.47ms</td><td>9.44ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.05ms</td><td>1.64ms</td><td>8.01ms</td><td>3.32ms</td><td>4.84ms</td><td>1.32ms</td><td>9.56ms</td><td>3.22ms</td><td>3.25ms</td><td>15.84ms</td><td>9.70ms</td><td>29.23ms</td><td>10.85ms</td><td>10.81ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	JDOM2 - JRE7 with With XPath "//null" and "//." - 19840 results form hamlet.xml (excludes the Document).
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.11ms</td><td>1.47ms</td><td>8.40ms</td><td>2.77ms</td><td>4.58ms</td><td>0.60ms</td><td>9.48ms</td><td>2.84ms</td><td>3.48ms</td><td>15.07ms</td><td>9.39ms</td><td>15.19ms</td><td>10.80ms</td><td>10.05ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.26ms</td><td>1.49ms</td><td>7.49ms</td><td>2.12ms</td><td>4.42ms</td><td>0.78ms</td><td>8.72ms</td><td>2.00ms</td><td>3.31ms</td><td>15.02ms</td><td>10.22ms</td><td>15.81ms</td><td>10.65ms</td><td>9.75ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.06ms</td><td>1.20ms</td><td>7.81ms</td><td>3.07ms</td><td>4.56ms</td><td>0.78ms</td><td>9.13ms</td><td>3.51ms</td><td>3.37ms</td><td>14.09ms</td><td>9.47ms</td><td>15.62ms</td><td>10.98ms</td><td>9.58ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.82ms</td><td>1.68ms</td><td>7.56ms</td><td>2.73ms</td><td>4.61ms</td><td>1.20ms</td><td>8.56ms</td><td>2.44ms</td><td>3.57ms</td><td>14.52ms</td><td>9.49ms</td><td>15.03ms</td><td>11.55ms</td><td>10.08ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.17ms</td><td>1.48ms</td><td>8.04ms</td><td>3.30ms</td><td>4.85ms</td><td>1.24ms</td><td>9.05ms</td><td>3.11ms</td><td>3.21ms</td><td>14.14ms</td><td>9.20ms</td><td>16.17ms</td><td>11.58ms</td><td>9.85ms</td></tr>
+	</table>
+
+	So, the bottom line is that the XPath expression has a big impact on performance.
+	<p>
+	
+	<h1>Comparative results - Java 7</h1>
+
+	<hr/>
+	<p/>
+	JDOM2
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.13ms</td><td>1.88ms</td><td>7.20ms</td><td>1.69ms</td><td>0.01ms</td><td>0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>3.26ms</td><td>14.98ms</td><td>9.73ms</td><td>14.86ms</td><td>11.66ms</td><td>9.94ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.12ms</td><td>1.32ms</td><td>7.66ms</td><td>2.96ms</td><td>0.01ms</td><td>0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>3.38ms</td><td>14.74ms</td><td>9.85ms</td><td>15.61ms</td><td>11.32ms</td><td>9.99ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.47ms</td><td>2.27ms</td><td>7.36ms</td><td>2.65ms</td><td>0.01ms</td><td>0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>3.45ms</td><td>14.58ms</td><td>9.66ms</td><td>14.41ms</td><td>12.36ms</td><td>10.32ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.69ms</td><td>1.55ms</td><td>7.82ms</td><td>2.37ms</td><td>0.01ms</td><td>0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>3.15ms</td><td>15.24ms</td><td>9.04ms</td><td>14.48ms</td><td>11.75ms</td><td>10.03ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.07ms</td><td>2.03ms</td><td>7.69ms</td><td>2.97ms</td><td>0.02ms</td><td>0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>3.61ms</td><td>14.40ms</td><td>9.83ms</td><td>15.11ms</td><td>10.92ms</td><td>9.45ms</td></tr>
+	</table>
+	
+	<hr/>
+	<p/>
+	JDOM 1.1.3
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.81ms</td><td>5.80ms</td><td>7.36ms</td><td>2.48ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.25ms</td><td>10.44ms</td><td>7.79ms</td><td>23.61ms</td><td>9.88ms</td><td>7.61ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.14ms</td><td>5.13ms</td><td>7.38ms</td><td>2.40ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.20ms</td><td>10.10ms</td><td>9.48ms</td><td>24.06ms</td><td>8.94ms</td><td>7.88ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>6.26ms</td><td>6.25ms</td><td>8.10ms</td><td>3.25ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.25ms</td><td>10.19ms</td><td>8.17ms</td><td>23.43ms</td><td>9.54ms</td><td>8.08ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>4.95ms</td><td>4.94ms</td><td>7.85ms</td><td>3.14ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>2.32ms</td><td>10.15ms</td><td>7.94ms</td><td>23.08ms</td><td>9.27ms</td><td>7.57ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>4.75ms</td><td>4.74ms</td><td>8.17ms</td><td>3.42ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.37ms</td><td>10.19ms</td><td>7.88ms</td><td>23.90ms</td><td>9.51ms</td><td>7.74ms</td></tr>
+	</table>
+	
+	
+	<h1>Comparative results - Java 6</h1>
+	
+	<hr/>
+	<p/>
+	JDOM2
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.78ms</td><td>1.80ms</td><td>7.70ms</td><td>2.71ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>3.47ms</td><td>15.56ms</td><td>10.48ms</td><td>17.61ms</td><td>11.88ms</td><td>9.40ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.97ms</td><td>1.21ms</td><td>7.13ms</td><td>1.80ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>3.21ms</td><td>15.31ms</td><td>9.41ms</td><td>18.50ms</td><td>10.96ms</td><td>9.53ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.84ms</td><td>1.42ms</td><td>7.69ms</td><td>3.17ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>3.39ms</td><td>15.18ms</td><td>10.30ms</td><td>18.21ms</td><td>11.75ms</td><td>9.97ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.90ms</td><td>1.81ms</td><td>7.56ms</td><td>2.54ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>3.48ms</td><td>14.61ms</td><td>10.12ms</td><td>17.99ms</td><td>11.75ms</td><td>9.80ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.83ms</td><td>1.54ms</td><td>7.76ms</td><td>3.16ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>3.50ms</td><td>15.06ms</td><td>9.15ms</td><td>18.26ms</td><td>12.41ms</td><td>9.42ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	JDOM 1.1.3
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.52ms</td><td>5.50ms</td><td>7.87ms</td><td>3.01ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>2.84ms</td><td>12.07ms</td><td>9.11ms</td><td>23.32ms</td><td>10.51ms</td><td>8.36ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>4.86ms</td><td>4.85ms</td><td>7.94ms</td><td>3.09ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.60ms</td><td>12.88ms</td><td>8.76ms</td><td>23.30ms</td><td>10.98ms</td><td>8.22ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.32ms</td><td>5.31ms</td><td>7.70ms</td><td>2.80ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.01ms</td><td>2.76ms</td><td>12.36ms</td><td>9.15ms</td><td>23.40ms</td><td>10.63ms</td><td>8.75ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.33ms</td><td>5.32ms</td><td>7.66ms</td><td>2.70ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>2.60ms</td><td>13.33ms</td><td>9.27ms</td><td>23.76ms</td><td>10.28ms</td><td>8.86ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.26MiB</td><td>5.12ms</td><td>5.10ms</td><td>7.50ms</td><td>2.80ms</td><td>0.01ms</td><td>-0.00ms</td><td>0.01ms</td><td>-0.00ms</td><td>2.79ms</td><td>12.75ms</td><td>8.97ms</td><td>23.94ms</td><td>10.34ms</td><td>8.18ms</td></tr>
+	</table>
+
+	<h1>Comparative results - Java 5</h1>
+	
+	<hr/>
+	<p/>
+	JDOM2
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.83MiB</td><td>13.22ms</td><td>6.19ms</td><td>18.34ms</td><td>7.79ms</td><td>0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>7.90ms</td><td>28.42ms</td><td>23.33ms</td><td>48.88ms</td><td>30.12ms</td><td>22.84ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.83MiB</td><td>13.92ms</td><td>7.31ms</td><td>18.84ms</td><td>8.23ms</td><td>0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>8.37ms</td><td>29.33ms</td><td>22.44ms</td><td>49.11ms</td><td>29.81ms</td><td>25.02ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.83MiB</td><td>13.49ms</td><td>6.98ms</td><td>18.18ms</td><td>7.34ms</td><td>0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>8.15ms</td><td>31.16ms</td><td>23.83ms</td><td>48.87ms</td><td>27.78ms</td><td>25.79ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.83MiB</td><td>13.61ms</td><td>6.80ms</td><td>18.57ms</td><td>8.48ms</td><td>0.00ms</td><td>0.00ms</td><td>0.01ms</td><td>0.00ms</td><td>8.29ms</td><td>31.78ms</td><td>23.96ms</td><td>48.90ms</td><td>30.55ms</td><td>23.65ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.83MiB</td><td>13.09ms</td><td>6.37ms</td><td>18.71ms</td><td>8.11ms</td><td>0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>8.38ms</td><td>29.00ms</td><td>23.54ms</td><td>48.99ms</td><td>26.93ms</td><td>24.68ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	JDOM 1.1.3
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.78MiB</td><td>10.23ms</td><td>10.23ms</td><td>18.01ms</td><td>7.14ms</td><td>0.00ms</td><td>-0.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>8.52ms</td><td>24.37ms</td><td>19.47ms</td><td>56.99ms</td><td>22.31ms</td><td>19.33ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.78MiB</td><td>10.46ms</td><td>10.46ms</td><td>16.87ms</td><td>6.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>0.00ms</td><td>-0.00ms</td><td>8.37ms</td><td>24.31ms</td><td>19.21ms</td><td>56.21ms</td><td>23.18ms</td><td>18.52ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.78MiB</td><td>10.43ms</td><td>10.43ms</td><td>17.06ms</td><td>6.25ms</td><td>0.00ms</td><td>-0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>8.52ms</td><td>24.69ms</td><td>18.76ms</td><td>56.60ms</td><td>22.37ms</td><td>18.77ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.78MiB</td><td>10.17ms</td><td>10.16ms</td><td>16.30ms</td><td>6.13ms</td><td>0.00ms</td><td>-0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>8.52ms</td><td>24.70ms</td><td>19.06ms</td><td>55.47ms</td><td>22.86ms</td><td>19.00ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.78MiB</td><td>10.40ms</td><td>10.39ms</td><td>17.55ms</td><td>6.82ms</td><td>0.00ms</td><td>-0.00ms</td><td>0.00ms</td><td>0.00ms</td><td>8.63ms</td><td>34.33ms</td><td>20.60ms</td><td>55.54ms</td><td>22.26ms</td><td>18.26ms</td></tr>
+	</table>
+
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/hunterhacker/jdom">hunterhacker/jdom</a>
+    </div>
+
+  </div>
+
+  
+</body>
+</html>
+
+
+
+
