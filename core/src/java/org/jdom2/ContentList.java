@@ -562,7 +562,7 @@ final class ContentList extends AbstractList<Content>
 		return super.toString();
 	}
 	
-	void sortInPlace(final int[] indexes) {
+	private void sortInPlace(final int[] indexes) {
 		// the indexes are a discrete set of values that have no duplicates,
 		// and describe the relative order of each of them.
 		// as a result, we can do some tricks....

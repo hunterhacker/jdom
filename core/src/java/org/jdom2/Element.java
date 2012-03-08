@@ -1828,6 +1828,28 @@ public class Element extends Content implements Parent {
 	}
 	
 	/**
+	 * Sort the Attributes of this Element using a mechanism that is safe
+	 * for JDOM. Other child content will be unaffected. See the notes
+	 * on {@link #sortContent(Filter, Comparator)} for how the algorithm works.
+	 * <p>
+	 * {@link Collections#sort(List, Comparator)} is not appropriate for sorting
+	 * the Lists returned from {@link Element#getContent()} because those are
+	 * 'live' lists, and the Collections.sort() method uses an algorithm that
+	 * adds the content in the new location before removing it from the old.
+	 * This creates validation issues with content attempting to attach to a
+	 * parent before detaching first.
+	 * <p>
+	 * This method provides a safe means to conveniently sort the content.
+	 * 
+	 * @param comparator The Comparator to use for the sorting.
+	 */
+	public void sortAttributes(Comparator <? super Attribute> comparator) {
+		if (attributes != null) {
+			attributes.sort(comparator);
+		}
+	}
+	
+	/**
 	 * Sort the child content of this Element that matches the Filter, using a
 	 * mechanism that is safe for JDOM content. Other child content (that does
 	 * not match the filter) will be unaffected.

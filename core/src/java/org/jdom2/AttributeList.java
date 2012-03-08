@@ -528,6 +528,77 @@ final class AttributeList extends AbstractList<Attribute>
 		return super.toString();
 	}
 
+	/**
+	 * Unlike the Arrays.binarySearch, this method never expects an
+	 * "already exists" condition, we only ever add, thus there will never
+	 * be a negative insertion-point.
+	 * @param indexes The pointers to search within
+	 * @param len The number of pointers to search within
+	 * @param val The pointer we are checking for.
+	 * @param comp The Comparator to compare with
+	 * @return the insertion point.
+	 */
+	private final int binarySearch(final int[] indexes, final int len,
+			final int val, final Comparator<? super Attribute> comp) {
+		int left = 0, mid = 0, right = len - 1, cmp = 0;
+		final Attribute base = attributeData[val];
+		while (left <= right) {
+			mid = (left + right) >>> 1;
+			cmp = comp.compare(base, attributeData[indexes[mid]]);
+			if (cmp == 0) {
+				while (cmp == 0 && mid < right && comp.compare(
+						base, attributeData[indexes[mid + 1]]) == 0) {
+					mid++;
+				}
+				return mid + 1;
+			} else if (cmp < 0) {
+				right = mid - 1;
+			} else {
+				left = mid + 1;
+			}
+		}
+		return left;
+	}
+	
+	private void sortInPlace(final int[] indexes) {
+		// the indexes are a discrete set of values that have no duplicates,
+		// and describe the relative order of each of them.
+		// as a result, we can do some tricks....
+		final int[] unsorted = ArrayCopy.copyOf(indexes, indexes.length);
+		Arrays.sort(unsorted);
+		final Attribute[] usc = new Attribute[unsorted.length];
+		for (int i = 0; i < usc.length; i++) {
+			usc[i] = attributeData[indexes[i]];
+		}
+		// usc contains the content in their pre-sorted order....
+		for (int i = 0; i < indexes.length; i ++) {
+			attributeData[unsorted[i]] = usc[i];
+		}
+	}
+
+	/**
+	 * Sort the attributes using the supplied comparator. The attributes are
+	 * never added using regular mechanisms, so there are never problems with
+	 * detached or already-attached Attributes. The sort happens 'in place'.
+	 * <p>
+	 * If the comparator identifies two (or more) Attributes to be equal, then
+	 * the relative order of those attributes will not be changed.
+	 * 
+	 * @param comp The Comparator to use for sorting.
+	 */
+	void sort(Comparator<? super Attribute> comp) {
+		final int sz = size;
+		int[] indexes = new int[sz];
+		for (int i = 0 ; i < sz; i++) {
+			final int ip = binarySearch(indexes, i, i, comp);
+			if (ip < i) {
+				System.arraycopy(indexes, ip, indexes, ip+1, i - ip);
+			}
+			indexes[ip] = i;
+		}
+		sortInPlace(indexes);
+	}
+
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * */
 	/* * * * * * * * * * * * * ContentListIterator * * * * * * * * * * * * * */
 	/**

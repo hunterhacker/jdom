@@ -2804,4 +2804,86 @@ public final class TestElement {
 		assertTrue(emt.getContent(2) == cd3);
 	}
 
+	@Test
+	public void testSortAttributes() {
+		final Element emt = new Element("root");
+		final Attribute att1 = new Attribute("one",   "001", Namespace.getNamespace("z", "uri1"));
+		final Attribute att2 = new Attribute("two",   "002", Namespace.getNamespace("y", "uri1"));
+		final Attribute att3 = new Attribute("three", "003", Namespace.getNamespace("x", "uri1"));
+		final Attribute att4 = new Attribute("four",  "004", Namespace.getNamespace("w", "uri2"));
+		final Attribute att5 = new Attribute("five",  "005", Namespace.getNamespace("v", "uri2"));
+		emt.setAttribute(att5);
+		emt.setAttribute(att4);
+		emt.setAttribute(att3);
+		emt.setAttribute(att2);
+		emt.setAttribute(att1);
+		
+		checkAttOrder(emt.getAttributes(), att5, att4, att3, att2, att1);
+		
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		
+		// alphabetic by string name.
+		checkAttOrder(emt.getAttributes(), att5, att4, att1, att3, att2);
+		
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getNamespacePrefix().compareTo(o2.getNamespacePrefix());
+			}
+		});
+		
+		// Namespace Prefixes's are reverse order
+		checkAttOrder(emt.getAttributes(), att5, att4, att3, att2, att1);
+		
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		});
+		
+		// Values are in order
+		checkAttOrder(emt.getAttributes(), att1, att2, att3, att4, att5);
+		
+		// Namespace URI's have some common items.... and are in same order
+		// as a result, we should have no change at all.
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getNamespaceURI().compareTo(o2.getNamespaceURI());
+			}
+		});
+		
+		// Values are in order
+		checkAttOrder(emt.getAttributes(), att1, att2, att3, att4, att5);
+		
+		// Namespace URI's have some common items.... and are in same order
+		// as a result, we should have no change at all.... except, this time
+		// we do the inverse of the result... so, this moves 4&5 to the front
+		// but relative order is maintained for equal values....
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return - o1.getNamespaceURI().compareTo(o2.getNamespaceURI());
+			}
+		});
+		
+		// Values are in order
+		checkAttOrder(emt.getAttributes(), att4, att5, att1, att2, att3);
+		
+	}
+
+	private void checkAttOrder(List<Attribute> attributes, Attribute...atts) {
+		assertTrue(atts.length == attributes.size());
+		for (int i = atts.length - 1; i >= 0; i--) {
+			assertTrue(atts[i] == attributes.get(i));
+		}
+		
+	}
+
 }
