@@ -150,6 +150,12 @@ public class Attribute extends CloneBase
 
 	/** The type of the <code>Attribute</code> */
 	protected AttributeType type = AttributeType.UNDECLARED;
+	
+	/**
+	 * Specified attributes are part of the XML,
+	 * unspecified attributes are 'defaulted' from a DTD.
+	 */
+	protected boolean specified = true;
 
 	/**
 	 * The parent to which this Attribute belongs. Change it with
@@ -362,6 +368,7 @@ public class Attribute extends CloneBase
 			throw new IllegalNameException(name, "attribute", reason);
 		}
 		this.name = name;
+		specified = true;
 		return this;
 	}
 
@@ -460,6 +467,7 @@ public class Attribute extends CloneBase
 					"NO_NAMESPACE namespace");
 		}
 		this.namespace = namespace;
+		specified = true;
 		return this;
 	}
 
@@ -493,6 +501,7 @@ public class Attribute extends CloneBase
 			throw new IllegalDataException(value, "attribute", reason);
 		}
 		this.value = value;
+		specified = true;
 		return this;
 	}
 
@@ -516,6 +525,7 @@ public class Attribute extends CloneBase
 	 */
 	public Attribute setAttributeType(final AttributeType type) {
 		this.type = type == null ? AttributeType.UNDECLARED : type;
+		specified = true;
 		return this;
 	}
 
@@ -532,6 +542,26 @@ public class Attribute extends CloneBase
 	public Attribute setAttributeType(final int type) {
 		setAttributeType(AttributeType.byIndex(type));
 		return this;
+	}
+	
+	/**
+	 * Get the 'specified' flag. True values indicate this attribute
+	 * was part of an XML document, false indicates it was defaulted
+	 * from a DTD.
+	 * @return the specified flag.
+	 * @since JDOM2
+	 */
+	public boolean isSpecified() {
+		return specified;
+	}
+	
+	/**
+	 * Change the specified flag to the given value.
+	 * @param specified The value to set the specified flag to.
+	 * @since JDOM2
+	 */
+	public void setSpecified(boolean specified) {
+		this.specified = specified;
 	}
 	
 	/**

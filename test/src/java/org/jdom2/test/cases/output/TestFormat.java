@@ -103,6 +103,16 @@ public class TestFormat {
 	}
 
 	@Test
+	public void testSpecifiedAttributesOnly() {
+		assertFalse(Format.getPrettyFormat().isSpecifiedAttributesOnly());
+		assertFalse(Format.getCompactFormat().isSpecifiedAttributesOnly());
+		Format mine = Format.getRawFormat();
+		assertFalse(mine.isSpecifiedAttributesOnly());
+		mine.setSpecifiedAttributesOnly(true);
+		assertTrue (mine.isSpecifiedAttributesOnly());
+	}
+
+	@Test
 	public void testExpandEmptyElements() {
 		assertFalse(Format.getPrettyFormat().getExpandEmptyElements());
 		assertFalse(Format.getCompactFormat().getExpandEmptyElements());

@@ -65,6 +65,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.ext.Attributes2;
 import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -622,6 +623,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 			String attPrefix = "";
 			String attLocalName = atts.getLocalName(i);
 			final String attQName = atts.getQName(i);
+			final boolean specified = (atts instanceof Attributes2) ? ((Attributes2)atts).isSpecified(i) : true;
 
 			// If attribute QName is set, then set attribute prefix and
 			// attribute local name as necessary
@@ -712,6 +714,10 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 
 			final Attribute attribute = factory.attribute(attLocalName,
 					attValue, attType, attNs);
+			if (!specified) {
+				// it is a DTD defaulted value.
+				attribute.setSpecified(false);
+			}
 			factory.setAttribute(element, attribute);
 		}
 

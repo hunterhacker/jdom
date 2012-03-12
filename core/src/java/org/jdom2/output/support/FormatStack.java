@@ -115,6 +115,11 @@ public final class FormatStack {
 	 * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code>
 	 */
 	private final boolean expandEmptyElements;
+	
+	/**
+	 * Whether or not to output 'specified' Attributes only
+	 */
+	private final boolean specifiedAttributesOnly;
 
 	/** entity escape logic */
 	private EscapeStrategy escapeStrategy;
@@ -163,6 +168,7 @@ public final class FormatStack {
 		expandEmptyElements = format.getExpandEmptyElements();
 		escapeStrategy = format.getEscapeStrategy();
 		defaultMode = format.getTextMode();
+		specifiedAttributesOnly = format.isSpecifiedAttributesOnly();
 
 		levelIndent[depth] = format.getIndent() == null
 				? null : "";
@@ -202,6 +208,17 @@ public final class FormatStack {
 	 */
 	public boolean isOmitDeclaration() {
 		return omitDeclaration;
+	}
+	
+	/**
+	 * Indicate whether only those Attributes specified in the XML
+	 * should be output.
+	 * @return true if only the specified Attributes should be output,
+	 *      false if those Attributes defaulted from the DTD or XML schema
+	 *      should be output too.
+	 */
+	public boolean isSpecifiedAttributesOnly() {
+		return specifiedAttributesOnly;
 	}
 
 	/**

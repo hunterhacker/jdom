@@ -444,6 +444,10 @@ public class Format implements Cloneable {
 	/** Whether or not to output the encoding in the XML declaration
 	 * - default is <code>false</code> */
 	boolean omitEncoding = false;
+	
+	/** Whether Attributes that are defaulted from the DTD or Schema
+	 * are output. */
+	boolean specifiedAttributesOnly = false;
 
 	/** Whether or not to expand empty elements to
 	 * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
@@ -750,6 +754,27 @@ public class Format implements Cloneable {
 	 */
 	public String getEncoding() {
 		return encoding;
+	}
+	
+	
+	/**
+	 * Will Attributes defaulted from the DTD or XMLSchema
+	 * be output
+	 * @return true if the defaulted Attributes will be output
+	 */
+	public boolean isSpecifiedAttributesOnly() {
+		return specifiedAttributesOnly;
+	}
+
+	/**
+	 * Set whether only those Attributes specified in the input XML should 
+	 * be output. Other Attributes (those defaulted or 'fixed' in the DTD
+	 * or XMLSchema) should be ignored.
+	 * @param specifiedAttributesOnly true if the defaulted
+	 * Attributes should be ignored, false if they should be output
+	 */
+	public void setSpecifiedAttributesOnly(boolean specifiedAttributesOnly) {
+		this.specifiedAttributesOnly = specifiedAttributesOnly;
 	}
 
 	@Override

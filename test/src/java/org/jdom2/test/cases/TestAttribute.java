@@ -101,6 +101,7 @@ public final class TestAttribute {
     		private static final long serialVersionUID = 200L;
         };
         assertTrue(null == attribute.getName());
+        assertTrue(attribute.isSpecified());
     }
 
     /**
@@ -110,6 +111,7 @@ public final class TestAttribute {
     @Test
 	public void test_TCC___String_String() {
 		final Attribute attribute = new Attribute("test", "value");
+        assertTrue(attribute.isSpecified());
 		assertTrue("incorrect attribute name", attribute.getName().equals("test"));
         assertTrue("incoorect attribute value", attribute.getValue().equals("value"));
         assertEquals("incorrect attribute type", attribute.getAttributeType(), Attribute.UNDECLARED_TYPE);
@@ -922,6 +924,35 @@ public final class TestAttribute {
     	assertTrue(att.getAttributeType() == AttributeType.UNDECLARED);
     	att.setAttributeType(AttributeType.ID);
     	assertTrue(att.getAttributeType() == AttributeType.ID);
+    }
+    
+    @Test
+    public void testSpecified() {
+    	Attribute att = new Attribute("att", "value");
+    	assertTrue(att.isSpecified());
+    	att.setSpecified(false);
+    	assertFalse(att.isSpecified());
+    	
+    	att.setValue("val");
+    	assertTrue(att.isSpecified());
+    	att.setSpecified(false);
+    	assertFalse(att.isSpecified());
+    	
+    	att.setName("attb");
+    	assertTrue(att.isSpecified());
+    	att.setSpecified(false);
+    	assertFalse(att.isSpecified());
+    	
+    	att.setNamespace(Namespace.getNamespace("pfx", "nothing"));
+    	assertTrue(att.isSpecified());
+    	att.setSpecified(false);
+    	assertFalse(att.isSpecified());
+    	
+    	att.setAttributeType(AttributeType.ID);
+    	assertTrue(att.isSpecified());
+    	att.setSpecified(false);
+    	assertFalse(att.isSpecified());
+    	
     }
 
 }

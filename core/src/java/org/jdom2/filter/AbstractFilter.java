@@ -68,7 +68,7 @@ import org.jdom2.Content;
  * @author Bradley S. Huffman
  * @param <T> The Generic type of content returned by this Filter
  */
-abstract class AbstractFilter<T> implements Filter<T> {
+public abstract class AbstractFilter<T> implements Filter<T> {
 
 	/**
 	 * JDOM2 Serialization: Default mechanism

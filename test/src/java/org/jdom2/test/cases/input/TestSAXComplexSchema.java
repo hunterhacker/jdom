@@ -106,8 +106,10 @@ public class TestSAXComplexSchema {
 				assertTrue(defns.equals(data.getNamespace()));
 				Attribute att = data.getAttribute("type", Namespace.NO_NAMESPACE);
 				assertTrue("Could not find type attribute in default ns.", att != null);
+				assertTrue(att.isSpecified());
 				att = data.getAttribute("type", impns);
 				assertTrue("Could not find type attribute in impns.", att != null);
+				assertFalse(att.isSpecified());
 			}
 		} catch (JDOMException e) {
 			e.printStackTrace();

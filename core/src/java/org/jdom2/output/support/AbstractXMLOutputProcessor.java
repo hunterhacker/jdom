@@ -1034,6 +1034,9 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 	protected void printAttribute(final Writer out, final FormatStack fstack,
 			final Attribute attribute) throws IOException {
 
+		if (!attribute.isSpecified() && fstack.isSpecifiedAttributesOnly()) {
+			return;
+		}
 		write(out, " ");
 		write(out, attribute.getQualifiedName());
 		write(out, "=");

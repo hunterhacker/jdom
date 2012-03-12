@@ -397,7 +397,8 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
 		checkOutput(root,
 				expect, 
 				excompact, 
-				expretty, 
+				expretty,
+				expretty,
 				extfw);
 	}
 	
@@ -459,9 +460,9 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
 	 */
 	@Override
 	protected void checkOutput(Object content, String methodprefix, Class<?> clazz, 
-			FormatSetup setup, String raw, String compact, String pretty, String trimfw) {
+			FormatSetup setup, String raw, String compact, String pretty, String tso, String trimfw) {
 		
-		super.checkOutput(content, methodprefix, clazz, setup, raw, compact, pretty, trimfw);
+		super.checkOutput(content, methodprefix, clazz, setup, raw, compact, pretty, tso, trimfw);
 		
 		Method mstring = getMethod(methodprefix + "String", clazz);
 		Method mstream = getMethod(methodprefix, clazz, OutputStream.class);

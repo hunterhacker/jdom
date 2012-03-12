@@ -309,6 +309,7 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 				rtdec, 
 				rtdec,
 				rtdec,
+				rtdec,
 				rtdec);
 	}
 

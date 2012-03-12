@@ -155,10 +155,26 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 		private final Iterator<Attribute> source;
 		private final XMLEventFactory fac;
 		
-		public AttIterator(Iterator<Attribute> source, XMLEventFactory fac) {
+		public AttIterator(final Iterator<Attribute> source, final XMLEventFactory fac, 
+				final boolean specifiedAttributesOnly) {
 			super();
-			this.source = source;
+			// remove not-specified Attributes if needed....
+			this.source = specifiedAttributesOnly ? specified(source) : source;
 			this.fac = fac;
+		}
+
+		private Iterator<Attribute> specified(Iterator<Attribute> src) {
+			if (src == null) {
+				return null;
+			}
+			final ArrayList<Attribute> al = new ArrayList<Attribute>();
+			while (src.hasNext()) {
+				Attribute att = src.next();
+				if (att.isSpecified()) {
+					al.add(att);
+				}
+			}
+			return al.isEmpty() ? null : al.iterator();
 		}
 
 		@Override
@@ -168,7 +184,7 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 
 		@Override
 		public javax.xml.stream.events.Attribute next() {
-			Attribute att = source.next();
+			final Attribute att = source.next();
 			final Namespace ns = att.getNamespace();
 			if (ns == Namespace.NO_NAMESPACE) {
 				return fac.createAttribute(att.getName(), att.getValue());
@@ -627,15 +643,15 @@ public abstract class AbstractStAXEventProcessor extends AbstractOutputProcessor
 						null;
 			if (ns == Namespace.NO_NAMESPACE) {
 				out.add(eventfactory.createStartElement("", "", element.getName(), 
-						new AttIterator(ait, eventfactory), 
+						new AttIterator(ait, eventfactory, fstack.isSpecifiedAttributesOnly()), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			} else if ("".equals(ns.getPrefix())) {
 				out.add(eventfactory.createStartElement("", ns.getURI(), element.getName(), 
-						new AttIterator(ait, eventfactory), 
+						new AttIterator(ait, eventfactory, fstack.isSpecifiedAttributesOnly()), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			} else {
 				out.add(eventfactory.createStartElement(ns.getPrefix(), ns.getURI(), element.getName(), 
-						new AttIterator(ait, eventfactory), 
+						new AttIterator(ait, eventfactory, fstack.isSpecifiedAttributesOnly()), 
 						new NSIterator(nstack.addedForward().iterator(), eventfactory)));
 			}
 			ait = null;

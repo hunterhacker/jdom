@@ -407,6 +407,9 @@ public abstract class AbstractDOMOutputProcessor extends
 	 */
 	protected org.w3c.dom.Attr printAttribute(final FormatStack fstack,
 			final org.w3c.dom.Document basedoc, final Attribute attribute) {
+		if (!attribute.isSpecified() && fstack.isSpecifiedAttributesOnly()) {
+			return null;
+		}
 		org.w3c.dom.Attr attr = basedoc.createAttributeNS(
 				attribute.getNamespaceURI(), attribute.getQualifiedName());
 		attr.setValue(attribute.getValue());
@@ -464,7 +467,10 @@ public abstract class AbstractDOMOutputProcessor extends
 
 			if (element.hasAttributes()) {
 				for (Attribute att : element.getAttributes()) {
-					ret.setAttributeNodeNS(printAttribute(fstack, basedoc, att));
+					final org.w3c.dom.Attr a = printAttribute(fstack, basedoc, att);
+					if (a != null) {
+						ret.setAttributeNodeNS(a);
+					}
 				}
 			}
 

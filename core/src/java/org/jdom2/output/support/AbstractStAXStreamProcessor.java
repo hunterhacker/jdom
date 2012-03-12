@@ -785,6 +785,10 @@ public abstract class AbstractStAXStreamProcessor
 	protected void printAttribute(final XMLStreamWriter out, final FormatStack fstack,
 			final Attribute attribute) throws XMLStreamException {
 
+		if (!attribute.isSpecified() && fstack.isSpecifiedAttributesOnly()) {
+			return;
+		}
+		
 		final Namespace ns = attribute.getNamespace();
 		if (ns == Namespace.NO_NAMESPACE) {
 			out.writeAttribute(attribute.getName(), attribute.getValue());

@@ -568,6 +568,9 @@ public class AbstractSAXOutputProcessor extends AbstractOutputProcessor
 			// Allocate attribute list.
 			if (element.hasAttributes()) {
 				for (Attribute a : element.getAttributes()) {
+					if (!a.isSpecified() && fstack.isSpecifiedAttributesOnly()) {
+						continue;
+					}
 					atts.addAttribute(a.getNamespaceURI(), a.getName(),
 							a.getQualifiedName(),
 							getAttributeTypeName(a.getAttributeType()),
