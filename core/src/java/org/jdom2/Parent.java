@@ -59,8 +59,8 @@ import java.util.*;
 import org.jdom2.filter.Filter;
 
 /**
- * Superclass for JDOM objects which are allowed to contain
- * {@link Content} content.
+ * Interface for JDOM objects which are allowed to contain
+ * {@link Content} content - {@link Element} and {@link Document}. 
  *
  * @see org.jdom2.Content
  * @see org.jdom2.Document

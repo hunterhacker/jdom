@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@
  */
 
 /**
- Tools to build JDOM documents and content using SAX parsers.
+ Support classes for building JDOM documents and content using SAX parsers.
 
  <h2>Introduction</h2>
  Skip to the <a href="#Examples">Examples</a> section for a quick bootstrap. 

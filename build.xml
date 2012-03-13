@@ -11,6 +11,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- =================================================================== -->
 	<tstamp >
 	    <format property="snapshot.time" pattern="yyyy.MM.dd.HH.mm" />
+	    <format property="year" pattern="yyyy" />
 	</tstamp>
 
 	<!--
@@ -34,7 +35,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<property name="version" value="2.x-${snapshot.time}"/>
 	<property name="version.impl" value="${version}"/>
 	<property name="version.spec" value="2.alpha"/>
-	<property name="year" value="2011"/>
 	
 	<property name="gpg" value="gpg" 
 		description="Path to the GNU gpg program for maven target"/>

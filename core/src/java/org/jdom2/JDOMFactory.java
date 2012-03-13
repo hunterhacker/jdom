@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -65,6 +65,7 @@ import java.util.*;
  * @author  Ken Rune Holland
  * @author  Phil Nelson
  * @author  Bradley S. Huffman
+ * @author  Rolf Lear
  */
 public interface JDOMFactory {
 
@@ -183,6 +184,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param str <code>String</code> content of CDATA.
 	 * @return the created CDATA instance
+	 * @since JDOM2
 	 */
 	public CDATA cdata(int line, int col, String str);
 
@@ -195,6 +197,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param str <code>String</code> content of Text.
 	 * @return the created Text instance
+	 * @since JDOM2
 	 */
 	public Text text(int line, int col, String str);
 
@@ -225,6 +228,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param text <code>String</code> content of comment.
 	 * @return the created Comment instance
+	 * @since JDOM2
 	 */
 	public Comment comment(int line, int col, String text);
 
@@ -283,6 +287,7 @@ public interface JDOMFactory {
 	 * @param systemID <code>String</code> system ID of
 	 *        referenced DTD
 	 * @return the created DocType instance
+	 * @since JDOM2
 	 */
 	public DocType docType(int line, int col, String elementName,
 			String publicID, String systemID);
@@ -299,6 +304,7 @@ public interface JDOMFactory {
 	 * @param systemID <code>String</code> system ID of
 	 *        referenced DTD
 	 * @return the created DocType instance
+	 * @since JDOM2
 	 */
 	public DocType docType(int line, int col, String elementName, String systemID);
 
@@ -311,6 +317,7 @@ public interface JDOMFactory {
 	 * @param elementName <code>String</code> name of
 	 *        element being constrained.
 	 * @return the created DocType instance
+	 * @since JDOM2
 	 */
 	public DocType docType(int line, int col, String elementName);
 
@@ -412,6 +419,7 @@ public interface JDOMFactory {
 	 * @param name <code>String</code> name of element.
 	 * @param namespace <code>Namespace</code> to put element in.
 	 * @return the created Element instance
+	 * @since JDOM2
 	 */
 	public Element element(int line, int col, String name, Namespace namespace);
 
@@ -423,6 +431,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param name <code>String</code> name of element.
 	 * @return the created Element instance
+	 * @since JDOM2
 	 */
 	public Element element(int line, int col, String name);
 
@@ -439,6 +448,7 @@ public interface JDOMFactory {
 	 * @param uri <code>String</code> URI for <code>Namespace</code> element
 	 *        should be in.
 	 * @return the created Element instance
+	 * @since JDOM2
 	 */
 	public Element element(int line, int col, String name, String uri);
 
@@ -455,6 +465,7 @@ public interface JDOMFactory {
 	 * @param uri <code>String</code> URI for <code>Namespace</code> element
 	 *        should be in.
 	 * @return the created Element instance
+	 * @since JDOM2
 	 */
 	public Element element(int line, int col, String name, String prefix, String uri);
 
@@ -502,6 +513,7 @@ public interface JDOMFactory {
 	 * @param data <code>Map</code> data for PI, in
 	 *             name/value pairs
 	 * @return the created ProcessingInstruction instance
+	 * @since JDOM2
 	 */
 	public ProcessingInstruction processingInstruction(int line, int col, String target,
 			Map<String,String> data);
@@ -515,6 +527,7 @@ public interface JDOMFactory {
 	 * @param target <code>String</code> target of PI.
 	 * @param data <code>String</code> data for PI.
 	 * @return the created ProcessingInstruction instance
+	 * @since JDOM2
 	 */
 	public ProcessingInstruction processingInstruction(int line, int col, String target,
 			String data);
@@ -527,6 +540,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param target <code>String</code> target of PI.
 	 * @return the created ProcessingInstruction instance
+	 * @since JDOM2
 	 */
 	public ProcessingInstruction processingInstruction(int line, int col, String target);
 
@@ -570,6 +584,7 @@ public interface JDOMFactory {
 	 * @param col  The column on the line at which this content begins.
 	 * @param name <code>String</code> name of element.
 	 * @return the created EntityRef instance
+	 * @since JDOM2
 	 */
 	public EntityRef entityRef(int line, int col, String name);
 
@@ -583,6 +598,7 @@ public interface JDOMFactory {
 	 * @param publicID <code>String</code> public ID of element.
 	 * @param systemID <code>String</code> system ID of element.
 	 * @return the created EntityRef instance
+	 * @since JDOM2
 	 */
 	public EntityRef entityRef(int line, int col, String name, String publicID, String systemID);
 
@@ -595,6 +611,7 @@ public interface JDOMFactory {
 	 * @param name <code>String</code> name of element.
 	 * @param systemID <code>String</code> system ID of element.
 	 * @return the created EntityRef instance
+	 * @since JDOM2
 	 */
 	public EntityRef entityRef(int line, int col, String name, String systemID);
 

@@ -56,7 +56,7 @@ DOMBuilder, etc.). The default JDOMFactory is the DefaultJDOMFactory).
 If you have custom JDOM classes or want special treatment for content as it is
 being created you can supply you own JDOMFactory instance to the input Builder.
 Typically you would extend the DefaultJDOMFactory for this purpose. 
-The DefaultJDOMFactory ensures all XML rules are followed correctly, the
+The DefaultJDOMFactory ensures all XML rules are followed correctly. The
 UncheckedJDOMFactory may create JDOM content that does not follow XML
 well-formedness rules. Use the UncheckedJDOMFactory in places where you are
 certain the input is correct (perhaps the results of a document parsed by a 

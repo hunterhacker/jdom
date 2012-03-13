@@ -113,8 +113,8 @@ import org.jdom2.input.sax.XMLReaders;
  * Please read the full documentation of this class, {@link SAXHandler},
  * {@link SAXHandlerFactory}, {@link JDOMFactory}, and the package documentation
  * for {@link org.jdom2.input.sax} before overriding this class. Future versions
- * of JDOM2 may make this class may be made 'final'. I you feel you have a good
- * reason to subclass SAXBuilder please mention it on <a
+ * of JDOM2 may make this class 'final'. I you feel you have a good reason to
+ * subclass SAXBuilder please mention it on <a
  * href="http://www.jdom.org/involved/lists.html">jdom-interest</a> mailing list
  * so that SAXBuilder can be extended or adapted to handle your use-case.
  * <p>

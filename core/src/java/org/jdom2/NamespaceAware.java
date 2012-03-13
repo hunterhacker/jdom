@@ -60,7 +60,8 @@ import java.util.List;
  * Classes implementing this interface are all sensitive to their
  * {@link Namespace} context. All the core JDOM classes are NamespaceAware (
  * {@link Parent} and subtypes, {@link Content} and subtypes, and
- * {@link Attribute}). You can use these methods to query the Namespace context.
+ * {@link Attribute}). You can use the methods that this interface provides
+ * to query the Namespace context.
  * <p>
  * JDOM2 introduces a consistency in reporting Namespace context. XML standards
  * do not dictate any conditions on Namespace reporting or ordering, but
@@ -96,7 +97,7 @@ import java.util.List;
  * <p>
  * In addition to the Element's Namespace, there could be other Namespaces that
  * are 'in scope' for the Element. The set of Namespaces that are in scope for
- * an Element are the union of five sets:
+ * an Element is the union of five sets:
  * <table>
  *   <tr>
  *     <th valign="top">XML</th>
