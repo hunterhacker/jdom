@@ -1,13 +1,13 @@
 <html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils">
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Unit Test Results: org.jdom2.test.cases.xpath.TestXalanCompiled</title>
+<title>Unit Test Results: org.jdom2.test.cases.xpath.TestJavaCompiled</title>
 <link rel="stylesheet" type="text/css" title="Style" href="../../../../../stylesheet.css">
 <script type="text/javascript" language="JavaScript">
         var TestCases = new Array();
         var cur;
         
-    cur = TestCases['org.jdom2.test.cases.xpath.TestXalanCompiled'] = new Array();
+    cur = TestCases['org.jdom2.test.cases.xpath.TestJavaCompiled'] = new Array();
     
         cur['about'] = './core/package';
     
@@ -27,7 +27,7 @@
     
         cur['ant.project.default-target'] = 'package';
     
-        cur['ant.project.invoked-targets'] = 'maven';
+        cur['ant.project.invoked-targets'] = 'clean,maven';
     
         cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
     
@@ -67,7 +67,7 @@
     
         cur['coverage.out'] = './build/coverage';
     
-        cur['DSTAMP'] = '20120229';
+        cur['DSTAMP'] = '20120312';
     
         cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
     
@@ -89,7 +89,7 @@
     
         cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
     
-        cur['jarbase'] = 'jdom2-0.0.2-BETA';
+        cur['jarbase'] = 'jdom2-0.0.3-BETA';
     
         cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
     
@@ -194,7 +194,7 @@
     
         cur['samples.src'] = './core/samples//';
     
-        cur['snapshot.time'] = '2012.02.29.22.54';
+        cur['snapshot.time'] = '2012.03.12.20.08';
     
         cur['stax.dir'] = 'dummy';
     
@@ -212,7 +212,7 @@
     
         cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
     
-        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3768327276918371911.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher8916114920701914303.properties propsfile=C:\\git\\jdom\\junit6203987670092228147.properties';
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3092559136248729582.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher6000843186501536880.properties propsfile=C:\\git\\jdom\\junit2450990882698235934.properties';
     
         cur['sun.java.launcher'] = 'SUN_STANDARD';
     
@@ -222,9 +222,9 @@
     
         cur['sun.os.patch.level'] = '';
     
-        cur['TODAY'] = 'February 29 2012';
+        cur['TODAY'] = 'March 12 2012';
     
-        cur['TSTAMP'] = '2254';
+        cur['TSTAMP'] = '2008';
     
         cur['user.country'] = 'CA';
     
@@ -240,9 +240,9 @@
     
         cur['user.variant'] = '';
     
-        cur['version'] = '0.0.2-BETA';
+        cur['version'] = '0.0.3-BETA';
     
-        cur['version.impl'] = '0.0.2-BETA';
+        cur['version.impl'] = '0.0.3-BETA';
     
         cur['version.spec'] = '2.alpha';
     
@@ -291,13 +291,13 @@
 </tr>
 </table>
 <hr size="1">
-<h3>Class org.jdom2.test.cases.xpath.TestXalanCompiled</h3>
+<h3>Class org.jdom2.test.cases.xpath.TestJavaCompiled</h3>
 <table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 <tr valign="top">
 <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
 </tr>
 <tr valign="top" class="Pass">
-<td><a title="Display all tests" href="75_TestXalanCompiled.html">TestXalanCompiled</a></td><td><a title="Display all tests" href="75_TestXalanCompiled.html">85</a></td><td>0</td><td>0</td><td>0.384</td><td>2012-03-01T03:54:51</td><td>lenny</td>
+<td><a title="Display all tests" href="70_TestJavaCompiled.html">TestJavaCompiled</a></td><td><a title="Display all tests" href="70_TestJavaCompiled.html">85</a></td><td>0</td><td>0</td><td>0.411</td><td>2012-03-13T00:09:24</td><td>lenny</td>
 </tr>
 </table>
 <h2>Tests</h2>
@@ -306,7 +306,7 @@
 <th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathPrecedingNode"></a>testXPathPrecedingNode</td><td>Success</td><td></td><td>0.008</td>
+<td><a name="testXPathPrecedingNode"></a>testXPathPrecedingNode</td><td>Success</td><td></td><td>0.057</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testToString"></a>testToString</td><td>Success</td><td></td><td>0.001</td>
@@ -318,13 +318,13 @@
 <td><a name="testAncestorOrSelfFromNamespace"></a>testAncestorOrSelfFromNamespace</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathDouble"></a>getXPathDouble</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="getXPathDouble"></a>getXPathDouble</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathString"></a>getXPathString</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="getXPathString"></a>getXPathString</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathBoolean"></a>getXPathBoolean</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="getXPathBoolean"></a>getXPathBoolean</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testNullQuery"></a>testNullQuery</td><td>Success</td><td></td><td>0.001</td>
@@ -348,16 +348,16 @@
 <td><a name="testRedefineNO_PREFIX"></a>testRedefineNO_PREFIX</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDuplicateVariable"></a>testDuplicateVariable</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testDuplicateVariable"></a>testDuplicateVariable</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testBadVariablePrefix"></a>testBadVariablePrefix</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testBadVariablePrefix"></a>testBadVariablePrefix</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testBadVariableName1"></a>testBadVariableName1</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testBadVariableName2"></a>testBadVariableName2</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testBadVariableName2"></a>testBadVariableName2</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testBadVariableNamespace"></a>testBadVariableNamespace</td><td>Success</td><td></td><td>0.001</td>
@@ -378,7 +378,7 @@
 <td><a name="testGetVariable2"></a>testGetVariable2</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testGetNullVariableValue"></a>testGetNullVariableValue</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testGetNullVariableValue"></a>testGetNullVariableValue</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testSetNullVariableValue"></a>testSetNullVariableValue</td><td>Success</td><td></td><td>0.001</td>
@@ -387,52 +387,52 @@
 <td><a name="testGetFilter"></a>testGetFilter</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectDocumentDoc"></a>testSelectDocumentDoc</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="testSelectDocumentDoc"></a>testSelectDocumentDoc</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectDocumentMain"></a>testSelectDocumentMain</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testSelectDocumentMain"></a>testSelectDocumentMain</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectDocumentAttr"></a>testSelectDocumentAttr</td><td>Success</td><td></td><td>0.008</td>
+<td><a name="testSelectDocumentAttr"></a>testSelectDocumentAttr</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectDocumentPI"></a>testSelectDocumentPI</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="testSelectDocumentPI"></a>testSelectDocumentPI</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectDocumentText"></a>testSelectDocumentText</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="testSelectDocumentText"></a>testSelectDocumentText</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectMainByName"></a>testSelectMainByName</td><td>Success</td><td></td><td>0.011</td>
+<td><a name="testSelectMainByName"></a>testSelectMainByName</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSelectMainFromDoc"></a>testSelectMainFromDoc</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="testSelectMainFromDoc"></a>testSelectMainFromDoc</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorsFromRoot"></a>testAncestorsFromRoot</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testAncestorsFromRoot"></a>testAncestorsFromRoot</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorsFromMain"></a>testAncestorsFromMain</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testAncestorsFromMain"></a>testAncestorsFromMain</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorsFromChild"></a>testAncestorsFromChild</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testAncestorsFromChild"></a>testAncestorsFromChild</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorOrSelfFromRoot"></a>testAncestorOrSelfFromRoot</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testAncestorOrSelfFromRoot"></a>testAncestorOrSelfFromRoot</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorOrSelfFromMain"></a>testAncestorOrSelfFromMain</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testAncestorOrSelfFromMain"></a>testAncestorOrSelfFromMain</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorOrSelfFromMainAttribute"></a>testAncestorOrSelfFromMainAttribute</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testAncestorOrSelfFromMainAttribute"></a>testAncestorOrSelfFromMainAttribute</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAncestorOrSelfFromChild"></a>testAncestorOrSelfFromChild</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testAncestorOrSelfFromChild"></a>testAncestorOrSelfFromChild</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathElementName"></a>getXPathElementName</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="getXPathElementName"></a>getXPathElementName</td><td>Success</td><td></td><td>0.009</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathElementText"></a>getXPathElementText</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="getXPathElementText"></a>getXPathElementText</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="getXPathProcessingInstructionAll"></a>getXPathProcessingInstructionAll</td><td>Success</td><td></td><td>0.004</td>
@@ -444,91 +444,91 @@
 <td><a name="getXPathProcessingInstructionByData"></a>getXPathProcessingInstructionByData</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathAttributeAll"></a>getXPathAttributeAll</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="getXPathAttributeAll"></a>getXPathAttributeAll</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathAttributeByName"></a>getXPathAttributeByName</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="getXPathAttributeByName"></a>getXPathAttributeByName</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="getXPathAttributeByValue"></a>getXPathAttributeByValue</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="getXPathAttributeByValue"></a>getXPathAttributeByValue</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSetVariable"></a>testSetVariable</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testSetVariable"></a>testSetVariable</td><td>Success</td><td></td><td>0.007</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAttributeNamespaceAsNumberToo"></a>testAttributeNamespaceAsNumberToo</td><td>Success</td><td></td><td>0.022</td>
+<td><a name="testAttributeNamespaceAsNumberToo"></a>testAttributeNamespaceAsNumberToo</td><td>Success</td><td></td><td>0.010</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAddNamespaceNamespace"></a>testAddNamespaceNamespace</td><td>Success</td><td></td><td>0.007</td>
+<td><a name="testAddNamespaceNamespace"></a>testAddNamespaceNamespace</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testGetALLNamespaces"></a>testGetALLNamespaces</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testGetALLNamespaces"></a>testGetALLNamespaces</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAttributesNamespace"></a>testAttributesNamespace</td><td>Success</td><td></td><td>0.010</td>
+<td><a name="testAttributesNamespace"></a>testAttributesNamespace</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAttributeParent"></a>testAttributeParent</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testAttributeParent"></a>testAttributeParent</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDefaultNamespacesFromElement"></a>testXPathDefaultNamespacesFromElement</td><td>Success</td><td></td><td>0.013</td>
+<td><a name="testXPathDefaultNamespacesFromElement"></a>testXPathDefaultNamespacesFromElement</td><td>Success</td><td></td><td>0.007</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDefaultNamespacesFromAttribute"></a>testXPathDefaultNamespacesFromAttribute</td><td>Success</td><td></td><td>0.013</td>
+<td><a name="testXPathDefaultNamespacesFromAttribute"></a>testXPathDefaultNamespacesFromAttribute</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDefaultNamespacesFromText"></a>testXPathDefaultNamespacesFromText</td><td>Success</td><td></td><td>0.011</td>
+<td><a name="testXPathDefaultNamespacesFromText"></a>testXPathDefaultNamespacesFromText</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testXPathAncestor"></a>testXPathAncestor</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathAncestorOrSelf"></a>testXPathAncestorOrSelf</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testXPathAncestorOrSelf"></a>testXPathAncestorOrSelf</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testXPathAncestorNodes"></a>testXPathAncestorNodes</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathAncestorOrSelfNodes"></a>testXPathAncestorOrSelfNodes</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathAncestorOrSelfNodes"></a>testXPathAncestorOrSelfNodes</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathAncestorOrSelfNodesFromAtt"></a>testXPathAncestorOrSelfNodesFromAtt</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testXPathAncestorOrSelfNodesFromAtt"></a>testXPathAncestorOrSelfNodesFromAtt</td><td>Success</td><td></td><td>0.007</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathAttributes"></a>testXPathAttributes</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testXPathAttributes"></a>testXPathAttributes</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathChild"></a>testXPathChild</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathChild"></a>testXPathChild</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDescendant"></a>testXPathDescendant</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathDescendant"></a>testXPathDescendant</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDescendantNode"></a>testXPathDescendantNode</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathDescendantNode"></a>testXPathDescendantNode</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathDescendantOrSelf"></a>testXPathDescendantOrSelf</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testXPathDescendantOrSelf"></a>testXPathDescendantOrSelf</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathFollowing"></a>testXPathFollowing</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathFollowing"></a>testXPathFollowing</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathFollowingNode"></a>testXPathFollowingNode</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathFollowingNode"></a>testXPathFollowingNode</td><td>Success</td><td></td><td>0.010</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathFollowingSibling"></a>testXPathFollowingSibling</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathFollowingSibling"></a>testXPathFollowingSibling</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathFollowingSiblingNode"></a>testXPathFollowingSiblingNode</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathFollowingSiblingNode"></a>testXPathFollowingSiblingNode</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathNamespaces"></a>testXPathNamespaces</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathNamespaces"></a>testXPathNamespaces</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathNamespacesForText"></a>testXPathNamespacesForText</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathNamespacesForText"></a>testXPathNamespacesForText</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathParent"></a>testXPathParent</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testXPathParent"></a>testXPathParent</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testXPathParentNode"></a>testXPathParentNode</td><td>Success</td><td></td><td>0.004</td>
@@ -537,7 +537,7 @@
 <td><a name="testXPathPreceding"></a>testXPathPreceding</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testXPathPrecedingSibling"></a>testXPathPrecedingSibling</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testXPathPrecedingSibling"></a>testXPathPrecedingSibling</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testXPathPrecedingSiblingNode"></a>testXPathPrecedingSiblingNode</td><td>Success</td><td></td><td>0.005</td>
@@ -552,17 +552,17 @@
 <td><a name="testXPathNoMatch"></a>testXPathNoMatch</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testNegativeBrokenPath"></a>testNegativeBrokenPath</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testNegativeBrokenPath"></a>testNegativeBrokenPath</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testNegativeBrokenExpression"></a>testNegativeBrokenExpression</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testNegativeBrokenExpression"></a>testNegativeBrokenExpression</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testXPathFilteredDiagnostic"></a>testXPathFilteredDiagnostic</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 </table>
 <div class="Properties">
-<a href="javascript:displayProperties('org.jdom2.test.cases.xpath.TestXalanCompiled');">
+<a href="javascript:displayProperties('org.jdom2.test.cases.xpath.TestJavaCompiled');">
                     Properties &raquo;
                 </a>
 </div>

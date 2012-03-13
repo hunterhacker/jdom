@@ -1,13 +1,13 @@
 <html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils">
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Unit Test Results: org.jdom2.test.cases.xpath.TestJaxenCompiled</title>
+<title>Unit Test Results: org.jdom2.test.cases.xpath.TestXPathBuilder</title>
 <link rel="stylesheet" type="text/css" title="Style" href="../../../../../stylesheet.css">
 <script type="text/javascript" language="JavaScript">
         var TestCases = new Array();
         var cur;
         
-    cur = TestCases['org.jdom2.test.cases.xpath.TestJaxenCompiled'] = new Array();
+    cur = TestCases['org.jdom2.test.cases.xpath.TestXPathBuilder'] = new Array();
     
         cur['about'] = './core/package';
     
@@ -27,7 +27,7 @@
     
         cur['ant.project.default-target'] = 'package';
     
-        cur['ant.project.invoked-targets'] = 'maven';
+        cur['ant.project.invoked-targets'] = 'clean,maven';
     
         cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
     
@@ -67,7 +67,7 @@
     
         cur['coverage.out'] = './build/coverage';
     
-        cur['DSTAMP'] = '20120229';
+        cur['DSTAMP'] = '20120312';
     
         cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
     
@@ -89,7 +89,7 @@
     
         cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
     
-        cur['jarbase'] = 'jdom2-0.0.2-BETA';
+        cur['jarbase'] = 'jdom2-0.0.3-BETA';
     
         cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
     
@@ -194,7 +194,7 @@
     
         cur['samples.src'] = './core/samples//';
     
-        cur['snapshot.time'] = '2012.02.29.22.54';
+        cur['snapshot.time'] = '2012.03.12.20.08';
     
         cur['stax.dir'] = 'dummy';
     
@@ -212,7 +212,7 @@
     
         cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
     
-        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3768327276918371911.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher8916114920701914303.properties propsfile=C:\\git\\jdom\\junit6203987670092228147.properties';
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3092559136248729582.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher6000843186501536880.properties propsfile=C:\\git\\jdom\\junit2450990882698235934.properties';
     
         cur['sun.java.launcher'] = 'SUN_STANDARD';
     
@@ -222,9 +222,9 @@
     
         cur['sun.os.patch.level'] = '';
     
-        cur['TODAY'] = 'February 29 2012';
+        cur['TODAY'] = 'March 12 2012';
     
-        cur['TSTAMP'] = '2254';
+        cur['TSTAMP'] = '2008';
     
         cur['user.country'] = 'CA';
     
@@ -240,9 +240,9 @@
     
         cur['user.variant'] = '';
     
-        cur['version'] = '0.0.2-BETA';
+        cur['version'] = '0.0.3-BETA';
     
-        cur['version.impl'] = '0.0.2-BETA';
+        cur['version.impl'] = '0.0.3-BETA';
     
         cur['version.spec'] = '2.alpha';
     
@@ -291,35 +291,47 @@
 </tr>
 </table>
 <hr size="1">
-<h3>Class org.jdom2.test.cases.xpath.TestJaxenCompiled</h3>
+<h3>Class org.jdom2.test.cases.xpath.TestXPathBuilder</h3>
 <table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 <tr valign="top">
 <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
 </tr>
-<tr valign="top" class="Failure">
-<td><a title="Display all tests" href="70_TestJaxenCompiled.html">TestJaxenCompiled</a></td><td><a title="Display all tests" href="70_TestJaxenCompiled.html">85</a></td><td>0</td><td><a title="Display only failures" href="70_TestJaxenCompiled-fails.html">2</a></td><td>0.173</td><td>2012-03-01T03:54:49</td><td>lenny</td>
+<tr valign="top" class="Pass">
+<td><a title="Display all tests" href="73_TestXPathBuilder.html">TestXPathBuilder</a></td><td><a title="Display all tests" href="73_TestXPathBuilder.html">8</a></td><td>0</td><td>0</td><td>0.008</td><td>2012-03-13T00:09:25</td><td>lenny</td>
 </tr>
 </table>
-<h2>Failures</h2>
+<h2>Tests</h2>
 <table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 <tr valign="top">
 <th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
 </tr>
-<tr valign="top" class="Failure">
-<td><a name="getXPathAttributeAll"></a>getXPathAttributeAll</td><td>Failure</td><td>Failed result at position 1 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
-<br>
-<code>junit.framework.AssertionFailedError: Failed result at position 1 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:283)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:314)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.getXPathAttributeAll(AbstractTestXPathCompiled.java:761)<br>
-</code></td><td>0.003</td>
+<tr valign="top" class="TableRowColor">
+<td><a name="testGetFilter"></a>testGetFilter</td><td>Success</td><td></td><td>0.000</td>
 </tr>
-<tr valign="top" class="Failure">
-<td><a name="testAttributesNamespace"></a>testAttributesNamespace</td><td>Failure</td><td>Failed result at position 0 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>
-<br>
-<code>junit.framework.AssertionFailedError: Failed result at position 0 for xpath '[XPathExpression: 2 namespaces and 0 variables for query //@*[namespace-uri() = 'jdom:c3nsb']]'. expected:&lt;[Attribute: c3nsb:intatt="-123"]&gt; but was:&lt;[Attribute: c3nsb:doubatt="-123.45"]&gt;<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkXPath(AbstractTestXPathCompiled.java:283)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.checkComplexXPath(AbstractTestXPathCompiled.java:332)<br>	at org.jdom2.test.cases.xpath.AbstractTestXPathCompiled.testAttributesNamespace(AbstractTestXPathCompiled.java:815)<br>
-</code></td><td>0.001</td>
+<tr valign="top" class="TableRowColor">
+<td><a name="testXPathBuilder"></a>testXPathBuilder</td><td>Success</td><td></td><td>0.001</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testGetSetVariable"></a>testGetSetVariable</td><td>Success</td><td></td><td>0.000</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testSetNamespaceStringString"></a>testSetNamespaceStringString</td><td>Success</td><td></td><td>0.000</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testSetNamespaceNamespace"></a>testSetNamespaceNamespace</td><td>Success</td><td></td><td>0.000</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testSetNamespaces"></a>testSetNamespaces</td><td>Success</td><td></td><td>0.000</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testGetExpression"></a>testGetExpression</td><td>Success</td><td></td><td>0.000</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testCompileWith"></a>testCompileWith</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 </table>
 <div class="Properties">
-<a href="javascript:displayProperties('org.jdom2.test.cases.xpath.TestJaxenCompiled');">
+<a href="javascript:displayProperties('org.jdom2.test.cases.xpath.TestXPathBuilder');">
                     Properties &raquo;
                 </a>
 </div>

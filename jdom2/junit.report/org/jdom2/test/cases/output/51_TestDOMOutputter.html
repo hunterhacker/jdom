@@ -27,7 +27,7 @@
     
         cur['ant.project.default-target'] = 'package';
     
-        cur['ant.project.invoked-targets'] = 'maven';
+        cur['ant.project.invoked-targets'] = 'clean,maven';
     
         cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
     
@@ -67,7 +67,7 @@
     
         cur['coverage.out'] = './build/coverage';
     
-        cur['DSTAMP'] = '20120229';
+        cur['DSTAMP'] = '20120312';
     
         cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
     
@@ -89,7 +89,7 @@
     
         cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
     
-        cur['jarbase'] = 'jdom2-0.0.2-BETA';
+        cur['jarbase'] = 'jdom2-0.0.3-BETA';
     
         cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
     
@@ -194,7 +194,7 @@
     
         cur['samples.src'] = './core/samples//';
     
-        cur['snapshot.time'] = '2012.02.29.22.54';
+        cur['snapshot.time'] = '2012.03.12.20.08';
     
         cur['stax.dir'] = 'dummy';
     
@@ -212,7 +212,7 @@
     
         cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
     
-        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3768327276918371911.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher8916114920701914303.properties propsfile=C:\\git\\jdom\\junit6203987670092228147.properties';
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3092559136248729582.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher6000843186501536880.properties propsfile=C:\\git\\jdom\\junit2450990882698235934.properties';
     
         cur['sun.java.launcher'] = 'SUN_STANDARD';
     
@@ -222,9 +222,9 @@
     
         cur['sun.os.patch.level'] = '';
     
-        cur['TODAY'] = 'February 29 2012';
+        cur['TODAY'] = 'March 12 2012';
     
-        cur['TSTAMP'] = '2254';
+        cur['TSTAMP'] = '2008';
     
         cur['user.country'] = 'CA';
     
@@ -240,9 +240,9 @@
     
         cur['user.variant'] = '';
     
-        cur['version'] = '0.0.2-BETA';
+        cur['version'] = '0.0.3-BETA';
     
-        cur['version.impl'] = '0.0.2-BETA';
+        cur['version.impl'] = '0.0.3-BETA';
     
         cur['version.spec'] = '2.alpha';
     
@@ -297,7 +297,7 @@
 <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
 </tr>
 <tr valign="top" class="Pass">
-<td><a title="Display all tests" href="51_TestDOMOutputter.html">TestDOMOutputter</a></td><td><a title="Display all tests" href="51_TestDOMOutputter.html">76</a></td><td>0</td><td>0</td><td>0.251</td><td>2012-03-01T03:54:42</td><td>lenny</td>
+<td><a title="Display all tests" href="51_TestDOMOutputter.html">TestDOMOutputter</a></td><td><a title="Display all tests" href="51_TestDOMOutputter.html">78</a></td><td>0</td><td>0</td><td>0.318</td><td>2012-03-13T00:09:18</td><td>lenny</td>
 </tr>
 </table>
 <h2>Tests</h2>
@@ -330,7 +330,7 @@
 <td><a name="testOutputElementNamespacesForceNS"></a>testOutputElementNamespacesForceNS</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementFull"></a>testOutputElementFull</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testOutputElementFull"></a>testOutputElementFull</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputElementFullForceNS"></a>testOutputElementFullForceNS</td><td>Success</td><td></td><td>0.002</td>
@@ -342,13 +342,13 @@
 <td><a name="testGetSetFormat"></a>testGetSetFormat</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testGetSetDOMOutputProcessor"></a>testGetSetDOMOutputProcessor</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testGetSetDOMOutputProcessor"></a>testGetSetDOMOutputProcessor</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testGetSetDOMAdapter"></a>testGetSetDOMAdapter</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testFullConstructor"></a>testFullConstructor</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testFullConstructor"></a>testFullConstructor</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testDOMOutputProcessorConstructor"></a>testDOMOutputProcessorConstructor</td><td>Success</td><td></td><td>0.001</td>
@@ -357,22 +357,22 @@
 <td><a name="testDOMAdapterConstructor"></a>testDOMAdapterConstructor</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDOMAdapterNameConstructor"></a>testDOMAdapterNameConstructor</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testDOMAdapterNameConstructor"></a>testDOMAdapterNameConstructor</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputAttribute"></a>testOutputAttribute</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testComment"></a>testComment</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testComment"></a>testComment</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testEntityRef"></a>testEntityRef</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testEntityRef"></a>testEntityRef</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputElementExpandEmpty"></a>testOutputElementExpandEmpty</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMultiAllWhiteExpandEmpty"></a>testOutputElementMultiAllWhiteExpandEmpty</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testOutputElementMultiAllWhiteExpandEmpty"></a>testOutputElementMultiAllWhiteExpandEmpty</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputDocumentOmitEncoding"></a>testOutputDocumentOmitEncoding</td><td>Success</td><td></td><td>0.000</td>
@@ -384,13 +384,13 @@
 <td><a name="testTextEmpty"></a>testTextEmpty</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testTextWhitespace"></a>testTextWhitespace</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testTextWhitespace"></a>testTextWhitespace</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testTextWithText"></a>testTextWithText</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testTextWithText"></a>testTextWithText</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testCDATAEmpty"></a>testCDATAEmpty</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testCDATAEmpty"></a>testCDATAEmpty</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testCDATAWhitespace"></a>testCDATAWhitespace</td><td>Success</td><td></td><td>0.001</td>
@@ -399,10 +399,10 @@
 <td><a name="testCDATAWithText"></a>testCDATAWithText</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testProcessingInstructionTargetOnly"></a>testProcessingInstructionTargetOnly</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testProcessingInstructionTargetOnly"></a>testProcessingInstructionTargetOnly</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testProcessingInstructionTargetWithData"></a>testProcessingInstructionTargetWithData</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testProcessingInstructionTargetWithData"></a>testProcessingInstructionTargetWithData</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testDocTypeSimple"></a>testDocTypeSimple</td><td>Success</td><td></td><td>0.001</td>
@@ -411,28 +411,28 @@
 <td><a name="testDocTypeSimpleISS"></a>testDocTypeSimpleISS</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocTypeSystemID"></a>testDocTypeSystemID</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testDocTypeSystemID"></a>testDocTypeSystemID</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testDocTypeSystemIDISS"></a>testDocTypeSystemIDISS</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocTypePublicSystemID"></a>testDocTypePublicSystemID</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testDocTypePublicSystemID"></a>testDocTypePublicSystemID</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testDocTypePublicSystemIDISS"></a>testDocTypePublicSystemIDISS</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testMultiWhiteText"></a>testMultiWhiteText</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testMultiWhiteText"></a>testMultiWhiteText</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testMultiText"></a>testMultiText</td><td>Success</td><td></td><td>0.006</td>
+<td><a name="testMultiText"></a>testMultiText</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocumentSimple"></a>testDocumentSimple</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testDocumentSimple"></a>testDocumentSimple</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDocumentDocType"></a>testDocumentDocType</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testDocumentDocType"></a>testDocumentDocType</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testDocumentComment"></a>testDocumentComment</td><td>Success</td><td></td><td>0.001</td>
@@ -441,16 +441,16 @@
 <td><a name="testXXX"></a>testXXX</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputText"></a>testOutputText</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testOutputText"></a>testOutputText</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputCDATA"></a>testOutputCDATA</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testOutputCDATA"></a>testOutputCDATA</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputComment"></a>testOutputComment</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testOutputComment"></a>testOutputComment</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputProcessingInstructionSimple"></a>testOutputProcessingInstructionSimple</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testOutputProcessingInstructionSimple"></a>testOutputProcessingInstructionSimple</td><td>Success</td><td></td><td>0.002</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputProcessingInstructionData"></a>testOutputProcessingInstructionData</td><td>Success</td><td></td><td>0.002</td>
@@ -465,31 +465,37 @@
 <td><a name="testOutputElementAttribute"></a>testOutputElementAttribute</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementCDATA"></a>testOutputElementCDATA</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementAttributeNotSpecifiedA"></a>testOutputElementAttributeNotSpecifiedA</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementPreserveSpace"></a>testOutputElementPreserveSpace</td><td>Success</td><td></td><td>0.010</td>
+<td><a name="testOutputElementAttributeNotSpecifiedB"></a>testOutputElementAttributeNotSpecifiedB</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMultiText"></a>testOutputElementMultiText</td><td>Success</td><td></td><td>0.008</td>
+<td><a name="testOutputElementCDATA"></a>testOutputElementCDATA</td><td>Success</td><td></td><td>0.003</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testOutputElementPreserveSpace"></a>testOutputElementPreserveSpace</td><td>Success</td><td></td><td>0.009</td>
+</tr>
+<tr valign="top" class="TableRowColor">
+<td><a name="testOutputElementMultiText"></a>testOutputElementMultiText</td><td>Success</td><td></td><td>0.007</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputElementMultiAllWhite"></a>testOutputElementMultiAllWhite</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMultiMostWhiteExpandEmpty"></a>testOutputElementMultiMostWhiteExpandEmpty</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testOutputElementMultiMostWhiteExpandEmpty"></a>testOutputElementMultiMostWhiteExpandEmpty</td><td>Success</td><td></td><td>0.008</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMixedMultiCDATA"></a>testOutputElementMixedMultiCDATA</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementMixedMultiCDATA"></a>testOutputElementMixedMultiCDATA</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMixedMultiEntityRef"></a>testOutputElementMixedMultiEntityRef</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementMixedMultiEntityRef"></a>testOutputElementMixedMultiEntityRef</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMixedMultiText"></a>testOutputElementMixedMultiText</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementMixedMultiText"></a>testOutputElementMixedMultiText</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMixedMultiZeroText"></a>testOutputElementMixedMultiZeroText</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementMixedMultiZeroText"></a>testOutputElementMixedMultiZeroText</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputElementMultiEntityLeftRight"></a>testOutputElementMultiEntityLeftRight</td><td>Success</td><td></td><td>0.004</td>
@@ -498,10 +504,10 @@
 <td><a name="testOutputElementMultiTrimLeftRight"></a>testOutputElementMultiTrimLeftRight</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementMultiCDATALeftRight"></a>testOutputElementMultiCDATALeftRight</td><td>Success</td><td></td><td>0.004</td>
+<td><a name="testOutputElementMultiCDATALeftRight"></a>testOutputElementMultiCDATALeftRight</td><td>Success</td><td></td><td>0.005</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementNamespaces"></a>testOutputElementNamespaces</td><td>Success</td><td></td><td>0.005</td>
+<td><a name="testOutputElementNamespaces"></a>testOutputElementNamespaces</td><td>Success</td><td></td><td>0.006</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testOutputDocTypeSimple"></a>testOutputDocTypeSimple</td><td>Success</td><td></td><td>0.001</td>
@@ -522,16 +528,16 @@
 <td><a name="testOutputDocumentSimple"></a>testOutputDocumentSimple</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputDocumentFull"></a>testOutputDocumentFull</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testOutputDocumentFull"></a>testOutputDocumentFull</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testDeepNesting"></a>testDeepNesting</td><td>Success</td><td></td><td>0.050</td>
+<td><a name="testDeepNesting"></a>testDeepNesting</td><td>Success</td><td></td><td>0.093</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputElementContent"></a>testOutputElementContent</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testOutputElementContent"></a>testOutputElementContent</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testOutputList"></a>testOutputList</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testOutputList"></a>testOutputList</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 </table>
 <div class="Properties">

@@ -27,7 +27,7 @@
     
         cur['ant.project.default-target'] = 'package';
     
-        cur['ant.project.invoked-targets'] = 'maven';
+        cur['ant.project.invoked-targets'] = 'clean,maven';
     
         cur['ant.version'] = 'Apache Ant(TM) version 1.8.2 compiled on December 20 2010';
     
@@ -67,7 +67,7 @@
     
         cur['coverage.out'] = './build/coverage';
     
-        cur['DSTAMP'] = '20120229';
+        cur['DSTAMP'] = '20120312';
     
         cur['eclipse.pdebuild.home'] = '/C:/eclipse/plugins/org.eclipse.pde.build_3.7.0.v20110512-1320/./';
     
@@ -89,7 +89,7 @@
     
         cur['isorelax.jar'] = './contrib/lib/isorelax.jar';
     
-        cur['jarbase'] = 'jdom2-0.0.2-BETA';
+        cur['jarbase'] = 'jdom2-0.0.3-BETA';
     
         cur['java.awt.graphicsenv'] = 'sun.awt.Win32GraphicsEnvironment';
     
@@ -194,7 +194,7 @@
     
         cur['samples.src'] = './core/samples//';
     
-        cur['snapshot.time'] = '2012.02.29.22.54';
+        cur['snapshot.time'] = '2012.03.12.20.08';
     
         cur['stax.dir'] = 'dummy';
     
@@ -212,7 +212,7 @@
     
         cur['sun.io.unicode.encoding'] = 'UnicodeLittle';
     
-        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3768327276918371911.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher8916114920701914303.properties propsfile=C:\\git\\jdom\\junit6203987670092228147.properties';
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\\git\\jdom\\junittestcases3092559136248729582.properties filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\\git\\jdom\\build\\junit.xml\\IGNORETHIS.xml crashfile=C:\\git\\jdom\\junitvmwatcher6000843186501536880.properties propsfile=C:\\git\\jdom\\junit2450990882698235934.properties';
     
         cur['sun.java.launcher'] = 'SUN_STANDARD';
     
@@ -222,9 +222,9 @@
     
         cur['sun.os.patch.level'] = '';
     
-        cur['TODAY'] = 'February 29 2012';
+        cur['TODAY'] = 'March 12 2012';
     
-        cur['TSTAMP'] = '2254';
+        cur['TSTAMP'] = '2008';
     
         cur['user.country'] = 'CA';
     
@@ -240,9 +240,9 @@
     
         cur['user.variant'] = '';
     
-        cur['version'] = '0.0.2-BETA';
+        cur['version'] = '0.0.3-BETA';
     
-        cur['version.impl'] = '0.0.2-BETA';
+        cur['version.impl'] = '0.0.3-BETA';
     
         cur['version.spec'] = '2.alpha';
     
@@ -297,7 +297,7 @@
 <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
 </tr>
 <tr valign="top" class="Pass">
-<td><a title="Display all tests" href="18_TestFilterListElement.html">TestFilterListElement</a></td><td><a title="Display all tests" href="18_TestFilterListElement.html">19</a></td><td>0</td><td>0</td><td>0.699</td><td>2012-03-01T03:54:16</td><td>lenny</td>
+<td><a title="Display all tests" href="18_TestFilterListElement.html">TestFilterListElement</a></td><td><a title="Display all tests" href="18_TestFilterListElement.html">19</a></td><td>0</td><td>0</td><td>0.728</td><td>2012-03-13T00:08:49</td><td>lenny</td>
 </tr>
 </table>
 <h2>Tests</h2>
@@ -306,10 +306,10 @@
 <th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testSamples"></a>testSamples</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testSamples"></a>testSamples</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testIllegalClassData"></a>testIllegalClassData</td><td>Success</td><td></td><td>0.000</td>
+<td><a name="testIllegalClassData"></a>testIllegalClassData</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testIllegalArgumentData"></a>testIllegalArgumentData</td><td>Success</td><td></td><td>0.000</td>
@@ -321,25 +321,25 @@
 <td><a name="testEmpty"></a>testEmpty</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAdd"></a>testAdd</td><td>Success</td><td></td><td>0.047</td>
+<td><a name="testAdd"></a>testAdd</td><td>Success</td><td></td><td>0.067</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAddAll"></a>testAddAll</td><td>Success</td><td></td><td>0.045</td>
+<td><a name="testAddAll"></a>testAddAll</td><td>Success</td><td></td><td>0.044</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testAddAllInt"></a>testAddAllInt</td><td>Success</td><td></td><td>0.040</td>
+<td><a name="testAddAllInt"></a>testAddAllInt</td><td>Success</td><td></td><td>0.048</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testIllegalAddAllInt"></a>testIllegalAddAllInt</td><td>Success</td><td></td><td>0.229</td>
+<td><a name="testIllegalAddAllInt"></a>testIllegalAddAllInt</td><td>Success</td><td></td><td>0.241</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testClear"></a>testClear</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testClear"></a>testClear</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testInsert"></a>testInsert</td><td>Success</td><td></td><td>0.054</td>
+<td><a name="testInsert"></a>testInsert</td><td>Success</td><td></td><td>0.041</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testNullAdd"></a>testNullAdd</td><td>Success</td><td></td><td>0.002</td>
+<td><a name="testNullAdd"></a>testNullAdd</td><td>Success</td><td></td><td>0.001</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testIllegalIndex"></a>testIllegalIndex</td><td>Success</td><td></td><td>0.000</td>
@@ -348,7 +348,7 @@
 <td><a name="testRemove"></a>testRemove</td><td>Success</td><td></td><td>0.253</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testIllegalArgumentContent"></a>testIllegalArgumentContent</td><td>Success</td><td></td><td>0.003</td>
+<td><a name="testIllegalArgumentContent"></a>testIllegalArgumentContent</td><td>Success</td><td></td><td>0.004</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testIllegalClassContent"></a>testIllegalClassContent</td><td>Success</td><td></td><td>0.001</td>
@@ -357,7 +357,7 @@
 <td><a name="testNullContent"></a>testNullContent</td><td>Success</td><td></td><td>0.003</td>
 </tr>
 <tr valign="top" class="TableRowColor">
-<td><a name="testConcurrentMod"></a>testConcurrentMod</td><td>Success</td><td></td><td>0.001</td>
+<td><a name="testConcurrentMod"></a>testConcurrentMod</td><td>Success</td><td></td><td>0.000</td>
 </tr>
 <tr valign="top" class="TableRowColor">
 <td><a name="testConcurrentSetMod"></a>testConcurrentSetMod</td><td>Success</td><td></td><td>0.001</td>
