@@ -73,9 +73,23 @@ import org.jdom2.Namespace;
 
 /**
  * Builds a JDOM {@link org.jdom2.Document org.jdom2.Document} from a pre-existing
- * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}. Also handy for testing
- * builds from files to sanity check {@link SAXBuilder}.
- *
+ * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}.
+ * <p>
+ * If you are building a document that has Namespace declarations, you should
+ * ensure that the Namespaces are correctly recorded in the DOM document before
+ * building the JDOM document from the DOM. By default, the native Java
+ * DOMBuilderFactory is configured to ignore Namespaces, and thus they are
+ * 'lost' in the DOM tree. JDOM expects Namespace-aware documents, so you
+ * should ensure that you change the default settings on the
+ * DOMBuilderFactory before parsing the DOM document. For example:
+ * <p>
+ * <pre>
+ *     DocumentBuilderFactory domfactory = DocumentBuilderFactory.newInstance();
+ *     domfactory.setNamespaceAware(true);
+ *     DocumentBuilder dombuilder = domfac.newDocumentBuilder();
+ *     org.w3c.dom.Document doc = dombuilder.parse(....);
+ * </pre>
+ * 
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
