@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -252,12 +252,6 @@ public class Text extends Content {
 		.toString();
 	}
 
-	/**
-	 * This will return a clone of this <code>Text</code> node, with the
-	 * same character content, but no parent.
-	 *
-	 * @return <code>Text</code> - cloned node.
-	 */
 	@Override
 	public Text clone() {
 		Text text = (Text)super.clone();

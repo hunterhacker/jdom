@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2007-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -72,6 +72,7 @@ import java.util.List;
  * 
  * @author Bradley S. Huffman
  * @author Jason Hunter
+ * @author Rolf Lear
  */
 public abstract class Content extends CloneBase
 		implements Serializable, NamespaceAware {
@@ -238,16 +239,6 @@ public abstract class Content extends CloneBase
 	 */
 	public abstract String getValue();
 
-	/**
-	 * Returns a deep, unattached copy of this child and its descendants
-	 * detached from any parent or document.
-	 * <p>
-	 * This method can be overridden by particular Content subclasses to return
-	 * a specific type of Content (co-variant return type). All overriding
-	 * subclasses <b>must</b> call <code>super.clone()</code>;
-	 *
-	 * @return a detached deep copy of this child and descendants
-	 */
 	@Override
 	public Content clone() {
 		Content c = (Content)super.clone();

@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,10 +61,11 @@ import org.jdom2.Parent;
 
 /**
  * Traverse all a parent's descendants (all children at any level below
- * the parent).
+ * the parent - excludes the parent itself).
  *
  * @author Bradley S. Huffman
  * @author Jason Hunter
+ * @author Rolf Lear
  */
 class DescendantIterator implements Iterator<Content> {
 

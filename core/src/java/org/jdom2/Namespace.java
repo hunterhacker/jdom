@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -296,7 +296,9 @@ public final class Namespace implements Serializable {
 	}
 
 	/**
-	 * This returns a probably unique hash code for the <code>Namespace</code>.
+	 * This returns the hash code for the <code>Namespace</code> that conforms
+	 * to the 'equals()' contract.
+	 * <p>
 	 * If two namespaces have the same URI, they are equal and have the same
 	 * hash code, even if they have different prefixes.
 	 *

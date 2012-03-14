@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -63,6 +63,14 @@ import java.util.TreeMap;
 /**
  * An XML attribute. Methods allow the user to obtain the value of the attribute
  * as well as namespace and type information.
+ * <p>
+ * <strong>JDOM 1.x Compatibility Note:</strong><br>
+ * The Attribute class in JDOM 1.x had a number of int Constants declared to
+ * represent different Attribute Types. JDOM2 has introduced an AttributeType
+ * enumeration instead. To facilitate compatibility and to simplify JDOM 1.x
+ * migrations, the replacement AttributeType enums are referenced still using
+ * the JDOM 1.x constant names. In JDOM 1.x these names referenced constant
+ * int values. In JDOM2 these names reference Enum constants. 
  *
  * @author  Brett McLaughlin
  * @author  Jason Hunter
@@ -81,59 +89,37 @@ public class Attribute extends CloneBase
 
 	// Keep the old constant names for one beta cycle to help migration
 	
-	/**
-	 * @see AttributeType#UNDECLARED
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#UNDECLARED} */
 	public final static AttributeType UNDECLARED_TYPE = AttributeType.UNDECLARED;
 
-	/**
-	 * @see AttributeType#CDATA
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#CDATA} */
 	public final static AttributeType CDATA_TYPE = AttributeType.CDATA;
 
-	/**
-	 * @see AttributeType#ID
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#ID} */
 	public final static AttributeType ID_TYPE = AttributeType.ID;
 
-	/**
-	 * @see AttributeType#IDREF
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#IDREF} */
 	public final static AttributeType IDREF_TYPE = AttributeType.IDREF;
 
-	/**
-	 * @see AttributeType#IDREFS
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#IDREFS} */
 	public final static AttributeType IDREFS_TYPE = AttributeType.IDREFS;
 
-	/**
-	 * @see AttributeType#ENTITY
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#ENTITY} */
 	public final static AttributeType ENTITY_TYPE = AttributeType.ENTITY;
 
-	/**
-	 * @see AttributeType#ENTITIES
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#ENTITIES} */
 	public final static AttributeType ENTITIES_TYPE = AttributeType.ENTITIES;
 
-	/**
-	 * @see AttributeType#NMTOKEN
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#NMTOKEN} */
 	public final static AttributeType NMTOKEN_TYPE = AttributeType.NMTOKEN;
 
-	/**
-	 * @see AttributeType#NMTOKENS
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#NMTOKENS} */
 	public final static AttributeType NMTOKENS_TYPE = AttributeType.NMTOKENS;
 
-	/**
-	 * @see AttributeType#NOTATION
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#NOTATION} */
 	public final static AttributeType NOTATION_TYPE = AttributeType.NOTATION;
 
-	/**
-	 * @see AttributeType#ENUMERATION
-	 */
+	/** JDOM 1.x compatible reference to {@link AttributeType#ENUMERATION} */
 	public final static AttributeType ENUMERATED_TYPE = AttributeType.ENUMERATION;
 
 
@@ -205,7 +191,7 @@ public class Attribute extends CloneBase
 	 *         {@link org.jdom2.Verifier#checkCharacterData}) or
 	 *         if the given attribute type is not one of the
 	 *         supported types.
-	 * @deprecated Use Constructor with AttributeType type, not int type.
+	 * @deprecated Use {@link #Attribute(String, String, AttributeType, Namespace)}.
 	 */
 	@Deprecated
 	public Attribute(final String name, final String value, final int type, final Namespace namespace) {
@@ -219,7 +205,7 @@ public class Attribute extends CloneBase
 	 *
 	 * @param name <code>String</code> name of <code>Attribute</code>.
 	 * @param value <code>String</code> value for new attribute.
-	 * @param type <code>int</code> type for new attribute.
+	 * @param type <code>AttributeType</code> for new attribute.
 	 * @param namespace <code>Namespace</code> namespace for new attribute.
 	 * @throws IllegalNameException if the given name is illegal as an
 	 *         attribute name or if if the new namespace is the default
@@ -269,7 +255,7 @@ public class Attribute extends CloneBase
 	 *
 	 * @param name <code>String</code> name of <code>Attribute</code>.
 	 * @param value <code>String</code> value for new attribute.
-	 * @param type <code>int</code> type for new attribute.
+	 * @param type <code>AttributeType</code> for new attribute.
 	 * @throws IllegalNameException if the given name is illegal as an
 	 *         attribute name.
 	 * @throws IllegalDataException if the given attribute value is
@@ -506,10 +492,9 @@ public class Attribute extends CloneBase
 	}
 
 	/**
-	 * This will return the actual declared type of this
-	 * <code>Attribute</code>.
+	 * This will return the declared type of this <code>Attribute</code>.
 	 *
-	 * @return <code>int</code> - type for this attribute.
+	 * @return <code>AttributeType</code> - type for this attribute.
 	 */
 	public AttributeType getAttributeType() {
 		return type;

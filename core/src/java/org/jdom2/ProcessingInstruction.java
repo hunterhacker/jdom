@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -460,12 +460,6 @@ public class ProcessingInstruction extends Content {
 		.toString();
 	}
 
-	/**
-	 * This will return a clone of this <code>ProcessingInstruction</code>.
-	 *
-	 * @return <code>Object</code> - clone of this
-	 * <code>ProcessingInstruction</code>.
-	 */
 	@Override
 	public ProcessingInstruction clone() {
 		ProcessingInstruction pi = (ProcessingInstruction) super.clone();

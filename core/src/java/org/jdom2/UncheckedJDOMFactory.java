@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -62,6 +62,8 @@ import java.util.*;
  * input is absolutely correct.  This factory can speed builds, but any
  * problems in the input will be uncaught until later when they could cause
  * infinite loops, malformed XML, or worse.  Use with extreme caution.
+ * 
+ * @author Various Authors - history is not complete
  */
 public class UncheckedJDOMFactory extends DefaultJDOMFactory {
 

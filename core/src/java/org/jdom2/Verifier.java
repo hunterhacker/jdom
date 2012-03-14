@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -64,6 +64,7 @@ import java.util.*;
  * @author  Elliotte Rusty Harold
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
+ * @author  Rolf Lear
  */
 final public class Verifier {
 

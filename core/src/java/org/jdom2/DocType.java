@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -56,7 +56,7 @@ package org.jdom2;
 
 /**
  * An XML DOCTYPE declaration.  Method allow the user to get and set the
- * root element name, public id, and system id.
+ * root element name, public id, system id and internal subset.
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
@@ -171,7 +171,7 @@ public class DocType extends Content {
 	 * This will set the root element name declared by this
 	 * DOCTYPE declaration.
 	 *
-	 * @return DocType <code>DocType</code> this DocType object
+	 * @return this <code>DocType</code> instance
 	 * @param elementName <code>String</code> name of
 	 *        root element being constrained.
 	 * @throws IllegalNameException if the given root element name is not a

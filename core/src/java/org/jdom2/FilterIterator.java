@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,7 @@ import org.jdom2.filter.*;
  * Traverse a parent's children that match the supplied filter.
  *
  * @author Bradley S. Huffman
+ * @author Rolf Lear
  * @param <T> The Generic type of content returned by this FilterIterator.
  */
 class FilterIterator<T> implements Iterator<T> {

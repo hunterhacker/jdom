@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -69,6 +69,7 @@ import org.jdom2.filter.*;
  * @author  Jason Hunter
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
+ * @author  Rolf Lear
  */
 public class Document extends CloneBase implements Parent {
 	
@@ -730,6 +731,10 @@ public class Document extends CloneBase implements Parent {
 		return new FilterIterator<F>(new DescendantIterator(this), filter);
 	}
 
+	/**
+	 * Always returns null, Document cannot have a parent.
+	 * @return null
+	 */
 	@Override
 	public Parent getParent() {
 		return null;  // documents never have parents
@@ -738,7 +743,8 @@ public class Document extends CloneBase implements Parent {
 
 
 	/**
-	 * @see org.jdom2.Parent#getDocument()
+	 * Always returns this Document Instance
+	 * @return 'this' because this Document is it's own Document
 	 */
 	@Override
 	public Document getDocument() {
@@ -747,11 +753,13 @@ public class Document extends CloneBase implements Parent {
 
 	/**
 	 * Assigns an arbitrary object to be associated with this document under
-	 * the given "id" string.  Null values are permitted.  Strings beginning
-	 * with "http://www.jdom.org/ are reserved for JDOM use.
+	 * the given "id" string.  Null values are permitted.  'id' Strings beginning
+	 * with "http://www.jdom.org/ are reserved for JDOM use. Properties set with
+	 * this method will not be serialized with the rest of this Document, should
+	 * serialization need to be done.
 	 *
-	 * @param id     the id of the stored object
-	 * @param value  the object to store
+	 * @param id     the id of the stored <code>Object</code>
+	 * @param value  the <code>Object</code> to store
 	 */
 	public void setProperty(String id, Object value) {
 		if (propertyMap == null) {
@@ -765,11 +773,13 @@ public class Document extends CloneBase implements Parent {
 	 * string, or null if there is no binding or if the binding explicitly
 	 * stored a null value.
 	 *
-	 * @param id   the id of the stored object to return
-	 * @return     the object associated with the given id
+	 * @param id   the id of the stored <code>Object</code> to return
+	 * @return     the <code>Object</code> associated with the given id
 	 */
 	public Object getProperty(String id) {
-		if (propertyMap == null) return null;
+		if (propertyMap == null) {
+			return null;
+		}
 		return propertyMap.get(id);
 	}
 	

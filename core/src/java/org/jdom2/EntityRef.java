@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,7 @@ package org.jdom2;
  * @author  Brett McLaughlin
  * @author  Jason Hunter
  * @author  Philip Nelson
+ * @author  Rolf Lear
  */
 public class EntityRef extends Content {
 

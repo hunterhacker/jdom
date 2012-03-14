@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -63,6 +63,7 @@ import java.util.*;
  * @author Ken Rune Holland
  * @author Phil Nelson
  * @author Bradley S. Huffman
+ * @author Rolf Lear
  */
 public class DefaultJDOMFactory implements JDOMFactory {
 
