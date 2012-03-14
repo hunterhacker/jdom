@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -111,10 +111,7 @@ public class Element extends Content implements Parent {
 
 	/** Additional namespace declarations to store on this element; useful
 	 * during output */
-	protected transient List<Namespace> additionalNamespaces;
-
-	// See http://lists.denveronline.net/lists/jdom-interest/2000-September/003030.html
-	// for a possible memory optimization here (using a RootElement subclass)
+	transient List<Namespace> additionalNamespaces = null;
 
 	/**
 	 *  The attributes of the element.  Subclassers have to
