@@ -171,6 +171,11 @@ public class TestFilters extends AbstractTestFilter {
 	}
 
 	@Test
+	public void testTextOnly() {
+		checkFilter(Filters.textOnly(), new Text("txt"), new CDATA("txt"));
+	}
+
+	@Test
 	public void testFBoolean() {
 		checkFilter(Filters.fboolean(), Boolean.TRUE, new Object());
 	}

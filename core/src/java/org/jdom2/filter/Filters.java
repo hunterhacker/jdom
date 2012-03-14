@@ -54,7 +54,17 @@
 
 package org.jdom2.filter;
 
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.Content;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
+import org.jdom2.Text;
 
 /**
  * Factory class of convenience methods to create Filter instances of common
@@ -98,6 +108,8 @@ public final class Filters {
 	
 	private static final Filter<Text> ftext = 
 			new ClassFilter<Text>(Text.class);
+	
+	private static final Filter<Text> ftextonly = new TextOnlyFilter();
 	
 	private static final Filter<Element> felement = 
 			new ClassFilter<Element>(Element.class);
@@ -287,6 +299,17 @@ public final class Filters {
 	 */
 	public static final Filter<Text> text() {
 		return ftext;
+	}
+
+	/**
+	 * Return a Filter that matches any {@link Text} data (excludes 
+	 * {@link CDATA} instances).
+	 * 
+	 * @return a Filter that matches any {@link Text} data (which excludes 
+	 * {@link CDATA} instances).
+	 */
+	public static final Filter<Text> textOnly() {
+		return ftextonly;
 	}
 
 	/**
