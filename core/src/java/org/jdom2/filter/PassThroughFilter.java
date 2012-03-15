@@ -52,7 +52,7 @@ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
 
  */
 
- package org.jdom2.filter;
+package org.jdom2.filter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +60,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
+/**
+ * A filter that does not actual filtering.
+ * This is made available through {@link Filters#fpassthrough()}.
+ * 
+ * @author Rolf Lear
+ *
+ */
 final class PassThroughFilter extends AbstractFilter<Object> {
 	/**
 	 * JDOM2 Serialization: Default mechanism

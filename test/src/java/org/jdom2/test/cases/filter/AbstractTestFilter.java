@@ -262,7 +262,7 @@ public class AbstractTestFilter {
 		}
 		
 		try {
-			Filter<?> and = af.and(null); 
+			Filter<F> and = af.and(null); 
 			fail  ("expected an exception from " + and);
 		} catch (RuntimeException re) {
 			// good
@@ -287,7 +287,7 @@ public class AbstractTestFilter {
 		Filter<?> bfor = nf.or(af);
 		assertFilterEquals(afor, bfor);
 		
-		Filter<?> afand = UnitTestUtil.deSerialize(af).and(nf);
+		Filter<F> afand = UnitTestUtil.deSerialize(af).and(nf);
 		Filter<?> bfand = nf.and(af);
 		assertFilterEquals(afand, bfand);
 		
@@ -392,7 +392,7 @@ public class AbstractTestFilter {
 		}
 		
 		try {
-			Filter<?> and = af.and(null); 
+			Filter<F> and = af.and(null); 
 			fail  ("expected an exception from " + and);
 		} catch (RuntimeException re) {
 			// good
@@ -417,7 +417,7 @@ public class AbstractTestFilter {
 		Filter<?> bfor = nf.or(af);
 		assertFilterEquals(afor, bfor);
 		
-		Filter<?> afand = UnitTestUtil.deSerialize(af).and(nf);
+		Filter<F> afand = UnitTestUtil.deSerialize(af).and(nf);
 		Filter<?> bfand = nf.and(af);
 		assertFilterEquals(afand, bfand);
 		

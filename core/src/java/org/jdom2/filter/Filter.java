@@ -1,6 +1,6 @@
 /*-- 
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -62,13 +62,15 @@ import java.util.List;
  *
  * @author  Jools Enticknap
  * @author  Bradley S. Huffman
+ * @author  Rolf Lear
  * @param <T> The Generic type of content returned by this Filter
  */
 public interface Filter <T> extends java.io.Serializable {
 
 
 	/**
-	 * Filter the input list of all content except that which matches the Filter.
+	 * Filter the input list keeping only the items that match the Filter.
+	 * 
 	 * @param content The content to filter.
 	 * @return a new read-only RandomAccess list of the filtered input content.
 	 */
@@ -109,17 +111,19 @@ public interface Filter <T> extends java.io.Serializable {
 	public Filter<? extends Object> or(Filter<?> filter);
 
 	/**
-	 * Creates an ANDing filter
+	 * Creates an ANDing filter. The generic type of the result is the same as
+	 * this Filter.
+	 * 
 	 * @param filter a second Filter to AND with.
 	 * @return a new Filter instance that returns the 'intersection' of this
 	 *     filter and the specified filter.
 	 */
-	public Filter<?> and(Filter<?> filter);
+	public Filter<T> and(Filter<?> filter);
 
 	/**
 	 * This is similar to the and(Filter) method except the generic type is
 	 * different.
-	 * @param <R> The Generic type of the retuned data is taken from the input
+	 * @param <R> The Generic type of the returned data is taken from the input
 	 * instance. 
 	 * @param filter The filter to refine our results with.
 	 * @return A Filter that requires content to both match our instance and the

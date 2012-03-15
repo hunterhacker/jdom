@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -66,6 +66,7 @@ import org.jdom2.Content;
  * Partial implementation of {@link Filter}.
  *
  * @author Bradley S. Huffman
+ * @author Rolf Lear
  * @param <T> The Generic type of content returned by this Filter
  */
 public abstract class AbstractFilter<T> implements Filter<T> {
@@ -126,12 +127,12 @@ public abstract class AbstractFilter<T> implements Filter<T> {
 	}
 
 	@Override
-	public final Filter<?> and(Filter<?> filter) {
-		return new AndFilter<Object>(this, filter);
+	public final Filter<T> and(Filter<?> filter) {
+		return new AndFilter<T>(filter, this);
 	}
 
 	@Override
 	public <R> Filter<R> refine(Filter<R> filter) {
-		return new RefineFilter<R>(this, filter);
+		return new AndFilter<R>(this, filter);
 	}
 }
