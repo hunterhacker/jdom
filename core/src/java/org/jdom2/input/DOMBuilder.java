@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2007 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -54,13 +54,15 @@
 
 package org.jdom2.input;
 
+/*
+ * To keep things simple, all DOM-based items are fully qualified in this code.
+ * As such, there are no import org.w3c.dom.* statements...
+ * This way there isless confusion about what a Document or Element is....
+ */
+
 import static org.jdom2.JDOMConstants.*;
 
 import java.util.HashMap;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import org.jdom2.Attribute;
 import org.jdom2.DefaultJDOMFactory;
@@ -104,9 +106,8 @@ public class DOMBuilder {
 	private JDOMFactory factory = new DefaultJDOMFactory();
 
 	/**
-	 * This creates a new DOMBuilder which will attempt to first locate
-	 * a parser via JAXP, then will try to use a set of default parsers.
-	 * The underlying parser will not validate.
+	 * This creates a new DOMBuilder instance using the DefaultJDOMFactory
+	 * to build the JDOM content.
 	 */
 	public DOMBuilder() {
 	}
@@ -239,7 +240,7 @@ public class DOMBuilder {
 	 * @param current <code>Element</code> that is current parent.
 	 * @param atRoot <code>boolean</code> indicating whether at root level.
 	 */
-	private void buildTree(Node node,
+	private void buildTree(org.w3c.dom.Node node,
 			Document doc,
 			Element current,
 			boolean atRoot) {
@@ -252,7 +253,7 @@ public class DOMBuilder {
 				}
 				break;
 
-			case Node.ELEMENT_NODE:
+			case org.w3c.dom.Node.ELEMENT_NODE:
 				String nodeName = node.getNodeName();
 				String prefix = NS_PFX_DEFAULT;
 				String localName = nodeName;
@@ -277,14 +278,14 @@ public class DOMBuilder {
 
 				if (atRoot) {
 					// If at root, set as document root
-					doc.setRootElement(element);  // XXX should we use a factory call?
+					factory.setRoot(doc, element);
 				} else {
 					// else add to parent element
 					factory.addContent(current, element);
 				}
 
 				// Add namespaces
-				NamedNodeMap attributeList = node.getAttributes();
+				org.w3c.dom.NamedNodeMap attributeList = node.getAttributes();
 				int attsize = attributeList.getLength();
 
 				for (int i = 0; i < attsize; i++) {
@@ -407,11 +408,11 @@ public class DOMBuilder {
 				// Recurse on child nodes
 				// The list should never be null nor should it ever contain
 				// null nodes, but some DOM impls are broken
-				NodeList children = node.getChildNodes();
+				org.w3c.dom.NodeList children = node.getChildNodes();
 				if (children != null) {
 					int size = children.getLength();
 					for (int i = 0; i < size; i++) {
-						Node item = children.item(i);
+						org.w3c.dom.Node item = children.item(i);
 						if (item != null) {
 							buildTree(item, doc, element, false);
 						}
@@ -419,16 +420,16 @@ public class DOMBuilder {
 				}
 				break;
 
-			case Node.TEXT_NODE:
+			case org.w3c.dom.Node.TEXT_NODE:
 				factory.addContent(current, build((org.w3c.dom.Text)node));
 				break;
 
-			case Node.CDATA_SECTION_NODE:
+			case org.w3c.dom.Node.CDATA_SECTION_NODE:
 				factory.addContent(current, build((org.w3c.dom.CDATASection)node));
 				break;
 
 
-			case Node.PROCESSING_INSTRUCTION_NODE:
+			case org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:
 				if (atRoot) {
 					factory.addContent(doc, build((org.w3c.dom.ProcessingInstruction)node));
 				} else {
@@ -436,7 +437,7 @@ public class DOMBuilder {
 				}
 				break;
 
-			case Node.COMMENT_NODE:
+			case org.w3c.dom.Node.COMMENT_NODE:
 				if (atRoot) {
 					factory.addContent(doc, build((org.w3c.dom.Comment)node));
 				} else {
@@ -444,15 +445,15 @@ public class DOMBuilder {
 				}
 				break;
 
-			case Node.ENTITY_REFERENCE_NODE:
+			case org.w3c.dom.Node.ENTITY_REFERENCE_NODE:
 				factory.addContent(current, build((org.w3c.dom.EntityReference)node));
 				break;
 
-			case Node.ENTITY_NODE:
+			case org.w3c.dom.Node.ENTITY_NODE:
 				// ??
 						break;
 
-			case Node.DOCUMENT_TYPE_NODE:
+			case org.w3c.dom.Node.DOCUMENT_TYPE_NODE:
 
 				factory.addContent(doc, build((org.w3c.dom.DocumentType)node));
 				break;
