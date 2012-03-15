@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2011 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -80,10 +80,10 @@ import org.jdom2.JDOMFactory;
  * 
  * The internal-subset should be re-formatted to conform to the JDOM 'standard'
  * where each declaration starts on a new line indented with 2 spaces. This
- * 'standard' is defined by the way the JDOM formats the DTD declarations in the 
+ * 'standard' is defined by the way that JDOM formats the DTD declarations in the 
  * SAX parse process, which fires individual events for the content in the DTD.
  * <p>
- * We can do this all with a well-structured regular expression, which, is
+ * We can do this all with a well-structured regular expression, which is
  * actually simpler than trying to fish out all the components ourselves....
  * <p>
  * 
@@ -106,7 +106,7 @@ public class DTDParser {
 	 * The database patterns are pulled to transform a pattern template in to a
 	 * final regular expression. This template is called the 'meta-pattern'
 	 * 
-	 * So, the pattern is not kept in it's final form, but rather it is built
+	 * So, the pattern is not kept in its final form, but rather it is built
 	 * up at class initialization time based on the meta-pattern, and the
 	 * pattern database in the map.
 	 * 
