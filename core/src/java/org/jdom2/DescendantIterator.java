@@ -58,6 +58,7 @@ import java.util.*;
 
 import org.jdom2.Content;
 import org.jdom2.Parent;
+import org.jdom2.util.IteratorIterable;
 
 /**
  * Traverse all a parent's descendants (all children at any level below
@@ -67,8 +68,9 @@ import org.jdom2.Parent;
  * @author Jason Hunter
  * @author Rolf Lear
  */
-class DescendantIterator implements Iterator<Content> {
+class DescendantIterator implements IteratorIterable<Content> {
 
+	private final Parent parent;
 	private LinkedList<ListIterator<Content>> stack = new LinkedList<ListIterator<Content>>();
 	ListIterator<Content> current = null;
 	ListIterator<Content> following = null;
@@ -79,8 +81,14 @@ class DescendantIterator implements Iterator<Content> {
 	 * @param parent document or element whose descendants will be iterated
 	 */
 	DescendantIterator(Parent parent) {
+		this.parent = parent;
 		// can trust that parent is not null, DescendantIterator is package-private.
 		current = parent.getContent().listIterator();
+	}
+	
+	@Override
+	public DescendantIterator iterator() {
+		return new DescendantIterator(parent);
 	}
 
 	/**

@@ -72,6 +72,7 @@ import java.util.TreeMap;
 import org.jdom2.ContentList.FilterList;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filter;
+import org.jdom2.util.IteratorIterable;
 
 /**
  * An XML element. Methods allow the user to get and manipulate its child
@@ -1416,7 +1417,7 @@ public class Element extends Content implements Parent {
 	 * @return an iterator to walk descendants
 	 */
 	@Override
-	public Iterator<Content> getDescendants() {
+	public IteratorIterable<Content> getDescendants() {
 		return new DescendantIterator(this);
 	}
 
@@ -1430,7 +1431,7 @@ public class Element extends Content implements Parent {
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
-	public <F extends Content> Iterator<F> getDescendants(final Filter<F> filter) {
+	public <F extends Content> IteratorIterable<F> getDescendants(final Filter<F> filter) {
 		return new FilterIterator<F>(new DescendantIterator(this), filter);
 	}
 

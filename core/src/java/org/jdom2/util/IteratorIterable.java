@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2000-2012 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -52,83 +52,24 @@
 
  */
 
-package org.jdom2;
+package org.jdom2.util;
 
-import java.util.*;
-
-import org.jdom2.filter.*;
-import org.jdom2.util.IteratorIterable;
+import java.util.Iterator;
 
 /**
- * Traverse a parent's children that match the supplied filter.
- *
- * @author Bradley S. Huffman
+ * An interface that represents both a <code>java.util.Iterator</code>
+ * and a <code>java.lang.Iterable</code>.
+ * <p>
+ * JDOM 1.x has a number of methods that return an Iterator. These methods
+ * would (in some conditions) be better represented as an Iterable. To maintain
+ * compatibility, and to extend the functionality of these methods in JDOM2,
+ * they have been altered to return an instance of this interface.
+ * 
  * @author Rolf Lear
- * @param <T> The Generic type of content returned by this FilterIterator.
+ *
+ * @param <T> The generic type of the values returned by this interface
  */
-class FilterIterator<T> implements IteratorIterable<T> {
-
-	private DescendantIterator iterator;
-	private Filter<T> filter;
-	private T nextObject;
-	private boolean canremove = false;
-
-	public FilterIterator(DescendantIterator iterator, Filter<T> filter) {
-		// can trust that iterator is not null, but filter may be.
-		if (filter == null) {
-			throw new NullPointerException("Cannot specify a null Filter " +
-					"for a FilterIterator");
-		}
-		this.iterator = iterator;
-		this.filter = filter;
-	}
-	
-	@Override
-	public Iterator<T> iterator() {
-		return new FilterIterator<T>(iterator.iterator(), filter);
-	}
-
-	@Override
-	public boolean hasNext() {
-		
-		canremove = false;
-		
-		if (nextObject != null) {
-			return true;
-		}
-
-		while (iterator.hasNext()) {
-			Object obj = iterator.next();
-			T f = filter.filter(obj);
-			if (f != null) {
-				nextObject = f;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public T next() {
-		if (!hasNext()) {
-			throw new NoSuchElementException();
-		}
-
-		T obj = nextObject;
-		nextObject = null;
-		canremove = true;
-		return obj;
-	}
-
-	@Override
-	public void remove() {
-		if (!canremove) {
-			throw new IllegalStateException("remove() can only be called " +
-					"on the FilterIterator immediately after a successful " +
-					"call to next(). A call to remove() immediately after " +
-					"a call to hasNext() or remove() will also fail.");
-		}
-		canremove = false;
-		iterator.remove();
-	}
+public interface IteratorIterable<T> extends Iterable<T>, Iterator<T> {
+	// There is no functionality added by this interface other than
+	// to combine the Iterator and Iterable interfaces.
 }

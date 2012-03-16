@@ -12,6 +12,8 @@ import java.util.NoSuchElementException;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.util.IteratorIterable;
+
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
@@ -21,7 +23,7 @@ public class TestDescendantIterator {
 			"legolas", "aragorn", "gimli", "boromir", "gandalf"
 	};
 	
-	private static final Iterator<Content> buildIterator() {
+	private static final IteratorIterable<Content> buildIterator() {
 		Element root = new Element("root");
 		Document doc = new Document(root);
 		for (String c : fellowship) {
@@ -53,6 +55,22 @@ public class TestDescendantIterator {
 			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
 		}
 		
+	}
+	
+	@Test
+	public void testIterable() {
+		int i = 0;
+		for (Content c : buildIterator()) {
+			assertNotNull(c != null);
+			assertTrue(c instanceof Element);
+			Element e = (Element)c;
+			if (i == 0) {
+				assertEquals("root", e.getName());
+			} else {
+				assertEquals(fellowship[i - 1], e.getName());
+			}
+			i++;
+		}
 	}
 
 	@Test

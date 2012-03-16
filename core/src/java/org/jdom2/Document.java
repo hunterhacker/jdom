@@ -60,6 +60,7 @@ import java.io.ObjectOutputStream;
 import java.util.*;
 
 import org.jdom2.filter.*;
+import org.jdom2.util.IteratorIterable;
 
 /**
  * An XML document. Methods allow access to the root element as well as the
@@ -713,7 +714,7 @@ public class Document extends CloneBase implements Parent {
 	 * @return an iterator to walk descendants
 	 */
 	@Override
-	public Iterator<Content> getDescendants() {
+	public IteratorIterable<Content> getDescendants() {
 		return new DescendantIterator(this);
 	}
 
@@ -727,7 +728,7 @@ public class Document extends CloneBase implements Parent {
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
-	public <F extends Content> Iterator<F> getDescendants(final Filter<F> filter) {
+	public <F extends Content> IteratorIterable<F> getDescendants(final Filter<F> filter) {
 		return new FilterIterator<F>(new DescendantIterator(this), filter);
 	}
 

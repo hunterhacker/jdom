@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.util.IteratorIterable;
+
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
@@ -22,7 +25,7 @@ public class TestDescendantFilterIterator {
 			"legolas", "aragorn", "gimli", "boromir", "gandalf"
 	};
 	
-	private static final Iterator<Element> buildIterator() {
+	private static final IteratorIterable<Element> buildIterator() {
 		Element root = new Element("root");
 		Document doc = new Document(root);
 		for (String c : fellowship) {
@@ -54,6 +57,22 @@ public class TestDescendantFilterIterator {
 			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
 		}
 		
+	}
+
+	@Test
+	public void testIterable() {
+		int i = 0;
+		for (Content c : buildIterator()) {
+			assertNotNull(c != null);
+			assertTrue(c instanceof Element);
+			Element e = (Element)c;
+			if (i == 0) {
+				assertEquals("root", e.getName());
+			} else {
+				assertEquals(fellowship[i - 1], e.getName());
+			}
+			i++;
+		}
 	}
 
 	@Test

@@ -57,6 +57,7 @@ package org.jdom2;
 import java.io.Serializable;
 import java.util.*;
 import org.jdom2.filter.Filter;
+import org.jdom2.util.IteratorIterable;
 
 /**
  * Interface for JDOM objects which are allowed to contain
@@ -202,23 +203,61 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	/**
 	 * Returns an {@link java.util.Iterator} that walks over all descendants
 	 * in document order.
+	 * <p>
+	 * Note that this method returns an IteratorIterable instance, which means
+	 * that you can use it either as an Iterator, or an Iterable, allowing both:
+	 * <p>
+	 * <pre>
+	 *   for (Iterator<Content> it = parent.getDescendants();
+	 *           it.hasNext();) {
+	 *       Content c = it.next();
+	 *       ....
+	 *   }
+	 * </pre>
+	 * and
+	 * <pre>
+	 *   for (Content c : parent.getDescendants()) {
+	 *       ....
+	 *   }
+	 * </pre>
+	 * The Iterator version is most useful if you need to do list modification
+	 * on the iterator (using remove()), and for compatibility with JDOM 1.x
 	 *
 	 * @return an iterator to walk descendants
 	 */
-	Iterator<Content> getDescendants();
+	IteratorIterable<Content> getDescendants();
 
 	/**
 	 * Returns an {@link java.util.Iterator} that walks over all descendants
-	 * in document order applying the Filter to return only elements that
+	 * in document order applying the Filter to return only content that
 	 * match the filter rule.  With filters you can match only Elements,
 	 * only Comments, Elements or Comments, only Elements with a given name
 	 * and/or prefix, and so on.
-	 * @param <E> The generic type of the descendant data
-	 *
+	 * <p>
+	 * Note that this method returns an IteratorIterable instance, which means
+	 * that you can use it either as an Iterator, or an Iterable, allowing both:
+	 * <p>
+	 * <pre>
+	 *   for (Iterator<Element> it = parent.getDescendants(Filters.element());
+	 *           it.hasNext();) {
+	 *       Element e = it.next();
+	 *       ....
+	 *   }
+	 * </pre>
+	 * and
+	 * <pre>
+	 *   for (Element e : parent.getDescendants(Filters.element())) {
+	 *       ....
+	 *   }
+	 * </pre>
+	 * The Iterator version is most useful if you need to do list modification
+	 * on the iterator (using remove()), and for compatibility with JDOM 1.x
+	 * 
+	 * @param <E> The generic type of the returned descendant data
 	 * @param filter filter to select which descendants to see
 	 * @return an iterator to walk descendants that match a filter
 	 */
-	<E extends Content> Iterator<E> getDescendants(Filter<E> filter);
+	<E extends Content> IteratorIterable<E> getDescendants(Filter<E> filter);
 
 	/**
 	 * Return this parent's parent, or null if this parent is currently
