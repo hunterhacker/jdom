@@ -79,15 +79,15 @@ import org.jdom2.input.stax.DTDParser;
 /**
  * Builds a JDOM Document from a StAX-based XMLEventReader.
  * <p>
- * XMLStreamReaders are pre-configured and as a result JDOM is not able to
- * alter whether the input is validated, or whether the Stream has escaped
+ * XMLSeventReaders are pre-configured and as a result JDOM is not able to
+ * alter whether the input is validated, or whether the Events have escaped
  * entities or not. These (and other) characteristics are configurable by
  * setting the correct features and properties on the XMLInputFactory when it
  * is used to create the XMLStreamReader.
  * <p>
  * Useful configuration to set, or know about is:
  * <ul>
- * <li>StAX streams seldom differentiate between Text and CDATA content. You
+ * <li>StAX Events seldom differentiate between Text and CDATA content. You
  * will likely want to configure your StAX factory (XMLInputFactory) with
  * <code>http://java.sun.com/xml/stream/properties/report-cdata-event</code>
  * for the default Java StAX implementation, or the equivalent property for your
@@ -109,7 +109,7 @@ import org.jdom2.input.stax.DTDParser;
  * @author Rolf Lear
  *
  */
-public class StAXEventBuilder implements XMLStreamConstants {
+public class StAXEventBuilder {
 	
 
 	/**

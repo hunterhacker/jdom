@@ -54,11 +54,12 @@
 
 package org.jdom2.input;
 
+import static javax.xml.stream.XMLStreamConstants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -74,7 +75,7 @@ import org.jdom2.input.stax.DTDParser;
 import org.jdom2.input.stax.StAXFilter;
 
 /**
- * Builds a JDOM Document from a StAX-based XMLStremReader.
+ * Builds a JDOM Document from a StAX-based XMLStreamReader.
  * <p>
  * XMLStreamReaders are pre-configured and as a result JDOM is not able to
  * alter whether the input is validated, or whether the Stream has escaped
@@ -106,7 +107,7 @@ import org.jdom2.input.stax.StAXFilter;
  * @author Rolf Lear
  *
  */
-public class StAXStreamBuilder implements XMLStreamConstants {
+public class StAXStreamBuilder {
 
 	/**
 	 * Create a Document from an XMLStreamReader
@@ -122,14 +123,14 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 
 			int state = stream.getEventType();
 
-			if (XMLStreamConstants.START_DOCUMENT != state) {
+			if (START_DOCUMENT != state) {
 				throw new JDOMException("JDOM requires that XMLStreamReaders " +
 						"are at their beginning when being processed.");
 			}
 
 			final Document document = factory.document(null);
 
-			while (state != XMLStreamConstants.END_DOCUMENT) {
+			while (state != END_DOCUMENT) {
 				switch (state) {
 
 					case START_DOCUMENT:
@@ -193,7 +194,7 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 		
 		int state = stream.getEventType();
 
-		if (XMLStreamConstants.START_DOCUMENT != state) {
+		if (START_DOCUMENT != state) {
 			throw new JDOMException("JDOM requires that XMLStreamReaders " +
 					"are at their beginning when being processed.");
 		}
@@ -286,7 +287,7 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 			final XMLStreamReader reader, final int topdepth, StAXFilter filter) 
 					throws XMLStreamException, JDOMException {
 
-		if (XMLStreamConstants.START_ELEMENT != reader.getEventType()) {
+		if (START_ELEMENT != reader.getEventType()) {
 			throw new JDOMException("JDOM requires that the XMLStreamReader " +
 					"is at the START_ELEMENT state when retrieving an " +
 					"Element Fragment.");
@@ -438,7 +439,7 @@ public class StAXStreamBuilder implements XMLStreamConstants {
 	private static final Element processElementFragment(final JDOMFactory factory, 
 			final XMLStreamReader reader) throws XMLStreamException, JDOMException {
 
-		if (XMLStreamConstants.START_ELEMENT != reader.getEventType()) {
+		if (START_ELEMENT != reader.getEventType()) {
 			throw new JDOMException("JDOM requires that the XMLStreamReader " +
 					"is at the START_ELEMENT state when retrieving an " +
 					"Element Fragment.");
