@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.input;
+package org.jdom2.input.stax;
 
 import org.jdom2.Namespace;
 

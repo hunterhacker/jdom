@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.input;
+package org.jdom2.input.stax;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;

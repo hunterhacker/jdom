@@ -6,7 +6,7 @@ import org.jdom2.DocType;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.DefaultJDOMFactory;
-import org.jdom2.input.DTDParser;
+import org.jdom2.input.stax.DTDParser;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 

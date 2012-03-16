@@ -74,8 +74,8 @@ import org.jdom2.Namespace;
 
 
 /**
- * Builds a JDOM {@link org.jdom2.Document org.jdom2.Document} from a pre-existing
- * DOM {@link org.w3c.dom.Document org.w3c.dom.Document}.
+ * Builds a JDOM Document from a pre-existing DOM {@link org.w3c.dom.Document 
+ * org.w3c.dom.Document}.
  * <p>
  * If you are building a document that has Namespace declarations, you should
  * ensure that the Namespaces are correctly recorded in the DOM document before

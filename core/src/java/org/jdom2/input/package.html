@@ -1,10 +1,15 @@
 <body>
 
-Classes to build JDOM documents from various sources.  The most common builder
-class is SAXBuilder which constructs a JDOM document using a SAX parser and
-can pull content from files, streams, sockets, readers, and so on.  It can use
-any underlying SAX parser to handle the parsing chores.  SAXHandler provides
-support for SAXBuilder.  DOMBuilder lets you build from a pre-existing DOM
-tree.
+Classes to build JDOM documents from various sources.
+<p>
+The most commonly used builder is SAXBuilder which constructs a JDOM document
+using a SAX parser and can pull content from files, streams, sockets, readers,
+and so on.  It can use any underlying SAX parser to handle the parsing chores.
+<p>
+DOMBuilder lets you build JDOM content from existing <code>org.w3c.dom.*</code>
+instances.
+<p>
+The StAXStreamBuilder and StAXEventBuilder classes allow you to build JDOM
+content from StAX-based XMLStreamReader and XMLEventReader instances.
 
 </body>

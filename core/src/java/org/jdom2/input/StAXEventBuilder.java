@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2011-2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -74,9 +74,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
+import org.jdom2.input.stax.DTDParser;
 
 /**
- * Builds a JDOM document from a StAX-based XMLStremReader.
+ * Builds a JDOM Document from a StAX-based XMLEventReader.
  * <p>
  * XMLStreamReaders are pre-configured and as a result JDOM is not able to
  * alter whether the input is validated, or whether the Stream has escaped

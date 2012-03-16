@@ -96,7 +96,7 @@ import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.input.sax.XMLReaders;
 
 /**
- * Builds a JDOM document using a SAX parser.
+ * Builds a JDOM Document using a SAX parser.
  * <p>
  * SAXbuilder uses a third-party SAX parser (chosen by JAXP by default, or you
  * can configure it manually) to handle the parsing duties and uses an instance
