@@ -90,7 +90,8 @@ public interface StAXFilter {
 	 * If the return value of this call is true, then this Element will be 
 	 * processed as a JDOM fragment. You may then get calls to the prune*
 	 * methods to determine whether child content of this Element should be
-	 * pruned
+	 * pruned.
+	 * 
 	 * @param depth The depth of this content from the document root
 	 * 			(the root Element is at depth 0)
 	 * @param name The XML tag name of this Element
@@ -102,9 +103,8 @@ public interface StAXFilter {
 	/**
 	 * The current event is a Comment event.
 	 * <p>
-	 * A non-null return value will become the Comment text. Return null to skip
-	 * the comment, the specified comment text to leave the comment unchanged,
-	 * or any other String to create a different comment value.
+	 * A null return value will cause the Comment to be ignored, and a non-null
+	 * return value will become the Comment's text.
 	 * <p>
 	 * To include the comment as-is, do:
 	 * <br>
@@ -134,9 +134,8 @@ public interface StAXFilter {
 	/**
 	 * The current event is a CDATA event.
 	 * <p>
-	 * A non-null return value will become the CDATA text. Return null to skip
-	 * the CDATA, the specified text to leave the CDATA unchanged,
-	 * or any other String to create a different CDATA value.
+	 * A null return value will cause the Comment to be ignored, and a non-null
+	 * return value will become the CDATA's text.
 	 * <p>
 	 * To include the CDATA as-is, do:
 	 * <br>
@@ -156,9 +155,8 @@ public interface StAXFilter {
 	/**
 	 * The current event is a TEXT event.
 	 * <p>
-	 * A non-null return value will become the Text text. Return null to skip
-	 * the Text, the specified text to leave the Text unchanged,
-	 * or any other String to create a different Text value.
+	 * A null return value will cause the Comment to be ignored, and a non-null
+	 * return value will become the Text's text.
 	 * <p>
 	 * To include the Text as-is, do:
 	 * <br>
@@ -204,8 +202,7 @@ public interface StAXFilter {
 	 * parent fragment?
 	 * <p>
 	 * A non-null return value will become the Comment value. Return null to
-	 * skip the Coment, the specified comment to leave the Comment unchanged,
-	 * or any other String to create a different Comment value.
+	 * skip the Comment.
 	 * <p>
 	 * To include the Comment as-is, do:
 	 * <br>
@@ -240,8 +237,7 @@ public interface StAXFilter {
 	 * parent fragment?
 	 * <p>
 	 * A non-null return value will become the CDATA text. Return null to skip
-	 * the CDATA, the specified text to leave the CDATA unchanged,
-	 * or any other String to create a different CDATA value.
+	 * the CDATA.
 	 * <p>
 	 * To include the CDATA as-is, do:
 	 * <br>
@@ -264,8 +260,7 @@ public interface StAXFilter {
 	 * parent fragment?
 	 * <p>
 	 * A non-null return value will become the Text. Return null to skip
-	 * the Text, the specified text to leave the Text unchanged,
-	 * or any other String to create a different Text value.
+	 * the Text.
 	 * <p>
 	 * To include the Text as-is, do:
 	 * <br>
