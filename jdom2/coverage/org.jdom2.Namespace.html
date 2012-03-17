@@ -23,7 +23,7 @@
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2007 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> All rights reserved.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
@@ -284,7 +284,7 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// have been placed in this.  Thus we can do this test before</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;138</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// verifying the URI and prefix.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered"><a title="Line 139: Conditional coverage 100% (2/2).">&nbsp;3388</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 139: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (uri == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered"><a title="Line 139: Conditional coverage 100% (2/2).">&nbsp;3383</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 139: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (uri == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered"><a title="Line 140: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;169</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 140: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                        <span class="keyword">if</span> (prefix == <span class="keyword">null</span> || NS_PFX_DEFAULT.equals(prefix)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsCovered">&nbsp;168</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> NO_NAMESPACE;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
@@ -304,8 +304,8 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// must have checked for 'null' uri else namespacemap throws NPE</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// do not 'trim' uri's any more see issue #50</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered">&nbsp;3219</td>  <td class="src"><pre class="src">&nbsp;                ConcurrentMap&lt;String, Namespace&gt; urimap = namespacemap.get(uri);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered"><a title="Line 152: Conditional coverage 100% (2/2).">&nbsp;3219</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 152: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (urimap == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered">&nbsp;3214</td>  <td class="src"><pre class="src">&nbsp;                ConcurrentMap&lt;String, Namespace&gt; urimap = namespacemap.get(uri);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered"><a title="Line 152: Conditional coverage 100% (2/2).">&nbsp;3214</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 152: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (urimap == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;153</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// no Namespaces yet with that URI.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
@@ -342,11 +342,11 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// OK, we have a container for the URI, let's search on the prefix.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered"><a title="Line 174: Conditional coverage 100% (2/2).">&nbsp;3217</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 174: Conditional coverage 100% (2/2).">                Namespace ns = urimap.get(prefix == <span class="keyword">null</span> ? NS_PFX_DEFAULT : prefix);</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;175</td>  <td class="nbHitsCovered"><a title="Line 175: Conditional coverage 100% (2/2).">&nbsp;3217</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 175: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ns != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered"><a title="Line 174: Conditional coverage 100% (2/2).">&nbsp;3212</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 174: Conditional coverage 100% (2/2).">                Namespace ns = urimap.get(prefix == <span class="keyword">null</span> ? NS_PFX_DEFAULT : prefix);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;175</td>  <td class="nbHitsCovered"><a title="Line 175: Conditional coverage 100% (2/2).">&nbsp;3212</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 175: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ns != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// got one.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered">&nbsp;3046</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ns;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered">&nbsp;3041</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ns;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;178</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;179</td>  <td class="nbHits">&nbsp;</td>
@@ -484,7 +484,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;254</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String getPrefix() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsCovered">&nbsp;64816</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> prefix;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsCovered">&nbsp;63292</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> prefix;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;257</td>  <td class="nbHits">&nbsp;</td>
@@ -501,7 +501,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;263</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String getURI() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;264</td>  <td class="nbHitsCovered">&nbsp;89257</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> uri;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;264</td>  <td class="nbHitsCovered">&nbsp;88900</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> uri;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;265</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;266</td>  <td class="nbHits">&nbsp;</td>
@@ -526,15 +526,15 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> equals(<span class="keyword">final</span> Object ob) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered"><a title="Line 277: Conditional coverage 100% (2/2).">&nbsp;86996</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 277: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == ob) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;80485</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered"><a title="Line 277: Conditional coverage 100% (2/2).">&nbsp;87024</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 277: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == ob) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;80613</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered"><a title="Line 280: Conditional coverage 100% (2/2).">&nbsp;6511</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 280: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ob <span class="keyword">instanceof</span> Namespace) {  <span class="comment">// instanceof returns false if null</span></a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered">&nbsp;6508</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> uri.equals(((Namespace)ob).uri);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered"><a title="Line 280: Conditional coverage 100% (2/2).">&nbsp;6411</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 280: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ob <span class="keyword">instanceof</span> Namespace) {  <span class="comment">// instanceof returns false if null</span></a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered">&nbsp;6400</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> uri.equals(((Namespace)ob).uri);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;282</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;283</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;283</td>  <td class="nbHitsCovered">&nbsp;11</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;284</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
@@ -555,7 +555,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;171</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="string">"[Namespace: prefix \""</span> + prefix + <span class="string">"\" is mapped to URI \""</span> + </pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;169</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="string">"[Namespace: prefix \""</span> + prefix + <span class="string">"\" is mapped to URI \""</span> + </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;295</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                uri + <span class="string">"\"]"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;296</td>  <td class="nbHits">&nbsp;</td>
@@ -565,115 +565,119 @@
 <tr>  <td class="numLine">&nbsp;298</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;299</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * This returns a probably unique hash code for the &lt;code&gt;Namespace&lt;/code&gt;.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * This returns the hash code for the &lt;code&gt;Namespace&lt;/code&gt; that conforms</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;300</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * If two namespaces have the same URI, they are equal and have the same</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * to the 'equals()' contract.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * hash code, even if they have different prefixes.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * &lt;p&gt;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * If two namespaces have the same URI, they are equal and have the same</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return &lt;code&gt;int&lt;/code&gt; - hash code for this &lt;code&gt;Namespace&lt;/code&gt;.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * hash code, even if they have different prefixes.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;304</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;305</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return &lt;code&gt;int&lt;/code&gt; - hash code for this &lt;code&gt;Namespace&lt;/code&gt;.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> hashCode() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;307</td>  <td class="nbHitsCovered">&nbsp;2818</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> uri.hashCode();</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;309</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> hashCode() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsCovered">&nbsp;2818</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> uri.hashCode();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;310</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;311</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/* *****************************************</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Serialization</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;313</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * ***************************************** */</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/* *****************************************</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;314</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Serialization</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;315</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * ***************************************** */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * JDOM 2.0.0 Serialization version</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;317</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = 200L;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * JDOM 2.0.0 Serialization version</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;320</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> NamespaceSerializationProxy </pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = 200L;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;321</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">implements</span> Serializable {</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;322</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> NamespaceSerializationProxy </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;323</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = 200L;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">implements</span> Serializable {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;324</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">final</span> String pprefix, puri;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;325</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> NamespaceSerializationProxy(String pprefix, String puri) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.pprefix = pprefix;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.puri = puri;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;328</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;329</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;330</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> Object readResolve() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> Namespace.getNamespace(pprefix, puri);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;333</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;325</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = 200L;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;326</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">final</span> String pprefix, puri;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> NamespaceSerializationProxy(String pprefix, String puri) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;328</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.pprefix = pprefix;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.puri = puri;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;330</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;331</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> Object readResolve() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> Namespace.getNamespace(pprefix, puri);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;336</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;337</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Serializes Namespace by using a proxy serialization instance.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;338</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @serialData The proxy deals with the protocol.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return the Namespace proxy instance.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;341</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Object writeReplace() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;342</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> NamespaceSerializationProxy(prefix, uri);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;344</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;345</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;346</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Because Namespace is serialized by proxy, the reading of direct Namespace</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;347</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * instances is illegal and prohibited.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;348</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return nothing.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @throws InvalidObjectException always</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;350</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Serializes Namespace by using a proxy serialization instance.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @serialData The proxy deals with the protocol.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;341</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return the Namespace proxy instance.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;351</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Object readResolve() <span class="keyword">throws</span> InvalidObjectException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;353</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="string">"Namespace is serialized through a proxy"</span>);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;354</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Object writeReplace() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;227</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> NamespaceSerializationProxy(prefix, uri);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;345</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;355</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;346</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;347</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;348</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Because Namespace is serialized by proxy, the reading of direct Namespace</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * instances is illegal and prohibited.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;350</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return nothing.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;351</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @throws InvalidObjectException always</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;352</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;353</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Object readResolve() <span class="keyword">throws</span> InvalidObjectException {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;355</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="string">"Namespace is serialized through a proxy"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;356</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;357</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;358</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

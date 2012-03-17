@@ -201,11 +201,11 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object unWrapNS(Object o) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered"><a title="Line 93: Conditional coverage 100% (2/2).">&nbsp;3263</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 93: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (o <span class="keyword">instanceof</span> NamespaceContainer) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;93</td>  <td class="nbHitsCovered"><a title="Line 93: Conditional coverage 100% (2/2).">&nbsp;3254</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 93: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (o <span class="keyword">instanceof</span> NamespaceContainer) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ((NamespaceContainer) o).getNamespace();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;96</td>  <td class="nbHitsCovered">&nbsp;3247</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> o;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;96</td>  <td class="nbHitsCovered">&nbsp;3238</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> o;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;98</td>  <td class="nbHits">&nbsp;</td>
@@ -321,7 +321,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;160</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String translateNamespacePrefixToUri(String prefix) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;10601</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> getNamespace(prefix);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;10568</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> getNamespace(prefix);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;163</td>  <td class="nbHits">&nbsp;</td>
@@ -332,21 +332,21 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Object getVariableValue(String namespaceURI, String prefix,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;166</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        String localName) <span class="keyword">throws</span> UnresolvableException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsUncovered"><a title="Line 167: Conditional coverage 50% (1/2).">&nbsp;27</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 167: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (namespaceURI == <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsUncovered"><a title="Line 167: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 167: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (namespaceURI == <span class="keyword">null</span>) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        namespaceURI = <span class="string">""</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsUncovered"><a title="Line 170: Conditional coverage 50% (1/2).">&nbsp;27</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 170: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (prefix == <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsUncovered"><a title="Line 170: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 170: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (prefix == <span class="keyword">null</span>) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;171</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        prefix = <span class="string">""</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsUncovered"><a title="Line 173: Conditional coverage 50% (1/2).">&nbsp;27</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 173: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (<span class="string">""</span>.equals(namespaceURI)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered">&nbsp;27</td>  <td class="src"><pre class="src">&nbsp;                        namespaceURI = getNamespace(prefix);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsUncovered"><a title="Line 173: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 173: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (<span class="string">""</span>.equals(namespaceURI)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                        namespaceURI = getNamespace(prefix);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered">&nbsp;27</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> getVariable(namespaceURI, localName);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> getVariable(namespaceURI, localName);</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;178</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">catch</span> (IllegalArgumentException e) {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;179</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> UnresolvableException(<span class="string">"Unable to resolve variable "</span> + localName + <span class="string">" in namespace '"</span> + namespaceURI + <span class="string">"' to a vaulue."</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;180</td>  <td class="nbHits">&nbsp;</td>
@@ -378,7 +378,7 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">protected</span> Object evaluateRawFirst(Object context) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;195</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered">&nbsp;95</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> unWrapNS(xPath.selectSingleNode(context));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered">&nbsp;86</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> unWrapNS(xPath.selectSingleNode(context));</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">catch</span> (JaxenException e) {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;199</td>  <td class="nbHits">&nbsp;</td>
@@ -393,6 +393,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

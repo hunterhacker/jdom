@@ -240,22 +240,22 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered">&nbsp;2169</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> ForwardWalker <span class="keyword">implements</span> Iterator&lt;Namespace&gt; {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered">&nbsp;2113</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> ForwardWalker <span class="keyword">implements</span> Iterator&lt;Namespace&gt; {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">final</span> Namespace[] namespaces;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered">&nbsp;1013</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> cursor = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered">&nbsp;985</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> cursor = 0;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;113</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;114</td>  <td class="nbHitsCovered">&nbsp;1013</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> ForwardWalker(Namespace[] namespaces) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsCovered">&nbsp;1013</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.namespaces = namespaces;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;1013</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;114</td>  <td class="nbHitsCovered">&nbsp;985</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> ForwardWalker(Namespace[] namespaces) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsCovered">&nbsp;985</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.namespaces = namespaces;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;985</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;119</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> <span class="keyword">boolean</span> hasNext() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered"><a title="Line 120: Conditional coverage 100% (2/2).">&nbsp;2707</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 120: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> cursor &lt; namespaces.length;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered"><a title="Line 120: Conditional coverage 100% (2/2).">&nbsp;2623</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 120: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> cursor &lt; namespaces.length;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;121</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
@@ -264,11 +264,11 @@
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> Namespace next() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered"><a title="Line 125: Conditional coverage 100% (2/2).">&nbsp;2169</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 125: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (cursor &gt;= namespaces.length) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered"><a title="Line 125: Conditional coverage 100% (2/2).">&nbsp;2113</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 125: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (cursor &gt;= namespaces.length) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered">&nbsp;156</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"Cannot over-iterate..."</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered">&nbsp;2013</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> namespaces[cursor++];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered">&nbsp;1957</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> namespaces[cursor++];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;129</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
@@ -371,15 +371,15 @@
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> forward;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">private</span> <span class="keyword">final</span> Namespace[] namespaces;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsCovered">&nbsp;886</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> NamespaceIterable(Namespace[] data, <span class="keyword">boolean</span> forward) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;187</td>  <td class="nbHitsCovered">&nbsp;886</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.forward = forward;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsCovered">&nbsp;886</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.namespaces = data;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered">&nbsp;886</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsCovered">&nbsp;858</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> NamespaceIterable(Namespace[] data, <span class="keyword">boolean</span> forward) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;187</td>  <td class="nbHitsCovered">&nbsp;858</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.forward = forward;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsCovered">&nbsp;858</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">this</span>.namespaces = data;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered">&nbsp;858</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;190</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;191</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> Iterator&lt;Namespace&gt; iterator() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered"><a title="Line 192: Conditional coverage 100% (2/2).">&nbsp;1034</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 192: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> forward ? <span class="keyword">new</span> ForwardWalker(namespaces)</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered"><a title="Line 192: Conditional coverage 100% (2/2).">&nbsp;1006</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 192: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> forward ? <span class="keyword">new</span> ForwardWalker(namespaces)</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        : <span class="keyword">new</span> BackwardWalker(namespaces);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
@@ -405,7 +405,7 @@
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;205</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> Iterator&lt;Namespace&gt; iterator() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;206</td>  <td class="nbHitsCovered">&nbsp;5907</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">this</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;206</td>  <td class="nbHitsCovered">&nbsp;5823</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">this</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;207</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
@@ -414,7 +414,7 @@
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> <span class="keyword">boolean</span> hasNext() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsCovered">&nbsp;5907</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsCovered">&nbsp;5823</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;212</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;213</td>  <td class="nbHits">&nbsp;</td>
@@ -453,12 +453,12 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** A comparator that sorts Namespaces by their prefix. */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsCovered">&nbsp;5390</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Comparator&lt;Namespace&gt; NSCOMP = <span class="keyword">new</span> Comparator&lt;Namespace&gt;() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsCovered">&nbsp;5082</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Comparator&lt;Namespace&gt; NSCOMP = <span class="keyword">new</span> Comparator&lt;Namespace&gt;() {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;234</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">public</span> <span class="keyword">int</span> compare(Namespace ns1, Namespace ns2) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;5389</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ns1.getPrefix().compareTo(ns2.getPrefix());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;5081</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ns1.getPrefix().compareTo(ns2.getPrefix());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
@@ -562,30 +562,30 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//                }</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;288</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// make the right-side 'inclusive' instead of 'exclusive'</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;5045</td>  <td class="src"><pre class="src">&nbsp;                right--;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;4737</td>  <td class="src"><pre class="src">&nbsp;                right--;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered"><a title="Line 291: Conditional coverage 100% (2/2).">&nbsp;10261</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 291: Conditional coverage 100% (2/2).">                <span class="keyword">while</span> (left &lt;= right) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered"><a title="Line 291: Conditional coverage 100% (2/2).">&nbsp;9645</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 291: Conditional coverage 100% (2/2).">                <span class="keyword">while</span> (left &lt;= right) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;292</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// get the mid-point. See the notes on the binary-search bug...</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// ... not that we'll ever have that many Namspaces.... ;-)</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;294</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;7796</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">int</span> mid = (left + right) &gt;&gt;&gt; 1;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered"><a title="Line 296: Conditional coverage 100% (2/2).">&nbsp;7796</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 296: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (data[mid] == key) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;7320</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">int</span> mid = (left + right) &gt;&gt;&gt; 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered"><a title="Line 296: Conditional coverage 100% (2/2).">&nbsp;7320</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 296: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (data[mid] == key) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// exact namespace match.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsCovered">&nbsp;2558</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> mid;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsCovered">&nbsp;2390</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> mid;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;299</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered">&nbsp;5238</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">int</span> cmp = NSCOMP.compare(data[mid], key);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered">&nbsp;4930</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> <span class="keyword">int</span> cmp = NSCOMP.compare(data[mid], key);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered"><a title="Line 302: Conditional coverage 100% (2/2).">&nbsp;5238</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 302: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (cmp &lt; 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;303</td>  <td class="nbHitsCovered">&nbsp;2046</td>  <td class="src"><pre class="src">&nbsp;                                left = mid + 1;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered"><a title="Line 304: Conditional coverage 100% (2/2).">&nbsp;3192</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 304: Conditional coverage 100% (2/2).">                        } <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered">&nbsp;3170</td>  <td class="src"><pre class="src">&nbsp;                                right = mid - 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered"><a title="Line 302: Conditional coverage 100% (2/2).">&nbsp;4930</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 302: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (cmp &lt; 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;303</td>  <td class="nbHitsCovered">&nbsp;1906</td>  <td class="src"><pre class="src">&nbsp;                                left = mid + 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered"><a title="Line 304: Conditional coverage 100% (2/2).">&nbsp;3024</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 304: Conditional coverage 100% (2/2).">                        } <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered">&nbsp;3002</td>  <td class="src"><pre class="src">&nbsp;                                right = mid - 1;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        } <span class="keyword">else</span> {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
@@ -593,21 +593,21 @@
 <tr>  <td class="numLineCover">&nbsp;308</td>  <td class="nbHitsCovered">&nbsp;22</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> mid;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;309</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;310</td>  <td class="nbHitsCovered">&nbsp;5216</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered">&nbsp;2465</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> -left - 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;310</td>  <td class="nbHitsCovered">&nbsp;4908</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered">&nbsp;2325</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> -left - 1;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;313</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;314</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** The namespaces added to the scope at each depth */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;315</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Namespace[][] added = <span class="keyword">new</span> Namespace[10][];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;315</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Namespace[][] added = <span class="keyword">new</span> Namespace[10][];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** The entire scope at each depth */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Namespace[][] scope = <span class="keyword">new</span> Namespace[10][];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Namespace[][] scope = <span class="keyword">new</span> Namespace[10][];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** The current depth */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;319</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">int</span> depth = -1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;319</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">int</span> depth = -1;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;320</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;321</td>  <td class="nbHits">&nbsp;</td>
@@ -638,13 +638,13 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * @param seed The namespaces to set as the top level of the stack.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NamespaceStack(Namespace[] seed) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;                depth++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;                added[depth] = seed;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NamespaceStack(Namespace[] seed) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;                depth++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;                added[depth] = seed;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;340</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;                scope[depth] = added[depth];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;4800</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;340</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;                scope[depth] = added[depth];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;4604</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
@@ -683,13 +683,13 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// the prefixes : "" and "xml"</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;360</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// As a result we can use the 0th index with impunity.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;361</td>  <td class="nbHitsCovered"><a title="Line 361: Conditional coverage 100% (2/2).">&nbsp;8456</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 361: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespace == scope[0]) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;361</td>  <td class="nbHitsCovered"><a title="Line 361: Conditional coverage 100% (2/2).">&nbsp;8204</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 361: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespace == scope[0]) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;362</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we are already in scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;363</td>  <td class="nbHitsCovered">&nbsp;5650</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> scope;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;363</td>  <td class="nbHitsCovered">&nbsp;5538</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> scope;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;364</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;365</td>  <td class="nbHitsCovered"><a title="Line 365: Conditional coverage 100% (2/2).">&nbsp;2806</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 365: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespace.getPrefix().equals(scope[0].getPrefix())) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;365</td>  <td class="nbHitsCovered"><a title="Line 365: Conditional coverage 100% (2/2).">&nbsp;2666</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 365: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespace.getPrefix().equals(scope[0].getPrefix())) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;366</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the prefix is the previous scope's primary prefix. This means</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;367</td>  <td class="nbHits">&nbsp;</td>
@@ -702,15 +702,15 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;373</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// will return +ve number if the prefix matches too.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;2671</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> ip = binarySearch(scope, 1, scope.length, namespace);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;375</td>  <td class="nbHitsCovered"><a title="Line 375: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2671</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 375: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (ip &gt;= 0 &amp;&amp; namespace == scope[ip]) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;2531</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> ip = binarySearch(scope, 1, scope.length, namespace);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;375</td>  <td class="nbHitsCovered"><a title="Line 375: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2531</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 375: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (ip &gt;= 0 &amp;&amp; namespace == scope[ip]) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;376</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the namespace is already in scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;377</td>  <td class="nbHitsCovered">&nbsp;1386</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> scope;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;377</td>  <td class="nbHitsCovered">&nbsp;1302</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> scope;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;378</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;379</td>  <td class="nbHitsCovered">&nbsp;1285</td>  <td class="src"><pre class="src">&nbsp;                store.add(namespace);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;380</td>  <td class="nbHitsCovered"><a title="Line 380: Conditional coverage 100% (2/2).">&nbsp;1285</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 380: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ip &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;379</td>  <td class="nbHitsCovered">&nbsp;1229</td>  <td class="src"><pre class="src">&nbsp;                store.add(namespace);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;380</td>  <td class="nbHitsCovered"><a title="Line 380: Conditional coverage 100% (2/2).">&nbsp;1229</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 380: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ip &gt;= 0) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;381</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// a different namespace with the same prefix as us is in-scope.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;382</td>  <td class="nbHits">&nbsp;</td>
@@ -722,11 +722,11 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;387</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// We are a new prefix in-scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;388</td>  <td class="nbHitsCovered">&nbsp;1267</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace[] nscope = ArrayCopy.copyOf(scope, scope.length + 1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;389</td>  <td class="nbHitsCovered">&nbsp;1267</td>  <td class="src"><pre class="src">&nbsp;                ip = - ip - 1;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsCovered">&nbsp;1267</td>  <td class="src"><pre class="src">&nbsp;                System.arraycopy(nscope, ip, nscope, ip + 1, nscope.length - ip - 1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsCovered">&nbsp;1267</td>  <td class="src"><pre class="src">&nbsp;                nscope[ip] = namespace;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;392</td>  <td class="nbHitsCovered">&nbsp;1267</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> nscope;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;388</td>  <td class="nbHitsCovered">&nbsp;1211</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace[] nscope = ArrayCopy.copyOf(scope, scope.length + 1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;389</td>  <td class="nbHitsCovered">&nbsp;1211</td>  <td class="src"><pre class="src">&nbsp;                ip = - ip - 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsCovered">&nbsp;1211</td>  <td class="src"><pre class="src">&nbsp;                System.arraycopy(nscope, ip, nscope, ip + 1, nscope.length - ip - 1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsCovered">&nbsp;1211</td>  <td class="src"><pre class="src">&nbsp;                nscope[ip] = namespace;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;392</td>  <td class="nbHitsCovered">&nbsp;1211</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> nscope;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;393</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;394</td>  <td class="nbHits">&nbsp;</td>
@@ -799,12 +799,12 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// how many times do you add more than 8 namespaces in one go...</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;428</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// we can add more if we need to...</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;429</td>  <td class="nbHitsCovered">&nbsp;5922</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> List&lt;Namespace&gt; toadd = <span class="keyword">new</span> ArrayList&lt;Namespace&gt;(8);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;5922</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace mns = element.getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;429</td>  <td class="nbHitsCovered">&nbsp;5810</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> List&lt;Namespace&gt; toadd = <span class="keyword">new</span> ArrayList&lt;Namespace&gt;(8);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;5810</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace mns = element.getNamespace();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;431</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// check to see whether the Namespace is new-to-scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered">&nbsp;5922</td>  <td class="src"><pre class="src">&nbsp;                Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered"><a title="Line 433: Conditional coverage 100% (2/2).">&nbsp;5922</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 433: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAdditionalNamespaces()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered">&nbsp;5810</td>  <td class="src"><pre class="src">&nbsp;                Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered"><a title="Line 433: Conditional coverage 100% (2/2).">&nbsp;5810</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 433: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAdditionalNamespaces()) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;434</td>  <td class="nbHitsCovered"><a title="Line 434: Conditional coverage 100% (2/2).">&nbsp;244</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 434: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">final</span> Namespace ns : element.getAdditionalNamespaces()) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;435</td>  <td class="nbHitsCovered"><a title="Line 435: Conditional coverage 100% (2/2).">&nbsp;380</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 435: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == mns) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;436</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">continue</span>;</pre></td></tr>
@@ -817,33 +817,33 @@
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;441</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;442</td>  <td class="nbHitsCovered"><a title="Line 442: Conditional coverage 100% (2/2).">&nbsp;5922</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 442: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAttributes()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;443</td>  <td class="nbHitsCovered"><a title="Line 443: Conditional coverage 100% (2/2).">&nbsp;1822</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 443: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">final</span> Attribute a : element.getAttributes()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;444</td>  <td class="nbHitsCovered">&nbsp;2513</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">final</span> Namespace ns = a.getNamespace();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;445</td>  <td class="nbHitsCovered"><a title="Line 445: Conditional coverage 100% (2/2).">&nbsp;2513</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 445: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == Namespace.NO_NAMESPACE) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;442</td>  <td class="nbHitsCovered"><a title="Line 442: Conditional coverage 100% (2/2).">&nbsp;5810</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 442: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (element.hasAttributes()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;443</td>  <td class="nbHitsCovered"><a title="Line 443: Conditional coverage 100% (2/2).">&nbsp;1766</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 443: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">final</span> Attribute a : element.getAttributes()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;444</td>  <td class="nbHitsCovered">&nbsp;2429</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">final</span> Namespace ns = a.getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;445</td>  <td class="nbHitsCovered"><a title="Line 445: Conditional coverage 100% (2/2).">&nbsp;2429</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 445: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == Namespace.NO_NAMESPACE) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;446</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="comment">// Attributes are allowed to be in the NO_NAMESPACE without</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;447</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="comment">// changing the in-scope set of the Element.... special-case</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;448</td>  <td class="nbHitsCovered">&nbsp;1315</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">continue</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;448</td>  <td class="nbHitsCovered">&nbsp;1287</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">continue</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;449</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;450</td>  <td class="nbHitsCovered"><a title="Line 450: Conditional coverage 100% (2/2).">&nbsp;1198</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 450: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == mns) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;450</td>  <td class="nbHitsCovered"><a title="Line 450: Conditional coverage 100% (2/2).">&nbsp;1142</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 450: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == mns) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;451</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">continue</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;452</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;453</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// check to see whether the Namespace is new-to-scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;1191</td>  <td class="src"><pre class="src">&nbsp;                                newscope = checkNamespace(toadd, ns, newscope);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;455</td>  <td class="nbHitsCovered">&nbsp;1191</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;1135</td>  <td class="src"><pre class="src">&nbsp;                                newscope = checkNamespace(toadd, ns, newscope);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;455</td>  <td class="nbHitsCovered">&nbsp;1135</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;456</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;457</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;458</td>  <td class="nbHitsCovered">&nbsp;5922</td>  <td class="src"><pre class="src">&nbsp;                pushStack(mns, newscope, toadd);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;458</td>  <td class="nbHitsCovered">&nbsp;5810</td>  <td class="src"><pre class="src">&nbsp;                pushStack(mns, newscope, toadd);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;459</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;5922</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;5810</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;461</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;462</td>  <td class="nbHits">&nbsp;</td>
@@ -858,15 +858,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> push(Attribute att) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered">&nbsp;1020</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> List&lt;Namespace&gt; toadd = <span class="keyword">new</span> ArrayList&lt;Namespace&gt;(1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered">&nbsp;1020</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace mns = att.getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered">&nbsp;936</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> List&lt;Namespace&gt; toadd = <span class="keyword">new</span> ArrayList&lt;Namespace&gt;(1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered">&nbsp;936</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace mns = att.getNamespace();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;470</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// check to see whether the Namespace is new-to-scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;1020</td>  <td class="src"><pre class="src">&nbsp;                Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;936</td>  <td class="src"><pre class="src">&nbsp;                Namespace[] newscope = checkNamespace(toadd, mns, scope[depth]);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;472</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsCovered">&nbsp;1020</td>  <td class="src"><pre class="src">&nbsp;                pushStack(mns, newscope, toadd);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;474</td>  <td class="nbHitsCovered">&nbsp;1020</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsCovered">&nbsp;936</td>  <td class="src"><pre class="src">&nbsp;                pushStack(mns, newscope, toadd);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;474</td>  <td class="nbHitsCovered">&nbsp;936</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;475</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;476</td>  <td class="nbHits">&nbsp;</td>
@@ -877,10 +877,10 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// OK, we've checked the namespaces in the Element, and 'toadd' contains</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;479</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// all namespaces that are not already in scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;480</td>  <td class="nbHitsCovered">&nbsp;6942</td>  <td class="src"><pre class="src">&nbsp;                depth++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;480</td>  <td class="nbHitsCovered">&nbsp;6746</td>  <td class="src"><pre class="src">&nbsp;                depth++;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;481</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;482</td>  <td class="nbHitsCovered"><a title="Line 482: Conditional coverage 100% (2/2).">&nbsp;6942</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 482: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (depth &gt;= scope.length) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;482</td>  <td class="nbHitsCovered"><a title="Line 482: Conditional coverage 100% (2/2).">&nbsp;6746</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 482: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (depth &gt;= scope.length) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;483</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we need more space on the stack.</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;484</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;                        scope = ArrayCopy.copyOf(scope, scope.length * 2);</pre></td></tr>
@@ -891,15 +891,15 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;488</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Sort out the added namespaces.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;489</td>  <td class="nbHitsCovered"><a title="Line 489: Conditional coverage 100% (2/2).">&nbsp;6942</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 489: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (toadd.isEmpty()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;489</td>  <td class="nbHitsCovered"><a title="Line 489: Conditional coverage 100% (2/2).">&nbsp;6746</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 489: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (toadd.isEmpty()) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;490</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// nothing changed in the scope.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;491</td>  <td class="nbHitsCovered">&nbsp;6204</td>  <td class="src"><pre class="src">&nbsp;                        added[depth] = EMPTY;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;491</td>  <td class="nbHitsCovered">&nbsp;6036</td>  <td class="src"><pre class="src">&nbsp;                        added[depth] = EMPTY;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;492</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;493</td>  <td class="nbHitsCovered">&nbsp;738</td>  <td class="src"><pre class="src">&nbsp;                        added[depth] = toadd.toArray(<span class="keyword">new</span> Namespace[toadd.size()]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;494</td>  <td class="nbHitsCovered"><a title="Line 494: Conditional coverage 100% (2/2).">&nbsp;738</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 494: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (added[depth][0] == mns) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;495</td>  <td class="nbHitsCovered">&nbsp;653</td>  <td class="src"><pre class="src">&nbsp;                                Arrays.sort(added[depth], 1, added[depth].length, NSCOMP);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;493</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                        added[depth] = toadd.toArray(<span class="keyword">new</span> Namespace[toadd.size()]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;494</td>  <td class="nbHitsCovered"><a title="Line 494: Conditional coverage 100% (2/2).">&nbsp;710</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 494: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (added[depth][0] == mns) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;495</td>  <td class="nbHitsCovered">&nbsp;625</td>  <td class="src"><pre class="src">&nbsp;                                Arrays.sort(added[depth], 1, added[depth].length, NSCOMP);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;496</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        } <span class="keyword">else</span> {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;497</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                                Arrays.sort(added[depth], NSCOMP);</pre></td></tr>
@@ -909,13 +909,13 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;500</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsCovered"><a title="Line 501: Conditional coverage 100% (2/2).">&nbsp;6942</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 501: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (mns != newscope[0]) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;502</td>  <td class="nbHitsCovered"><a title="Line 502: Conditional coverage 100% (2/2).">&nbsp;1159</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 502: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (toadd.isEmpty()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsCovered"><a title="Line 501: Conditional coverage 100% (2/2).">&nbsp;6746</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 501: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (mns != newscope[0]) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;502</td>  <td class="nbHitsCovered"><a title="Line 502: Conditional coverage 100% (2/2).">&nbsp;1075</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 502: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (toadd.isEmpty()) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;503</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// we need to make newscope a copy of the previous level's</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;504</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// scope, because it is not yet a copy.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsCovered">&nbsp;640</td>  <td class="src"><pre class="src">&nbsp;                                newscope = ArrayCopy.copyOf(newscope, newscope.length);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsCovered">&nbsp;584</td>  <td class="src"><pre class="src">&nbsp;                                newscope = ArrayCopy.copyOf(newscope, newscope.length);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;506</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;507</td>  <td class="nbHits">&nbsp;</td>
@@ -926,30 +926,30 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we need to take the mns from later in the array, and move it</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;510</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// to the front.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;511</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Namespace tmp = newscope[0];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">int</span> ip = - binarySearch(newscope, 1, newscope.length, tmp) - 1;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;511</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Namespace tmp = newscope[0];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">int</span> ip = - binarySearch(newscope, 1, newscope.length, tmp) - 1;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;513</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we can be sure that (- ip - 1 ) is &gt;= 1</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;514</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we also know that we want to move the data before the ip</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;515</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// backwards one spot, so the math is slightly different....</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;516</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        ip--;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;517</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(newscope, 1, newscope, 0, ip);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;518</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        newscope[ip] = tmp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;516</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        ip--;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;517</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(newscope, 1, newscope, 0, ip);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;518</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        newscope[ip] = tmp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;519</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;520</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        ip = binarySearch(newscope, 0, newscope.length, mns);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;520</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        ip = binarySearch(newscope, 0, newscope.length, mns);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;521</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// we can be sure that ip is &gt;= 0</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;522</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(newscope, 0, newscope, 1, ip);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;523</td>  <td class="nbHitsCovered">&nbsp;1159</td>  <td class="src"><pre class="src">&nbsp;                        newscope[0] = mns;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;522</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        System.arraycopy(newscope, 0, newscope, 1, ip);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;523</td>  <td class="nbHitsCovered">&nbsp;1075</td>  <td class="src"><pre class="src">&nbsp;                        newscope[0] = mns;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;524</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;525</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;526</td>  <td class="nbHitsCovered">&nbsp;6942</td>  <td class="src"><pre class="src">&nbsp;                scope[depth] = newscope;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;527</td>  <td class="nbHitsCovered">&nbsp;6942</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;526</td>  <td class="nbHitsCovered">&nbsp;6746</td>  <td class="src"><pre class="src">&nbsp;                scope[depth] = newscope;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;527</td>  <td class="nbHitsCovered">&nbsp;6746</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;528</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;529</td>  <td class="nbHits">&nbsp;</td>
@@ -986,11 +986,11 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;548</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Iterable&lt;Namespace&gt; addedForward() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;549</td>  <td class="nbHitsCovered"><a title="Line 549: Conditional coverage 100% (2/2).">&nbsp;5963</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 549: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (added[depth].length == 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;550</td>  <td class="nbHitsCovered">&nbsp;5187</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> EMPTYITER;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;549</td>  <td class="nbHitsCovered"><a title="Line 549: Conditional coverage 100% (2/2).">&nbsp;5851</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 549: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (added[depth].length == 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;550</td>  <td class="nbHitsCovered">&nbsp;5103</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> EMPTYITER;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;551</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;552</td>  <td class="nbHitsCovered">&nbsp;776</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> NamespaceIterable(added[depth], <span class="keyword">true</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;552</td>  <td class="nbHitsCovered">&nbsp;748</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> NamespaceIterable(added[depth], <span class="keyword">true</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;553</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;554</td>  <td class="nbHits">&nbsp;</td>
@@ -1049,7 +1049,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;583</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Namespace[] getScope() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;584</td>  <td class="nbHitsCovered">&nbsp;2614</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ArrayCopy.copyOf(scope[depth], scope[depth].length);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;584</td>  <td class="nbHitsCovered">&nbsp;2418</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ArrayCopy.copyOf(scope[depth], scope[depth].length);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;585</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;586</td>  <td class="nbHits">&nbsp;</td>
@@ -1088,6 +1088,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

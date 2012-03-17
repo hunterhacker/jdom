@@ -12,7 +12,7 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="org.jdom2.DescendantIterator.html">DescendantIterator</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">35/35</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">26/26</span></div></div></td></tr></table></td><td class="value"><span class="hidden">5.25;</span>5.25</td></tr>
+  <tr><td><a href="org.jdom2.DescendantIterator.html">DescendantIterator</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">37/37</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">100%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:100px"><span class="text">26/26</span></div></div></td></tr></table></td><td class="value"><span class="hidden">4.4;</span>4.4</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -22,7 +22,7 @@
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2007 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> All rights reserved.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
@@ -138,170 +138,186 @@
 <tr>  <td class="numLine">&nbsp;60</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> org.jdom2.Parent;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;61</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> org.jdom2.util.IteratorIterable;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;62</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">/**</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;63</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> * Traverse all a parent's descendants (all children at any level below</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">/**</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;64</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> * the parent).</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> * Traverse all a parent's descendants (all children at any level below</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;65</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> *</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> * the parent - excludes the parent itself).</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;66</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Bradley S. Huffman</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> *</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;67</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Jason Hunter</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Bradley S. Huffman</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;68</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;69</td>  <td class="nbHitsCovered">&nbsp;26988</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">class</span> DescendantIterator <span class="keyword">implements</span> Iterator&lt;Content&gt; {</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Jason Hunter</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;69</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Rolf Lear</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;14400</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">class</span> DescendantIterator <span class="keyword">implements</span> IteratorIterable&lt;Content&gt; {</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;72</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> LinkedList&lt;ListIterator&lt;Content&gt;&gt; stack = <span class="keyword">new</span> LinkedList&lt;ListIterator&lt;Content&gt;&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;72</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;        ListIterator&lt;Content&gt; current = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;        ListIterator&lt;Content&gt; following = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Iterator for the descendants of the supplied object.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;73</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> Parent parent;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;74</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> LinkedList&lt;ListIterator&lt;Content&gt;&gt; stack = <span class="keyword">new</span> LinkedList&lt;ListIterator&lt;Content&gt;&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;75</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;        ListIterator&lt;Content&gt; current = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;76</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;        ListIterator&lt;Content&gt; following = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;78</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @param parent document or element whose descendants will be iterated</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;79</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;        DescendantIterator(Parent parent) {</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Iterator for the descendants of the supplied object.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;81</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="comment">// can trust that parent is not null, DescendantIterator is package-private.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;                current = parent.getContent().listIterator();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;1025</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @param parent document or element whose descendants will be iterated</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;82</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;        DescendantIterator(Parent parent) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;84</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.parent = parent;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;85</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;86</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Returns &lt;b&gt;true&lt;/b&gt; if the iteration has more {@link Content} descendants.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                <span class="comment">// can trust that parent is not null, DescendantIterator is package-private.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;                current = parent.getContent().listIterator();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsCovered">&nbsp;1029</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;88</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return true is the iterator has more descendants</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> hasNext() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered"><a title="Line 92: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;28013</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 92: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (following != <span class="keyword">null</span> &amp;&amp; following.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content returned has un-processed child content</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;520</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;96</td>  <td class="nbHitsCovered"><a title="Line 96: Conditional coverage 100% (2/2).">&nbsp;27493</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 96: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content has un-iterated siblings.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;98</td>  <td class="nbHitsCovered">&nbsp;25976</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;99</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;100</td>  <td class="nbHitsCovered"><a title="Line 100: Conditional coverage 100% (2/2).">&nbsp;1517</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 100: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Iterator&lt;Content&gt; it : stack) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered"><a title="Line 101: Conditional coverage 100% (2/2).">&nbsp;764</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 101: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (it.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;102</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// an ancestor has un-iterated siblings.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;103</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;104</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;105</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsCovered">&nbsp;1511</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> DescendantIterator iterator() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> DescendantIterator(parent);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;110</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Returns the next {@link Content} descendant.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Returns &lt;b&gt;true&lt;/b&gt; if the iteration has more {@link Content} descendants.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;112</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return the next descendant</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;113</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;97</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return true is the iterator has more descendants</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;98</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;99</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Content next() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;26988</td>  <td class="src"><pre class="src">&nbsp;                Content ret = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;117</td>  <td class="nbHitsCovered"><a title="Line 117: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;26988</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 117: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (following != <span class="keyword">null</span> &amp;&amp; following.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// The last returned content is a parent with unprocessed content</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;520</td>  <td class="src"><pre class="src">&nbsp;                        ret = following.next();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;520</td>  <td class="src"><pre class="src">&nbsp;                        stack.addFirst(current);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;520</td>  <td class="src"><pre class="src">&nbsp;                        current = following;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;122</td>  <td class="nbHitsCovered"><a title="Line 122: Conditional coverage 100% (2/2).">&nbsp;26468</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 122: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content returned has un-iterated siblings.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered">&nbsp;25976</td>  <td class="src"><pre class="src">&nbsp;                        ret = current.next();</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;125</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// check up the ancestry for the next unprocessed sibling...</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered"><a title="Line 127: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;741</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 127: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                        <span class="keyword">while</span> (ret == <span class="keyword">null</span> &amp;&amp; !stack.isEmpty()) {</a></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;128</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// while we go we pop the stack.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;249</td>  <td class="src"><pre class="src">&nbsp;                                current = stack.removeFirst();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;130</td>  <td class="nbHitsCovered"><a title="Line 130: Conditional coverage 100% (2/2).">&nbsp;249</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 130: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                        ret = current.next();</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;132</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;133</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> hasNext() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered"><a title="Line 101: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;28035</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 101: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (following != <span class="keyword">null</span> &amp;&amp; following.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;102</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content returned has un-processed child content</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;103</td>  <td class="nbHitsCovered">&nbsp;522</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;104</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;105</td>  <td class="nbHitsCovered"><a title="Line 105: Conditional coverage 100% (2/2).">&nbsp;27513</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 105: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;106</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content has un-iterated siblings.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;107</td>  <td class="nbHitsCovered">&nbsp;25994</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;109</td>  <td class="nbHitsCovered"><a title="Line 109: Conditional coverage 100% (2/2).">&nbsp;1519</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 109: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Iterator&lt;Content&gt; it : stack) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered"><a title="Line 110: Conditional coverage 100% (2/2).">&nbsp;766</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 110: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (it.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// an ancestor has un-iterated siblings.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;113</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsCovered">&nbsp;1513</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;116</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;119</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Returns the next {@link Content} descendant.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;120</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         *</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;121</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * @return the next descendant</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Content next() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered">&nbsp;27008</td>  <td class="src"><pre class="src">&nbsp;                Content ret = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered"><a title="Line 126: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;27008</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 126: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (following != <span class="keyword">null</span> &amp;&amp; following.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// The last returned content is a parent with unprocessed content</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered">&nbsp;522</td>  <td class="src"><pre class="src">&nbsp;                        ret = following.next();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;522</td>  <td class="src"><pre class="src">&nbsp;                        stack.addFirst(current);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;130</td>  <td class="nbHitsCovered">&nbsp;522</td>  <td class="src"><pre class="src">&nbsp;                        current = following;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsCovered"><a title="Line 131: Conditional coverage 100% (2/2).">&nbsp;26486</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 131: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;132</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// the last content returned has un-iterated siblings.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;133</td>  <td class="nbHitsCovered">&nbsp;25994</td>  <td class="src"><pre class="src">&nbsp;                        ret = current.next();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;134</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;135</td>  <td class="nbHitsCovered"><a title="Line 135: Conditional coverage 100% (2/2).">&nbsp;26988</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 135: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered">&nbsp;486</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"Iterated off the end of the "</span> +</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="string">"DescendantIterator"</span>);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;138</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered"><a title="Line 139: Conditional coverage 100% (2/2).">&nbsp;26502</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 139: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret <span class="keyword">instanceof</span> Parent) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered">&nbsp;8676</td>  <td class="src"><pre class="src">&nbsp;                        following = ((Parent)ret).getContent().listIterator();</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsCovered">&nbsp;17826</td>  <td class="src"><pre class="src">&nbsp;                        following = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;135</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// check up the ancestry for the next unprocessed sibling...</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered"><a title="Line 136: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;741</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 136: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                        <span class="keyword">while</span> (ret == <span class="keyword">null</span> &amp;&amp; !stack.isEmpty()) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// while we go we pop the stack.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsCovered">&nbsp;249</td>  <td class="src"><pre class="src">&nbsp;                                current = stack.removeFirst();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered"><a title="Line 139: Conditional coverage 100% (2/2).">&nbsp;249</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 139: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (current.hasNext()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                        ret = current.next();</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;143</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered">&nbsp;26502</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered"><a title="Line 144: Conditional coverage 100% (2/2).">&nbsp;27008</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 144: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsCovered">&nbsp;486</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"Iterated off the end of the "</span> +</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;146</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                        <span class="string">"DescendantIterator"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;147</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;148</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Detaches the last {@link org.jdom2.Content} returned by the last call to</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;149</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * next from it's parent.  &lt;b&gt;Note&lt;/b&gt;: this &lt;b&gt;does not&lt;/b&gt; affect</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsCovered"><a title="Line 148: Conditional coverage 100% (2/2).">&nbsp;26522</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 148: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret <span class="keyword">instanceof</span> Parent) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;149</td>  <td class="nbHitsCovered">&nbsp;8696</td>  <td class="src"><pre class="src">&nbsp;                        following = ((Parent)ret).getContent().listIterator();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * iteration and all children, siblings, and any node following the</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;151</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         * removed node (in document order) will be visited.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsCovered">&nbsp;17826</td>  <td class="src"><pre class="src">&nbsp;                        following = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;152</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;153</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered">&nbsp;26522</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> remove() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                current.remove();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;156</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                following = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;158</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;155</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="comment">/**</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;157</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * Detaches the last {@link org.jdom2.Content} returned by the last call to</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;158</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * next from it's parent.  &lt;b&gt;Note&lt;/b&gt;: this &lt;b&gt;does not&lt;/b&gt; affect</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * iteration and all children, siblings, and any node following the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;160</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         * removed node (in document order) will be visited.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;161</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;163</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> remove() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                current.remove();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;165</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                following = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;167</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;168</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

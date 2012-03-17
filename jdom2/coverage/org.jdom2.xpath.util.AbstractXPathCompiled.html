@@ -174,10 +174,10 @@
 <tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> AbstractXPathCompiled&lt;T&gt; <span class="keyword">implements</span> XPathExpression&lt;T&gt; {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;79</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;3184</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Namespace&gt; xnamespaces = <span class="keyword">new</span> HashMap&lt;String, Namespace&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;3182</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Namespace&gt; xnamespaces = <span class="keyword">new</span> HashMap&lt;String, Namespace&gt;();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;81</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">// Not final to support cloning.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;3184</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Map&lt;String, Map&lt;String, Object&gt;&gt; xvariables = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Object&gt;&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;3182</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Map&lt;String, Map&lt;String, Object&gt;&gt; xvariables = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Object&gt;&gt;();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> String xquery;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
@@ -214,26 +214,26 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> AbstractXPathCompiled(<span class="keyword">final</span> String query, <span class="keyword">final</span> Filter&lt;T&gt; filter,</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered">&nbsp;3184</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Map&lt;String, Object&gt; variables, <span class="keyword">final</span> Namespace[] namespaces) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;102</td>  <td class="nbHitsCovered"><a title="Line 102: Conditional coverage 100% (2/2).">&nbsp;3184</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 102: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (query == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered">&nbsp;3182</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">final</span> Map&lt;String, Object&gt; variables, <span class="keyword">final</span> Namespace[] namespaces) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;102</td>  <td class="nbHitsCovered"><a title="Line 102: Conditional coverage 100% (2/2).">&nbsp;3182</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 102: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (query == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;103</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Null query"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;104</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;105</td>  <td class="nbHitsCovered"><a title="Line 105: Conditional coverage 100% (2/2).">&nbsp;3181</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 105: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filter == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;105</td>  <td class="nbHitsCovered"><a title="Line 105: Conditional coverage 100% (2/2).">&nbsp;3179</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 105: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filter == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Null filter"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsCovered">&nbsp;3178</td>  <td class="src"><pre class="src">&nbsp;                xnamespaces.put(Namespace.NO_NAMESPACE.getPrefix(),</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsCovered">&nbsp;3176</td>  <td class="src"><pre class="src">&nbsp;                xnamespaces.put(Namespace.NO_NAMESPACE.getPrefix(),</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                Namespace.NO_NAMESPACE);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered"><a title="Line 110: Conditional coverage 100% (2/2).">&nbsp;3178</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 110: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespaces != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;111</td>  <td class="nbHitsCovered"><a title="Line 111: Conditional coverage 100% (2/2).">&nbsp;3683</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 111: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (Namespace ns : namespaces) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered"><a title="Line 112: Conditional coverage 100% (2/2).">&nbsp;517</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 112: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered"><a title="Line 110: Conditional coverage 100% (2/2).">&nbsp;3176</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 110: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (namespaces != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;111</td>  <td class="nbHitsCovered"><a title="Line 111: Conditional coverage 100% (2/2).">&nbsp;3679</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 111: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (Namespace ns : namespaces) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered"><a title="Line 112: Conditional coverage 100% (2/2).">&nbsp;515</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 112: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (ns == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Null namespace"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsCovered">&nbsp;514</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">final</span> Namespace oldns = xnamespaces.put(ns.getPrefix(), ns);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered"><a title="Line 116: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;514</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 116: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (oldns != <span class="keyword">null</span> &amp;&amp; oldns != ns) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsCovered">&nbsp;512</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">final</span> Namespace oldns = xnamespaces.put(ns.getPrefix(), ns);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered"><a title="Line 116: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;512</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 116: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (oldns != <span class="keyword">null</span> &amp;&amp; oldns != ns) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;117</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        <span class="string">"A Namespace with the prefix '"</span> + ns.getPrefix()</pre></td></tr>
@@ -247,7 +247,7 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered"><a title="Line 124: Conditional coverage 100% (2/2).">&nbsp;3169</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 124: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (variables != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered"><a title="Line 124: Conditional coverage 100% (2/2).">&nbsp;3167</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 124: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (variables != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered"><a title="Line 125: Conditional coverage 100% (2/2).">&nbsp;42</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 125: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; me : variables.entrySet()) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered">&nbsp;75</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">final</span> String qname = me.getKey();</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered"><a title="Line 127: Conditional coverage 100% (2/2).">&nbsp;75</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 127: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (qname == <span class="keyword">null</span>) {</a></pre></td></tr>
@@ -307,9 +307,9 @@
 <tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;3151</td>  <td class="src"><pre class="src">&nbsp;                xquery = query;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;3151</td>  <td class="src"><pre class="src">&nbsp;                xfilter = filter;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsCovered">&nbsp;3151</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;3149</td>  <td class="src"><pre class="src">&nbsp;                xquery = query;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;3149</td>  <td class="src"><pre class="src">&nbsp;                xfilter = filter;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsCovered">&nbsp;3149</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
@@ -393,7 +393,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;217</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String getExpression() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsCovered">&nbsp;297</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xquery;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsCovered">&nbsp;292</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xquery;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;219</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;220</td>  <td class="nbHits">&nbsp;</td>
@@ -402,14 +402,14 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;222</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String getNamespace(<span class="keyword">final</span> String prefix) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsCovered">&nbsp;10667</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace ns = xnamespaces.get(prefix);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered"><a title="Line 224: Conditional coverage 100% (2/2).">&nbsp;10667</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 224: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ns == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsCovered">&nbsp;10631</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Namespace ns = xnamespaces.get(prefix);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered"><a title="Line 224: Conditional coverage 100% (2/2).">&nbsp;10631</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 224: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ns == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;225</td>  <td class="nbHitsCovered">&nbsp;3</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Namespace with prefix '"</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;226</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        + prefix + <span class="string">"' has not been declared."</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered">&nbsp;10664</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ns.getURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered">&nbsp;10628</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ns.getURI();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;229</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
@@ -418,15 +418,15 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> Object getVariable(<span class="keyword">final</span> String uri, <span class="keyword">final</span> String name) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsCovered"><a title="Line 233: Conditional coverage 100% (2/2).">&nbsp;115</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 233: Conditional coverage 100% (2/2).">                <span class="keyword">final</span> Map&lt;String, Object&gt; vmap = xvariables.get(uri == <span class="keyword">null</span> ? <span class="string">""</span> : uri);</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsCovered"><a title="Line 234: Conditional coverage 100% (2/2).">&nbsp;115</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 234: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (vmap == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsCovered"><a title="Line 233: Conditional coverage 100% (2/2).">&nbsp;106</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 233: Conditional coverage 100% (2/2).">                <span class="keyword">final</span> Map&lt;String, Object&gt; vmap = xvariables.get(uri == <span class="keyword">null</span> ? <span class="string">""</span> : uri);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsCovered"><a title="Line 234: Conditional coverage 100% (2/2).">&nbsp;106</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 234: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (vmap == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;235</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Variable with name '"</span> + name</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;236</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        + <span class="string">"' in namespace '"</span> + uri + <span class="string">"' has not been declared."</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;238</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Object ret = vmap.get(name);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered"><a title="Line 239: Conditional coverage 100% (2/2).">&nbsp;106</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 239: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;238</td>  <td class="nbHitsCovered">&nbsp;97</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> Object ret = vmap.get(name);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered"><a title="Line 239: Conditional coverage 100% (2/2).">&nbsp;97</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 239: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (ret == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsCovered"><a title="Line 240: Conditional coverage 100% (2/2).">&nbsp;15</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 240: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (!vmap.containsKey(name)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;241</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Variable with name '"</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;242</td>  <td class="nbHits">&nbsp;</td>
@@ -440,7 +440,7 @@
 <tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsCovered">&nbsp;91</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsCovered">&nbsp;82</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;249</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;250</td>  <td class="nbHits">&nbsp;</td>
@@ -462,7 +462,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;260</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> Filter&lt;T&gt; getFilter() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;261</td>  <td class="nbHitsCovered">&nbsp;3116</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;261</td>  <td class="nbHitsCovered">&nbsp;3114</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;262</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;263</td>  <td class="nbHits">&nbsp;</td>
@@ -471,7 +471,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;265</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> List&lt;T&gt; evaluate(Object context) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered">&nbsp;235</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter.filter(evaluateRawAll(context));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered">&nbsp;233</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter.filter(evaluateRawAll(context));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;267</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;268</td>  <td class="nbHits">&nbsp;</td>
@@ -486,12 +486,12 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> T evaluateFirst(Object context) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;231</td>  <td class="src"><pre class="src">&nbsp;                Object raw = evaluateRawFirst(context);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered"><a title="Line 275: Conditional coverage 100% (2/2).">&nbsp;228</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 275: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (raw == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;198</td>  <td class="src"><pre class="src">&nbsp;                Object raw = evaluateRawFirst(context);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered"><a title="Line 275: Conditional coverage 100% (2/2).">&nbsp;195</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 275: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (raw == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;276</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;277</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;219</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter.filter(raw);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;186</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> xfilter.filter(raw);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;280</td>  <td class="nbHits">&nbsp;</td>
@@ -500,12 +500,12 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;282</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> XPathDiagnostic&lt;T&gt; diagnose(Object context, <span class="keyword">boolean</span> firstonly) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;283</td>  <td class="nbHitsCovered"><a title="Line 283: Conditional coverage 100% (2/2).">&nbsp;3115</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 283: Conditional coverage 100% (2/2).">                <span class="keyword">final</span> List&lt;?&gt; result = firstonly ? Collections</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;283</td>  <td class="nbHitsCovered"><a title="Line 283: Conditional coverage 100% (2/2).">&nbsp;3113</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 283: Conditional coverage 100% (2/2).">                <span class="keyword">final</span> List&lt;?&gt; result = firstonly ? Collections</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;284</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                .singletonList(evaluateRawFirst(context))</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                : evaluateRawAll(context);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;286</td>  <td class="nbHitsCovered">&nbsp;3112</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> XPathDiagnosticImpl&lt;T&gt;(context, <span class="keyword">this</span>, result, firstonly);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;286</td>  <td class="nbHitsCovered">&nbsp;3110</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> XPathDiagnosticImpl&lt;T&gt;(context, <span class="keyword">this</span>, result, firstonly);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;288</td>  <td class="nbHits">&nbsp;</td>
@@ -514,13 +514,13 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered">&nbsp;49</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> nscnt = xnamespaces.size();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;49</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> vcnt = 0;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;293</td>  <td class="nbHitsCovered"><a title="Line 293: Conditional coverage 100% (2/2).">&nbsp;49</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 293: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Map&lt;String, Object&gt; cmap : xvariables.values()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> nscnt = xnamespaces.size();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> vcnt = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;293</td>  <td class="nbHitsCovered"><a title="Line 293: Conditional coverage 100% (2/2).">&nbsp;46</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 293: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Map&lt;String, Object&gt; cmap : xvariables.values()) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                        vcnt += cmap.size();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;295</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered">&nbsp;49</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> String.format(</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> String.format(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="string">"[XPathExpression: %d namespaces and %d variables for query %s]"</span>,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;298</td>  <td class="nbHits">&nbsp;</td>
@@ -583,6 +583,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

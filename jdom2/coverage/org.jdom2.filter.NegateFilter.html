@@ -22,7 +22,7 @@
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2007 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> All rights reserved.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
@@ -173,20 +173,20 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * @param filter filter to use.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;78</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;1822</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NegateFilter(Filter&lt;?&gt; filter) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;1822</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.filter = filter;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;1822</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;1823</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> NegateFilter(Filter&lt;?&gt; filter) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;1823</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.filter = filter;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;1823</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;82</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Object filter(Object content) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered"><a title="Line 85: Conditional coverage 100% (2/2).">&nbsp;16494</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 85: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filter.matches(content)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered"><a title="Line 85: Conditional coverage 100% (2/2).">&nbsp;11666</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 85: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filter.matches(content)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsCovered">&nbsp;4424</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;12070</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> content;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;7242</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> content;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
@@ -202,17 +202,17 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> equals(Object obj) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsCovered"><a title="Line 97: Conditional coverage 100% (2/2).">&nbsp;4688</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 97: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == obj) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsCovered"><a title="Line 97: Conditional coverage 100% (2/2).">&nbsp;5288</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 97: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == obj) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;98</td>  <td class="nbHitsCovered">&nbsp;336</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;99</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered"><a title="Line 101: Conditional coverage 100% (2/2).">&nbsp;4352</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 101: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> NegateFilter) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered"><a title="Line 101: Conditional coverage 100% (2/2).">&nbsp;4952</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 101: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> NegateFilter) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;102</td>  <td class="nbHitsCovered">&nbsp;1980</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> filter.equals(((NegateFilter) obj).filter);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;103</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;104</td>  <td class="nbHitsCovered">&nbsp;2372</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;104</td>  <td class="nbHitsCovered">&nbsp;2972</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;105</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;106</td>  <td class="nbHits">&nbsp;</td>
@@ -221,7 +221,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">int</span> hashCode() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;109</td>  <td class="nbHitsCovered">&nbsp;4498</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ~filter.hashCode();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;109</td>  <td class="nbHitsCovered">&nbsp;4499</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ~filter.hashCode();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;110</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
@@ -245,6 +245,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

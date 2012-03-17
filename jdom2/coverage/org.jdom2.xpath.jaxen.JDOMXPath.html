@@ -247,7 +247,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * finally {} to the rescue.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;63</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> JDOMNavigator navigator = <span class="keyword">new</span> JDOMNavigator();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">final</span> JDOMNavigator navigator = <span class="keyword">new</span> JDOMNavigator();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
@@ -270,11 +270,11 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object unWrapNS(Object o) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered"><a title="Line 128: Conditional coverage 100% (2/2).">&nbsp;178</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 128: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (o <span class="keyword">instanceof</span> NamespaceContainer) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ((NamespaceContainer) o).getNamespace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered"><a title="Line 128: Conditional coverage 100% (2/2).">&nbsp;169</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 128: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (o <span class="keyword">instanceof</span> NamespaceContainer) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> ((NamespaceContainer) o).getNamespace();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsCovered">&nbsp;169</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> o;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsCovered">&nbsp;164</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> o;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;132</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;133</td>  <td class="nbHits">&nbsp;</td>
@@ -299,12 +299,12 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;143</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> List&lt;Object&gt; unWrap(List&lt;?&gt; results) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> ArrayList&lt;Object&gt; ret = <span class="keyword">new</span> ArrayList&lt;Object&gt;(results.size());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsCovered"><a title="Line 145: Conditional coverage 100% (2/2).">&nbsp;59</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 145: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Iterator&lt;?&gt; it = results.iterator(); it.hasNext();) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered">&nbsp;121</td>  <td class="src"><pre class="src">&nbsp;                        ret.add(unWrapNS(it.next()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> ArrayList&lt;Object&gt; ret = <span class="keyword">new</span> ArrayList&lt;Object&gt;(results.size());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsCovered"><a title="Line 145: Conditional coverage 100% (2/2).">&nbsp;56</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 145: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Iterator&lt;?&gt; it = results.iterator(); it.hasNext();) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsCovered">&nbsp;112</td>  <td class="src"><pre class="src">&nbsp;                        ret.add(unWrapNS(it.next()));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;147</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ret;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;149</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
@@ -329,9 +329,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;160</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> JDOMXPath(String expr)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;63</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> JDOMException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsCovered">&nbsp;63</td>  <td class="src"><pre class="src">&nbsp;                setXPath(expr);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> JDOMException {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                setXPath(expr);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;164</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
@@ -368,10 +368,10 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> JDOMException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;181</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;182</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        navigator.setContext(context);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;182</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;                        navigator.setContext(context);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;183</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;184</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> unWrap(xPath.selectNodes(context));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;184</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> unWrap(xPath.selectNodes(context));</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;185</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">catch</span> (JaxenException ex1) {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> JDOMException(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
@@ -380,7 +380,7 @@
   <td class="src"><pre class="src">&nbsp;                                                        + <span class="string">"\": "</span> + ex1.getMessage(), ex1);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;189</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                } <span class="keyword">finally</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        navigator.reset();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;                        navigator.reset();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;191</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;192</td>  <td class="nbHits">&nbsp;</td>
@@ -628,7 +628,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;324</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String getXPath() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;325</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (xPath.toString());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;325</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (xPath.toString());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;326</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;327</td>  <td class="nbHits">&nbsp;</td>
@@ -653,21 +653,21 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">void</span> setXPath(String expr) <span class="keyword">throws</span> JDOMException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;337</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered">&nbsp;63</td>  <td class="src"><pre class="src">&nbsp;                        xPath = <span class="keyword">new</span> BaseXPath(expr, navigator);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;339</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                        xPath.setNamespaceContext(navigator);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;338</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        xPath = <span class="keyword">new</span> BaseXPath(expr, navigator);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;339</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                        xPath.setNamespaceContext(navigator);</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;340</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">catch</span> (Exception ex1) {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> JDOMException(<span class="string">"Invalid XPath expression: \""</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        + expr + <span class="string">"\""</span>, ex1);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;345</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;346</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;347</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String toString() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (String.format(<span class="string">"[XPath: %s]"</span>, xPath.toString()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (String.format(<span class="string">"[XPath: %s]"</span>, xPath.toString()));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;350</td>  <td class="nbHits">&nbsp;</td>
@@ -676,6 +676,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>

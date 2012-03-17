@@ -22,7 +22,7 @@
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2007 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="comment"> Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> All rights reserved.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
@@ -179,7 +179,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author Bradley S. Huffman</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;81</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;37527</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> ContentFilter <span class="keyword">extends</span> AbstractFilter&lt;Content&gt; {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;36343</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> ContentFilter <span class="keyword">extends</span> AbstractFilter&lt;Content&gt; {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
@@ -252,9 +252,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * Default constructor that allows any legal JDOM objects.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;3952</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> ContentFilter() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;3952</td>  <td class="src"><pre class="src">&nbsp;                setDefaultMask();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;3952</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsCovered">&nbsp;3954</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> ContentFilter() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;120</td>  <td class="nbHitsCovered">&nbsp;3954</td>  <td class="src"><pre class="src">&nbsp;                setDefaultMask();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsCovered">&nbsp;3954</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;123</td>  <td class="nbHits">&nbsp;</td>
@@ -339,10 +339,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> setDefaultMask() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsCovered">&nbsp;3982</td>  <td class="src"><pre class="src">&nbsp;                filterMask = ELEMENT | CDATA | TEXT | COMMENT |</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;170</td>  <td class="nbHitsCovered">&nbsp;3984</td>  <td class="src"><pre class="src">&nbsp;                filterMask = ELEMENT | CDATA | TEXT | COMMENT |</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                PI | ENTITYREF | DOCUMENT | DOCTYPE;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;172</td>  <td class="nbHitsCovered">&nbsp;3982</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;172</td>  <td class="nbHitsCovered">&nbsp;3984</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;174</td>  <td class="nbHits">&nbsp;</td>
@@ -575,37 +575,37 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;304</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Content filter(Object obj) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered"><a title="Line 305: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;37543</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 305: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (obj == <span class="keyword">null</span> || !Content.<span class="keyword">class</span>.isInstance(obj)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered"><a title="Line 305: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;36359</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 305: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                <span class="keyword">if</span> (obj == <span class="keyword">null</span> || !Content.<span class="keyword">class</span>.isInstance(obj)) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;306</td>  <td class="nbHitsCovered">&nbsp;80</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsCovered">&nbsp;37463</td>  <td class="src"><pre class="src">&nbsp;                Content content = (Content)obj;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsCovered">&nbsp;36279</td>  <td class="src"><pre class="src">&nbsp;                Content content = (Content)obj;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;310</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered"><a title="Line 311: Conditional coverage 100% (2/2).">&nbsp;37463</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 311: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Element) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered"><a title="Line 311: Conditional coverage 100% (2/2).">&nbsp;36279</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 311: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Element) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;312</td>  <td class="nbHitsCovered"><a title="Line 312: Conditional coverage 100% (2/2).">&nbsp;12066</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 312: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; ELEMENT) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;313</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;314</td>  <td class="nbHitsCovered"><a title="Line 314: Conditional coverage 100% (2/2).">&nbsp;25397</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 314: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> CDATA) {  <span class="comment">// must come before Text check</span></a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;315</td>  <td class="nbHitsCovered"><a title="Line 315: Conditional coverage 100% (2/2).">&nbsp;2817</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 315: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; CDATA) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;314</td>  <td class="nbHitsCovered"><a title="Line 314: Conditional coverage 100% (2/2).">&nbsp;24213</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 314: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> CDATA) {  <span class="comment">// must come before Text check</span></a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;315</td>  <td class="nbHitsCovered"><a title="Line 315: Conditional coverage 100% (2/2).">&nbsp;2721</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 315: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; CDATA) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered"><a title="Line 317: Conditional coverage 100% (2/2).">&nbsp;22580</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 317: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Text) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;318</td>  <td class="nbHitsCovered"><a title="Line 318: Conditional coverage 100% (2/2).">&nbsp;14173</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 318: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; TEXT) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered"><a title="Line 317: Conditional coverage 100% (2/2).">&nbsp;21492</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 317: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Text) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;318</td>  <td class="nbHitsCovered"><a title="Line 318: Conditional coverage 100% (2/2).">&nbsp;13213</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 318: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; TEXT) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;320</td>  <td class="nbHitsCovered"><a title="Line 320: Conditional coverage 100% (2/2).">&nbsp;8407</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 320: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Comment) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;320</td>  <td class="nbHitsCovered"><a title="Line 320: Conditional coverage 100% (2/2).">&nbsp;8279</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 320: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> Comment) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;321</td>  <td class="nbHitsCovered"><a title="Line 321: Conditional coverage 100% (2/2).">&nbsp;5125</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 321: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; COMMENT) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;322</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;323</td>  <td class="nbHitsCovered"><a title="Line 323: Conditional coverage 100% (2/2).">&nbsp;3282</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 323: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> ProcessingInstruction) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;323</td>  <td class="nbHitsCovered"><a title="Line 323: Conditional coverage 100% (2/2).">&nbsp;3154</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 323: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> ProcessingInstruction) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;324</td>  <td class="nbHitsCovered"><a title="Line 324: Conditional coverage 100% (2/2).">&nbsp;928</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 324: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; PI) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;325</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered"><a title="Line 326: Conditional coverage 100% (2/2).">&nbsp;2354</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 326: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> EntityRef) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered"><a title="Line 327: Conditional coverage 100% (2/2).">&nbsp;1416</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 327: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; ENTITYREF) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered"><a title="Line 326: Conditional coverage 100% (2/2).">&nbsp;2226</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 326: Conditional coverage 100% (2/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> EntityRef) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered"><a title="Line 327: Conditional coverage 100% (2/2).">&nbsp;1320</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 327: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; ENTITYREF) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;328</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;329</td>  <td class="nbHits">&nbsp;</td>
@@ -614,8 +614,8 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//            return (filterMask &amp; DOCUMENT) != 0 ? obj : null;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;331</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//        }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;332</td>  <td class="nbHitsUncovered"><a title="Line 332: Conditional coverage 50% (1/2).">&nbsp;938</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 332: Conditional coverage 50% (1/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> DocType) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered"><a title="Line 333: Conditional coverage 100% (2/2).">&nbsp;938</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 333: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; DOCTYPE) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;332</td>  <td class="nbHitsUncovered"><a title="Line 332: Conditional coverage 50% (1/2).">&nbsp;906</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 332: Conditional coverage 50% (1/2).">                <span class="keyword">else</span> <span class="keyword">if</span> (content <span class="keyword">instanceof</span> DocType) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered"><a title="Line 333: Conditional coverage 100% (2/2).">&nbsp;906</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 333: Conditional coverage 100% (2/2).">                        <span class="keyword">return</span> (filterMask &amp; DOCTYPE) != 0 ? content : <span class="keyword">null</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;335</td>  <td class="nbHits">&nbsp;</td>
@@ -645,17 +645,17 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">boolean</span> equals(Object obj) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;348</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Generated by IntelliJ</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;349</td>  <td class="nbHitsCovered"><a title="Line 349: Conditional coverage 100% (2/2).">&nbsp;14436</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 349: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == obj) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;350</td>  <td class="nbHitsCovered"><a title="Line 350: Conditional coverage 100% (2/2).">&nbsp;6404</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 350: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!(obj <span class="keyword">instanceof</span> ContentFilter)) <span class="keyword">return</span> <span class="keyword">false</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;349</td>  <td class="nbHitsCovered"><a title="Line 349: Conditional coverage 100% (2/2).">&nbsp;16078</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 349: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (<span class="keyword">this</span> == obj) <span class="keyword">return</span> <span class="keyword">true</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;350</td>  <td class="nbHitsCovered"><a title="Line 350: Conditional coverage 100% (2/2).">&nbsp;8044</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 350: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (!(obj <span class="keyword">instanceof</span> ContentFilter)) <span class="keyword">return</span> <span class="keyword">false</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;351</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;5511</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> ContentFilter filter = (ContentFilter) obj;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;5771</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> ContentFilter filter = (ContentFilter) obj;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;353</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered"><a title="Line 354: Conditional coverage 100% (2/2).">&nbsp;5511</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 354: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filterMask != filter.filterMask) <span class="keyword">return</span> <span class="keyword">false</span>;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered"><a title="Line 354: Conditional coverage 100% (2/2).">&nbsp;5771</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 354: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (filterMask != filter.filterMask) <span class="keyword">return</span> <span class="keyword">false</span>;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;355</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;5502</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;5534</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;357</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;358</td>  <td class="nbHits">&nbsp;</td>
@@ -673,6 +673,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12/03/12 8:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 16/03/12 8:36 PM.</div>
 </body>
 </html>
