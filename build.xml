@@ -426,7 +426,6 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="src" path="core/package"/>
 	<classpathentry kind="src" path="core/samples"/>
 	<classpathentry kind="src" path="test/src/java"/>
-	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="src" path="contrib/src/java" excluding="org/jdom/contrib/ids/doc-files/|org/jdom/contrib/input/scanner/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/input/scanner/doc-files/|org/jdom2/contrib/input/scanner/doc-files/"/>
 	<classpathentry kind="src" path="contrib/samples"/>
 	<classpathentry kind="src" path="contrib/src/java/org/jdom2/contrib/ids/doc-files"/>
@@ -436,6 +435,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.3.jar"/>
 	<classpathentry kind="lib" path="contrib/lib/isorelax.jar"/>
+	<classpathentry kind="lib" path="lib/xalan/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xalan/xalan-2.7.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="ebuild"/>
 </classpath>
