@@ -68,12 +68,12 @@ import org.jdom2.util.IteratorIterable;
  * @author Jason Hunter
  * @author Rolf Lear
  */
-class DescendantIterator implements IteratorIterable<Content> {
+final class DescendantIterator implements IteratorIterable<Content> {
 
 	private final Parent parent;
-	private LinkedList<ListIterator<Content>> stack = new LinkedList<ListIterator<Content>>();
-	ListIterator<Content> current = null;
-	ListIterator<Content> following = null;
+	private LinkedList<Iterator<Content>> stack = new LinkedList<Iterator<Content>>();
+	private Iterator<Content> current = null;
+	private Iterator<Content> following = null;
 
 	/**
 	 * Iterator for the descendants of the supplied object.
@@ -83,7 +83,7 @@ class DescendantIterator implements IteratorIterable<Content> {
 	DescendantIterator(Parent parent) {
 		this.parent = parent;
 		// can trust that parent is not null, DescendantIterator is package-private.
-		current = parent.getContent().listIterator();
+		current = parent.getContent().iterator();
 	}
 	
 	@Override
@@ -141,12 +141,14 @@ class DescendantIterator implements IteratorIterable<Content> {
 				}
 			}
 		}
+		
 		if (ret == null) {
 			throw new NoSuchElementException("Iterated off the end of the " +
 					"DescendantIterator");
 		}
+		
 		if (ret instanceof Parent) {
-			following = ((Parent)ret).getContent().listIterator();
+			following = ((Parent)ret).getContent().iterator();
 		} else {
 			following = null;
 		}

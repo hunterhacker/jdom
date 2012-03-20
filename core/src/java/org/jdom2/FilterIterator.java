@@ -66,10 +66,10 @@ import org.jdom2.util.IteratorIterable;
  * @author Rolf Lear
  * @param <T> The Generic type of content returned by this FilterIterator.
  */
-class FilterIterator<T> implements IteratorIterable<T> {
+final class FilterIterator<T> implements IteratorIterable<T> {
 
-	private DescendantIterator iterator;
-	private Filter<T> filter;
+	private final DescendantIterator iterator;
+	private final Filter<T> filter;
 	private T nextObject;
 	private boolean canremove = false;
 
@@ -98,8 +98,8 @@ class FilterIterator<T> implements IteratorIterable<T> {
 		}
 
 		while (iterator.hasNext()) {
-			Object obj = iterator.next();
-			T f = filter.filter(obj);
+			final Object obj = iterator.next();
+			final T f = filter.filter(obj);
 			if (f != null) {
 				nextObject = f;
 				return true;
@@ -114,7 +114,7 @@ class FilterIterator<T> implements IteratorIterable<T> {
 			throw new NoSuchElementException();
 		}
 
-		T obj = nextObject;
+		final T obj = nextObject;
 		nextObject = null;
 		canremove = true;
 		return obj;
