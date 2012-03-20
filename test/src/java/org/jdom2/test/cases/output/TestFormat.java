@@ -206,6 +206,13 @@ public class TestFormat {
 	}
 	
 	@Test
+	public void testCharsetEncodingEscapes() {
+		checkBitEscape("windows-1252",
+				new char[] {'a', 'b', '\n', '!', (char)127, (char)255},
+				new char[] {(char)0xD800, (char)1234});
+	}
+	
+	@Test
 	public void testIllegalEncodingEscapes() {
 		checkBitEscape("junk",
 				new char[] {'a', 'b', '\n', '!', (char)128, (char)255, (char)1234},

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.jdom2.IllegalDataException;
+import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.support.AbstractXMLOutputProcessor;
 import org.jdom2.output.support.FormatStack;
@@ -177,7 +178,7 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	public void testTextEscapedEntitiesFilter() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" &#x153; ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
 		String data = " \" \u0153 ' & < > \r \n \t \uD800\uDC00 ";
-		textEscapedEntitiesFilter(cw, fsraw, data);
+		printText(cw, fsraw, new Text(data));
 		cw.close();
 	}
 
@@ -187,7 +188,7 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 		// the HighSurrogate is broken here....
 		try {
 			String data = " \" ' & < > \r \n \t \uD800 \uDC00 ";
-			textEscapedEntitiesFilter(cw, fsraw, data);
+			printText(cw, fsraw, new Text(data));
 			fail("Should have missed the low surrogate...");
 		} catch (IllegalDataException ide) {
 			//good
@@ -203,7 +204,7 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 		// the HighSurrogate is broken here....
 		try {
 			String data = " \" ' & < > \r \n \t \uD800";
-			textEscapedEntitiesFilter(cw, fsraw, data);
+			printText(cw, fsraw, new Text(data));
 			fail("Should have missed the low surrogate...");
 		} catch (IllegalDataException ide) {
 			//good
@@ -219,7 +220,7 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 		String data = " \" ' & < > \r \n \t \uD800\uDC00 ";
 		FormatStack tmps = new FormatStack(RAW);
 		tmps.setEscapeOutput(false);
-		textEscapedEntitiesFilter(cw, tmps, data);
+		printText(cw, tmps, new Text(data));
 		cw.close();
 	}
 
@@ -227,14 +228,14 @@ public class TestXMLOutputProcessor extends AbstractXMLOutputProcessor {
 	public void testTextEscapeRaw() throws IOException {
 		CheckWriter cw = new CheckWriter(" \" ' &amp; &lt; &gt; &#xD; \r\n \t &#x10000; ");
 		String s = " \" ' & < > \r \n \t \uD800\uDC00 ";
-		textEscapedEntitiesFilter(cw, fsraw, s);
+		printText(cw, fsraw, new Text(s));
 		cw.close();
 	}
 
 	@Test
 	public void testTextEscapeRawEmpty() throws IOException {
 		CheckWriter cw = new CheckWriter("");
-		textEscapedEntitiesFilter(cw, fsraw, "");
+		printText(cw, fsraw, new Text(""));
 		cw.close();
 	}
 

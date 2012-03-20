@@ -76,6 +76,73 @@ import org.jdom2.Verifier;
  * @author Rolf Lear
  */
 public class Format implements Cloneable {
+
+	/**
+	 * An EscapeStrategy suitable for UTF-8 an UTF-16
+	 */
+	private static final EscapeStrategy UTFEscapeStrategy = new EscapeStrategy() {
+		@Override
+		public boolean shouldEscape(char ch) {
+			return Verifier.isHighSurrogate(ch);
+		}
+	};
+
+	/**
+	 * An EscapeStrategy suitable for 8-bit charsets
+	 */
+	private static final EscapeStrategy Bits8EscapeStrategy = new EscapeStrategy() {
+		@Override
+		public boolean shouldEscape(char ch) {
+			return (ch >>> 8) != 0;
+		}
+	};
+
+	/**
+	 * An EscapeStrategy suitable for 7-bit charsets
+	 */
+	private static final EscapeStrategy Bits7EscapeStrategy = new EscapeStrategy() {
+		@Override
+		public boolean shouldEscape(char ch) {
+			return (ch >>> 7) != 0;
+		}
+	};
+	
+	/**
+	 * An EscapeStrategy suitable for 'unknown' charsets
+	 */
+	private static final EscapeStrategy DefaultEscapeStrategy = new EscapeStrategy() {
+		@Override
+		public boolean shouldEscape(char ch) {
+			if (Verifier.isHighSurrogate(ch)) {
+				return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
+			}
+
+			return false;
+		}
+	};
+	
+	/**
+	 * Handles Charsets.
+	 */
+	private final static class DefaultCharsetEscapeStrategy implements EscapeStrategy {
+		
+		private final CharsetEncoder encoder;
+
+		public DefaultCharsetEscapeStrategy(CharsetEncoder cse) {
+			encoder = cse;
+		}
+
+		@Override
+		public boolean shouldEscape(final char ch) {
+			
+			if (Verifier.isHighSurrogate(ch)) {
+				return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
+			}
+
+			return !encoder.canEncode(ch);
+		}
+		
+	}
 	
 	/**
 	 * Returns a new Format object that performs no whitespace changes, uses
@@ -244,13 +311,27 @@ public class Format implements Cloneable {
 	 */
 	public static final String escapeAttribute(final EscapeStrategy strategy, 
 			final String value) {
+		final int len = value.length();
+		int idx = 0;
+		
+		checkloop: while (idx < len) {
+			final char ch = value.charAt(idx);
+			if (ch == '<' || ch == '>' || ch == '&' || ch == '\r' || ch == '\n'
+					|| ch == '"' || ch == '\t' || strategy.shouldEscape(ch)) {
+				break checkloop;
+			}
+			idx++;
+		}
+		
+		if (idx == len) {
+			return value;
+		}
 		
 		char highsurrogate = 0;
-		final int len = value.length();
 		final StringBuilder sb = new StringBuilder(len + 5);
-		boolean changed = false;
-		for (int i = 0; i < len; i++) {
-			final char ch = value.charAt(i);
+		sb.append(value, 0, idx);
+		while (idx < len) {
+			final char ch = value.charAt(idx++);
 			if (highsurrogate > 0) {
 				if (!Verifier.isLowSurrogate(ch)) {
 					throw new IllegalDataException(
@@ -263,44 +344,35 @@ public class Format implements Cloneable {
 				sb.append(Integer.toHexString(chp));
 				sb.append(';');
 				highsurrogate = 0;
-				changed = true;
 				continue;
 			}
 			switch (ch) {
 				case '<':
 					sb.append("&lt;");
-					changed = true;
 					break;
 				case '>':
 					sb.append("&gt;");
-					changed = true;
 					break;
 				case '&':
 					sb.append("&amp;");
-					changed = true;
 					break;
 				case '\r':
 					sb.append("&#xD;");
-					changed = true;
 					break;
 				case '"':
 					sb.append("&quot;");
-					changed = true;
 					break;
 				case '\t':
 					sb.append("&#x9;");
-					changed = true;
 					break;
 				case '\n':
 					sb.append("&#xA;");
-					changed = true;
 					break;
 				default:
 
 					if (strategy.shouldEscape(ch)) {
 						// make sure what we are escaping is not the
 						// beginning of a multi-byte character.
-						changed = true;
 						if (Verifier.isHighSurrogate(ch)) {
 							// this is a the high of a surrogate pair
 							highsurrogate = ch;
@@ -314,9 +386,6 @@ public class Format implements Cloneable {
 					}
 					break;
 			}
-		}
-		if (!changed) {
-			return value;
 		}
 		if (highsurrogate > 0) {
 			throw new IllegalDataException("Surrogate pair 0x" +
@@ -349,13 +418,29 @@ public class Format implements Cloneable {
 	 *         if an entity can not be escaped
 	 * @since JDOM2
 	 */
-	public static final String escapeText(
-			final EscapeStrategy strategy, final String eol, 
-			final String value) {
+	public static final String escapeText(final EscapeStrategy strategy,
+			final String eol, final String value) {
 		final int right = value.length();
-		final StringBuilder sb = new StringBuilder(right + 5);
-		char highsurrogate = 0;
 		int idx = 0;
+		checkloop: while (idx < right) {
+			final char ch = value.charAt(idx);
+			if (ch == '<' || ch == '>' || ch == '&' || ch == '\r' || ch == '\n'
+					|| strategy.shouldEscape(ch)) {
+				break checkloop;
+			}
+			idx++;
+		}
+		
+		if (idx == right) {
+			// no escape needed.
+			return value;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		if (idx > 0) {
+			sb.append(value, 0, idx);
+		}
+		char highsurrogate = 0;
 		while (idx < right) {
 			final char ch = value.charAt(idx++);
 			if (highsurrogate > 0) {
@@ -417,6 +502,31 @@ public class Format implements Cloneable {
 	}
 	
 	
+	private static final EscapeStrategy chooseStrategy(String encoding) {
+		if ("UTF-8".equalsIgnoreCase(encoding) ||
+				"UTF-16".equalsIgnoreCase(encoding)) {
+			return UTFEscapeStrategy;
+		}
+		
+		if (encoding.toUpperCase().startsWith("ISO-8859-") ||
+				"Latin1".equalsIgnoreCase(encoding)) {
+			return Bits8EscapeStrategy;
+		}
+		
+		if ("US-ASCII".equalsIgnoreCase(encoding) ||
+				"ASCII".equalsIgnoreCase(encoding)) {
+			return Bits7EscapeStrategy;
+		}
+
+		try {
+			final CharsetEncoder cse = Charset.forName(encoding).newEncoder();
+			return new DefaultCharsetEscapeStrategy(cse);
+		} catch (Exception e) {
+			// swallow that... and assume false.
+		}
+		return DefaultEscapeStrategy;
+	}
+	
 
 	/** standard value to indent by, if we are indenting */
 	private static final String STANDARD_INDENT = "  ";
@@ -461,12 +571,14 @@ public class Format implements Cloneable {
 	TextMode mode = TextMode.PRESERVE;
 
 	/** entity escape logic */
-	EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
+	EscapeStrategy escapeStrategy = DefaultEscapeStrategy;
 
 	/**
 	 * Creates a new Format instance with default (raw) behavior.
 	 */
-	private Format() { }
+	private Format() {
+		setEncoding(STANDARD_ENCODING);
+	}
 
 	/**
 	 * Sets the {@link EscapeStrategy} to use for character escaping.
@@ -743,7 +855,7 @@ public class Format implements Cloneable {
 	 */
 	public Format setEncoding(String encoding) {
 		this.encoding = encoding;
-		escapeStrategy = new DefaultEscapeStrategy(encoding);
+		escapeStrategy = chooseStrategy(encoding);
 		return this;
 	}
 
@@ -790,83 +902,6 @@ public class Format implements Cloneable {
 
 		return format;
 	}
-
-
-	/**
-	 * Handle common charsets quickly and easily.  Use reflection
-	 * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
-	 * If JDK 1.4 isn't around, default to no special encoding.
-	 */
-	private final static class DefaultEscapeStrategy implements EscapeStrategy {
-		private final int bits;
-		private final CharsetEncoder encoder;
-
-		public DefaultEscapeStrategy(String encoding) {
-			if ("UTF-8".equalsIgnoreCase(encoding) ||
-					"UTF-16".equalsIgnoreCase(encoding)) {
-				bits = 16;
-				encoder = null;
-			}
-			else if ("ISO-8859-1".equalsIgnoreCase(encoding) ||
-					"Latin1".equalsIgnoreCase(encoding)) {
-				bits = 8;
-				encoder = null;
-			}
-			else if ("US-ASCII".equalsIgnoreCase(encoding) ||
-					"ASCII".equalsIgnoreCase(encoding)) {
-				bits = 7;
-				encoder = null;
-			}
-			else {
-				bits = 0;
-				CharsetEncoder cse = null;
-				try {
-					cse = Charset.forName(encoding).newEncoder();
-				} catch (Exception e) {
-					// swallow that... and assume false.
-				}
-				encoder = cse;
-			}
-		}
-
-		@Override
-		public boolean shouldEscape(char ch) {
-			if (bits == 16) {
-				if (Verifier.isHighSurrogate(ch)) {
-					return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
-				}
-				return false;
-			}
-			if (bits == 8) {
-				if (ch > 255) {
-					return true;
-				}
-				return false;
-			}
-			if (bits == 7) {
-				if (ch > 127) {
-					return true;
-				}
-				return false;
-			}
-			if (Verifier.isHighSurrogate(ch))
-				return true;  // Safer this way per http://unicode.org/faq/utf_bom.html#utf8-4
-
-				if (encoder != null) {
-					try {
-						return !encoder.canEncode(ch);
-					}
-					catch (Exception ignored) {
-						// ignore problems.
-					}
-				}
-				// Return false if we don't know.  This risks not escaping
-				// things which should be escaped, but also means people won't
-				// start getting loads of unnecessary escapes.
-				return false;
-		}
-	}
-
 
 	/**
 	 * Class to signify how text should be handled on output.  The following

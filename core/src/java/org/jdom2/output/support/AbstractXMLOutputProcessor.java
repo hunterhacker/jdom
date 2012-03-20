@@ -75,7 +75,6 @@ import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.Verifier;
-import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
 import org.jdom2.output.XMLOutputter;
@@ -130,7 +129,7 @@ import org.jdom2.util.NamespaceStack;
  * returned as either Text/CDATA instances or as formatted String values
  * this class sometimes uses printCDATA(...) and printText(...), and sometimes
  * uses the more direct {@link #textCDATA(Writer, String)} or
- * {@link #textEscapedEntitiesFilter(Writer, FormatStack, String)} as
+ * {@link #textRaw(Writer, String)} as
  * appropriate. In other words, subclasses should probably override these second
  * methods instead of the print methods.
  * <p>
@@ -465,41 +464,6 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 		textRaw(out, CDATAPOST);
 	}
 
-	/**
-	 * This will take the three pre-defined entities in XML 1.0 ('&lt;', '&gt;',
-	 * and '&amp;' - used specifically in XML elements) and convert their
-	 * character representation to the appropriate entity reference, suitable
-	 * for XML element content. Further, some special characters (e.g.
-	 * characters that are not valid in the current encoding) are converted to
-	 * escaped representations.
-	 * <p>
-	 * <b>Note:</b> If {@link FormatStack#getEscapeOutput()} is false then no
-	 * escaping will happen.
-	 * 
-	 * @param out
-	 *        The destination Writer
-	 * @param fstack
-	 *        The {@link FormatStack}
-	 * @param value
-	 *        <code>String</code> input to escape.
-	 * @throws IOException
-	 *         if the destination Writer fails.
-	 * @throws IllegalDataException
-	 *         if an entity can not be escaped
-	 */
-	protected void textEscapedEntitiesFilter(final Writer out,
-			final FormatStack fstack, final String value) throws IOException {
-		if (!fstack.getEscapeOutput()) {
-			textRaw(out, value);
-			return;
-		}
-		final EscapeStrategy strategy = fstack.getEscapeStrategy();
-		
-		textRaw(out, Format.escapeText(
-				strategy, fstack.getLineSeparator(), value));
-
-	}
-
 	/* *******************************************
 	 * Support methods for output. Should all be protected. All content-type
 	 * print methods have a FormatStack. Only printContent is responsible for
@@ -798,7 +762,13 @@ public abstract class AbstractXMLOutputProcessor extends AbstractOutputProcessor
 	 */
 	protected void printText(final Writer out, final FormatStack fstack,
 			final Text text) throws IOException {
-		textEscapedEntitiesFilter(out, fstack, text.getText());
+		if (fstack.getEscapeOutput()) {
+			textRaw(out, Format.escapeText(fstack.getEscapeStrategy(),
+					fstack.getLineSeparator(), text.getText()));
+
+			return;
+		}
+		textRaw(out, text.getText());
 	}
 
 	/**

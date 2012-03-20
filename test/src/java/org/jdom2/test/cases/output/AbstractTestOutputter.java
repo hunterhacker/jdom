@@ -1206,6 +1206,29 @@ public abstract class AbstractTestOutputter {
 	}
 
 	
+	@Test
+	public void testOutputEscapedMixedMultiText() {
+		// this test has mixed content (text-type and not text type).
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(" xx "));
+		root.addContent(new Text("<emb>"));
+		root.addContent(new Text(" xx "));
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		checkOutput(root, fs,  
+				"<root><!--Boo--> xx &lt;emb&gt; xx </root>", 
+				"<root><!--Boo-->xx &lt;emb&gt; xx</root>",
+				"<root>\n  <!--Boo-->\n  xx &lt;emb&gt; xx\n</root>",
+				"<root>\n  <!--Boo-->\n  xx &lt;emb&gt; xx\n</root>",
+				"<root>\n  <!--Boo-->\n   xx &lt;emb&gt; xx \n</root>");
+	}
+
 	
 	
 	protected void checkOutput(Object content, String raw, String compact, String pretty, String tso, String trimfw) {
