@@ -4,7 +4,6 @@ import java.io.CharArrayReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -65,80 +64,6 @@ public class PerfDoc {
 				document = doc;
 			}
 		}
-	}
-	
-	private static class DevNull extends Writer {
-		
-		int counter = 0;
-		
-		public void reset() {
-			counter = 0;
-		}
-		
-		public int getCounter() {
-			return counter;
-		}
-		
-		@Override
-		public void write(char[] cbuf, int off, int len) throws IOException {
-			// do nothing
-			counter++;
-		}
-		
-		@Override
-		public void flush() throws IOException {
-			// do nothing
-			counter++;
-		}
-		
-		@Override
-		public void close() throws IOException {
-			// do nothing
-			counter++;
-		}
-
-		@Override
-		public void write(int c) throws IOException {
-			// do nothing
-			counter++;
-		}
-
-		@Override
-		public void write(char[] cbuf) throws IOException {
-			// do nothing
-			counter++;
-		}
-
-		@Override
-		public void write(String str) throws IOException {
-			// do nothing
-			counter++;
-		}
-
-		@Override
-		public void write(String str, int off, int len) throws IOException {
-			// do nothing
-			counter++;
-		}
-
-		@Override
-		public Writer append(CharSequence csq) throws IOException {
-			counter++;
-			return this;
-		}
-
-		@Override
-		public Writer append(CharSequence csq, int start, int end) throws IOException {
-			counter++;
-			return this;
-		}
-
-		@Override
-		public Writer append(char c) throws IOException {
-			counter++;
-			return this;
-		}
-		
 	}
 	
 	private static final DevNull devnull = new DevNull();
