@@ -122,7 +122,7 @@ public final class FormatStack {
 	private final boolean specifiedAttributesOnly;
 
 	/** entity escape logic */
-	private EscapeStrategy escapeStrategy;
+	private final EscapeStrategy escapeStrategy;
 
 	/*
 	 * ====================================================================

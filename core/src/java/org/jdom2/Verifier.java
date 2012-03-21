@@ -745,6 +745,11 @@ final public class Verifier {
 	public static boolean isHighSurrogate(final char ch) {
 		// faster way to do it is with bit manipulation....
 		// return (ch >= 0xD800 && ch <= 0xDBFF);
+		// A high surrogate has the bit pattern:
+		//    110110xx xxxxxxxx
+		// ch & 0xFC00 does a bit-mask of the most significant 6 bits (110110)
+		// return 0xD800 == (ch & 0xFC00);
+		// as it happens, it is faster to do a bit-shift,
 		return 0x36 == ch >>> 10;
 	}
 

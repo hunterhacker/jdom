@@ -78,34 +78,53 @@ import org.jdom2.Verifier;
 public class Format implements Cloneable {
 
 	/**
-	 * An EscapeStrategy suitable for UTF-8 an UTF-16
+	 * An EscapeStrategy suitable for UTF-8 an UTF-16. We want the class to
+	 * have its own name.
 	 */
-	private static final EscapeStrategy UTFEscapeStrategy = new EscapeStrategy() {
+	private static final class EscapeStrategyUTF implements EscapeStrategy {
 		@Override
-		public boolean shouldEscape(char ch) {
+		public final boolean shouldEscape(char ch) {
 			return Verifier.isHighSurrogate(ch);
 		}
-	};
+	}
+
+	/**
+	 * An EscapeStrategy suitable for UTF-8 an UTF-16
+	 */
+	private static final EscapeStrategy UTFEscapeStrategy = new EscapeStrategyUTF();
+
+	/**
+	 * An EscapeStrategy suitable for 8-bit charsets. We want the class to have
+	 * its own name.
+	 */
+	private static final class EscapeStrategy8Bits implements EscapeStrategy {
+		@Override
+		public boolean shouldEscape(final char ch) {
+			return (ch >>> 8) != 0;
+		}
+	}
 
 	/**
 	 * An EscapeStrategy suitable for 8-bit charsets
 	 */
-	private static final EscapeStrategy Bits8EscapeStrategy = new EscapeStrategy() {
-		@Override
-		public boolean shouldEscape(char ch) {
-			return (ch >>> 8) != 0;
-		}
-	};
+	private static final EscapeStrategy Bits8EscapeStrategy = new EscapeStrategy8Bits();
 
+	/**
+	 * An EscapeStrategy suitable for 7-bit charsets. We want the class to
+	 * have its own name.
+	 */
+	private static final class EscapeStrategy7Bits implements EscapeStrategy {
+		@Override
+		public boolean shouldEscape(final char ch) {
+			return (ch >>> 7) != 0;
+		}
+	}
+	
 	/**
 	 * An EscapeStrategy suitable for 7-bit charsets
 	 */
-	private static final EscapeStrategy Bits7EscapeStrategy = new EscapeStrategy() {
-		@Override
-		public boolean shouldEscape(char ch) {
-			return (ch >>> 7) != 0;
-		}
-	};
+	private static final EscapeStrategy Bits7EscapeStrategy = 
+			new EscapeStrategy7Bits();
 	
 	/**
 	 * An EscapeStrategy suitable for 'unknown' charsets

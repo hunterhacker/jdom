@@ -91,6 +91,21 @@ import org.jdom2.util.ArrayCopy;
  */
 public abstract class AbstractFormattedWalker implements Walker {
 	
+	/*
+	 * We use Text instances to return formatted text to the caller.
+	 * We do not need to validate the Text content... it is 'safe' to
+	 * not use the default Text class.
+	 */
+	private static final class FastText extends Text {
+		
+		private static final long serialVersionUID = 200L;
+
+		private FastText(String text) {
+			super(CType.Text);
+			this.value = text;
+		}
+	}
+	
 	/**
 	 * Indicate how text content should be added
 	 * @author Rolf Lear
@@ -175,7 +190,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 				return;
 			}
 			ensurespace();
-			data[msize++] = new Text(buffer.toString());
+			data[msize++] = new FastText(buffer.toString());
 			buffer.setLength(0);
 		}
 		
