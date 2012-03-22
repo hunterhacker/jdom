@@ -59,7 +59,6 @@ import java.util.NoSuchElementException;
 
 import org.jdom2.CDATA;
 import org.jdom2.Content;
-import org.jdom2.Text;
 import org.jdom2.Content.CType;
 import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
@@ -96,15 +95,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * We do not need to validate the Text content... it is 'safe' to
 	 * not use the default Text class.
 	 */
-	private static final class FastText extends Text {
-		
-		private static final long serialVersionUID = 200L;
-
-		private FastText(String text) {
-			super(CType.Text);
-			this.value = text;
-		}
-	}
+	private static final CDATA CDATATOKEN = new CDATA("");
 	
 	/**
 	 * Indicate how text content should be added
@@ -130,7 +121,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * @author Rolf Lear
 	 *
 	 */
-	protected class MultiText {
+	protected final class MultiText {
 		
 		// what the walker's cursor will be when this text is complete
 		private final int nextcursor;
@@ -143,7 +134,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		// the location of the processed content.
 		private Content[] data;
 		// whether the mixed content should be returned as raw JDOM objects
-		private boolean[] returnraw;
+		private String[] ctext;
 		// the current cursor in the mixed content.
 		private int mpos = -1;
 		// we cheat here by using Boolean as a three-state option...
@@ -157,7 +148,8 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * @param postpad True if this text sequence should be postpadded
 		 * @param guess The approximate number of resulting text-like items
 		 */
-		private MultiText(int nextcursor, boolean prepad, boolean postpad, int guess, Boolean wasescape) {
+		private MultiText(final int nextcursor, final boolean prepad,
+				final boolean postpad, final int guess, final Boolean wasescape) {
 			this.nextcursor = nextcursor;
 			this.postpad = postpad;
 			this.wasescape = wasescape;
@@ -166,7 +158,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 				buffer.append(newlineindent);
 			}
 			data = new Content[guess];
-			returnraw = new boolean[guess];
+			ctext = new String[guess];
 		}
 		
 		/**
@@ -175,7 +167,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		private void ensurespace() {
 			if (msize >= data.length) {
 				data = ArrayCopy.copyOf(data, msize + 4);
-				returnraw = ArrayCopy.copyOf(returnraw, data.length);
+				ctext = ArrayCopy.copyOf(ctext, data.length);
 			}
 		}
 		
@@ -190,7 +182,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 				return;
 			}
 			ensurespace();
-			data[msize++] = new FastText(buffer.toString());
+			ctext[msize++] = buffer.toString();
 			buffer.setLength(0);
 		}
 		
@@ -203,7 +195,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * @param trim How to prepare the Text content
 		 * @param text The actual Text content.
 		 */
-		public void appendText(Trim trim, String text) {
+		public void appendText(final Trim trim, final String text) {
 			final int tlen = text.length();
 			if (tlen == 0) {
 				return;
@@ -233,14 +225,14 @@ public abstract class AbstractFormattedWalker implements Walker {
 			}
 		}
 		
-		private String escapeText(String text) {
+		private String escapeText(final String text) {
 			if (escape == null || !fstack.getEscapeOutput()) {
 				return text;
 			}
 			return Format.escapeText(escape, endofline, text);
 		}
 
-		private String escapeCDATA(String text) {
+		private String escapeCDATA(final String text) {
 			if (escape == null) {
 				return text;
 			}
@@ -276,7 +268,9 @@ public abstract class AbstractFormattedWalker implements Walker {
 			
 			toadd = escapeCDATA(toadd);
 			ensurespace();
-			data[msize++] = new CDATA(toadd);
+			// mark this as being CDATA text
+			data[msize] = CDATATOKEN;
+			ctext[msize++] = toadd;
 
 			gottext = true;
 
@@ -287,7 +281,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * content, and is never escaped.
 		 * @param text
 		 */
-		private void forceAppend(String text) {
+		private void forceAppend(final String text) {
 			gottext = true;
 			buffer.append(text);
 		}
@@ -297,10 +291,9 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * as part of the Text-like sequence.
 		 * @param c the content to add.
 		 */
-		public void appendRaw(Content c) {
+		public void appendRaw(final Content c) {
 			closeText();
 			ensurespace();
-			returnraw[msize] = true;
 			data[msize++] = c;
 			buffer.setLength(0);
 
@@ -348,7 +341,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * @param doescape Whether Text values should be escaped.
 	 */
 	public AbstractFormattedWalker(final List<? extends Content> content,
-			final FormatStack fstack, boolean doescape) {
+			final FormatStack fstack, final boolean doescape) {
 		super();
 		this.fstack = fstack;
 		this.content = content;
@@ -417,7 +410,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 			// advance the cursor
 			multitext.mpos++;
 			
-			final Content ret = multitext.returnraw[multitext.mpos]
+			final Content ret = multitext.ctext[multitext.mpos] == null
 					? multitext.data[multitext.mpos] : null;
 
 			
@@ -450,7 +443,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 					if (pendingmt.nextcursor < size && 
 							newlineindent != null) {
 						// yes, we need indenting.
-						int nc = pendingmt.nextcursor;
+						final int nc = pendingmt.nextcursor;
 						// redefine the pending.
 						pendingmt = new MultiText(nc, false, false, 1, null);
 						pendingmt.forceAppend(newlineindent);
@@ -489,7 +482,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * @param index the index to get the content at.
 	 * @return the content at the index.
 	 */
-	protected final Content get(int index) {
+	protected final Content get(final int index) {
 		return content.get(index);
 	}
 	
@@ -503,7 +496,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		return hasnext;
 	}
 
-	private MultiText buildMultiText() {
+	private final MultiText buildMultiText() {
 		// set up a sequence where the next bunch of stuff is text.
 		int i = cursor - 1;
 		wloop: while (++i < size) {
@@ -517,7 +510,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 					break wloop; //while loop
 			}
 		}
-		MultiText mt = new MultiText(i, cursor > 0, i < size, 
+		final MultiText mt = new MultiText(i, cursor > 0, i < size, 
 				(i - cursor) * 2 + 1, fstack.getEscapeOutput());
 		analyzeMultiText(mt, cursor, i - cursor);
 		mt.done();
@@ -525,35 +518,31 @@ public abstract class AbstractFormattedWalker implements Walker {
 	}
 
 	@Override
-	public String text() {
+	public final String text() {
 		if (multitext == null || multitext.mpos >= multitext.msize) {
 			return null;
 		}
-		if (multitext.returnraw[multitext.mpos]) {
-			return null;
-		}
-		
-		return multitext.data[multitext.mpos].getValue();
+		return multitext.ctext[multitext.mpos];
 	}
 
 	@Override
-	public boolean isCDATA() {
+	public final boolean isCDATA() {
 		if (multitext == null || multitext.mpos >= multitext.msize) {
 			return false;
 		}
-		if (multitext.returnraw[multitext.mpos]) {
+		if (multitext.ctext[multitext.mpos] == null) {
 			return false;
 		}
 		
-		return multitext.data[multitext.mpos].getCType() == CType.CDATA;
+		return multitext.data[multitext.mpos] == CDATATOKEN;
 	}
 
 	@Override
-	public boolean isAllWhiteSpace() {
+	public final boolean isAllWhiteSpace() {
 		return allwhite;
 	}
 
-	private boolean isTextLike(int pos) {
+	private final boolean isTextLike(final int pos) {
 		switch (get(pos).getCType()) {
 			case Text:
 			case CDATA:
