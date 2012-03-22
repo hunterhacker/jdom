@@ -76,6 +76,60 @@
 	
 	<hr/>
 	<p/>
+	Optimized Indent calculation on FormatStack, and Text/CDATA improvements in the AbstractFormattedWalker.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>6.40ms</td><td>3.18ms</td><td>7.45ms</td><td>1.96ms</td><td>5.16ms</td><td>1.66ms</td><td>8.75ms</td><td>3.19ms</td><td>3.11ms</td><td>8.02ms</td><td>7.34ms</td><td>31.13ms</td><td>9.11ms</td><td>7.42ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.97ms</td><td>1.47ms</td><td>7.63ms</td><td>2.83ms</td><td>5.49ms</td><td>1.73ms</td><td>8.61ms</td><td>2.79ms</td><td>3.13ms</td><td>7.84ms</td><td>7.35ms</td><td>29.99ms</td><td>9.26ms</td><td>7.36ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.79ms</td><td>1.23ms</td><td>7.50ms</td><td>2.87ms</td><td>4.93ms</td><td>1.78ms</td><td>8.56ms</td><td>2.75ms</td><td>3.12ms</td><td>7.84ms</td><td>7.62ms</td><td>30.98ms</td><td>9.37ms</td><td>7.39ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.19ms</td><td>2.11ms</td><td>7.16ms</td><td>2.66ms</td><td>4.79ms</td><td>1.45ms</td><td>8.97ms</td><td>3.34ms</td><td>3.01ms</td><td>8.25ms</td><td>7.37ms</td><td>30.68ms</td><td>9.11ms</td><td>7.55ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.80ms</td><td>1.68ms</td><td>7.41ms</td><td>2.73ms</td><td>4.93ms</td><td>1.47ms</td><td>9.65ms</td><td>3.70ms</td><td>3.04ms</td><td>8.15ms</td><td>7.43ms</td><td>29.68ms</td><td>9.62ms</td><td>7.61ms</td></tr>
+	</table>
+
+
+	<hr/>
+	<p/>
+	Format sub classes.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>6.57ms</td><td>3.14ms</td><td>7.62ms</td><td>2.04ms</td><td>5.48ms</td><td>1.78ms</td><td>9.84ms</td><td>3.24ms</td><td>3.07ms</td><td>9.99ms</td><td>7.50ms</td><td>30.77ms</td><td>9.19ms</td><td>7.72ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.46ms</td><td>1.58ms</td><td>8.55ms</td><td>3.35ms</td><td>5.30ms</td><td>1.81ms</td><td>9.39ms</td><td>2.98ms</td><td>3.15ms</td><td>10.21ms</td><td>8.32ms</td><td>31.29ms</td><td>9.53ms</td><td>8.22ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.24ms</td><td>1.68ms</td><td>7.60ms</td><td>2.50ms</td><td>5.63ms</td><td>2.18ms</td><td>8.90ms</td><td>2.63ms</td><td>3.03ms</td><td>9.49ms</td><td>8.39ms</td><td>30.87ms</td><td>9.73ms</td><td>8.11ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.94ms</td><td>1.59ms</td><td>7.58ms</td><td>2.96ms</td><td>5.02ms</td><td>1.32ms</td><td>9.03ms</td><td>2.65ms</td><td>3.39ms</td><td>9.51ms</td><td>7.79ms</td><td>29.11ms</td><td>9.54ms</td><td>7.49ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.79ms</td><td>1.61ms</td><td>7.38ms</td><td>2.66ms</td><td>4.88ms</td><td>1.68ms</td><td>9.30ms</td><td>3.20ms</td><td>3.21ms</td><td>9.73ms</td><td>7.60ms</td><td>29.13ms</td><td>9.65ms</td><td>7.90ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	FastText in Walker
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.60ms</td><td>2.05ms</td><td>7.18ms</td><td>1.60ms</td><td>5.19ms</td><td>1.70ms</td><td>8.38ms</td><td>2.32ms</td><td>3.13ms</td><td>9.88ms</td><td>7.24ms</td><td>29.08ms</td><td>9.53ms</td><td>7.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.61ms</td><td>1.79ms</td><td>7.94ms</td><td>2.70ms</td><td>4.79ms</td><td>1.04ms</td><td>8.84ms</td><td>3.14ms</td><td>3.14ms</td><td>9.59ms</td><td>7.75ms</td><td>29.48ms</td><td>10.08ms</td><td>7.32ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.32ms</td><td>1.42ms</td><td>7.11ms</td><td>2.18ms</td><td>5.34ms</td><td>1.85ms</td><td>8.50ms</td><td>2.46ms</td><td>3.12ms</td><td>9.31ms</td><td>7.58ms</td><td>29.13ms</td><td>9.55ms</td><td>7.70ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.69ms</td><td>2.17ms</td><td>8.26ms</td><td>3.09ms</td><td>5.04ms</td><td>1.81ms</td><td>8.74ms</td><td>2.46ms</td><td>3.14ms</td><td>10.32ms</td><td>7.11ms</td><td>30.05ms</td><td>9.29ms</td><td>7.51ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.28ms</td><td>1.73ms</td><td>7.51ms</td><td>2.44ms</td><td>5.12ms</td><td>1.20ms</td><td>8.24ms</td><td>2.54ms</td><td>3.27ms</td><td>9.32ms</td><td>7.82ms</td><td>28.84ms</td><td>9.27ms</td><td>7.91ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	Faster DescendantIterator
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.25ms</td><td>2.00ms</td><td>7.46ms</td><td>2.05ms</td><td>5.10ms</td><td>1.58ms</td><td>8.74ms</td><td>2.66ms</td><td>3.19ms</td><td>10.53ms</td><td>7.24ms</td><td>29.51ms</td><td>9.51ms</td><td>7.59ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.12ms</td><td>1.58ms</td><td>8.70ms</td><td>3.52ms</td><td>5.34ms</td><td>1.55ms</td><td>8.92ms</td><td>3.25ms</td><td>3.24ms</td><td>11.55ms</td><td>7.47ms</td><td>31.85ms</td><td>9.77ms</td><td>7.42ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.28ms</td><td>1.89ms</td><td>7.15ms</td><td>2.01ms</td><td>5.06ms</td><td>1.69ms</td><td>8.74ms</td><td>3.23ms</td><td>3.09ms</td><td>10.56ms</td><td>7.75ms</td><td>30.07ms</td><td>9.02ms</td><td>7.73ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.63ms</td><td>1.56ms</td><td>7.41ms</td><td>2.48ms</td><td>4.93ms</td><td>1.55ms</td><td>9.58ms</td><td>4.09ms</td><td>3.09ms</td><td>10.57ms</td><td>7.37ms</td><td>28.81ms</td><td>9.41ms</td><td>7.72ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.98ms</td><td>1.87ms</td><td>7.89ms</td><td>3.37ms</td><td>4.87ms</td><td>1.46ms</td><td>8.33ms</td><td>2.51ms</td><td>3.11ms</td><td>10.84ms</td><td>6.85ms</td><td>31.15ms</td><td>9.05ms</td><td>7.53ms</td></tr>
+	</table>
+
+
+	<hr/>
+	<p/>
 	Faster Formatter
 	<br />
 	<table border="1">
