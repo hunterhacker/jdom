@@ -137,7 +137,10 @@ public final class FormatStack {
 	/** The 'current' End-Of-Line */
 	private String[] levelEOL = new String[capacity];
 
+	/** The padding to put between content items */
 	private String[] levelEOLIndent = new String[capacity];
+	
+	/** The padding to put after the last item (typically one less indent) */
 	private String[] termEOLIndent  = new String[capacity];
 	
 	/**
@@ -180,6 +183,19 @@ public final class FormatStack {
 		ignoreTrAXEscapingPIs[depth] = format.getIgnoreTrAXEscapingPIs();
 		mode[depth] = format.getTextMode();
 		escapeOutput[depth] = true;
+	}
+
+	/**
+	 * If the indent strategy changes part way through a stack, we need to
+	 * clear the previously calculated reusable 'lower' levels of the stack.
+	 */
+	private final void resetReusableIndents() {
+		int d = depth + 1;
+		while (d < levelIndent.length && levelIndent[d] != null) {
+			// all subsequent forays in to lower levels will need to be redone
+			levelIndent[d] = null;
+			d++;
+		}
 	}
 
 	/**
@@ -327,7 +343,7 @@ public final class FormatStack {
 		this.levelIndent[depth] = indent;
 		levelEOLIndent[depth] = (indent == null || levelEOL[depth] == null) ?  
 				null : (levelEOL[depth] + indent);
-		
+		resetReusableIndents();
 	}
 
 	/**
@@ -345,6 +361,7 @@ public final class FormatStack {
 	 */
 	public void setLevelEOL(String newline) {
 		this.levelEOL[depth] = newline;
+		resetReusableIndents();
 	}
 
 	/**
@@ -385,8 +402,7 @@ public final class FormatStack {
 						}
 						// the start point was '1', so we are one indent
 						// short, which is just right for the term....
-						termEOLIndent[depth] = sb.toString() + 
-								lineSeparator;
+						termEOLIndent[depth] = lineSeparator + sb.toString();
 						// but we increase it once for the actual indent.
 						sb.append(indent);
 						levelIndent[depth] = sb.toString();
@@ -397,6 +413,7 @@ public final class FormatStack {
 					levelEOLIndent[depth] = lineSeparator + levelIndent[depth];
 				}
 		}
+		resetReusableIndents();
 	}
 
 	/**
@@ -426,7 +443,9 @@ public final class FormatStack {
 			levelEOL[depth] = null;
 			levelEOLIndent[depth] = null;
 			termEOLIndent[depth] = null;
-		} else {
+		} else if (levelIndent[depth] == null) {
+			// we need to build our level details ....
+			// cannot reuse previous ones.
 			levelEOL[depth] = levelEOL[prev];
 			termEOLIndent[depth] = levelEOL[depth] + levelIndent[prev];
 			levelIndent[depth] = levelIndent[prev] + indent;

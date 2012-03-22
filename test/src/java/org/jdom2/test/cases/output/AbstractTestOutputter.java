@@ -769,6 +769,30 @@ public abstract class AbstractTestOutputter {
 		checkOutput(root, txt, txt, txt, txt, txt);
 	}
 	
+	@Test
+	public void testOutputElementPreserveSpaceComplex() {
+		// the purpose of this test is to ensure that the different
+		// formatting values are used when going down one level,
+		// back up, then in to 'preserve', back up, and then again
+		// down in to normal (not preserve).
+		
+		// this is essentially a test of the FormatStack code....
+
+		Element tst = new Element("child");
+		Comment cmt = new Comment("comment");
+		tst.addContent(cmt);
+		String spaced = "  <child>\n    <!--comment-->\n  </child>\n";
+		String compact = "<child><!--comment--></child>";
+		String preserved = "<child xml:space=\"preserve\"><!--comment--></child>";
+		Element root = new Element("root");
+		root.addContent(tst.clone());
+		root.addContent(tst.clone().setAttribute("space", "preserve", Namespace.XML_NAMESPACE));
+		root.addContent(tst.clone());
+		String rawcompact = "<root>" + compact + preserved + compact + "</root>";
+		String pretty = "<root>\n" + spaced + "  " + preserved + "\n" + spaced + "</root>";
+		checkOutput(root, rawcompact, rawcompact, pretty, pretty, pretty);
+	}
+	
 
 	@Test
 	public void testOutputElementMultiText() {
