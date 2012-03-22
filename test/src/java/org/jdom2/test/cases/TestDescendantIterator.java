@@ -6,15 +6,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import org.junit.Test;
 
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.util.IteratorIterable;
-
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class TestDescendantIterator {
@@ -31,6 +33,21 @@ public class TestDescendantIterator {
 		}
 		
 		return doc.getDescendants();
+	}
+	
+	private static final Element buildTestDoc() {
+		Element hobbits = new Element(fellowship[0]);
+		hobbits.addContent(new Element(fellowship[1]));
+		hobbits.addContent(new Element(fellowship[2]));
+		hobbits.addContent(new Element(fellowship[3]));
+		Element humans = new Element(fellowship[4]);
+		humans.addContent(new Element(fellowship[5]));
+		humans.addContent(new Element(fellowship[6]));
+		humans.addContent(new Element(fellowship[7]));
+		hobbits.addContent(humans);
+		// gandalf
+		hobbits.addContent(new Element(fellowship[8]));
+		return new Element("root").addContent(hobbits);
 	}
 	
 	@Test
@@ -98,5 +115,58 @@ public class TestDescendantIterator {
 		}
 		
 	}
+	
+	
+	@Test
+	public void testRemoves() {
+		for (int i = fellowship.length - 1; i >= 0; i--) {
+			checkRemove(i);
+		}
+	}
+	
+	private void checkIterator(final Iterator<Content> it, final String...values) {
+		for (int i = 0; i < values.length; i++) {
+			assertTrue(it.hasNext());
+			assertEquals(values[i], ((Element)it.next()).getName());
+		}
+		assertFalse(it.hasNext());
+		try {
+			assertTrue(null != it.next().toString());
+			fail("Should not be able to iterate off the end of the descendants.");
+		} catch (NoSuchElementException nse) {
+			// good
+		} catch (Exception e) {
+			fail("Expected NoSuchElementException, but got " + e.getClass().getName());
+		}
+	}
+
+	private void checkRemove(final int remove) {
+		Element doc = buildTestDoc();
+		checkIterator(doc.getDescendants(), fellowship);
+		Iterator<Content> it1 = doc.getDescendants();
+		it1.next();
+		for (int i = 0; i < remove; i++) {
+			it1.next();
+		}
+		it1.remove();
+		try {
+			it1.remove();
+			fail ("Should not be able to double-remove");
+		} catch (Exception e) {
+			UnitTestUtil.checkException(IllegalStateException.class, e);
+		}
+		ArrayList<String> al = new ArrayList<String>();
+		Iterator<Content> it2 = doc.getDescendants();
+		int i = remove;
+		while (--i >= 0) {
+			it2.next();
+		}
+		while (it2.hasNext()) {
+			al.add(((Element)it2.next()).getName());
+		}
+		checkIterator(it1, al.toArray(new String[al.size()]));
+	}
+	
+	
 
 }

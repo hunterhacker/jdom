@@ -69,11 +69,27 @@ import org.jdom2.util.IteratorIterable;
  * @author Rolf Lear
  */
 final class DescendantIterator implements IteratorIterable<Content> {
-
+	
+	/** Needed to be Iterable! */
 	private final Parent parent;
-	private LinkedList<Iterator<Content>> stack = new LinkedList<Iterator<Content>>();
+	
+	/*
+	 * Note, we use an Array of Object here, even through
+	 * List<Iterator<Content>> would look neater, etc.
+	 * Fact is, for 'hamlet', using a list for the stack takes about
+	 * twice as long as using the Object[] array.
+	 */
+	private Object[] stack = new Object[16];
+	private int ssize = 0;
+
+	/** The iterator that supplied to most recent next() */
 	private Iterator<Content> current = null;
-	private Iterator<Content> following = null;
+	/** The iterator going down the tree, null unless next() returned Parent */
+	private Iterator<Content> descending = null;
+	/** The iterator going up the tree, null unless next() returned dead-end */
+	private Iterator<Content> ascending = null;
+	/** what it says... */
+	private boolean hasnext = true;
 
 	/**
 	 * Iterator for the descendants of the supplied object.
@@ -84,10 +100,12 @@ final class DescendantIterator implements IteratorIterable<Content> {
 		this.parent = parent;
 		// can trust that parent is not null, DescendantIterator is package-private.
 		current = parent.getContent().iterator();
+		hasnext = current.hasNext();
 	}
 	
 	@Override
 	public DescendantIterator iterator() {
+		// Implement the Iterable stuff.
 		return new DescendantIterator(parent);
 	}
 
@@ -98,21 +116,7 @@ final class DescendantIterator implements IteratorIterable<Content> {
 	 */
 	@Override
 	public boolean hasNext() {
-		if (following != null && following.hasNext()) {
-			// the last content returned has un-processed child content
-			return true;
-		}
-		if (current.hasNext()) {
-			// the last content has un-iterated siblings.
-			return true;
-		}
-		for (Iterator<Content> it : stack) {
-			if (it.hasNext()) {
-				// an ancestor has un-iterated siblings.
-				return true;
-			}
-		}
-		return false;
+		return hasnext;
 	}
 
 	/**
@@ -122,36 +126,51 @@ final class DescendantIterator implements IteratorIterable<Content> {
 	 */
 	@Override
 	public Content next() {
-		Content ret = null;
-		if (following != null && following.hasNext()) {
-			// The last returned content is a parent with unprocessed content
-			ret = following.next();
-			stack.addFirst(current);
-			current = following;
-		} else if (current.hasNext()) {
-			// the last content returned has un-iterated siblings.
-			ret = current.next();
-		} else {
-			// check up the ancestry for the next unprocessed sibling...
-			while (ret == null && !stack.isEmpty()) {
-				// while we go we pop the stack.
-				current = stack.removeFirst();
-				if (current.hasNext()) {
-					ret = current.next();
-				}
+		// set the 'current' if it needs changing.
+		if (descending != null) {
+			current = descending;
+			descending = null;
+		} else if (ascending != null) {
+			current = ascending;
+			ascending = null;
+		}
+		
+		final Content ret = current.next();
+		
+		// got an item to return.
+		// sort out the next state....
+		if ((ret instanceof Element) && ((Element)ret).getContentSize() > 0) {
+			// there is another descendant, and it has values.
+			// our next will be down....
+			descending = ((Element)ret).getContent().iterator();
+			if (ssize >= stack.length) {
+				stack = Arrays.copyOf(stack, ssize + 16);
+			}
+			stack[ssize++] = current;
+			return ret;
+		}
+		
+		if (current.hasNext()) {
+			// our next will be along....
+			return ret;
+		}
+		
+		// our next will be up.
+		while (ssize > 0) {
+			
+			// if the stack was generic, this would not be needed, but,
+			// the java.uti.* stack codes are too slow.
+			@SuppressWarnings("unchecked")
+			final Iterator<Content> subit = (Iterator<Content>)stack[--ssize];
+			ascending = subit;
+			stack[ssize] = null;
+			if (ascending.hasNext()) {
+				return ret;
 			}
 		}
-		
-		if (ret == null) {
-			throw new NoSuchElementException("Iterated off the end of the " +
-					"DescendantIterator");
-		}
-		
-		if (ret instanceof Parent) {
-			following = ((Parent)ret).getContent().iterator();
-		} else {
-			following = null;
-		}
+
+		ascending = null;
+		hasnext = false;
 		return ret;
 	}
 
@@ -164,7 +183,27 @@ final class DescendantIterator implements IteratorIterable<Content> {
 	@Override
 	public void remove() {
 		current.remove();
-		following = null;
+		// if our next move was to go down, we can't.
+		// we can go along, or up.
+		descending = null;
+		if (current.hasNext() || ascending != null) {
+			// we have a next element, or our next move was up anyway.
+			return;
+		}
+		// our next move was going to be down, or accross, but those are not
+		// possible any more, need to check up.
+		// our next will be up.
+		while (ssize > 0) {
+			@SuppressWarnings("unchecked")
+			final Iterator<Content> subit = (Iterator<Content>)stack[--ssize];
+			stack[ssize] = null;
+			ascending = subit;
+			if (ascending.hasNext()) {
+				return;
+			}
+		}
+		ascending = null;
+		hasnext = false;
 	}
 
 }
