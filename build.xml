@@ -30,11 +30,11 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<property file="${user.home}/jdom.build.properties" />
 	<property file="${basedir}/build.properties" />
 
-	<property name="Name" value="JDOM2"/>
-	<property name="name" value="jdom2"/>
+	<property name="Name" value="JDOM"/>
+	<property name="name" value="jdom"/>
 	<property name="version" value="2.x-${snapshot.time}"/>
 	<property name="version.impl" value="${version}"/>
-	<property name="version.spec" value="2.alpha"/>
+	<property name="version.spec" value="2.0.0"/>
 	
 	<property name="gpg" value="gpg" 
 		description="Path to the GNU gpg program for maven target"/>
