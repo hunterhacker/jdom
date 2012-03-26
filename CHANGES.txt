@@ -1,3 +1,7 @@
+!!! This file is no longer maintained. Please see the GitHub Commits !!!
+https://github.com/hunterhacker/jdom/commits/master
+
+
 * * * * * * JDOM 1.1.1 (tag: jdom_1_1_1) from JDOM 1.1 * * * * * *
 
 Fixed a synchronization issue in the Namespace class that could cause a
