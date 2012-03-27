@@ -167,6 +167,68 @@ public class TestDescendantIterator {
 		checkIterator(it1, al.toArray(new String[al.size()]));
 	}
 	
+	@Test
+	public void testDeepNesting() {
+		ArrayList<String> names = new ArrayList<String>(64);
+		Element p = new Element("name");
+		names.add("name");
+		Document doc = new Document(p);
+		for (int i = 0; i < 64; i++) {
+			names.add("name" + i);
+			final Element e = new Element("name" + i);
+			p.getContent().add(e);
+			p = e;
+		}
+		
+		checkIterator(doc.getDescendants(), names.toArray(new String[names.size()]));
+	}
+	
+	@Test
+	public void testSpecialCaseRemove() {
+		// this is designed to test a special case:
+		// the iterator's next move was to go down next, but, we did a remove(),
+		// and now we can't go down next, but, there's no more siblings either,
+		// so our next move will be up, but the level up is no more siblings
+		// either, but some level above that has siblings, so we go there....
+		/*
+		 * <root>
+		 *   <filler1>
+		 *     <toremove>
+		 *       <child />
+		 *     </toremove>
+		 *   </filler1>
+		 *   <postremove />
+		 * </root>
+		 */
+		Element root = new Element("root");
+		Element filler1 = new Element("filler");
+		root.addContent(filler1);
+		
+		// right, this will be the thing we remove.
+		Element toremove = new Element("toremove");
+		filler1.addContent(toremove);
+		
+		// but, this needs to have kids to go down to...
+		toremove.addContent(new Element("child"));
+		
+		
+		// this will be what next() returns after the remove.
+		Element postremove = new Element("postremove");
+		root.addContent(postremove);
+		
+		Document doc = new Document(root);
+		Iterator<Content> it = doc.getDescendants();
+		while (it.hasNext()) {
+			Content c = it.next();
+			if (c == toremove) {
+				it.remove();
+				assertTrue(it.hasNext());
+				assertTrue(postremove == it.next());
+			}
+		}
+		
+	}
+	
 	
 
 }

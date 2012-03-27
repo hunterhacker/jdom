@@ -58,6 +58,7 @@ import java.util.*;
 
 import org.jdom2.Content;
 import org.jdom2.Parent;
+import org.jdom2.util.ArrayCopy;
 import org.jdom2.util.IteratorIterable;
 
 /**
@@ -144,7 +145,7 @@ final class DescendantIterator implements IteratorIterable<Content> {
 			// our next will be down....
 			descending = ((Element)ret).getContent().iterator();
 			if (ssize >= stack.length) {
-				stack = Arrays.copyOf(stack, ssize + 16);
+				stack = ArrayCopy.copyOf(stack, ssize + 16);
 			}
 			stack[ssize++] = current;
 			return ret;
