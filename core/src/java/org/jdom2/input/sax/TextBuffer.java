@@ -107,15 +107,6 @@ final class TextBuffer {
 	}
 
 	/**
-	 * Returns the size of the text value.
-	 * 
-	 * @return the number of charactes currently in the TextBuffer
-	 */
-	int size() {
-		return arraySize;
-	}
-
-	/**
 	 * Clears the text value and prepares the TextBuffer for reuse.
 	 */
 	void clear() {
