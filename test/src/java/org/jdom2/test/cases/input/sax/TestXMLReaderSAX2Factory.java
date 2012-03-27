@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -53,6 +54,20 @@ public class TestXMLReaderSAX2Factory {
 		assertFalse(facnon.isValidating());
 		assertEquals("com.sun.org.apache.xerces.internal.parsers.SAXParser",
 				facnon.getDriverClassName());
+	}
+	
+	@Test
+	public void testGetDummyDriver() {
+		XMLReaderSAX2Factory facnon = new XMLReaderSAX2Factory(false, 
+				"does.not.exist");
+		assertFalse(facnon.isValidating());
+		try {
+			facnon.createXMLReader();
+			UnitTestUtil.failNoException(JDOMException.class);
+		} catch (Exception e) {
+			UnitTestUtil.checkException(JDOMException.class, e);
+			UnitTestUtil.checkException(SAXException.class, e.getCause());
+		}
 	}
 	
 	
