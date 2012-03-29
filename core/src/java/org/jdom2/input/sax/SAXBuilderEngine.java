@@ -226,10 +226,12 @@ public class SAXBuilderEngine implements SAXEngine {
 			final String systemId = e.getSystemId();
 			if (systemId != null) {
 				throw new JDOMParseException("Error on line " +
-						e.getLineNumber() + " of document " + systemId, e, doc);
+						e.getLineNumber() + " of document " + systemId + ": " +
+						e.getMessage(), e, doc);
 			}
 			throw new JDOMParseException("Error on line " +
-					e.getLineNumber(), e, doc);
+					e.getLineNumber() + ": " +
+							e.getMessage(), e, doc);
 		} catch (final SAXException e) {
 			throw new JDOMParseException("Error in building: " +
 					e.getMessage(), e, saxHandler.getDocument());
