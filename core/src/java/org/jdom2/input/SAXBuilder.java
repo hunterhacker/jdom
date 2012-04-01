@@ -625,22 +625,9 @@ public class SAXBuilder implements SAXEngine {
 	 * 
 	 * @return whether element content whitespace is to be ignored during the
 	 *         build
-	 * @deprecated in lieu of {@link #isIgnoringElementContentWhitespace()}
-	 */
-	@Deprecated
-	public boolean getIgnoringElementContentWhitespace() {
-		return isIgnoringElementContentWhitespace();
-	}
-
-	/**
-	 * Returns whether element content whitespace is to be ignored during the
-	 * build.
-	 * 
-	 * @return whether element content whitespace is to be ignored during the
-	 *         build
 	 */
 	@Override
-	public boolean isIgnoringElementContentWhitespace() {
+	public boolean getIgnoringElementContentWhitespace() {
 		return ignoringWhite;
 	}
 
@@ -667,23 +654,9 @@ public class SAXBuilder implements SAXEngine {
 	 * @return <code>boolean</code> - whether only whitespace content will be
 	 *         ignored during build.
 	 * @see #setIgnoringBoundaryWhitespace
-	 * @deprecated in lieu of {@link #isIgnoringBoundaryWhitespace()}
-	 */
-	@Deprecated
-	public boolean getIgnoringBoundaryWhitespace() {
-		return isIgnoringBoundaryWhitespace();
-	}
-
-	/**
-	 * Returns whether or not the parser will eliminate element content
-	 * containing only whitespace.
-	 * 
-	 * @return <code>boolean</code> - whether only whitespace content will be
-	 *         ignored during build.
-	 * @see #setIgnoringBoundaryWhitespace
 	 */
 	@Override
-	public boolean isIgnoringBoundaryWhitespace() {
+	public boolean getIgnoringBoundaryWhitespace() {
 		return ignoringBoundaryWhite;
 	}
 
@@ -714,21 +687,9 @@ public class SAXBuilder implements SAXEngine {
 	 * content.
 	 * 
 	 * @return whether entities are being expanded
-	 * @deprecated in lieu of {@link #isExpandEntities()}
-	 */
-	@Deprecated
-	public boolean getExpandEntities() {
-		return expand;
-	}
-
-	/**
-	 * Returns whether or not entities are being expanded into normal text
-	 * content.
-	 * 
-	 * @return whether entities are being expanded
 	 */
 	@Override
-	public boolean isExpandEntities() {
+	public boolean getExpandEntities() {
 		return expand;
 	}
 

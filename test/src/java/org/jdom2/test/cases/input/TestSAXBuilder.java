@@ -162,7 +162,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -174,7 +174,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -186,7 +186,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -198,7 +198,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -215,7 +215,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -237,7 +237,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -255,7 +255,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());		
+		assertTrue(sb.getExpandEntities());		
 		try {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
@@ -288,7 +288,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertFalse(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -300,7 +300,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		assertTrue(sb.getJDOMFactory() instanceof DefaultJDOMFactory);
 		assertTrue(sb.getJDOMFactory() == sb.getFactory());
 	}
@@ -382,7 +382,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		
 		assertTrue(sb.buildEngine().getErrorHandler() instanceof BuilderErrorHandler);
 		
@@ -402,7 +402,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 
 		EntityResolver er = new EntityResolver() {
 			@Override
@@ -424,7 +424,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 
 		DTDHandler dtd = new DTDHandler() {
 			@Override
@@ -461,7 +461,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getErrorHandler() == null);
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 
 		XMLFilter filter = new XMLFilterImpl() {
 			@Override
@@ -512,21 +512,19 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		
 		SAXEngine se = sb.buildEngine();
-		assertFalse(se.isIgnoringBoundaryWhitespace());
+		assertFalse(se.getIgnoringBoundaryWhitespace());
 		
 		sb.setIgnoringElementContentWhitespace(true);
 		assertTrue(sb.getIgnoringElementContentWhitespace());		
-		assertTrue(sb.isIgnoringElementContentWhitespace());		
 		se = sb.buildEngine();
-		assertTrue(se.isIgnoringElementContentWhitespace());
+		assertTrue(se.getIgnoringElementContentWhitespace());
 		sb.setIgnoringElementContentWhitespace(false);
 		assertFalse(sb.getIgnoringElementContentWhitespace());		
-		assertFalse(sb.isIgnoringElementContentWhitespace());		
 		se = sb.buildEngine();
-		assertFalse(se.isIgnoringElementContentWhitespace());
+		assertFalse(se.getIgnoringElementContentWhitespace());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -540,23 +538,21 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		assertTrue(se.getEntityResolver() == null);
 		assertTrue(se.getErrorHandler() != null);
 		assertTrue(se.getDTDHandler() != null);
 		assertTrue(se.isValidating());
-		assertTrue(se.isExpandEntities());
+		assertTrue(se.getExpandEntities());
 		sb.setIgnoringBoundaryWhitespace(true);
 		assertTrue(sb.getIgnoringBoundaryWhitespace());		
-		assertTrue(sb.isIgnoringBoundaryWhitespace());		
 		se = sb.buildEngine();
-		assertTrue(se.isIgnoringBoundaryWhitespace());		
+		assertTrue(se.getIgnoringBoundaryWhitespace());		
 		sb.setIgnoringBoundaryWhitespace(false);
-		assertFalse(sb.getIgnoringBoundaryWhitespace());		
-		assertFalse(sb.isIgnoringBoundaryWhitespace());
+		assertFalse(sb.getIgnoringBoundaryWhitespace());
 		
 		se = sb.buildEngine();
-		assertFalse(se.isIgnoringBoundaryWhitespace());
+		assertFalse(se.getIgnoringBoundaryWhitespace());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -568,7 +564,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		
 		sb.setReuseParser(true);
 		assertTrue(sb.getReuseParser());		
@@ -689,7 +685,7 @@ public final class TestSAXBuilder {
         File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
 
         builder.setExpandEntities(true);
-        assertTrue(builder.isExpandEntities());
+        assertTrue(builder.getExpandEntities());
         
         Document doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
@@ -698,7 +694,7 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with internal entity
         builder.setExpandEntities(false);
-        assertFalse(builder.isExpandEntities());
+        assertFalse(builder.getExpandEntities());
 
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
@@ -713,7 +709,7 @@ public final class TestSAXBuilder {
         file = new File(resourceDir + "/SAXBuilderTestEntity2.xml");
 
         builder.setExpandEntities(true);
-        assertTrue(builder.isExpandEntities());
+        assertTrue(builder.getExpandEntities());
 
         doc = builder.build(file);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
@@ -722,7 +718,7 @@ public final class TestSAXBuilder {
         //test that entity declaration appears in doctype
         //and EntityRef is created in content with external entity
         builder.setExpandEntities(false);
-        assertFalse(builder.isExpandEntities());
+        assertFalse(builder.getExpandEntities());
         doc = builder.build(file);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
@@ -839,7 +835,7 @@ public final class TestSAXBuilder {
 		assertTrue(sb.getDTDHandler() == null);
 		assertTrue(sb.getXMLFilter() == null);
 		assertTrue(sb.isValidating());
-		assertTrue(sb.isExpandEntities());
+		assertTrue(sb.getExpandEntities());
 		
 		sb.setFastReconfigure(true);
 		

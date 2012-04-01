@@ -121,7 +121,7 @@ public interface SAXEngine {
 	 * @return whether element content whitespace is to be ignored during the
 	 *         build
 	 */
-	public abstract boolean isIgnoringElementContentWhitespace();
+	public abstract boolean getIgnoringElementContentWhitespace();
 
 	/**
 	 * Returns whether or not the parser will elminate element content
@@ -130,7 +130,7 @@ public interface SAXEngine {
 	 * @return <code>boolean</code> - whether only whitespace content will be
 	 *         ignored during build.
 	 */
-	public abstract boolean isIgnoringBoundaryWhitespace();
+	public abstract boolean getIgnoringBoundaryWhitespace();
 
 	/**
 	 * Returns whether or not entities are being expanded into normal text
@@ -138,7 +138,7 @@ public interface SAXEngine {
 	 * 
 	 * @return whether entities are being expanded
 	 */
-	public abstract boolean isExpandEntities();
+	public abstract boolean getExpandEntities();
 
 	/**
 	 * This builds a document from the supplied input source.

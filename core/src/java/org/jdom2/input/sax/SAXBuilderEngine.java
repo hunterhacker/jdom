@@ -180,7 +180,7 @@ public class SAXBuilderEngine implements SAXEngine {
 	 * @see org.jdom2.input.sax.SAXEngine#isIgnoringElementContentWhitespace()
 	 */
 	@Override
-	public boolean isIgnoringElementContentWhitespace() {
+	public boolean getIgnoringElementContentWhitespace() {
 		return saxHandler.getIgnoringElementContentWhitespace();
 	}
 
@@ -190,7 +190,7 @@ public class SAXBuilderEngine implements SAXEngine {
 	 * @see org.jdom2.input.sax.SAXEngine#isIgnoringBoundaryWhitespace()
 	 */
 	@Override
-	public boolean isIgnoringBoundaryWhitespace() {
+	public boolean getIgnoringBoundaryWhitespace() {
 		return saxHandler.getIgnoringBoundaryWhitespace();
 	}
 
@@ -200,7 +200,7 @@ public class SAXBuilderEngine implements SAXEngine {
 	 * @see org.jdom2.input.sax.SAXEngine#isExpandEntities()
 	 */
 	@Override
-	public boolean isExpandEntities() {
+	public boolean getExpandEntities() {
 		return saxHandler.getExpandEntities();
 	}
 
