@@ -95,19 +95,19 @@ public abstract class AbstractOutputProcessor {
 		
 		switch (fstack.getTextMode()) {
 			case PRESERVE:
-				return new WalkPreserving(content);
+				return new WalkerPRESERVE(content);
 			case NORMALIZE:
-				return new WalkCompacting(content, fstack, escape);
+				return new WalkerNORMALIZE(content, fstack, escape);
 			case TRIM:
-				return new WalkTrimming(content, fstack, escape);
+				return new WalkerTRIM(content, fstack, escape);
 			case TRIM_FULL_WHITE:
-				return new WalkTrimmingFullWhite(content, fstack, escape);
+				return new WalkerTRIM_FULL_WHITE(content, fstack, escape);
 		}
 		// all cases should be handled in the switch statement above. If someone
 		// creates a new TextMode though, then it will create a warning in
 		// eclipse above, and the code will fall through to this 'default' raw
 		// instance.
-		return new WalkPreserving(content);
+		return new WalkerPRESERVE(content);
 	}
 
 }

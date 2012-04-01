@@ -66,7 +66,7 @@ import org.jdom2.Verifier;
  * @author Rolf Lear
  *
  */
-public class WalkTrimmingFullWhite extends AbstractFormattedWalker {
+public class WalkerTRIM extends AbstractFormattedWalker {
 
 	/**
 	 * Create the Trimmed walker instance.
@@ -74,17 +74,17 @@ public class WalkTrimmingFullWhite extends AbstractFormattedWalker {
 	 * @param fstack The current stack.
 	 * @param escape Whether Text values should be escaped.
 	 */
-	public WalkTrimmingFullWhite(final List<? extends Content> content, 
+	public WalkerTRIM(final List<? extends Content> content, 
 			final FormatStack fstack, final boolean escape) {
 		super(content, fstack, escape);
 	}
 
 	@Override
 	protected void analyzeMultiText(final MultiText mtext,
-			final int offset, final int len) {
-		int ln = len;
-		while (--ln >= 0) {
-			final Content c = get(offset + ln);
+			int offset, int len) {
+		
+		while (len > 0) {
+			final Content c = get(offset);
 			if (c instanceof Text) {
 				// either Text or CDATA
 				if (!Verifier.isAllXMLWhitespace(c.getValue())) {
@@ -93,21 +93,41 @@ public class WalkTrimmingFullWhite extends AbstractFormattedWalker {
 			} else {
 				break;
 			}
-		}
-		if (ln < 0) {
-			// all whitespace.
-			return;
+			offset++;
+			len--;
 		}
 		
-		// some non-white, so return all, but merge the sequential Text items.
+		while (len > 0) {
+			final Content c = get(offset + len - 1);
+			if (c instanceof Text) {
+				// either Text or CDATA
+				if (!Verifier.isAllXMLWhitespace(c.getValue())) {
+					break;
+				}
+			} else {
+				break;
+			}
+			len--;
+		}
+		
 		for (int i = 0; i < len; i++) {
+			Trim trim = Trim.NONE;
+			if (i + 1 == len) {
+				trim = Trim.RIGHT;
+			}
+			if (i == 0) {
+				trim = Trim.LEFT;
+			}
+			if (len == 1) {
+				trim = Trim.BOTH;
+			}
 			final Content c = get(offset + i);
 			switch (c.getCType()) {
 				case Text :
-					mtext.appendText(Trim.NONE, c.getValue());
+					mtext.appendText(trim, c.getValue());
 					break;
 				case CDATA :
-					mtext.appendCDATA(Trim.NONE, c.getValue());
+					mtext.appendCDATA(trim, c.getValue());
 					break;
 				case EntityRef:
 					// treat like any other content.

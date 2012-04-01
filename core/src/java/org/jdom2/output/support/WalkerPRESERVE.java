@@ -68,7 +68,7 @@ import org.jdom2.Content;
  * @author Rolf Lear
  *
  */
-public class WalkPreserving implements Walker {
+public class WalkerPRESERVE implements Walker {
 	
 	private int cursor = 0;
 	private final int size;
@@ -79,7 +79,7 @@ public class WalkPreserving implements Walker {
 	 * Create a Walker that preserves all content in its raw state.
 	 * @param content the content to walk.
 	 */
-	public WalkPreserving(List<? extends Content> content) {
+	public WalkerPRESERVE(List<? extends Content> content) {
 		super();
 		size = content.size();
 		if (size == 0) {
@@ -132,7 +132,7 @@ public class WalkPreserving implements Walker {
 	}
 
 	@Override
-	public boolean isAllWhiteSpace() {
+	public boolean isAllWhitespace() {
 		return size == 0;
 	}
 

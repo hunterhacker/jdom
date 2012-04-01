@@ -106,7 +106,7 @@ public interface Walker {
 	 * values of these Text/CDATA members are all XML Whitespace.
 	 * @return true 
 	 */
-	public abstract boolean isAllWhiteSpace();
+	public abstract boolean isAllWhitespace();
 
 	/**
 	 * Behaves similarly to to a regular Iterator

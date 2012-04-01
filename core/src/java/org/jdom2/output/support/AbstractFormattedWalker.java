@@ -538,7 +538,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	}
 
 	@Override
-	public final boolean isAllWhiteSpace() {
+	public final boolean isAllWhitespace() {
 		return allwhite;
 	}
 
