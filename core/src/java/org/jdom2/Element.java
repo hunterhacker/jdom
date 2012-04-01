@@ -54,8 +54,8 @@
 
 package org.jdom2;
 
-import static org.jdom2.JDOMConstants.NS_PFX_DEFAULT;
-import static org.jdom2.JDOMConstants.NS_PFX_XML;
+import static org.jdom2.JDOMConstants.NS_PREFIX_DEFAULT;
+import static org.jdom2.JDOMConstants.NS_PREFIX_XML;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -183,7 +183,7 @@ public class Element extends Content implements Parent {
 	 *                              namespace URI
 	 */
 	public Element(final String name, final String uri) {
-		this(name, Namespace.getNamespace(NS_PFX_DEFAULT, uri));
+		this(name, Namespace.getNamespace(NS_PREFIX_DEFAULT, uri));
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class Element extends Content implements Parent {
 			return null;
 		}
 
-		if (NS_PFX_XML.equals(prefix)) {
+		if (NS_PREFIX_XML.equals(prefix)) {
 			// Namespace "xml" is always bound.
 			return Namespace.XML_NAMESPACE;
 		}

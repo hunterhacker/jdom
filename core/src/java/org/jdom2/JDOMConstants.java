@@ -90,17 +90,17 @@ public final class JDOMConstants {
 	 */
 	
 	/** Defined as {@value} */
-	public static final String NS_PFX_DEFAULT = "";
+	public static final String NS_PREFIX_DEFAULT = "";
 	/** Defined as {@value} */
 	public static final String NS_URI_DEFAULT = "";
 
 	/** Defined as {@value} */
-	public static final String NS_PFX_XML = "xml";
+	public static final String NS_PREFIX_XML = "xml";
 	/** Defined as {@value} */
 	public static final String NS_URI_XML = "http://www.w3.org/XML/1998/namespace";
 	
 	/** Defined as {@value} */
-	public static final String NS_PFX_XMLNS = "xmlns";
+	public static final String NS_PREFIX_XMLNS = "xmlns";
 	/** Defined as {@value} */
 	public static final String NS_URI_XMLNS = "http://www.w3.org/2000/xmlns/";
 	

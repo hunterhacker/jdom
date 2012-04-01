@@ -113,11 +113,11 @@ final class JNamespace extends JNamespaceAware implements Attr {
 	}
 	@Override
 	public String getPrefix() {
-		return "".equals(ns.getPrefix()) ? "" : JDOMConstants.NS_PFX_XMLNS;
+		return "".equals(ns.getPrefix()) ? "" : JDOMConstants.NS_PREFIX_XMLNS;
 	}
 	@Override
 	public String getLocalName() {
-		return "".equals(ns.getPrefix()) ? JDOMConstants.NS_PFX_XMLNS : ns.getPrefix();
+		return "".equals(ns.getPrefix()) ? JDOMConstants.NS_PREFIX_XMLNS : ns.getPrefix();
 	}
 	@Override
 	public boolean hasAttributes() {
@@ -133,7 +133,7 @@ final class JNamespace extends JNamespaceAware implements Attr {
 	}
 	@Override
 	public String getName() {
-		return "".equals(ns.getPrefix()) ? ns.getPrefix() : (JDOMConstants.NS_PFX_XMLNS + ":" + ns.getPrefix());
+		return "".equals(ns.getPrefix()) ? ns.getPrefix() : (JDOMConstants.NS_PREFIX_XMLNS + ":" + ns.getPrefix());
 	}
 	@Override
 	public boolean getSpecified() {

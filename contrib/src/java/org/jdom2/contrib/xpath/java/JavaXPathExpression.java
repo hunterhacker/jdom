@@ -89,10 +89,10 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 			throw new IllegalArgumentException("Null namespaceURI");
 		}
 		if (JDOMConstants.NS_URI_XML.equals(namespaceURI)) {
-			return JDOMConstants.NS_PFX_XML;
+			return JDOMConstants.NS_PREFIX_XML;
 		}
 		if (JDOMConstants.NS_URI_XMLNS.equals(namespaceURI)) {
-			return JDOMConstants.NS_PFX_XMLNS;
+			return JDOMConstants.NS_PREFIX_XMLNS;
 		}
 		for (Namespace ns : nsraw) {
 			if (namespaceURI.equals(ns.getURI())) {
@@ -110,10 +110,10 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 			throw new IllegalArgumentException("Null namespaceURI");
 		}
 		if (JDOMConstants.NS_URI_XML.equals(namespaceURI)) {
-			return Collections.singleton(JDOMConstants.NS_PFX_XML).iterator();
+			return Collections.singleton(JDOMConstants.NS_PREFIX_XML).iterator();
 		}
 		if (JDOMConstants.NS_URI_XMLNS.equals(namespaceURI)) {
-			return Collections.singleton(JDOMConstants.NS_PFX_XMLNS).iterator();
+			return Collections.singleton(JDOMConstants.NS_PREFIX_XMLNS).iterator();
 		}
 		ArrayList<String> pfx = new ArrayList<String>();
 		for (Namespace ns : nsraw) {
@@ -173,8 +173,8 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 				// it is an xml declaration.
 				return Namespace.getNamespace(a.getLocalName(), a.getValue());
 			}
-			if (JDOMConstants.NS_PFX_DEFAULT.equals(a.getNamespaceURI()) &&
-					JDOMConstants.NS_PFX_XMLNS.equals(a.getLocalName())) {
+			if (JDOMConstants.NS_PREFIX_DEFAULT.equals(a.getNamespaceURI()) &&
+					JDOMConstants.NS_PREFIX_XMLNS.equals(a.getLocalName())) {
 				return Namespace.getNamespace(a.getValue());
 			}
 		}

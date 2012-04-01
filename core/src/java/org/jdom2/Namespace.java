@@ -88,11 +88,11 @@ public final class Namespace implements Serializable {
 			<String, ConcurrentMap<String,Namespace>>(512, 0.75f, 64);
 	
 	/** Define a <code>Namespace</code> for when <i>not</i> in a namespace */
-	public static final Namespace NO_NAMESPACE = new Namespace(NS_PFX_DEFAULT, 
+	public static final Namespace NO_NAMESPACE = new Namespace(NS_PREFIX_DEFAULT, 
 			NS_URI_DEFAULT);
 
 	/** Define a <code>Namespace</code> for the standard xml prefix. */
-	public static final Namespace XML_NAMESPACE = new Namespace(NS_PFX_XML, 
+	public static final Namespace XML_NAMESPACE = new Namespace(NS_PREFIX_XML, 
 			NS_URI_XML);
 	
 	
@@ -137,7 +137,7 @@ public final class Namespace implements Serializable {
 		// have been placed in this.  Thus we can do this test before
 		// verifying the URI and prefix.
 		if (uri == null) {
-			if (prefix == null || NS_PFX_DEFAULT.equals(prefix)) {
+			if (prefix == null || NS_PREFIX_DEFAULT.equals(prefix)) {
 				return NO_NAMESPACE;
 			}
 			// we have an attempt for some prefix
@@ -171,7 +171,7 @@ public final class Namespace implements Serializable {
 		
 		// OK, we have a container for the URI, let's search on the prefix.
 		
-		Namespace ns = urimap.get(prefix == null ? NS_PFX_DEFAULT : prefix);
+		Namespace ns = urimap.get(prefix == null ? NS_PREFIX_DEFAULT : prefix);
 		if (ns != null) {
 			// got one.
 			return ns;
@@ -193,11 +193,11 @@ public final class Namespace implements Serializable {
 		if (NS_URI_XML.equals(uri)) {
 			throw new IllegalNameException(uri, "Namespace URI",
 					"The " + NS_URI_XML + " must be bound to " +
-					"only the '" + NS_PFX_XML + "' prefix.");        
+					"only the '" + NS_PREFIX_XML + "' prefix.");        
 		}
 
 		// no namespace found, we validate the prefix
-		final String pfx = prefix == null ? NS_PFX_DEFAULT : prefix;
+		final String pfx = prefix == null ? NS_PREFIX_DEFAULT : prefix;
 		
 		String reason;
 		if ((reason = Verifier.checkNamespacePrefix(pfx)) != null) {
@@ -230,7 +230,7 @@ public final class Namespace implements Serializable {
 	 * @return <code>Namespace</code> - ready to use namespace.
 	 */
 	public static Namespace getNamespace(final String uri) {
-		return getNamespace(NS_PFX_DEFAULT, uri);
+		return getNamespace(NS_PREFIX_DEFAULT, uri);
 	}
 
 	/**

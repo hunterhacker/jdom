@@ -255,7 +255,7 @@ public class DOMBuilder {
 
 			case org.w3c.dom.Node.ELEMENT_NODE:
 				String nodeName = node.getNodeName();
-				String prefix = NS_PFX_DEFAULT;
+				String prefix = NS_PREFIX_DEFAULT;
 				String localName = nodeName;
 				int colon = nodeName.indexOf(':');
 				if (colon >= 0) {
@@ -292,8 +292,8 @@ public class DOMBuilder {
 					org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);
 
 					String attname = att.getName();
-					if (attname.startsWith(NS_PFX_XMLNS)) {
-						String attPrefix = NS_PFX_DEFAULT;
+					if (attname.startsWith(NS_PREFIX_XMLNS)) {
+						String attPrefix = NS_PREFIX_DEFAULT;
 						colon = attname.indexOf(':');
 						if (colon >= 0) {
 							attPrefix = attname.substring(colon + 1);
@@ -328,8 +328,8 @@ public class DOMBuilder {
 
 					String attname = att.getName();
 
-					if ( !attname.startsWith(NS_PFX_XMLNS)) {
-						String attPrefix = NS_PFX_DEFAULT;
+					if ( !attname.startsWith(NS_PREFIX_XMLNS)) {
+						String attPrefix = NS_PREFIX_DEFAULT;
 						String attLocalName = attname;
 						colon = attname.indexOf(':');
 						if (colon >= 0) {
