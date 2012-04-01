@@ -74,7 +74,16 @@ import org.jdom2.Verifier;
  * <p>
  * By default JDOM will always use the CRNL sequence "\r\n" for output. This
  * can be changed in a number of different ways. See the {@link LineSeparator}
- * enumeration for more information. 
+ * enumeration for more information.
+ * <p>
+ * <b>Note about XML Character Escaping:</b>
+ * <p>
+ * JDOM will escape characters in the output based on the EscapeStrategy that
+ * is specified by this Format. The Format will by default use a sensible
+ * EscapeStrategy that is based on the character encoding of the output. If
+ * the default escape mechanism is not producing the correct results you can
+ * change the EscapeStrategy on the format to suit your own needs.  
+ * 
  *
  * @see LineSeparator
  *
@@ -667,7 +676,7 @@ public class Format implements Cloneable {
 	 * newlines written after the declaration and doctype, as well as any
 	 * newlines embedded within existing text content. 
 	 * </p>
-	 * Setting setting the indent to be null will disable end-of-line processing
+	 * Setting the indent to be null will disable end-of-line processing
 	 * for any formatting, but will not affect substitution of embedded \n.
 	 * Setting this value to null or the empty string will disable all
 	 * end-of-line modifications.
@@ -959,7 +968,7 @@ public class Format implements Cloneable {
 	 *     <td>
 	 *       Content between tags consisting of all whitespace is not printed.
 	 *       If the content contains even one non-whitespace character, it is
-	 *       printed verbatim, whitespace and all.
+	 *       all printed verbatim, whitespace and all.
 	 *     </td>
 	 *   </tr>
 	 *
@@ -968,8 +977,7 @@ public class Format implements Cloneable {
 	 *       TRIM
 	 *     </td>
 	 *     <td>
-	 *       Same as TrimAllWhite, plus leading/trailing whitespace are
-	 *       trimmed.
+	 *       All leading and trailing whitespace is trimmed.
 	 *     </td>
 	 *   </tr>
 	 *
@@ -978,8 +986,8 @@ public class Format implements Cloneable {
 	 *       NORMALIZE
 	 *     </td>
 	 *     <td>
-	 *       Same as TextTrim, plus addition interior whitespace is compressed
-	 *       to a single space.
+	 *       Leading and trailing whitespace is trimmed, and any 'internal'
+	 *       whitespace is compressed to a single space.
 	 *     </td>
 	 *   </tr>
 	 * </table>
@@ -991,12 +999,12 @@ public class Format implements Cloneable {
 	 * output already has whitespace, it's wise to turn on TRIM mode so the
 	 * pre-existing whitespace can be trimmed before adding new whitespace.
 	 * <p>
-	 * When a element has a xml:space attribute with the value of "preserve",
-	 * all formating is turned off and reverts back to the default until the
-	 * element and its contents have been printed. If a nested element contains
-	 * another xml:space with the value "default" formatting is turned back on
-	 * for the child element and then off for the remainder of the parent
-	 * element.
+	 * When an element has a xml:space attribute with the value of "preserve",
+	 * all formating is turned off (actually, the TextMode is set to
+	 * {@link #PRESERVE} until the element and its contents have been printed.
+	 * If a nested element contains another xml:space with the value "default"
+	 * formatting is turned back on  for the child element and then off for the
+	 * remainder of the parent element.
 	 * 
 	 * @since JDOM2
 	 */
