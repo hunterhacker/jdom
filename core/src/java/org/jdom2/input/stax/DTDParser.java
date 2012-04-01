@@ -101,10 +101,10 @@ public class DTDParser {
 	 * This code works by using a reg-ex to parse a valid DTD document.
 	 * The pattern is complicated (not as complicated as an actual parser).
 	 * 
-	 * Because the pattern is complicated this code creates a pattern 'database'
+	 * Because the pattern is complicated, this code creates a pattern 'database'
 	 * and then 'pulls' patterns from the database to create the final regex.
-	 * The database patterns are pulled to transform a pattern template in to a
-	 * final regular expression. This template is called the 'meta-pattern'
+	 * The database patterns are pulled to transform a pattern template into a
+	 * final regular expression. This template is called the 'meta-pattern'.
 	 * 
 	 * So, the pattern is not kept in its final form, but rather it is built
 	 * up at class initialization time based on the meta-pattern, and the

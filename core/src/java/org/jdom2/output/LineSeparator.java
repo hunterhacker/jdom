@@ -141,8 +141,8 @@ public enum LineSeparator {
 	
 	/**
 	 * Use the sequence '\r\n' unless the System property
-	 * {@link JDOMConstants#JDOM2_PROPERTY_LINE_SEPARATOR} is defined, at which
-	 * point use the value specified in that property. If the value in that
+	 * {@link JDOMConstants#JDOM2_PROPERTY_LINE_SEPARATOR} is defined, in which
+	 * case use the value specified in that property. If the value in that
 	 * property matches one of the Enumeration names (e.g. SYSTEM) then use the
 	 * sequence specified in that enumeration. 
 	 */

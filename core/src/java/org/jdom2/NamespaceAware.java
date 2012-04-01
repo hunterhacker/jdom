@@ -58,8 +58,8 @@ import java.util.List;
 
 /**
  * Classes implementing this interface are all sensitive to their
- * {@link Namespace} context. All the core JDOM classes are NamespaceAware (
- * {@link Parent} and subtypes, {@link Content} and subtypes, and
+ * {@link Namespace} context. All the core JDOM classes are NamespaceAware
+ * ({@link Parent} and subtypes, {@link Content} and subtypes, and
  * {@link Attribute}). You can use the methods that this interface provides
  * to query the Namespace context.
  * <p>
@@ -86,8 +86,8 @@ import java.util.List;
  * <p>
  * <h2>The Element Namespace Scope</h2>
  * The 'default' Namespace is a source of confusion, but it is simply the
- * Namespace which is in-scope for an Element that has no Namespace prefix (
- * prefix is "" but it could have any Namespace URI). There will always be
+ * Namespace which is in-scope for an Element that has no Namespace prefix
+ * (prefix is "" but it could have any Namespace URI). There will always be
  * exactly one Namespace that is in-scope for an element that has no prefix.
  * <p>
  * All Elements are in a Namespace. Elements will be in 

@@ -637,7 +637,7 @@ public class Format implements Cloneable {
 	 * outputter.  All XML parsers are required to 'normalize' all the
 	 * combinations of line seperators to just '\n'. As a result, if any JDOM
 	 * component has an end-of-line-like value (e.g. '\r') in it then that value
-	 * must b he result of an escaped value in the XML source document
+	 * must be the result of an escaped value in the XML source document
 	 * <code>&amp;#xD;</code> or a value explicitly set with one of the Text
 	 * value setters. Values in JDOM content that were explicitly set to be
 	 * '\r' will always be escaped on XML Output.
@@ -733,7 +733,7 @@ public class Format implements Cloneable {
 
 	/**
 	 * This will set whether the XML declaration
-	 * (<code>&lt;&#063;xml version="1&#046;0"&#063;gt;</code>)
+	 * (<code>&lt;&#063;xml version="1&#046;0"&#063;&gt;</code>)
 	 * will be omitted or not. It is common to omit this in uses such
 	 * as SOAP and XML-RPC calls.
 	 *

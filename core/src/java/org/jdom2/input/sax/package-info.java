@@ -221,7 +221,7 @@
 
  <h2>Configuring the Pillars</h2>
 
- The JDOMFactory pillar is not configurable, you can only replace it entirely.
+ The JDOMFactory pillar is not configurable; you can only replace it entirely.
  The other two pillars are configurable though, but you should inspect the
  getters and setters on {@link org.jdom2.input.SAXBuilder} to identify what can
  (by default) be changed easily. Remember, if you have anything that needs to be
@@ -288,7 +288,7 @@
  pools you can pool either the SAXBuilder or the SAXBuilderEngine in the same
  pool.
  <p>
- it is most likely though that what you will want to do is to create a single
+ It is most likely though that what you will want to do is to create a single
  SAXBuilder that represents the configuration you want, and then you can use this
  single SAXBuilder to create multiple SAXEngines as you need them in the pool by
  calling the <code>buildEngine()</code> method.

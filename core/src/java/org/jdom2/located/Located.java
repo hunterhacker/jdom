@@ -55,7 +55,7 @@
 package org.jdom2.located;
 
 /**
- * Implementations of this class know about their location (line an column).
+ * Implementations of this class know about their location (line and column).
  * <p>
  * While it would seem intuitive that this represents the location where the
  * content starts, in fact, if the data is populated by a SAX parser the line

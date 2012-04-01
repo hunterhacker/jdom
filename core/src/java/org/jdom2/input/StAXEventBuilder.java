@@ -79,7 +79,7 @@ import org.jdom2.input.stax.DTDParser;
 /**
  * Builds a JDOM Document from a StAX-based XMLEventReader.
  * <p>
- * XMLSeventReaders are pre-configured and as a result JDOM is not able to
+ * XMLEventReaders are pre-configured and as a result JDOM is not able to
  * alter whether the input is validated, or whether the Events have escaped
  * entities or not. These (and other) characteristics are configurable by
  * setting the correct features and properties on the XMLInputFactory when it

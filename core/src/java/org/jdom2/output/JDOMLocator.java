@@ -64,7 +64,7 @@ import org.xml.sax.Locator;
  * accurate anyway, and as an interface a specific Outputter instance can
  * instead do 'the right thing' with the locator, if needed.
  * <p>
- * This change breaks a possible compatibility with anyonw who happened to treat
+ * This change breaks a possible compatibility with anyone who happened to treat
  * the JDOMLocator to be 'settable'. This used to extend LocatorImpl class which
  * had setter methods for the ColumnNumber, Line, PublicID, SystemID 
  *
