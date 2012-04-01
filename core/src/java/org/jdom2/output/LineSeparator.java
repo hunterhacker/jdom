@@ -77,6 +77,11 @@ import org.jdom2.JDOMConstants;
  * Handling</a>). As a result there is no XML issue with the JDOM default CR/NL
  * end-of-line sequence.
  * <p>
+ * It should be noted that because JDOM internally stores just a '\n' as a line
+ * separator that any other output separator requires additional processing to
+ * output. There is a distinct performance benefit for using the UNIX, or NL
+ * LineSeparator for output.
+ * <p>
  * JDOM has always allowed the line-terminating sequence to be customised (or
  * even disabled) for each {@link XMLOutputter} operation by using this Format
  * class.
@@ -98,7 +103,7 @@ import org.jdom2.JDOMConstants;
  * sequence instead of always CRLF:
  * <p>
  * <pre>
- * java -D org.jdom2.output.LineSeparator=SYSTEM ...
+ * java -Dorg.jdom2.output.LineSeparator=SYSTEM ...
  * </pre>
  * 
  * @since JDOM2
@@ -117,7 +122,7 @@ public enum LineSeparator {
 	 */
 	NL("\n"),
 	/**
-	 * The Separator sequence RC which is '\r'. 
+	 * The Separator sequence CR which is '\r'. 
 	 */
 	CR("\r"),
 	

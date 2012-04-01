@@ -71,6 +71,12 @@ import org.jdom2.Verifier;
  * See the documentation for {@link TextMode} for details.
  * <p>
  * <b>Note about Line Separator:</b>
+ * <p>
+ * By default JDOM will always use the CRNL sequence "\r\n" for output. This
+ * can be changed in a number of different ways. See the {@link LineSeparator}
+ * enumeration for more information. 
+ *
+ * @see LineSeparator
  *
  * @author Jason Hunter
  * @author Rolf Lear
