@@ -56,6 +56,7 @@ package org.jdom2;
 
 import java.io.Serializable;
 import java.util.*;
+
 import org.jdom2.filter.Filter;
 import org.jdom2.util.IteratorIterable;
 
@@ -287,4 +288,54 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	 */
 	void canContainContent(Content content, int index, boolean replace) throws IllegalAddException;
 
+	/**
+	 * Appends the child to the end of the content list.
+	 *
+	 * @param child   child to append to end of content list
+	 * @return        the Parent instance on which the method was called
+	 * @throws IllegalAddException if the given child already has a parent.
+	 */
+	public Parent addContent(Content child);
+	
+	/**
+	 * Appends all children in the given collection to the end of
+	 * the content list.  In event of an exception during add the
+	 * original content will be unchanged and the objects in the supplied
+	 * collection will be unaltered.
+	 *
+	 * @param c   collection to append
+	 * @return    the document on which the method was called
+	 * @throws IllegalAddException if any item in the collection
+	 *         already has a parent or is of an illegal type.
+	 */
+	public Parent addContent(Collection<? extends Content> c);
+	
+	/**
+	 * Inserts the child into the content list at the given index.
+	 *
+	 * @param index location for adding the collection
+	 * @param child      child to insert
+	 * @return           the parent on which the method was called
+	 * @throws IndexOutOfBoundsException if index is negative or beyond
+	 *         the current number of children
+	 * @throws IllegalAddException if the given child already has a parent.
+	 */
+	public Parent addContent(int index, Content child);
+
+	/**
+	 * Inserts the content in a collection into the content list
+	 * at the given index.  In event of an exception the original content
+	 * will be unchanged and the objects in the supplied collection will be
+	 * unaltered.
+	 *
+	 * @param index location for adding the collection
+	 * @param c  collection to insert
+	 * @return            the parent on which the method was called
+	 * @throws IndexOutOfBoundsException if index is negative or beyond
+	 *         the current number of children
+	 * @throws IllegalAddException if any item in the collection
+	 *         already has a parent or is of an illegal type.
+	 */
+	public Parent addContent(int index, Collection<? extends Content> c);
+	
 }

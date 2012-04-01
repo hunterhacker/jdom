@@ -315,6 +315,7 @@ public class Document extends CloneBase implements Parent {
 	 * @return        the document on which the method was called
 	 * @throws IllegalAddException if the given child already has a parent.
 	 */
+	@Override
 	public Document addContent(Content child) {
 		content.add(child);
 		return this;
@@ -331,6 +332,7 @@ public class Document extends CloneBase implements Parent {
 	 * @throws IllegalAddException if any item in the collection
 	 *         already has a parent or is of an illegal type.
 	 */
+	@Override
 	public Document addContent(Collection<? extends Content> c) {
 		content.addAll(c);
 		return this;
@@ -346,6 +348,7 @@ public class Document extends CloneBase implements Parent {
 	 *         the current number of children
 	 * @throws IllegalAddException if the given child already has a parent.
 	 */
+	@Override
 	public Document addContent(int index, Content child) {
 		content.add(index, child);
 		return this;
@@ -365,6 +368,7 @@ public class Document extends CloneBase implements Parent {
 	 * @throws IllegalAddException if any item in the collection
 	 *         already has a parent or is of an illegal type.
 	 */
+	@Override
 	public Document addContent(int index, Collection<? extends Content> c) {
 		content.addAll(index, c);
 		return this;

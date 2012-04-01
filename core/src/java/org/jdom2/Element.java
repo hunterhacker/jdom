@@ -863,6 +863,7 @@ public class Element extends Content implements Parent {
 	 * @param child   child to append to end of content list
 	 * @return        the element on which the method was called
 	 * @throws IllegalAddException if the given child already has a parent.     */
+	@Override
 	public Element addContent(final Content child) {
 		content.add(child);
 		return this;
@@ -879,6 +880,7 @@ public class Element extends Content implements Parent {
 	 * @throws IllegalAddException if any item in the collection
 	 *         already has a parent or is of an inappropriate type.
 	 */
+	@Override
 	public Element addContent(final Collection<? extends Content> newContent) {
 		content.addAll(newContent);
 		return this;
@@ -894,6 +896,7 @@ public class Element extends Content implements Parent {
 	 *         the current number of children
 	 * @throws IllegalAddException if the given child already has a parent.
 	 */
+	@Override
 	public Element addContent(final int index, final Content child) {
 		content.add(index, child);
 		return this;
@@ -913,6 +916,7 @@ public class Element extends Content implements Parent {
 	 * @throws IllegalAddException if any item in the collection
 	 *         already has a parent or is of an inappropriate type.
 	 */
+	@Override
 	public Element addContent(final int index, final Collection<? extends Content> newContent) {
 		content.addAll(index, newContent);
 		return this;
