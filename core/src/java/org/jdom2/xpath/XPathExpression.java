@@ -56,6 +56,7 @@ package org.jdom2.xpath;
 
 import java.util.List;
 
+import org.jdom2.Namespace;
 import org.jdom2.filter.Filter;
 
 /**
@@ -105,7 +106,7 @@ public interface XPathExpression<T> extends Cloneable {
 	public String getExpression();
 
 	/**
-	 * Get the Namespace URI associated with a given prefix.
+	 * Get the Namespace associated with a given prefix.
 	 * 
 	 * @param prefix
 	 *        The prefix to select the Namespace URI for.
@@ -113,7 +114,14 @@ public interface XPathExpression<T> extends Cloneable {
 	 * @throws IllegalArgumentException
 	 *         if that prefix is not defined.
 	 */
-	public String getNamespace(String prefix);
+	public Namespace getNamespace(String prefix);
+	
+	/**
+	 * Get the Namespaces that were used to compile this XPathExpression.
+	 * 
+	 * @return a potentially empty array of Namespaces (never null).
+	 */
+	public Namespace[] getNamespaces();
 
 	/**
 	 * Change the defined value for a variable to some new value. You may not
@@ -125,10 +133,10 @@ public interface XPathExpression<T> extends Cloneable {
 	 * support a null value it should be translated to something meaningful for
 	 * that library, typically the empty string.
 	 * 
+	 * @param localname
+	 *        The variable localname to change.
 	 * @param uri
-	 *        the Namespace URI in which the variable name is declared.
-	 * @param name
-	 *        The variable to change.
+	 *        the Namespace in which the variable name is declared.
 	 * @param value
 	 *        The new value to set.
 	 * @return The value of the variable prior to this change.
@@ -137,23 +145,70 @@ public interface XPathExpression<T> extends Cloneable {
 	 * @throws IllegalArgumentException
 	 *         if name is not already a variable.
 	 */
-	public Object setVariable(String uri, String name, Object value);
+	public Object setVariable(String localname, Namespace uri, Object value);
+	
+	/**
+	 * Change the defined value for a variable to some new value. You may not
+	 * use this method to add new variables to the compiled XPath, you can only
+	 * change existing variable values.
+	 * <p>
+	 * The value of the variable may be null. Some XPath libraries support a
+	 * null value, and if the library that this expression is for does not
+	 * support a null value it should be translated to something meaningful for
+	 * that library, typically the empty string.
+	 * <p>
+	 * qname must consist of an optional namespace prefix and colon, followed
+	 * by a mandatory variable localname. If the prefix is not specified, then
+	 * the Namespace is assumed to be the {@link Namespace#NO_NAMESPACE}. If
+	 * the prefix is specified, it must match with one of the declared
+	 * Namespaces for this XPathExpression
+	 * 
+	 * @param qname
+	 *        The variable qname to change.
+	 * @param value
+	 *        The new value to set.
+	 * @return The value of the variable prior to this change.
+	 * @throws NullPointerException
+	 *         if qname is null
+	 * @throws IllegalArgumentException
+	 *         if name is not already a variable.
+	 */
+	public Object setVariable(String qname, Object value);
 
 	/**
-	 * Get the variable value associated to the given variable name (namespace
-	 * aware).
+	 * Get the variable value associated to the given variable name.
+	 * 
+	 * @param localname
+	 *        the variable localname to retrieve the value for.
 	 * @param uri
-	 *        the Namespace URI in which the variable name was declared.
-	 * @param name
-	 *        the variable name to retrieve the value for.
+	 *        the Namespace in which the variable name was declared.
 	 * @return the value associated to a Variable name.
 	 * @throws NullPointerException
 	 *         if name or uri is null
 	 * @throws IllegalArgumentException
 	 *         if that variable name is not defined.
 	 */
-	public Object getVariable(String uri, String name);
+	public Object getVariable(String localname, Namespace uri);
 
+	/**
+	 * Get the variable value associated to the given variable qname.
+	 * <p>
+	 * qname must consist of an optional namespace prefix and colon, followed
+	 * by a mandatory variable localname. If the prefix is not specified, then
+	 * the Namespace is assumed to be the {@link Namespace#NO_NAMESPACE}. If
+	 * the prefix is specified, it must match with one of the declared
+	 * Namespaces for this XPathExpression
+	 * 
+	 * @param qname
+	 *        the variable qname to retrieve the value for.
+	 * @return the value associated to a Variable name.
+	 * @throws NullPointerException
+	 *         if qname is null
+	 * @throws IllegalArgumentException
+	 *         if that variable name is not defined.
+	 */
+	public Object getVariable(String qname);
+	
 	/**
 	 * Get the {@code Filter<T>} used to coerce the raw XPath results in to
 	 *         the correct Generic type.

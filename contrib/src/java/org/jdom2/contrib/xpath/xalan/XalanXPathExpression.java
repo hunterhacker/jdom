@@ -53,8 +53,8 @@ class XalanXPathExpression<T> extends AbstractXPathCompiled <T> implements Prefi
 			if (qname == null) {
 				throw new IllegalArgumentException("Null qname");
 			}
-	        final Object varValue = getVariable(
-	        		qname.getNamespaceURI(), qname.getLocalName());		
+	        final Object varValue = getVariable(qname.getLocalName(),
+	        		Namespace.getNamespace(qname.getNamespaceURI()));		
 	        if ( varValue == null ) {
 	            throw new TransformerException(
 	            		"No such variable " + qname.toNamespacedString());
@@ -180,13 +180,13 @@ class XalanXPathExpression<T> extends AbstractXPathCompiled <T> implements Prefi
 	
 	@Override
 	public String getNamespaceForPrefix(String prefix) {
-		return getNamespace(prefix);
+		return getNamespace(prefix).getURI();
 	}
 
 	@Override
 	public String getNamespaceForPrefix(String prefix, Node context) {
 		if (context == null) {
-			return getNamespace(prefix);
+			return getNamespace(prefix).getPrefix();
 		}
 		if (prefix == null) {
 			prefix = "";

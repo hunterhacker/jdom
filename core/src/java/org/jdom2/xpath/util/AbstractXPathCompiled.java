@@ -54,7 +54,9 @@
 
 package org.jdom2.xpath.util;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,15 @@ import org.jdom2.xpath.XPathDiagnostic;
  * @author Rolf Lear
  */
 public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
+	
+	private static final class NamespaceComparator implements Comparator<Namespace> {
+		@Override
+		public int compare(Namespace ns1, Namespace ns2) {
+			return ns1.getPrefix().compareTo(ns2.getPrefix());
+		}
+	}
+	
+	private static final NamespaceComparator NSSORT = new NamespaceComparator();
 
 	private final Map<String, Namespace> xnamespaces = new HashMap<String, Namespace>();
 	// Not final to support cloning.
@@ -219,27 +230,36 @@ public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
 	}
 
 	@Override
-	public final String getNamespace(final String prefix) {
+	public final Namespace getNamespace(final String prefix) {
 		final Namespace ns = xnamespaces.get(prefix);
 		if (ns == null) {
 			throw new IllegalArgumentException("Namespace with prefix '"
 					+ prefix + "' has not been declared.");
 		}
-		return ns.getURI();
+		return ns;
+	}
+	
+	@Override
+	public Namespace[] getNamespaces() {
+		final Namespace[] nsa = xnamespaces.values().toArray(
+				new Namespace[xnamespaces.size()]);
+		Arrays.sort(nsa, NSSORT);
+		return nsa;
 	}
 
 	@Override
-	public final Object getVariable(final String uri, final String name) {
-		final Map<String, Object> vmap = xvariables.get(uri == null ? "" : uri);
+	public final Object getVariable(final String name, Namespace uri) {
+		final Map<String, Object> vmap =
+				xvariables.get(uri == null ? "" : uri.getURI());
 		if (vmap == null) {
 			throw new IllegalArgumentException("Variable with name '" + name
-					+ "' in namespace '" + uri + "' has not been declared.");
+					+ "' in namespace '" + uri.getURI() + "' has not been declared.");
 		}
 		final Object ret = vmap.get(name);
 		if (ret == null) {
 			if (!vmap.containsKey(name)) {
 				throw new IllegalArgumentException("Variable with name '"
-						+ name + "' in namespace '" + uri
+						+ name + "' in namespace '" + uri.getURI()
 						+ "' has not been declared.");
 			}
 			// leave translating null variable values to the implementation.
@@ -249,11 +269,39 @@ public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
 	}
 
 	@Override
-	public Object setVariable(String uri, String name, Object value) {
-		final Object ret = getVariable(uri, name);
+	public Object getVariable(String qname) {
+		if (qname == null) {
+			throw new NullPointerException(
+					"Cannot get variable value for null qname");
+		}
+		final int pos = qname.indexOf(':');
+		if (pos >= 0) {
+			return getVariable(qname.substring(pos + 1), 
+					getNamespace(qname.substring(0,  pos)));
+		}
+		return getVariable(qname, Namespace.NO_NAMESPACE);
+	}
+
+	@Override
+	public Object setVariable(String name, Namespace uri, Object value) {
+		final Object ret = getVariable(name, uri);
 		// if that succeeded then we have it easy....
-		xvariables.get(uri).put(name, value);
+		xvariables.get(uri.getURI()).put(name, value);
 		return ret;
+	}
+	
+	@Override
+	public Object setVariable(String qname, Object value) {
+		if (qname == null) {
+			throw new NullPointerException(
+					"Cannot get variable value for null qname");
+		}
+		final int pos = qname.indexOf(':');
+		if (pos >= 0) {
+			return setVariable(qname.substring(pos + 1), 
+					getNamespace(qname.substring(0,  pos)), value);
+		}
+		return setVariable(qname, Namespace.NO_NAMESPACE, value);
 	}
 
 	@Override

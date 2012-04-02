@@ -105,7 +105,7 @@ public class XPathBuilder<T> {
 	 * Variables can have a null value. The {@link XPathExpression} can change
 	 * the variable value before the expression is evaluated, and, some XPath
 	 * libraries support a null variable value. See
-	 * {@link XPathExpression#setVariable(String, String, Object)}.
+	 * {@link XPathExpression#setVariable(String, Namespace, Object)}.
 	 * <p>
 	 * In order to validate that a Variable is unique you have to know the
 	 * namespace associated with the prefix. This class is designed to make it
@@ -241,7 +241,7 @@ public class XPathBuilder<T> {
 	}
 
 	/**
-	 * Get the variable value associated with the given name.
+	 * Get the Namespace associated with the given prefix.
 	 * 
 	 * @param prefix
 	 *        The Namespace prefix to get the Namespace for.

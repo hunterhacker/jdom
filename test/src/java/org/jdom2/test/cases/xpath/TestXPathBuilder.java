@@ -184,9 +184,9 @@ public class TestXPathBuilder {
 		XPathExpression<Object> xpe = xpb.compileWith(XPathFactory.instance());
 		assertEquals("/", xpe.getExpression());
 		assertEquals(Filters.fpassthrough(), xpe.getFilter());
-		assertEquals("", xpe.getNamespace(""));
-		assertEquals("uri", xpe.getNamespace("p"));
-		assertEquals("value", xpe.getVariable("uri", "var"));
+		assertEquals("", xpe.getNamespace("").getURI());
+		assertEquals("uri", xpe.getNamespace("p").getURI());
+		assertEquals("value", xpe.getVariable("var", Namespace.getNamespace("uri")));
 	}
 
 }

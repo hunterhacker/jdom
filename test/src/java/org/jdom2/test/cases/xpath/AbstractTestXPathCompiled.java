@@ -421,7 +421,7 @@ public abstract class AbstractTestXPathCompiled {
 	public void testNullNamespaceArray() {
 		Namespace[] nsa = null;
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), null, nsa);
-		assertEquals("", xp.getNamespace(""));
+		assertEquals("", xp.getNamespace("").getURI());
 	}
 	
 	@Test
@@ -539,13 +539,21 @@ public abstract class AbstractTestXPathCompiled {
 	
 	@Test
 	public void testGetNamespace1() {
-		assertEquals("", getFactory().compile("/").getNamespace(""));
+		assertEquals("", getFactory().compile("/").getNamespace("").getURI());
 	}
 	
 	@Test
 	public void testGetNamespace2() {
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), null, Namespace.getNamespace("x", "y"));
-		assertEquals("y", xp.getNamespace("x"));
+		assertEquals("y", xp.getNamespace("x").getURI());
+	}
+	
+	@Test
+	public void testGetNamespaces() {
+		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), null, Namespace.getNamespace("x", "y"));
+		Namespace[] nsa = xp.getNamespaces();
+		assertEquals("", nsa[0].getURI());
+		assertEquals("y", nsa[1].getURI());
 	}
 	
 	@Test
@@ -566,8 +574,11 @@ public abstract class AbstractTestXPathCompiled {
 		vars.put("nsa:one", 2);
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), vars, Namespace.getNamespace("nsa", "zzz"));
 		
-		assertEquals(1, xp.getVariable("", "one"));
-		assertEquals(2, xp.getVariable("zzz", "one"));
+		assertEquals(1, xp.getVariable("one"));
+		assertEquals(1, xp.getVariable("one", Namespace.NO_NAMESPACE));
+		assertEquals(2, xp.getVariable("nsa:one"));
+		assertEquals(2, xp.getVariable("one", Namespace.getNamespace("zzz")));
+		
 	}
 	
 	@Test
@@ -580,13 +591,28 @@ public abstract class AbstractTestXPathCompiled {
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), vars, Namespace.getNamespace("nsa", "zzz"));
 		
 		try {
-			xp.getVariable("", "two");
+			xp.getVariable("two");
 			fail("expected IAE");
 		} catch (IllegalArgumentException ise) {
 			// good.
 		}
+
 		try {
-			xp.getVariable("zzz", "three");
+			xp.getVariable("two", Namespace.NO_NAMESPACE);
+			fail("expected IAE");
+		} catch (IllegalArgumentException ise) {
+			// good.
+		}
+		
+		try {
+			xp.getVariable("nsa:three");
+			fail("expected IAE");
+		} catch (IllegalArgumentException ise) {
+			// good.
+		}
+
+		try {
+			xp.getVariable("three", Namespace.getNamespace("zzz"));
 			fail("expected IAE");
 		} catch (IllegalArgumentException ise) {
 			// good.
@@ -600,8 +626,11 @@ public abstract class AbstractTestXPathCompiled {
 		vars.put("nsa:one", null);
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), vars, Namespace.getNamespace("nsa", "zzz"));
 		
-		assertEquals(1, xp.getVariable("", "one"));
-		assertEquals(null, xp.getVariable("zzz", "one"));
+		assertEquals(1, xp.getVariable("one"));
+		assertEquals(1, xp.getVariable("one", null));
+		assertEquals(1, xp.getVariable("one", Namespace.NO_NAMESPACE));
+		assertEquals(null, xp.getVariable("nsa:one"));
+		assertEquals(null, xp.getVariable("one", Namespace.getNamespace("zzz")));
 	}
 	
 	@Test
@@ -611,16 +640,22 @@ public abstract class AbstractTestXPathCompiled {
 		vars.put("nsa:one", 2);
 		XPathExpression<Element> xp = getFactory().compile("/", Filters.element(), vars, Namespace.getNamespace("nsa", "zzz"));
 		
-		assertEquals(1, xp.getVariable("", "one"));
-		assertEquals(2, xp.getVariable("zzz", "one"));
+		assertEquals(1, xp.getVariable("one"));
+		assertEquals(1, xp.getVariable("one", Namespace.NO_NAMESPACE));
+		assertEquals(2, xp.getVariable("nsa:one"));
+		assertEquals(2, xp.getVariable("one", Namespace.getNamespace("zzz")));
 		
-		assertEquals(2, xp.setVariable("zzz", "one", null));
-		assertEquals(1, xp.getVariable("", "one"));
-		assertEquals(null, xp.getVariable("zzz", "one"));
+		assertEquals(2, xp.setVariable("one", Namespace.getNamespace("zzz"), null));
+		assertEquals(1, xp.getVariable("one"));
+		assertEquals(1, xp.getVariable("one", Namespace.NO_NAMESPACE));
+		assertEquals(null, xp.getVariable("one", Namespace.getNamespace("zzz")));
+		assertEquals(null, xp.getVariable("nsa:one"));
 		
-		assertEquals(null, xp.setVariable("zzz", "one", 3));
-		assertEquals(1, xp.getVariable("", "one"));
-		assertEquals(3, xp.getVariable("zzz", "one"));
+		assertEquals(null, xp.setVariable("nsa:one", 3));
+		assertEquals(1, xp.getVariable("one"));
+		assertEquals(1, xp.getVariable("one", Namespace.NO_NAMESPACE));
+		assertEquals(3, xp.getVariable("one", Namespace.getNamespace("zzz")));
+		assertEquals(3, xp.getVariable("nsa:one"));
 	}
 	
 	@Test
@@ -649,11 +684,12 @@ public abstract class AbstractTestXPathCompiled {
 		XPathExpression<Element> xq = xp.clone();
 		assertTrue(xp != xq);
 		assertTrue(xp.getExpression() == xq.getExpression());
-		assertTrue(xp.getVariable("", "one") == xq.getVariable("", "one"));
-		assertTrue(xp.getVariable("zzz", "one") == xq.getVariable("zzz", "one"));
-		assertTrue(xq.getVariable("", "one") == xp.setVariable("", "one", "newval"));
-		assertEquals("newval", xp.getVariable("", "one"));
-		assertEquals(1, xq.getVariable("", "one"));
+		assertTrue(xp.getVariable("one") == xq.getVariable("one"));
+		assertTrue(xp.getVariable("nsa:one") == xq.getVariable("one", Namespace.getNamespace("zzz")));
+		assertTrue(xq.getVariable("one", Namespace.NO_NAMESPACE) == 
+				xp.setVariable("one", "newval"));
+		assertEquals("newval", xp.getVariable("one"));
+		assertEquals(1, xq.getVariable("one"));
 		
 	}
 	

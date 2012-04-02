@@ -158,7 +158,7 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 
 	@Override
 	public String translateNamespacePrefixToUri(String prefix) {
-		return getNamespace(prefix);
+		return getNamespace(prefix).getURI();
 	}
 	
 	@Override
@@ -170,13 +170,15 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 		if (prefix == null) {
 			prefix = "";
 		}
-		if ("".equals(namespaceURI)) {
-			namespaceURI = getNamespace(prefix);
-		}
 		try {
-			return getVariable(namespaceURI, localName);
+			if ("".equals(namespaceURI)) {
+				namespaceURI = getNamespace(prefix).getURI();
+			}
+			return getVariable(localName, Namespace.getNamespace(namespaceURI));
 		} catch (IllegalArgumentException e) {
-			throw new UnresolvableException("Unable to resolve variable " + localName + " in namespace '" + namespaceURI + "' to a vaulue.");
+			throw new UnresolvableException("Unable to resolve variable " + 
+					localName + " in namespace '" + namespaceURI + 
+					"' to a vaulue.");
 		}
 	}
 

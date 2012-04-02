@@ -78,7 +78,7 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 
 	@Override
 	public String getNamespaceURI(String prefix) {
-		return getNamespace(prefix);
+		return getNamespace(prefix).getURI();
 	}
 
 	@Override
@@ -126,8 +126,8 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 
 	@Override
 	public Object resolveVariable(QName variableName) {
-		return getVariable(
-				variableName.getNamespaceURI(), variableName.getLocalPart());
+		return getVariable(variableName.getLocalPart(),
+				Namespace.getNamespace(variableName.getNamespaceURI()));
 	}
 	
 	private Object wrapContext(Object context) {
