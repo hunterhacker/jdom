@@ -132,10 +132,6 @@ public final class Namespace implements Serializable {
 		// 3. no-memory-lookup for pre-existing Namespaces... (avoid 'new' and
 		//    most String methods that allocte memory (like trim())
 
-		// Return existing namespace if found. The preexisting namespaces
-		// should all be legal. In other words, an illegal namespace won't
-		// have been placed in this.  Thus we can do this test before
-		// verifying the URI and prefix.
 		if (uri == null) {
 			if (prefix == null || NS_PREFIX_DEFAULT.equals(prefix)) {
 				return NO_NAMESPACE;
