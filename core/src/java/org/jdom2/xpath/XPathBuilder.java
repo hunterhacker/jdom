@@ -280,7 +280,7 @@ public class XPathBuilder<T> {
 	}
 
 	/**
-	 * Compile an XPathCOmpiled using the details currently stored in the
+	 * Compile an XPathExpression using the details currently stored in the
 	 * XPathBuilder.
 	 * 
 	 * @param factory
