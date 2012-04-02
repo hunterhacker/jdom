@@ -101,6 +101,7 @@ import org.jdom2.Content.CType;
 import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.UnitTestUtil;
 
@@ -2886,4 +2887,102 @@ public final class TestElement {
 		
 	}
 
+	private String getTestString() {
+		return "  this  has  space ";
+	}
+	
+	private String getComp() {
+		return Format.compact(getTestString());
+	}
+	
+	private String getTrim() {
+		return Format.trimBoth(getTestString());
+	}
+	
+	private String getPlain() {
+		return getTestString(); 
+	}
+	
+	private Namespace getNamespace() {
+		return Namespace.getNamespace("jdomtest");
+	}
+
+	public Element getTextHelperRoot() {
+		final Namespace ns = getNamespace();
+		
+		final Element root = new Element("root");
+		final Element childa = new Element("child");
+		final Element childb = new Element("child", ns);
+		final Element childc = new Element("child");
+		final Element childd = new Element("child", ns);
+		final Element childe = new Element("kid");
+		final Element childf = new Element("kid", ns);
+		
+		childa.setText(getTestString());
+		childb.setText(getTestString());
+		childc.setText(getTestString());
+		childd.setText(getTestString());
+		root.addContent(childa);
+		root.addContent(childb);
+		root.addContent(childc);
+		root.addContent(childd);
+		root.addContent(childe);
+		root.addContent(childf);
+		
+		return root;
+	}
+
+	@Test
+	public void testGetChildTextElementString() {
+		Element root = getTextHelperRoot();
+		assertEquals(getPlain(), root.getChildText("child"));
+		assertEquals(null, root.getChildText("dummy"));
+		assertEquals("", root.getChildText("kid"));
+	}
+
+	@Test
+	public void testGetChildTextElementStringNamespace() {
+		Element root = getTextHelperRoot();
+		Namespace ns = getNamespace();
+		assertEquals(getPlain(), root.getChildText("child", ns));
+		assertEquals(null, root.getChildText("dummy", ns));
+		assertEquals("", root.getChildText("kid", ns));
+	}
+
+	@Test
+	public void testGetChildTextTrimElementString() {
+		Element root = getTextHelperRoot();
+		assertEquals(getTrim(), root.getChildTextTrim("child"));
+		assertEquals(null, root.getChildTextTrim("dummy"));
+		assertEquals("", root.getChildTextTrim("kid"));
+	}
+
+	@Test
+	public void testGetChildTextTrimElementStringNamespace() {
+		Element root = getTextHelperRoot();
+		Namespace ns = getNamespace();
+		assertEquals(getTrim(), root.getChildTextTrim("child", ns));
+		assertEquals(null, root.getChildTextTrim("dummy", ns));
+		assertEquals("", root.getChildTextTrim("kid", ns));
+	}
+
+	@Test
+	public void testGetChildTextNormalizeElementString() {
+		Element root = getTextHelperRoot();
+		assertEquals(getComp(), root.getChildTextNormalize("child"));
+		assertEquals(null, root.getChildTextNormalize("dummy"));
+		assertEquals("", root.getChildTextNormalize("kid"));
+	}
+
+	@Test
+	public void testGetChildTextNormalizeElementStringNamespace() {
+		Element root = getTextHelperRoot();
+		Namespace ns = getNamespace();
+		assertEquals(getComp(), root.getChildTextNormalize("child", ns));
+		assertEquals(null, root.getChildTextNormalize("dummy", ns));
+		assertEquals("", root.getChildTextNormalize("kid", ns));
+	}
+
+	
+	
 }
