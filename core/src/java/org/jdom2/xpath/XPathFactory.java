@@ -136,7 +136,7 @@ public abstract class XPathFactory {
 	 * <p>
 	 * This method is a convenience mechanism only, and JDOM users are free to
 	 * create a custom XPathFactory instance and use a simple: <br>
-	 * <code>   XPathFactory fac = new MyXPathFactpry(arg1, arg2, ...)</code>
+	 * <code>   XPathFactory fac = new MyXPathFactory(arg1, arg2, ...)</code>
 	 * 
 	 * @param factoryclass
 	 *        The name of the XPathFactory class to create.

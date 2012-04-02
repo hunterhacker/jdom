@@ -85,7 +85,7 @@ import org.jdom2.filter.Filters;
  * <br>
  * <code>   .../*[local-name() = 'tag' and namespace-uri() = 'uri']</code>
  * <br>
- * Similarly, Attributes will have a syntx similar to:
+ * Similarly, Attributes will have a syntax similar to:
  * <br>
  * <code>   .../@*[local-name() = 'attname' and namespace-uri() = 'uri'] </code>
  * <br>
