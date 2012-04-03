@@ -2878,6 +2878,19 @@ public final class TestElement {
 		checkAttOrder(emt.getAttributes(), att4, att5, att1, att2, att3);
 		
 	}
+	
+	@Test
+	public void testSortAttributesNone() {
+		Element emt = new Element("root");
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return - o1.getNamespaceURI().compareTo(o2.getNamespaceURI());
+			}
+		});
+		// this ends up creating the Attribute array inside the Element.
+		checkAttOrder(emt.getAttributes());
+	}
 
 	private void checkAttOrder(List<Attribute> attributes, Attribute...atts) {
 		assertTrue(atts.length == attributes.size());
@@ -2983,6 +2996,99 @@ public final class TestElement {
 		assertEquals("", root.getChildTextNormalize("kid", ns));
 	}
 
+
+	@Test
+	public void testSimplifyTextSimple() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		root.addContent("two");
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.simplifyText());
+		assertTrue(1 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.simplifyText());
+		assertEquals("one two three", root.getText());
+	}
 	
+	@Test
+	public void testSimplifyTextCDATA() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		root.addContent(new CDATA("two"));
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.simplifyText());
+		assertTrue(3 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.simplifyText());
+		assertEquals("one two three", root.getText());
+	}
 	
+	@Test
+	public void testSimplifyTextNested() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		Element kid = new Element("kid");
+		root.addContent(kid);
+		kid.addContent("two");
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one  three", root.getText());
+		
+		assertTrue(root.simplifyText());
+		assertTrue(3 == root.getContentSize());
+		assertEquals("one  three", root.getText());
+		assertFalse(root.simplifyText());
+		assertEquals("one  three", root.getText());
+	}
+	
+	@Test
+	public void testSimplifyTextEmpty() {
+		Element root = new Element("root");
+		root.addContent("");
+		root.addContent("one");
+		root.addContent("");
+		root.addContent(" ");
+		root.addContent("");
+		
+		root.addContent("two");
+		
+		root.addContent("");
+		root.addContent(" ");
+		root.addContent("");
+		root.addContent("three");
+		root.addContent("");
+		assertTrue(11 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.simplifyText());
+		assertTrue(1 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.simplifyText());
+		assertEquals("one two three", root.getText());
+	}
+	
+	@Test
+	public void testSimplifyTextSingle() {
+		Element root = new Element("root");
+		root.addContent("");
+		assertEquals("", root.getText());
+		
+		assertTrue(root.simplifyText());
+		assertTrue(0 == root.getContentSize());
+		assertEquals("", root.getText());
+		assertFalse(root.simplifyText());
+		assertEquals("", root.getText());
+	}
 }

@@ -686,6 +686,42 @@ public class Element extends Content implements Parent {
 
 		return this;
 	}
+	
+	/**
+	 * Adjacent Text content is merged into the first Text in document
+	 * order, and the redundant Text items are removed (including any empty
+	 * Text).
+	 * @return true if any content was changed by this operation.
+	 */
+	public boolean simplifyText() {
+		final Iterator<Content> it = content.iterator();
+		Text tfirst = null;
+		boolean changed = false;
+		while (it.hasNext()) {
+			final Content c = it.next();
+			if (c.getCType() == CType.Text) {
+				// Text, and no CDATA!
+				final Text text = (Text)c;
+				if ("".equals(text.getValue())) {
+					it.remove();
+					changed = true;
+				} else if (tfirst == null) {
+					// this could be the first of some adjacent text.
+					tfirst = text;
+				} else {
+					// add our text to the first in the sequence
+					tfirst.append(text.getValue());
+					// remove us from the sequence 
+					it.remove();
+					changed = true;
+				}
+			} else {
+				// the end of the sequence
+				tfirst = null;
+			}
+		}
+		return changed;
+	}
 
 	/**
 	 * This returns the full content of the element as a List which
