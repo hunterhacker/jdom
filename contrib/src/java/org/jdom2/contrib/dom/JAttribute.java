@@ -67,7 +67,6 @@ import org.w3c.dom.TypeInfo;
 import org.jdom2.Attribute;
 import org.jdom2.AttributeType;
 import org.jdom2.Namespace;
-import org.jdom2.util.XMLBase;
 
 final class JAttribute extends JNamespaceAware implements Attr {
 
@@ -130,7 +129,7 @@ final class JAttribute extends JNamespaceAware implements Attr {
 	@Override
 	public String getBaseURI() {
 		try {
-			return XMLBase.xmlBase(attribute.getParent()).toASCIIString();
+			return attribute.getParent().getXMLBaseURI().toASCIIString();
 		} catch (final URISyntaxException e) {
 			throw new IllegalStateException("Unable to process URI", e);
 		}

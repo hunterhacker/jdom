@@ -60,6 +60,8 @@ import static org.jdom2.JDOMConstants.NS_PREFIX_XML;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1924,6 +1926,65 @@ public class Element extends Content implements Parent {
 		
 	}
 	
+
+	/**
+	 * Simple method that supports getXMLBaseURI().
+	 * @param uri 'currently' URI as a string
+	 * @param relative the relative URI we are trying to make absolute
+	 * @return the resulting URI, may be null.
+	 * @throws URISyntaxException for URI problems.
+	 */
+	private final URI resolve(String uri, URI relative)
+			throws URISyntaxException {
+		if (uri == null) {
+			return relative;
+		}
+		final URI n = new URI(uri);
+		if (relative == null) {
+			return n;
+		}
+		return n.resolve(relative);
+	}
+
+	/**
+	 * Calculate the XMLBase URI for this Element using the rules defined in the
+	 * XMLBase specification, as well as the values supplied in the xml:base
+	 * attributes on this Element and its ancestry.
+	 * <p>
+	 * This method assumes that all values in <code>xml:base</code> attributes
+	 * are valid URI values according to the <code>java.net.URI</code>
+	 * implementation. The same implementation is used to resolve relative URI
+	 * values, and thus this code follows the assumptions in java.net.URI.
+	 * <p>
+	 * This technically deviates from the XMLBase spec because to fully support
+	 * legacy HTML the xml:base attribute could contain what is called a 'LIERI'
+	 * which is a superset of true URI values, but for practical purposes JDOM
+	 * users should never encounter such values because they are not processing
+	 * raw HTML (but xhtml maybe). 
+	 * 
+	 * @return a URI representing the XMLBase value for the supplied Element, or
+	 *         null if one could not be calculated.
+	 * @throws URISyntaxException
+	 *         if it is not possible to create java.net.URI values from the data
+	 *         in the <code>xml:base</code> attributes.
+	 */
+	public URI getXMLBaseURI() throws URISyntaxException {
+		Parent p = this;
+		URI ret = null;
+		while (p != null) {
+			if (p instanceof Element) {
+				ret = resolve(((Element) p).getAttributeValue("base",
+						Namespace.XML_NAMESPACE), ret);
+			} else {
+				ret = resolve(((Document) p).getBaseURI(), ret);
+			}
+			if (ret != null && ret.isAbsolute()) {
+				return ret;
+			}
+			p = p.getParent();
+		}
+		return ret;
+	}
 
 
 

@@ -70,7 +70,6 @@ import org.jdom2.Attribute;
 import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.filter.Filters;
-import org.jdom2.util.XMLBase;
 
 class JElement extends JParent implements Element {
 
@@ -211,7 +210,7 @@ class JElement extends JParent implements Element {
 	@Override
 	public final String getBaseURI() {
 		try {
-			return XMLBase.xmlBase((org.jdom2.Element)shadow).toASCIIString();
+			return ((org.jdom2.Element)shadow).getXMLBaseURI().toASCIIString();
 		} catch (final URISyntaxException e) {
 			throw new IllegalStateException("Broken base URI references.", e);
 		}
