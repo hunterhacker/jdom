@@ -52,7 +52,9 @@
 
  */
 
-package org.jdom2.util;
+package org.jdom2;
+
+import org.jdom2.internal.ArrayCopy;
 
 
 /**
@@ -84,7 +86,7 @@ package org.jdom2.util;
  * @author Rolf Lear
  *
  */
-public final class StringBin {
+final class StringBin {
 	
 	// Here are some magic numbers:
 	

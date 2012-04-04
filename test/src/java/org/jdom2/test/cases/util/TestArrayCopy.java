@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.test.util.UnitTestUtil;
-import org.jdom2.util.ArrayCopy;
 
 @SuppressWarnings("javadoc")
 public class TestArrayCopy {

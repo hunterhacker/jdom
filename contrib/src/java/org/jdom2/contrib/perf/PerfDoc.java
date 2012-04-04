@@ -40,10 +40,10 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXEventBuilder;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
-import org.jdom2.util.ArrayCopy;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 

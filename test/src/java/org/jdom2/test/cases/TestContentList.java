@@ -12,8 +12,8 @@ import java.util.List;
 import org.jdom2.Content;
 import org.jdom2.DocType;
 import org.jdom2.Element;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.test.util.AbstractTestList;
-import org.jdom2.util.ArrayCopy;
 
 import org.junit.Assume;
 import org.junit.Before;

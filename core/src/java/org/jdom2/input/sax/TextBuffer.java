@@ -55,7 +55,7 @@
 package org.jdom2.input.sax;
 
 import org.jdom2.Verifier;
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * A non-public utility class similar to StringBuilder but optimized for XML

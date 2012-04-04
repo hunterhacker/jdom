@@ -64,6 +64,7 @@ import java.util.NoSuchElementException;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.jdom2.internal.ArrayCopy;
 
 
 /**

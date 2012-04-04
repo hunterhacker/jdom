@@ -62,7 +62,7 @@ import org.jdom2.JDOMConstants;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
-import org.jdom2.util.ReflectionConstructor;
+import org.jdom2.internal.ReflectionConstructor;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 /**

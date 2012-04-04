@@ -60,9 +60,9 @@ import java.util.NoSuchElementException;
 import org.jdom2.CDATA;
 import org.jdom2.Content;
 import org.jdom2.Content.CType;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
-import org.jdom2.util.ArrayCopy;
 
 /**
  * This Walker implementation walks a list of Content in a Formatted form of

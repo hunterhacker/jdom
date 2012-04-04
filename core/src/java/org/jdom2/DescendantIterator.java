@@ -58,7 +58,7 @@ import java.util.*;
 
 import org.jdom2.Content;
 import org.jdom2.Parent;
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.util.IteratorIterable;
 
 /**

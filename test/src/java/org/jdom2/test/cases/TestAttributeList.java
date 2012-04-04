@@ -11,8 +11,8 @@ import org.jdom2.Element;
 import org.jdom2.IllegalAddException;
 import org.jdom2.Namespace;
 import org.jdom2.Text;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.test.util.AbstractTestList;
-import org.jdom2.util.ArrayCopy;
 
 import org.junit.Assume;
 import org.junit.Before;

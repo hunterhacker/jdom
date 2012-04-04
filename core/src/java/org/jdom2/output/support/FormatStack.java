@@ -54,10 +54,10 @@
 
 package org.jdom2.output.support;
 
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
-import org.jdom2.util.ArrayCopy;
 
 /**
  * FormatStack implements a mechanism where the formatting details can be

@@ -56,7 +56,7 @@ package org.jdom2;
 
 import java.util.*;
 
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * <code>AttributeList</code> represents legal JDOM

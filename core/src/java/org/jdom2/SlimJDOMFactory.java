@@ -56,7 +56,6 @@ package org.jdom2;
 
 import java.util.Map;
 
-import org.jdom2.util.StringBin;
 
 /**
  * This JDOMFactory instance reduces the amount of memory used by JDOM content.

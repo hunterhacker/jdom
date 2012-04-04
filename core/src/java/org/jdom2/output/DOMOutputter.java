@@ -69,9 +69,9 @@ import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.adapters.DOMAdapter;
 import org.jdom2.adapters.JAXPDOMAdapter;
+import org.jdom2.internal.ReflectionConstructor;
 import org.jdom2.output.support.AbstractDOMOutputProcessor;
 import org.jdom2.output.support.DOMOutputProcessor;
-import org.jdom2.util.ReflectionConstructor;
 
 /**
  * Outputs a JDOM {@link org.jdom2.Document org.jdom2.Document} as a DOM

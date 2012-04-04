@@ -57,7 +57,7 @@ package org.jdom2;
 import java.util.*;
 
 import org.jdom2.filter.*;
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * A non-public list implementation holding only legal JDOM content, including

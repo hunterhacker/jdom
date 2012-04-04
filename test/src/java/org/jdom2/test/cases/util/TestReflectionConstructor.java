@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import org.jdom2.Namespace;
-import org.jdom2.util.ReflectionConstructor;
+import org.jdom2.internal.ReflectionConstructor;
 
 @SuppressWarnings("javadoc")
 public class TestReflectionConstructor {

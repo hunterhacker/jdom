@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import org.junit.Assume;
 import org.junit.Test;
 
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * This base class can be used to test multiple implementations of List<?>

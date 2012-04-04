@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import org.jdom2.Verifier;
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * This class builds jUnitTestCases for the Verifier character classes.

@@ -32,7 +32,7 @@ import org.jdom2.Text;
 import org.jdom2.contrib.dom.DOM;
 import org.jdom2.contrib.dom.Wrapper;
 import org.jdom2.filter.Filter;
-import org.jdom2.util.ArrayCopy;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.xpath.util.AbstractXPathCompiled;
 
 /**

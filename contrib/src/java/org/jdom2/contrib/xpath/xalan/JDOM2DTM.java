@@ -85,8 +85,8 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.NamespaceAware;
 import org.jdom2.Parent;
+import org.jdom2.internal.ArrayCopy;
 import org.jdom2.transform.JDOMSource;
-import org.jdom2.util.ArrayCopy;
 import org.jdom2.util.NamespaceStack;
 
 /**
