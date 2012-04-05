@@ -4,15 +4,12 @@ Introduction to the JDOM project
 Please see the JDOM web site at http://jdom.org/
 and GitHub repository at https://github.com/hunterhacker/jdom/
 
-Quick-Start for JDOM2
+Quick-Start for JDOM
 =====================
-See http://hunterhacker.github.com/jdom/jdom2/ for learning about JDOM2
+See the github wiki for a Primer on using JDOM:
+https://github.com/hunterhacker/jdom/wiki/JDOM2-A-Primer
 
-
-How to use JDOM
-===============
-
-Please see the web site http://jdom.org/downloads/docs.html.  It has links to
+Also see the web site http://jdom.org/downloads/docs.html.  It has links to
 numerous articles and books covering JDOM.
 
 
@@ -49,15 +46,34 @@ That's it!
 Building instructions
 =====================
 
+If you do not have the full source code it can be cloned from GitHub. The JDOM
+project at https://github.com/hunterhacker/jdom has the instructions and source
+URL to make the git clone easy.
+
+You will need to have Apache Ant 1.8.2 or later, and you will need Java JDK 1.6
+or later.
+
 Ok, let's build the code. First, make sure your current working directory is
 where the build.xml file is located. Then run "ant".
 
 If everything is right and all the required packages are visible, this action
-will generate a file called "jdom2.jar" in the "./build" directory. Note, that
-if you do further development, compilation time is reduced since Ant is able
-to detect which files have changed and recompile them as needed.
+will generate a file called "jdom-2.x-20yy.mm.dd.HH.MM.zip" in the
+"./build/package" directory. This is the same 'zip' file that is distributed
+as the official JDOM distribution.
 
-If something went wrong, go to the FAQ at http://www.jdom.org/docs/faq.html.
+The name of the zip file (and the jar names inside the zip) is controlled by
+the two ant properties 'name' and 'version'. The package is called
+"${name}-${version}.zip". The 'official' JDOM Build process is done by
+creating a file 'build.properties' in the 'top' folder of the JDOM code, and
+it contains the single line (or whatever the appropriate version is):
+
+version=2.0.0
+
+If your favourite Java IDE happens to be Eclipse, you can run the 'eclipse' ant
+target, and that will configure your Eclipse project to have all the right
+'source' folders, and 'Referenced Libraries'. After running the 'ant eclipse'
+target, you should refresh your Eclipse project, and you should have a project
+with no errors or warnings.
 
 
 Build targets
@@ -69,13 +85,14 @@ javadocs.
 
 These are the meaningful targets for this build file:
 
- - package [default] -> generates ./build/jdom2.jar and other supporting files
+ - package [default] -> generates ./build/package/jdom*.zip
  - compile -> compiles the source code
  - javadoc -> generates the API documentation in ./build/javadocs
  - junit -> runs the JUnit tests
  - coverage -> generates test coverage metrics
  - eclipse -> generates an Eclipse project (source folders, jars, etc)
  - clean -> restores the distribution to its original and clean state
+ - maven -> generates the package, and makes a 'bundle' for maven-central
 
 To learn the details of what each target does, read the build.xml file.  It is
 quite understandable.
