@@ -15,7 +15,8 @@
     </description>
     <copyright>2000-@year@, Jason Hunter</copyright>
     <license>BSD/Apache style, see LICENSE.txt</license>
-    <support>See the jdom-interest mailing list at jdom.org</support>
+    <support>See the jdom-interest mailing list at jdom.org,
+             searchable at http://jdom.markmail.org</support>
     <web-site>http://www.jdom.org/</web-site>
     <!--
     The following list of authors was initially extracted from @author
@@ -26,6 +27,9 @@
     </author>
     <author>
         <name>Brett McLaughlin (co-creator)</name>
+    </author>
+    <author>
+        <name>Rolf Lear (primary, maintainer)</name>
     </author>
     <author>
         <name>Steven Gould</name>
