@@ -3000,7 +3000,7 @@ public final class TestElement {
 
 
 	@Test
-	public void testSimplifyTextSimple() {
+	public void testCoalesceTextSimple() {
 		Element root = new Element("root");
 		root.addContent("one");
 		root.addContent(" ");
@@ -3010,15 +3010,15 @@ public final class TestElement {
 		assertTrue(5 == root.getContentSize());
 		assertEquals("one two three", root.getText());
 		
-		assertTrue(root.simplifyText());
+		assertTrue(root.coalesceText(false));
 		assertTrue(1 == root.getContentSize());
 		assertEquals("one two three", root.getText());
-		assertFalse(root.simplifyText());
+		assertFalse(root.coalesceText(false));
 		assertEquals("one two three", root.getText());
 	}
 	
 	@Test
-	public void testSimplifyTextCDATA() {
+	public void testCoalesceTextCDATA() {
 		Element root = new Element("root");
 		root.addContent("one");
 		root.addContent(" ");
@@ -3028,15 +3028,15 @@ public final class TestElement {
 		assertTrue(5 == root.getContentSize());
 		assertEquals("one two three", root.getText());
 		
-		assertTrue(root.simplifyText());
+		assertTrue(root.coalesceText(false));
 		assertTrue(3 == root.getContentSize());
 		assertEquals("one two three", root.getText());
-		assertFalse(root.simplifyText());
+		assertFalse(root.coalesceText(false));
 		assertEquals("one two three", root.getText());
 	}
 	
 	@Test
-	public void testSimplifyTextNested() {
+	public void testCoalesceTextNested() {
 		Element root = new Element("root");
 		root.addContent("one");
 		root.addContent(" ");
@@ -3048,15 +3048,15 @@ public final class TestElement {
 		assertTrue(5 == root.getContentSize());
 		assertEquals("one  three", root.getText());
 		
-		assertTrue(root.simplifyText());
+		assertTrue(root.coalesceText(false));
 		assertTrue(3 == root.getContentSize());
 		assertEquals("one  three", root.getText());
-		assertFalse(root.simplifyText());
+		assertFalse(root.coalesceText(false));
 		assertEquals("one  three", root.getText());
 	}
 	
 	@Test
-	public void testSimplifyTextEmpty() {
+	public void testCoalesceTextEmpty() {
 		Element root = new Element("root");
 		root.addContent("");
 		root.addContent("one");
@@ -3074,23 +3074,119 @@ public final class TestElement {
 		assertTrue(11 == root.getContentSize());
 		assertEquals("one two three", root.getText());
 		
-		assertTrue(root.simplifyText());
+		assertTrue(root.coalesceText(false));
 		assertTrue(1 == root.getContentSize());
 		assertEquals("one two three", root.getText());
-		assertFalse(root.simplifyText());
+		assertFalse(root.coalesceText(false));
 		assertEquals("one two three", root.getText());
 	}
 	
 	@Test
-	public void testSimplifyTextSingle() {
+	public void testCoalesceTextSingle() {
 		Element root = new Element("root");
 		root.addContent("");
 		assertEquals("", root.getText());
 		
-		assertTrue(root.simplifyText());
+		assertTrue(root.coalesceText(false));
 		assertTrue(0 == root.getContentSize());
 		assertEquals("", root.getText());
-		assertFalse(root.simplifyText());
+		assertFalse(root.coalesceText(false));
+		assertEquals("", root.getText());
+	}
+
+
+	@Test
+	public void testCoalesceTextSimpleRec() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		root.addContent("two");
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.coalesceText(true));
+		assertTrue(1 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.coalesceText(true));
+		assertEquals("one two three", root.getText());
+	}
+	
+	@Test
+	public void testCoalesceTextCDATARec() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		root.addContent(new CDATA("two"));
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.coalesceText(true));
+		assertTrue(3 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.coalesceText(true));
+		assertEquals("one two three", root.getText());
+	}
+	
+	@Test
+	public void testCoalesceTextNestedRec() {
+		Element root = new Element("root");
+		root.addContent("one");
+		root.addContent(" ");
+		Element kid = new Element("kid");
+		root.addContent(kid);
+		kid.addContent("two");
+		root.addContent(" ");
+		root.addContent("three");
+		assertTrue(5 == root.getContentSize());
+		assertEquals("one  three", root.getText());
+		
+		assertTrue(root.coalesceText(true));
+		assertTrue(3 == root.getContentSize());
+		assertEquals("one  three", root.getText());
+		assertFalse(root.coalesceText(true));
+		assertEquals("one  three", root.getText());
+	}
+	
+	@Test
+	public void testCoalesceTextEmptyRec() {
+		Element root = new Element("root");
+		root.addContent("");
+		root.addContent("one");
+		root.addContent("");
+		root.addContent(" ");
+		root.addContent("");
+		
+		root.addContent("two");
+		
+		root.addContent("");
+		root.addContent(" ");
+		root.addContent("");
+		root.addContent("three");
+		root.addContent("");
+		assertTrue(11 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		
+		assertTrue(root.coalesceText(true));
+		assertTrue(1 == root.getContentSize());
+		assertEquals("one two three", root.getText());
+		assertFalse(root.coalesceText(true));
+		assertEquals("one two three", root.getText());
+	}
+	
+	@Test
+	public void testCoalesceTextSingleRec() {
+		Element root = new Element("root");
+		root.addContent("");
+		assertEquals("", root.getText());
+		
+		assertTrue(root.coalesceText(true));
+		assertTrue(0 == root.getContentSize());
+		assertEquals("", root.getText());
+		assertFalse(root.coalesceText(true));
 		assertEquals("", root.getText());
 	}
 
