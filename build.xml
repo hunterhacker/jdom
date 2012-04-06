@@ -464,12 +464,17 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<copy todir="${mavendir}/core" file="${package}/${jarbase}.jar"/>
 		<copy todir="${mavendir}/core" file="${package}/${jarbase}-javadoc.jar"/>
 		<copy todir="${mavendir}/core" file="${package}/${jarbase}-sources.jar"/>
+		
+		<!-- load the license in to the ${license} property -->
+		<loadfile property="license" srcfile="LICENSE.txt" />
+		
 		<!-- copy/rename the pom template -->
 		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/core/${jarbase}.pom">
 			<filterset>
 				<filter token="artifactID" value="${name}"/>
 				<filter token="version" value="${version}" />
 				<filter token="jdk" value="${compile.target}" />
+				<filter token="license" value="${license}" />
 			</filterset>
 		</copy>
 		

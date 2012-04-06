@@ -31,6 +31,11 @@
 			<name>Similar to Apache License but with the acknowledgment clause removed</name>
 			<url>https://raw.github.com/hunterhacker/jdom/master/LICENSE.txt</url>
 			<distribution>repo</distribution>
+			<comments xml:space="preserve"><![CDATA[
+			
+@license@
+
+			]]></comments>
 		</license>
 	</licenses>
 
