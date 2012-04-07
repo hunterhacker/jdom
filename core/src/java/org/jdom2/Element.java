@@ -243,7 +243,7 @@ public class Element extends Content implements Parent {
 	 * Sets the element's {@link Namespace}. If the provided namespace is null,
 	 * the element will have no namespace.
 	 *
-	 * @param  namespace           the new namespace
+	 * @param  namespace           the new namespace. A null implies Namespace.NO_NAMESPACE.
 	 * @return                     the target element
 	 * @throws IllegalAddException if there is a Namespace conflict
 	 */
@@ -410,7 +410,7 @@ public class Element extends Content implements Parent {
 	 * relating directly to itself. If the declaration is not present, this
 	 * method does nothing.
 	 *
-	 * @param additionalNamespace namespace to remove
+	 * @param additionalNamespace namespace to remove. A null Namespace does nothing.
 	 */
 	public void removeNamespaceDeclaration(final Namespace additionalNamespace) {
 		if (additionalNamespaces == null) {
@@ -617,11 +617,12 @@ public class Element extends Content implements Parent {
 	/**
 	 * Returns the textual content of the named child element, or null if
 	 * there's no such child.
-	 *
-	 * @param  cname                the name of the child
-	 * @param  ns                  the namespace of the child
-	 * @return                     text content for the named child, or null if
-	 *                             no such child
+	 * 
+	 * @param cname
+	 *        the name of the child
+	 * @param ns
+	 *        the namespace of the child. A null implies Namespace.NO_NAMESPACE.
+	 * @return text content for the named child, or null if no such child
 	 */
 	public String getChildText(final String cname, final Namespace ns) {
 		final Element child = getChild(cname, ns);
@@ -634,11 +635,13 @@ public class Element extends Content implements Parent {
 	/**
 	 * Returns the trimmed textual content of the named child element, or null
 	 * if there's no such child.
-	 *
-	 * @param  cname                the name of the child
-	 * @param  ns                  the namespace of the child
-	 * @return                     trimmed text content for the named child, or
-	 *                             null if no such child
+	 * 
+	 * @param cname
+	 *        the name of the child
+	 * @param ns
+	 *        the namespace of the child. A null implies Namespace.NO_NAMESPACE.
+	 * @return trimmed text content for the named child, or null if no such
+	 *         child
 	 */
 	public String getChildTextTrim(final String cname, final Namespace ns) {
 		final Element child = getChild(cname, ns);
@@ -651,11 +654,13 @@ public class Element extends Content implements Parent {
 	/**
 	 * Returns the normalized textual content of the named child element, or
 	 * null if there's no such child.
-	 *
-	 * @param  cname                the name of the child
-	 * @param  ns                  the namespace of the child
-	 * @return                     normalized text content for the named child,
-	 *                             or null if no such child
+	 * 
+	 * @param cname
+	 *        the name of the child
+	 * @param ns
+	 *        the namespace of the child. A null implies Namespace.NO_NAMESPACE.
+	 * @return normalized text content for the named child, or null if no such
+	 *         child
 	 */
 	public String getChildTextNormalize(final String cname, final Namespace ns) {
 		final Element child = getChild(cname, ns);
@@ -1120,7 +1125,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param attname name of the attribute to return
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return attribute for the element
 	 */
 	public Attribute getAttribute(final String attname, final Namespace ns) {
@@ -1173,7 +1178,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param attname name of the attribute whose valud is to be returned
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return the named attribute's value, or null if no such attribute
 	 */
 	public String getAttributeValue(final String attname, final Namespace ns) {
@@ -1191,7 +1196,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param attname name of the attribute whose valud is to be returned
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @param def a default value to return if the attribute does not exist
 	 * @return the named attribute's value, or the default if no such attribute
 	 */
@@ -1290,7 +1295,7 @@ public class Element extends Content implements Parent {
 	 *
 	 * @param name name of the attribute to set
 	 * @param value value of the attribute to set
-	 * @param ns namespace of the attribute to set
+	 * @param ns namespace of the attribute to set. A null implies Namespace.NO_NAMESPACE.
 	 * @return this element modified
 	 * @throws IllegalNameException if the given name is illegal as an
 	 *         attribute name, or if the namespace is an unprefixed default
@@ -1351,7 +1356,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param attname name of attribute to remove
-	 * @param ns namespace URI of attribute to remove
+	 * @param ns namespace URI of attribute to remove. A null implies Namespace.NO_NAMESPACE.
 	 * @return whether the attribute was removed
 	 */
 	public boolean removeAttribute(final String attname, final Namespace ns) {
@@ -1554,7 +1559,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param cname local name for the children to match
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return all matching child elements
 	 */
 	public List<Element> getChildren(final String cname, final Namespace ns) {
@@ -1568,7 +1573,7 @@ public class Element extends Content implements Parent {
 	 * returned.
 	 *
 	 * @param cname local name of child element to match
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return the first matching child element, or null if not found
 	 */
 	public Element getChild(final String cname, final Namespace ns) {
@@ -1615,7 +1620,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param cname the name of child element to remove
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChild(final String cname, final Namespace ns) {
@@ -1653,7 +1658,7 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param cname the name of child elements to remove
-	 * @param ns <code>Namespace</code> to search within
+	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
 	 * @return whether deletion occurred
 	 */
 	public boolean removeChildren(final String cname, final Namespace ns) {
