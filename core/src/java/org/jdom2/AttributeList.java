@@ -391,6 +391,9 @@ final class AttributeList extends AbstractList<Attribute>
 	 */
 	int indexOf(final String name, final Namespace namespace) {
 		if (attributeData != null) {
+			if (namespace == null) {
+				return indexOf(name, Namespace.NO_NAMESPACE);
+			}
 			final String uri = namespace.getURI();
 			for (int i = 0; i < size; i++) {
 				final Attribute att = attributeData[i];

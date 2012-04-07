@@ -2233,6 +2233,15 @@ public final class TestElement {
 		emt.setNamespace(nsd);
 		assertTrue(nsd == emt.getNamespace());
 		
+		assertTrue(emt.setAttribute("tst", "val1", null) == emt);
+		assertEquals("val1", emt.getAttributeValue("tst"));
+		assertEquals("val1", emt.getAttributeValue("tst", (Namespace)null));
+		assertEquals("val1", emt.getAttributeValue("tst", Namespace.NO_NAMESPACE));
+		assertTrue(emt.setAttribute("tst", "val2", Namespace.NO_NAMESPACE) == emt);
+		assertEquals("val2", emt.getAttributeValue("tst"));
+		assertEquals("val2", emt.getAttributeValue("tst", (Namespace)null));
+		assertEquals("val2", emt.getAttributeValue("tst", Namespace.NO_NAMESPACE));
+		
 
 	}
 	
@@ -2468,6 +2477,7 @@ public final class TestElement {
 		assertTrue(emt.getAttribute("att") == null);
 		assertTrue(emt.getAttributeValue("att") == null);
 		assertTrue(emt.getAttributeValue("att", Namespace.NO_NAMESPACE) == null);
+		assertTrue(emt.getAttributeValue("att", (Namespace)null) == null);
 		assertTrue(emt.getAttributeValue("att", myns) == null);
 		assertTrue("def".equals(emt.getAttributeValue("att", "def")));
 		assertTrue("def".equals(emt.getAttributeValue("att", myns, "def")));
@@ -2478,9 +2488,11 @@ public final class TestElement {
 		assertTrue(emt.getAttribute("att") != null);
 		assertTrue("val".equals(emt.getAttributeValue("att")));
 		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE)));
+		assertTrue("val".equals(emt.getAttributeValue("att", (Namespace)null)));
 		assertTrue(emt.getAttributeValue("att", myns) == null);
 		assertTrue("val".equals(emt.getAttributeValue("att", "def")));
 		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE, "def")));
+		assertTrue("val".equals(emt.getAttributeValue("att", null, "def")));
 		assertTrue("def".equals(emt.getAttributeValue("att", myns, "def")));
 		assertTrue(emt.getAdditionalNamespaces().isEmpty());
 		
@@ -2491,6 +2503,7 @@ public final class TestElement {
 		assertTrue(emt.getAttribute("att") != emt.getAttribute("att", myns));
 		assertTrue("val".equals(emt.getAttributeValue("att")));
 		assertTrue("val".equals(emt.getAttributeValue("att", Namespace.NO_NAMESPACE)));
+		assertTrue("val".equals(emt.getAttributeValue("att", (Namespace)null)));
 		assertTrue("nsval".equals(emt.getAttributeValue("att", myns)));
 		assertTrue("nsval".equals(emt.getAttributeValue("att", mynsz)));
 		assertTrue("val".equals(emt.getAttributeValue("att", "def")));
