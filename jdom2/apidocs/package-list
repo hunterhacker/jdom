@@ -4,6 +4,7 @@ org.jdom2.filter
 org.jdom2.input
 org.jdom2.input.sax
 org.jdom2.input.stax
+org.jdom2.internal
 org.jdom2.located
 org.jdom2.output
 org.jdom2.output.support
