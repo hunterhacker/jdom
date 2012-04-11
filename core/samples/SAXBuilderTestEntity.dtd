@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-	<!ELEMENT internalentites (#PCDATA)>
-	<!ATTLIST internalentities 
-		test (CDATA) #IMPLIED>
-	<!ENTITY simple 'simple entity' >
-	<!ENTITY simple2 'another simple entity'>
-
