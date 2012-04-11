@@ -984,6 +984,27 @@ public abstract class AbstractTestOutputter {
 	}
 
 	@Test
+	public void testOutputElementInterleavedEmptyText() {
+		// this is to test issue #72
+		// Compact format only prints first child.
+		// and, it has a multi-text-type at the end.
+		Element root = new Element("root");
+		root.addContent(new Text(" "));
+		root.addContent(new Comment("Boo"));
+		root.addContent(new Text(" "));
+		root.addContent(new Element("child"));
+		root.addContent(new Text(" "));
+		root.addContent(new ProcessingInstruction("pitarget"));
+		root.addContent(new Text(" "));
+		checkOutput(root,  
+				"<root> <!--Boo--> <child /> <?pitarget?> </root>", 
+				"<root><!--Boo--><child /><?pitarget?></root>", 
+				"<root>\n  <!--Boo-->\n  <child />\n  <?pitarget?>\n</root>",
+				"<root>\n  <!--Boo-->\n  <child />\n  <?pitarget?>\n</root>",
+				"<root>\n  <!--Boo-->\n  <child />\n  <?pitarget?>\n</root>");
+	}
+
+	@Test
 	public void testOutputElementMultiEntityLeftRight() {
 		Element root = new Element("root");
 		root.addContent(new EntityRef("erl"));

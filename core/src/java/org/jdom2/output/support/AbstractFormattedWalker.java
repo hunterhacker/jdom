@@ -450,8 +450,9 @@ public abstract class AbstractFormattedWalker implements Walker {
 						pendingmt.done();
 						hasnext = true;
 					} else {
+						cursor = pendingmt.nextcursor;
 						pendingmt = null;
-						hasnext = false;
+						hasnext = cursor < size;
 					}
 				}
 			} else {
