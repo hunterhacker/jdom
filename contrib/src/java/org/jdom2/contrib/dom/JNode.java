@@ -54,6 +54,7 @@
 
 package org.jdom2.contrib.dom;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.w3c.dom.DOMException;
@@ -232,10 +233,70 @@ abstract class JNode implements Node, Wrapper {
 
 	@Override
 	public final short compareDocumentPosition(final Node other) throws DOMException {
-		if ((other instanceof JNode) && ((JNode)other).topdoc == topdoc) {
-			return topdoc.compareDocumentPosition(other);
+		if ((other instanceof JNode)) {
+			JNode their = (JNode)other;
+			if (their == this) {
+				return 0;
+			}
+			if (their.topdoc == topdoc) {
+				// same document....
+				final ArrayList<JNode> ancestry = new ArrayList<JNode>();
+				ancestry.add(their);
+				JNode p = their.parent;
+				while (p != null) {
+					if (p == this) {
+						// we contain the other node.
+						return DOCUMENT_POSITION_CONTAINED_BY | DOCUMENT_POSITION_FOLLOWING;
+					}
+					ancestry.add(p);
+					p = p.parent;
+				}
+				// OK, we have the ancestry.... but, we are not on the direct ancestry of that node.
+				// let's find an intersection of our ancestry...
+				p = this.parent;
+				JNode k = this;
+				final int alen = ancestry.size();
+				while (p != null) {
+					for (int apos = 0; apos < alen; apos++) {
+						if (p == ancestry.get(apos)) {
+							// we have intersected...
+							final int sibpos = apos - 1;
+							if (sibpos < 0) {
+								return DOCUMENT_POSITION_CONTAINS | DOCUMENT_POSITION_PRECEDING;
+							}
+							final JNode sibling = ancestry.get(sibpos);
+							// need to get relative order of 'k' and sibling within 'p'.
+							final JParent prnt = (JParent)p;
+							if (sibling instanceof JAttribute) {
+								final NamedNodeMap nnm = prnt.getAttributes();
+								for (int i = nnm.getLength() - 1; i >= 0; i--) {
+									final Node n = nnm.item(i);
+									if (n == sibling) {
+										return DOCUMENT_POSITION_FOLLOWING;
+									} else if (n == k) {
+										return DOCUMENT_POSITION_PRECEDING;
+									}
+								}
+							} else {
+								for (int i = prnt.getLength() - 1; i >= 0; i--) {
+									final Node n = prnt.item(i);
+									if (n == sibling) {
+										return DOCUMENT_POSITION_FOLLOWING;
+									} else if (n == k) {
+										return DOCUMENT_POSITION_PRECEDING;
+									}
+								}
+							}
+							throw new IllegalStateException("Sibling nodes appear not to be siblings?");
+						}
+					}
+					k = p;
+					p = p.parent;
+				}
+			}
+			return Node.DOCUMENT_POSITION_DISCONNECTED;
 		}
-		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Not same Document");
+		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Not same Document Model");
 	}
 
 	@Override
