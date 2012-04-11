@@ -3,7 +3,10 @@
  */
 package org.jdom2.test.cases.input;
 
-import java.io.File;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
@@ -11,9 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
@@ -39,9 +45,7 @@ public class TestSAXComplexSchema {
 		builder.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 		builder.setFeature("http://apache.org/xml/features/validation/schema", true);
 		
-		File inputdir = new File(".");
-		URL furl = inputdir.toURI().toURL();
-		URL rurl = new URL(furl, "test/resources/xsdcomplex/input.xml");
+		URL rurl = ClassLoader.getSystemResource("xsdcomplex/input.xml");
 		
 		
 		try {
@@ -81,9 +85,7 @@ public class TestSAXComplexSchema {
 	public void testBuildFileNewSAX() throws IOException {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		
-		File inputdir = new File(".");
-		URL furl = inputdir.toURI().toURL();
-		URL rurl = new URL(furl, "test/resources/xsdcomplex/input.xml");
+		URL rurl = ClassLoader.getSystemResource("xsdcomplex/input.xml");
 		
 		
 		try {

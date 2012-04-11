@@ -3,7 +3,6 @@ package org.jdom2.test.cases.xpath;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -123,7 +122,7 @@ public class TestXPathHepler {
 	public void testComplex() throws JDOMException, IOException {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setExpandEntities(false);
-		Document doc = sb.build(new File("test/resources/complex.xml"));
+		Document doc = sb.build(ClassLoader.getSystemResource("complex.xml"));
 		final Iterator<Content> des = doc.getDescendants();
 		final ArrayList<NamespaceAware> allc = new ArrayList<NamespaceAware>();
 		while (des.hasNext()) {

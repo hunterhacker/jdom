@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -21,7 +22,7 @@ import org.xml.sax.SAXException;
 @SuppressWarnings("javadoc")
 public class HelpTestDOMBuilder {
 
-	public static final Document getDocument(String filename, boolean xsdvalidate) throws ParserConfigurationException, SAXException, IOException {
+	public static final Document getDocument(String resname, boolean xsdvalidate) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
 		dbf.setValidating(xsdvalidate);
@@ -31,7 +32,8 @@ public class HelpTestDOMBuilder {
 			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 		}
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		return db.parse(filename);
+		InputSource is = new InputSource(ClassLoader.getSystemResource(resname).toExternalForm());
+		return db.parse(is);
 	}
 	
 	public static final Element getRoot(Document doc) {

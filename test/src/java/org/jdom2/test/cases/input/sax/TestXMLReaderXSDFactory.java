@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.transform.Source;
@@ -17,18 +17,18 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaderXSDFactory;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
+import org.jdom2.input.sax.XMLReaderXSDFactory;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
 public class TestXMLReaderXSDFactory {
 	//"./test/resources/xscomplex/multi_one.xsd",
 	
-	File filemain = new File("./test/resources/xsdcomplex/multi_main.xsd");
-	File fileone  = new File("./test/resources/xsdcomplex/multi_one.xsd");
-	File filetwo  = new File("./test/resources/xsdcomplex/multi_two.xsd");
-	File source   = new File("./test/resources/xsdcomplex/multi.xml");
+	URL filemain = ClassLoader.getSystemResource("xsdcomplex/multi_main.xsd");
+	URL fileone  = ClassLoader.getSystemResource("xsdcomplex/multi_one.xsd");
+	URL filetwo  = ClassLoader.getSystemResource("xsdcomplex/multi_two.xsd");
+	URL source   = ClassLoader.getSystemResource("xsdcomplex/multi.xml");
 
 	private void checkXML(XMLReaderJDOMFactory fac) {
 		SAXBuilder builder = new SAXBuilder(fac);
@@ -57,20 +57,20 @@ public class TestXMLReaderXSDFactory {
 	}
 	
 	@Test
-	public void testXMLReaderXSDFactoryStringArray() throws MalformedURLException, JDOMException {
+	public void testXMLReaderXSDFactoryStringArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				filemain.toURI().toURL().toExternalForm(),
-				fileone.toURI().toURL().toExternalForm(),
-				filetwo.toURI().toURL().toExternalForm());
+				filemain.toExternalForm(),
+				fileone.toExternalForm(),
+				filetwo.toExternalForm());
 		checkXML(fac);
 	}
 
 	@Test
-	public void testXMLReaderXSDFactoryURLArray() throws JDOMException, MalformedURLException {
+	public void testXMLReaderXSDFactoryURLArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				filemain.toURI().toURL(),
-				fileone.toURI().toURL(),
-				filetwo.toURI().toURL());
+				filemain,
+				fileone,
+				filetwo);
 		checkXML(fac);
 	}
 
@@ -84,11 +84,11 @@ public class TestXMLReaderXSDFactory {
 	}
 
 	@Test
-	public void testXMLReaderXSDFactorySourceArray() throws JDOMException {
+	public void testXMLReaderXSDFactorySourceArray() throws JDOMException, IOException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				new StreamSource(filemain),
-				new StreamSource(fileone),
-				new StreamSource(filetwo));
+				new StreamSource(filemain.openStream()),
+				new StreamSource(fileone.openStream()),
+				new StreamSource(filetwo.openStream()));
 		checkXML(fac);
 	}
 

@@ -78,6 +78,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.CharBuffer;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -680,14 +681,15 @@ public final class TestSAXBuilder {
     @Test
     public void test_TCM__void_setExpandEntities_boolean() throws JDOMException, IOException {
         //test entity exansion on internal entity
+    	
+    	URL src = ClassLoader.getSystemResource("SAXBuilderTestEntity.xml");
 
         SAXBuilder builder = new SAXBuilder();
-        File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
 
         builder.setExpandEntities(true);
         assertTrue(builder.getExpandEntities());
         
-        Document doc = builder.build(file);
+        Document doc = builder.build(src);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("another simple entity") > 1);        	
 
@@ -696,7 +698,7 @@ public final class TestSAXBuilder {
         builder.setExpandEntities(false);
         assertFalse(builder.getExpandEntities());
 
-        doc = builder.build(file);
+        doc = builder.build(src);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
 		List<Content> content = doc.getRootElement().getContent();
@@ -706,12 +708,12 @@ public final class TestSAXBuilder {
 			content.get(2) instanceof EntityRef);
 		
         //test entity expansion on external entity
-        file = new File(resourceDir + "/SAXBuilderTestEntity2.xml");
+        URL src2 = ClassLoader.getSystemResource("SAXBuilderTestEntity2.xml");
 
         builder.setExpandEntities(true);
         assertTrue(builder.getExpandEntities());
 
-        doc = builder.build(file);
+        doc = builder.build(src2);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("simple entity") == 0);
         assertTrue("didn't get entity text", doc.getRootElement().getText().indexOf("another simple entity") > 1);        	
 
@@ -719,7 +721,7 @@ public final class TestSAXBuilder {
         //and EntityRef is created in content with external entity
         builder.setExpandEntities(false);
         assertFalse(builder.getExpandEntities());
-        doc = builder.build(file);
+        doc = builder.build(src2);
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("simple entity") > 1));
         assertTrue("got entity text", ! (doc.getRootElement().getText().indexOf("another simple entity") > 1));        	
 		content = doc.getRootElement().getContent();
@@ -743,7 +745,7 @@ public final class TestSAXBuilder {
 
         SAXBuilder builder = new SAXBuilder();
         //test entity expansion on external entity
-        File file = new File(resourceDir + "/SAXBuilderTestDecl.xml");
+        URL file = ClassLoader.getSystemResource("SAXBuilderTestDecl.xml");
 
        //test that entity declaration appears in doctype
         //and EntityRef is created in content with external entity
@@ -769,7 +771,7 @@ public final class TestSAXBuilder {
 
         SAXBuilder builder = new SAXBuilder();
         //test entity expansion on internal and external entity
-        File file = new File(resourceDir + "/SAXBuilderTestIntExtEntity.xml");
+        URL file = ClassLoader.getSystemResource("SAXBuilderTestIntExtEntity.xml");
 
         builder.setExpandEntities(true);
         Document doc = builder.build(file);

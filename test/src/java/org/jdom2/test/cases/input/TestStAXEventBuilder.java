@@ -7,9 +7,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -48,77 +47,77 @@ public class TestStAXEventBuilder {
 	
 	@Test
 	public void testSimpleDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/simple.xml", true);
+		checkStAX("DOMBuilder/simple.xml", true);
 	}
 	
 	@Test
 	public void testAttributesDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/attributes.xml", true);
+		checkStAX("DOMBuilder/attributes.xml", true);
 	}
 	
 	@Test
 	public void testNamespaceDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/namespaces.xml", true);
+		checkStAX("DOMBuilder/namespaces.xml", true);
 	}
 	
 	@Test
 	@Ignore
 	// TODO
 	public void testDocTypeDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/doctype.xml", true);
+		checkStAX("DOMBuilder/doctype.xml", true);
 	}
 	
 	@Test
 	public void testDocTypeDocumentSimpleExpand() {
-		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", true);
+		checkStAX("DOMBuilder/doctypesimple.xml", true);
 	}
 	
 	@Test
 	public void testComplexDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/complex.xml", true);
+		checkStAX("DOMBuilder/complex.xml", true);
 	}
 	
 	@Test
 	public void testXSDDocumentExpand() {
-		checkStAX("test/resources/xsdcomplex/input.xml", true);
+		checkStAX("xsdcomplex/input.xml", true);
 	}
 	
 	@Test
 	public void testSimpleDocument() {
-		checkStAX("test/resources/DOMBuilder/simple.xml", false);
+		checkStAX("DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkStAX("test/resources/DOMBuilder/attributes.xml", false);
+		checkStAX("DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkStAX("test/resources/DOMBuilder/namespaces.xml", false);
+		checkStAX("DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkStAX("test/resources/DOMBuilder/doctype.xml", false);
+		checkStAX("DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeSimpleDocument() {
-		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", false);
+		checkStAX("DOMBuilder/doctypesimple.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkStAX("test/resources/DOMBuilder/complex.xml", false);
+		checkStAX("DOMBuilder/complex.xml", false);
 	}
 	
 	@Test
 	public void testXSDDocument() {
-		checkStAX("test/resources/xsdcomplex/input.xml", false);
+		checkStAX("xsdcomplex/input.xml", false);
 	}
 	
-	private void checkStAX(String filename, boolean expand) {
+	private void checkStAX(String resourcename, boolean expand) {
 		try {
 			StAXEventBuilder stxb = new StAXEventBuilder();
 			XMLInputFactory inputfac = XMLInputFactory.newInstance();
@@ -126,7 +125,7 @@ public class TestStAXEventBuilder {
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
 
-			FileReader eventsource = new FileReader(new File(filename));
+			InputStream eventsource = ClassLoader.getSystemResourceAsStream(resourcename);
 			XMLEventReader events = inputfac.createXMLEventReader(eventsource);
 			Document eventbuild = stxb.build(events);
 			Element eventroot = eventbuild.hasRootElement() ? eventbuild.getRootElement() : null;
@@ -134,7 +133,7 @@ public class TestStAXEventBuilder {
 			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
-			Document saxbuild = sb.build(filename);
+			Document saxbuild = sb.build(ClassLoader.getSystemResourceAsStream(resourcename));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals("DOC SAX to StAXEvent", toString(saxbuild), toString(eventbuild));
@@ -142,7 +141,7 @@ public class TestStAXEventBuilder {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Could not parse file '" + filename + "': " + e.getMessage());
+			fail("Could not parse resource '" + resourcename + "': " + e.getMessage());
 		}
 	}
 	

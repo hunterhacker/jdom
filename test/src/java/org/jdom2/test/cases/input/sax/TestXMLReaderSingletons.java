@@ -1,8 +1,9 @@
 package org.jdom2.test.cases.input.sax;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class TestXMLReaderSingletons {
 	public void testNonValidatingReader() throws JDOMException, IOException {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.NONVALIDATING);
 		assertFalse(builder.isValidating());
-		Document doc = builder.build("test/resources/DOMBuilder/attributes.xml");
+		Document doc = builder.build(ClassLoader.getSystemResource("DOMBuilder/attributes.xml"));
 		assertEquals("root", doc.getRootElement().getName());
 	}
 
@@ -30,7 +31,7 @@ public class TestXMLReaderSingletons {
 	public void testDTDValidatingReader() throws JDOMException, IOException {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.DTDVALIDATING);
 		assertTrue(builder.isValidating());
-		Document doc = builder.build("test/resources/DOMBuilder/doctype.xml");
+		Document doc = builder.build(ClassLoader.getSystemResource("DOMBuilder/doctype.xml"));
 		assertEquals("root", doc.getRootElement().getName());
 	}
 
@@ -39,7 +40,7 @@ public class TestXMLReaderSingletons {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.DTDVALIDATING);
 		assertTrue(builder.isValidating());
 		try {
-			builder.build("test/resources/DOMBuilder/attributes.xml");
+			builder.build(ClassLoader.getSystemResource("DOMBuilder/attributes.xml"));
 			UnitTestUtil.failNoException(JDOMException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(JDOMException.class, e);
@@ -50,7 +51,7 @@ public class TestXMLReaderSingletons {
 	public void testXSDValidatingReader() throws JDOMException, IOException {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		assertTrue(builder.isValidating());
-		Document doc = builder.build(new File("test/resources/xsdcomplex/input.xml"));
+		Document doc = builder.build(ClassLoader.getSystemResource("xsdcomplex/input.xml"));
 		assertEquals("test", doc.getRootElement().getName());
 		// the whole point of this particular XML input is that it should apply
 		// default attribute values.... lets make sure they make it.
@@ -67,7 +68,7 @@ public class TestXMLReaderSingletons {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		assertTrue(builder.isValidating());
 		try {
-			builder.build("test/resources/DOMBuilder/attributes.xml");
+			builder.build(ClassLoader.getSystemResource("DOMBuilder/attributes.xml"));
 			UnitTestUtil.failNoException(JDOMException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(JDOMException.class, e);

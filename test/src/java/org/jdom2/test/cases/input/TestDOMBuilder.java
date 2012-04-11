@@ -42,37 +42,37 @@ public class TestDOMBuilder {
 	
 	@Test
 	public void testSimpleDocument() {
-		checkDOM("test/resources/DOMBuilder/simple.xml", false);
+		checkDOM("DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkDOM("test/resources/DOMBuilder/attributes.xml", false);
+		checkDOM("DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkDOM("test/resources/DOMBuilder/namespaces.xml", false);
+		checkDOM("DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkDOM("test/resources/DOMBuilder/doctype.xml", false);
+		checkDOM("DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkDOM("test/resources/DOMBuilder/complex.xml", false);
+		checkDOM("DOMBuilder/complex.xml", false);
 	}
 	
 	@Test
 	public void testXSDDocument() {
-		checkDOM("test/resources/xsdcomplex/input.xml", true);
+		checkDOM("xsdcomplex/input.xml", true);
 	}
 	
-	private void checkDOM(String filename, boolean xsdvalidate) {
+	private void checkDOM(String resname, boolean xsdvalidate) {
 		try {
-			org.w3c.dom.Document domdoc = HelpTestDOMBuilder.getDocument(filename, xsdvalidate);
+			org.w3c.dom.Document domdoc = HelpTestDOMBuilder.getDocument(resname, xsdvalidate);
 			DOMBuilder db = new DOMBuilder();
 			Document dombuild = db.build(domdoc);
 			Element domroot = db.build(HelpTestDOMBuilder.getRoot(domdoc));
@@ -82,7 +82,7 @@ public class TestDOMBuilder {
 					: XMLReaders.NONVALIDATING );
 			sb.setExpandEntities(false);
 			
-			Document saxbuild = sb.build(filename);
+			Document saxbuild = sb.build(ClassLoader.getSystemResource(resname));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals(toString(saxbuild), toString(dombuild));
@@ -90,7 +90,7 @@ public class TestDOMBuilder {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Could not parse file '" + filename + "': " + e.getMessage());
+			fail("Could not parse file '" + resname + "': " + e.getMessage());
 		}
 	}
 	

@@ -70,6 +70,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 
 	<property name="junit" value="./test" />
 	<property name="junit.src" value="${junit}/src/java" />
+	<property name="junit.resources" value="${junit}/src/resources" />
 	<property name="junit.build" value="${build}/junit" />
 	<property name="junit.xml" value="${build}/junit.xml" />
 	<property name="junit.report" value="${build}/junit.report" />
@@ -250,6 +251,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<!-- Copy resources and stuff - everything except Java code -->
 		<copy todir="${junit.build}" >
 			<fileset dir="${junit.src}" excludes="**/*.java" />
+			<fileset dir="${junit.resources}" />
 		</copy>
 		
 		<!-- ignore deprecation warnings in jUnit -->
@@ -427,6 +429,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<classpathentry kind="src" path="core/package"/>
 	<classpathentry kind="src" path="core/samples"/>
 	<classpathentry kind="src" path="test/src/java"/>
+	<classpathentry kind="src" path="test/src/resources"/>
 	<classpathentry kind="src" path="contrib/src/java" excluding="org/jdom/contrib/ids/doc-files/|org/jdom/contrib/input/scanner/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/ids/doc-files/|org/jdom2/contrib/input/scanner/doc-files/|org/jdom2/contrib/input/scanner/doc-files/"/>
 	<classpathentry kind="src" path="contrib/samples"/>
 	<classpathentry kind="src" path="contrib/src/java/org/jdom2/contrib/ids/doc-files"/>

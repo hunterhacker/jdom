@@ -3,7 +3,6 @@ package org.jdom2.test.cases.located;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -52,7 +51,7 @@ public class TestLocatedJDOMFactory extends AbstractTestJDOMFactory {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setJDOMFactory(new LocatedJDOMFactory());
 		sb.setExpandEntities(false);
-		Document doc = sb.build(new File("test/resources/complex.xml"));
+		Document doc = sb.build(ClassLoader.getSystemResource("complex.xml"));
 		// it appears the location of the DocType is the start of the internal subset.
 		checkLocation(doc.getDocType(), 2, 16);
 		final Element root = doc.getRootElement();

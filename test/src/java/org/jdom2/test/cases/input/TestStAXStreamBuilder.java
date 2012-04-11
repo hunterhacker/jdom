@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -50,90 +48,88 @@ public class TestStAXStreamBuilder {
 	
 	@Test
 	public void testSimpleDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/simple.xml", true);
+		checkStAX("DOMBuilder/simple.xml", true);
 	}
 	
 	@Test
 	public void testAttributesDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/attributes.xml", true);
+		checkStAX("DOMBuilder/attributes.xml", true);
 	}
 	
 	@Test
 	public void testNamespaceDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/namespaces.xml", true);
+		checkStAX("DOMBuilder/namespaces.xml", true);
 	}
 	
 	@Test
 	@Ignore
 	public void testDocTypeDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/doctype.xml", true);
+		checkStAX("DOMBuilder/doctype.xml", true);
 	}
 	
 	@Test
 	@Ignore
 	public void testDocTypeDocumentSimpleExpand() {
-		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", true);
+		checkStAX("DOMBuilder/doctypesimple.xml", true);
 	}
 	
 	@Test
 	public void testComplexDocumentExpand() {
-		checkStAX("test/resources/DOMBuilder/complex.xml", true);
+		checkStAX("DOMBuilder/complex.xml", true);
 	}
 	
 	@Test
 	public void testXSDDocumentExpand() {
-		checkStAX("test/resources/xsdcomplex/input.xml", true);
+		checkStAX("xsdcomplex/input.xml", true);
 	}
 	
 	@Test
 	public void testSimpleDocument() {
-		checkStAX("test/resources/DOMBuilder/simple.xml", false);
+		checkStAX("DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkStAX("test/resources/DOMBuilder/attributes.xml", false);
+		checkStAX("DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkStAX("test/resources/DOMBuilder/namespaces.xml", false);
+		checkStAX("DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkStAX("test/resources/DOMBuilder/doctype.xml", false);
+		checkStAX("DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeSimpleDocument() {
-		checkStAX("test/resources/DOMBuilder/doctypesimple.xml", false);
+		checkStAX("DOMBuilder/doctypesimple.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkStAX("test/resources/DOMBuilder/complex.xml", false);
+		checkStAX("DOMBuilder/complex.xml", false);
 	}
 	
 	@Test
 	public void testXSDDocument() {
-		checkStAX("test/resources/xsdcomplex/input.xml", false);
+		checkStAX("xsdcomplex/input.xml", false);
 	}
 	
-	private void checkStAX(String filename, boolean expand) {
+	private void checkStAX(String resname, boolean expand) {
 		try {
 			StAXStreamBuilder stxb = new StAXStreamBuilder();
-			FileReader source = new FileReader(new File(filename));
 			XMLInputFactory inputfac = XMLInputFactory.newInstance();
 			inputfac.setProperty(
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
-			XMLStreamReader reader = inputfac.createXMLStreamReader(source);
+			XMLStreamReader reader = inputfac.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(resname));
 			Document staxbuild = stxb.build(reader);
 			Element staxroot = staxbuild.hasRootElement() ? staxbuild.getRootElement() : null;
 			
-			source = new FileReader(new File(filename));
-			XMLStreamReader fragreader = inputfac.createXMLStreamReader(source);
+			XMLStreamReader fragreader = inputfac.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(resname));
 			List<Content> contentlist = stxb.buildFragments(fragreader, new DefaultStAXFilter());
 			Document fragbuild = new Document();
 			fragbuild.addContent(contentlist);
@@ -142,7 +138,7 @@ public class TestStAXStreamBuilder {
 			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
-			Document saxbuild = sb.build(filename);
+			Document saxbuild = sb.build(ClassLoader.getSystemResource(resname));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals("DOC SAX to StAXReader", toString(saxbuild), toString(staxbuild));
@@ -151,7 +147,7 @@ public class TestStAXStreamBuilder {
 			assertEquals("ROOT SAX to StAXReader FragmentList", toString(saxroot), toString(fragroot));
 			
 		} catch (Exception e) {
-			UnitTestUtil.failException("Could not parse file '" + filename + "': " + e.getMessage(), e);
+			UnitTestUtil.failException("Could not parse file '" + resname + "': " + e.getMessage(), e);
 		}
 	}
 	
