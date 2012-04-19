@@ -303,9 +303,11 @@ public class UnitTestUtil {
     				" but got a null value instead");
     	}
     	if (!expect.isInstance(got)) {
-    		got.printStackTrace();
-    		fail("We expected an exception of type " + expect.getName() + 
+    		AssertionError ae = new AssertionError(
+    				"We expected an exception of type " + expect.getName() + 
     				" but got a " + got.getClass().getName() + " instead");
+    		ae.initCause(got);
+    		throw ae;
     	}
     }
 
