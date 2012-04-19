@@ -158,20 +158,22 @@ public enum LineSeparator {
 	
 	
 	private static String getDefaultLineSeparator() {
-		String def = LineSeparator.DOS.value();
-		String prop = System.getProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, def);
+		// Android has some unique ordering requirements in this bootstrap process.
+		// also, Android will not have the system property set, so we can exit with the null.
+		final String prop = System.getProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "DEFAULT");
 		if ("DEFAULT".equals(prop)) {
-			// need to do this to catch an unlikelye instance when someone sets
+			// need to do this to catch the normal process where the property is not set
+			// which will cause the value 'DEFAULT' to be returned by the getProperty(),
+			// or in an unlikely instance when someone sets
 			// -Dorg.jdom2.output.LineSeparator=DEFAULT
 			// which would create some sort of loop to happen....
-			prop = "\r\n";
-		} else {
-			try {
-				LineSeparator sep = Enum.valueOf(LineSeparator.class, prop);
-				prop = sep.value();
-			} catch (Exception e) {
-				// ignore it, just use the prop.
-			}
+			return DOS.value();
+		}
+		try {
+			final LineSeparator sep = Enum.valueOf(LineSeparator.class, prop);
+			return sep.value();
+		} catch (Exception e) {
+			// ignore it, just use the prop.
 		}
 		return prop;
 	}
