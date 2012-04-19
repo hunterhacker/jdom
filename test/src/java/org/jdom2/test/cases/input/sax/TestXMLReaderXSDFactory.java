@@ -26,10 +26,19 @@ import org.jdom2.test.util.UnitTestUtil;
 public class TestXMLReaderXSDFactory {
 	//"./test/resources/xscomplex/multi_one.xsd",
 	
-	URL filemain = FidoFetch.getFido().getURL("xsdcomplex/multi_main.xsd");
-	URL fileone  = FidoFetch.getFido().getURL("xsdcomplex/multi_one.xsd");
-	URL filetwo  = FidoFetch.getFido().getURL("xsdcomplex/multi_two.xsd");
-	URL source   = FidoFetch.getFido().getURL("xsdcomplex/multi.xml");
+	private final URL filemain() {
+		return FidoFetch.getFido().getURL("xsdcomplex/multi_main.xsd");
+	}
+	private final URL fileone() {
+		return FidoFetch.getFido().getURL("xsdcomplex/multi_one.xsd");
+	}
+	
+	private final URL filetwo() {
+		return FidoFetch.getFido().getURL("xsdcomplex/multi_two.xsd");
+	}
+	private final URL source() {
+		return FidoFetch.getFido().getURL("xsdcomplex/multi.xml");
+	}
 
 	private void checkXML(XMLReaderJDOMFactory fac) {
 		SAXBuilder builder = new SAXBuilder(fac);
@@ -38,7 +47,7 @@ public class TestXMLReaderXSDFactory {
 			Namespace nsone  = Namespace.getNamespace("http://www.jdom.org/schema_one");
 			Namespace nstwo  = Namespace.getNamespace("http://www.jdom.org/schema_two");
 			
-			Document doc = builder.build(source);
+			Document doc = builder.build(source());
 			assertTrue(doc.hasRootElement());
 			Element root = doc.getRootElement();
 			assertTrue(nsmain == root.getNamespace());
@@ -60,36 +69,36 @@ public class TestXMLReaderXSDFactory {
 	@Test
 	public void testXMLReaderXSDFactoryStringArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				filemain.toExternalForm(),
-				fileone.toExternalForm(),
-				filetwo.toExternalForm());
+				filemain().toExternalForm(),
+				fileone().toExternalForm(),
+				filetwo().toExternalForm());
 		checkXML(fac);
 	}
 
 	@Test
 	public void testXMLReaderXSDFactoryURLArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				filemain,
-				fileone,
-				filetwo);
+				filemain(),
+				fileone(),
+				filetwo());
 		checkXML(fac);
 	}
 
 	@Test
 	public void testXMLReaderXSDFactoryFileArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				filemain,
-				fileone,
-				filetwo);
+				filemain(),
+				fileone(),
+				filetwo());
 		checkXML(fac);
 	}
 
 	@Test
 	public void testXMLReaderXSDFactorySourceArray() throws JDOMException, IOException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
-				new StreamSource(filemain.openStream()),
-				new StreamSource(fileone.openStream()),
-				new StreamSource(filetwo.openStream()));
+				new StreamSource(filemain().openStream()),
+				new StreamSource(fileone().openStream()),
+				new StreamSource(filetwo().openStream()));
 		checkXML(fac);
 	}
 
