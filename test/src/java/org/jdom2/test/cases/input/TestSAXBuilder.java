@@ -62,13 +62,14 @@ package org.jdom2.test.cases.input;
  * @author Philip Nelson
  * @version 0.5
  */
+import static org.jdom2.test.util.UnitTestUtil.checkException;
+import static org.jdom2.test.util.UnitTestUtil.failNoException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayReader;
@@ -82,7 +83,6 @@ import java.net.URL;
 import java.nio.CharBuffer;
 import java.util.List;
 
-import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.Attributes;
@@ -1110,7 +1110,11 @@ public final class TestSAXBuilder {
 	
 	@Test
 	public void testParserFactory() throws JDOMException, IOException {
-		Assume.assumeNotNull(System.getProperty("org.jdom2.performance"));
+		if (System.getProperty("org.jdom2.performance") == null) {
+			// for android.
+			//Assume.assumeNotNull(System.getProperty("org.jdom2.performance"));
+			return;
+		}
 		long start = 0L, time = 0L;
 		loopParser(false, false);
 		loopParser(false, false);

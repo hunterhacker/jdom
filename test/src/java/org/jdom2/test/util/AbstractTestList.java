@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import org.junit.Assume;
 import org.junit.Test;
 
 import org.jdom2.internal.ArrayCopy;
@@ -773,11 +772,23 @@ public abstract class AbstractTestList<T> {
 	@Test
 	public void testIllegalAddAllInt() {
 		final T[] illegal = buildIllegalArgumentContent();
-		Assume.assumeTrue(illegal.length > 0);
+		if (illegal.length <= 0) {
+			// for android.
+			//Assume.assumeTrue(illegal.length > 0);
+			return;
+		}
 		final T[] extra = buildAdditionalContent();
-		Assume.assumeTrue(extra.length > 0);
+		if (extra.length <= 0) {
+			// for android.
+			//Assume.assumeTrue(extra.length > 0);
+			return;
+		}
 		final T[] content = buildSampleContent();
-		Assume.assumeTrue(content.length > 0);
+		if (content.length <= 0) {
+			// for android.
+			//Assume.assumeTrue(content.length > 0);
+			return;
+		}
 		T[] toadd = ArrayCopy.copyOf(extra, extra.length + illegal.length);
 		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
 		
@@ -815,7 +826,11 @@ public abstract class AbstractTestList<T> {
 			// make sure it's all OK.
 			exercise(list, content);
 			
-			Assume.assumeTrue(content.length >= 2);
+			if (content.length < 2) {
+				// for android.
+				// Assume.assumeTrue(content.length >= 2);
+				return;
+			}
 			
 			// now check to make sure that concurrency is not affected....
 			Iterator<T> it = list.iterator();

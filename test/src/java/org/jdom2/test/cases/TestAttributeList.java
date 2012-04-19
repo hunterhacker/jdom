@@ -14,7 +14,6 @@ import org.jdom2.Text;
 import org.jdom2.internal.ArrayCopy;
 import org.jdom2.test.util.AbstractTestList;
 
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -155,9 +154,17 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	@Test
 	public void testSetAttributes() {
 		final Attribute[] extra = buildAdditionalContent();
-		Assume.assumeTrue(extra.length > 0);
+		if (extra.length <= 0) {
+			// android
+			//Assume.assumeTrue(extra.length > 0);
+			return;
+		}
 		final Attribute[] content = buildSampleContent();
-		Assume.assumeTrue(content.length > 0);
+		if (content.length <= 0) {
+			// android
+			// Assume.assumeTrue(content.length > 0);
+			return;
+		}
 
 		// populate the list.
 		List<Attribute> list = buildEmptyList();
@@ -197,11 +204,20 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	@Test
 	public void testIllegalSetAttributes() {
 		final Attribute[] illegal = buildIllegalArgumentContent();
-		Assume.assumeTrue(illegal.length > 0);
+		if (illegal.length <= 0) {
+			//Assume.assumeTrue(illegal.length > 0);
+			return;
+		}
 		final Attribute[] extra = buildAdditionalContent();
-		Assume.assumeTrue(extra.length > 0);
+		if (extra.length <= 0) {
+			// Assume.assumeTrue(extra.length > 0);
+			return;
+		}
 		final Attribute[] content = buildSampleContent();
-		Assume.assumeTrue(content.length > 0);
+		if (content.length <= 0) {
+			//Assume.assumeTrue(content.length > 0);
+			return;
+		}
 		// the ' + 1' ensures a null value too!
 		Attribute[] toadd = ArrayCopy.copyOf(extra, extra.length + illegal.length + 1);
 		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
@@ -244,7 +260,10 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		// make sure it's all OK.
 		exercise(list, content);
 		
-		Assume.assumeTrue(content.length >= 2);
+		if (content.length < 2) {
+			//Assume.assumeTrue(content.length >= 2);
+			return;
+		}
 		
 		// now check to make sure that concurrency is not affected....
 		Iterator<Attribute> it = list.iterator();

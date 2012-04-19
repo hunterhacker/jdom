@@ -15,7 +15,6 @@ import org.jdom2.Element;
 import org.jdom2.internal.ArrayCopy;
 import org.jdom2.test.util.AbstractTestList;
 
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,11 +70,20 @@ public class TestContentList extends AbstractTestList<Content> {
 	@Test
 	public void testIllegalSetContent() {
 		final Content[] illegal = buildIllegalArgumentContent();
-		Assume.assumeTrue(illegal.length > 0);
+		if (illegal.length <= 0) {
+			//Assume.assumeTrue(illegal.length > 0);
+			return;
+		}
 		final Content[] extra = buildAdditionalContent();
-		Assume.assumeTrue(extra.length > 0);
+		if (extra.length <= 0) {
+			//Assume.assumeTrue(extra.length > 0);
+			return;
+		}
 		final Content[] content = buildSampleContent();
-		Assume.assumeTrue(content.length > 0);
+		if (content.length <= 0) {
+			// Assume.assumeTrue(content.length > 0);
+			return;
+		}
 		// the ' + 1' ensures a null value too!
 		Content[] toadd = ArrayCopy.copyOf(extra, extra.length + illegal.length + 1);
 		System.arraycopy(illegal, 0, toadd, extra.length, illegal.length);
@@ -118,7 +126,10 @@ public class TestContentList extends AbstractTestList<Content> {
 		// make sure it's all OK.
 		exercise(list, content);
 		
-		Assume.assumeTrue(content.length >= 2);
+		if (content.length < 2) {
+			//Assume.assumeTrue(content.length >= 2);
+			return;
+		}
 		
 		// now check to make sure that concurrency is not affected....
 		Iterator<Content> it = list.iterator();
