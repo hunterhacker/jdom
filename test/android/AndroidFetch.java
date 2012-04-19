@@ -102,7 +102,7 @@ public class AndroidFetch extends FidoFetch{
 				throw new IllegalStateException("Unable to transfer assets to " + dir, e);
 			}
 			
-			folder.set(dir);
+			folder.set(dir.getAbsoluteFile());
 		}
 	}
 
