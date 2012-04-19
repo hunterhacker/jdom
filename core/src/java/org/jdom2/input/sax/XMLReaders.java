@@ -124,6 +124,10 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 				} catch (SAXException se) {
 					// we could not get a validating system, set the fac to null
 					fac = null;
+				} catch (IllegalArgumentException iae) {
+					// this system does not support XSD Validation.... which is true for android!
+					// we could not get a validating system, set the fac to null
+					fac = null;
 				}
 				break;
 		}
