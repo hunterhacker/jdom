@@ -291,12 +291,13 @@ For instructions on how to build JDOM, please view the README.txt file.
 			<classpath refid="base.class.path"/>
 		</javadoc>
 	</target>
-
+	
+	
 	<!-- =================================================================== -->
-	<!-- Creates the class package                                           -->
+	<!-- Creates the jars                                           -->
 	<!-- =================================================================== -->
-	<target name="package" depends="compile, javadoc, coverage"
-          description="Creates the class package">
+	<target name="jars" depends="compile, javadoc"
+	    description="Builds the Jars">
 		<fixcrlf srcdir="." includes="**/*.bat" excludes="build*.*" eol="crlf"/>
 		<fixcrlf srcdir="." includes="**/*.sh" excludes="build*.*" eol="lf"/>
 
@@ -330,6 +331,57 @@ For instructions on how to build JDOM, please view the README.txt file.
 			<fileset dir="${junit.src}" includes="**/*" />
 			<fileset dir="${contrib.src}" includes="**/*" />
 		</jar>
+	    	    
+	</target>
+	
+	<target name="androidtests" depends="jars">
+	    
+	    <property name="android.project" value="JUT" />
+	    <property name="android" value="${build}/android" />
+	    <property name="android.libs" value="${android}/${android.project}/libs" />
+	    <mkdir dir="${android}" />
+		<mkdir dir="${android.libs}" />
+			    	    
+		<path id="at.class.path">
+			<pathelement location="${package}/${jarbase}.jar" />
+			<pathelement location="${package}/${jarbase}-contrib.jar" />
+			<pathelement location="${package}/${jarbase}-junit.jar" />
+			<path refid="base.class.path"/>
+		</path>
+			    
+		<!-- Convert the test cases from JUnit4 to a JUnit3 format -->
+		<!-- This also copies the resources only. -->
+		<java classname="org.jdom2.contrib.android.TranslateTests"
+		    classpathref="at.class.path" >
+			<arg value="${package}/${jarbase}-junit.jar" />
+		    <arg value="${android}/${android.project}/assets" />
+		    <arg value="${android}/${android.project}Test/src" />
+		</java>
+		
+		<mkdir dir="${android}/${android.project}Test/src/org/jdom2/test/util" />
+		<copy todir="${android}/${android.project}Test/src/org/jdom2/test/util"
+		    file="test/android/AndroidFetch.java" />
+				
+	    <!-- Create a Jar file with just the JUnit4 tests, not the resources. -->
+		<jar jarfile="${android.libs}/${jarbase}-android-junit4.jar" >
+			<fileset dir="${junit.build}" includes="**/*.class" />
+		</jar>
+		
+		<copy todir="${android.libs}">
+		    <fileset dir="${package}" includes="${jarbase}.jar, ${jarbase}-contrib.jar" />
+		</copy>
+		
+		<copy todir="${android.libs}" file="${jaxen.jar}"/>
+		<copy todir="${android.libs}" file="${xalan.jar}"/>
+		<copy todir="${android.libs}" file="${xalanser.jar}"/>
+		<copy todir="${android.libs}" file="${junit.jar}"/>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Creates the class package                                           -->
+	<!-- =================================================================== -->
+	<target name="package" depends="coverage, jars"
+          description="Creates the class package">
 		<zip destfile="${package}/${jarbase}.zip">
 			<fileset dir="${package}" includes="${jarbase}*.jar" />
 			<fileset dir="${basedir}" includes="lib/xerces* lib/jaxen* lib/xml*" />
