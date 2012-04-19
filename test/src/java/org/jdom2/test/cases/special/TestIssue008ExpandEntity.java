@@ -10,6 +10,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
+
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
@@ -17,7 +19,7 @@ public class TestIssue008ExpandEntity {
 	
 	private final void roundTrip(boolean expand, boolean validating, String encoding, String expect) {
 		String docloc = this.getClass().getPackage().getName().replaceAll("\\.", "/") + "/TestIssue008.xml";
-		URL docurl = ClassLoader.getSystemResource(docloc);
+		URL docurl = FidoFetch.getFido().getURL(docloc);
 		
 		if (docurl == null) {
 			throw new IllegalStateException("Unable to get resource " + docloc);

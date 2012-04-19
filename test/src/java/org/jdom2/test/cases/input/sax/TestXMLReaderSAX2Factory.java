@@ -11,6 +11,7 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaderSAX2Factory;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -76,7 +77,7 @@ public class TestXMLReaderSAX2Factory {
 		XMLReaderSAX2Factory fac = new XMLReaderSAX2Factory(true);
 		assertTrue(fac.isValidating());
 		SAXBuilder builder = new SAXBuilder(fac);
-		Document doc = builder.build(ClassLoader.getSystemResource("DOMBuilder/doctype.xml"));
+		Document doc = builder.build(FidoFetch.getFido().getURL("DOMBuilder/doctype.xml"));
 		assertEquals("root", doc.getRootElement().getName());
 	}
 	
@@ -86,7 +87,7 @@ public class TestXMLReaderSAX2Factory {
 		assertTrue(fac.isValidating());
 		SAXBuilder builder = new SAXBuilder(fac);
 		try {
-			builder.build(ClassLoader.getSystemResource("DOMBuilder/attributes.xml"));
+			builder.build(FidoFetch.getFido().getURL("DOMBuilder/attributes.xml"));
 			UnitTestUtil.failNoException(JDOMException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(JDOMException.class, e);
@@ -98,7 +99,7 @@ public class TestXMLReaderSAX2Factory {
 		XMLReaderSAX2Factory fac = new XMLReaderSAX2Factory(false);
 		assertFalse(fac.isValidating());
 		SAXBuilder builder = new SAXBuilder(fac);
-		Document doc = builder.build(ClassLoader.getSystemResource("DOMBuilder/attributes.xml"));
+		Document doc = builder.build(FidoFetch.getFido().getURL("DOMBuilder/attributes.xml"));
 		assertEquals("root", doc.getRootElement().getName());
 	}
 	

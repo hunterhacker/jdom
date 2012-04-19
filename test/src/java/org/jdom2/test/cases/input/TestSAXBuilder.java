@@ -81,7 +81,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.junit.Assume;
 import org.junit.Ignore;
@@ -114,6 +113,7 @@ import org.jdom2.input.sax.XMLReaderSAX2Factory;
 import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
 
 
 @SuppressWarnings("javadoc")
@@ -147,13 +147,6 @@ public final class TestSAXBuilder {
 		}
 	}
 	
-	/**
-	 * the directory where needed resource files will be kept
-	 */
-	private final String resourceDir = 
-			ResourceBundle.getBundle("org.jdom2.test.Test")
-				.getString("test.resourceRoot");
-
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testSAXBuilder() {
@@ -682,7 +675,7 @@ public final class TestSAXBuilder {
     public void test_TCM__void_setExpandEntities_boolean() throws JDOMException, IOException {
         //test entity exansion on internal entity
     	
-    	URL src = ClassLoader.getSystemResource("SAXBuilderTestEntity.xml");
+    	URL src = FidoFetch.getFido().getURL("SAXBuilderTestEntity.xml");
 
         SAXBuilder builder = new SAXBuilder();
 
@@ -708,7 +701,7 @@ public final class TestSAXBuilder {
 			content.get(2) instanceof EntityRef);
 		
         //test entity expansion on external entity
-        URL src2 = ClassLoader.getSystemResource("SAXBuilderTestEntity2.xml");
+        URL src2 = FidoFetch.getFido().getURL("SAXBuilderTestEntity2.xml");
 
         builder.setExpandEntities(true);
         assertTrue(builder.getExpandEntities());
@@ -745,7 +738,7 @@ public final class TestSAXBuilder {
 
         SAXBuilder builder = new SAXBuilder();
         //test entity expansion on external entity
-        URL file = ClassLoader.getSystemResource("SAXBuilderTestDecl.xml");
+        URL file = FidoFetch.getFido().getURL("SAXBuilderTestDecl.xml");
 
        //test that entity declaration appears in doctype
         //and EntityRef is created in content with external entity
@@ -771,7 +764,7 @@ public final class TestSAXBuilder {
 
         SAXBuilder builder = new SAXBuilder();
         //test entity expansion on internal and external entity
-        URL file = ClassLoader.getSystemResource("SAXBuilderTestIntExtEntity.xml");
+        URL file = FidoFetch.getFido().getURL("SAXBuilderTestIntExtEntity.xml");
 
         builder.setExpandEntities(true);
         Document doc = builder.build(file);
@@ -808,7 +801,7 @@ public final class TestSAXBuilder {
     
         SAXBuilder builder = new SAXBuilder();
         //test entity expansion on internal subset
-        File file = new File(resourceDir + "/SAXBuilderTestEntity.xml");
+        URL file = FidoFetch.getFido().getURL("SAXBuilderTestEntity.xml");
 
         builder.setExpandEntities(true);
         Document doc = builder.build(file);

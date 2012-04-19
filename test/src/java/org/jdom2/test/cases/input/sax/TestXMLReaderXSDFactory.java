@@ -19,16 +19,17 @@ import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaderJDOMFactory;
 import org.jdom2.input.sax.XMLReaderXSDFactory;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
 public class TestXMLReaderXSDFactory {
 	//"./test/resources/xscomplex/multi_one.xsd",
 	
-	URL filemain = ClassLoader.getSystemResource("xsdcomplex/multi_main.xsd");
-	URL fileone  = ClassLoader.getSystemResource("xsdcomplex/multi_one.xsd");
-	URL filetwo  = ClassLoader.getSystemResource("xsdcomplex/multi_two.xsd");
-	URL source   = ClassLoader.getSystemResource("xsdcomplex/multi.xml");
+	URL filemain = FidoFetch.getFido().getURL("xsdcomplex/multi_main.xsd");
+	URL fileone  = FidoFetch.getFido().getURL("xsdcomplex/multi_one.xsd");
+	URL filetwo  = FidoFetch.getFido().getURL("xsdcomplex/multi_two.xsd");
+	URL source   = FidoFetch.getFido().getURL("xsdcomplex/multi.xml");
 
 	private void checkXML(XMLReaderJDOMFactory fac) {
 		SAXBuilder builder = new SAXBuilder(fac);

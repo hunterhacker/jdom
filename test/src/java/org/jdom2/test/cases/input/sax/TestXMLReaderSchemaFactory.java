@@ -19,6 +19,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaderSchemaFactory;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -28,7 +29,7 @@ public class TestXMLReaderSchemaFactory {
 	public void testSchemaXMLReaderFactory() throws SAXException, JDOMException {
 		SchemaFactory schemafac = 
 				SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		Schema schema = schemafac.newSchema(ClassLoader.getSystemResource("xsdcomplex/SAXTestComplexMain.xsd"));
+		Schema schema = schemafac.newSchema(FidoFetch.getFido().getURL("xsdcomplex/SAXTestComplexMain.xsd"));
 		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(schema);
 		assertTrue(readerfac.isValidating());
 		assertNotNull(readerfac.createXMLReader());
@@ -48,11 +49,11 @@ public class TestXMLReaderSchemaFactory {
 	public void testParseValidateWorks() throws JDOMException, IOException, SAXException {
 		SchemaFactory schemafac = 
 				SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		Schema schema = schemafac.newSchema(ClassLoader.getSystemResource("xsdcomplex/SAXTestComplexMain.xsd"));
+		Schema schema = schemafac.newSchema(FidoFetch.getFido().getURL("xsdcomplex/SAXTestComplexMain.xsd"));
 		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(schema);
 		assertTrue(readerfac.isValidating());
 		SAXBuilder builder = new SAXBuilder(readerfac);
-		Document doc = builder.build(ClassLoader.getSystemResource("xsdcomplex/input.xml"));
+		Document doc = builder.build(FidoFetch.getFido().getURL("xsdcomplex/input.xml"));
 		assertEquals("test", doc.getRootElement().getName());
 		// the whole point of this particular XML input is that it should apply
 		// default attribute values.... lets make sure they make it.

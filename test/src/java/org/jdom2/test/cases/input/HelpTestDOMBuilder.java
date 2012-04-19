@@ -12,6 +12,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import org.jdom2.test.util.FidoFetch;
+
 /**
  * This class encapsulates all the org.w3c.dom.DOM details, so that the actual
  * TestDOMBuilder class has a cleaner import * setup with just
@@ -32,7 +34,7 @@ public class HelpTestDOMBuilder {
 			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 		}
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		InputSource is = new InputSource(ClassLoader.getSystemResource(resname).toExternalForm());
+		InputSource is = new InputSource(FidoFetch.getFido().getURL(resname).toExternalForm());
 		return db.parse(is);
 	}
 	

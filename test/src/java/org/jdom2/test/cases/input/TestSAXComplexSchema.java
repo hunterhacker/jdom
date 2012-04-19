@@ -24,6 +24,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
 
 
 /**
@@ -45,7 +46,7 @@ public class TestSAXComplexSchema {
 		builder.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 		builder.setFeature("http://apache.org/xml/features/validation/schema", true);
 		
-		URL rurl = ClassLoader.getSystemResource("xsdcomplex/input.xml");
+		URL rurl = FidoFetch.getFido().getURL("xsdcomplex/input.xml");
 		
 		
 		try {
@@ -85,7 +86,7 @@ public class TestSAXComplexSchema {
 	public void testBuildFileNewSAX() throws IOException {
 		SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 		
-		URL rurl = ClassLoader.getSystemResource("xsdcomplex/input.xml");
+		URL rurl = FidoFetch.getFido().getURL("xsdcomplex/input.xml");
 		
 		
 		try {

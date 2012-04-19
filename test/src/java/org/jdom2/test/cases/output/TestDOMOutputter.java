@@ -368,16 +368,18 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     	assertEquals("name", doma.getNodeName());
     	assertEquals("name", doma.getLocalName());
     	assertEquals("val", doma.getNodeValue());
-    	assertEquals(null, doma.getPrefix());
-    	assertEquals(null, doma.getNamespaceURI());
+    	// Android can have "" values, xerces has null. Technically it is implementation dependant
+    	assertTrue(null == doma.getPrefix() || "".equals(doma.getPrefix()));
+    	// Android can have "" values, xerces has null. Technically it is implementation dependant
+    	assertTrue(null == doma.getNamespaceURI() || "".equals(doma.getNamespaceURI()));
     	assertTrue(domdoc != doma.getOwnerDocument());
     	
     	doma = out.output(domdoc, att);
     	assertEquals("name", doma.getNodeName());
     	assertEquals("name", doma.getLocalName());
     	assertEquals("val", doma.getNodeValue());
-    	assertEquals(null, doma.getPrefix());
-    	assertEquals(null, doma.getNamespaceURI());
+    	assertTrue(null == doma.getPrefix() || "".equals(doma.getPrefix()));
+    	assertTrue(null == doma.getNamespaceURI() || "".equals(doma.getNamespaceURI()));
     	assertTrue(domdoc == doma.getOwnerDocument());
     	
     	att = new Attribute("name", "val", Namespace.getNamespace("ns", "http://jdom.org/junit/ns"));

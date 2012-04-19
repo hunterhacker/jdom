@@ -18,6 +18,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.Located;
 import org.jdom2.located.LocatedJDOMFactory;
 import org.jdom2.test.cases.AbstractTestJDOMFactory;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.xpath.XPathFactory;
 
 @SuppressWarnings("javadoc")
@@ -51,7 +52,7 @@ public class TestLocatedJDOMFactory extends AbstractTestJDOMFactory {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setJDOMFactory(new LocatedJDOMFactory());
 		sb.setExpandEntities(false);
-		Document doc = sb.build(ClassLoader.getSystemResource("complex.xml"));
+		Document doc = sb.build(FidoFetch.getFido().getURL("complex.xml"));
 		// it appears the location of the DocType is the start of the internal subset.
 		checkLocation(doc.getDocType(), 2, 16);
 		final Element root = doc.getRootElement();

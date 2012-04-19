@@ -18,6 +18,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 import org.junit.Test;
 
@@ -82,7 +83,7 @@ public class TestDOMBuilder {
 					: XMLReaders.NONVALIDATING );
 			sb.setExpandEntities(false);
 			
-			Document saxbuild = sb.build(ClassLoader.getSystemResource(resname));
+			Document saxbuild = sb.build(FidoFetch.getFido().getURL(resname));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals(toString(saxbuild), toString(dombuild));

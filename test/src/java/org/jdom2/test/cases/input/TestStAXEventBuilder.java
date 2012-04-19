@@ -24,6 +24,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.StAXEventBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -125,7 +126,7 @@ public class TestStAXEventBuilder {
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
 
-			InputStream eventsource = ClassLoader.getSystemResourceAsStream(resourcename);
+			InputStream eventsource = FidoFetch.getFido().getStream(resourcename);
 			XMLEventReader events = inputfac.createXMLEventReader(eventsource);
 			Document eventbuild = stxb.build(events);
 			Element eventroot = eventbuild.hasRootElement() ? eventbuild.getRootElement() : null;
@@ -133,7 +134,7 @@ public class TestStAXEventBuilder {
 			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
-			Document saxbuild = sb.build(ClassLoader.getSystemResourceAsStream(resourcename));
+			Document saxbuild = sb.build(FidoFetch.getFido().getStream(resourcename));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals("DOC SAX to StAXEvent", toString(saxbuild), toString(eventbuild));

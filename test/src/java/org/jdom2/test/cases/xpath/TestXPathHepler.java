@@ -21,6 +21,7 @@ import org.jdom2.NamespaceAware;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 import org.jdom2.xpath.XPathDiagnostic;
 import org.jdom2.xpath.XPathExpression;
@@ -122,7 +123,7 @@ public class TestXPathHepler {
 	public void testComplex() throws JDOMException, IOException {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setExpandEntities(false);
-		Document doc = sb.build(ClassLoader.getSystemResource("complex.xml"));
+		Document doc = sb.build(FidoFetch.getFido().getURL("complex.xml"));
 		final Iterator<Content> des = doc.getDescendants();
 		final ArrayList<NamespaceAware> allc = new ArrayList<NamespaceAware>();
 		while (des.hasNext()) {

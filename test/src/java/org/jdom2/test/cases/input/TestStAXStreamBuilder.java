@@ -25,6 +25,7 @@ import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.input.stax.DefaultStAXFilter;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
@@ -125,11 +126,11 @@ public class TestStAXStreamBuilder {
 			inputfac.setProperty(
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
-			XMLStreamReader reader = inputfac.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(resname));
+			XMLStreamReader reader = inputfac.createXMLStreamReader(FidoFetch.getFido().getStream(resname));
 			Document staxbuild = stxb.build(reader);
 			Element staxroot = staxbuild.hasRootElement() ? staxbuild.getRootElement() : null;
 			
-			XMLStreamReader fragreader = inputfac.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(resname));
+			XMLStreamReader fragreader = inputfac.createXMLStreamReader(FidoFetch.getFido().getStream(resname));
 			List<Content> contentlist = stxb.buildFragments(fragreader, new DefaultStAXFilter());
 			Document fragbuild = new Document();
 			fragbuild.addContent(contentlist);
@@ -138,7 +139,7 @@ public class TestStAXStreamBuilder {
 			SAXBuilder sb = new SAXBuilder();
 			sb.setExpandEntities(expand);
 			
-			Document saxbuild = sb.build(ClassLoader.getSystemResource(resname));
+			Document saxbuild = sb.build(FidoFetch.getFido().getURL(resname));
 			Element saxroot = saxbuild.hasRootElement() ? saxbuild.getRootElement() : null;
 			
 			assertEquals("DOC SAX to StAXReader", toString(saxbuild), toString(staxbuild));
