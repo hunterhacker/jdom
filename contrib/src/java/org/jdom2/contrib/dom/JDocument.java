@@ -299,25 +299,18 @@ class JDocument extends JParent implements Document {
 			return EMPTYLIST;
 		}
 		final ArrayList<JElement> enodes = new ArrayList<JElement>();
-		if (xshadow != null) {
-			final Iterator<org.jdom2.Element> it =
-					xshadow.getDescendants(Filters.element());
+		final boolean alltags = "*".equals(tagname);
+		
+		final Iterator<org.jdom2.Element> it =
+				xshadow.getDescendants(Filters.element());
 
-			org.jdom2.Element e = null;
-			if (xshadow instanceof org.jdom2.Element) {
-				e = (org.jdom2.Element)xshadow;
-			} else {
-				if (it.hasNext()) {
-					e = it.next();
-				}
-			}
-			while (e != null) {
-				if ("*".equals(tagname) || tagname.equals(e.getQualifiedName())) {
-					enodes.add(find(e));
-				}
-				e = it.hasNext() ? it.next() : null;
+		while (it.hasNext()) {
+			final org.jdom2.Element e = it.next();
+			if (alltags || tagname.equals(e.getQualifiedName())) {
+				enodes.add(find(e));
 			}
 		}
+		
 		return new JNodeList(enodes);
 	}
 
@@ -333,26 +326,18 @@ class JDocument extends JParent implements Document {
 		final boolean allname = "*".equals(localName);
 
 		final ArrayList<JElement> enodes = new ArrayList<JElement>();
-		if (xshadow != null) {
-			final Iterator<org.jdom2.Element> it =
-					xshadow.getDescendants(Filters.element());
 
-			org.jdom2.Element e = null;
-			if (xshadow instanceof org.jdom2.Element) {
-				e = (org.jdom2.Element)xshadow;
-			} else {
-				if (it.hasNext()) {
-					e = it.next();
-				}
-			}
-			while (e != null) {
-				if ((allname || localName.equals(e.getName())) &&
-						(alluri || namespaceURI.equals(e.getNamespaceURI()))) {
-					enodes.add(find(e));
-				}
-				e = it.hasNext() ? it.next() : null;
+		final Iterator<org.jdom2.Element> it =
+				xshadow.getDescendants(Filters.element());
+
+		while (it.hasNext()) {
+			final org.jdom2.Element e = it.next();
+			if ((allname || localName.equals(e.getName())) &&
+					(alluri || namespaceURI.equals(e.getNamespaceURI()))) {
+				enodes.add(find(e));
 			}
 		}
+
 		return new JNodeList(enodes);
 	}
 
