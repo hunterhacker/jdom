@@ -40,7 +40,8 @@ public class TranslateTests {
 	
 	private static final String[] skipclasses = new String[] {".*StAX.*"};
 	
-	private static final String[] skipmethods = new String[] {".*HighSurrogateAttPair.*"};
+	private static final String[] skipmethods = new String[] {
+		".*HighSurrogateAttPair.*", "bulkIntern"};
 
 	private static final Pattern pat = Pattern.compile("^(.+/(\\w+))\\.class$");
 
@@ -204,8 +205,11 @@ public class JDOMMainTest extends AndroidTestCase {
 			sb.append("  private final ").append(sname).append(" test = new ").append(sname).append("();\n");
 			
 			sb.append("\n  @Override\n");
-			sb.append("  public void setUp() {\n");
+			sb.append("  public void setUp() throws Exception {\n");
+			sb.append("    super.setUp();\n");
 			sb.append("    // tests run when class starts...\n");
+			sb.append("    System.setProperty(\"javax.xml.validation.SchemaFactory:http://www.w3.org/2001/XMLSchema\",\n");
+			sb.append("        \"org.apache.xerces.jaxp.validation.XMLSchemaFactory\");\n");
 			sb.append("    org.jdom2.test.util.AndroidFetch.check(this.getContext());\n");
 			for (Method m : methods) {
 				if (m.getAnnotation(BeforeClass.class) != null) {
@@ -215,7 +219,8 @@ public class JDOMMainTest extends AndroidTestCase {
 			sb.append("  }\n");
 			
 			sb.append("\n  @Override\n");
-			sb.append("  public void tearDown() {\n");
+			sb.append("  public void tearDown() throws Exception {\n");
+			sb.append("    super.tearDown();\n");
 			sb.append("    // tests run when class completes...\n");
 			for (Method m : methods) {
 				if (m.getAnnotation(AfterClass.class) != null) {
