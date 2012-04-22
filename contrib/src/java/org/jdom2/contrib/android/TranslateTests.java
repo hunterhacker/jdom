@@ -1,10 +1,8 @@
 package org.jdom2.contrib.android;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -68,20 +66,12 @@ public class TranslateTests {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		if (args.length != 3) {
-			throw new IllegalArgumentException("Usage: Jar AssetOutDir SrcOutDir");
+		if (args.length != 2) {
+			throw new IllegalArgumentException("Usage: Jar SrcOutDir");
 		}
 		final String jarname = args[0];
 		
-		File assoutdir = new File(args[1]);
-		if (!assoutdir.exists()) {
-			assoutdir.mkdirs();
-		}
-		if (!assoutdir.isDirectory()) {
-			throw new IllegalArgumentException("Could not create/use AssetOutput directory: " + assoutdir);
-		}
-		
-		final File srcoutdir = new File(args[2]);
+		final File srcoutdir = new File(args[1]);
 		if (!srcoutdir.exists()) {
 			srcoutdir.mkdirs();
 		}
@@ -92,7 +82,6 @@ public class TranslateTests {
 		final ArrayList<String> classes = new ArrayList<String>();
 		
 		final ZipFile zfile = new ZipFile(jarname);
-		StringBuilder assetnames = new StringBuilder();
 		try {
 			final Enumeration<? extends ZipEntry> e = zfile.entries();
 			while (e.hasMoreElements()) {
@@ -107,28 +96,8 @@ public class TranslateTests {
 						TranslateTests tt = new TranslateTests(srcoutdir, classname);
 						classes.add(tt.translate());
 					}
-				} else if (zename.indexOf("META-INF") < 0){
-					// copy resources in to output folder with full path.
-					System.out.println("Asset: " + zename);
-					assetnames.append(zename).append("\n");
-					final InputStream zis = zfile.getInputStream(ze);
-					final File outfile = new File(assoutdir, zename);
-					outfile.getParentFile().mkdirs();
-					final FileOutputStream fos = new FileOutputStream(outfile);
-					final byte[] buffer = new byte[4096];
-					int len = 0;
-					while ((len = zis.read(buffer)) >= 0) {
-						fos.write(buffer, 0, len);
-					}
-					fos.flush();
-					fos.close();
-					zis.close();
 				}
 			}
-			final FileWriter fw = new FileWriter(new File(assoutdir, "assetlist.txt"));
-			fw.write(assetnames.toString());
-			fw.flush();
-			fw.close();
 		} finally {
 			zfile.close();
 		}
@@ -210,7 +179,6 @@ public class JDOMMainTest extends AndroidTestCase {
 			sb.append("    // tests run when class starts...\n");
 			sb.append("    System.setProperty(\"javax.xml.validation.SchemaFactory:http://www.w3.org/2001/XMLSchema\",\n");
 			sb.append("        \"org.apache.xerces.jaxp.validation.XMLSchemaFactory\");\n");
-			sb.append("    org.jdom2.test.util.AndroidFetch.check(this.getContext());\n");
 			for (Method m : methods) {
 				if (m.getAnnotation(BeforeClass.class) != null) {
 					sb.append("    test.").append(m.getName()).append("();\n");
@@ -235,7 +203,6 @@ public class JDOMMainTest extends AndroidTestCase {
 					final String tname = getTestName(m);
 					sb.append("\n");
 					sb.append("  public void ").append(tname).append("()").append(buildThrows(excepts, m)).append("{\n");
-					sb.append("    org.jdom2.test.util.AndroidFetch.check(this.getContext());\n");
 					for (Method pre : pretest) {
 						sb.append("    // pre test\n");
 						sb.append("    test.").append(pre.getName()).append("();\n");

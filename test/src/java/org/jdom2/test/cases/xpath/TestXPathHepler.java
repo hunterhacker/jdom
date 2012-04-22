@@ -123,7 +123,7 @@ public class TestXPathHepler {
 	public void testComplex() throws JDOMException, IOException {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setExpandEntities(false);
-		Document doc = sb.build(FidoFetch.getFido().getURL("complex.xml"));
+		Document doc = sb.build(FidoFetch.getFido().getURL("/complex.xml"));
 		final Iterator<Content> des = doc.getDescendants();
 		final ArrayList<NamespaceAware> allc = new ArrayList<NamespaceAware>();
 		while (des.hasNext()) {

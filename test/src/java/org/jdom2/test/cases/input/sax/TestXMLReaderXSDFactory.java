@@ -27,17 +27,17 @@ public class TestXMLReaderXSDFactory {
 	//"./test/resources/xscomplex/multi_one.xsd",
 	
 	private final URL filemain() {
-		return FidoFetch.getFido().getURL("xsdcomplex/multi_main.xsd");
+		return FidoFetch.getFido().getURL("/xsdcomplex/multi_main.xsd");
 	}
 	private final URL fileone() {
-		return FidoFetch.getFido().getURL("xsdcomplex/multi_one.xsd");
+		return FidoFetch.getFido().getURL("/xsdcomplex/multi_one.xsd");
 	}
 	
 	private final URL filetwo() {
-		return FidoFetch.getFido().getURL("xsdcomplex/multi_two.xsd");
+		return FidoFetch.getFido().getURL("/xsdcomplex/multi_two.xsd");
 	}
 	private final URL source() {
-		return FidoFetch.getFido().getURL("xsdcomplex/multi.xml");
+		return FidoFetch.getFido().getURL("/xsdcomplex/multi.xml");
 	}
 
 	private void checkXML(XMLReaderJDOMFactory fac) {

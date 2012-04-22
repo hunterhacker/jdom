@@ -43,32 +43,32 @@ public class TestDOMBuilder {
 	
 	@Test
 	public void testSimpleDocument() {
-		checkDOM("DOMBuilder/simple.xml", false);
+		checkDOM("/DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkDOM("DOMBuilder/attributes.xml", false);
+		checkDOM("/DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkDOM("DOMBuilder/namespaces.xml", false);
+		checkDOM("/DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkDOM("DOMBuilder/doctype.xml", false);
+		checkDOM("/DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkDOM("DOMBuilder/complex.xml", false);
+		checkDOM("/DOMBuilder/complex.xml", false);
 	}
 	
 	@Test
 	public void testXSDDocument() {
-		checkDOM("xsdcomplex/input.xml", true);
+		checkDOM("/xsdcomplex/input.xml", true);
 	}
 	
 	private void checkDOM(String resname, boolean xsdvalidate) {

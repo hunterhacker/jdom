@@ -354,21 +354,12 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<java classname="org.jdom2.contrib.android.TranslateTests"
 		    classpathref="at.class.path" >
 			<arg value="${package}/${jarbase}-junit.jar" />
-		    <arg value="${android}/${android.project}/assets" />
 		    <arg value="${android}/${android.project}Test/src" />
 		</java>
-		
-		<mkdir dir="${android}/${android.project}Test/src/org/jdom2/test/util" />
-		<copy todir="${android}/${android.project}Test/src/org/jdom2/test/util"
-		    file="test/android/AndroidFetch.java" />
-				
-	    <!-- Create a Jar file with just the JUnit4 tests, not the resources. -->
-		<jar jarfile="${android.libs}/${jarbase}-android-junit4.jar" >
-			<fileset dir="${junit.build}" includes="**/*.class" />
-		</jar>
-		
+						
 		<copy todir="${android.libs}">
-		    <fileset dir="${package}" includes="${jarbase}.jar, ${jarbase}-contrib.jar" />
+		    <fileset dir="${package}"
+		        includes="${jarbase}.jar, ${jarbase}-contrib.jar ${jarbase}-junit.jar" />
 		</copy>
 		
 		<copy todir="${android.libs}" file="${jaxen.jar}"/>

@@ -18,7 +18,7 @@ import org.junit.Test;
 public class TestIssue008ExpandEntity {
 	
 	private final void roundTrip(boolean expand, boolean validating, String encoding, String expect) {
-		String docloc = this.getClass().getPackage().getName().replaceAll("\\.", "/") + "/TestIssue008.xml";
+		String docloc = "/" + this.getClass().getPackage().getName().replaceAll("\\.", "/") + "/TestIssue008.xml";
 		URL docurl = FidoFetch.getFido().getURL(docloc);
 		
 		if (docurl == null) {

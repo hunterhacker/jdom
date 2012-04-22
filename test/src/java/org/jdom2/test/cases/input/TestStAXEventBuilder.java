@@ -48,74 +48,74 @@ public class TestStAXEventBuilder {
 	
 	@Test
 	public void testSimpleDocumentExpand() {
-		checkStAX("DOMBuilder/simple.xml", true);
+		checkStAX("/DOMBuilder/simple.xml", true);
 	}
 	
 	@Test
 	public void testAttributesDocumentExpand() {
-		checkStAX("DOMBuilder/attributes.xml", true);
+		checkStAX("/DOMBuilder/attributes.xml", true);
 	}
 	
 	@Test
 	public void testNamespaceDocumentExpand() {
-		checkStAX("DOMBuilder/namespaces.xml", true);
+		checkStAX("/DOMBuilder/namespaces.xml", true);
 	}
 	
 	@Test
 	@Ignore
 	// TODO
 	public void testDocTypeDocumentExpand() {
-		checkStAX("DOMBuilder/doctype.xml", true);
+		checkStAX("/DOMBuilder/doctype.xml", true);
 	}
 	
 	@Test
 	public void testDocTypeDocumentSimpleExpand() {
-		checkStAX("DOMBuilder/doctypesimple.xml", true);
+		checkStAX("/DOMBuilder/doctypesimple.xml", true);
 	}
 	
 	@Test
 	public void testComplexDocumentExpand() {
-		checkStAX("DOMBuilder/complex.xml", true);
+		checkStAX("/DOMBuilder/complex.xml", true);
 	}
 	
 	@Test
 	public void testXSDDocumentExpand() {
-		checkStAX("xsdcomplex/input.xml", true);
+		checkStAX("/xsdcomplex/input.xml", true);
 	}
 	
 	@Test
 	public void testSimpleDocument() {
-		checkStAX("DOMBuilder/simple.xml", false);
+		checkStAX("/DOMBuilder/simple.xml", false);
 	}
 	
 	@Test
 	public void testAttributesDocument() {
-		checkStAX("DOMBuilder/attributes.xml", false);
+		checkStAX("/DOMBuilder/attributes.xml", false);
 	}
 	
 	@Test
 	public void testNamespaceDocument() {
-		checkStAX("DOMBuilder/namespaces.xml", false);
+		checkStAX("/DOMBuilder/namespaces.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeDocument() {
-		checkStAX("DOMBuilder/doctype.xml", false);
+		checkStAX("/DOMBuilder/doctype.xml", false);
 	}
 	
 	@Test
 	public void testDocTypeSimpleDocument() {
-		checkStAX("DOMBuilder/doctypesimple.xml", false);
+		checkStAX("/DOMBuilder/doctypesimple.xml", false);
 	}
 	
 	@Test
 	public void testComplexDocument() {
-		checkStAX("DOMBuilder/complex.xml", false);
+		checkStAX("/DOMBuilder/complex.xml", false);
 	}
 	
 	@Test
 	public void testXSDDocument() {
-		checkStAX("xsdcomplex/input.xml", false);
+		checkStAX("/xsdcomplex/input.xml", false);
 	}
 	
 	private void checkStAX(String resourcename, boolean expand) {

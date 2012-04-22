@@ -52,7 +52,7 @@ public class TestLocatedJDOMFactory extends AbstractTestJDOMFactory {
 		SAXBuilder sb = new SAXBuilder();
 		sb.setJDOMFactory(new LocatedJDOMFactory());
 		sb.setExpandEntities(false);
-		Document doc = sb.build(FidoFetch.getFido().getURL("complex.xml"));
+		Document doc = sb.build(FidoFetch.getFido().getURL("/complex.xml"));
 		// it appears the location of the DocType is the start of the internal subset.
 		checkLocation(doc.getDocType(), 2, 16);
 		final Element root = doc.getRootElement();
