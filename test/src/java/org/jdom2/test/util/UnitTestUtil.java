@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jdom2.Attribute;
 import org.jdom2.Comment;
@@ -33,6 +34,12 @@ import org.jdom2.ProcessingInstruction;
 
 @SuppressWarnings("javadoc")
 public class UnitTestUtil {
+	
+	private static final AtomicBoolean isandroid = new AtomicBoolean(false);
+	
+	public static final void setAndroid() {
+		isandroid.set(true);
+	}
 	
 	public static final void testNamespaceIntro(NamespaceAware content, Namespace...expect) {
 		List<Namespace> intro = content.getNamespacesIntroduced();
@@ -305,8 +312,18 @@ public class UnitTestUtil {
     	if (!expect.isInstance(got)) {
     		AssertionError ae = new AssertionError(
     				"We expected an exception of type " + expect.getName() + 
-    				" but got a " + got.getClass().getName() + " instead");
-    		ae.initCause(got);
+    				" but got a " + got.getClass().getName() + 
+    				" instead with message " + got.getMessage());
+    		if (isandroid.get()) {
+    			System.out.println("ANDROID: About to throw AssertionError " +
+    					"but we cannot initialize the cause... " +
+    					"Here follows both the AssertionError and its cause");
+    			ae.printStackTrace();
+    			System.out.println("And the cause...");
+    			got.printStackTrace();
+    		} else {
+    			ae.initCause(got);
+    		}
     		throw ae;
     	}
     }
@@ -314,12 +331,21 @@ public class UnitTestUtil {
     /**
      * Call this if you have an exception you want to fail for!
      * @param message
-     * @param t
+     * @param got this exception
      */
-	public static void failException(String message, Throwable t) {
-		AssertionError tothrow = new AssertionError(message);
-		tothrow.initCause(t);
-		throw tothrow;
+	public static void failException(String message, Throwable got) {
+		AssertionError ae = new AssertionError(message);
+		if (isandroid.get()) {
+			System.out.println("ANDROID: About to throw AssertionError " +
+					"but we cannot initialize the cause... " +
+					"Here follows both the AssertionError and its cause");
+			ae.printStackTrace();
+			System.out.println("And the cause...");
+			got.printStackTrace();
+		} else {
+			ae.initCause(got);
+		}
+		throw ae;
 	}
 	
 	public static final void compare(final NamespaceAware ap, final NamespaceAware bp) {

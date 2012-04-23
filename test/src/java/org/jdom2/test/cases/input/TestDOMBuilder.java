@@ -4,10 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
+
+import org.junit.Test;
 
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
@@ -20,7 +21,6 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.FidoFetch;
 import org.jdom2.test.util.UnitTestUtil;
-import org.junit.Test;
 
 @SuppressWarnings("javadoc")
 public class TestDOMBuilder {
@@ -90,8 +90,8 @@ public class TestDOMBuilder {
 			assertEquals(toString(saxroot), toString(domroot));
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Could not parse file '" + resname + "': " + e.getMessage());
+			UnitTestUtil.failException(
+					"Could not parse file '" + resname + "': " + e.getMessage(), e);
 		}
 	}
 	

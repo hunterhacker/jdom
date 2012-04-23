@@ -39,7 +39,7 @@ public class TranslateTests {
 	private static final String[] skipclasses = new String[] {".*StAX.*"};
 	
 	private static final String[] skipmethods = new String[] {
-		".*HighSurrogateAttPair.*", "bulkIntern"};
+		".*HighSurrogateAttPair.*", "bulkIntern", "testBuildString"};
 
 	private static final Pattern pat = Pattern.compile("^(.+/(\\w+))\\.class$");
 
@@ -177,6 +177,7 @@ public class JDOMMainTest extends AndroidTestCase {
 			sb.append("  public void setUp() throws Exception {\n");
 			sb.append("    super.setUp();\n");
 			sb.append("    // tests run when class starts...\n");
+			sb.append("    org.jdom2.test.util.UnitTestUtil.setAndroid();\n");
 			sb.append("    System.setProperty(\"javax.xml.validation.SchemaFactory:http://www.w3.org/2001/XMLSchema\",\n");
 			sb.append("        \"org.apache.xerces.jaxp.validation.XMLSchemaFactory\");\n");
 			for (Method m : methods) {

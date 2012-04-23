@@ -55,18 +55,12 @@
 package org.jdom2.input.sax;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import org.xml.sax.SAXException;
 
 import org.jdom2.JDOMException;
 
@@ -88,158 +82,16 @@ import org.jdom2.JDOMException;
  * @see org.jdom2.input.sax
  * @author Rolf Lear
  */
-public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
+public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
+	
+	private static final SchemaFactoryProvider xsdschemas = new SchemaFactoryProvider() {
+		@Override
+		public SchemaFactory getSchemaFactory() {
+			return SchemaFactory.newInstance(
+					XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		}
+	};
 
-	/**
-	 * Use a Thread-Local system to manage SchemaFactory. SchemaFactory is not
-	 * thread-safe, so we need some mechanism to isolate it, and thread-local is
-	 * a logical way because it only creates an instance when needed in each
-	 * thread, and they die when the thread dies. Does not need any
-	 * synchronisation either.
-	 */
-	private static final ThreadLocal<SchemaFactory> schemafactl =
-			new ThreadLocal<SchemaFactory>() {
-				@Override
-				protected SchemaFactory initialValue() {
-					return SchemaFactory.newInstance(
-							XMLConstants.W3C_XML_SCHEMA_NS_URI);
-				}
-			};
-
-	/**
-	 * Compile an array of String URLs in to Sources which are then compiled in
-	 * to a single Schema
-	 * 
-	 * @param systemID
-	 *        The source URLs to compile
-	 * @return the resulting Schema
-	 * @throws JDOMException
-	 *         if there is a problem with the Sources
-	 */
-	private static final Schema getSchemaFromString(String... systemID)
-			throws JDOMException {
-		if (systemID == null) {
-			throw new NullPointerException("Cannot specify a null input array");
-		}
-		if (systemID.length == 0) {
-			throw new IllegalArgumentException("You need at least one " +
-					"XSD source for an XML Schema validator");
-		}
-		Source[] urls = new Source[systemID.length];
-		for (int i = 0; i < systemID.length; i++) {
-			if (systemID[i] == null) {
-				throw new NullPointerException("Cannot specify a null SystemID");
-			}
-			urls[i] = new StreamSource(systemID[i]);
-		}
-		return getSchemaFromSource(urls);
-	}
-
-	/**
-	 * Compile an array of Files in to URLs which are then compiled in to a
-	 * single Schema
-	 * 
-	 * @param systemID
-	 *        The source Files to compile
-	 * @return the resulting Schema
-	 * @throws JDOMException
-	 *         if there is a problem with the Sources
-	 */
-	private static final Schema getSchemaFromFile(File... systemID)
-			throws JDOMException {
-		if (systemID == null) {
-			throw new NullPointerException("Cannot specify a null input array");
-		}
-		if (systemID.length == 0) {
-			throw new IllegalArgumentException("You need at least one " +
-					"XSD source for an XML Schema validator");
-		}
-		Source[] sources = new Source[systemID.length];
-		for (int i = 0; i < systemID.length; i++) {
-			if (systemID[i] == null) {
-				throw new NullPointerException("Cannot specify a null SystemID");
-			}
-			sources[i] = new StreamSource(systemID[i]);
-		}
-		return getSchemaFromSource(sources);
-	}
-
-	/**
-	 * Compile an array of URLs in to Sources which are then compiled in to a
-	 * single Schema
-	 * 
-	 * @param systemID
-	 *        The source URLs to compile
-	 * @return the resulting Schema
-	 * @throws JDOMException
-	 *         if there is a problem with the Sources
-	 */
-	private static final Schema getSchemaFromURL(URL... systemID)
-			throws JDOMException {
-		if (systemID == null) {
-			throw new NullPointerException("Cannot specify a null input array");
-		}
-		if (systemID.length == 0) {
-			throw new IllegalArgumentException("You need at least one " +
-					"XSD source for an XML Schema validator");
-		}
-		InputStream[] streams = new InputStream[systemID.length];
-		try {
-			Source[] sources = new Source[systemID.length];
-			for (int i = 0; i < systemID.length; i++) {
-				if (systemID[i] == null) {
-					throw new NullPointerException("Cannot specify a null SystemID");
-				}
-				InputStream is = null;
-				try {
-					is = systemID[i].openStream();
-				} catch (IOException e) {
-					throw new JDOMException("Unable to read Schema URL " +
-							systemID[i].toString(), e);
-				}
-				streams[i] = is;
-				sources[i] = new StreamSource(is, systemID[i].toString());
-			}
-			return getSchemaFromSource(sources);
-		} finally {
-			for (InputStream is : streams) {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException ioe) {
-						// swallow it.
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Compile an array of Sources in to a single Schema
-	 * 
-	 * @param sources
-	 *        The sources to compile
-	 * @return the resulting Schema
-	 * @throws JDOMException
-	 *         if there is a problem with the Sources
-	 */
-	private static final Schema getSchemaFromSource(Source... sources)
-			throws JDOMException {
-		if (sources == null) {
-			throw new NullPointerException("Cannot specify a null input array");
-		}
-		if (sources.length == 0) {
-			throw new IllegalArgumentException("You need at least one " +
-					"XSD Source for an XML Schema validator");
-		}
-		try {
-			return schemafactl.get().newSchema(sources);
-		} catch (SAXException e) {
-			String msg = Arrays.toString(sources);
-			throw new JDOMException("Unable to create a Schema for Sources " +
-					msg, e);
-		}
-	}
 
 	/**
 	 * Create an XML Schema validating XMLReader factory using one or more XSD
@@ -254,7 +106,7 @@ public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
 	 */
 	public XMLReaderXSDFactory(String... systemid)
 			throws JDOMException {
-		super(getSchemaFromString(systemid));
+		super(SAXParserFactory.newInstance(), xsdschemas, systemid);
 	}
 
 	/**
@@ -269,7 +121,7 @@ public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
 	 *         wrap a SAXException that contains the actual fault.
 	 */
 	public XMLReaderXSDFactory(URL... systemid) throws JDOMException {
-		super(getSchemaFromURL(systemid));
+		super(SAXParserFactory.newInstance(), xsdschemas, systemid);
 	}
 
 	/**
@@ -284,7 +136,7 @@ public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
 	 *         wrap a SAXException that contains the actual fault.
 	 */
 	public XMLReaderXSDFactory(File... systemid) throws JDOMException {
-		super(getSchemaFromFile(systemid));
+		super(SAXParserFactory.newInstance(), xsdschemas, systemid);
 	}
 
 	/**
@@ -299,7 +151,7 @@ public class XMLReaderXSDFactory extends XMLReaderSchemaFactory {
 	 *         wrap a SAXException that contains the actual fault.
 	 */
 	public XMLReaderXSDFactory(Source... sources) throws JDOMException {
-		super(getSchemaFromSource(sources));
+		super(SAXParserFactory.newInstance(), xsdschemas, sources);
 	}
 
 }

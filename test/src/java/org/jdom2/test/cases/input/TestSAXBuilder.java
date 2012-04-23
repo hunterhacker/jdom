@@ -81,6 +81,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -114,6 +115,7 @@ import org.jdom2.input.sax.XMLReaders;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.test.util.FidoFetch;
+import org.jdom2.test.util.UnitTestUtil;
 
 
 @SuppressWarnings("javadoc")
@@ -848,15 +850,26 @@ public final class TestSAXBuilder {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("Failed to write Document " + doc + " to CharArrayWriter.");
+			UnitTestUtil.failException("Failed to write Document " + doc + " to CharArrayWriter.", e);
 		}
 		if (baseuri == null) {
 			assertNull(doc.getBaseURI());
 		} else {
 			if (!baseuri.equals(doc.getBaseURI())) {
-				String moduri = baseuri.replaceFirst(":/", ":///");
-				if (!moduri.equals(doc.getBaseURI())) {
-					fail("Neither " + baseuri + " nor " + moduri + " matches base URI " + doc.getBaseURI());
+				try {
+					final String moduri = baseuri.replaceFirst(":/", ":///");
+					if (!moduri.equals(doc.getBaseURI())) {
+						final String fileuri = new File(baseuri).toURI().toURL().toExternalForm();
+						if (!fileuri.equals(doc.getBaseURI())) {
+							final String modfileuri = fileuri.replaceFirst(":/", ":///");
+							if (!modfileuri.equals(doc.getBaseURI())) {
+								fail("Base URI " + doc.getBaseURI() + " is not one of " +
+										Arrays.toString(new String[]{baseuri, moduri, fileuri, modfileuri}));
+							}
+						}
+					}
+				} catch (MalformedURLException mue) {
+					UnitTestUtil.failException("Could not create File URL", mue);
 				}
 			}
 		}
@@ -965,21 +978,20 @@ public final class TestSAXBuilder {
 		
 		try {
 			SAXBuilder sb = new SAXBuilder();
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+			assertXMLMatches("baseID",
 					sb.build(new ByteArrayInputStream(bytes), "baseID"));
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+			assertXMLMatches("baseID",
 					sb.build(new ByteArrayInputStream(bytes), "baseID"));
 			sb.setReuseParser(false);
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+			assertXMLMatches("baseID",
 					sb.build(new ByteArrayInputStream(bytes), "baseID"));
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+			assertXMLMatches("baseID",
 					sb.build(new ByteArrayInputStream(bytes), "baseID"));
-			
-			assertXMLMatches(new File("baseID").toURI().toURL().toExternalForm(),
+			assertXMLMatches("baseID",
 					sb.buildEngine().build(new ByteArrayInputStream(bytes), "baseID"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Failed to parse document: " + e.getMessage());
+			UnitTestUtil.failException("Failed to parse document: " + e.getMessage(), e);
 		}
 	}
 
@@ -997,7 +1009,7 @@ public final class TestSAXBuilder {
 			assertXMLMatches(null, sb.buildEngine().build(new CharArrayReader(chars)));
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Failed to parse document: " + e.getMessage());
+			UnitTestUtil.failException("Failed to parse document: " + e.getMessage(), e);
 		}
 	}
 
@@ -1006,17 +1018,17 @@ public final class TestSAXBuilder {
 		char[] chars = testxml.toCharArray();
 		try {
 			SAXBuilder sb = new SAXBuilder();
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+			assertXMLMatches("baseID",
 					sb.build(new CharArrayReader(chars), "baseID"));
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+			assertXMLMatches("baseID",
 					sb.build(new CharArrayReader(chars), "baseID"));
 			sb.setReuseParser(false);
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+			assertXMLMatches("baseID",
 					sb.build(new CharArrayReader(chars), "baseID"));
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+			assertXMLMatches("baseID",
 					sb.build(new CharArrayReader(chars), "baseID"));
 			
-			assertXMLMatches(new File("baseID").getCanonicalFile().toURI().toURL().toString(),
+			assertXMLMatches("baseID",
 					sb.buildEngine().build(new CharArrayReader(chars), "baseID"));
 		} catch (Exception e) {
 			e.printStackTrace();
