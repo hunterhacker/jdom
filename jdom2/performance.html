@@ -76,6 +76,19 @@
 	
 	<hr/>
 	<p/>
+	JDOM 2.0.1 - Fix for issue #72 means that the 'Dump' job is doing more work, and is thus slower than before.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>4.97ms</td><td>1.89ms</td><td>7.08ms</td><td>2.09ms</td><td>4.74ms</td><td>1.24ms</td><td>8.22ms</td><td>2.65ms</td><td>1.68ms</td><td>13.02ms</td><td>7.07ms</td><td>31.24ms</td><td>8.55ms</td><td>7.19ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.74ms</td><td>1.35ms</td><td>7.47ms</td><td>2.66ms</td><td>4.62ms</td><td>1.30ms</td><td>8.21ms</td><td>2.61ms</td><td>1.69ms</td><td>13.12ms</td><td>6.84ms</td><td>31.10ms</td><td>8.56ms</td><td>7.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.11ms</td><td>2.12ms</td><td>7.01ms</td><td>2.56ms</td><td>4.56ms</td><td>1.39ms</td><td>8.03ms</td><td>2.45ms</td><td>1.80ms</td><td>13.00ms</td><td>6.89ms</td><td>31.96ms</td><td>8.57ms</td><td>7.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.82ms</td><td>1.85ms</td><td>6.99ms</td><td>2.52ms</td><td>4.58ms</td><td>1.45ms</td><td>8.34ms</td><td>2.89ms</td><td>1.66ms</td><td>13.00ms</td><td>6.92ms</td><td>32.36ms</td><td>8.59ms</td><td>7.11ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.67ms</td><td>1.69ms</td><td>7.49ms</td><td>2.97ms</td><td>4.91ms</td><td>1.71ms</td><td>8.09ms</td><td>2.61ms</td><td>1.65ms</td><td>13.00ms</td><td>6.86ms</td><td>32.72ms</td><td>8.82ms</td><td>7.24ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
 	JDOM 2.0.0
 	<br />
 	<table border="1">
