@@ -1,6 +1,11 @@
 package org.jdom2.test.cases;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.Iterator;
 import java.util.List;
+
+import org.junit.Test;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -56,4 +61,63 @@ public class TestFilterListElement extends AbstractTestList<Element> {
 	}
 
 
+	/**
+	 * Issue #81 - multiple concurrent 'open' FilterLIsts do not re-sync on remove....
+	 */
+	@Test
+	public void testMultiLists() {
+		Element root = new Element("root");
+		root.addContent(new Element("A"));
+		root.addContent(new Element("B"));
+		root.addContent(new Element("C"));
+		root.addContent(new Element("A"));
+		root.addContent(new Element("B"));
+		root.addContent(new Element("C"));
+		root.addContent(new Element("A"));
+		root.addContent(new Element("B"));
+		root.addContent(new Element("C"));
+		root.addContent(new Element("A"));
+		root.addContent(new Element("B"));
+		root.addContent(new Element("C"));
+
+		List<Element> as = root.getChildren("A");
+		List<Element> bs = root.getChildren("B");
+		List<Element> cs = root.getChildren("C");
+		
+		for (Element f : as) {
+			assertTrue("A".equals(f.getName()));
+		}
+		for (Element f : bs) {
+			assertTrue("B".equals(f.getName()));
+		}
+		for (Element f : cs) {
+			assertTrue("C".equals(f.getName()));
+		}
+		
+		final int bsz = bs.size();
+		final int csz = cs.size();
+		
+		while (!as.isEmpty()) {
+			
+			final int sz = as.size() - 1;
+			Element e = as.get(0);
+			as.remove(e);
+			
+			assertTrue(sz == as.size());
+			assertTrue(bsz == bs.size());
+			assertTrue(csz == cs.size());
+			
+			for (Element f : as) {
+				assertTrue("A".equals(f.getName()));
+			}
+			for (Iterator<Element> bi = bs.iterator(); bi.hasNext();) {
+				assertTrue("B".equals(bi.next().getName()));
+			}
+			for (Element f : cs) {
+				assertTrue("C".equals(f.getName()));
+			}
+		}
+		
+		
+	}
 }

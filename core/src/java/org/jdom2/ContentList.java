@@ -101,7 +101,7 @@ final class ContentList extends AbstractList<Content>
 	 * modCount is used for concurrent modification, but dataModCount is used
 	 * for refreshing filters.
 	 */
-	private transient int dataModCount = Integer.MIN_VALUE;
+	private transient int dataModiCount = Integer.MIN_VALUE;
 
 	/** Document or Element this list belongs to */
 	private final Parent parent;
@@ -128,7 +128,6 @@ final class ContentList extends AbstractList<Content>
 		ensureCapacity(size + 1);
 		elementData[size++] = c;
 		incModCount();
-		dataModCount++;
 	}
 
 	/**
@@ -137,11 +136,14 @@ final class ContentList extends AbstractList<Content>
 	 * (set/get/inc)ModCount() is the only thing you should see in the remainder
 	 * of this code.
 	 * 
-	 * @param mod
-	 *        the value to set.
+	 * @param sizemod
+	 *        the value to set for the size-mod count.
+	 * @param datamod
+	 *        the value to set for the data-mod count.
 	 */
-	private final void setModCount(final int mod) {
-		sizeModCount = mod;
+	private final void setModCount(final int sizemod, final int datamod) {
+		sizeModCount = sizemod;
+		dataModiCount = datamod;
 	}
 
 	/**
@@ -163,7 +165,22 @@ final class ContentList extends AbstractList<Content>
 	 * of this code.
 	 */
 	private final void incModCount() {
+		// indicate there's a change to data
+		dataModiCount++;
+		// indicate there's a change to the size
 		sizeModCount++;
+	}
+	
+	private final void incDataModOnly() {
+		dataModiCount++;
+	}
+
+	/**
+	 * Get the modcount of data changes.
+	 * @return the current data mode count.
+	 */
+	private final int getDataModCount() {
+		return dataModiCount;
 	}
 
 	private final void checkIndex(final int index, final boolean excludes) {
@@ -240,7 +257,6 @@ final class ContentList extends AbstractList<Content>
 		}
 		// Successful add's increment the AbstractList's modCount
 		incModCount();
-		dataModCount++;
 	}
 
 	/**
@@ -294,7 +310,7 @@ final class ContentList extends AbstractList<Content>
 		ensureCapacity(size() + addcnt);
 
 		final int tmpmodcount = getModCount();
-		final int tmpdmc = dataModCount;
+		final int tmpdmc = getDataModCount();
 		boolean ok = false;
 
 		int count = 0;
@@ -312,8 +328,7 @@ final class ContentList extends AbstractList<Content>
 					remove(index + count);
 				}
 				// restore the mod-counts.
-				setModCount(tmpmodcount);
-				dataModCount = tmpdmc;
+				setModCount(tmpmodcount, tmpdmc);
 			}
 		}
 
@@ -334,7 +349,6 @@ final class ContentList extends AbstractList<Content>
 			size = 0;
 		}
 		incModCount();
-		dataModCount++;
 	}
 
 	/**
@@ -354,6 +368,7 @@ final class ContentList extends AbstractList<Content>
 		final Content[] old = elementData;
 		final int oldSize = size;
 		final int oldModCount = getModCount();
+		final int oldDataModCount = getDataModCount();
 
 		// clear the current system
 		// we need to detach before we add so that we don't run in to a problem
@@ -380,7 +395,7 @@ final class ContentList extends AbstractList<Content>
 				while (size < oldSize) {
 					elementData[size++].setParent(parent);
 				}
-				setModCount(oldModCount);
+				setModCount(oldModCount, oldDataModCount);
 			}
 		}
 
@@ -523,7 +538,7 @@ final class ContentList extends AbstractList<Content>
 		elementData[index] = child;
 		// for set method we increment dataModCount, but not modCount
 		// set does not change the structure of the List (size())
-		dataModCount++;
+		incDataModOnly();
 		return old;
 	}
 
@@ -935,10 +950,10 @@ final class ContentList extends AbstractList<Content>
 		 *         or the backing data size if there is no match for the index.
 		 */
 		private final int resync(final int index) {
-			if (xdata != dataModCount) {
+			if (xdata != getDataModCount()) {
 				// The underlying list was modified somehow...
 				// we need to invalidate our research...
-				xdata = dataModCount;
+				xdata = getDataModCount();
 				backingsize = 0;
 				if (size >= backingpos.length) {
 					backingpos = new int[size + 1];
@@ -1001,7 +1016,7 @@ final class ContentList extends AbstractList<Content>
 				}
 				backingpos[index] = adj;
 				backingsize = index + 1;
-				xdata = dataModCount;
+				xdata = getDataModCount();
 
 			} else {
 				throw new IllegalAddException("Filter won't allow the " +
@@ -1034,7 +1049,7 @@ final class ContentList extends AbstractList<Content>
 			ContentList.this.ensureCapacity(ContentList.this.size() + addcnt);
 
 			final int tmpmodcount = getModCount();
-			final int tmpdmc = dataModCount;
+			final int tmpdmc = getDataModCount();
 			boolean ok = false;
 
 			int count = 0;
@@ -1057,7 +1072,7 @@ final class ContentList extends AbstractList<Content>
 						}
 						backingpos[index + count] = adj + count;
 						backingsize = index + count + 1;
-						xdata = ContentList.this.dataModCount;
+						xdata = getDataModCount();
 
 						count++;
 					} else {
@@ -1075,8 +1090,7 @@ final class ContentList extends AbstractList<Content>
 						ContentList.this.remove(adj + count);
 					}
 					// restore the mod-counts.
-					setModCount(tmpmodcount);
-					dataModCount = tmpdmc;
+					setModCount(tmpmodcount, tmpdmc);
 					// reset the cache... will need to redo some work on another
 					// call maybe....
 					backingsize = index;
@@ -1140,7 +1154,7 @@ final class ContentList extends AbstractList<Content>
 			final Content oldc = ContentList.this.remove(adj);
 			// optimise the backing cache.
 			backingsize = index;
-			xdata = dataModCount;
+			xdata = getDataModCount();
 			// use Filter to ensure the cast is right.
 			return filter.filter(oldc);
 		}
@@ -1168,7 +1182,7 @@ final class ContentList extends AbstractList<Content>
 			if (ins != null) {
 				final F oldc = filter.filter(ContentList.this.set(adj, ins));
 				// optimize the backing....
-				xdata = dataModCount;
+				xdata = getDataModCount();
 				return oldc;
 			}
 			throw new IllegalAddException("Filter won't allow index " +
