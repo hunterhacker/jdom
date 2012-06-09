@@ -125,6 +125,11 @@ public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
 				}
 				final Namespace oldns = xnamespaces.put(ns.getPrefix(), ns);
 				if (oldns != null && oldns != ns) {
+					if (oldns == Namespace.NO_NAMESPACE) {
+						throw new IllegalArgumentException(
+								"The default (no prefix) Namespace URI for XPath queries is always" +
+								" '' and it cannot be redefined to '" + ns.getURI() + "'.");
+					}
 					throw new IllegalArgumentException(
 							"A Namespace with the prefix '" + ns.getPrefix()
 									+ "' has already been declared.");

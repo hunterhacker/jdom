@@ -462,6 +462,43 @@ public abstract class AbstractTestXPathCompiled {
 	}
 	
 	@Test
+	public void testDoubleSupplyNS() {
+		// call the same thing twice.... this is not an error
+		Namespace nsa = Namespace.getNamespace("pfx", "one");
+		getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, nsa, Namespace.NO_NAMESPACE, nsa);
+	}
+	
+	@Test
+	public void testRedeclareNoPrefixMessageDifferentToPrefix() {
+		// redeclare a namespace, and the defalt namespace. The Default versions should have a
+		// different message
+		Namespace nsa = Namespace.getNamespace("pfx", "one");
+		Namespace nsb = Namespace.getNamespace("pfx", "two");
+		Namespace nsd = Namespace.getNamespace("", "three");
+		
+		String ma = null;
+		String mb = null;
+		
+		try {
+			// cannot redeclare "" namespace prefix.
+			getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, nsd);
+			fail("excpected IAE");
+		} catch (IllegalArgumentException iae) {
+			ma = iae.getMessage();
+		}
+		
+		try {
+			// cannot redeclare "pfx" namespace prefix.
+			getFactory().compile("/", Filters.element(), null, nsa, nsb);
+			fail("excpected IAE");
+		} catch (IllegalArgumentException iae) {
+			mb = iae.getMessage();
+		}
+		
+		assertFalse(ma.equals(mb));
+	}
+	
+	@Test
 	public void testDuplicateVariable() {
 		try {
 			Map<String,Object> vars = new HashMap<String, Object>();
