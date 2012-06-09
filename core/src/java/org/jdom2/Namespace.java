@@ -63,7 +63,10 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * An XML namespace representation, as well as a factory for creating XML
- * namespace objects.
+ * namespace objects. All methods on Namespace (including
+ * {@link #getNamespace(String)} and {@link #getNamespace(String, String)})
+ * are thread-safe.
+ * 
  * <p>
  * See {@link NamespaceAware} for additional notes on how Namespaces are
  * 'in-scope' in JDOM content, and how those in-scope Namespaces are accessed.
@@ -113,6 +116,7 @@ public final class Namespace implements Serializable {
 	/**
 	 * This will retrieve (if in existence) or create (if not) a 
 	 * <code>Namespace</code> for the supplied <i>prefix</i> and <i>uri</i>.
+	 * This method is thread-safe.
 	 *
 	 * @param prefix <code>String</code> prefix to map to 
 	 *               <code>Namespace</code>.
@@ -221,6 +225,7 @@ public final class Namespace implements Serializable {
 	 * This will retrieve (if in existence) or create (if not) a 
 	 * <code>Namespace</code> for the supplied URI, and make it usable 
 	 * as a default namespace, as no prefix is supplied.
+	 * This method is thread-safe.
 	 *
 	 * @param uri <code>String</code> URI of new <code>Namespace</code>.
 	 * @return <code>Namespace</code> - ready to use namespace.
