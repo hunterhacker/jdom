@@ -118,11 +118,11 @@ public class UnitTestUtil {
 	 * @param input
 	 * @return
 	 */
-    public static final <T extends Serializable> T deSerialize(T input) {
+    public static final <T extends Serializable> T deSerialize(final T input) {
     	if (input == null) {
     		return null;
     	}
-    	Class<?> tclass = input.getClass();
+    	final Class<?> tclass = input.getClass();
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             final ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
@@ -130,26 +130,26 @@ public class UnitTestUtil {
                 objectOutputStream.writeObject(input);
             }
             catch(final IOException ioException) {
-                failException("Unable to serialize object" + ioException, ioException);
+                failException("Unable to serialize object.", ioException);
             }
             finally {
                 try {
                     objectOutputStream.close();
                 }
                 catch(final IOException ioException) {
-                    fail("failed to close object stream while serializing object" + ioException);
+                    failException("failed to close object stream while serializing object", ioException);
                 }
             }
         }
         catch(final IOException ioException) {
-            fail("unable to serialize object" + ioException);
+            failException("unable to serialize object", ioException);
         }
         finally {
             try {
                 outputStream.close();
             }
             catch(final IOException ioException) {
-                fail("failed to close output stream while serializing object" + ioException);
+                failException("failed to close output stream while serializing object", ioException);
             }
         }
 
@@ -168,27 +168,33 @@ public class UnitTestUtil {
                     objectInputStream.close();
                 }
                 catch(final IOException ioException) {
-                    fail("failed to close object stream while deserializing object" + ioException);
+                    failException("failed to close object stream while deserializing object", ioException);
                 }
             }
         }
         catch(final IOException ioException) {
-            fail("unable to deserialize object" + ioException);
+        	failException("unable to deserialize object.", ioException);
         }
         catch(final ClassNotFoundException classNotFoundException) {
-            fail("unable to deserialize object" + classNotFoundException);
+            failException("unable to deserialize object.", classNotFoundException);
         }
         finally {
             try{
                 inputStream.close();
             }
             catch(final IOException ioException) {
-                fail("failed to close output stream while serializing object" + ioException);
+                failException("failed to close output stream while serializing object.", ioException);
             }
         }
         
+        assertTrue("Deserialized (non-null) object is null!", o != null);
+        
         @SuppressWarnings("unchecked")
-		T t = (T)tclass.cast(o);
+		final T t = (T)tclass.cast(o);
+        
+        assertTrue("Deserialized instance should not be the same instance as the pre-serialization",
+        		t != input);
+        
         return t;
 
     }

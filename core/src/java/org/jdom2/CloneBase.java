@@ -61,6 +61,22 @@ package org.jdom2;
  * @author Rolf Lear
  */
 class CloneBase implements Cloneable {
+	
+	/**
+	 * Change the permission of the no-arg constructor from public to protcted.
+	 * <p>
+	 * Otherwise package-private class's constructor is not really public. Changing this to
+	 * 'protected' makes this constructor available to all subclasses regardless of the
+	 * subclass's package. This in turn makes it possible to make all th subclasses of this
+	 * CloneBase class serializable.
+	 * 
+	 */
+	protected CloneBase() {
+		// This constructor is needed to solve issue #88
+		// There needs to be a no-arg constructor accessible by all
+		// potential subclasses of CloneBase, and 'protected' is actually more
+		// accessible than 'public' since this is a package-private class.
+	}
 
 	/**
 	 * Return a deep clone of this instance. Even if this instance has a parent,
