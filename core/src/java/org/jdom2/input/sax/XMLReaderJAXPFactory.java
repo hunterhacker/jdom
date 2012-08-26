@@ -1,6 +1,6 @@
 /*--
 
- Copyright (C) 2011 Jason Hunter & Brett McLaughlin.
+ Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -54,52 +54,65 @@
 
 package org.jdom2.input.sax;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.validation.Schema;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import org.jdom2.JDOMException;
 
 /**
- * This {@link XMLReaderJDOMFactory} class returns XMLReaders configured to
- * validate against the supplied Schema instance. The Schema could be an XSD
- * schema or some other schema supported by SAX (e.g. RelaxNG). The SAX Parser
- * is obtained through the JAXP process.
+ * Create XMLReaders directly from the javax.xml.parsers.SAXParserFactory API using an explicit
+ * implementation of the parser instead of relying on the default JAXP search path.
  * <p>
- * If you want to validate an XML document against the XSD references embedded
- * in the XML itself (xsdSchemaLocation) then you do not want to use this class
- * but rather use an alternate means like
- * {@link XMLReaders#XSDVALIDATING}.
+ * If you want to rely on the default JAXP search mechanism you should instead use one of the simple
+ * members of the {@link XMLReaders} enumeration, or use one of the simple constructors on
+ * {@link XMLReaderXSDFactory} or {@link XMLReaderSchemaFactory}.
  * <p>
- * See the {@link org.jdom2.input.sax package documentation} for the best
- * alternatives.
+ * See the documentation for {@link SAXParserFactory} for the details on what the factoryClassName
+ * and classLoader should be.
  * 
  * @see org.jdom2.input.sax
+ * @since 2.0.3
  * @author Rolf Lear
  */
-public class XMLReaderSchemaFactory extends AbstractReaderSchemaFactory {
+public class XMLReaderJAXPFactory implements XMLReaderJDOMFactory {
 
+	private final SAXParserFactory instance;
+	private final boolean validating;
+	
 	/**
-	 * XMLReader instances from this class will be configured to validate using
-	 * the supplied Schema instance.
-	 * 
-	 * @param schema
-	 *        The Schema to use for validation.
+	 * Create an XMLReaderJAXPFactory using the specified factory name, classloader, and
+	 * dtdvalidating flag.
+	 * @param factoryClassName The name of the implementation to use for the SAXParserFactory.
+	 * @param classLoader The classloader to use for locating the SAXParserFactory (may be null).
+	 * @param dtdvalidate Whether this should create DTD Validating XMLReaders.
 	 */
-	public XMLReaderSchemaFactory(final Schema schema) {
-		super(SAXParserFactory.newInstance(), schema);
+	public XMLReaderJAXPFactory(final String factoryClassName, final ClassLoader classLoader,
+			boolean dtdvalidate) {
+		instance = SAXParserFactory.newInstance(factoryClassName, classLoader);
+		instance.setNamespaceAware(true);
+		instance.setValidating(dtdvalidate);
+		validating = dtdvalidate;
 	}
 
-	/**
-	 * XMLReader instances from this class will be configured to validate using
-	 * the supplied Schema instance, and use the specified JAXP SAXParserFactory.
-	 * 
-	 * @param factoryClassName The name of the SAXParserFactory class to use
-	 * @param classloader The classLoader to use for loading the SAXParserFactory. 
-	 * @param schema
-	 *        The Schema to use for validation.
-	 * @since 2.0.3
-	 */
-	public XMLReaderSchemaFactory(final String factoryClassName, final ClassLoader classloader,
-			final Schema schema) {
-		super(SAXParserFactory.newInstance(factoryClassName, classloader), schema);
+	@Override
+	public XMLReader createXMLReader() throws JDOMException {
+		try {
+			return instance.newSAXParser().getXMLReader();
+		} catch (SAXException e) {
+			throw new JDOMException(
+					"Unable to create a new XMLReader instance", e);
+		} catch (ParserConfigurationException e) {
+			throw new JDOMException(
+					"Unable to create a new XMLReader instance", e);
+		}
+	}
+
+	@Override
+	public boolean isValidating() {
+		return validating;
 	}
 
 }

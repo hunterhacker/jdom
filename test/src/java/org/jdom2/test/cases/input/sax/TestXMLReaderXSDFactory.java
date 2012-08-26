@@ -76,8 +76,28 @@ public class TestXMLReaderXSDFactory {
 	}
 
 	@Test
+	public void testXMLReaderXSDFactoryStringArrayJAXP() throws JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				"org.apache.xerces.jaxp.SAXParserFactoryImpl", (ClassLoader)null,
+				filemain().toExternalForm(),
+				fileone().toExternalForm(),
+				filetwo().toExternalForm());
+		checkXML(fac);
+	}
+
+	@Test
 	public void testXMLReaderXSDFactoryURLArray() throws JDOMException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				filemain(),
+				fileone(),
+				filetwo());
+		checkXML(fac);
+	}
+
+	@Test
+	public void testXMLReaderXSDFactoryURLArrayJAXP() throws JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				"org.apache.xerces.jaxp.SAXParserFactoryImpl", null,
 				filemain(),
 				fileone(),
 				filetwo());
@@ -94,8 +114,28 @@ public class TestXMLReaderXSDFactory {
 	}
 
 	@Test
+	public void testXMLReaderXSDFactoryFileArrayJAXP() throws JDOMException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				"org.apache.xerces.jaxp.SAXParserFactoryImpl", null,
+				filemain(),
+				fileone(),
+				filetwo());
+		checkXML(fac);
+	}
+
+	@Test
 	public void testXMLReaderXSDFactorySourceArray() throws JDOMException, IOException {
 		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				new StreamSource(filemain().openStream()),
+				new StreamSource(fileone().openStream()),
+				new StreamSource(filetwo().openStream()));
+		checkXML(fac);
+	}
+
+	@Test
+	public void testXMLReaderXSDFactorySourceArrayJJAXP() throws JDOMException, IOException {
+		XMLReaderJDOMFactory fac = new XMLReaderXSDFactory(
+				"org.apache.xerces.jaxp.SAXParserFactoryImpl", null,
 				new StreamSource(filemain().openStream()),
 				new StreamSource(fileone().openStream()),
 				new StreamSource(filetwo().openStream()));

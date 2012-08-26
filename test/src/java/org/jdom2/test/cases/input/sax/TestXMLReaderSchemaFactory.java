@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -25,6 +26,8 @@ import org.jdom2.test.util.UnitTestUtil;
 @SuppressWarnings("javadoc")
 public class TestXMLReaderSchemaFactory {
 
+	//org.apache.xerces.jaxp.SAXParserFactoryImpl
+	
 	@Test
 	public void testSchemaXMLReaderFactory() throws SAXException, JDOMException {
 		SchemaFactory schemafac = 
@@ -36,12 +39,33 @@ public class TestXMLReaderSchemaFactory {
 	}
 
 	@Test
+	public void testSchemaXMLReaderFactoryXerces() throws SAXException, JDOMException {
+		SchemaFactory schemafac = 
+				SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema = schemafac.newSchema(FidoFetch.getFido().getURL("/xsdcomplex/SAXTestComplexMain.xsd"));
+		XMLReaderSchemaFactory readerfac = new XMLReaderSchemaFactory(
+				"org.apache.xerces.jaxp.SAXParserFactoryImpl", null, schema);
+		assertTrue(readerfac.isValidating());
+		assertNotNull(readerfac.createXMLReader());
+	}
+
+	@Test
 	public void testSchemaXMLReaderFactoryNull() {
 		try {
 			new XMLReaderSchemaFactory(null);
 			UnitTestUtil.failNoException(NullPointerException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(NullPointerException.class, e);
+		}
+	}
+
+	@Test
+	public void testSchemaXMLReaderFactoryNullFactory() {
+		try {
+			new XMLReaderSchemaFactory(null, null, null);
+			UnitTestUtil.failNoException(FactoryConfigurationError.class);
+		} catch (Throwable e) {
+			UnitTestUtil.checkException(FactoryConfigurationError.class, e);
 		}
 	}
 

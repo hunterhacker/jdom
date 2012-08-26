@@ -66,7 +66,9 @@ import org.jdom2.JDOMException;
 
 /**
  * This XMLReaderJDOMFactory class returns XMLReaders configured to validate
- * against the supplied XML Schema (XSD) instance.
+ * against the supplied XML Schema (XSD) instance. The SAX Parser is obtained through
+ * the JAXP process.
+ * 
  * <p>
  * This class has var-arg constructors, accepting potentially many XSD sources.
  * It is just as simple though to have a single source:
@@ -111,6 +113,25 @@ public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
 
 	/**
 	 * Create an XML Schema validating XMLReader factory using one or more XSD
+	 * sources from SystemID references, and use the specified JAXP SAXParserFactory.
+	 * 
+	 * @param factoryClassName The name of the SAXParserFactory class to use
+	 * @param classloader The classLoader to use for loading the SAXParserFactory. 
+	 * @param systemid
+	 *        The var-arg array of at least one SystemID reference (URL) to
+	 *        locate the XSD's used to validate
+	 * @throws JDOMException
+	 *         If the Schemas could not be loaded from the SystemIDs This will
+	 *         wrap a SAXException that contains the actual fault.
+	 * @since 2.0.3
+	 */
+	public XMLReaderXSDFactory(final String factoryClassName, final ClassLoader classloader,
+			final String... systemid) throws JDOMException {
+		super(SAXParserFactory.newInstance(factoryClassName, classloader), xsdschemas, systemid);
+	}
+
+	/**
+	 * Create an XML Schema validating XMLReader factory using one or more XSD
 	 * sources from URL references.
 	 * 
 	 * @param systemid
@@ -122,6 +143,25 @@ public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
 	 */
 	public XMLReaderXSDFactory(URL... systemid) throws JDOMException {
 		super(SAXParserFactory.newInstance(), xsdschemas, systemid);
+	}
+
+	/**
+	 * Create an XML Schema validating XMLReader factory using one or more XSD
+	 * sources from URL references, and use the specified JAXP SAXParserFactory.
+	 * 
+	 * @param factoryClassName The name of the SAXParserFactory class to use
+	 * @param classloader The classLoader to use for loading the SAXParserFactory. 
+	 * @param systemid
+	 *        The var-arg array of at least one SystemID reference (URL) to
+	 *        locate the XSD's used to validate
+	 * @throws JDOMException
+	 *         If the Schemas could not be loaded from the SystemIDs This will
+	 *         wrap a SAXException that contains the actual fault.
+	 * @since 2.0.3
+	 */
+	public XMLReaderXSDFactory(final String factoryClassName, final ClassLoader classloader,
+			URL... systemid) throws JDOMException {
+		super(SAXParserFactory.newInstance(factoryClassName, classloader), xsdschemas, systemid);
 	}
 
 	/**
@@ -141,6 +181,25 @@ public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
 
 	/**
 	 * Create an XML Schema validating XMLReader factory using one or more XSD
+	 * sources from File references, and use the specified JAXP SAXParserFactory.
+	 * 
+	 * @param factoryClassName The name of the SAXParserFactory class to use
+	 * @param classloader The classLoader to use for loading the SAXParserFactory. 
+	 * @param systemid
+	 *        The var-arg array of at least one SystemID reference (File) to
+	 *        locate the XSD's used to validate
+	 * @throws JDOMException
+	 *         If the Schemas could not be loaded from the SystemIDs This will
+	 *         wrap a SAXException that contains the actual fault.
+	 * @since 2.0.3
+	 */
+	public XMLReaderXSDFactory(final String factoryClassName, final ClassLoader classloader,
+			File... systemid) throws JDOMException {
+		super(SAXParserFactory.newInstance(factoryClassName, classloader), xsdschemas, systemid);
+	}
+
+	/**
+	 * Create an XML Schema validating XMLReader factory using one or more XSD
 	 * sources from Transform Source references.
 	 * 
 	 * @param sources
@@ -152,6 +211,25 @@ public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
 	 */
 	public XMLReaderXSDFactory(Source... sources) throws JDOMException {
 		super(SAXParserFactory.newInstance(), xsdschemas, sources);
+	}
+
+	/**
+	 * Create an XML Schema validating XMLReader factory using one or more XSD
+	 * sources from Transform Source references, and use the specified JAXP SAXParserFactory.
+	 * 
+	 * @param factoryClassName The name of the SAXParserFactory class to use
+	 * @param classloader The classLoader to use for loading the SAXParserFactory. 
+	 * @param sources
+	 *        The var-arg array of at least one transform Source reference to
+	 *        locate the XSD's used to validate
+	 * @throws JDOMException
+	 *         If the Schemas could not be loaded from the Sources This will
+	 *         wrap a SAXException that contains the actual fault.
+	 * @since 2.0.3
+	 */
+	public XMLReaderXSDFactory(final String factoryClassName, final ClassLoader classloader,
+			Source... sources) throws JDOMException {
+		super(SAXParserFactory.newInstance(factoryClassName, classloader), xsdschemas, sources);
 	}
 
 }

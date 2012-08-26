@@ -87,7 +87,7 @@
  {@link org.jdom2.input.sax.XMLReaders#NONVALIDATING} which it
  mates with a Default {@link org.jdom2.input.sax.SAXHandler} factory, and the 
  {@link org.jdom2.DefaultJDOMFactory}. 
- <li>A number of other constructors that mostly are for backward-compatibility
+ <li>A number of other constructors that are mostly for backward-compatibility
  with JDOM 1.x. These other constructors affect what 
  {@link org.jdom2.input.sax.XMLReaderJDOMFactory} will be used but still use
  the default SAXHandler and JDOMFactory values.
@@ -101,10 +101,29 @@
 
 
  <h2>The XMLReaderJDOMFactory Pillar</h2>
-
- SAX parsers have been exposed as different things during the evolution of the
- SAX API, but in SAX2.0 they are <code>XMLReader</code> instances. Thus
- SAXBuilder needs an XMLReader to process the input. To get an XMLReader the
+ 
+ A brief history of XML Parsers in Java:<br>
+ XML Parsers have been available in Java from essentially 'the beginning'. There
+ have been a number different ways to access these parsers though:
+ <ol>
+ <li>Create the parser directly 'by name'.
+ <li>Use the SAX (and later the SAX 2.0) API to locate a parser.
+ <li>Use JAXP (versions 1, through 1.4) API to locate a parser.
+ </ol>
+ <p>
+ In addition to the different ways of creating an XML parser, there have also
+ been updates to the way the actual SAX parsing API is exposed to Java (the Java
+ interface). The SAX specification was revised with version 2.0. The 'new' SAX
+ version introduced the XMLReader concept, which replaces the XMLParser concept.
+ These two concepts aim to accomplish the same goal, but do it in different
+ ways.
+ <p>
+ JDOM 2.x requires an XMLReader (SAX 2.0) interface, thus your XML parser needs
+ to be compatible with SAX 2.0 (for the XMLReader), but should be accessible
+ through JAXP which is the more modern and flexible access system.
+ <p>
+ The purpose of the XMLReaderJDOMFactory Pillar is to give the SAXBuilder an
+ XMLReader instance (a SAX 2.0 parser). To get an XMLReader the
  SAXBuilder delegates to the {@link org.jdom2.input.sax.XMLReaderJDOMFactory}
  by calling {@link org.jdom2.input.sax.XMLReaderJDOMFactory#createXMLReader()} 
  <p>
@@ -132,11 +151,11 @@
  <li>It allows you to create differently-configured 'factories' that
  create XMLReaders in a pre-specified format (SAX2.0 has a single global
  factory that creates raw XMLReader instances that then need to be
- re-configured for you task). 
+ re-configured for your task). 
  </ul>
 
  <h3>JAXP Factories</h3>
- JDOM exposes five factories that use JAXP to source XMLReaders. These factories
+ JDOM exposes six factories that use JAXP to source XMLReaders. These factories
  cover almost all conditions under which you would want a SAX parser:
  <ol>
  <li>A simple non-validating SAX parser
@@ -144,6 +163,8 @@
  against.
  <li>A validating parser that uses the XML Schema (XSD) references embedded in
  the XML to validate against.
+ <li>A factory that uses a specific JAXP-based parser that can optionally
+ validate using the DTD DocType.
  <li>A validating parser that uses an external Schema (XML Schema, Relax NG,
  etc.) to validate the XML against.
  <li>A special case of the Schema-validating factory that specialises in XML
@@ -155,15 +176,22 @@
  are 'singletons' that can be used in a multi-threaded and concurrent way to
  provide XMLReaders that are configured correctly for the respective behaviour.
  <p>
+ To parse with a specific (rather than the default) JAXP-based XML Parser
+ you can use the {@link org.jdom2.input.sax.XMLReaderJAXPFactory}. This factory
+ can optionally be set to do DTD validation during the parse.  
+ <p>
  To validate using an arbitrary external Schema you can use the
  {@link org.jdom2.input.sax.XMLReaderSchemaFactory} to create an instance for
  the particular Schema you want to validate against. Because this requires an
- input Schema it cannot be constructed as a singleton like the others.
+ input Schema it cannot be constructed as a singleton like the others. There
+ are constructors that allow you to use a specific (rather than the default)
+ JAXP-compatible parser.
  <p>
  {@link org.jdom2.input.sax.XMLReaderXSDFactory} is a special case of
  XMLReaderSchemaFactory which internally uses an efficient mechanism to
  compile Schema instances from one or many input XSD documents which can come
- from multiple sources.
+ from multiple sources. There are constructors that allow you to use a specific
+ (rather than the default) JAXP-compatible parser.
 
  <h3>SAX 2.0 Factory</h3>
 
