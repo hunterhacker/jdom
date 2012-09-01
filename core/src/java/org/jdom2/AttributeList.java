@@ -125,12 +125,29 @@ final class AttributeList extends AbstractList<Attribute>
 	 */
 	@Override
 	public boolean add(final Attribute attribute) {
+		if (attribute.getParent() != null) {
+			throw new IllegalAddException(
+					"The attribute already has an existing parent \""
+							+ attribute.getParent().getQualifiedName() + "\"");
+		}
+
+		if (Verifier.checkNamespaceCollision(attribute, parent) != null) {
+			throw new IllegalAddException(parent, attribute,
+					Verifier.checkNamespaceCollision(attribute, parent));
+		}
+
+		// returns -1 if not exist
 		final int duplicate = indexOfDuplicate(attribute);
 		if (duplicate < 0) {
-			add(size(), attribute);
-		}
-		else {
-			set(duplicate, attribute);
+			attribute.setParent(parent);
+			ensureCapacity(size + 1);
+			attributeData[size++] = attribute;
+			modCount++;
+		} else {
+			final Attribute old = attributeData[duplicate];
+			old.setParent(null);
+			attributeData[duplicate] = attribute;
+			attribute.setParent(parent);
 		}
 		return true;
 	}
