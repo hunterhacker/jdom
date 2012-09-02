@@ -125,6 +125,7 @@ final public class SavingVerifier {
 	private static final Writer attributenamewriter = getWriter(attributefilename);
 	private static final Writer characterdatawriter = getWriter(chardatafilename);
 
+	@SuppressWarnings("javadoc")
 	public static final void closeWriters() throws IOException {
 		if (!open.getAndSet(false)) {
 			return;
