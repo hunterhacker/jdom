@@ -52,11 +52,35 @@
 
  */
 
-package org.jdom2;
+package org.jdom2.contrib.perf;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Comment;
+import org.jdom2.DocType;
+import org.jdom2.Element;
+import org.jdom2.EntityRef;
+import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
 
 /**
+ * NOTE
+ * ====
+ * This is a clone of the pre-bitmask Verifier.java file, and then modified to 'save' the
+ * checked data from the verifier. Used with PerfVerifier to test the Verfier performance.
+ * 
+ * 
+ * Old Comments:
+ * =============
  * A utility class to handle well-formedness checks on names, data, and other
  * verification tasks for JDOM. The class is final and may not be subclassed.
  *
@@ -66,285 +90,58 @@ import java.util.*;
  * @author  Bradley S. Huffman
  * @author  Rolf Lear
  */
-final public class Verifier {
+final public class SavingVerifier {
 	
-	/*
-	 * KEY TO UNDERSTANDING MASKS.
-	 * ===========================
-	 * 
-	 * This Verifier uses bitwise logic to perform fast validation on
-	 * XML characters. The concept is as follows...
-	 * 
-	 * There are 7 major tests for characters in JDOM. Can the character
-	 * be a regular character, can it be part of an XML Name (element,
-	 * attribute), does it represent a letter, digit, or combining character.
-	 * Finally can a character be the first character in a name, or can the
-	 * character be part of a URI.
-	 * 
-	 * These 7 tests are often performed in very tight performance critical
-	 * loops. It is essential for them to be fast.
-	 * 
-	 * These 7 tests conveniently can be represented as 7 bits in a byte.
-	 * We can thus have a single byte that represents the possible roles for
-	 * each possible character. There are 64K characters... thus we need 64K
-	 * bytes to represent each character's possible roles.
-	 * 
-	 * We could use arrays of booleans to accomplish the same thing, but each
-	 * boolean is a byte of memory, and using a bitmask allows us to put the
-	 * 7 bitmask tests in the same memory space as just one boolean array.
-	 * 
-	 * The end solution is to have an array of these bytes, one per character,
-	 * and to then query each bit on the byte to see whether the corresponding
-	 * character is able to perform in the respective role.
-	 * 
-	 * The complicated part of this process is three-fold. The hardest part is
-	 * knowing what role each character can play. The next hard part is
-	 * converting this knowledge in to an array of bytes we can express in this
-	 * Verifier class. The final part is querying that array for each test.
-	 * 
-	 * Before this particular performance upgrade, the knowledge of what roles
-	 * each character can play was embedded in each of the isXML*() methods.
-	 * Those methods have been transferred in to the 'contrib' class
-	 * org.jdom2.contrib.verifier.VerifierBuilder. That VerifierBuilder class
-	 * has a main method which takes that knowledge, and converts it in to a
-	 * 'compressed' set of two arrays, the byte mask, and the number of
-	 * consecutive characters that have that mask, which are then copy/pasted
-	 * in to this file as the VALCONST and LENCONST arrays.
-	 * 
-	 * These two arrays are then 'decompressed' in to the CHARFLAGS array.
-	 * 
-	 * The CHARFLAGS array is then queried for each of the 7 critical tests
-	 * to determine which roles a character performs.
-	 * 
-	 * If you need to change the roles a character plays in XML (i.e. change
-	 * the return-value of one of the isXML...() methods, then you need to:
-	 * 
-	 *  - update the logic in org.jdom2.contrib.verifier.VerifierBuilder
-	 *  - run the VerifierBuilder
-	 *  - copy/paste the output to this file.
-	 *  - update the JUnit test harness TestVerifier
-	 */
-
-	/**
-	 * The seed array used with LENCONST to populate CHARFLAGS.
-	 */
-	private static final byte[] VALCONST = new byte[] {
-	        0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x41, 0x01, 
-	        0x41, 0x49, 0x41, 0x59, 0x4d, 0x01, 0x41, 0x01, 
-	        0x41, 0x4f, 0x01, 0x4d, 0x01, 0x4f, 0x01, 0x41, 
-	        0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 0x01, 0x29, 
-	        0x01, 0x0f, 0x09, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 
-	        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x0f, 0x29, 
-	        0x01, 0x19, 0x01, 0x29, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 
-	        0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 
-	        0x01, 0x29, 0x0f, 0x29, 0x01, 0x29, 0x01, 0x0f, 
-	        0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
-	        0x01, 0x19, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x19, 0x29, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 
-	        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x29, 0x0f, 0x29, 0x01, 0x0f, 0x09, 0x29, 
-	        0x01, 0x19, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 0x01, 
-	        0x29, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 
-	        0x01, 0x19, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 
-	        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
-	        0x01, 0x09, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x09, 
-	        0x01, 0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x00, 0x01, 0x00};
-
-	/**
-	 * The seed array used with VALCONST to populate CHARFLAGS.
-	 */
-	private static final int [] LENCONST = new int [] {
-	            9,     2,     2,     1,    18,     1,     1,     2, 
-	            9,     2,     1,    10,     1,     2,     1,     1, 
-	            2,    26,     4,     1,     1,    26,     3,     1, 
-	           56,     1,     8,    23,     1,    31,     1,    58, 
-	            2,    11,     2,     8,     1,    53,     1,    68, 
-	            9,    36,     3,     2,     4,    30,    56,    89, 
-	           18,     7,    14,     2,    46,    70,    26,     2, 
-	           36,     1,     1,     3,     1,     1,     1,    20, 
-	            1,    44,     1,     7,     3,     1,     1,     1, 
-	            1,     1,     1,     1,     1,    18,    13,    12, 
-	            1,    66,     1,    12,     1,    36,     1,     4, 
-	            9,    53,     2,     2,     2,     2,     3,    28, 
-	            2,     8,     2,     2,    55,    38,     2,     1, 
-	            7,    38,    10,    17,     1,    23,     1,     3, 
-	            1,     1,     1,     2,     1,     1,    11,    27, 
-	            5,     3,    46,    26,     5,     1,    10,     8, 
-	           13,    10,     6,     1,    71,     2,     5,     1, 
-	           15,     1,     4,     1,     1,    15,     2,     2, 
-	            1,     4,     2,    10,   519,     3,     1,    53, 
-	            2,     1,     1,    16,     3,     4,     3,    10, 
-	            2,     2,    10,    17,     3,     1,     8,     2, 
-	            2,     2,    22,     1,     7,     1,     1,     3, 
-	            4,     2,     1,     1,     7,     2,     2,     2, 
-	            3,     9,     1,     4,     2,     1,     3,     2, 
-	            2,    10,     2,    16,     1,     2,     6,     4, 
-	            2,     2,    22,     1,     7,     1,     2,     1, 
-	            2,     1,     2,     2,     1,     1,     5,     4, 
-	            2,     2,     3,    11,     4,     1,     1,     7, 
-	           10,     2,     3,    12,     3,     1,     7,     1, 
-	            1,     1,     3,     1,    22,     1,     7,     1, 
-	            2,     1,     5,     2,     1,     1,     8,     1, 
-	            3,     1,     3,    18,     1,     5,    10,    17, 
-	            3,     1,     8,     2,     2,     2,    22,     1, 
-	            7,     1,     2,     2,     4,     2,     1,     1, 
-	            6,     3,     2,     2,     3,     8,     2,     4, 
-	            2,     1,     3,     4,    10,    18,     2,     1, 
-	            6,     3,     3,     1,     4,     3,     2,     1, 
-	            1,     1,     2,     3,     2,     3,     3,     3, 
-	            8,     1,     3,     4,     5,     3,     3,     1, 
-	            4,     9,     1,    15,     9,    17,     3,     1, 
-	            8,     1,     3,     1,    23,     1,    10,     1, 
-	            5,     4,     7,     1,     3,     1,     4,     7, 
-	            2,     9,     2,     4,    10,    18,     2,     1, 
-	            8,     1,     3,     1,    23,     1,    10,     1, 
-	            5,     4,     7,     1,     3,     1,     4,     7, 
-	            2,     7,     1,     1,     2,     4,    10,    18, 
-	            2,     1,     8,     1,     3,     1,    23,     1, 
-	           16,     4,     6,     2,     3,     1,     4,     9, 
-	            1,     8,     2,     4,    10,   145,    46,     1, 
-	            1,     1,     2,     7,     5,     6,     1,     8, 
-	            1,    10,    39,     2,     1,     1,     2,     2, 
-	            1,     1,     2,     1,     6,     4,     1,     7, 
-	            1,     3,     1,     1,     1,     1,     2,     2, 
-	            1,     2,     1,     1,     1,     2,     6,     1, 
-	            2,     1,     2,     5,     1,     1,     1,     6, 
-	            2,    10,    62,     2,     6,    10,    11,     1, 
-	            1,     1,     1,     1,     4,     2,     8,     1, 
-	           33,     7,    20,     1,     6,     4,     6,     1, 
-	            1,     1,    21,     3,     7,     1,     1,   230, 
-	           38,    10,    39,     9,     1,     1,     2,     1, 
-	            3,     1,     1,     1,     2,     1,     5,    41, 
-	            1,     1,     1,     1,     1,    11,     1,     1, 
-	            1,     1,     1,     3,     2,     3,     1,     5, 
-	            3,     1,     1,     1,     1,     1,     1,     1, 
-	            1,     3,     2,     3,     2,     1,     1,    40, 
-	            1,     9,     1,     2,     1,     2,     2,     7, 
-	            2,     1,     1,     1,     7,    40,     1,     4, 
-	            1,     8,     1,  3078,   156,     4,    90,     6, 
-	           22,     2,     6,     2,    38,     2,     6,     2, 
-	            8,     1,     1,     1,     1,     1,     1,     1, 
-	           31,     2,    53,     1,     7,     1,     1,     3, 
-	            3,     1,     7,     3,     4,     2,     6,     4, 
-	           13,     5,     3,     1,     7,   211,    13,     4, 
-	            1,    68,     1,     3,     2,     2,     1,    81, 
-	            3,  3714,     1,     1,     1,    25,     9,     6, 
-	            1,     5,    11,    84,     4,     2,     2,     2, 
-	            2,    90,     1,     3,     6,    40,  7379, 20902, 
-	         3162, 11172,    92,  2048,  8190,     2};	
-
-	/**
-	 * The number of characters in Java.
-	 */
-	private static final int  CHARCNT = Character.MAX_VALUE + 1;
+	private static final AtomicBoolean open = new AtomicBoolean(true); 
 	
-	/**
-	 * An array of byte where each byte represents the roles that the
-	 * corresponding character can play. Use the bit mask values
-	 * to access each character's role.
-	 */
-	private static final byte[] CHARFLAGS = buildBitFlags();
-
-	/**
-	 * Convert the two compressed arrays in to th CHARFLAGS array.
-	 * @return the CHARFLAGS array.
-	 */
-	private static final byte[] buildBitFlags() {
-		final byte[] ret = new byte[CHARCNT];
-		int index = 0;
-		for (int i = 0; i < VALCONST.length; i++) {
-			// v represents the roles a character can play.
-			final byte v = VALCONST[i];
-			// l is the number of consecutive chars that have the same
-			// roles 'v'
-			int l = LENCONST[i];
-			// we need to give the next 'l' chars the role bits 'v'
-			while (--l >= 0) {
-				ret[index++] = v;
+	private static final Writer getWriter(final String name) {
+		try {
+			final FileOutputStream fos = new FileOutputStream(name);
+			final OutputStreamWriter osw = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+			return new BufferedWriter(osw);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			open.set(false);
+			return null;
+		}
+	}
+	
+	private static final void write(Writer writer, String value) {
+		if (open.get()) {
+			try {
+				writer.write(value);
+				writer.write((char)0);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		return ret;
 	}
+	
+	private static final String elementfilename = "checkElementName.txt"; 
+	private static final String attributefilename = "checkAttributeName.txt"; 
+	private static final String chardatafilename = "checkCharacterData.txt"; 
+	
+	private static final Writer elementnamewriter = getWriter(elementfilename);
+	private static final Writer attributenamewriter = getWriter(attributefilename);
+	private static final Writer characterdatawriter = getWriter(chardatafilename);
 
-	/** Mask used to test for {@link #isXMLCharacter(int)} */
-	private static final byte MASKXMLCHARACTER  = 1 << 0;
-	/** Mask used to test for {@link #isXMLLetter(char)} */
-	private static final byte MASKXMLLETTER     = 1 << 1;
-	/** Mask used to test for {@link #isXMLNameStartCharacter(char)} */
-	private static final byte MASKXMLSTARTCHAR  = 1 << 2;
-	/** Mask used to test for {@link #isXMLNameCharacter(char)} */
-	private static final byte MASKXMLNAMECHAR   = 1 << 3;
-	/** Mask used to test for {@link #isXMLDigit(char)} */
-	private static final byte MASKXMLDIGIT      = 1 << 4;
-	/** Mask used to test for {@link #isXMLCombiningChar(char)} */
-	private static final byte MASKXMLCOMBINING  = 1 << 5;
-	/** Mask used to test for {@link #isURICharacter(char)} */
-	private static final byte MASKURICHAR       = 1 << 6;
-	/** Mask used to test for {@link #isXMLLetterOrDigit(char)} */
-	private static final byte MASKXMLLETTERORDIGIT = MASKXMLLETTER | MASKXMLDIGIT;
+	public static final void closeWriters() throws IOException {
+		if (!open.getAndSet(false)) {
+			return;
+		}
+		open.set(false);
+		elementnamewriter.flush();
+		elementnamewriter.close();
+		attributenamewriter.flush();
+		attributenamewriter.close();
+		characterdatawriter.flush();
+		characterdatawriter.close();
+	}
 	
 	/**
 	 * Ensure instantation cannot occur.
 	 */
-	private Verifier() { }
+	private SavingVerifier() { }
 
 	/**
 	 * This will check the supplied name to see if it is legal for use as
@@ -355,6 +152,9 @@ final public class Verifier {
 	 *         <code>null</code> if name is OK.
 	 */
 	public static String checkElementName(final String name) {
+		
+		write(elementnamewriter, name);
+		
 		// Check basic XML name rules first
 		if (checkXMLName(name) != null) {
 			return checkXMLName(name);
@@ -378,6 +178,9 @@ final public class Verifier {
 	 *         <code>null</code> if name is OK.
 	 */
 	public static String checkAttributeName(final String name) {
+		
+		write(attributenamewriter, name);
+		
 		// Check basic XML name rules first
 		if (checkXMLName(name) != null) {
 			return checkXMLName(name);
@@ -417,6 +220,7 @@ final public class Verifier {
 	 *         <code>null</code> if name is OK.
 	 */
 	public static String checkCharacterData(final String text) {
+		write(characterdatawriter, text);
 		if (text == null) {
 			return "A null is not a legal XML value";
 		}
@@ -426,11 +230,7 @@ final public class Verifier {
 		final int len = text.length();
 		for (int i = 0; i < len; i++) {
 			// we are expecting a normal char, but may be a surrogate.
-			// the isXMLCharacter method takes an int argument, but we have a char.
-			// we save a lot of time by doing the test directly here without
-			// doing the unnecessary cast-to-int and double-checking ranges
-			// for the char.
-			if (isXMLCharacter(text.charAt(i))) { // (byte)0 != (CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)
+			if (isXMLCharacter(text.charAt(i))) {
 				if (lowx) {
 					// we got a normal character, but we wanted a low surrogate
 					return String.format("Illegal Surrogate Pair 0x%04x%04x",
@@ -1110,7 +910,30 @@ final public class Verifier {
 	 * @return true if it's allowed, false otherwise.
 	 */
 	public static boolean isURICharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKURICHAR);
+		if (c >= 'a' && c <= 'z') return true;
+		if (c >= 'A' && c <= 'Z') return true;
+		if (c >= '0' && c <= '9') return true;
+		if (c == '/') return true;
+		if (c == '-') return true;
+		if (c == '.') return true;
+		if (c == '?') return true;
+		if (c == ':') return true;
+		if (c == '@') return true;
+		if (c == '&') return true;
+		if (c == '=') return true;
+		if (c == '+') return true;
+		if (c == '$') return true;
+		if (c == ',') return true;
+		if (c == '%') return true;
+
+		if (c == '_') return true;
+		if (c == '!') return true;
+		if (c == '~') return true;
+		if (c == '*') return true;
+		if (c == '\'') return true;
+		if (c == '(') return true;
+		if (c == ')') return true;
+		return false;
 	}
 
 	/**
@@ -1123,10 +946,16 @@ final public class Verifier {
 	 *                                false otherwise
 	 */
 	public static boolean isXMLCharacter(final int c) {
-		if (c >= CHARCNT) {
-			return c <= 0x10FFFF;
-		}
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLCHARACTER);
+
+		if (c == '\n') return true;
+		if (c == '\r') return true;
+		if (c == '\t') return true;
+
+		if (c < 0x20) return false;  if (c <= 0xD7FF) return true;
+		if (c < 0xE000) return false;  if (c <= 0xFFFD) return true;
+		if (c < 0x10000) return false;  if (c <= 0x10FFFF) return true;
+
+		return false;
 	}
 
 
@@ -1140,7 +969,10 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameCharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLNAMECHAR);
+
+		return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
+				|| c == '_' || c == ':' || isXMLCombiningChar(c) 
+				|| isXMLExtender(c));
 	}
 
 	/**
@@ -1155,7 +987,9 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameStartCharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLSTARTCHAR);
+
+		return (isXMLLetter(c) || c == '_' || c ==':');
+
 	}
 
 	/**
@@ -1168,7 +1002,9 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLLetterOrDigit(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLLETTERORDIGIT);
+
+		return (isXMLLetter(c) || isXMLDigit(c));
+
 	}
 
 	/**
@@ -1179,7 +1015,219 @@ final public class Verifier {
 	 * @return <code>String</code> true if it's a letter, false otherwise.
 	 */
 	public static boolean isXMLLetter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLLETTER);
+		// Note that order is very important here.  The search proceeds 
+		// from lowest to highest values, so that no searching occurs 
+		// above the character's value.  BTW, the first line is equivalent to:
+		// if (c >= 0x0041 && c <= 0x005A) return true;
+
+		if (c < 0x0041) return false;  if (c <= 0x005a) return true;
+		if (c < 0x0061) return false;  if (c <= 0x007A) return true;
+		if (c < 0x00C0) return false;  if (c <= 0x00D6) return true;
+		if (c < 0x00D8) return false;  if (c <= 0x00F6) return true;
+		if (c < 0x00F8) return false;  if (c <= 0x00FF) return true;
+		if (c < 0x0100) return false;  if (c <= 0x0131) return true;
+		if (c < 0x0134) return false;  if (c <= 0x013E) return true;
+		if (c < 0x0141) return false;  if (c <= 0x0148) return true;
+		if (c < 0x014A) return false;  if (c <= 0x017E) return true;
+		if (c < 0x0180) return false;  if (c <= 0x01C3) return true;
+		if (c < 0x01CD) return false;  if (c <= 0x01F0) return true;
+		if (c < 0x01F4) return false;  if (c <= 0x01F5) return true;
+		if (c < 0x01FA) return false;  if (c <= 0x0217) return true;
+		if (c < 0x0250) return false;  if (c <= 0x02A8) return true;
+		if (c < 0x02BB) return false;  if (c <= 0x02C1) return true;
+		if (c == 0x0386) return true;
+		if (c < 0x0388) return false;  if (c <= 0x038A) return true;
+		if (c == 0x038C) return true;
+		if (c < 0x038E) return false;  if (c <= 0x03A1) return true;
+		if (c < 0x03A3) return false;  if (c <= 0x03CE) return true;
+		if (c < 0x03D0) return false;  if (c <= 0x03D6) return true;
+		if (c == 0x03DA) return true;
+		if (c == 0x03DC) return true;
+		if (c == 0x03DE) return true;
+		if (c == 0x03E0) return true;
+		if (c < 0x03E2) return false;  if (c <= 0x03F3) return true;
+		if (c < 0x0401) return false;  if (c <= 0x040C) return true;
+		if (c < 0x040E) return false;  if (c <= 0x044F) return true;
+		if (c < 0x0451) return false;  if (c <= 0x045C) return true;
+		if (c < 0x045E) return false;  if (c <= 0x0481) return true;
+		if (c < 0x0490) return false;  if (c <= 0x04C4) return true;
+		if (c < 0x04C7) return false;  if (c <= 0x04C8) return true;
+		if (c < 0x04CB) return false;  if (c <= 0x04CC) return true;
+		if (c < 0x04D0) return false;  if (c <= 0x04EB) return true;
+		if (c < 0x04EE) return false;  if (c <= 0x04F5) return true;
+		if (c < 0x04F8) return false;  if (c <= 0x04F9) return true;
+		if (c < 0x0531) return false;  if (c <= 0x0556) return true;
+		if (c == 0x0559) return true;
+		if (c < 0x0561) return false;  if (c <= 0x0586) return true;
+		if (c < 0x05D0) return false;  if (c <= 0x05EA) return true;
+		if (c < 0x05F0) return false;  if (c <= 0x05F2) return true;
+		if (c < 0x0621) return false;  if (c <= 0x063A) return true;
+		if (c < 0x0641) return false;  if (c <= 0x064A) return true;
+		if (c < 0x0671) return false;  if (c <= 0x06B7) return true;
+		if (c < 0x06BA) return false;  if (c <= 0x06BE) return true;
+		if (c < 0x06C0) return false;  if (c <= 0x06CE) return true;
+		if (c < 0x06D0) return false;  if (c <= 0x06D3) return true;
+		if (c == 0x06D5) return true;
+		if (c < 0x06E5) return false;  if (c <= 0x06E6) return true;
+		if (c < 0x0905) return false;  if (c <= 0x0939) return true;
+		if (c == 0x093D) return true;
+		if (c < 0x0958) return false;  if (c <= 0x0961) return true;
+		if (c < 0x0985) return false;  if (c <= 0x098C) return true;
+		if (c < 0x098F) return false;  if (c <= 0x0990) return true;
+		if (c < 0x0993) return false;  if (c <= 0x09A8) return true;
+		if (c < 0x09AA) return false;  if (c <= 0x09B0) return true;
+		if (c == 0x09B2) return true;
+		if (c < 0x09B6) return false;  if (c <= 0x09B9) return true;
+		if (c < 0x09DC) return false;  if (c <= 0x09DD) return true;
+		if (c < 0x09DF) return false;  if (c <= 0x09E1) return true;
+		if (c < 0x09F0) return false;  if (c <= 0x09F1) return true;
+		if (c < 0x0A05) return false;  if (c <= 0x0A0A) return true;
+		if (c < 0x0A0F) return false;  if (c <= 0x0A10) return true;
+		if (c < 0x0A13) return false;  if (c <= 0x0A28) return true;
+		if (c < 0x0A2A) return false;  if (c <= 0x0A30) return true;
+		if (c < 0x0A32) return false;  if (c <= 0x0A33) return true;
+		if (c < 0x0A35) return false;  if (c <= 0x0A36) return true;
+		if (c < 0x0A38) return false;  if (c <= 0x0A39) return true;
+		if (c < 0x0A59) return false;  if (c <= 0x0A5C) return true;
+		if (c == 0x0A5E) return true;
+		if (c < 0x0A72) return false;  if (c <= 0x0A74) return true;
+		if (c < 0x0A85) return false;  if (c <= 0x0A8B) return true;
+		if (c == 0x0A8D) return true;
+		if (c < 0x0A8F) return false;  if (c <= 0x0A91) return true;
+		if (c < 0x0A93) return false;  if (c <= 0x0AA8) return true;
+		if (c < 0x0AAA) return false;  if (c <= 0x0AB0) return true;
+		if (c < 0x0AB2) return false;  if (c <= 0x0AB3) return true;
+		if (c < 0x0AB5) return false;  if (c <= 0x0AB9) return true;
+		if (c == 0x0ABD) return true;
+		if (c == 0x0AE0) return true;
+		if (c < 0x0B05) return false;  if (c <= 0x0B0C) return true;
+		if (c < 0x0B0F) return false;  if (c <= 0x0B10) return true;
+		if (c < 0x0B13) return false;  if (c <= 0x0B28) return true;
+		if (c < 0x0B2A) return false;  if (c <= 0x0B30) return true;
+		if (c < 0x0B32) return false;  if (c <= 0x0B33) return true;
+		if (c < 0x0B36) return false;  if (c <= 0x0B39) return true;
+		if (c == 0x0B3D) return true;
+		if (c < 0x0B5C) return false;  if (c <= 0x0B5D) return true;
+		if (c < 0x0B5F) return false;  if (c <= 0x0B61) return true;
+		if (c < 0x0B85) return false;  if (c <= 0x0B8A) return true;
+		if (c < 0x0B8E) return false;  if (c <= 0x0B90) return true;
+		if (c < 0x0B92) return false;  if (c <= 0x0B95) return true;
+		if (c < 0x0B99) return false;  if (c <= 0x0B9A) return true;
+		if (c == 0x0B9C) return true;
+		if (c < 0x0B9E) return false;  if (c <= 0x0B9F) return true;
+		if (c < 0x0BA3) return false;  if (c <= 0x0BA4) return true;
+		if (c < 0x0BA8) return false;  if (c <= 0x0BAA) return true;
+		if (c < 0x0BAE) return false;  if (c <= 0x0BB5) return true;
+		if (c < 0x0BB7) return false;  if (c <= 0x0BB9) return true;
+		if (c < 0x0C05) return false;  if (c <= 0x0C0C) return true;
+		if (c < 0x0C0E) return false;  if (c <= 0x0C10) return true;
+		if (c < 0x0C12) return false;  if (c <= 0x0C28) return true;
+		if (c < 0x0C2A) return false;  if (c <= 0x0C33) return true;
+		if (c < 0x0C35) return false;  if (c <= 0x0C39) return true;
+		if (c < 0x0C60) return false;  if (c <= 0x0C61) return true;
+		if (c < 0x0C85) return false;  if (c <= 0x0C8C) return true;
+		if (c < 0x0C8E) return false;  if (c <= 0x0C90) return true;
+		if (c < 0x0C92) return false;  if (c <= 0x0CA8) return true;
+		if (c < 0x0CAA) return false;  if (c <= 0x0CB3) return true;
+		if (c < 0x0CB5) return false;  if (c <= 0x0CB9) return true;
+		if (c == 0x0CDE) return true;
+		if (c < 0x0CE0) return false;  if (c <= 0x0CE1) return true;
+		if (c < 0x0D05) return false;  if (c <= 0x0D0C) return true;
+		if (c < 0x0D0E) return false;  if (c <= 0x0D10) return true;
+		if (c < 0x0D12) return false;  if (c <= 0x0D28) return true;
+		if (c < 0x0D2A) return false;  if (c <= 0x0D39) return true;
+		if (c < 0x0D60) return false;  if (c <= 0x0D61) return true;
+		if (c < 0x0E01) return false;  if (c <= 0x0E2E) return true;
+		if (c == 0x0E30) return true;
+		if (c < 0x0E32) return false;  if (c <= 0x0E33) return true;
+		if (c < 0x0E40) return false;  if (c <= 0x0E45) return true;
+		if (c < 0x0E81) return false;  if (c <= 0x0E82) return true;
+		if (c == 0x0E84) return true;
+		if (c < 0x0E87) return false;  if (c <= 0x0E88) return true;
+		if (c == 0x0E8A) return true;
+		if (c == 0x0E8D) return true;
+		if (c < 0x0E94) return false;  if (c <= 0x0E97) return true;
+		if (c < 0x0E99) return false;  if (c <= 0x0E9F) return true;
+		if (c < 0x0EA1) return false;  if (c <= 0x0EA3) return true;
+		if (c == 0x0EA5) return true;
+		if (c == 0x0EA7) return true;
+		if (c < 0x0EAA) return false;  if (c <= 0x0EAB) return true;
+		if (c < 0x0EAD) return false;  if (c <= 0x0EAE) return true;
+		if (c == 0x0EB0) return true;
+		if (c < 0x0EB2) return false;  if (c <= 0x0EB3) return true;
+		if (c == 0x0EBD) return true;
+		if (c < 0x0EC0) return false;  if (c <= 0x0EC4) return true;
+		if (c < 0x0F40) return false;  if (c <= 0x0F47) return true;
+		if (c < 0x0F49) return false;  if (c <= 0x0F69) return true;
+		if (c < 0x10A0) return false;  if (c <= 0x10C5) return true;
+		if (c < 0x10D0) return false;  if (c <= 0x10F6) return true;
+		if (c == 0x1100) return true;
+		if (c < 0x1102) return false;  if (c <= 0x1103) return true;
+		if (c < 0x1105) return false;  if (c <= 0x1107) return true;
+		if (c == 0x1109) return true;
+		if (c < 0x110B) return false;  if (c <= 0x110C) return true;
+		if (c < 0x110E) return false;  if (c <= 0x1112) return true;
+		if (c == 0x113C) return true;
+		if (c == 0x113E) return true;
+		if (c == 0x1140) return true;
+		if (c == 0x114C) return true;
+		if (c == 0x114E) return true;
+		if (c == 0x1150) return true;
+		if (c < 0x1154) return false;  if (c <= 0x1155) return true;
+		if (c == 0x1159) return true;
+		if (c < 0x115F) return false;  if (c <= 0x1161) return true;
+		if (c == 0x1163) return true;
+		if (c == 0x1165) return true;
+		if (c == 0x1167) return true;
+		if (c == 0x1169) return true;
+		if (c < 0x116D) return false;  if (c <= 0x116E) return true;
+		if (c < 0x1172) return false;  if (c <= 0x1173) return true;
+		if (c == 0x1175) return true;
+		if (c == 0x119E) return true;
+		if (c == 0x11A8) return true;
+		if (c == 0x11AB) return true;
+		if (c < 0x11AE) return false;  if (c <= 0x11AF) return true;
+		if (c < 0x11B7) return false;  if (c <= 0x11B8) return true;
+		if (c == 0x11BA) return true;
+		if (c < 0x11BC) return false;  if (c <= 0x11C2) return true;
+		if (c == 0x11EB) return true;
+		if (c == 0x11F0) return true;
+		if (c == 0x11F9) return true;
+		if (c < 0x1E00) return false;  if (c <= 0x1E9B) return true;
+		if (c < 0x1EA0) return false;  if (c <= 0x1EF9) return true;
+		if (c < 0x1F00) return false;  if (c <= 0x1F15) return true;
+		if (c < 0x1F18) return false;  if (c <= 0x1F1D) return true;
+		if (c < 0x1F20) return false;  if (c <= 0x1F45) return true;
+		if (c < 0x1F48) return false;  if (c <= 0x1F4D) return true;
+		if (c < 0x1F50) return false;  if (c <= 0x1F57) return true;
+		if (c == 0x1F59) return true;
+		if (c == 0x1F5B) return true;
+		if (c == 0x1F5D) return true;
+		if (c < 0x1F5F) return false;  if (c <= 0x1F7D) return true;
+		if (c < 0x1F80) return false;  if (c <= 0x1FB4) return true;
+		if (c < 0x1FB6) return false;  if (c <= 0x1FBC) return true;
+		if (c == 0x1FBE) return true;
+		if (c < 0x1FC2) return false;  if (c <= 0x1FC4) return true;
+		if (c < 0x1FC6) return false;  if (c <= 0x1FCC) return true;
+		if (c < 0x1FD0) return false;  if (c <= 0x1FD3) return true;
+		if (c < 0x1FD6) return false;  if (c <= 0x1FDB) return true;
+		if (c < 0x1FE0) return false;  if (c <= 0x1FEC) return true;
+		if (c < 0x1FF2) return false;  if (c <= 0x1FF4) return true;
+		if (c < 0x1FF6) return false;  if (c <= 0x1FFC) return true;
+		if (c == 0x2126) return true;
+		if (c < 0x212A) return false;  if (c <= 0x212B) return true;
+		if (c == 0x212E) return true;
+		if (c < 0x2180) return false;  if (c <= 0x2182) return true;
+		if (c == 0x3007) return true;                          // ideographic
+		if (c < 0x3021) return false;  if (c <= 0x3029) return true;  // ideo
+		if (c < 0x3041) return false;  if (c <= 0x3094) return true;
+		if (c < 0x30A1) return false;  if (c <= 0x30FA) return true;
+		if (c < 0x3105) return false;  if (c <= 0x312C) return true;
+		if (c < 0x4E00) return false;  if (c <= 0x9FA5) return true;  // ideo
+		if (c < 0xAC00) return false;  if (c <= 0xD7A3) return true;
+
+		return false;
+
 	}
 
 	/**
@@ -1192,7 +1240,129 @@ final public class Verifier {
 	 *         false otherwise.
 	 */
 	public static boolean isXMLCombiningChar(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLCOMBINING);
+		// CombiningChar
+		if (c < 0x0300) return false;  if (c <= 0x0345) return true;
+		if (c < 0x0360) return false;  if (c <= 0x0361) return true;
+		if (c < 0x0483) return false;  if (c <= 0x0486) return true;
+		if (c < 0x0591) return false;  if (c <= 0x05A1) return true;
+
+		if (c < 0x05A3) return false;  if (c <= 0x05B9) return true;
+		if (c < 0x05BB) return false;  if (c <= 0x05BD) return true;
+		if (c == 0x05BF) return true;
+		if (c < 0x05C1) return false;  if (c <= 0x05C2) return true;
+
+		if (c == 0x05C4) return true;
+		if (c < 0x064B) return false;  if (c <= 0x0652) return true;
+		if (c == 0x0670) return true;
+		if (c < 0x06D6) return false;  if (c <= 0x06DC) return true;
+
+		if (c < 0x06DD) return false;  if (c <= 0x06DF) return true;
+		if (c < 0x06E0) return false;  if (c <= 0x06E4) return true;
+		if (c < 0x06E7) return false;  if (c <= 0x06E8) return true;
+
+		if (c < 0x06EA) return false;  if (c <= 0x06ED) return true;
+		if (c < 0x0901) return false;  if (c <= 0x0903) return true;
+		if (c == 0x093C) return true;
+		if (c < 0x093E) return false;  if (c <= 0x094C) return true;
+
+		if (c == 0x094D) return true;
+		if (c < 0x0951) return false;  if (c <= 0x0954) return true;
+		if (c < 0x0962) return false;  if (c <= 0x0963) return true;
+		if (c < 0x0981) return false;  if (c <= 0x0983) return true;
+
+		if (c == 0x09BC) return true;
+		if (c == 0x09BE) return true;
+		if (c == 0x09BF) return true;
+		if (c < 0x09C0) return false;  if (c <= 0x09C4) return true;
+		if (c < 0x09C7) return false;  if (c <= 0x09C8) return true;
+
+		if (c < 0x09CB) return false;  if (c <= 0x09CD) return true;
+		if (c == 0x09D7) return true;
+		if (c < 0x09E2) return false;  if (c <= 0x09E3) return true;
+		if (c == 0x0A02) return true;
+		if (c == 0x0A3C) return true;
+
+		if (c == 0x0A3E) return true;
+		if (c == 0x0A3F) return true;
+		if (c < 0x0A40) return false;  if (c <= 0x0A42) return true;
+		if (c < 0x0A47) return false;  if (c <= 0x0A48) return true;
+
+		if (c < 0x0A4B) return false;  if (c <= 0x0A4D) return true;
+		if (c < 0x0A70) return false;  if (c <= 0x0A71) return true;
+		if (c < 0x0A81) return false;  if (c <= 0x0A83) return true;
+		if (c == 0x0ABC) return true;
+
+		if (c < 0x0ABE) return false;  if (c <= 0x0AC5) return true;
+		if (c < 0x0AC7) return false;  if (c <= 0x0AC9) return true;
+		if (c < 0x0ACB) return false;  if (c <= 0x0ACD) return true;
+
+		if (c < 0x0B01) return false;  if (c <= 0x0B03) return true;
+		if (c == 0x0B3C) return true;
+		if (c < 0x0B3E) return false;  if (c <= 0x0B43) return true;
+		if (c < 0x0B47) return false;  if (c <= 0x0B48) return true;
+
+		if (c < 0x0B4B) return false;  if (c <= 0x0B4D) return true;
+		if (c < 0x0B56) return false;  if (c <= 0x0B57) return true;
+		if (c < 0x0B82) return false;  if (c <= 0x0B83) return true;
+
+		if (c < 0x0BBE) return false;  if (c <= 0x0BC2) return true;
+		if (c < 0x0BC6) return false;  if (c <= 0x0BC8) return true;
+		if (c < 0x0BCA) return false;  if (c <= 0x0BCD) return true;
+		if (c == 0x0BD7) return true;
+
+		if (c < 0x0C01) return false;  if (c <= 0x0C03) return true;
+		if (c < 0x0C3E) return false;  if (c <= 0x0C44) return true;
+		if (c < 0x0C46) return false;  if (c <= 0x0C48) return true;
+
+		if (c < 0x0C4A) return false;  if (c <= 0x0C4D) return true;
+		if (c < 0x0C55) return false;  if (c <= 0x0C56) return true;
+		if (c < 0x0C82) return false;  if (c <= 0x0C83) return true;
+
+		if (c < 0x0CBE) return false;  if (c <= 0x0CC4) return true;
+		if (c < 0x0CC6) return false;  if (c <= 0x0CC8) return true;
+		if (c < 0x0CCA) return false;  if (c <= 0x0CCD) return true;
+
+		if (c < 0x0CD5) return false;  if (c <= 0x0CD6) return true;
+		if (c < 0x0D02) return false;  if (c <= 0x0D03) return true;
+		if (c < 0x0D3E) return false;  if (c <= 0x0D43) return true;
+
+		if (c < 0x0D46) return false;  if (c <= 0x0D48) return true;
+		if (c < 0x0D4A) return false;  if (c <= 0x0D4D) return true;
+		if (c == 0x0D57) return true;
+		if (c == 0x0E31) return true;
+
+		if (c < 0x0E34) return false;  if (c <= 0x0E3A) return true;
+		if (c < 0x0E47) return false;  if (c <= 0x0E4E) return true;
+		if (c == 0x0EB1) return true;
+		if (c < 0x0EB4) return false;  if (c <= 0x0EB9) return true;
+
+		if (c < 0x0EBB) return false;  if (c <= 0x0EBC) return true;
+		if (c < 0x0EC8) return false;  if (c <= 0x0ECD) return true;
+		if (c < 0x0F18) return false;  if (c <= 0x0F19) return true;
+		if (c == 0x0F35) return true;
+
+		if (c == 0x0F37) return true;
+		if (c == 0x0F39) return true;
+		if (c == 0x0F3E) return true;
+		if (c == 0x0F3F) return true;
+		if (c < 0x0F71) return false;  if (c <= 0x0F84) return true;
+
+		if (c < 0x0F86) return false;  if (c <= 0x0F8B) return true;
+		if (c < 0x0F90) return false;  if (c <= 0x0F95) return true;
+		if (c == 0x0F97) return true;
+		if (c < 0x0F99) return false;  if (c <= 0x0FAD) return true;
+
+		if (c < 0x0FB1) return false;  if (c <= 0x0FB7) return true;
+		if (c == 0x0FB9) return true;
+		if (c < 0x20D0) return false;  if (c <= 0x20DC) return true;
+		if (c == 0x20E1) return true;
+
+		if (c < 0x302A) return false;  if (c <= 0x302F) return true;
+		if (c == 0x3099) return true;
+		if (c == 0x309A) return true; 
+
+		return false;
+
 	}
 
 	/**
@@ -1204,13 +1374,6 @@ final public class Verifier {
 	 * @return <code>String</code> true if it's an extender, false otherwise.
 	 */
 	public static boolean isXMLExtender(final char c) {
-		/*
-		 * This function is not accellerated by the bitmask system because
-		 * there are no longer any actual calls to it from the JDOM code.
-		 * It used to be called by the isXMLNameCharacter() method before
-		 * the bitmask optimization. Now the VerifierBuilder code actually
-		 * calls this method instead.
-		 */
 
 		if (c < 0x00B6) return false;  // quick short circuit
 
@@ -1241,7 +1404,28 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a digit, false otherwise
 	 */
 	public static boolean isXMLDigit(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLDIGIT);
+
+		if (c < 0x0030) return false;  if (c <= 0x0039) return true;
+		if (c < 0x0660) return false;  if (c <= 0x0669) return true;
+		if (c < 0x06F0) return false;  if (c <= 0x06F9) return true;
+		if (c < 0x0966) return false;  if (c <= 0x096F) return true;
+
+		if (c < 0x09E6) return false;  if (c <= 0x09EF) return true;
+		if (c < 0x0A66) return false;  if (c <= 0x0A6F) return true;
+		if (c < 0x0AE6) return false;  if (c <= 0x0AEF) return true;
+
+		if (c < 0x0B66) return false;  if (c <= 0x0B6F) return true;
+		if (c < 0x0BE7) return false;  if (c <= 0x0BEF) return true;
+		if (c < 0x0C66) return false;  if (c <= 0x0C6F) return true;
+
+		if (c < 0x0CE6) return false;  if (c <= 0x0CEF) return true;
+		if (c < 0x0D66) return false;  if (c <= 0x0D6F) return true;
+		if (c < 0x0E50) return false;  if (c <= 0x0E59) return true;
+
+		if (c < 0x0ED0) return false;  if (c <= 0x0ED9) return true;
+		if (c < 0x0F20) return false;  if (c <= 0x0F29) return true; 
+
+		return false;
 	}  
 
 	/**
