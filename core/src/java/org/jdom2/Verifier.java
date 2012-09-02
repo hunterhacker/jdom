@@ -353,13 +353,30 @@ final public class Verifier {
 	 */
 	public static String checkNamespaceCollision(final Attribute attribute,
 			final Element element) {
+		return checkNamespaceCollision(attribute, element, -1);
+	}
+
+	/**
+	 * Check if <code>{@link Attribute}</code>'s namespace collides with a 
+	 * <code>{@link Element}</code>'s namespace.
+	 *
+	 * @param attribute <code>Attribute</code> to check.
+	 * @param element <code>Element</code> to check against.
+	 * @param ignoreatt Ignore a specific Attribute (if it exists) when
+	 *        calculating any collisions (used when replacing one attribute
+	 *        with another).
+	 * @return <code>String</code> reason for collision, or
+	 *         <code>null</code> if no collision.
+	 */
+	public static String checkNamespaceCollision(final Attribute attribute,
+			final Element element, final int ignoreatt) {
 		final Namespace namespace = attribute.getNamespace();
 		final String prefix = namespace.getPrefix();
 		if ("".equals(prefix)) {
 			return null;
 		}
 
-		return checkNamespaceCollision(namespace, element);
+		return checkNamespaceCollision(namespace, element, ignoreatt);
 	}
 
 	/**
@@ -373,6 +390,23 @@ final public class Verifier {
 	 */
 	public static String checkNamespaceCollision(final Namespace namespace,
 			final Element element) {
+		return checkNamespaceCollision(namespace, element, -1);
+	}
+
+	/**
+	 * Check if a <code>{@link Namespace}</code> collides with a
+	 * <code>{@link Element}</code>'s namespace.
+	 *
+	 * @param namespace <code>Namespace</code> to check.
+	 * @param element <code>Element</code> to check against.
+	 * @param ignoreatt Ignore a specific Attribute (if it exists) when
+	 *        calculating any collisions (used when replacing one attribute
+	 *        with another).
+	 * @return <code>String</code> reason for collision, or
+	 *         <code>null</code> if no collision.
+	 */
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final Element element, final int ignoreatt) {
 		String reason = checkNamespaceCollision(namespace,
 				element.getNamespace());
 		if (reason != null) {
@@ -388,7 +422,7 @@ final public class Verifier {
 		}
 
 		if (element.hasAttributes()) {
-			reason = checkNamespaceCollision(namespace, element.getAttributes());
+			reason = checkNamespaceCollision(namespace, element.getAttributes(), ignoreatt);
 			if (reason != null) {
 				return reason;
 			}
@@ -430,15 +464,37 @@ final public class Verifier {
 	 */
 	public static String checkNamespaceCollision(final Namespace namespace,
 			final List<?> list) {
+		return checkNamespaceCollision(namespace, list, -1);
+	}
+
+	/**
+	 * Check if a <code>{@link Namespace}</code> collides with any namespace
+	 * from a list of objects.
+	 *
+	 * @param namespace <code>Namespace</code> to check.
+	 * @param list <code>List</code> to check against.
+	 * @param ignoreatt Ignore a specific Attribute (if it exists) when
+	 *        calculating any collisions (used when replacing one attribute
+	 *        with another).
+	 * @return <code>String</code> reason for collision, or
+	 *         <code>null</code> if no collision.
+	 */
+	public static String checkNamespaceCollision(final Namespace namespace,
+			final List<?> list, final int ignoreatt) {
 		if (list == null) {
 			return null;
 		}
 
 		String reason = null;
 		final Iterator<?> i = list.iterator();
+		int cnt = -1;
 		while ((reason == null) && i.hasNext()) {
 			final Object obj = i.next();
+			cnt++;
 			if (obj instanceof Attribute) {
+				if (cnt == ignoreatt) {
+					continue;
+				}
 				reason = checkNamespaceCollision(namespace, (Attribute) obj);
 			}
 			else if (obj instanceof Element) {

@@ -493,7 +493,7 @@ final class AttributeList extends AbstractList<Attribute>
 			throw new IllegalAddException("Cannot set duplicate attribute");
 		}
 
-		final String reason = Verifier.checkNamespaceCollision(attribute, parent);
+		final String reason = Verifier.checkNamespaceCollision(attribute, parent, index);
 		if (reason != null) {
 			throw new IllegalAddException(parent, attribute, reason);
 		}

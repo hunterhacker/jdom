@@ -42,7 +42,8 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 				new Attribute("one", "val"), new Attribute("two", "val"), 
 				new Attribute("three", "val"), new Attribute("four", "val"),
 				new Attribute("five", "val"), new Attribute("six", "val"),
-				new Attribute("att", "val", Namespace.getNamespace("pfx", "nsX"))
+				new Attribute("att", "val", Namespace.getNamespace("pfx", "nsX")),
+		        new Attribute("sec", "val", Namespace.getNamespace("pfx", "nsX"))
 		};
 	}
 	
@@ -135,19 +136,26 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		Attribute attb = new Attribute("hi", "there", Namespace.getNamespace("mypfx", "nsb"));
 		attlist.add(atta);
 		try {
+			// cannot add two different namespaces with same prefix.
 			attlist.add(attb);
 			failNoException(IllegalAddException.class);
 		} catch (Exception e) {
 			checkException(IllegalAddException.class, e);
 		}
 		Attribute attc = new Attribute("bilbo", "baggins", Namespace.getNamespace("mypfc", "nsc"));
+		// can add a different prefix.
 		attlist.add(attc);
 		try {
+			// cannot set an attribute that causes a conflict.
 			attlist.set(1, attb);
 			failNoException(IllegalAddException.class);
 		} catch (Exception e) {
 			checkException(IllegalAddException.class, e);
 		}
+		
+		// but you can swap an existing attribute with a different one that changes
+		// the namespace URI for a prefix.
+		attlist.set(0, attb);
 		
 	}
 	
