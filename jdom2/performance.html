@@ -76,6 +76,33 @@
 	
 	<hr/>
 	<p/>
+	JDOM 2.0.3 - Various fixes but mostly the BitMasked Verifier - incorporating Canadian Wilf's performance suggestions.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.51ms</td><td>2.51ms</td><td>8.19ms</td><td>3.30ms</td><td>5.28ms</td><td>1.60ms</td><td>8.71ms</td><td>2.97ms</td><td>1.75ms</td><td>12.55ms</td><td>7.40ms</td><td>32.00ms</td><td>8.38ms</td><td>7.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.95ms</td><td>1.46ms</td><td>7.34ms</td><td>2.25ms</td><td>5.48ms</td><td>2.16ms</td><td>8.30ms</td><td>2.12ms</td><td>1.64ms</td><td>13.59ms</td><td>6.42ms</td><td>34.06ms</td><td>7.94ms</td><td>7.73ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.72ms</td><td>0.98ms</td><td>7.28ms</td><td>2.01ms</td><td>4.67ms</td><td>1.45ms</td><td>9.04ms</td><td>3.39ms</td><td>1.76ms</td><td>13.78ms</td><td>6.89ms</td><td>33.85ms</td><td>8.84ms</td><td>7.56ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.06ms</td><td>1.91ms</td><td>7.96ms</td><td>3.29ms</td><td>4.69ms</td><td>1.48ms</td><td>8.79ms</td><td>3.00ms</td><td>1.69ms</td><td>14.80ms</td><td>6.97ms</td><td>31.52ms</td><td>8.89ms</td><td>7.48ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.39ms</td><td>2.44ms</td><td>7.94ms</td><td>3.37ms</td><td>5.38ms</td><td>1.24ms</td><td>8.49ms</td><td>2.33ms</td><td>1.77ms</td><td>12.96ms</td><td>6.48ms</td><td>33.30ms</td><td>8.90ms</td><td>7.38ms</td></tr>
+	</table>
+
+
+	<hr/>
+	<p/>
+	New NodeComparator in Jaxen
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.11ms</td><td>1.64ms</td><td>7.03ms</td><td>1.63ms</td><td>4.65ms</td><td>1.20ms</td><td>8.94ms</td><td>2.11ms</td><td>1.75ms</td><td>12.81ms</td><td>7.21ms</td><td>27.42ms</td><td>8.59ms</td><td>7.37ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.20ms</td><td>1.37ms</td><td>7.29ms</td><td>2.13ms</td><td>4.95ms</td><td>1.22ms</td><td>8.69ms</td><td>1.75ms</td><td>1.71ms</td><td>12.90ms</td><td>7.43ms</td><td>27.84ms</td><td>9.33ms</td><td>7.93ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.61ms</td><td>2.46ms</td><td>7.39ms</td><td>2.51ms</td><td>4.49ms</td><td>1.18ms</td><td>8.84ms</td><td>2.35ms</td><td>1.66ms</td><td>13.25ms</td><td>7.61ms</td><td>29.50ms</td><td>9.66ms</td><td>7.34ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>5.72ms</td><td>2.48ms</td><td>7.93ms</td><td>3.18ms</td><td>4.57ms</td><td>1.14ms</td><td>10.17ms</td><td>3.28ms</td><td>1.75ms</td><td>13.45ms</td><td>7.17ms</td><td>29.37ms</td><td>9.16ms</td><td>7.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.06MiB</td><td>4.83ms</td><td>1.75ms</td><td>7.57ms</td><td>2.58ms</td><td>4.56ms</td><td>1.11ms</td><td>9.10ms</td><td>2.38ms</td><td>1.74ms</td><td>13.52ms</td><td>7.54ms</td><td>28.39ms</td><td>9.78ms</td><td>7.79ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
 	JDOM 2.0.1 - Fix for issue #72 means that the 'Dump' job is doing more work, and is thus slower than before.
 	<br />
 	<table border="1">
