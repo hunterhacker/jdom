@@ -433,8 +433,6 @@ final public class Verifier {
 			return "A null is not a legal XML value";
 		}
 		
-		// lowx indicates we expect a low surrogate next.
-		boolean lowx = false;
 		final int len = text.length();
 		for (int i = 0; i < len; i++) {
 			// we are expecting a normal char, but may be a surrogate.
@@ -442,49 +440,55 @@ final public class Verifier {
 			// we save a lot of time by doing the test directly here without
 			// doing the unnecessary cast-to-int and double-checking ranges
 			// for the char.
-			if ((byte)0 != (byte)(CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)) { //isXMLCharacter(text.charAt(i))) {
-				if (lowx) {
+			// Also, note that we only need to check for non-zero flags, instead
+			// of checking for an actual bit, because all the other
+			// character roles are a pure subset of CharacterData. Put another way,
+			// any character with any bit set, will always also have the
+			// CharacterData bit set.
+			while (CHARFLAGS[text.charAt(i)] != (byte)0) {
+				// fast-loop through the chars until we find something that's not.
+				if (++i == len) {
+					// we passed all the characters...
+					return null;
+				}
+			}
+			// the character is not a normal character.
+			// we need to sort out what it is. Neither high nor low
+			// surrogate pairs are valid characters, so they will get here.
+			
+			if (isHighSurrogate(text.charAt(i))) {
+				// we have the valid high char of a pair.
+				// we will expect the low char on the next index,
+				i++;
+				if (i >= len) {
+					return String.format("Truncated Surrogate Pair 0x%04x????",
+							(int)text.charAt(i - 1));
+				}
+				if (isLowSurrogate(text.charAt(i))) {
+					// we now have the low char of a pair, decode and validate
+					if (!isXMLCharacter(decodeSurrogatePair(
+							text.charAt(i - 1), text.charAt(i)))) {
+						// Likely this character can't be easily displayed
+						// because it's a control so we use it'd hexadecimal 
+						// representation in the reason.
+						return String.format("0x%06x is not a legal XML character",
+								decodeSurrogatePair(
+										text.charAt(i - 1), text.charAt(i)));
+					}
+				} else {
 					// we got a normal character, but we wanted a low surrogate
 					return String.format("Illegal Surrogate Pair 0x%04x%04x",
 							(int)text.charAt(i - 1), (int)text.charAt(i));
 				}
 			} else {
-				// the character is not a normal character.
-				// we need to sort out what it is. Neither high nor low
-				// surrogate pairs are valid characters, so they will get here.
-				
-				if (!lowx && isHighSurrogate(text.charAt(i))) {
-					// we have the valid high char of a pair.
-					// we will expect the low char on the next loop through,
-					// so mark the high char, and move on.
-					lowx = true;
-				} else if (lowx && isLowSurrogate(text.charAt(i))) {
-					// we now have the low char of a pair, decode and validate
-					final int chi = decodeSurrogatePair(
-							text.charAt(i - 1), text.charAt(i));
-					if (!isXMLCharacter(chi)) {
-						// Likely this character can't be easily displayed
-						// because it's a control so we use it'd hexadecimal 
-						// representation in the reason.
-						return String.format("0x%06x is not a legal XML character",
-								chi);
-					}
-					lowx = false;
-				} else {
-					// Likely this character can't be easily displayed
-					// because it's a control so we use it's hexadecimal 
-					// representation in the reason.
-					return String.format("0x%04x is not a legal XML character",
-							(int)text.charAt(i));
-				}
+				// Likely this character can't be easily displayed
+				// because it's a control so we use its hexadecimal 
+				// representation in the reason.
+				return String.format("0x%04x is not a legal XML character",
+						(int)text.charAt(i));
 			}
 		}
 		
-		if (lowx) {
-			return String.format("Truncated Surrogate Pair 0x%04x????",
-					(int)text.charAt(text.length() - 1));
-		}
-
 		// If we got here, everything is OK
 		return null;
 	}

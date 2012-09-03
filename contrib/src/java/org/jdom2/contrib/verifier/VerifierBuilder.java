@@ -117,6 +117,18 @@ final public class VerifierBuilder {
 			if (isURICharacter(c)) {
 				flags[i] |= maskuricharacter;
 			}
+			
+			if (flags[i] != 0) {
+				if ((flags[i] & maskxmlcharacter) == 0) {
+					// for performance reasons, the testing of CharacterData
+					// in the final Verifier code does not use the bit-mask for it,
+					// but rather just checks for a non-zero flag. It does not need to
+					// check the actual bit because there are no characters flagged for
+					// any other role (name chars, uri's, etc.) that are not also a pure
+					// subset of the Character Data set.
+					throw new IllegalStateException("Flagged non-xmlchar '" + (char)i + "'.");
+				}
+			}
 		}
 		
 		// OK, now 'condense' the flags array to something usable.
