@@ -82,13 +82,14 @@ final public class Verifier {
 	 * character in a name, or can the character be part of a URI. The special
 	 * case is that Attributes and Element names in JDOM do not include the
 	 * namespace prefix, thus, for Attribute and Elements, the name is the
-	 * identical test to other XML names, but excludes the ':'. Thus the 8th
-	 * test is a special case of the general XML Name test.
+	 * identical test to other XML names, but excludes the ':'. For performance
+	 * reasons we only have the bitmask for the JDOM names, and then add the
+	 * ':' for the general case tests.
 	 * 
-	 * These 8 tests are often performed in very tight performance critical
+	 * These 7 tests are often performed in very tight performance critical
 	 * loops. It is essential for them to be fast.
 	 * 
-	 * These 8 tests conveniently can be represented as 8 bits in a byte.
+	 * These 7 tests conveniently can be represented as 8 bits in a byte.
 	 * We can thus have a single byte that represents the possible roles for
 	 * each possible character. There are 64K characters... thus we need 64K
 	 * bytes to represent each character's possible roles.
@@ -329,21 +330,21 @@ final public class Verifier {
 	}
 
 	/** Mask used to test for {@link #isXMLCharacter(int)} */
-	private static final int MASKXMLCHARACTER  = 1 << 0;
+	private static final byte MASKXMLCHARACTER  = 1 << 0;
 	/** Mask used to test for {@link #isXMLLetter(char)} */
-	private static final int MASKXMLLETTER     = 1 << 1;
+	private static final byte MASKXMLLETTER     = 1 << 1;
 	/** Mask used to test for {@link #isXMLNameStartCharacter(char)} */
-	private static final int MASKXMLSTARTCHAR  = 1 << 2;
+	private static final byte MASKXMLSTARTCHAR  = 1 << 2;
 	/** Mask used to test for {@link #isXMLNameCharacter(char)} */
-	private static final int MASKXMLNAMECHAR   = 1 << 3;
+	private static final byte MASKXMLNAMECHAR   = 1 << 3;
 	/** Mask used to test for {@link #isXMLDigit(char)} */
-	private static final int MASKXMLDIGIT      = 1 << 4;
+	private static final byte MASKXMLDIGIT      = 1 << 4;
 	/** Mask used to test for {@link #isXMLCombiningChar(char)} */
-	private static final int MASKXMLCOMBINING  = 1 << 5;
+	private static final byte MASKXMLCOMBINING  = 1 << 5;
 	/** Mask used to test for {@link #isURICharacter(char)} */
-	private static final int MASKURICHAR       = 1 << 6;
+	private static final byte MASKURICHAR       = 1 << 6;
 	/** Mask used to test for {@link #isXMLLetterOrDigit(char)} */
-	private static final int MASKXMLLETTERORDIGIT = MASKXMLLETTER | MASKXMLDIGIT;
+	private static final byte MASKXMLLETTERORDIGIT = MASKXMLLETTER | MASKXMLDIGIT;
 	
 	/**
 	 * Ensure instantation cannot occur.
@@ -363,14 +364,14 @@ final public class Verifier {
 		}
 
 		// Cannot start with a number
-		if (0 == (CHARFLAGS[name.charAt(0)] & MASKXMLSTARTCHAR)) {
+		if ((byte)0 == (CHARFLAGS[name.charAt(0)] & MASKXMLSTARTCHAR)) {
 			return "XML names cannot begin with the character \"" + 
 					name.charAt(0) + "\"";
 		}
 		// Ensure legal content for non-first chars
 		// also check char 0 to catch colon char ':'
 		for (int i = name.length() - 1; i > 1; i--) {
-			if (0 == (CHARFLAGS[name.charAt(i)] & MASKXMLNAMECHAR)) {
+			if ((byte)0 == (byte)(CHARFLAGS[name.charAt(i)] & MASKXMLNAMECHAR)) {
 				return "XML names cannot contain the character \"" + name.charAt(i) + "\"";
 			}
 		}
@@ -441,7 +442,7 @@ final public class Verifier {
 			// we save a lot of time by doing the test directly here without
 			// doing the unnecessary cast-to-int and double-checking ranges
 			// for the char.
-			if (0 != (CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)) { //isXMLCharacter(text.charAt(i))) {
+			if ((byte)0 != (byte)(CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)) { //isXMLCharacter(text.charAt(i))) {
 				if (lowx) {
 					// we got a normal character, but we wanted a low surrogate
 					return String.format("Illegal Surrogate Pair 0x%04x%04x",
@@ -528,12 +529,12 @@ final public class Verifier {
 		final int len = prefix.length();
 		
 		// Cannot start with a number
-		if (0 == (CHARFLAGS[prefix.charAt(0)] & MASKXMLSTARTCHAR)) {
+		if ((byte)0 == (byte)(CHARFLAGS[prefix.charAt(0)] & MASKXMLSTARTCHAR)) {
 			return "Namespace prefixes cannot begin with character '" + prefix.charAt(0) + "'";
 		}
 		// Ensure legal content
 		for (int i=1; i < len; i++) {
-			if (0 == (CHARFLAGS[prefix.charAt(i)] & MASKXMLNAMECHAR)) {
+			if ((byte)0 == (byte)(CHARFLAGS[prefix.charAt(i)] & MASKXMLNAMECHAR)) {
 				return "Namespace prefixes cannot contain the character \"" +
 						prefix.charAt(i) + "\"";
 			}
@@ -1116,7 +1117,7 @@ final public class Verifier {
 	 * @return true if it's allowed, false otherwise.
 	 */
 	public static boolean isURICharacter(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKURICHAR);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKURICHAR);
 	}
 
 	/**
@@ -1132,7 +1133,7 @@ final public class Verifier {
 		if (c >= CHARCNT) {
 			return c <= 0x10FFFF;
 		}
-		return 0 != (CHARFLAGS[c] & MASKXMLCHARACTER);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLCHARACTER);
 	}
 
 
@@ -1146,7 +1147,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameCharacter(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLNAMECHAR) || c == ':';
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLNAMECHAR) || c == ':';
 	}
 
 	/**
@@ -1161,7 +1162,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameStartCharacter(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLSTARTCHAR) || c == ':';
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLSTARTCHAR) || c == ':';
 	}
 
 	/**
@@ -1174,7 +1175,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLLetterOrDigit(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLLETTERORDIGIT);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLLETTERORDIGIT);
 	}
 
 	/**
@@ -1185,7 +1186,7 @@ final public class Verifier {
 	 * @return <code>String</code> true if it's a letter, false otherwise.
 	 */
 	public static boolean isXMLLetter(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLLETTER);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLLETTER);
 	}
 
 	/**
@@ -1198,7 +1199,7 @@ final public class Verifier {
 	 *         false otherwise.
 	 */
 	public static boolean isXMLCombiningChar(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLCOMBINING);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLCOMBINING);
 	}
 
 	/**
@@ -1247,7 +1248,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a digit, false otherwise
 	 */
 	public static boolean isXMLDigit(final char c) {
-		return 0 != (CHARFLAGS[c] & MASKXMLDIGIT);
+		return (byte)0 != (byte)(CHARFLAGS[c] & MASKXMLDIGIT);
 	}  
 
 	/**
