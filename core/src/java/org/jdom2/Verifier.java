@@ -65,6 +65,7 @@ import java.util.*;
  * @author  Jason Hunter
  * @author  Bradley S. Huffman
  * @author  Rolf Lear
+ * @author  Wilfried Middleton
  */
 final public class Verifier {
 	
