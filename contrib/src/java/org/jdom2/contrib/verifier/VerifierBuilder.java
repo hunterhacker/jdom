@@ -79,13 +79,13 @@ final public class VerifierBuilder {
 	
 	
 	private static final int charcnt = Character.MAX_VALUE + 1;
-	private static final byte maskxmlcharacter     = 1 << 0;
-	private static final byte maskxmlletter        = 1 << 1;
-	private static final byte maskxmlstart         = 1 << 2;
-	private static final byte maskxmlnamecharacter = 1 << 3;
-	private static final byte maskxmldigit         = 1 << 4;
-	private static final byte maskxmlcombining     = 1 << 5;
-	private static final byte maskuricharacter     = 1 << 6;
+	private static final byte maskxmlcharacter      = 1 << 0;
+	private static final byte maskxmlletter         = 1 << 1;
+	private static final byte maskxmlstart          = 1 << 2;
+	private static final byte maskxmlnamecharacter  = 1 << 3;
+	private static final byte maskxmldigit          = 1 << 4;
+	private static final byte maskxmlcombining      = 1 << 5;
+	private static final byte maskuricharacter      = 1 << 6;
 	
 	@SuppressWarnings("javadoc")
 	public static void main(String[] args) {
@@ -171,6 +171,9 @@ final public class VerifierBuilder {
 			if ((i % 8) == 0) {
 				sbval.append("\n        ");
 				sblen.append("\n        ");
+			}
+			if ((vals[i] & (byte)0x80) != 0) {
+				sbval.append("(byte)");
 			}
 			sbval.append(String.format("0x%02x", vals[i]));
 			sblen.append(String.format("%5d", lens[i]));
@@ -280,8 +283,13 @@ final public class VerifierBuilder {
 	 */
 	public static boolean isXMLNameCharacter(final char c) {
 
+		// remove check for || c == ':'
+		// JDOM Attributes and Elements cannot start with ':' since JDOM
+		// seperates the prefix from the name.
+		// we do not want ':' in the bitmask, instead we add it later.
+		
 		return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
-				|| c == '_' || c == ':' || isXMLCombiningChar(c) 
+				|| c == '_'  || isXMLCombiningChar(c) 
 				|| Verifier.isXMLExtender(c));
 	}
 
@@ -298,7 +306,12 @@ final public class VerifierBuilder {
 	 */
 	public static boolean isXMLNameStartCharacter(final char c) {
 
-		return (isXMLLetter(c) || c == '_' || c ==':');
+		// remove check for || c == ':'
+		// JDOM Attributes and Elements cannot start with ':' since JDOM
+		// seperates the prefix from the name.
+		// we do not want ':' in the bitmask, instead we add it later.
+		
+		return (isXMLLetter(c) || c == '_');
 
 	}
 

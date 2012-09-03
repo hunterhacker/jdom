@@ -75,23 +75,27 @@ final public class Verifier {
 	 * This Verifier uses bitwise logic to perform fast validation on
 	 * XML characters. The concept is as follows...
 	 * 
-	 * There are 7 major tests for characters in JDOM. Can the character
-	 * be a regular character, can it be part of an XML Name (element,
-	 * attribute), does it represent a letter, digit, or combining character.
-	 * Finally can a character be the first character in a name, or can the
-	 * character be part of a URI.
+	 * There are 7 major tests for characters in JDOM and one special case.
+	 * Can the character be a regular character, can it be part of an XML Name
+	 * (element, attribute, entity-ref, etc.), does it represent a letter,
+	 * digit, or combining character. Finally can a character be the first
+	 * character in a name, or can the character be part of a URI. The special
+	 * case is that Attributes and Element names in JDOM do not include the
+	 * namespace prefix, thus, for Attribute and Elements, the name is the
+	 * identical test to other XML names, but excludes the ':'. Thus the 8th
+	 * test is a special case of the general XML Name test.
 	 * 
-	 * These 7 tests are often performed in very tight performance critical
+	 * These 8 tests are often performed in very tight performance critical
 	 * loops. It is essential for them to be fast.
 	 * 
-	 * These 7 tests conveniently can be represented as 7 bits in a byte.
+	 * These 8 tests conveniently can be represented as 8 bits in a byte.
 	 * We can thus have a single byte that represents the possible roles for
 	 * each possible character. There are 64K characters... thus we need 64K
 	 * bytes to represent each character's possible roles.
 	 * 
 	 * We could use arrays of booleans to accomplish the same thing, but each
 	 * boolean is a byte of memory, and using a bitmask allows us to put the
-	 * 7 bitmask tests in the same memory space as just one boolean array.
+	 * 8 bitmask tests in the same memory space as just one boolean array.
 	 * 
 	 * The end solution is to have an array of these bytes, one per character,
 	 * and to then query each bit on the byte to see whether the corresponding
@@ -113,7 +117,7 @@ final public class Verifier {
 	 * 
 	 * These two arrays are then 'decompressed' in to the CHARFLAGS array.
 	 * 
-	 * The CHARFLAGS array is then queried for each of the 7 critical tests
+	 * The CHARFLAGS array is then queried for each of the 8 critical tests
 	 * to determine which roles a character performs.
 	 * 
 	 * If you need to change the roles a character plays in XML (i.e. change
@@ -129,167 +133,167 @@ final public class Verifier {
 	 * The seed array used with LENCONST to populate CHARFLAGS.
 	 */
 	private static final byte[] VALCONST = new byte[] {
-	        0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x41, 0x01, 
-	        0x41, 0x49, 0x41, 0x59, 0x4d, 0x01, 0x41, 0x01, 
-	        0x41, 0x4f, 0x01, 0x4d, 0x01, 0x4f, 0x01, 0x41, 
-	        0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 0x01, 0x29, 
-	        0x01, 0x0f, 0x09, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 
-	        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x0f, 0x29, 
-	        0x01, 0x19, 0x01, 0x29, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 
-	        0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 
-	        0x01, 0x29, 0x0f, 0x29, 0x01, 0x29, 0x01, 0x0f, 
-	        0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
-	        0x01, 0x19, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x19, 0x29, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 
-	        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x29, 0x0f, 0x29, 0x01, 0x0f, 0x09, 0x29, 
-	        0x01, 0x19, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 0x01, 
-	        0x29, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 
-	        0x01, 0x19, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 
-	        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 
-	        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
-	        0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
-	        0x01, 0x09, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x09, 
-	        0x01, 0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 
-	        0x01, 0x0f, 0x01, 0x00, 0x01, 0x00};
+        0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x41, 0x01, 
+        0x41, 0x49, 0x41, 0x59, 0x41, 0x01, 0x41, 0x01, 
+        0x41, 0x4f, 0x01, 0x4d, 0x01, 0x4f, 0x01, 0x41, 
+        0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 0x01, 0x29, 
+        0x01, 0x0f, 0x09, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 
+        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x0f, 0x29, 
+        0x01, 0x19, 0x01, 0x29, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 
+        0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 
+        0x01, 0x29, 0x0f, 0x29, 0x01, 0x29, 0x01, 0x0f, 
+        0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
+        0x01, 0x19, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x19, 0x29, 0x0f, 0x01, 0x29, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 0x29, 0x01, 
+        0x29, 0x01, 0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x0f, 
+        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x29, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x19, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x19, 0x01, 0x0f, 0x01, 
+        0x0f, 0x29, 0x0f, 0x29, 0x01, 0x0f, 0x09, 0x29, 
+        0x01, 0x19, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x0f, 0x29, 0x0f, 0x29, 0x01, 
+        0x29, 0x0f, 0x01, 0x0f, 0x01, 0x09, 0x01, 0x29, 
+        0x01, 0x19, 0x01, 0x29, 0x01, 0x19, 0x01, 0x29, 
+        0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x0f, 0x01, 
+        0x0f, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x29, 0x01, 
+        0x29, 0x01, 0x0f, 0x01, 0x0f, 0x01, 0x0f, 0x01, 
+        0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 0x29, 
+        0x01, 0x09, 0x01, 0x0f, 0x01, 0x29, 0x01, 0x09, 
+        0x01, 0x0f, 0x01, 0x09, 0x01, 0x0f, 0x01, 0x0f, 
+        0x01, 0x0f, 0x01, 0x00, 0x01, 0x00};
 
 	/**
 	 * The seed array used with VALCONST to populate CHARFLAGS.
 	 */
 	private static final int [] LENCONST = new int [] {
-	            9,     2,     2,     1,    18,     1,     1,     2, 
-	            9,     2,     1,    10,     1,     2,     1,     1, 
-	            2,    26,     4,     1,     1,    26,     3,     1, 
-	           56,     1,     8,    23,     1,    31,     1,    58, 
-	            2,    11,     2,     8,     1,    53,     1,    68, 
-	            9,    36,     3,     2,     4,    30,    56,    89, 
-	           18,     7,    14,     2,    46,    70,    26,     2, 
-	           36,     1,     1,     3,     1,     1,     1,    20, 
-	            1,    44,     1,     7,     3,     1,     1,     1, 
-	            1,     1,     1,     1,     1,    18,    13,    12, 
-	            1,    66,     1,    12,     1,    36,     1,     4, 
-	            9,    53,     2,     2,     2,     2,     3,    28, 
-	            2,     8,     2,     2,    55,    38,     2,     1, 
-	            7,    38,    10,    17,     1,    23,     1,     3, 
-	            1,     1,     1,     2,     1,     1,    11,    27, 
-	            5,     3,    46,    26,     5,     1,    10,     8, 
-	           13,    10,     6,     1,    71,     2,     5,     1, 
-	           15,     1,     4,     1,     1,    15,     2,     2, 
-	            1,     4,     2,    10,   519,     3,     1,    53, 
-	            2,     1,     1,    16,     3,     4,     3,    10, 
-	            2,     2,    10,    17,     3,     1,     8,     2, 
-	            2,     2,    22,     1,     7,     1,     1,     3, 
-	            4,     2,     1,     1,     7,     2,     2,     2, 
-	            3,     9,     1,     4,     2,     1,     3,     2, 
-	            2,    10,     2,    16,     1,     2,     6,     4, 
-	            2,     2,    22,     1,     7,     1,     2,     1, 
-	            2,     1,     2,     2,     1,     1,     5,     4, 
-	            2,     2,     3,    11,     4,     1,     1,     7, 
-	           10,     2,     3,    12,     3,     1,     7,     1, 
-	            1,     1,     3,     1,    22,     1,     7,     1, 
-	            2,     1,     5,     2,     1,     1,     8,     1, 
-	            3,     1,     3,    18,     1,     5,    10,    17, 
-	            3,     1,     8,     2,     2,     2,    22,     1, 
-	            7,     1,     2,     2,     4,     2,     1,     1, 
-	            6,     3,     2,     2,     3,     8,     2,     4, 
-	            2,     1,     3,     4,    10,    18,     2,     1, 
-	            6,     3,     3,     1,     4,     3,     2,     1, 
-	            1,     1,     2,     3,     2,     3,     3,     3, 
-	            8,     1,     3,     4,     5,     3,     3,     1, 
-	            4,     9,     1,    15,     9,    17,     3,     1, 
-	            8,     1,     3,     1,    23,     1,    10,     1, 
-	            5,     4,     7,     1,     3,     1,     4,     7, 
-	            2,     9,     2,     4,    10,    18,     2,     1, 
-	            8,     1,     3,     1,    23,     1,    10,     1, 
-	            5,     4,     7,     1,     3,     1,     4,     7, 
-	            2,     7,     1,     1,     2,     4,    10,    18, 
-	            2,     1,     8,     1,     3,     1,    23,     1, 
-	           16,     4,     6,     2,     3,     1,     4,     9, 
-	            1,     8,     2,     4,    10,   145,    46,     1, 
-	            1,     1,     2,     7,     5,     6,     1,     8, 
-	            1,    10,    39,     2,     1,     1,     2,     2, 
-	            1,     1,     2,     1,     6,     4,     1,     7, 
-	            1,     3,     1,     1,     1,     1,     2,     2, 
-	            1,     2,     1,     1,     1,     2,     6,     1, 
-	            2,     1,     2,     5,     1,     1,     1,     6, 
-	            2,    10,    62,     2,     6,    10,    11,     1, 
-	            1,     1,     1,     1,     4,     2,     8,     1, 
-	           33,     7,    20,     1,     6,     4,     6,     1, 
-	            1,     1,    21,     3,     7,     1,     1,   230, 
-	           38,    10,    39,     9,     1,     1,     2,     1, 
-	            3,     1,     1,     1,     2,     1,     5,    41, 
-	            1,     1,     1,     1,     1,    11,     1,     1, 
-	            1,     1,     1,     3,     2,     3,     1,     5, 
-	            3,     1,     1,     1,     1,     1,     1,     1, 
-	            1,     3,     2,     3,     2,     1,     1,    40, 
-	            1,     9,     1,     2,     1,     2,     2,     7, 
-	            2,     1,     1,     1,     7,    40,     1,     4, 
-	            1,     8,     1,  3078,   156,     4,    90,     6, 
-	           22,     2,     6,     2,    38,     2,     6,     2, 
-	            8,     1,     1,     1,     1,     1,     1,     1, 
-	           31,     2,    53,     1,     7,     1,     1,     3, 
-	            3,     1,     7,     3,     4,     2,     6,     4, 
-	           13,     5,     3,     1,     7,   211,    13,     4, 
-	            1,    68,     1,     3,     2,     2,     1,    81, 
-	            3,  3714,     1,     1,     1,    25,     9,     6, 
-	            1,     5,    11,    84,     4,     2,     2,     2, 
-	            2,    90,     1,     3,     6,    40,  7379, 20902, 
-	         3162, 11172,    92,  2048,  8190,     2};	
+        9,     2,     2,     1,    18,     1,     1,     2, 
+        9,     2,     1,    10,     1,     2,     1,     1, 
+        2,    26,     4,     1,     1,    26,     3,     1, 
+       56,     1,     8,    23,     1,    31,     1,    58, 
+        2,    11,     2,     8,     1,    53,     1,    68, 
+        9,    36,     3,     2,     4,    30,    56,    89, 
+       18,     7,    14,     2,    46,    70,    26,     2, 
+       36,     1,     1,     3,     1,     1,     1,    20, 
+        1,    44,     1,     7,     3,     1,     1,     1, 
+        1,     1,     1,     1,     1,    18,    13,    12, 
+        1,    66,     1,    12,     1,    36,     1,     4, 
+        9,    53,     2,     2,     2,     2,     3,    28, 
+        2,     8,     2,     2,    55,    38,     2,     1, 
+        7,    38,    10,    17,     1,    23,     1,     3, 
+        1,     1,     1,     2,     1,     1,    11,    27, 
+        5,     3,    46,    26,     5,     1,    10,     8, 
+       13,    10,     6,     1,    71,     2,     5,     1, 
+       15,     1,     4,     1,     1,    15,     2,     2, 
+        1,     4,     2,    10,   519,     3,     1,    53, 
+        2,     1,     1,    16,     3,     4,     3,    10, 
+        2,     2,    10,    17,     3,     1,     8,     2, 
+        2,     2,    22,     1,     7,     1,     1,     3, 
+        4,     2,     1,     1,     7,     2,     2,     2, 
+        3,     9,     1,     4,     2,     1,     3,     2, 
+        2,    10,     2,    16,     1,     2,     6,     4, 
+        2,     2,    22,     1,     7,     1,     2,     1, 
+        2,     1,     2,     2,     1,     1,     5,     4, 
+        2,     2,     3,    11,     4,     1,     1,     7, 
+       10,     2,     3,    12,     3,     1,     7,     1, 
+        1,     1,     3,     1,    22,     1,     7,     1, 
+        2,     1,     5,     2,     1,     1,     8,     1, 
+        3,     1,     3,    18,     1,     5,    10,    17, 
+        3,     1,     8,     2,     2,     2,    22,     1, 
+        7,     1,     2,     2,     4,     2,     1,     1, 
+        6,     3,     2,     2,     3,     8,     2,     4, 
+        2,     1,     3,     4,    10,    18,     2,     1, 
+        6,     3,     3,     1,     4,     3,     2,     1, 
+        1,     1,     2,     3,     2,     3,     3,     3, 
+        8,     1,     3,     4,     5,     3,     3,     1, 
+        4,     9,     1,    15,     9,    17,     3,     1, 
+        8,     1,     3,     1,    23,     1,    10,     1, 
+        5,     4,     7,     1,     3,     1,     4,     7, 
+        2,     9,     2,     4,    10,    18,     2,     1, 
+        8,     1,     3,     1,    23,     1,    10,     1, 
+        5,     4,     7,     1,     3,     1,     4,     7, 
+        2,     7,     1,     1,     2,     4,    10,    18, 
+        2,     1,     8,     1,     3,     1,    23,     1, 
+       16,     4,     6,     2,     3,     1,     4,     9, 
+        1,     8,     2,     4,    10,   145,    46,     1, 
+        1,     1,     2,     7,     5,     6,     1,     8, 
+        1,    10,    39,     2,     1,     1,     2,     2, 
+        1,     1,     2,     1,     6,     4,     1,     7, 
+        1,     3,     1,     1,     1,     1,     2,     2, 
+        1,     2,     1,     1,     1,     2,     6,     1, 
+        2,     1,     2,     5,     1,     1,     1,     6, 
+        2,    10,    62,     2,     6,    10,    11,     1, 
+        1,     1,     1,     1,     4,     2,     8,     1, 
+       33,     7,    20,     1,     6,     4,     6,     1, 
+        1,     1,    21,     3,     7,     1,     1,   230, 
+       38,    10,    39,     9,     1,     1,     2,     1, 
+        3,     1,     1,     1,     2,     1,     5,    41, 
+        1,     1,     1,     1,     1,    11,     1,     1, 
+        1,     1,     1,     3,     2,     3,     1,     5, 
+        3,     1,     1,     1,     1,     1,     1,     1, 
+        1,     3,     2,     3,     2,     1,     1,    40, 
+        1,     9,     1,     2,     1,     2,     2,     7, 
+        2,     1,     1,     1,     7,    40,     1,     4, 
+        1,     8,     1,  3078,   156,     4,    90,     6, 
+       22,     2,     6,     2,    38,     2,     6,     2, 
+        8,     1,     1,     1,     1,     1,     1,     1, 
+       31,     2,    53,     1,     7,     1,     1,     3, 
+        3,     1,     7,     3,     4,     2,     6,     4, 
+       13,     5,     3,     1,     7,   211,    13,     4, 
+        1,    68,     1,     3,     2,     2,     1,    81, 
+        3,  3714,     1,     1,     1,    25,     9,     6, 
+        1,     5,    11,    84,     4,     2,     2,     2, 
+        2,    90,     1,     3,     6,    40,  7379, 20902, 
+     3162, 11172,    92,  2048,  8190,     2};
 
 	/**
 	 * The number of characters in Java.
@@ -325,26 +329,55 @@ final public class Verifier {
 	}
 
 	/** Mask used to test for {@link #isXMLCharacter(int)} */
-	private static final byte MASKXMLCHARACTER  = 1 << 0;
+	private static final int MASKXMLCHARACTER  = 1 << 0;
 	/** Mask used to test for {@link #isXMLLetter(char)} */
-	private static final byte MASKXMLLETTER     = 1 << 1;
+	private static final int MASKXMLLETTER     = 1 << 1;
 	/** Mask used to test for {@link #isXMLNameStartCharacter(char)} */
-	private static final byte MASKXMLSTARTCHAR  = 1 << 2;
+	private static final int MASKXMLSTARTCHAR  = 1 << 2;
 	/** Mask used to test for {@link #isXMLNameCharacter(char)} */
-	private static final byte MASKXMLNAMECHAR   = 1 << 3;
+	private static final int MASKXMLNAMECHAR   = 1 << 3;
 	/** Mask used to test for {@link #isXMLDigit(char)} */
-	private static final byte MASKXMLDIGIT      = 1 << 4;
+	private static final int MASKXMLDIGIT      = 1 << 4;
 	/** Mask used to test for {@link #isXMLCombiningChar(char)} */
-	private static final byte MASKXMLCOMBINING  = 1 << 5;
+	private static final int MASKXMLCOMBINING  = 1 << 5;
 	/** Mask used to test for {@link #isURICharacter(char)} */
-	private static final byte MASKURICHAR       = 1 << 6;
+	private static final int MASKURICHAR       = 1 << 6;
 	/** Mask used to test for {@link #isXMLLetterOrDigit(char)} */
-	private static final byte MASKXMLLETTERORDIGIT = MASKXMLLETTER | MASKXMLDIGIT;
+	private static final int MASKXMLLETTERORDIGIT = MASKXMLLETTER | MASKXMLDIGIT;
 	
 	/**
 	 * Ensure instantation cannot occur.
 	 */
 	private Verifier() { }
+	
+	private static final String checkJDOMName(final String name) {
+		// Check basic XML name rules first
+		// Cannot be empty or null
+		if (name == null) {
+			return "XML names cannot be null";
+		}
+		
+		//final int len = name.length();
+		if (name.length() == 0) { 
+			return "XML names cannot be empty";
+		}
+
+		// Cannot start with a number
+		if (0 == (CHARFLAGS[name.charAt(0)] & MASKXMLSTARTCHAR)) {
+			return "XML names cannot begin with the character \"" + 
+					name.charAt(0) + "\"";
+		}
+		// Ensure legal content for non-first chars
+		// also check char 0 to catch colon char ':'
+		for (int i = name.length() - 1; i > 1; i--) {
+			if (0 == (CHARFLAGS[name.charAt(i)] & MASKXMLNAMECHAR)) {
+				return "XML names cannot contain the character \"" + name.charAt(i) + "\"";
+			}
+		}
+
+		// If we got here, everything is OK
+		return null;
+	}
 
 	/**
 	 * This will check the supplied name to see if it is legal for use as
@@ -355,18 +388,7 @@ final public class Verifier {
 	 *         <code>null</code> if name is OK.
 	 */
 	public static String checkElementName(final String name) {
-		// Check basic XML name rules first
-		if (checkXMLName(name) != null) {
-			return checkXMLName(name);
-		}
-
-		// No colons allowed, since elements handle this internally
-		if (name.indexOf(":") != -1) {
-			return "Element names cannot contain colons";
-		}
-
-		// If we got here, everything is OK
-		return null;
+		return checkJDOMName(name);
 	}
 
 	/**
@@ -378,24 +400,13 @@ final public class Verifier {
 	 *         <code>null</code> if name is OK.
 	 */
 	public static String checkAttributeName(final String name) {
-		// Check basic XML name rules first
-		if (checkXMLName(name) != null) {
-			return checkXMLName(name);
-		}
-
-		// No colons are allowed, since attributes handle this internally
-		if (name.indexOf(":") != -1) {
-			return "Attribute names cannot contain colons";
-		}
-
 		// Attribute names may not be xmlns since we do this internally too
-		if (name.equals("xmlns")) {
+		if ("xmlns".equals(name)) {
 			return "An Attribute name may not be \"xmlns\"; " +
 					"use the Namespace class to manage namespaces";
 		}
 
-		// If we got here, everything is OK
-		return null;
+		return checkJDOMName(name);
 	}
 
 	/**
@@ -430,7 +441,7 @@ final public class Verifier {
 			// we save a lot of time by doing the test directly here without
 			// doing the unnecessary cast-to-int and double-checking ranges
 			// for the char.
-			if (isXMLCharacter(text.charAt(i))) { // (byte)0 != (CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)
+			if (0 != (CHARFLAGS[text.charAt(i)] & MASKXMLCHARACTER)) { //isXMLCharacter(text.charAt(i))) {
 				if (lowx) {
 					// we got a normal character, but we wanted a low surrogate
 					return String.format("Illegal Surrogate Pair 0x%04x%04x",
@@ -513,38 +524,33 @@ final public class Verifier {
 		if ((prefix == null) || (prefix.equals(""))) {
 			return null;
 		}
-
+		
+		final int len = prefix.length();
+		
 		// Cannot start with a number
-		final char first = prefix.charAt(0);
-		if (isXMLDigit(first)) {
-			return "Namespace prefixes cannot begin with a number";
+		if (0 == (CHARFLAGS[prefix.charAt(0)] & MASKXMLSTARTCHAR)) {
+			return "Namespace prefixes cannot begin with character '" + prefix.charAt(0) + "'";
 		}
-		// Cannot start with a $
-		if (first == '$') {
-			return "Namespace prefixes cannot begin with a dollar sign ($)";
-		}
-		// Cannot start with a -
-		if (first == '-') {
-			return "Namespace prefixes cannot begin with a hyphen (-)";
-		}
-		// Cannot start with a .
-		if (first == '.') {
-			return "Namespace prefixes cannot begin with a period (.)";
-		}
-		// Cannot start with "xml" in any character case
-		if (prefix.toLowerCase().startsWith("xml")) {
-			return "Namespace prefixes cannot begin with " +
-					"\"xml\" in any combination of case";
-		}
-
 		// Ensure legal content
-		for (int i=0, len = prefix.length(); i<len; i++) {
-			final char c = prefix.charAt(i);
-			if (!isXMLNameCharacter(c)) {
+		for (int i=1; i < len; i++) {
+			if (0 == (CHARFLAGS[prefix.charAt(i)] & MASKXMLNAMECHAR)) {
 				return "Namespace prefixes cannot contain the character \"" +
-						c + "\"";
+						prefix.charAt(i) + "\"";
 			}
 		}
+
+		// Cannot start with "xml" in any character case
+		if (len >= 3) {
+			if (prefix.charAt(0) == 'x' || prefix.charAt(0) == 'X') {
+				if (prefix.charAt(1) == 'm' || prefix.charAt(1) == 'M') {
+					if (prefix.charAt(2) == 'l' || prefix.charAt(2) == 'L') {
+						return "Namespace prefixes cannot begin with " +
+								"\"xml\" in any combination of case";
+					}
+				}
+			}
+		}
+
 
 		// No colons allowed
 		if (prefix.indexOf(":") != -1) {
@@ -1110,7 +1116,7 @@ final public class Verifier {
 	 * @return true if it's allowed, false otherwise.
 	 */
 	public static boolean isURICharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKURICHAR);
+		return 0 != (CHARFLAGS[c] & MASKURICHAR);
 	}
 
 	/**
@@ -1126,7 +1132,7 @@ final public class Verifier {
 		if (c >= CHARCNT) {
 			return c <= 0x10FFFF;
 		}
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLCHARACTER);
+		return 0 != (CHARFLAGS[c] & MASKXMLCHARACTER);
 	}
 
 
@@ -1140,7 +1146,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameCharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLNAMECHAR);
+		return 0 != (CHARFLAGS[c] & MASKXMLNAMECHAR) || c == ':';
 	}
 
 	/**
@@ -1155,7 +1161,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLNameStartCharacter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLSTARTCHAR);
+		return 0 != (CHARFLAGS[c] & MASKXMLSTARTCHAR) || c == ':';
 	}
 
 	/**
@@ -1168,7 +1174,7 @@ final public class Verifier {
 	 *                                false otherwise.
 	 */
 	public static boolean isXMLLetterOrDigit(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLLETTERORDIGIT);
+		return 0 != (CHARFLAGS[c] & MASKXMLLETTERORDIGIT);
 	}
 
 	/**
@@ -1179,7 +1185,7 @@ final public class Verifier {
 	 * @return <code>String</code> true if it's a letter, false otherwise.
 	 */
 	public static boolean isXMLLetter(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLLETTER);
+		return 0 != (CHARFLAGS[c] & MASKXMLLETTER);
 	}
 
 	/**
@@ -1192,7 +1198,7 @@ final public class Verifier {
 	 *         false otherwise.
 	 */
 	public static boolean isXMLCombiningChar(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLCOMBINING);
+		return 0 != (CHARFLAGS[c] & MASKXMLCOMBINING);
 	}
 
 	/**
@@ -1241,7 +1247,7 @@ final public class Verifier {
 	 * @return <code>boolean</code> true if it's a digit, false otherwise
 	 */
 	public static boolean isXMLDigit(final char c) {
-		return (byte)0 != (CHARFLAGS[c] & MASKXMLDIGIT);
+		return 0 != (CHARFLAGS[c] & MASKXMLDIGIT);
 	}  
 
 	/**

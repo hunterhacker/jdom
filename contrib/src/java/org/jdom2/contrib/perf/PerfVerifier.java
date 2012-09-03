@@ -22,6 +22,7 @@ public class PerfVerifier {
 	
 	@SuppressWarnings("javadoc")
 	public static void main(final String[] args) {
+		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		if (args.length != 1) {
 			throw new IllegalArgumentException("We expect a single directory argument.");
 		}
@@ -30,9 +31,11 @@ public class PerfVerifier {
 			throw new IllegalArgumentException("We expect a single directory argument.");
 		}
 		
-		long sattnanos = 0L;
-		long semtnanos = 0L;
-		long schrnanos = 0L;
+		final int bestcnt = 10;
+		
+		long[] sattnanos = new long[bestcnt];
+		long[] semtnanos = new long[bestcnt];
+		long[] schrnanos = new long[bestcnt];
 		long start = 0L;
 
 		System.out.println("Loading data");
@@ -48,12 +51,12 @@ public class PerfVerifier {
 		System.out.println("Launch");
 		
 		int i = 0;
-		int cnt = 18;
+		int cnt = bestcnt * 3;
 		while (--cnt >= 0) {
 			long attnanos = 0L;
 			long emtnanos = 0L;
 			long chrnanos = 0L;
-
+			
 			start = System.nanoTime();
 			for (i = attnames.length - 1; i >= 0; i--) {
 				Verifier.checkAttributeName(attnames[i]);
@@ -67,33 +70,49 @@ public class PerfVerifier {
 			emtnanos = System.nanoTime() - start;
 
 			start = System.nanoTime();
+			
 			for (i = chardata.length - 1; i >= 0; i--) {
 				Verifier.checkCharacterData(chardata[i]);
 			}
 			chrnanos = System.nanoTime() - start;
 			
-			if (cnt >= 10) {
-				System.out.printf("   Warmup %2d took: att=%.3fms emt=%.3fms char=%.3fms\n", cnt,
-						attnanos / 1000000.0, emtnanos / 1000000.0, chrnanos / 1000000.0);
-			} else {
-				System.out.printf("   Loop   %2d took: att=%.3fms emt=%.3fms char=%.3fms\n", cnt,
-						attnanos / 1000000.0, emtnanos / 1000000.0, chrnanos / 1000000.0);
-				
-				sattnanos += attnanos;
-				semtnanos += emtnanos;
-				schrnanos += chrnanos;
-			}
+			System.out.printf("   Loop   %2d took: att=%.3fms emt=%.3fms char=%.3fms\n", cnt,
+					attnanos / 1000000.0, emtnanos / 1000000.0, chrnanos / 1000000.0);
+			
+			insertTime(sattnanos, attnanos);
+			insertTime(semtnanos, emtnanos);
+			insertTime(schrnanos, chrnanos);
 			
 		}
 		
 		final long memused = getMemUsed() - prebytes;
 		
 		System.out.printf("Validating took: att=%.3fms emt=%.3fms char=%.3fms mem=%.3fKB\n",
-				sattnanos / 1000000.0, semtnanos / 1000000.0, schrnanos / 1000000.0,
+				sum(sattnanos) / 1000000.0, sum(semtnanos) / 1000000.0, sum(schrnanos) / 1000000.0,
 				memused / 1024.0);
 				
 		Verifier.isAllXMLWhitespace("  ");
 		System.out.println("Checks " + (chardata.length + emtnames.length + attnames.length));
+	}
+	
+	private static final void insertTime(final long[] array, final long time) {
+		int index = array.length -1;
+		while (index >= 0 && (array[index] == 0L || time < array[index])) {
+			index--;
+		}
+		index++;
+		if (index < array.length) {
+			System.arraycopy(array, index, array, index+1, array.length - index - 1);
+			array[index] = time;
+		}
+	}
+	
+	private static final long sum(final long[] values) {
+		long ret = 0L;
+		for (long v : values) {
+			ret += v;
+		}
+		return ret;
 	}
 
 	private static long getMemUsed() {

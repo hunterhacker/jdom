@@ -157,7 +157,19 @@ public final class TestVerifier {
 		assertNull("invalidated valid name with 0x4E01", Verifier.checkAttributeName("test" + (char)0x4E01));
 		assertNull("invalidated valid name with 0x0301", Verifier.checkAttributeName("test" + (char)0x0301));
 
-	}
+    	assertNull(Verifier.checkAttributeName("hi"));
+    	assertNull(Verifier.checkAttributeName("hi2you"));
+    	assertNull(Verifier.checkAttributeName("hi_you"));
+    	
+    	assertNotNull(Verifier.checkAttributeName(null));
+    	assertNotNull(Verifier.checkAttributeName(""));
+    	assertNotNull(Verifier.checkAttributeName("   "));
+    	assertNotNull(Verifier.checkAttributeName("  hi  "));
+    	assertNotNull(Verifier.checkAttributeName("hi "));
+    	assertNotNull(Verifier.checkAttributeName(" hi"));
+    	assertNotNull(Verifier.checkAttributeName("2bad"));
+
+    }
     
 	/**
 	 * Test that a String contains only xml characters.  The method under
@@ -525,17 +537,18 @@ public final class TestVerifier {
 
     @Test
     public void testCheckXMLName() {
-    	assertNull(Verifier.checkAttributeName("hi"));
-    	assertNull(Verifier.checkAttributeName("hi2you"));
-    	assertNull(Verifier.checkAttributeName("hi_you"));
+    	assertNull(Verifier.checkXMLName("hi"));
+    	assertNull(Verifier.checkXMLName("hi2you"));
+    	assertNull(Verifier.checkXMLName("hi_you"));
+    	assertNull(Verifier.checkXMLName("hi:you"));
     	
-    	assertNotNull(Verifier.checkAttributeName(null));
-    	assertNotNull(Verifier.checkAttributeName(""));
-    	assertNotNull(Verifier.checkAttributeName("   "));
-    	assertNotNull(Verifier.checkAttributeName("  hi  "));
-    	assertNotNull(Verifier.checkAttributeName("hi "));
-    	assertNotNull(Verifier.checkAttributeName(" hi"));
-    	assertNotNull(Verifier.checkAttributeName("2bad"));
+    	assertNotNull(Verifier.checkXMLName(null));
+    	assertNotNull(Verifier.checkXMLName(""));
+    	assertNotNull(Verifier.checkXMLName("   "));
+    	assertNotNull(Verifier.checkXMLName("  hi  "));
+    	assertNotNull(Verifier.checkXMLName("hi "));
+    	assertNotNull(Verifier.checkXMLName(" hi"));
+    	assertNotNull(Verifier.checkXMLName("2bad"));
     }
     
     @Test
