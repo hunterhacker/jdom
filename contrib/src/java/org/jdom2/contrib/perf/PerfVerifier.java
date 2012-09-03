@@ -21,7 +21,7 @@ import org.jdom2.Verifier;
 public class PerfVerifier {
 	
 	@SuppressWarnings("javadoc")
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws InterruptedException {
 		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		if (args.length != 1) {
 			throw new IllegalArgumentException("We expect a single directory argument.");
@@ -31,7 +31,7 @@ public class PerfVerifier {
 			throw new IllegalArgumentException("We expect a single directory argument.");
 		}
 		
-		final int bestcnt = 10;
+		final int bestcnt = 50;
 		
 		long[] sattnanos = new long[bestcnt];
 		long[] semtnanos = new long[bestcnt];
@@ -46,12 +46,13 @@ public class PerfVerifier {
 		
 		
 		System.out.println("Stabilize");
+		Thread.sleep(5000);
 		final long prebytes = getMemUsed();
 		
 		System.out.println("Launch");
 		
 		int i = 0;
-		int cnt = bestcnt * 3;
+		int cnt = bestcnt * 4;
 		while (--cnt >= 0) {
 			long attnanos = 0L;
 			long emtnanos = 0L;
@@ -87,8 +88,8 @@ public class PerfVerifier {
 		
 		final long memused = getMemUsed() - prebytes;
 		
-		System.out.printf("Validating took: att=%.3fms emt=%.3fms char=%.3fms mem=%.3fKB\n",
-				sum(sattnanos) / 1000000.0, sum(semtnanos) / 1000000.0, sum(schrnanos) / 1000000.0,
+		System.out.printf("    Validating took: att=%.3fms emt=%.3fms char=%.3fms mem=%.3fKB\n",
+				avg(sattnanos) / 1000000.0, avg(semtnanos) / 1000000.0, avg(schrnanos) / 1000000.0,
 				memused / 1024.0);
 				
 		Verifier.isAllXMLWhitespace("  ");
@@ -107,12 +108,12 @@ public class PerfVerifier {
 		}
 	}
 	
-	private static final long sum(final long[] values) {
+	private static final double avg(final long[] values) {
 		long ret = 0L;
 		for (long v : values) {
 			ret += v;
 		}
-		return ret;
+		return ret / (double)values.length;
 	}
 
 	private static long getMemUsed() {
