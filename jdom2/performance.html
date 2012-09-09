@@ -76,7 +76,35 @@
 	
 	<hr/>
 	<p/>
-	JDOM 2.0.3 - Various fixes but mostly the BitMasked Verifier - incorporating Canadian Wilf's performance suggestions.
+	JDOM 2.0.3 - Identical code to previous test, but run with Java7u7 instead of Java7u0 (Code is compiled with Java6, but run with different Java7 JREs)
+	<br/>
+	Note that Update7 seems slightly slower on everything, but uses less memory for Java objects.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>5.52ms</td><td>1.42ms</td><td>7.99ms</td><td>1.79ms</td><td>5.76ms</td><td>1.22ms</td><td>9.24ms</td><td>2.34ms</td><td>1.75ms</td><td>14.25ms</td><td>7.51ms</td><td>35.22ms</td><td>8.37ms</td><td>7.27ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>6.04ms</td><td>1.93ms</td><td>8.51ms</td><td>2.64ms</td><td>5.36ms</td><td>1.59ms</td><td>9.52ms</td><td>2.91ms</td><td>1.91ms</td><td>13.10ms</td><td>7.96ms</td><td>36.89ms</td><td>9.16ms</td><td>7.64ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>5.13ms</td><td>1.07ms</td><td>7.64ms</td><td>1.66ms</td><td>5.49ms</td><td>1.53ms</td><td>9.87ms</td><td>3.18ms</td><td>1.91ms</td><td>13.58ms</td><td>7.07ms</td><td>35.82ms</td><td>9.36ms</td><td>7.92ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>5.19ms</td><td>1.43ms</td><td>7.57ms</td><td>1.88ms</td><td>5.81ms</td><td>1.30ms</td><td>11.69ms</td><td>4.43ms</td><td>1.71ms</td><td>15.15ms</td><td>6.69ms</td><td>36.27ms</td><td>8.62ms</td><td>8.23ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>5.58ms</td><td>1.70ms</td><td>7.71ms</td><td>2.62ms</td><td>5.42ms</td><td>0.98ms</td><td>9.44ms</td><td>2.90ms</td><td>1.89ms</td><td>14.58ms</td><td>6.89ms</td><td>36.33ms</td><td>8.82ms</td><td>7.85ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	JDOM 2.0.3 - ContentList and Verifier performance fixes (not particularly visible in these benchmarks which are too broad).
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.07ms</td><td>1.47ms</td><td>7.82ms</td><td>1.95ms</td><td>5.53ms</td><td>1.89ms</td><td>9.01ms</td><td>2.99ms</td><td>1.76ms</td><td>13.22ms</td><td>6.96ms</td><td>34.19ms</td><td>8.62ms</td><td>7.45ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.51ms</td><td>1.40ms</td><td>8.65ms</td><td>2.92ms</td><td>5.13ms</td><td>1.11ms</td><td>9.13ms</td><td>3.24ms</td><td>1.71ms</td><td>13.13ms</td><td>6.55ms</td><td>34.13ms</td><td>8.88ms</td><td>7.68ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.10ms</td><td>1.34ms</td><td>7.59ms</td><td>2.61ms</td><td>4.93ms</td><td>1.42ms</td><td>8.70ms</td><td>2.84ms</td><td>1.67ms</td><td>13.36ms</td><td>6.82ms</td><td>32.30ms</td><td>8.53ms</td><td>7.60ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>4.93ms</td><td>1.82ms</td><td>7.54ms</td><td>2.44ms</td><td>5.01ms</td><td>1.60ms</td><td>9.14ms</td><td>3.48ms</td><td>1.66ms</td><td>13.36ms</td><td>6.42ms</td><td>34.56ms</td><td>8.20ms</td><td>7.34ms</td></tr>
+		<tr><td>273.14KiB</td><td>2.07MiB</td><td>5.30ms</td><td>1.98ms</td><td>7.83ms</td><td>3.01ms</td><td>5.18ms</td><td>1.77ms</td><td>8.59ms</td><td>2.67ms</td><td>1.76ms</td><td>12.97ms</td><td>6.88ms</td><td>34.89ms</td><td>8.43ms</td><td>7.67ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	Pre JDOM 2.0.3 - Various fixes but mostly the BitMasked Verifier - incorporating Canadian Wilf's performance suggestions.
 	<br />
 	<table border="1">
 		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
