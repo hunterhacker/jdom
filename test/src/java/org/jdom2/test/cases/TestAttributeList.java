@@ -289,4 +289,124 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		assertTrue(content[1] == it.next());
 	}
 	
+	@Test
+	public void testAlreadyHasParent () {
+		// create an attribute.
+		final Attribute att = new Attribute("att", "val");
+		// give this attribute a parent.
+		final Element parent = new Element("parent");
+		parent.setAttribute(att);
+		
+		// none will have no attributes.
+		final Element none = new Element("none");
+		// same will have an attribute with the same name as att.
+		final Element same = new Element("same");
+		same.setAttribute("att", "val");
+		// other will have an attrubute not the same as att.
+		final Element other = new Element("other");
+		other.setAttribute("diff", "other");
+		
+		try {
+			// cannot set an attribute with an existing parent.
+			none.setAttribute(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot set an attribute with an existing parent.
+			same.setAttribute(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot set an attribute with an existing parent.
+			other.setAttribute(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			none.getAttributes().add(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			same.getAttributes().add(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			other.getAttributes().add(att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			none.getAttributes().add(0, att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			same.getAttributes().add(0, att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			other.getAttributes().add(0, att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+
+		try {
+			// cannot set an empty value.
+			// cannot add an attribute with an existing parent.
+			none.getAttributes().set(0, att);
+			failNoException(IndexOutOfBoundsException.class);
+		} catch (Exception e) {
+			checkException(IndexOutOfBoundsException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			same.getAttributes().set(0, att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		try {
+			// cannot add an attribute with an existing parent.
+			other.getAttributes().set(0, att);
+			failNoException(IllegalAddException.class);
+		} catch (Exception e) {
+			checkException(IllegalAddException.class, e);
+		}
+		
+		assertEquals("val", same.getAttributeValue("att"));
+		assertEquals("other", other.getAttributeValue("diff"));
+		assertFalse(none.hasAttributes());
+		
+	}
+	
 }
