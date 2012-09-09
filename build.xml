@@ -506,18 +506,22 @@ For instructions on how to build JDOM, please view the README.txt file.
 		<mkdir dir="${mavendir}/core" />
 		<mkdir dir="${mavendir}/test" />
 		<mkdir dir="${mavendir}/contrib" />
+		
+		<property name="mavenartifact" value="jdom2" />
+		<property name="mavenbase" value="${mavenartifact}-${version}" />
+		
 		<!-- copy the build jar -->
-		<copy todir="${mavendir}/core" file="${package}/${jarbase}.jar"/>
-		<copy todir="${mavendir}/core" file="${package}/${jarbase}-javadoc.jar"/>
-		<copy todir="${mavendir}/core" file="${package}/${jarbase}-sources.jar"/>
+		<copy tofile="${mavendir}/core/${mavenbase}.jar" file="${package}/${jarbase}.jar"/>
+		<copy tofile="${mavendir}/core/${mavenbase}-javadoc.jar" file="${package}/${jarbase}-javadoc.jar"/>
+		<copy tofile="${mavendir}/core/${mavenbase}-sources.jar" file="${package}/${jarbase}-sources.jar"/>
 		
 		<!-- load the license in to the ${license} property -->
 		<loadfile property="license" srcfile="LICENSE.txt" />
 		
 		<!-- copy/rename the pom template -->
-		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/core/${jarbase}.pom">
+		<copy filtering="true" file="maven/maven.pom" tofile="${mavendir}/core/${mavenbase}.pom">
 			<filterset>
-				<filter token="artifactID" value="${name}"/>
+				<filter token="artifactID" value="${mavenartifact}"/>
 				<filter token="version" value="${version}" />
 				<filter token="jdk" value="${compile.target}" />
 				<filter token="license" value="${license}" />
@@ -526,24 +530,24 @@ For instructions on how to build JDOM, please view the README.txt file.
 		
 		<exec dir="${mavendir}/core" executable="${gpg}">
 			<arg value="-abv"/>
-			<arg value="${jarbase}.pom"/>
+			<arg value="${mavenbase}.pom"/>
 		</exec>
 		<exec dir="${mavendir}/core" executable="${gpg}">
 			<arg value="-abv"/>
-			<arg value="${jarbase}.jar"/>
+			<arg value="${mavenbase}.jar"/>
 		</exec>
 		<exec dir="${mavendir}/core" executable="${gpg}">
 			<arg value="-abv"/>
-			<arg value="${jarbase}-sources.jar"/>
+			<arg value="${mavenbase}-sources.jar"/>
 		</exec>
 		<exec dir="${mavendir}/core" executable="${gpg}">
 			<arg value="-abv"/>
-			<arg value="${jarbase}-javadoc.jar"/>
+			<arg value="${mavenbase}-javadoc.jar"/>
 		</exec>
 		
-		<jar destfile="${mavendir}/${jarbase}-maven-bundle.jar"
+		<jar destfile="${mavendir}/${mavenbase}-maven-bundle.jar"
 			basedir="${mavendir}/core"
-			includes="${jarbase}*" excludes="*maven-bundle*" />
+			includes="${mavenbase}*" excludes="*maven-bundle*" />
 		
 	</target>
 	
