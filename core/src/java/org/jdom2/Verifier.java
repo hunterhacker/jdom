@@ -366,14 +366,15 @@ final public class Verifier {
 
 		// Cannot start with a number
 		if ((byte)0 == (CHARFLAGS[name.charAt(0)] & MASKXMLSTARTCHAR)) {
-			return "XML names cannot begin with the character \"" + 
+			return "XML name '" + name + "' cannot begin with the character \"" + 
 					name.charAt(0) + "\"";
 		}
 		// Ensure legal content for non-first chars
 		// also check char 0 to catch colon char ':'
-		for (int i = name.length() - 1; i > 1; i--) {
+		for (int i = name.length() - 1; i >= 1; i--) {
 			if ((byte)0 == (byte)(CHARFLAGS[name.charAt(i)] & MASKXMLNAMECHAR)) {
-				return "XML names cannot contain the character \"" + name.charAt(i) + "\"";
+				return "XML name '" + name + "' cannot contain the character \""
+						+ name.charAt(i) + "\"";
 			}
 		}
 
@@ -531,22 +532,14 @@ final public class Verifier {
 			return null;
 		}
 		
-		final int len = prefix.length();
+		if (checkJDOMName(prefix) != null) {
+			// will double-check null and empty names, but that's OK
+			// since we have already checked them.
+			return checkJDOMName(prefix);
+		}
 		
-		// Cannot start with a number
-		if ((byte)0 == (byte)(CHARFLAGS[prefix.charAt(0)] & MASKXMLSTARTCHAR)) {
-			return "Namespace prefixes cannot begin with character '" + prefix.charAt(0) + "'";
-		}
-		// Ensure legal content
-		for (int i=1; i < len; i++) {
-			if ((byte)0 == (byte)(CHARFLAGS[prefix.charAt(i)] & MASKXMLNAMECHAR)) {
-				return "Namespace prefixes cannot contain the character \"" +
-						prefix.charAt(i) + "\"";
-			}
-		}
-
 		// Cannot start with "xml" in any character case
-		if (len >= 3) {
+		if (prefix.length() >= 3) {
 			if (prefix.charAt(0) == 'x' || prefix.charAt(0) == 'X') {
 				if (prefix.charAt(1) == 'm' || prefix.charAt(1) == 'M') {
 					if (prefix.charAt(2) == 'l' || prefix.charAt(2) == 'L') {
@@ -555,12 +548,6 @@ final public class Verifier {
 					}
 				}
 			}
-		}
-
-
-		// No colons allowed
-		if (prefix.indexOf(":") != -1) {
-			return "Namespace prefixes cannot contain colons";
 		}
 
 		// If we got here, everything is OK

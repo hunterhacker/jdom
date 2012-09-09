@@ -99,14 +99,19 @@ public final class TestVerifier {
 	public void testCheckElementName() {
 		//check out of range values
 		assertNotNull("validated invalid null", Verifier.checkElementName(null));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName("test" + (char)0x0 + "ing"));
-		assertNotNull("validated invalid name with null", Verifier.checkElementName((char)0x0 + "test"));
+		assertNotNull("validated invalid name with null char", Verifier.checkElementName("test" + (char)0x0));
+		assertNotNull("validated invalid name with null char", Verifier.checkElementName("test" + (char)0x0 + "ing"));
+		assertNotNull("validated invalid name with null char", Verifier.checkElementName((char)0x0 + "test"));
 		assertNotNull("validated invalid name with 0x01", Verifier.checkElementName((char)0x01 + "test"));
 		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800));
 		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName("test" + (char)0xD800 + "ing"));
 		assertNotNull("validated invalid name with 0xD800", Verifier.checkElementName((char)0xD800 + "test"));
 		assertNotNull("validated invalid name with :", Verifier.checkElementName("test" + ':' + "local"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName("abcd:"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName("abc:d"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName("ab:cd"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName("a:bcd"));
+		assertNotNull("validated invalid name with :", Verifier.checkElementName(":abcd"));
 
 		//invalid start characters
 		assertNotNull("validated invalid name with startin -", Verifier.checkElementName('-' + "test"));
@@ -256,9 +261,17 @@ public final class TestVerifier {
 		assertNotNull("validated invalid name with starting digit", Verifier.checkNamespacePrefix("9"));
 		assertNotNull("validated invalid name with starting $", Verifier.checkNamespacePrefix("$"));
 		assertNotNull("validated invalid name with starting .", Verifier.checkNamespacePrefix("."));
+		
+		// cannot start with xml (case insensitive).
+		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmlabc"));
+		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmLabc"));
+		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xMlabc"));
+		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("Xmlabc"));
+		
 
 		//valid tests
 		assertNull("invalidated valid null", Verifier.checkNamespacePrefix(null));
+		assertNull("invalidated valid empty String", Verifier.checkNamespacePrefix(""));
 		assertNull("invalidated valid name with starting _", Verifier.checkNamespacePrefix('_' + "test"));
 		assertNull("invalidated valid name with _", Verifier.checkNamespacePrefix("test" + '_'));
 		assertNull("invalidated valid name with .", Verifier.checkNamespacePrefix("test" + '.' + "name"));
@@ -266,6 +279,8 @@ public final class TestVerifier {
 		assertNull("invalidated valid name with 0x00B7", Verifier.checkNamespacePrefix("test" + (char)0x00B7));
 		assertNull("invalidated valid name with 0x4E01", Verifier.checkNamespacePrefix("test" + (char)0x4E01));
 		assertNull("invalidated valid name with 0x0301", Verifier.checkNamespacePrefix("test" + (char)0x0301));
+		assertNull("invalidated valid name with xml embedded", Verifier.checkNamespacePrefix("txml"));
+		assertNull("invalidated valid name with xml embedded", Verifier.checkNamespacePrefix("xmml"));
 
 	}
 
