@@ -416,11 +416,14 @@ final class ContentList extends AbstractList<Content>
 		} else if (minCapacity < elementData.length) {
 			return;
 		}
-		// most JVM's allocate memory in multiples of 'double-words', on
-		// 64-bit it's 16-bytes, on 32-bit it's 8 bytes which all means it makes
-		// sense to increment the capacity in even values.
+		// use algorithm Wilf suggests which is essentially the same
+		// as algorithm as ArrayList.ensureCapacity....
+		// typically the minCapacity is only slightly larger than
+		// the current capacity.... so grow from the current capacity
+		// with a double-check.
+		final int newcap = ((size * 3) / 2) + 1;
 		elementData = ArrayCopy.copyOf(elementData, 
-				((minCapacity + INITIAL_ARRAY_SIZE) >>> 1) << 1);
+				(newcap < minCapacity ? minCapacity : newcap));
 	}
 
 	/**
