@@ -1,13 +1,13 @@
 package org.jdom2.test.cases.util;
 
-import static org.junit.Assert.*;
-import static org.jdom2.test.util.UnitTestUtil.*;
+import static org.jdom2.test.util.UnitTestUtil.checkException;
+import static org.jdom2.test.util.UnitTestUtil.failNoException;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.junit.Test;
 
-import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.internal.ReflectionConstructor;
 
