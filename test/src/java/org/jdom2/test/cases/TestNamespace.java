@@ -195,7 +195,7 @@ public final class TestNamespace {
 		
 		try {
 			assertTrue(null != Namespace.getNamespace("p:x", "myuri"));
-			fail("Should not be able to create Namespace with illegal prefix 'xml'");
+			fail("Should not be able to create Namespace with illegal prefix 'p:x'");
 		} catch (IllegalNameException ine) {
 			// good
 		} catch (Exception e) {
