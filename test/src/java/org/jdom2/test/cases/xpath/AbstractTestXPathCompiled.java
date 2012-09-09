@@ -58,6 +58,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -555,6 +556,23 @@ public abstract class AbstractTestXPathCompiled {
 			fail("excpected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
+		}
+	}
+	
+	@Test
+	public void testBadVariableName3() {
+		XPathExpression<Element> xpe = getFactory().compile("/", Filters.element());
+		try {
+			xpe.getVariable(null);
+			failNoException(NullPointerException.class);
+		} catch (Exception e) {
+			checkException(NullPointerException.class, e);
+		}
+		try {
+			xpe.setVariable(null, "hi");
+			failNoException(NullPointerException.class);
+		} catch (Exception e) {
+			checkException(NullPointerException.class, e);
 		}
 	}
 	

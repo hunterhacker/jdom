@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.internal.ReflectionConstructor;
 
@@ -46,6 +47,16 @@ public class TestReflectionConstructor {
 			failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			checkException(IllegalArgumentException.class, e);
+		}
+	}
+	
+	@Test
+	public void testConstructClassCastConstructor() {
+		try {
+			ReflectionConstructor.construct("java.lang.String", Namespace.class);
+			failNoException(ClassCastException.class);
+		} catch (Exception e) {
+			checkException(ClassCastException.class, e);
 		}
 	}
 }
