@@ -55,6 +55,7 @@
 package org.jdom2.output;
 
 import org.jdom2.JDOMConstants;
+import org.jdom2.internal.SystemProperty;
 
 /**
  * An enumeration of common separators that are used for JDOM output.
@@ -139,7 +140,7 @@ public enum LineSeparator {
 	 * the equivalent of {@link #DOS} on windows platforms, and
 	 * of {@link #UNIX} on UNIX and Apple systems (after Mac OSX).
 	 */
-	SYSTEM(System.getProperty("line.separator")),
+	SYSTEM(SystemProperty.get("line.separator", "\r\n")),
 	
 	/** Perform no end-of-line processing. */
 	NONE(null),
@@ -160,7 +161,7 @@ public enum LineSeparator {
 	private static String getDefaultLineSeparator() {
 		// Android has some unique ordering requirements in this bootstrap process.
 		// also, Android will not have the system property set, so we can exit with the null.
-		final String prop = System.getProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "DEFAULT");
+		final String prop = SystemProperty.get(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "DEFAULT");
 		if ("DEFAULT".equals(prop)) {
 			// need to do this to catch the normal process where the property is not set
 			// which will cause the value 'DEFAULT' to be returned by the getProperty(),

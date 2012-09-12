@@ -61,6 +61,7 @@ import java.lang.reflect.Modifier;
 
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.internal.SystemProperty;
 
 import org.xml.sax.Attributes;
 
@@ -373,7 +374,7 @@ public abstract class XPathMatcher {
          if (constructor == null) {
             // First call.
             // => Load configuration to determine implementation.
-            String className = System.getProperty(
+            String className = SystemProperty.get(
                                         IMPLEMENTATION_CLASS_PROPERTY,
                                         DEFAULT_IMPLEMENTATION_CLASS);
 

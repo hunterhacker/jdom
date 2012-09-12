@@ -635,9 +635,13 @@ public class Format implements Cloneable {
 	}
 
 	/**
-	 * This will set the newline separator (<code>lineSeparator</code>).
-	 * The default is <code>\r\n</code>.  To make it output
-	 * the system default line ending string, call
+	 * This will set the newline separator (<code>LineSeparator</code>).
+	 * The default is <code>\r\n</code>.
+	 * <p>
+	 * Use the {@link #setLineSeparator(LineSeparator)} method to set
+	 * standard separators in an easier way.
+	 * <p>
+	 * To make it output the system default line ending string, call
 	 * <code>setLineSeparator(System.getProperty("line.separator"))</code>.
 	 *
 	 * <p>
@@ -682,6 +686,7 @@ public class Format implements Cloneable {
 	 * end-of-line modifications.
 	 *
 	 * @see #setTextMode
+	 * @see #setLineSeparator(LineSeparator)
 	 *
 	 * @param separator <code>String</code> line separator to use.
 	 * @return a pointer to this Format for chaining

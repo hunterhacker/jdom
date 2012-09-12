@@ -63,6 +63,7 @@ import org.jdom2.Namespace;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.internal.ReflectionConstructor;
+import org.jdom2.internal.SystemProperty;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 /**
@@ -98,7 +99,7 @@ public abstract class XPathFactory {
 	 */
 	private static final AtomicReference<XPathFactory> defaultreference = new AtomicReference<XPathFactory>();
 
-	private static final String DEFAULTFACTORY = System.getProperty(
+	private static final String DEFAULTFACTORY = SystemProperty.get(
 			JDOMConstants.JDOM2_PROPERTY_XPATH_FACTORY, null);
 
 	/**

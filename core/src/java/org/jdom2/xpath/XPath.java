@@ -60,6 +60,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.jdom2.*;
+import org.jdom2.internal.SystemProperty;
 
 
 /**
@@ -126,7 +127,7 @@ public abstract class XPath implements Serializable {
 				// First call => Determine implementation.
 				String className;
 				try {
-					className = System.getProperty(XPATH_CLASS_PROPERTY,
+					className = SystemProperty.get(XPATH_CLASS_PROPERTY,
 							DEFAULT_XPATH_CLASS);
 				}
 				catch (SecurityException ex1) {
