@@ -96,6 +96,7 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 
 	/** the actual SAXParserFactory in the respective singletons. */
 	private final SAXParserFactory jaxpfactory;
+	private final Exception failcause;
 	/** Is this a validating parser */
 	private final boolean validates;
 
@@ -103,6 +104,7 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 	private XMLReaders(int validate) {
 		SAXParserFactory fac = SAXParserFactory.newInstance();
 		boolean val = false;
+		Exception problem = null;
 		// All JDOM parsers are namespace aware.
 		fac.setNamespaceAware(true);
 		switch (validate) {
@@ -124,21 +126,25 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 				} catch (SAXException se) {
 					// we could not get a validating system, set the fac to null
 					fac = null;
+					problem = se;
 				} catch (IllegalArgumentException iae) {
 					// this system does not support XSD Validation.... which is true for android!
 					// we could not get a validating system, set the fac to null
 					fac = null;
+					problem = iae;
 				} catch (UnsupportedOperationException uoe) {
 					// SAXParserFactory throws this exception when setSchema is called.
 					// Therefore every factory throws this exception unless it overrides
 					// setSchema. A popular example is Apache Xerces SAXParserFactoryImpl
 					// before version 2.7.0.
 					fac = null;
+					problem = uoe;
 				}
 				break;
 		}
 		jaxpfactory = fac;
 		validates = val;
+		failcause = problem;
 	}
 
 	/**
@@ -153,7 +159,7 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 	public XMLReader createXMLReader() throws JDOMException {
 		if (jaxpfactory == null) {
 			throw new JDOMException("It was not possible to configure a " +
-					"suitable XMLReader to support " + this);
+					"suitable XMLReader to support " + this, failcause);
 		}
 		try {
 			return jaxpfactory.newSAXParser().getXMLReader();
