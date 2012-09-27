@@ -128,6 +128,12 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 					// this system does not support XSD Validation.... which is true for android!
 					// we could not get a validating system, set the fac to null
 					fac = null;
+				} catch (UnsupportedOperationException uoe) {
+					// SAXParserFactory throws this exception when setSchema is called.
+					// Therefore every factory throws this exception unless it overrides
+					// setSchema. A popular example is Apache Xerces SAXParserFactoryImpl
+					// before version 2.7.0.
+					fac = null;
 				}
 				break;
 		}
