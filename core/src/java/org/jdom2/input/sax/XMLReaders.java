@@ -82,17 +82,24 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 	/**
 	 * The non-validating singleton
 	 */
-	NONVALIDATING(0),
+	NONVALIDATING(false),
 
 	/**
 	 * The DTD-validating Singleton
 	 */
-	DTDVALIDATING(1),
+	DTDVALIDATING(true),
 
 	/**
 	 * The XSD-validating Singleton
 	 */
-	XSDVALIDATING(2);
+	XSDVALIDATING();
+
+	private static SAXParserFactory factoryWithValidating(boolean validating) {
+		SAXParserFactory fac = SAXParserFactory.newInstance();
+		fac.setNamespaceAware(true); // All JDOM parsers are namespace aware.
+		fac.setValidating(validating);
+		return fac;
+	}
 
 	/** the actual SAXParserFactory in the respective singletons. */
 	private final SAXParserFactory jaxpfactory;
@@ -100,47 +107,44 @@ public enum XMLReaders implements XMLReaderJDOMFactory {
 	/** Is this a validating parser */
 	private final boolean validates;
 
-	/** Private constructor */
-	private XMLReaders(int validate) {
-		SAXParserFactory fac = SAXParserFactory.newInstance();
-		boolean val = false;
-		Exception problem = null;
-		// All JDOM parsers are namespace aware.
-		fac.setNamespaceAware(true);
-		switch (validate) {
-			case 0:
-				fac.setValidating(false);
-				break;
-			case 1:
-				fac.setValidating(true);
-				val = true;
-				break;
-			case 2:
-				fac.setValidating(false);
-				try {
-					SchemaFactory sfac = SchemaFactory.
-							newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-					Schema schema = sfac.newSchema();
-					fac.setSchema(schema);
-					val = true;
-				} catch (SAXException se) {
-					// we could not get a validating system, set the fac to null
-					fac = null;
-					problem = se;
-				} catch (IllegalArgumentException iae) {
-					// this system does not support XSD Validation.... which is true for android!
-					// we could not get a validating system, set the fac to null
-					fac = null;
-					problem = iae;
-				} catch (UnsupportedOperationException uoe) {
-					// SAXParserFactory throws this exception when setSchema is called.
-					// Therefore every factory throws this exception unless it overrides
-					// setSchema. A popular example is Apache Xerces SAXParserFactoryImpl
-					// before version 2.7.0.
-					fac = null;
-					problem = uoe;
-				}
-				break;
+	/** Creates a non schema validating factory */
+	private XMLReaders(boolean validating) {
+		jaxpfactory = factoryWithValidating(validating);
+		failcause = null;
+		validates = validating;
+	}
+
+	/** Creates a schema validating factory */
+	private XMLReaders() {
+		SAXParserFactory fac = factoryWithValidating(false);
+		boolean val;
+		Exception problem;
+		try {
+			SchemaFactory sfac = SchemaFactory.
+					newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sfac.newSchema();
+			fac.setSchema(schema);
+			problem = null;
+			val = true;
+		} catch (SAXException se) {
+			// we could not get a validating system, set the fac to null
+			fac = null;
+			problem = se;
+			val = false;
+		} catch (IllegalArgumentException iae) {
+			// this system does not support XSD Validation.... which is true for android!
+			// we could not get a validating system, set the fac to null
+			fac = null;
+			problem = iae;
+			val = false;
+		} catch (UnsupportedOperationException uoe) {
+			// SAXParserFactory throws this exception when setSchema is called.
+			// Therefore every factory throws this exception unless it overrides
+			// setSchema. A popular example is Apache Xerces SAXParserFactoryImpl
+			// before version 2.7.0.
+			fac = null;
+			problem = uoe;
+			val = false;
 		}
 		jaxpfactory = fac;
 		validates = val;
