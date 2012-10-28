@@ -31,6 +31,42 @@ public class TestXalanCompiled extends AbstractTestXPathCompiled {
 		checkXPath("preceding::node()", child2emt, null, 
 				maincomment, mainpi, maintext1, child1emt, child1text, maintext2);
 	}
+
+	@Override
+	public void testDetachedAttribute() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedText() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedCDATA() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedProcessingInstruction() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedEntityRef() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedComment() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedElement() {
+		// TODO Not Supported
+	}
+	
 	
 	
 }

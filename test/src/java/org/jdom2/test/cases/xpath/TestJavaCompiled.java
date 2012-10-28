@@ -48,4 +48,39 @@ public class TestJavaCompiled extends AbstractTestXPathCompiled {
 	}
 	
 	
+	@Override
+	public void testDetachedAttribute() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedText() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedCDATA() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedProcessingInstruction() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedEntityRef() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedComment() {
+		// TODO Not Supported
+	}
+
+	@Override
+	public void testDetachedElement() {
+		// TODO Not Supported
+	}
+	
 }

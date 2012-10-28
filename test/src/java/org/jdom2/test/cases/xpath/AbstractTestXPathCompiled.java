@@ -54,26 +54,30 @@
 
 package org.jdom2.test.cases.xpath;
 
+import static org.jdom2.test.util.UnitTestUtil.checkException;
+import static org.jdom2.test.util.UnitTestUtil.failNoException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.jdom2.test.util.UnitTestUtil.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
 import org.jdom2.Attribute;
+import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.EntityRef;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.NamespaceAware;
@@ -297,7 +301,7 @@ public abstract class AbstractTestXPathCompiled {
 					}
 				}
 				if (!gotit) {
-					fail("Expected to have item " + att + " returned, but it was not");
+					fail("Expected to have item " + att + " returned, but it was not. Instead we got " + result.toString());
 				}
 			}
 			if (expectsize != result.size()) {
@@ -1200,4 +1204,94 @@ public abstract class AbstractTestXPathCompiled {
 		assertTrue(diagg.getFilteredResults().size() == 0);
 	}
 
+	private void checkDetached(final NamespaceAware nsa) {
+		checkXPath(".", nsa, null, nsa);
+	}
+	
+	@Test
+	public void testDetachedAttribute() {
+		// non-Element content...
+		checkDetached(new Attribute("detached", "value"));
+	}
+	
+	@Test
+	public void testDetachedText() {
+		checkDetached(new Text("detached"));
+	}
+	
+	@Test
+	public void testDetachedCDATA() {
+		checkDetached(new CDATA("detached"));
+	}
+	
+	@Test
+	public void testDetachedProcessingInstruction() {
+		checkDetached(new ProcessingInstruction("detached"));
+	}
+	
+	@Test
+	public void testDetachedEntityRef() {
+		checkDetached(new EntityRef("detached"));
+	}
+	
+	@Test
+	public void testDetachedComment() {
+		checkDetached(new Comment("detached"));
+		
+	}
+	
+	@Test
+	public void testDetachedElement() {
+		checkDetached(new Element("detached"));
+		
+	}
+	
+	@Test
+	public void testDeepNesting() {
+		Element root = new Element("root");
+		Document docx = new Document(root);
+		Element p = root;
+		for (int d = 15; d >= 0; d--) {
+			for (int i = 0; i < 64; i++) {
+				p.addContent(new Element("child"));
+			}
+			p = (Element)p.getContent(0);
+		}
+		XPathExpression<Element> xpe = setupXPath(Filters.element(), "//child", null, docx);
+		final int sz = xpe.evaluate(docx).size();
+		assertEquals("Expected ", 16*64, sz);
+	}
+	
+	
+	@Test
+	public void testDeepBackNesting() {
+		// same as DeepNesting but the chold is attached to the last parent sibling instead of the first
+		Element root = new Element("root");
+		Document docx = new Document(root);
+		ArrayList<Element> al = new ArrayList<Element>();
+		Element p = root;
+		for (int d = 15; d >= 0; d--) {
+			for (int i = 0; i < 64; i++) {
+				Element k = new Element("child");
+				k.addContent(new Text(""));
+				k.addContent(new Text(""));
+				al.add(k);
+				p.addContent(k);
+			}
+			p = (Element)p.getContent(p.getContentSize() - 1);
+		}
+		XPathExpression<Element> xpe = setupXPath(Filters.element(), "//child", null, docx);
+		List<Element> res = xpe.evaluate(docx);
+		assertEquals("Expected ", al.size(), res.size());
+		Iterator<Element> ita = res.iterator();
+		Iterator<Element> itb = al.iterator();
+		while (ita.hasNext() && itb.hasNext()) {
+			final Element a = ita.next();
+			final Element b = itb.next();
+			assertTrue(a == b);
+		}
+		assertFalse(ita.hasNext());
+		assertFalse(itb.hasNext());
+	}
+	
 }

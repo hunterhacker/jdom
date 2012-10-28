@@ -29,7 +29,9 @@ import org.jdom2.xpath.XPathFactory;
 import org.jdom2.xpath.XPathHelper;
 
 @SuppressWarnings("javadoc")
-public class TestXPathHepler {
+public abstract class AbstractTestXPathHepler {
+	
+	abstract XPathFactory getFactory();
 
 	@Test
 	public void testGetPathStringElement() {
@@ -41,8 +43,7 @@ public class TestXPathHepler {
 		assertEquals("/root/kid", XPathHelper.getAbsolutePath(kid));
 	}
 	
-	private static final void checkAbsolute(NamespaceAware nsa) {
-		final XPathFactory xfac = XPathFactory.instance();
+	private static final void checkAbsolute(final XPathFactory xfac, final NamespaceAware nsa) {
 		String xq = null;
 		if (nsa instanceof Attribute) {
 			xq = XPathHelper.getAbsolutePath((Attribute)nsa);
@@ -59,7 +60,7 @@ public class TestXPathHepler {
 				fail ("expected exactly one result, not " + xd.getResult().size());
 			}
 			if (nsa != xd.getResult().get(0)) {
-				fail ("Expect the only result to be " + nsa + " but it was " + 
+				fail ("Expect the only result for '" + xq + "' to be " + nsa + " but it was " + 
 							xd.getResult().get(0));
 			}
 		} catch (IllegalArgumentException e) {
@@ -78,8 +79,7 @@ public class TestXPathHepler {
 		
 	}
 
-	private static final void checkRelative(final NamespaceAware nsa, final NamespaceAware nsb) {
-		final XPathFactory xfac = XPathFactory.instance();
+	private static final void checkRelative(final XPathFactory xfac, final NamespaceAware nsa, final NamespaceAware nsb) {
 		String xq = null;
 		if (nsa instanceof Attribute) {
 			if (nsb instanceof Attribute) {
@@ -126,18 +126,19 @@ public class TestXPathHepler {
 		Document doc = sb.build(FidoFetch.getFido().getURL("/complex.xml"));
 		final Iterator<Content> des = doc.getDescendants();
 		final ArrayList<NamespaceAware> allc = new ArrayList<NamespaceAware>();
+		final XPathFactory fac = getFactory();
 		while (des.hasNext()) {
 			final Content c = des.next();
-			if (c.getParent() == doc && c != doc.getRootElement()) {
-				// ignore document level content (except root element.
-				continue;
-			}
-			checkAbsolute(c);
+//			if (c.getParent() == doc && c != doc.getRootElement()) {
+//				// ignore document level content (except root element.
+//				continue;
+//			}
+			checkAbsolute(fac, c);
 			allc.add(c);
 			if (c instanceof Element) {
 				if (((Element) c).hasAttributes()) {
 					for (Attribute a : ((Element)c).getAttributes()) {
-						checkAbsolute(a);
+						checkAbsolute(fac, a);
 						allc.add(a);
 					}
 				}
@@ -145,7 +146,7 @@ public class TestXPathHepler {
 		}
 		for (NamespaceAware nsa : allc) {
 			for (NamespaceAware nsb : allc) {
-				checkRelative(nsa, nsb);
+				checkRelative(fac, nsa, nsb);
 			}
 		}
 	}
@@ -314,25 +315,26 @@ public class TestXPathHepler {
 		}
 	}
 	
-	private void checkDetached(final NamespaceAware nsa) {
+	private void checkDetached(final XPathFactory fac, final NamespaceAware nsa) {
 		try {
-			checkAbsolute(nsa);
+			checkAbsolute(fac, nsa);
 			UnitTestUtil.failNoException(IllegalArgumentException.class);
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
 		}
-		checkRelative(nsa, nsa);
+		checkRelative(fac, nsa, nsa);
 	}
 	
 	@Test
 	public void testDetached() {
 		// non-Element content...
-		checkDetached(new Text("detached"));
-		checkDetached(new CDATA("detached"));
-		checkDetached(new Attribute("detached", "value"));
-		checkDetached(new ProcessingInstruction("detached"));
-		checkDetached(new EntityRef("detached"));
-		checkDetached(new Comment("detached"));
+		final XPathFactory fac = getFactory();
+		checkDetached(fac, new Text("detached"));
+		checkDetached(fac, new CDATA("detached"));
+		checkDetached(fac, new Attribute("detached", "value"));
+		checkDetached(fac, new ProcessingInstruction("detached"));
+		checkDetached(fac, new EntityRef("detached"));
+		checkDetached(fac, new Comment("detached"));
 		
 	}
 

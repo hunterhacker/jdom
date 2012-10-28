@@ -65,6 +65,7 @@ import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.NamespaceAware;
+import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.filter.Filters;
@@ -180,7 +181,7 @@ public final class XPathHelper {
 			
 			final Content content = (Content) nsa;
 			
-			final Element pnt = content.getParentElement();
+			final Parent pnt = content.getParent();
 
 			if (content instanceof Text) { // OR CDATA!
 				
@@ -201,14 +202,14 @@ public final class XPathHelper {
 				return getPositionPath(content, sibs,
 						"processing-instruction()", buffer);
 				
-			} else if (content instanceof Element && 
+			} else if (content instanceof Element &&
 					((Element) content).getNamespace() == Namespace.NO_NAMESPACE) {
 				
 				// simple XPath to a no-namespace Element.
 				
 				final String ename = ((Element) content).getName();
-				final List<?> sibs = pnt == null ? null : pnt
-						.getChildren(ename);
+				final List<?> sibs = (pnt instanceof Element) ? ((Element)pnt)
+						.getChildren(ename) : null;
 				return getPositionPath(content, sibs, ename, buffer);
 				
 			} else if (content instanceof Element) {
@@ -220,15 +221,14 @@ public final class XPathHelper {
 				
 				// Note, the getChildren compares only the URI (not the prefix)
 				// so the results are the same as an XPath would be.
-				final List<?> sibs = pnt == null ? null :
-					pnt.getChildren(emt.getName(), emt.getNamespace());
+				final List<?> sibs = (pnt instanceof Element) ? 
+						((Element)pnt).getChildren(emt.getName(), emt.getNamespace()) : null;
 				String xps = "*[local-name() = '" + emt.getName() + 
 						"' and namespace-uri() = '" + 
 						emt.getNamespaceURI() + "']";
 				return getPositionPath(content, sibs, xps, buffer);
 				
 			} else {
-				
 				final List<?> sibs = pnt == null ? Collections
 						.singletonList(nsa) : pnt.getContent();
 				return getPositionPath(content, sibs, "node()", buffer);
@@ -266,7 +266,7 @@ public final class XPathHelper {
 	 *         if the from and to Elements have no common ancestor.
 	 */
 	private static StringBuilder getRelativeElementPath(final Element from,
-			final Element to, final StringBuilder sb) {
+			final Parent to, final StringBuilder sb) {
 		if (from == to) {
 			sb.append(".");
 			return sb;
@@ -275,29 +275,29 @@ public final class XPathHelper {
 		// ToStack will be a chain of Elements from the to element to the
 		// root element, but will be 'short' if it encounters the from Element
 		// itself.
-		final ArrayList<Element> tostack = new ArrayList<Element>();
-		Element e = to;
-		while (e != null && e != from) {
-			tostack.add(e);
-			e = e.getParentElement();
+		final ArrayList<Parent> tostack = new ArrayList<Parent>();
+		Parent p = to;
+		while (p != null && p != from) {
+			tostack.add(p);
+			p = p.getParent();
 		}
 		
 		// the number of steps we will have in the resulting path (potentially)
 		int pos = tostack.size();
 
-		if (e != from) {
+		if (p != from) {
 			// the from is not a direct ancestor of the to.
 			// we need to find where the common ancestor is between from and to
 			// we use the 'pos' variable to locate the common ancestor.
 			// pos is a pointer in to the tostack.
-			Element f = from;
+			Parent f = from;
 			int fcnt = 0;
 			// note that we search for 'pos' here... it will be set.
 			while (f != null && (pos = locate(f, tostack)) < 0) {
 				// go up the from ELement's ancestry until we intersect with the
 				// to Element's Ancestry.
 				fcnt++;
-				f = f.getParentElement();
+				f = f.getParent();
 			}
 			if (f == null) {
 				throw new IllegalArgumentException(
@@ -329,7 +329,7 @@ public final class XPathHelper {
 	 *        The list to search in.
 	 * @return the position of the f value in the tostack.
 	 */
-	private static int locate(final Element f, final List<Element> tostack) {
+	private static int locate(final Parent f, final List<Parent> tostack) {
 		// a somewhat naive search... ArrayList it is fast enough though.
 		int ret = tostack.size();
 		while (--ret >= 0) {
@@ -374,7 +374,7 @@ public final class XPathHelper {
 		if (to instanceof Element) {
 			getRelativeElementPath(efrom, (Element) to, sb);
 		} else {
-			final Element telement = to.getParentElement();
+			final Parent telement = to.getParent();
 			if (telement == null) {
 				throw new IllegalArgumentException(
 						"Cannot get a relative XPath to detached content.");
@@ -508,8 +508,14 @@ public final class XPathHelper {
 		final Element t = (to instanceof Element) ? (Element) to : to
 				.getParentElement();
 		if (t == null) {
-			throw new IllegalArgumentException(
-					"Cannot create a path to detached target");
+			if (to.getParent() == null) {
+				throw new IllegalArgumentException(
+						"Cannot create a path to detached target");
+			}
+			// otherwise it must be at the document level.
+			sb.append("/");
+			getSingleStep(to, sb);
+			return sb.toString();
 		}
 		Element r = t;
 		while (r.getParentElement() != null) {
