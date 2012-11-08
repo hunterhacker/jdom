@@ -162,7 +162,7 @@ public class DOMBuilder {
 	 * @since JDOM2
 	 */
 	public org.jdom2.CDATA build(org.w3c.dom.CDATASection cdata) {
-		return factory.cdata(cdata.getTextContent());
+		return factory.cdata(cdata.getNodeValue());
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class DOMBuilder {
 	 * @since JDOM2
 	 */
 	public org.jdom2.Text build(org.w3c.dom.Text text) {
-		return factory.text(text.getTextContent());
+		return factory.text(text.getNodeValue());
 	}
 	
 	/**
@@ -184,7 +184,7 @@ public class DOMBuilder {
 	 * @since JDOM2
 	 */
 	public org.jdom2.Comment build(org.w3c.dom.Comment comment) {
-		return factory.comment(comment.getTextContent());
+		return factory.comment(comment.getNodeValue());
 	}
 	
 	/**
