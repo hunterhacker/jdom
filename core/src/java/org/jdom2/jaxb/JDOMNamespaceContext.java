@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.contrib.helpers;
+package org.jdom2.jaxb;
 
 import java.util.ArrayList;
 import java.util.Iterator;

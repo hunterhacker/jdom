@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.contrib.output;
+package org.jdom2.jaxb;
 
 import java.util.Iterator;
 import javax.xml.XMLConstants;
@@ -444,7 +444,7 @@ public class JDOMStreamReader implements XMLStreamReader {
         }
         
         Content c = getCurrentContent();
-        return new org.jdom2.contrib.helpers.JDOMNamespaceContext(c.getNamespacesInScope());
+        return new org.jdom2.jaxb.JDOMNamespaceContext(c.getNamespacesInScope());
     }
 
     @Override

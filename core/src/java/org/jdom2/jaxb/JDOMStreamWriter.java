@@ -51,7 +51,7 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-package org.jdom2.contrib.input;
+package org.jdom2.jaxb;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -403,7 +403,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
     public NamespaceContext getNamespaceContext() {
         final List<Namespace> namespaces = getCurrentNamespaces();
         
-        return new org.jdom2.contrib.helpers.JDOMNamespaceContext(namespaces);
+        return new org.jdom2.jaxb.JDOMNamespaceContext(namespaces);
     }
 
     private List<Namespace> getCurrentNamespaces() {

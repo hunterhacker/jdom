@@ -58,7 +58,8 @@ import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.jdom2.contrib.input.JDOMStreamWriter;
+import org.jdom2.jaxb.JDOMStreamWriter;
+
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;

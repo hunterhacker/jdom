@@ -60,8 +60,9 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.Text;
-import org.jdom2.contrib.output.JDOMStreamReader;
 import org.jdom2.input.StAXStreamBuilder;
+import org.jdom2.jaxb.JDOMStreamReader;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
