@@ -53,13 +53,13 @@
  */
 package org.jdom2.jaxb;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
@@ -228,6 +228,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 
     @Override
     public void flush() throws XMLStreamException {
+    	// flush does nothing.
     }
 
     @Override

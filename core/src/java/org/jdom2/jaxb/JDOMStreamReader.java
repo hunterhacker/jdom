@@ -85,7 +85,7 @@ public class JDOMStreamReader implements XMLStreamReader {
     private Document document;
     private Element root;
     private DomWalkingContentIterator rootIterator;
-    private ReaderState state = ReaderState.START_DOCUMENT;
+    private ReaderState state = ReaderState.RS_START_DOCUMENT;
     
     private int currentEvt = START_DOCUMENT;
     
@@ -97,6 +97,10 @@ public class JDOMStreamReader implements XMLStreamReader {
         return ret;
     }
     
+    /**
+     * Create a new JDOMStreamReader that outputs a JDOM Document as an XMLStream.
+     * @param document the document to output.
+     */
     public JDOMStreamReader(Document document){
         this.document = document;
         this.root = document.getRootElement();
@@ -110,26 +114,24 @@ public class JDOMStreamReader implements XMLStreamReader {
     @Override
     public int next() throws XMLStreamException {
         switch(state){
-            case START_DOCUMENT:
-                state = ReaderState.START_ROOT_ELEMENT;
+            case RS_START_DOCUMENT:
+                state = ReaderState.RS_START_ROOT_ELEMENT;
                 return currentEvt = START_DOCUMENT;
                 
-            case START_ROOT_ELEMENT:
-                state = ReaderState.WALKING_TREE;
+            case RS_START_ROOT_ELEMENT:
+                state = ReaderState.RS_WALKING_TREE;
                 this.rootIterator = new DomWalkingContentIterator(root);
                 return currentEvt = START_ELEMENT;
                 
-            case WALKING_TREE:
+            case RS_WALKING_TREE:
                 if(this.rootIterator.hasNext()){
                     return currentEvt = this.rootIterator.next();
                 }
-                else{
-                    state = ReaderState.END_ROOT_ELEMENT;
-                    return currentEvt = END_ELEMENT;
-                }
+				state = ReaderState.RS_END_ROOT_ELEMENT;
+				return currentEvt = END_ELEMENT;
                 
-            case END_ROOT_ELEMENT:
-                state = ReaderState.END_DOCUMENT;
+            case RS_END_ROOT_ELEMENT:
+                state = ReaderState.RS_END_DOCUMENT;
                 return currentEvt = END_DOCUMENT;
                 
             default:
@@ -208,13 +210,13 @@ public class JDOMStreamReader implements XMLStreamReader {
 
     @Override
     public boolean hasNext() throws XMLStreamException {
-        return !(state == ReaderState.END_DOCUMENT ||
-                state == ReaderState.CLOSED);
+        return !(state == ReaderState.RS_END_DOCUMENT ||
+                state == ReaderState.RS_CLOSED);
     }
 
     @Override
     public void close() throws XMLStreamException {
-        this.state = ReaderState.CLOSED;
+        this.state = ReaderState.RS_CLOSED;
         this.document = null;
         this.root = null;
         this.rootIterator = null;
@@ -439,7 +441,7 @@ public class JDOMStreamReader implements XMLStreamReader {
 
     @Override
     public NamespaceContext getNamespaceContext() {
-        if(state == ReaderState.START_DOCUMENT || state == ReaderState.END_DOCUMENT || state == ReaderState.CLOSED){
+        if(state == ReaderState.RS_START_DOCUMENT || state == ReaderState.RS_END_DOCUMENT || state == ReaderState.RS_CLOSED){
             throw new IllegalStateException("getNamespaceCount not supported for event " + currentEvt);
         }
         
@@ -454,7 +456,7 @@ public class JDOMStreamReader implements XMLStreamReader {
 
     @Override
     public String getText() {
-        Content c = getCurrentContent();
+        final Content c = getCurrentContent();
         switch(c.getCType()){
             case CDATA:
             case Text:
@@ -463,9 +465,11 @@ public class JDOMStreamReader implements XMLStreamReader {
                 
             case DocType:
                 return ((DocType)c).getInternalSubset();
+                
+            default:
+                throw new IllegalStateException("getText not valid for event type " + currentEvt);
         }
         
-        throw new IllegalStateException("getText not valid for event type " + currentEvt);
     }
 
     @Override
@@ -717,10 +721,8 @@ public class JDOMStreamReader implements XMLStreamReader {
                     next = subIterator.next();
                     return next;
                 }
-                else{
-                    subIterator = null;
-                    return END_ELEMENT;
-                }
+				subIterator = null;
+				return END_ELEMENT;
             }
             
             if(this.toWalk.getContentSize() > contentIndex){
@@ -779,11 +781,11 @@ public class JDOMStreamReader implements XMLStreamReader {
      * The current state of the reader
      */
     private enum ReaderState{
-        START_DOCUMENT,
-        START_ROOT_ELEMENT,
-        WALKING_TREE,
-        END_ROOT_ELEMENT,
-        END_DOCUMENT,
-        CLOSED
+        RS_START_DOCUMENT,
+        RS_START_ROOT_ELEMENT,
+        RS_WALKING_TREE,
+        RS_END_ROOT_ELEMENT,
+        RS_END_DOCUMENT,
+        RS_CLOSED
     }
 }

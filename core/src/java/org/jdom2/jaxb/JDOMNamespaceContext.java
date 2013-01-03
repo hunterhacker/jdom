@@ -69,6 +69,10 @@ public class JDOMNamespaceContext implements NamespaceContext {
     
     private List<Namespace> namespaces;
     
+    /**
+     * Create a read-only representation of the input namespace list.
+     * @param namespaces the namespaces to represent.
+     */
     public JDOMNamespaceContext(List<Namespace> namespaces){
         this.namespaces = new ArrayList<Namespace>(namespaces);
     }
@@ -95,7 +99,8 @@ public class JDOMNamespaceContext implements NamespaceContext {
         return null;
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public Iterator getPrefixes(String namespaceURI) {
         List<String> ret = new ArrayList<String>();
         for(Namespace n : namespaces){
