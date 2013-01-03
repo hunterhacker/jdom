@@ -55,9 +55,12 @@
 package org.jdom2.jaxb;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.namespace.NamespaceContext;
+
+import org.jdom2.JDOMConstants;
 import org.jdom2.Namespace;
 
 /**
@@ -65,51 +68,96 @@ import org.jdom2.Namespace;
  * in a JDOM node.
  * @author gordon burgett https://github.com/gburgett
  */
-public class JDOMNamespaceContext implements NamespaceContext {
+public final class JDOMNamespaceContext implements NamespaceContext {
     
-    private List<Namespace> namespaces;
+    private final Namespace[] namespacearray;
     
     /**
      * Create a read-only representation of the input namespace list.
-     * @param namespaces the namespaces to represent.
+     * @param namespaces the Namespace instances to represent.
      */
-    public JDOMNamespaceContext(List<Namespace> namespaces){
-        this.namespaces = new ArrayList<Namespace>(namespaces);
+    public JDOMNamespaceContext(final List<Namespace> namespaces){
+    	if (namespaces == null) {
+    		throw new IllegalArgumentException("Cannot process a null Namespace list");
+    	}
+        this.namespacearray = namespaces.toArray(new Namespace[0]);
+        for (int i = 1; i < namespacearray.length; i++) {
+    		final Namespace n = namespacearray[i];
+    		if (n == null) {
+    			throw new IllegalArgumentException("Cannot process null namespace at position " + i);
+    		}
+    		final String p = n.getPrefix();
+        	for (int j = 0; j < i; j++) {
+        		if (p.equals(namespacearray[j].getPrefix())) {
+        			throw new IllegalArgumentException("Cannot process multiple namespaces with the prefix '" + p + "'.");
+        		}
+        	}
+        }
     }
     
     @Override
-    public String getNamespaceURI(String prefix) {
-        for(Namespace n : namespaces){
+    public String getNamespaceURI(final String prefix) {
+    	if (prefix == null) {
+    		throw new IllegalArgumentException("NamespaceContext requires a non-null prefix");
+    	}
+    	if (JDOMConstants.NS_PREFIX_XML.equals(prefix)) {
+    		return JDOMConstants.NS_URI_XML;
+    	}
+    	if (JDOMConstants.NS_PREFIX_XMLNS.equals(prefix)) {
+    		return JDOMConstants.NS_URI_XMLNS;
+    	}
+    	
+        for(final Namespace n : namespacearray){
             if(n.getPrefix().equals(prefix)){
                 return n.getURI();
             }
         }
 
-        return null;
+        return "";
     }
 
     @Override
-    public String getPrefix(String namespaceURI) {
-        for(Namespace n : namespaces){
+    public String getPrefix(final String namespaceURI) {
+    	if (namespaceURI == null) {
+    		throw new IllegalArgumentException("NamespaceContext requires a non-null Namespace URI");
+    	}
+    	if (JDOMConstants.NS_URI_XML.equals(namespaceURI)) {
+    		return JDOMConstants.NS_PREFIX_XML;
+    	}
+    	if (JDOMConstants.NS_URI_XMLNS.equals(namespaceURI)) {
+    		return JDOMConstants.NS_PREFIX_XMLNS;
+    	}
+    	
+        for(final Namespace n : namespacearray){
             if(n.getURI().equals(namespaceURI)){
                 return n.getPrefix();
             }
         }
 
-        return null;
+        return "";
     }
 
     @SuppressWarnings("rawtypes")
 	@Override
-    public Iterator getPrefixes(String namespaceURI) {
-        List<String> ret = new ArrayList<String>();
-        for(Namespace n : namespaces){
+    public Iterator getPrefixes(final String namespaceURI) {
+    	if (namespaceURI == null) {
+    		throw new IllegalArgumentException("NamespaceContext requires a non-null Namespace URI");
+    	}
+    	if (JDOMConstants.NS_URI_XML.equals(namespaceURI)) {
+    		return Collections.singleton(JDOMConstants.NS_PREFIX_XML).iterator();
+    	}
+    	if (JDOMConstants.NS_URI_XMLNS.equals(namespaceURI)) {
+    		return Collections.singleton(JDOMConstants.NS_PREFIX_XMLNS).iterator();
+    	}
+    	
+        final List<String> ret = new ArrayList<String>();
+        for(final Namespace n : namespacearray){
             if(n.getURI().equals(namespaceURI)){
                 ret.add(n.getPrefix());
             }
         }
 
-        return ret.iterator();
+        return Collections.unmodifiableCollection(ret).iterator();
     }
 
 }
