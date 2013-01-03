@@ -51,37 +51,31 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-package org.jdom2.test.cases.input;
+package org.jdom2.test.cases.jaxb;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.jaxb.JDOMStreamWriter;
 
-import org.junit.After;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
  * Tests for {@link JDOMStreamWriter}
  * @author gordon burgett https://github.com/gburgett
  */
+@SuppressWarnings("javadoc")
 public class TestJDOMStreamWriter {
     
-    public TestJDOMStreamWriter() {
+	public TestJDOMStreamWriter() {
     }
     
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testEmptyRootElement_DocumentHasEmptyRoot() throws Exception {
         System.out.println("testEmptyRootElement_DocumentHasEmptyRoot");

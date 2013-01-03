@@ -51,9 +51,15 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-package org.jdom2.test.cases.output;
+package org.jdom2.test.cases.jaxb;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import org.jdom2.CDATA;
 import org.jdom2.Content;
 import org.jdom2.Document;
@@ -63,28 +69,16 @@ import org.jdom2.Text;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.jaxb.JDOMStreamReader;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 /**
  * Tests for {@link JDOMStreamReader}
  * @author gordon burgett https://github.com/gburgett
  */
+@SuppressWarnings("javadoc")
 public class TestJDOMStreamReader {
     
     public TestJDOMStreamReader() {
     }
     
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testSimpleDocument_BuildsFromReader_SameDocument() throws Exception {
         System.out.println("testSimpleDocument_BuildsFromReader_SameDocument");
