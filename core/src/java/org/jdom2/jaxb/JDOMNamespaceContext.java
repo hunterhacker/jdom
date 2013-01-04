@@ -134,7 +134,7 @@ public final class JDOMNamespaceContext implements NamespaceContext {
             }
         }
 
-        return "";
+        return null;
     }
 
     @SuppressWarnings("rawtypes")

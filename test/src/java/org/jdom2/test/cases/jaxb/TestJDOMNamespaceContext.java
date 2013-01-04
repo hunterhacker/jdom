@@ -94,18 +94,24 @@ public class TestJDOMNamespaceContext {
 	public void testGetPrefixWithDef() {
 		final JDOMNamespaceContext nsc = new JDOMNamespaceContext(Arrays.asList(nsok));
 		assertEquals("", nsc.getPrefix("defns"));
-		assertEquals(Namespace.NO_NAMESPACE.getPrefix(), nsc.getPrefix(Namespace.NO_NAMESPACE.getURI()));
+		assertEquals(null, nsc.getPrefix(Namespace.NO_NAMESPACE.getURI()));
 		assertEquals(Namespace.XML_NAMESPACE.getPrefix(), nsc.getPrefix(Namespace.XML_NAMESPACE.getURI()));
 		assertEquals(JDOMConstants.NS_PREFIX_XMLNS, nsc.getPrefix(JDOMConstants.NS_URI_XMLNS));
 		assertEquals("a", nsc.getPrefix("urla"));
 		assertEquals("b", nsc.getPrefix("urlb"));
+		try {
+			nsc.getPrefix(null);
+			failNoException(IllegalArgumentException.class);
+		} catch (Exception e) {
+			checkException(IllegalArgumentException.class, e);
+		}
 	}
 
 	@Test
 	public void testGetPrefixWithoutDef() {
 		final JDOMNamespaceContext nsc = new JDOMNamespaceContext(Arrays.asList(nsmay));
-		assertEquals("", nsc.getPrefix("defns"));
-		assertEquals(Namespace.NO_NAMESPACE.getPrefix(), nsc.getPrefix(Namespace.NO_NAMESPACE.getURI()));
+		assertEquals(null, nsc.getPrefix("defns"));
+		assertEquals(null, nsc.getPrefix(Namespace.NO_NAMESPACE.getURI()));
 		assertEquals(Namespace.XML_NAMESPACE.getPrefix(), nsc.getPrefix(Namespace.XML_NAMESPACE.getURI()));
 		assertEquals(JDOMConstants.NS_PREFIX_XMLNS, nsc.getPrefix(JDOMConstants.NS_URI_XMLNS));
 		assertEquals("a", nsc.getPrefix("urla"));
@@ -121,6 +127,12 @@ public class TestJDOMNamespaceContext {
 		checkIteratorEquals(nsc.getPrefixes(JDOMConstants.NS_URI_XMLNS), JDOMConstants.NS_PREFIX_XMLNS);
 		checkIteratorEquals(nsc.getPrefixes("urla"), "a", "a2");
 		checkIteratorEquals(nsc.getPrefixes("urlb"), "b");
+		try {
+			nsc.getPrefixes(null);
+			failNoException(IllegalArgumentException.class);
+		} catch (Exception e) {
+			checkException(IllegalArgumentException.class, e);
+		}
 	}
 
 	@Test
