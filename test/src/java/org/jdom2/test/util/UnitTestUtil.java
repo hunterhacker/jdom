@@ -391,7 +391,9 @@ public class UnitTestUtil {
 	    			compare(ea.getAttributes(), eb.getAttributes());
 	    			assertEquals(ea.getNamespacesInScope(), eb.getNamespacesInScope());
 	        		final int sz = ea.getContentSize();
-	        		assertTrue(sz == eb.getContentSize());
+	        		if (sz != eb.getContentSize()) {
+	        			fail (String.format("Expected %d members but got %d for Element %s", sz, eb.getContentSize(), ea));
+	        		}
 	        		for (int i = 0; i < sz; i++) {
 	        			compare(ea.getContent(i), eb.getContent(i));
 	        		}
@@ -423,7 +425,10 @@ public class UnitTestUtil {
     
     public static final void compare(List<Attribute> a, List<Attribute> b) {
 		assertTrue(a != b);
-		assertTrue(a.size() == b.size());
+		if(a.size() != b.size()) {
+			fail(String.format("Expected same number of attributes (a has %d and b has %d): a=%s and b=%s", 
+					a.size(), b.size(), a.toString(), b.toString()));
+		}
 		Iterator<Attribute> ait = a.iterator();
 		Iterator<Attribute> bit = b.iterator();
 		while (ait.hasNext() && bit.hasNext()) {
