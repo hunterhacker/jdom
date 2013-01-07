@@ -69,6 +69,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
+import org.jdom2.Parent;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 
@@ -115,25 +116,19 @@ public class JDOMStreamReader implements XMLStreamReader {
     public int next() throws XMLStreamException {
         switch(state){
             case RS_START_DOCUMENT:
-                state = ReaderState.RS_START_ROOT_ELEMENT;
-                return currentEvt = START_DOCUMENT;
-                
-            case RS_START_ROOT_ELEMENT:
-                state = ReaderState.RS_WALKING_TREE;
-                this.rootIterator = new DomWalkingContentIterator(root);
-                return currentEvt = START_ELEMENT;
+            	if(this.rootIterator == null){
+            		state = ReaderState.RS_WALKING_TREE;
+	                this.rootIterator = new DomWalkingContentIterator(this.document);
+	                return currentEvt = START_DOCUMENT;
+            	}
                 
             case RS_WALKING_TREE:
                 if(this.rootIterator.hasNext()){
                     return currentEvt = this.rootIterator.next();
                 }
-				state = ReaderState.RS_END_ROOT_ELEMENT;
-				return currentEvt = END_ELEMENT;
-                
-            case RS_END_ROOT_ELEMENT:
-                state = ReaderState.RS_END_DOCUMENT;
-                return currentEvt = END_DOCUMENT;
-                
+				state = ReaderState.RS_END_DOCUMENT;
+				return currentEvt = END_DOCUMENT;
+				
             default:
                 throw new IllegalStateException("Reader does not have next");
         }
@@ -690,9 +685,9 @@ public class JDOMStreamReader implements XMLStreamReader {
             return ret;
         }
         
-        private Element toWalk;
+        private Parent toWalk;
         
-        public DomWalkingContentIterator(Element toWalk){
+        public DomWalkingContentIterator(Parent toWalk){
             this.toWalk = toWalk;
         }
         
@@ -782,9 +777,7 @@ public class JDOMStreamReader implements XMLStreamReader {
      */
     private enum ReaderState{
         RS_START_DOCUMENT,
-        RS_START_ROOT_ELEMENT,
         RS_WALKING_TREE,
-        RS_END_ROOT_ELEMENT,
         RS_END_DOCUMENT,
         RS_CLOSED
     }
