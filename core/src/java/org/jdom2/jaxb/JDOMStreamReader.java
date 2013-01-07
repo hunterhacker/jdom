@@ -55,13 +55,17 @@
 package org.jdom2.jaxb;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
 import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.DocType;
@@ -70,7 +74,15 @@ import org.jdom2.Element;
 import org.jdom2.EntityRef;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
-import org.jdom2.Text;
+import org.jdom2.Verifier;
+import org.jdom2.internal.ArrayCopy;
+import org.jdom2.output.Format;
+import org.jdom2.output.Format.TextMode;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.output.support.AbstractOutputProcessor;
+import org.jdom2.output.support.FormatStack;
+import org.jdom2.output.support.Walker;
+import org.jdom2.util.NamespaceStack;
 
 /**
  * An {@link XMLStreamReader} implementation that reads the XML document
@@ -80,92 +92,317 @@ import org.jdom2.Text;
  * events as it encounters them in the DOM.
  * @author gordon burgett https://github.com/gburgett
  */
-public class JDOMStreamReader implements XMLStreamReader {
+public class JDOMStreamReader extends AbstractOutputProcessor implements XMLStreamReader {
+	
+	private static final class DocumentWalker implements Walker {
+		
+		private final Content[] data;
+		private int pos = 0;
+		
+		public DocumentWalker(final Document doc) {
+			data = doc.getContent().toArray(new Content[doc.getContentSize()]);
+		}
 
+		@Override
+		public boolean isAllText() {
+			return false;
+		}
+
+		@Override
+		public boolean isAllWhitespace() {
+			return false;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pos < data.length;
+		}
+
+		@Override
+		public Content next() {
+			return data[pos++];
+		}
+
+		@Override
+		public String text() {
+			return null;
+		}
+
+		@Override
+		public boolean isCDATA() {
+			return false;
+		}
+		
+	}
+
+	private final FormatStack formatstack;
+	private final NamespaceStack nsstack = new NamespaceStack();
+	
     private Document document;
-    private Element root;
-    private DomWalkingContentIterator rootIterator;
-    private ReaderState state = ReaderState.RS_START_DOCUMENT;
+    
+    private String curi = null, clocalname = null, cprefix = null, 
+    		ctext = null, ctarget = null, cdata = null;
+    private Element [] emtstack = new Element[32];
+    private Walker[] stack = new Walker[32];
+    private int depth = 0;
     
     private int currentEvt = START_DOCUMENT;
-    
-    private Content getCurrentContent(){
-        Content ret = rootIterator.getCurrentContent();
-        if(ret == null){
-            return root;
-        }
-        return ret;
-    }
     
     /**
      * Create a new JDOMStreamReader that outputs a JDOM Document as an XMLStream.
      * @param document the document to output.
+     * @param format The output format to use. 
      */
-    public JDOMStreamReader(Document document){
+    public JDOMStreamReader(Document document, Format format){
         this.document = document;
-        this.root = document.getRootElement();
+        this.formatstack = new FormatStack(format);
+        stack[0] = new DocumentWalker(document);
+    }
+    
+    /**
+     * Create a new JDOMStreamReader that outputs a JDOM Document as an XMLStream using
+     * the Format.getRawFormat() format.
+     * @param document the document to output.
+     */
+    public JDOMStreamReader(Document document) {
+    	this(document, Format.getRawFormat());
     }
     
     @Override
-    public Object getProperty(String name) throws IllegalArgumentException {
-        return null;
+    public boolean hasNext() throws XMLStreamException {
+        return depth >= 0;
     }
 
     @Override
     public int next() throws XMLStreamException {
-        switch(state){
-            case RS_START_DOCUMENT:
-                state = ReaderState.RS_START_ROOT_ELEMENT;
-                return currentEvt = START_DOCUMENT;
-                
-            case RS_START_ROOT_ELEMENT:
-                state = ReaderState.RS_WALKING_TREE;
-                this.rootIterator = new DomWalkingContentIterator(root);
-                return currentEvt = START_ELEMENT;
-                
-            case RS_WALKING_TREE:
-                if(this.rootIterator.hasNext()){
-                    return currentEvt = this.rootIterator.next();
-                }
-				state = ReaderState.RS_END_ROOT_ELEMENT;
-				return currentEvt = END_ELEMENT;
-                
-            case RS_END_ROOT_ELEMENT:
-                state = ReaderState.RS_END_DOCUMENT;
-                return currentEvt = END_DOCUMENT;
-                
-            default:
-                throw new IllegalStateException("Reader does not have next");
+    	if (depth < 0) {
+    		throw new NoSuchElementException("No more data available.");
+    	}
+    	
+        curi = null;
+        clocalname = null;
+        cprefix = null;
+        ctext = null;
+        ctarget = null;
+        cdata = null;
+        
+        if (currentEvt == END_ELEMENT) {
+        	nsstack.pop();
+        	formatstack.pop();
+        	emtstack[depth + 1] = null;
         }
+        
+        // confirm next walker item.
+        if (!stack[depth].hasNext()) {
+        	// no more items at this level.
+        	stack[depth] = null;
+        	// we kill the element stack at the end of the END_ELEMENT event.
+        	// emtstack[depth] = null
+        	depth--;
+        	return currentEvt = (depth < 0 ? END_DOCUMENT : END_ELEMENT);
+        }
+        
+        final Content c = stack[depth].next();
+        if (c == null) {
+        	// formatted text or CDATA.
+        	ctext = stack[depth].text();
+        	return currentEvt = stack[depth].isCDATA() ? CDATA : CHARACTERS;
+        }
+        
+        switch (c.getCType()) {
+        	case CDATA:
+        		ctext = c.getValue();
+        		return currentEvt = CDATA;
+        	case Text:
+        		ctext = c.getValue();
+        		return currentEvt = CHARACTERS;
+        	case Comment:
+        		ctext = c.getValue();
+        		return currentEvt = COMMENT;
+        	case DocType:
+        		// format doctype appropriately.
+        		XMLOutputter xout = new XMLOutputter();
+        		ctext = xout.outputString((DocType)c);
+        		return currentEvt = DTD;
+        	case EntityRef:
+        		clocalname = ((EntityRef)c).getName();
+        		ctext = "";
+        		return currentEvt = ENTITY_REFERENCE;
+        	case ProcessingInstruction:
+        		final ProcessingInstruction pi = (ProcessingInstruction)c;
+        		ctarget = pi.getTarget();
+        		cdata = pi.getData();
+        		return currentEvt = PROCESSING_INSTRUCTION;
+        	case Element:
+        		// great
+        		// we deal with Element outside the switch statement.
+        		break;
+        	default:
+        		throw new IllegalStateException("Unexpected content " + c);
+        }
+        // OK, we break out here if we are an Element start.
+        final Element emt = (Element)c;
+    	clocalname = emt.getName();
+    	cprefix = emt.getNamespacePrefix();
+    	curi = emt.getNamespaceURI();
+        
+        nsstack.push(emt);
+        formatstack.push();
+        final String space = emt.getAttributeValue("space", Namespace.XML_NAMESPACE);
+		// Check for xml:space and adjust format settings
+		if ("default".equals(space)) {
+			formatstack.setTextMode(formatstack.getDefaultMode());
+		}
+		else if ("preserve".equals(space)) {
+			formatstack.setTextMode(TextMode.PRESERVE);
+		}
+		
+		depth++;
+		if (depth >= stack.length) {
+			stack = ArrayCopy.copyOf(stack, depth + 32);
+			emtstack = ArrayCopy.copyOf(emtstack, depth+32);
+		}
+		
+		emtstack[depth] = emt;
+		stack[depth] = buildWalker(formatstack, emt.getContent(), false);
+
+		return currentEvt = START_ELEMENT;
+        
+    }
+
+    @Override
+    public int getEventType() {
+        return currentEvt;
+    }
+
+    @Override
+    public boolean isStartElement() {
+        return currentEvt == START_ELEMENT;
+    }
+
+    @Override
+    public boolean isEndElement() {
+        return currentEvt == END_ELEMENT;
+    }
+
+    @Override
+    public boolean isCharacters() {
+        return currentEvt == CHARACTERS;
+    }
+
+    @Override
+    public boolean isWhiteSpace() {
+    	switch (currentEvt) {
+    		case SPACE :
+    			return true;
+    		case CDATA:
+    		case CHARACTERS:
+    			return Verifier.isAllXMLWhitespace(ctext);
+    		default:
+    			return false;
+    	}
     }
 
     @Override
     public void require(int type, String namespaceURI, String localName) throws XMLStreamException {
-        if(type != currentEvt){
-            throw new XMLStreamException("required event " + type + " but got event " + currentEvt);
+        if(type != getEventType()){
+            throw new XMLStreamException("required event " + type + " but got event " + getEventType());
         }
         
         if(localName != null){
-            if(!localName.equals(getLocalName())){
-                throw new XMLStreamException("required name " + localName + " but got name " + getLocalName());
+            if(!localName.equals(clocalname)){
+                throw new XMLStreamException("required name " + localName + " but got name " + clocalname);
             }
         }
         
         if(namespaceURI != null){
-            if(!namespaceURI.equals(getNamespaceURI())){
-                throw new XMLStreamException("required namespace " + namespaceURI + " but got namespace " + getNamespaceURI());
+            if(!namespaceURI.equals(curi)){
+                throw new XMLStreamException("required namespace " + namespaceURI + " but got namespace " + curi);
             }
         }
     }
 
     @Override
+    public QName getName() {
+    	switch (currentEvt) {
+    		case START_ELEMENT:
+    		case END_ELEMENT:
+    			final Element emt = emtstack[depth];
+    			return new QName(emt.getNamespaceURI(), emt.getName(), emt.getNamespacePrefix());
+    		default:
+    			throw new IllegalStateException("getName not supported for event " + currentEvt);
+        }
+    }
+
+    @Override
+    public String getLocalName() {
+    	switch (currentEvt) {
+    		case START_ELEMENT:
+    		case END_ELEMENT:
+            case ENTITY_REFERENCE:
+    			return clocalname;
+    		default:
+    			throw new IllegalStateException("getLocalName not supported for event " + currentEvt);
+        }
+    }
+
+    @Override
+    public boolean hasName() {
+        return currentEvt == START_ELEMENT || currentEvt == END_ELEMENT;
+    }
+
+    @Override
+    public String getNamespaceURI() {
+    	switch (currentEvt) {
+    		case START_ELEMENT:
+    		case END_ELEMENT:
+    			return curi;
+    		default:
+                throw new IllegalStateException("getNamespaceURI not supported for event " + currentEvt);
+        }
+    }
+
+    @Override
+    public String getPrefix() {
+    	switch (currentEvt) {
+    		case START_ELEMENT:
+    		case END_ELEMENT:
+    			return cprefix;
+    		default:
+                throw new IllegalStateException("getPrefix not supported for event " + currentEvt);
+        }
+    }
+    
+    @Override
+    public String getPITarget() {
+    	switch (currentEvt) {
+    		case PROCESSING_INSTRUCTION:
+    			return ctarget;
+    		default:
+                throw new IllegalStateException("getPITarget not supported for event " + currentEvt);
+        }
+    }
+
+    @Override
+    public String getPIData() {
+    	switch (currentEvt) {
+    		case PROCESSING_INSTRUCTION:
+    			return cdata;
+    		default:
+                throw new IllegalStateException("getPIData not supported for event " + currentEvt);
+        }
+    }
+    
+    
+    @Override
     public String getElementText() throws XMLStreamException {
+        // copied from documentation.
         if(getEventType() != XMLStreamConstants.START_ELEMENT) {
-            throw new XMLStreamException("parser must be on START_ELEMENT to read next text", getLocation());
+            throw new XMLStreamException("parser must be on START_ELEMENT to read next text");
         }
         
         int eventType = next();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         while(eventType != XMLStreamConstants.END_ELEMENT ) {
             if(eventType == XMLStreamConstants.CHARACTERS
                     || eventType == XMLStreamConstants.CDATA
@@ -209,65 +446,38 @@ public class JDOMStreamReader implements XMLStreamReader {
     }
 
     @Override
-    public boolean hasNext() throws XMLStreamException {
-        return !(state == ReaderState.RS_END_DOCUMENT ||
-                state == ReaderState.RS_CLOSED);
-    }
-
-    @Override
     public void close() throws XMLStreamException {
-        this.state = ReaderState.RS_CLOSED;
+        currentEvt = END_DOCUMENT;
+        while (depth >= 0) {
+        	stack[depth] = null;
+        	emtstack[depth] = null;
+        	depth--;
+        }
+    	cdata = null;
+    	clocalname = null;
+    	cprefix = null;
+    	ctarget = null;
+    	ctext = null;
+    	curi = null;
         this.document = null;
-        this.root = null;
-        this.rootIterator = null;
     }
 
     @Override
     public String getNamespaceURI(String prefix) {
-        if("xml".equalsIgnoreCase(prefix)){
-            return Namespace.XML_NAMESPACE.getURI();
-        }
-        if("xmlns".equalsIgnoreCase(prefix)){
-            return "http://www.w3.org/2000/xmlns/";
-        }
-        
-        Content c = getCurrentContent();
-        for(Namespace ns : c.getNamespacesInScope()){
-            if(ns.getPrefix().equals(prefix)){
-                return ns.getURI();
-            }
-        }
-        
-        return null;
-    }
-
-    @Override
-    public boolean isStartElement() {
-        return currentEvt == START_ELEMENT;
-    }
-
-    @Override
-    public boolean isEndElement() {
-        return currentEvt == END_ELEMENT;
-    }
-
-    @Override
-    public boolean isCharacters() {
-        return currentEvt == CHARACTERS;
-    }
-
-    @Override
-    public boolean isWhiteSpace() {
-        return currentEvt == SPACE;
+    	final Namespace ns = nsstack.getNamespaceForPrefix(prefix);
+    	return ns == null ? null : ns.getURI();
     }
 
     @Override
     public String getAttributeValue(String namespaceURI, String localName) {
-        if(currentEvt != START_ELEMENT && currentEvt != ATTRIBUTE){
+        if(currentEvt != START_ELEMENT){
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
+        final Element e = emtstack[depth];
+        if (!e.hasAttributes()) {
+        	return null;
+        }
         
         if(namespaceURI != null){
             return e.getAttributeValue(localName, Namespace.getNamespace(namespaceURI));
@@ -285,12 +495,10 @@ public class JDOMStreamReader implements XMLStreamReader {
 
     @Override
     public int getAttributeCount() {
-        if(currentEvt != START_ELEMENT && currentEvt != ATTRIBUTE){
+        if(currentEvt != START_ELEMENT){
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
-        
-        Element e = (Element)getCurrentContent();
-        return e.getAttributes().size();
+        return emtstack[depth].getAttributesSize();
     }
 
     @Override
@@ -299,8 +507,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
+        final Attribute a = emtstack[depth].getAttributes().get(index);
         
         String ns = a.getNamespaceURI();
         if("".equals(ns))
@@ -319,13 +526,8 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
-        String ret = a.getNamespaceURI();
-        if("".equals(ret)){
-            return null;
-        }
-        return ret;
+        final Attribute a = emtstack[depth].getAttributes().get(index);
+        return a.getNamespaceURI();
     }
 
     @Override
@@ -334,8 +536,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
+        final Attribute a = emtstack[depth].getAttributes().get(index);
         return a.getName();
     }
 
@@ -345,13 +546,8 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
-        String ret = a.getNamespacePrefix();
-        if(ret == null || "".equals(ret)){
-            return XMLConstants.DEFAULT_NS_PREFIX;
-        }
-        return ret;
+        final Attribute a = emtstack[depth].getAttributes().get(index);
+        return a.getNamespacePrefix();
     }
 
     @Override
@@ -360,9 +556,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
-        
+        final Attribute a = emtstack[depth].getAttributes().get(index);
         return a.getAttributeType().name();
     }
 
@@ -372,8 +566,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
+        final Attribute a = emtstack[depth].getAttributes().get(index);
         return a.getValue();
     }
 
@@ -383,9 +576,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             throw new IllegalStateException("getAttributeCount not supported for event " + currentEvt);
         }
         
-        Element e = (Element)getCurrentContent();
-        Attribute a = e.getAttributes().get(index);
-        
+        final Attribute a = emtstack[depth].getAttributes().get(index);
         return a.isSpecified();
     }
 
@@ -393,28 +584,39 @@ public class JDOMStreamReader implements XMLStreamReader {
     public int getNamespaceCount() {
         switch(currentEvt){
             case START_ELEMENT:
-            case NAMESPACE:
             case END_ELEMENT:
-                Element e = (Element)getCurrentContent();
-                return e.getNamespacesIntroduced().size();
+            	final Iterator<?> it = nsstack.addedForward().iterator();
+            	int cnt = 0;
+            	while (it.hasNext()) {
+            		cnt++;
+            		it.next();
+            	}
+            	return cnt;
         }
         
         throw new IllegalStateException("getNamespaceCount not supported for event " + currentEvt);
+    }
+    
+    private final Namespace getNamespaceByIndex(int index) {
+    	final Iterator<Namespace> it = nsstack.addedForward().iterator();
+    	int cnt = 0;
+    	while (it.hasNext()) {
+    		if (cnt == index) {
+    			return it.next();
+    		}
+    		it.next();
+    		cnt++;
+    	}
+    	throw new NoSuchElementException("No Namespace with index " + index + 
+    			" (there are only " + cnt + ").");
     }
 
     @Override
     public String getNamespacePrefix(int index) {
         switch(currentEvt){
             case START_ELEMENT:
-            case NAMESPACE:
             case END_ELEMENT:
-                Element e = (Element)getCurrentContent();
-                Namespace ns = e.getNamespacesIntroduced().get(index);
-                String ret = ns.getPrefix();
-                if(ret == null || "".equals(ret)){
-                    ret = XMLConstants.DEFAULT_NS_PREFIX;
-                }
-                return ret;
+            	return getNamespaceByIndex(index).getPrefix();
         }
         
         throw new IllegalStateException("getNamespacePrefix not supported for event " + currentEvt);
@@ -427,13 +629,7 @@ public class JDOMStreamReader implements XMLStreamReader {
             case START_ELEMENT:
             case NAMESPACE:
             case END_ELEMENT:
-                Element e = (Element)getCurrentContent();
-                Namespace ns = e.getNamespacesIntroduced().get(index);
-                String ret = ns.getURI();
-                if("".equals(ret)){
-                    ret = null;
-                }
-                return ret;
+            	return getNamespaceByIndex(index).getURI();
         }
         
         throw new IllegalStateException("getNamespaceURI not supported for event " + currentEvt);
@@ -441,31 +637,32 @@ public class JDOMStreamReader implements XMLStreamReader {
 
     @Override
     public NamespaceContext getNamespaceContext() {
-        if(state == ReaderState.RS_START_DOCUMENT || state == ReaderState.RS_END_DOCUMENT || state == ReaderState.RS_CLOSED){
-            throw new IllegalStateException("getNamespaceCount not supported for event " + currentEvt);
-        }
-        
-        Content c = getCurrentContent();
-        return new org.jdom2.jaxb.JDOMNamespaceContext(c.getNamespacesInScope());
+        return new JDOMNamespaceContext(nsstack.getScope());
     }
 
     @Override
-    public int getEventType() {
-        return currentEvt;
+    public boolean hasText() {
+        switch(currentEvt){
+            case CDATA:
+            case CHARACTERS:
+            case COMMENT:
+            case DTD:
+            case ENTITY_REFERENCE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override
     public String getText() {
-        final Content c = getCurrentContent();
-        switch(c.getCType()){
+        switch(currentEvt){
             case CDATA:
-            case Text:
-            case Comment:
-                return c.getValue();
-                
-            case DocType:
-                return ((DocType)c).getInternalSubset();
-                
+            case CHARACTERS:
+            case COMMENT:
+            case DTD:
+            case ENTITY_REFERENCE:
+                return ctext;
             default:
                 throw new IllegalStateException("getText not valid for event type " + currentEvt);
         }
@@ -515,15 +712,6 @@ public class JDOMStreamReader implements XMLStreamReader {
     }
 
     @Override
-    public boolean hasText() {
-        return currentEvt == CHARACTERS ||
-                currentEvt == DTD ||
-                currentEvt == ENTITY_REFERENCE ||
-                currentEvt == COMMENT ||
-                currentEvt == SPACE;
-    }
-
-    @Override
     public Location getLocation() {
         return new Location(){
             @Override
@@ -554,72 +742,6 @@ public class JDOMStreamReader implements XMLStreamReader {
         };
     }
 
-    @Override
-    public QName getName() {
-        if(currentEvt != START_ELEMENT && currentEvt != END_ELEMENT){
-            throw new IllegalStateException("getName not supported for event " + currentEvt);
-        }
-        
-        Element e = (Element)getCurrentContent();
-        String ns = e.getNamespaceURI();
-        if("".equals(ns)) 
-            ns = null;
-        
-        String prefix = e.getNamespacePrefix();
-        if(prefix == null || "".equals(prefix)) 
-            prefix = XMLConstants.DEFAULT_NS_PREFIX;
-        
-        return new QName(ns, e.getName(), prefix);
-    }
-
-    @Override
-    public String getLocalName() {
-        switch(currentEvt){
-            case START_ELEMENT:
-            case END_ELEMENT:
-                Element e = (Element)getCurrentContent();
-                return e.getName();
-                
-            case ENTITY_REFERENCE:
-                EntityRef er = (EntityRef)getCurrentContent();
-                return er.getName();
-        }
-        
-        throw new IllegalStateException("getLocalName not supported for event " + currentEvt);
-    }
-
-    @Override
-    public boolean hasName() {
-        return currentEvt == START_ELEMENT || currentEvt == END_ELEMENT;
-    }
-
-    @Override
-    public String getNamespaceURI() {
-        if(currentEvt != START_ELEMENT && currentEvt != END_ELEMENT){
-            throw new IllegalStateException("getNamespaceURI not supported for event " + currentEvt);
-        }
-        
-        Element e = (Element)getCurrentContent();
-        String ret = e.getNamespaceURI();
-        if("".equals(ret)){
-            ret = null;
-        }
-        return ret;
-    }
-
-    @Override
-    public String getPrefix() {
-        if(currentEvt != START_ELEMENT && currentEvt != END_ELEMENT){
-            throw new IllegalStateException("getName not supported for event " + currentEvt);
-        }
-        
-        Element e = (Element)getCurrentContent();
-        String ret = e.getNamespacePrefix();
-        if(ret == null || "".equals(ret))
-            ret = XMLConstants.DEFAULT_NS_PREFIX;
-        
-        return ret;
-    }
 
     @Override
     public String getVersion() {
@@ -647,145 +769,35 @@ public class JDOMStreamReader implements XMLStreamReader {
     }
 
     @Override
-    public String getPITarget() {
-        if(currentEvt != PROCESSING_INSTRUCTION){
-            throw new IllegalStateException("getPITarget not supported for event " + currentEvt);
-        }
-        
-        ProcessingInstruction pi = (ProcessingInstruction)getCurrentContent();
-        return pi.getTarget();
+    public Object getProperty(final String name) throws IllegalArgumentException {
+    	if (name == null) {
+    		throw new IllegalArgumentException("Property name is not allowed to be null");
+    	}
+    	if (XMLInputFactory.ALLOCATOR.equals(name)) {
+    		return null;
+    	}
+    	if (XMLInputFactory.IS_COALESCING.equals(name)) {
+    		return formatstack.getDefaultMode() != TextMode.PRESERVE;
+    	}
+    	if (XMLInputFactory.IS_NAMESPACE_AWARE.equals(name)) {
+    		return Boolean.TRUE;
+    	}
+    	if (XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES.equals(name)) {
+    		return Boolean.FALSE;
+    	}
+    	if (XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES.equals(name)) {
+    		return Boolean.FALSE;
+    	}
+    	if (XMLInputFactory.IS_VALIDATING.equals(name)) {
+    		return Boolean.TRUE;
+    	}
+    	if (XMLInputFactory.REPORTER.equals(name)) {
+    		return null;
+    	}
+    	if (XMLInputFactory.RESOLVER.equals(name)) {
+    		return null;
+    	}
+        return null;
     }
 
-    @Override
-    public String getPIData() {
-        if(currentEvt != PROCESSING_INSTRUCTION){
-            throw new IllegalStateException("getPIData not supported for event " + currentEvt);
-        }
-        
-        ProcessingInstruction pi = (ProcessingInstruction)getCurrentContent();
-        return pi.getData();
-    }
-    
-    /**
-     * An Iterator that recursively walks DOM elements and returns 
-     * {@link XMLStreamConstants XML stream events}.
-     */
-    private class DomWalkingContentIterator implements Iterator<Integer> {
-        
-        private int contentIndex = 0;
-        
-        private DomWalkingContentIterator subIterator;
-        
-        private Content currentContent;
-        public Content getCurrentContent(){
-            Content ret = null;
-            if(subIterator != null){
-                ret = subIterator.getCurrentContent();
-            }
-            
-            if(ret == null){
-                return currentContent;
-            }
-            
-            return ret;
-        }
-        
-        private Element toWalk;
-        
-        public DomWalkingContentIterator(Element toWalk){
-            this.toWalk = toWalk;
-        }
-        
-        @Override
-        public boolean hasNext() {
-            //if we're walking a recursive sub-iterator
-            if(subIterator != null){
-                //we either have sub-iterator content or we have END_ELEMENT
-                return true;
-            }
-            
-            //if we have content remaining
-            if(toWalk.getContentSize() > contentIndex){
-                return true;
-            }
-            
-            return false;
-        }
-
-        @Override
-        public Integer next() {
-            int next;
-            if(subIterator != null){
-                //walk the sub-element
-                if(subIterator.hasNext()){
-                    next = subIterator.next();
-                    return next;
-                }
-				subIterator = null;
-				return END_ELEMENT;
-            }
-            
-            if(this.toWalk.getContentSize() > contentIndex){
-                Content c = this.toWalk.getContent(contentIndex++);
-                this.currentContent = c;
-                if(c.getCType() == Content.CType.Element){
-                    subIterator = new DomWalkingContentIterator((Element)c);
-                    return START_ELEMENT;
-                }
-
-                return getEventType(c);
-            }
-            
-            throw new IllegalStateException("Iterator does not have next");
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Remove is not supported.");
-        }
-
-        
-    }
-    
-    
-    private int getEventType(Content c){
-        switch(c.getCType()){
-            case CDATA:
-                return CDATA; 
-                
-            case Comment:
-                return COMMENT;
-                
-            case DocType:
-                return DTD;
-                
-            case EntityRef:
-                //TODO: properly expand entity refs
-                throw new UnsupportedOperationException("Entity references not yet supported");
-                
-            case ProcessingInstruction:
-                return PROCESSING_INSTRUCTION;
-                
-            case Text:
-                if(((Text)c).getText().trim().length() == 0){
-                    return SPACE;
-                }
-                return CHARACTERS;
-                
-            default:
-                throw new UnsupportedOperationException("No event type available for content type " + c.getCType());
-        }
-    }
-    
-    /**
-     * The current state of the reader
-     */
-    private enum ReaderState{
-        RS_START_DOCUMENT,
-        RS_START_ROOT_ELEMENT,
-        RS_WALKING_TREE,
-        RS_END_ROOT_ELEMENT,
-        RS_END_DOCUMENT,
-        RS_CLOSED
-    }
 }

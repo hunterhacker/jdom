@@ -713,7 +713,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	public NamespaceContext getNamespaceContext() {
 		final List<Namespace> namespaces = getCurrentNamespaces();
 
-		return new org.jdom2.jaxb.JDOMNamespaceContext(namespaces);
+		return new JDOMNamespaceContext(namespaces.toArray(new Namespace[namespaces.size()]));
 	}
 
 	@Override

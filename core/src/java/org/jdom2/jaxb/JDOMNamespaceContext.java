@@ -62,6 +62,7 @@ import javax.xml.namespace.NamespaceContext;
 
 import org.jdom2.JDOMConstants;
 import org.jdom2.Namespace;
+import org.jdom2.internal.ArrayCopy;
 
 /**
  * A Read-Only {@link NamespaceContext} that describes namespaces found
@@ -76,11 +77,11 @@ public final class JDOMNamespaceContext implements NamespaceContext {
      * Create a read-only representation of the input namespace list.
      * @param namespaces the Namespace instances to represent.
      */
-    public JDOMNamespaceContext(final List<Namespace> namespaces){
+    public JDOMNamespaceContext(final Namespace[] namespaces){
     	if (namespaces == null) {
     		throw new IllegalArgumentException("Cannot process a null Namespace list");
     	}
-        this.namespacearray = namespaces.toArray(new Namespace[0]);
+        this.namespacearray = ArrayCopy.copyOf(namespaces, namespaces.length);
         for (int i = 1; i < namespacearray.length; i++) {
     		final Namespace n = namespacearray[i];
     		if (n == null) {
