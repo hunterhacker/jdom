@@ -2,7 +2,7 @@
 <!-- root comment -->
 
 <?jdomtest root level ?>
-   
+
 <root att1="val1" att2="val2" >
   text
 	<child att="child1" xml:space="preserve"> hello Frodo Baggins! </child>
@@ -17,5 +17,7 @@
 	</child>
 </root>
 
+<!-- trailing comment -->
+<?jdomtest post root?>
 
       

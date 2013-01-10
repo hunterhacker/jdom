@@ -55,7 +55,6 @@ package org.jdom2.jaxb;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
@@ -80,15 +79,14 @@ import org.jdom2.util.NamespaceStack;
 public class JDOMStreamWriter implements XMLStreamWriter {
 
 	private static final DefaultJDOMFactory DEFFAC = new DefaultJDOMFactory();
-	private static final Namespace[] EMPTYNSA = new Namespace[0];
 
 	// The optional global namespace context for namespace bindings.
 	private NamespaceContext globalcontext = null;
 
 	// The active Element NamespaceStack of actual used Namespaces.
-	private final NamespaceStack usednsstack = new NamespaceStack();
+	private NamespaceStack usednsstack = new NamespaceStack();
 	// The stack of namespace bindings which may not necessarily be used in an element
-	private final NamespaceStack boundstack = new NamespaceStack();
+	private NamespaceStack boundstack = new NamespaceStack();
 	
 	// The namespaces pending in the current Element that need to be actively bound.
 	private LinkedList<Namespace> pendingns = new LinkedList<Namespace>();
@@ -97,6 +95,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	private final boolean repairnamespace;
 
 	private Document document = null;
+	private boolean done = false;
 	private Parent parent = null;
 	private Element activeelement = null;
 	private boolean isempty = false;
@@ -105,8 +104,6 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	private int genprefix = 0;
 	
 	private final JDOMFactory factory;
-
-	private StreamWriterState state = StreamWriterState.BEFORE_DOCUMENT_START;
 
 	/**
 	 * Create a JDOMStreamWriter with the default JDOMFactory for creating JDOM
@@ -140,11 +137,11 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	 * @return The created {@link Document}
 	 */
 	public Document getDocument() {
-		if (state == StreamWriterState.DOCUMENT_ENDED) {
+		if (done && document != null) {
 			return document;
 		}
 		
-		if (state == StreamWriterState.CLOSED) {
+		if (done) {
 			throw new IllegalStateException("Writer is closed");
 		}
 
@@ -171,41 +168,36 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		// JDOM has no support for XML Version specification/handling
 		// ignore version.
 		
-		if (this.state != StreamWriterState.BEFORE_DOCUMENT_START) {
+		if (done || document != null) {
 			throw new IllegalStateException(
-					"Cannot write start document while in state " + this.state);
+					"Cannot write start document twice.");
 		}
 
-		this.document = factory.document(null);
+		document = factory.document(null);
+		parent = document;
 		if (encoding != null && !"".equals(encoding))
 			this.document.setProperty("ENCODING", encoding);
 
-
-		this.state = StreamWriterState.DOCUMENT_START;
 		activeelement = null;
 	}
 
 	@Override
 	public void setNamespaceContext(final NamespaceContext context)
 			throws XMLStreamException {
-		if (state != StreamWriterState.DOCUMENT_START) {
+		if (document == null || document.hasRootElement()) {
 			throw new XMLStreamException("Can only set the NamespaceContext at the Document start");
 		}
 		globalcontext = context;
 	}
 
 	@Override
-	public void writeDTD(final String dtd) throws XMLStreamException {
-		// FIXME to do ... ?
-		throw new UnsupportedOperationException("not supported yet");
-	}
-
-	@Override
 	public String getPrefix(final String uri) throws XMLStreamException {
-		for (Namespace n : boundstack) {
-			if (n.getURI().equals(uri)) {
-				return n.getPrefix();
-			}
+		if (document == null) {
+			return null;
+		}
+		final Namespace n = boundstack.getFirstNamespaceForURI(uri);
+		if (n != null) {
+			return n.getPrefix();
 		}
 		if (globalcontext != null) {
 			return globalcontext.getPrefix(uri);
@@ -219,7 +211,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		if (prefix == null) {
 			throw new IllegalArgumentException("prefix may not be null");
 		}
-		if (state != StreamWriterState.IN_ELEMENT && state != StreamWriterState.DOCUMENT_START) {
+		if (document == null || done) {
 			throw new IllegalStateException(
 					"Attempt to set prefix at an illegal stream state.");
 		}
@@ -235,7 +227,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 
 		final Namespace ns = Namespace.getNamespace(prefix, uri);
 		if (!boundstack.isInScope(ns)) {
-			ArrayList<Namespace> al = new ArrayList<Namespace>();
+			final ArrayList<Namespace> al = new ArrayList<Namespace>();
 			for (Namespace n : boundstack) {
 				if (n.getPrefix().equals(prefix)) {
 					// do not rebind the same prefix with the old URI.
@@ -245,7 +237,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 			}
 			// bind the new URI to the prefix.
 			al.add(ns);
-			// kill the previous binding.
+			// kill the previous bindings.
 			boundstack.pop();
 			// reset the binding.
 			boundstack.push(al);
@@ -257,47 +249,318 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		setPrefix(JDOMConstants.NS_PREFIX_DEFAULT, uri);
 	}
 
+	@Override
+	public void writeDTD(final String dtd) throws XMLStreamException {
+		// FIXME to do ... ?
+		throw new UnsupportedOperationException("not supported yet");
+	}
+
+	@Override
+	public void writeStartElement(final String localName) throws XMLStreamException {
+		writeStartElement("", localName);
+	}
+
+	@Override
+	public void writeStartElement(final String namespaceURI, final String localName) 
+			throws XMLStreamException {
+		if (namespaceURI == null) {
+			throw new XMLStreamException("Cannot have a null namespaceURI");
+		}
+		if (localName == null) {
+			throw new XMLStreamException("Cannot have a null localname");
+		}
+		this.buildElement("", localName, namespaceURI, false, false);
+	}
+
+	@Override
+	public void writeStartElement(final String prefix, final String localName,
+			final String namespaceURI) throws XMLStreamException {
+		if (prefix == null) {
+			throw new XMLStreamException("Cannot have a null prefix");
+		}
+		if (localName == null) {
+			throw new XMLStreamException("Cannot have a null localName");
+		}
+		if (namespaceURI == null) {
+			throw new XMLStreamException("Cannot have a null namespaceURI");
+		}
+		buildElement(prefix, localName, namespaceURI, true, false);
+	}
+
+	@Override
+	public void writeEmptyElement(final String localName)
+			throws XMLStreamException {
+		if (localName == null) {
+			throw new XMLStreamException("Cannot have a null localname");
+		}
+		this.buildElement("", localName, "", false, true);
+	}
+
+	@Override
+	public void writeEmptyElement(final String namespaceURI,
+			final String localName) throws XMLStreamException {
+		if (namespaceURI == null) {
+			throw new XMLStreamException("Cannot have a null namespaceURI");
+		}
+		if (localName == null) {
+			throw new XMLStreamException("Cannot have a null localname");
+		}
+		this.buildElement("", localName, namespaceURI, false, true);
+	}
+
+	@Override
+	public void writeEmptyElement(final String prefix, final String localName,
+			final String namespaceURI) throws XMLStreamException {
+		if (prefix == null) {
+			throw new XMLStreamException("Cannot have a null prefix");
+		}
+		if (localName == null) {
+			throw new XMLStreamException("Cannot have a null localname");
+		}
+		if (namespaceURI == null) {
+			throw new XMLStreamException("Cannot have a null namespaceURI");
+		}
+		buildElement(prefix, localName, namespaceURI, true, true);
+	}
+	
+	@Override
+	public void writeDefaultNamespace(final String namespaceURI)
+			throws XMLStreamException {
+		this.writeNamespace("", namespaceURI);
+	}
+
+	@Override
+	public void writeNamespace(final String prefix, final String namespaceURI)
+			throws XMLStreamException {
+		if (activeelement == null) {
+			throw new IllegalStateException("Can only write a Namespace after starting an Element" +
+					" and before adding content to that Element.");
+		}
+		if (prefix == null || JDOMConstants.NS_PREFIX_XMLNS.equals(prefix)) {
+			// recurse with the "" prefix.
+			writeNamespace("", namespaceURI);
+		} else {
+			pendingns.add(Namespace.getNamespace(prefix, namespaceURI));
+		}
+	}
+
+	@Override
+	public void writeAttribute(final String localName, final String value)
+			throws XMLStreamException {
+		buildAttribute("", "", localName, value, false);
+	}
+
+	@Override
+	public void writeAttribute(final String namespaceURI,
+			final String localName, final String value)
+			throws XMLStreamException {
+		buildAttribute("", namespaceURI == null ? "" : namespaceURI, localName, value, false);
+	}
+	
+	@Override
+	public void writeAttribute(final String prefix, final String namespaceURI,
+			final String localName, final String value)
+			throws XMLStreamException {
+		buildAttribute(prefix == null ? "" : prefix, namespaceURI == null ? "" : namespaceURI, localName, value, true);
+	}
+
+	@Override
+	public void writeComment(final String data) throws XMLStreamException {
+		if (document == null || done) {
+			throw new XMLStreamException("Can only add a Comment to the Document or an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		factory.addContent(parent, factory.comment(data));
+	}
+
+	@Override
+	public void writeProcessingInstruction(final String target)
+			throws XMLStreamException {
+		if (document == null || done) {
+			throw new XMLStreamException("Can only add a ProcessingInstruction to the Document or an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		factory.addContent(parent, factory.processingInstruction(target));
+	}
+
+	@Override
+	public void writeProcessingInstruction(final String target,
+			final String data) throws XMLStreamException {
+		if (document == null || done) {
+			throw new XMLStreamException("Can only add a ProcessingInstruction to the Document or an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		factory.addContent(parent, factory.processingInstruction(target, data));
+	}
+
+	@Override
+	public void writeCData(final String data) throws XMLStreamException {
+		if (!(parent instanceof Element)) {
+			throw new XMLStreamException("Can only writeCDATA() inside an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		factory.addContent(parent, factory.cdata(data));
+	}
+
+	@Override
+	public void writeEntityRef(final String name) throws XMLStreamException {
+		if (!(parent instanceof Element)) {
+			throw new XMLStreamException("Can only writeEntityRef() inside an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		factory.addContent(parent, factory.entityRef(name));
+	}
+	
+	@Override
+	public void writeCharacters(final String chars) throws XMLStreamException {
+		if (document == null || done) {
+			throw new XMLStreamException("Unable to add Characters at this point in the stream.");
+		}
+		flushActiveElement();
+		if (chars == null) {
+			return;
+		}
+		if (parent instanceof Element) {
+			if (activetext != null) {
+				activetext.append(chars);
+			} else {
+				activetext = factory.text(chars);
+				factory.addContent(parent, activetext);
+			}
+		}
+		// ignore case where parent is Document.
+	}
+
+	@Override
+	public void writeCharacters(final char[] chars, final int start,
+			final int len) throws XMLStreamException {
+		writeCharacters(new String(chars, start, len));
+	}
+
+	@Override
+	public void writeEndElement() throws XMLStreamException {
+		if (!(parent instanceof Element)) {
+			throw new XMLStreamException("Cannot end an Element unless you are in an Element.");
+		}
+		flushActiveElement();
+		flushActiveText();
+		usednsstack.pop();
+		boundstack.pop();
+		boundstack.pop();
+		boundstack.pop();
+		parent = parent.getParent();
+	}
+
+	@Override
+	public void writeEndDocument() throws XMLStreamException {
+		// flush may change state if isempty root element
+		if (document == null || done || parent instanceof Element) {
+			throw new IllegalStateException(
+					"Cannot write end document before writing the end of root element");
+		}
+		flushActiveElement();
+		done = true;
+	}
+
+	@Override
+	public void close() throws XMLStreamException {
+		this.document = null;
+		this.parent = null;
+		activeelement = null;
+		activetext = null;
+		boundstack = null;
+		usednsstack = null;
+		done = true;
+	}
+
+	@Override
+	public void flush() throws XMLStreamException {
+		// flush does nothing.
+	}
+
+	@Override
+	public NamespaceContext getNamespaceContext() {
+		if (document == null) {
+			return new JDOMNamespaceContext(new Namespace[0]);
+		}
+		return new JDOMNamespaceContext(boundstack.getScope());
+	}
+
+	@Override
+	public Object getProperty(String name) throws IllegalArgumentException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	// *****************************
+	// Private methods.
+	// *****************************
+
 	/**
-	 * Simple method that implements the start-element logic without the spec-required checks
-	 * for null values.
-	 * @param prefix The prefix for the namespace (may be null).
-	 * @param localName The localName for the Element
-	 * @param namespaceURI The namespaceURI (null implies "");
-	 * @param withpfx true if the prefix is user-specified.
-	 * @throws XMLStreamException if the stream is not in a good state for an Element.
+	 * Simple method that implements the empty-element logic without the spec-required
+	 * null-check logic
+	 * @param prefix The namespace prefix (may be null).
+	 * @param localName The Element tag
+	 * @param namespaceURI The namespace URI (may be null).
+	 * @param empty Is this an Empty element (expecting children?)
+	 * @throws XMLStreamException If the stream is not in an appropriate state for a new Element.
 	 */
-	private void buildStartElement(final String prefix, final String localName,
-			final String namespaceURI, boolean withpfx) throws XMLStreamException {
+	private final void buildElement(final String prefix, final String localName,
+			final String namespaceURI, final boolean withpfx, boolean empty) throws XMLStreamException {
+		
+		if (document == null || done) {
+			throw new XMLStreamException(
+					"Cannot write new element when in current state.");
+		}
+		
+		if (parent == document && document.hasRootElement()) {
+			throw new XMLStreamException(
+					"Document can have only one root Element.");
+		}
+			
 		
 		flushActiveElement();
 		flushActiveText();
 		
+		// create an element-specific namespace binding layer.
+		boundstack.push();
+		
 		final Namespace ns = resolveElementNamespace(prefix, namespaceURI, withpfx);
+
 		final Element e = factory.element(localName, ns);
 
-		switch (state) {
-			case DOCUMENT_START:
-				factory.setRoot(document, e);
-				parent = e;
-				state = StreamWriterState.IN_ELEMENT;
-				break;
-
-			case IN_ELEMENT:
-				factory.addContent(parent, e);
-				parent = e;
-				break;
-
-			default:
-				throw new XMLStreamException(
-						"Cannot write new element when in state " + state);
-		}
+		factory.addContent(parent, e);
 		activeelement = e;
-		isempty = false;
+		if (empty) {
+			isempty = true;
+		} else {
+			isempty = false;
+			parent = e;
+		}
 	}
 
 	private Namespace resolveElementNamespace(String prefix, String namespaceURI,
 			boolean withpfx) throws XMLStreamException {
+		
+		if ("".equals(namespaceURI)) {
+			final Namespace defns = boundstack.getNamespaceForPrefix("");
+			if(Namespace.NO_NAMESPACE != defns) {
+				// inconsistency in XMLStreamWriter specification....
+				// In theory the repairing code should create a generated prefic for unbound
+				// namespace URI, but you can't create a prefixed ""-URI namespace.
+				throw new XMLStreamException("This attempt to use the empty URI \"\" as an " +
+						"Element Namespace is illegal because the default Namespace is already " +
+						"bound to the URI '" + defns.getURI() + "'. You must call " +
+						"setPrefix(\"\", \"\") prior to this call.");
+			}
+		}
+		
 		final Namespace ns = Namespace.getNamespace(prefix, namespaceURI);
+		
 		if (withpfx) {
 			final Namespace bnd = boundstack.getNamespaceForPrefix(prefix);
 			if (bnd == null || bnd == ns) {
@@ -379,146 +642,12 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		return pfx;
 	}
 
-	@Override
-	public void writeStartElement(final String localName) throws XMLStreamException {
-		writeStartElement("", localName);
-	}
-
-	@Override
-	public void writeStartElement(final String namespaceURI, final String localName) 
-			throws XMLStreamException {
-		if (namespaceURI == null) {
-			throw new XMLStreamException("Cannot have a null namespaceURI");
-		}
-		if (localName == null) {
-			throw new XMLStreamException("Cannot have a null localname");
-		}
-		this.buildStartElement("", localName, namespaceURI, false);
-	}
-
-	@Override
-	public void writeStartElement(final String prefix, final String localName,
-			final String namespaceURI) throws XMLStreamException {
-		if (prefix == null) {
-			throw new XMLStreamException("Cannot have a null prefix");
-		}
-		if (localName == null) {
-			throw new XMLStreamException("Cannot have a null localName");
-		}
-		if (namespaceURI == null) {
-			throw new XMLStreamException("Cannot have a null namespaceURI");
-		}
-		buildStartElement(prefix, localName, namespaceURI, true);
-	}
-
-	/**
-	 * Simple method that implements the empty-element logic without the spec-required
-	 * null-check logic
-	 * @param prefix The namespace prefix (may be null).
-	 * @param localName The Element tag
-	 * @param namespaceURI The namespace URI (may be null).
-	 * @throws XMLStreamException If the stream is not in an appropriate state for a new Element.
-	 */
-	private final void buildEmptyElement(final String prefix, final String localName,
-			final String namespaceURI, final boolean withpfx) throws XMLStreamException {
-		
-		flushActiveElement();
-		flushActiveText();
-		
-		final Namespace ns = resolveElementNamespace(prefix, namespaceURI, withpfx);
-
-		final Element e = factory.element(localName, ns);
-
-		switch (state) {
-			case DOCUMENT_START:
-				// an empty root element
-				factory.setRoot(document, e);
-				state = StreamWriterState.OUT_ELEMENT;
-				break;
-
-			case IN_ELEMENT:
-				factory.addContent(parent, e);
-				// still in element
-				break;
-
-			default:
-				throw new XMLStreamException(
-						"Cannot write new element when in state " + state);
-		}
-		activeelement = e;
-		isempty = true;
-	}
-
-	@Override
-	public void writeEmptyElement(final String localName)
-			throws XMLStreamException {
-		if (localName == null) {
-			throw new XMLStreamException("Cannot have a null localname");
-		}
-		this.buildEmptyElement("", localName, "", false);
-	}
-
-	@Override
-	public void writeEmptyElement(final String namespaceURI,
-			final String localName) throws XMLStreamException {
-		if (namespaceURI == null) {
-			throw new XMLStreamException("Cannot have a null namespaceURI");
-		}
-		if (localName == null) {
-			throw new XMLStreamException("Cannot have a null localname");
-		}
-		this.buildEmptyElement("", localName, namespaceURI, false);
-	}
-
-	@Override
-	public void writeEmptyElement(final String prefix, final String localName,
-			final String namespaceURI) throws XMLStreamException {
-		if (prefix == null) {
-			throw new XMLStreamException("Cannot have a null prefix");
-		}
-		if (localName == null) {
-			throw new XMLStreamException("Cannot have a null localname");
-		}
-		if (namespaceURI == null) {
-			throw new XMLStreamException("Cannot have a null namespaceURI");
-		}
-		buildEmptyElement(prefix, localName, namespaceURI, true);
-	}
-	
-	@Override
-	public void writeDefaultNamespace(final String namespaceURI)
-			throws XMLStreamException {
-		this.writeNamespace("", namespaceURI);
-	}
-
-	@Override
-	public void writeNamespace(final String prefix, final String namespaceURI)
-			throws XMLStreamException {
-		if (prefix == null || JDOMConstants.NS_PREFIX_XMLNS.equals(prefix)) {
-			writeNamespace("", namespaceURI);
-			return;
-		}
-		final Namespace ns = Namespace.getNamespace(prefix, namespaceURI);
-		switch (state) {
-			case IN_ELEMENT:
-				if (activeelement == null) {
-					throw new IllegalStateException("Not able to write a Namespace after adding content.");
-				}
-				pendingns.add(ns);
-				break;
-
-			default:
-				throw new IllegalStateException(
-						"Cannot write namespace when in state " + state);
-		}
-	}
-
 	private final void buildAttribute(final String prefix,
 			final String namespaceURI, final String localName,
 			final String value, final boolean withpfx) throws XMLStreamException {
-		if (state != StreamWriterState.IN_ELEMENT) {
+		if (!(parent instanceof Element)) {
 			throw new IllegalStateException(
-					"Cannot write attribute when in state " + state);
+					"Cannot write attribute unless inside an Element.");
 		}
 		if (localName == null) {
 			throw new XMLStreamException("localName is not allowed to be null");
@@ -533,26 +662,6 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		Namespace ns = resolveAttributeNamespace(prefix, namespaceURI, withpfx);
 		
 		factory.setAttribute(activeelement, factory.attribute(localName, value, ns));
-	}
-
-	@Override
-	public void writeAttribute(final String localName, final String value)
-			throws XMLStreamException {
-		buildAttribute("", "", localName, value, false);
-	}
-
-	@Override
-	public void writeAttribute(final String namespaceURI,
-			final String localName, final String value)
-			throws XMLStreamException {
-		buildAttribute("", namespaceURI == null ? "" : namespaceURI, localName, value, false);
-	}
-	
-	@Override
-	public void writeAttribute(final String prefix, final String namespaceURI,
-			final String localName, final String value)
-			throws XMLStreamException {
-		buildAttribute(prefix == null ? "" : prefix, namespaceURI == null ? "" : namespaceURI, localName, value, true);
 	}
 
 	private final void flushActiveElement() {
@@ -578,17 +687,20 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 			if (mod) {
 				usednsstack.pop();
 				if (isempty) {
+					boundstack.pop();
 					activeelement = null;
 					return;
 				}
+				// reload the stack with the additional namespaces.
 				usednsstack.push(activeelement);
 			}
 			if (isempty) {
+				boundstack.pop();
 				activeelement = null;
 				return;
 			}
 			boundstack.push(activeelement);
-			boundstack.push(EMPTYNSA);
+			boundstack.push();
 			
 			activeelement = null;
 		}
@@ -598,150 +710,4 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 		activetext = null;
 	}
 
-	@Override
-	public void writeComment(final String data) throws XMLStreamException {
-		flushActiveElement();
-		flushActiveText();
-		factory.addContent(state == StreamWriterState.DOCUMENT_START ? document : parent, 
-				factory.comment(data));
-	}
-
-	@Override
-	public void writeProcessingInstruction(final String target)
-			throws XMLStreamException {
-		flushActiveElement();
-		flushActiveText();
-		factory.addContent(state == StreamWriterState.DOCUMENT_START ? document : parent, 
-				factory.processingInstruction(target));
-	}
-
-	@Override
-	public void writeProcessingInstruction(final String target,
-			final String data) throws XMLStreamException {
-		flushActiveElement();
-		flushActiveText();
-		factory.addContent(state == StreamWriterState.DOCUMENT_START ? document : parent, 
-				factory.processingInstruction(target, data));
-	}
-
-	@Override
-	public void writeCData(final String data) throws XMLStreamException {
-		flushActiveElement();
-		flushActiveText();
-		factory.addContent(parent, factory.cdata(data));
-	}
-
-	@Override
-	public void writeEntityRef(final String name) throws XMLStreamException {
-		flushActiveElement();
-		flushActiveText();
-		factory.addContent(parent, factory.entityRef(name));
-	}
-	
-	@Override
-	public void writeCharacters(final String chars) throws XMLStreamException {
-		flushActiveElement();
-		if (chars == null) {
-			return;
-		}
-		switch (state) {
-			case IN_ELEMENT:
-				if (activetext != null) {
-					activetext.append(chars);
-				} else {
-					activetext = factory.text(chars);
-					factory.addContent(parent, activetext);
-				}
-				return;
-			case DOCUMENT_START:
-			case OUT_ELEMENT:
-				// JDOM Does not support activetext at document level (it can only be space anyway).
-				return;
-			default:
-				throw new XMLStreamException("Unable to add Characters at this point in the stream.");
-		}
-	}
-
-	@Override
-	public void writeCharacters(final char[] chars, final int start,
-			final int len) throws XMLStreamException {
-		writeCharacters(new String(chars, start, len));
-	}
-
-	@Override
-	public void writeEndElement() throws XMLStreamException {
-		if (state != StreamWriterState.IN_ELEMENT) {
-			throw new XMLStreamException(
-					"Cannot write end element when in state " + state);
-		}
-		flushActiveElement();
-		flushActiveText();
-		usednsstack.pop();
-		boundstack.pop();
-		boundstack.pop();
-		parent = parent.getParent();
-		if (parent == document) {
-			// back to root element
-			state = StreamWriterState.OUT_ELEMENT;
-		}
-	}
-
-	@Override
-	public void writeEndDocument() throws XMLStreamException {
-		if (state != StreamWriterState.OUT_ELEMENT) {
-			throw new IllegalStateException(
-					"Cannot write end document before writing end of root element");
-		}
-		state = StreamWriterState.DOCUMENT_ENDED;
-	}
-
-	@Override
-	public void close() throws XMLStreamException {
-		this.document = null;
-		this.parent = null;
-		this.state = StreamWriterState.CLOSED;
-		activeelement = null;
-		activetext = null;
-	}
-
-	@Override
-	public void flush() throws XMLStreamException {
-		// flush does nothing.
-	}
-
-	@Override
-	public NamespaceContext getNamespaceContext() {
-		final List<Namespace> namespaces = getCurrentNamespaces();
-
-		return new JDOMNamespaceContext(namespaces.toArray(new Namespace[namespaces.size()]));
-	}
-
-	@Override
-	public Object getProperty(String name) throws IllegalArgumentException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	// *****************************
-	// Private methods.
-	// *****************************
-
-	private List<Namespace> getCurrentNamespaces() {
-		switch (state) {
-			case IN_ELEMENT:
-				return parent.getNamespacesInScope();
-
-			case DOCUMENT_START:
-			case OUT_ELEMENT:
-				return document.getNamespacesInScope();
-
-			default:
-				throw new IllegalStateException(
-						"Attempt to get namespaces in unsupported state "
-								+ this.state);
-		}
-	}
-
-	private enum StreamWriterState {
-		BEFORE_DOCUMENT_START, DOCUMENT_START, IN_ELEMENT, OUT_ELEMENT, DOCUMENT_ENDED, CLOSED
-	}
 }

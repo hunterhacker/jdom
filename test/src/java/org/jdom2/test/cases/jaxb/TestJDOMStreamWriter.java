@@ -58,6 +58,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+//import javax.xml.stream.XMLOutputFactory;
+//import javax.xml.stream.XMLStreamWriter;
+
 import org.junit.Test;
 
 import org.jdom2.Content;
@@ -152,10 +155,13 @@ public class TestJDOMStreamWriter {
         System.out.println("testElementsWithNamespace");
         
         Document doc;
+        //XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(System.out);
         JDOMStreamWriter writer = new JDOMStreamWriter();
         try{
             writer.writeStartDocument();
+            writer.setPrefix("", "testUri");
             writer.writeStartElement("testUri", "root");
+                writer.writeDefaultNamespace("testUri");
                 writer.writeNamespace("tst", "testUri2");
             
                 writer.writeStartElement("tst", "element", "testUri2");
@@ -167,7 +173,9 @@ public class TestJDOMStreamWriter {
                     writer.writeCharacters("same ns");
                 writer.writeEndElement();
                 
+                writer.setPrefix("", "");
                 writer.writeStartElement("element");
+                    writer.writeDefaultNamespace("");
                     writer.writeCharacters("no ns");
                 writer.writeEndElement();
             
@@ -175,6 +183,7 @@ public class TestJDOMStreamWriter {
             writer.writeEndDocument();
             
             doc = writer.getDocument();
+            //doc = null;
         }
         finally{
             writer.close();
