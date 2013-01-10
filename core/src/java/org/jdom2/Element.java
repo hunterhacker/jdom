@@ -1095,14 +1095,27 @@ public class Element extends Content implements Parent {
 	 * This returns the complete set of attributes for this element, as a
 	 * <code>List</code> of <code>Attribute</code> objects in no particular
 	 * order, or an empty list if there are none.
+	 * </p>
 	 * The returned list is "live" and changes to it affect the
 	 * element's actual attributes.
 	 * </p>
+	 * Use the methods {@link #hasAttributes()} or {@link #getAttributesSize()}
+	 * if you just want to see whether there are attributes. Calling this method
+	 * may be inefficient if there are no Attributes.
 	 *
 	 * @return attributes for the element
 	 */
 	public List<Attribute> getAttributes() {
 		return getAttributeList();
+	}
+
+
+	/**
+	 * Get the number of Attributes currently attached to this Element.
+	 * @return the number of Attributes attached.
+	 */
+	public int getAttributesSize() {
+		return attributes == null ? 0 : attributes.size();
 	}
 
 	/**
