@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'org.jdom'
+version = '2.0.0'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/java'
+		}
+		resources {
+			srcDir 'src/resource'
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations.compile.transitive = true
+dependencies {
+	compile 'org.jdom:jdom2:2.0.+'
+	compile 'xalan:xalan:2.7.1'
+	compile 'xalan:serializer:2.7.1'
+	compile 'isorelax:isorelax:20030108'
+	
+	// JDOM is required, because main and test are not separated
+	compile 'junit:junit:4.11'
+}
+
