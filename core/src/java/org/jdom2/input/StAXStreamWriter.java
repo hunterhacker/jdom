@@ -74,8 +74,15 @@ import org.jdom2.util.NamespaceStack;
 /**
  * An {@link XMLStreamWriter} implementation that writes XML data to a new JDOM
  * {@link Document}. The document can be retrieved using {@link #getDocument() }.
+ * <p>
+ * This class is the inverse of the class {@link StAXStreamBuilder} in the sense that
+ * this class is written to (it's an XMLStreamWriter implementation) to create a JDOM
+ * Document whereas the StAXStreamBuilder <strong>reads from</strong> a user-supplied
+ * XMLStreamReader. It is the difference between a 'push' concept and a 'pull' concept.
  * 
  * @author gordon burgett https://github.com/gburgett
+ * @author Rolf Lear
+ * @since JDOM 2.1
  */
 public class StAXStreamWriter implements XMLStreamWriter {
 

@@ -86,10 +86,19 @@ import org.jdom2.util.NamespaceStack;
 /**
  * An {@link XMLStreamReader} implementation that reads the XML document
  * out of a JDOM {@link Document}.
+ * <p>
+ * The reader reads XML Events by walking the JDOM tree, reporting all XML stream
+ * events as it encounters them in the JDOM.
+ * <p>
+ * This class is the inverse of the class {@link StAXStreamOutputter} in the sense that
+ * this class is read from (it's an XMLStreamReader implementation) by interpreting a JDOM
+ * Document whereas the StAXStreamOutputter interprets a JDOM Document and <strong>writes to</strong>
+ *  a user-supplied XMLStreamWriter. It is the difference between a 'pull' concept and a
+ *  'push' concept.
  * 
- * The reader reads XML Events by walking the DOM tree, reporting all XML stream
- * events as it encounters them in the DOM.
  * @author gordon burgett https://github.com/gburgett
+ * @author Rolf Lear
+ * @since JDOM 2.1
  */
 public class StAXStreamReader extends AbstractOutputProcessor implements XMLStreamReader {
 	
