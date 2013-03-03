@@ -70,31 +70,21 @@ import org.jdom2.EntityRef;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
+import org.jdom2.output.StAXStreamOutputter;
 
 /**
- * This interface provides a base support for the {@link XMLOutputter}.
+ * This interface provides a base support for the {@link StAXStreamOutputter}.
  * <p>
- * People who want to create a custom XMLOutputProcessor for XMLOutputter are
- * able to implement this interface with the following notes and restrictions:
- * <ol>
- * <li>The XMLOutputter will call one, and only one of the <code>process(XMLStreamWriter,Format,*)</code> methods each
- * time the XMLOutputter is requested to output some JDOM content. It is thus
- * safe to assume that a <code>process(XMLStreamWriter,Format,*)</code> method can set up any
- * infrastructure needed to process the content, and that the XMLOutputter will
- * not re-call that method, or some other <code>process(XMLStreamWriter,Format,*)</code> method for the same output
- * sequence.
- * <li>The process methods should be thread-safe and reentrant: The same
- * <code>process(XMLStreamWriter,Format,*)</code> method may (will) be called concurrently from different threads.
- * </ol>
+ * People who want to create a custom StAXStreamProcessor for StAXStreamOutputter are
+ * able to implement this interface.
  * <p>
- * The {@link AbstractXMLOutputProcessor} class is a full implementation of this
- * interface and is fully customisable. People who want a custom XMLOutputter
- * are encouraged to extend the AbstractXMLOutputProcessor rather than do a full
+ * The {@link AbstractStAXStreamProcessor} class is a full implementation of this
+ * interface and is fully customisable. People who want a custom StAXStreamOutputter
+ * are encouraged to extend the AbstractStAXStreamProcessor rather than do a full
  * re-implementation of this interface.
  * 
- * @see XMLOutputter
- * @see AbstractXMLOutputProcessor
+ * @see StAXStreamOutputter
+ * @see AbstractStAXStreamProcessor
  * @since JDOM2
  * @author Rolf Lear
  */
