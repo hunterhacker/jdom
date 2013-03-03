@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.jaxb;
+package org.jdom2.input;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -82,6 +82,7 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.output.support.AbstractOutputProcessor;
 import org.jdom2.output.support.FormatStack;
 import org.jdom2.output.support.Walker;
+import org.jdom2.util.JDOMNamespaceContext;
 import org.jdom2.util.NamespaceStack;
 
 /**
@@ -92,7 +93,7 @@ import org.jdom2.util.NamespaceStack;
  * events as it encounters them in the DOM.
  * @author gordon burgett https://github.com/gburgett
  */
-public class JDOMStreamReader extends AbstractOutputProcessor implements XMLStreamReader {
+public class StAXStreamReader extends AbstractOutputProcessor implements XMLStreamReader {
 	
 	private static final class DocumentWalker implements Walker {
 		
@@ -149,22 +150,22 @@ public class JDOMStreamReader extends AbstractOutputProcessor implements XMLStre
     private int currentEvt = START_DOCUMENT;
     
     /**
-     * Create a new JDOMStreamReader that outputs a JDOM Document as an XMLStream.
+     * Create a new StAXStreamReader that outputs a JDOM Document as an XMLStream.
      * @param document the document to output.
      * @param format The output format to use. 
      */
-    public JDOMStreamReader(Document document, Format format){
+    public StAXStreamReader(Document document, Format format){
         this.document = document;
         this.formatstack = new FormatStack(format);
         stack[0] = new DocumentWalker(document);
     }
     
     /**
-     * Create a new JDOMStreamReader that outputs a JDOM Document as an XMLStream using
+     * Create a new StAXStreamReader that outputs a JDOM Document as an XMLStream using
      * the Format.getRawFormat() format.
      * @param document the document to output.
      */
-    public JDOMStreamReader(Document document) {
+    public StAXStreamReader(Document document) {
     	this(document, Format.getRawFormat());
     }
     

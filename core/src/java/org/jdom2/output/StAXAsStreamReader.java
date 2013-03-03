@@ -57,7 +57,7 @@ package org.jdom2.output;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
-import org.jdom2.jaxb.JDOMStreamReader;
+import org.jdom2.input.StAXStreamReader;
 import org.jdom2.output.support.AbstractStAXAsStreamProcessor;
 import org.jdom2.output.support.StAXAsStreamProcessor;
 
@@ -109,7 +109,7 @@ public final class StAXAsStreamReader implements Cloneable {
 	 */
 	private static final class DefaultStAXAsStreamProcessor implements StAXAsStreamProcessor {
 		
-		private static final class MyXMLStreamReader extends JDOMStreamReader {
+		private static final class MyXMLStreamReader extends StAXStreamReader {
 			public MyXMLStreamReader(Document doc, Format format) {
 				super(doc, format);
 			}

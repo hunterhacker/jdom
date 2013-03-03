@@ -57,7 +57,7 @@ package org.jdom2.output.support;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
-import org.jdom2.jaxb.JDOMStreamReader;
+import org.jdom2.input.StAXStreamReader;
 import org.jdom2.output.Format;
 
 /**
@@ -73,7 +73,7 @@ import org.jdom2.output.Format;
  */
 public class AbstractStAXAsStreamProcessor implements StAXAsStreamProcessor {
 	
-	private static final class MyXMLStreamReader extends JDOMStreamReader {
+	private static final class MyXMLStreamReader extends StAXStreamReader {
 
 		public MyXMLStreamReader(Document doc, Format format) {
 			super(doc, format);

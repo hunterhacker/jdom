@@ -51,7 +51,7 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-package org.jdom2.jaxb;
+package org.jdom2.output;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -68,6 +68,7 @@ import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
 import org.jdom2.Parent;
 import org.jdom2.Text;
+import org.jdom2.util.JDOMNamespaceContext;
 import org.jdom2.util.NamespaceStack;
 
 /**
@@ -76,7 +77,7 @@ import org.jdom2.util.NamespaceStack;
  * 
  * @author gordon burgett https://github.com/gburgett
  */
-public class JDOMStreamWriter implements XMLStreamWriter {
+public class StAXStreamWriter implements XMLStreamWriter {
 
 	private static final DefaultJDOMFactory DEFFAC = new DefaultJDOMFactory();
 
@@ -106,15 +107,15 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	private final JDOMFactory factory;
 
 	/**
-	 * Create a JDOMStreamWriter with the default JDOMFactory for creating JDOM
+	 * Create a StAXStreamWriter with the default JDOMFactory for creating JDOM
 	 * Content.
 	 */
-	public JDOMStreamWriter() {
+	public StAXStreamWriter() {
 		this(DEFFAC, true);
 	}
 
 	/**
-	 * Create a JDOMStreamWriter with the specified JDOMFactory for creating
+	 * Create a StAXStreamWriter with the specified JDOMFactory for creating
 	 * JDOM Content.
 	 * 
 	 * @param fac
@@ -122,7 +123,7 @@ public class JDOMStreamWriter implements XMLStreamWriter {
 	 * @param repairnamespace
 	 *        If true, then repair namespace errors.
 	 */
-	public JDOMStreamWriter(final JDOMFactory fac, final boolean repairnamespace) {
+	public StAXStreamWriter(final JDOMFactory fac, final boolean repairnamespace) {
 		this.factory = fac;
 		this.repairnamespace = repairnamespace;
 		// create an empty level in the namespace stack.

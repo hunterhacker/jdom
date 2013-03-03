@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import org.jdom2.JDOMConstants;
 import org.jdom2.Namespace;
-import org.jdom2.jaxb.JDOMNamespaceContext;
+import org.jdom2.util.JDOMNamespaceContext;
 
 @SuppressWarnings("javadoc")
 public class TestJDOMNamespaceContext {

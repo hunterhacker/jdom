@@ -67,10 +67,10 @@ import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.jdom2.jaxb.JDOMStreamWriter;
+import org.jdom2.output.StAXStreamWriter;
 
 /**
- * Tests for {@link JDOMStreamWriter}
+ * Tests for {@link StAXStreamWriter}
  * @author gordon burgett https://github.com/gburgett
  */
 @SuppressWarnings("javadoc")
@@ -84,7 +84,7 @@ public class TestJDOMStreamWriter {
         System.out.println("testEmptyRootElement_DocumentHasEmptyRoot");
         
         Document doc;
-        JDOMStreamWriter writer = new JDOMStreamWriter();
+        StAXStreamWriter writer = new StAXStreamWriter();
         try{
             writer.writeStartDocument();
             
@@ -108,7 +108,7 @@ public class TestJDOMStreamWriter {
         System.out.println("testMultipleElementsWithText_DocHasElements");
         
         Document doc;
-        JDOMStreamWriter writer = new JDOMStreamWriter();
+        StAXStreamWriter writer = new StAXStreamWriter();
         try{
             writer.writeStartDocument();
             writer.writeStartElement("testroot");
@@ -156,7 +156,7 @@ public class TestJDOMStreamWriter {
         
         Document doc;
         //XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(System.out);
-        JDOMStreamWriter writer = new JDOMStreamWriter();
+        StAXStreamWriter writer = new StAXStreamWriter();
         try{
             writer.writeStartDocument();
             writer.setPrefix("", "testUri");

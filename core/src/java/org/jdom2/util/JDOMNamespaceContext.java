@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.jaxb;
+package org.jdom2.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

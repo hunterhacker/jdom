@@ -66,11 +66,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.Text;
+import org.jdom2.input.StAXStreamReader;
 import org.jdom2.input.StAXStreamBuilder;
-import org.jdom2.jaxb.JDOMStreamReader;
 
 /**
- * Tests for {@link JDOMStreamReader}
+ * Tests for {@link StAXStreamReader}
  * @author gordon burgett https://github.com/gburgett
  */
 @SuppressWarnings("javadoc")
@@ -87,7 +87,7 @@ public class TestJDOMStreamReader {
         doc.setRootElement(new Element("simple"));
         
         Document read;
-        JDOMStreamReader instance = new JDOMStreamReader(doc);
+        StAXStreamReader instance = new StAXStreamReader(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -117,7 +117,7 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(content);
         
         Document read;
-        JDOMStreamReader instance = new JDOMStreamReader(doc);
+        StAXStreamReader instance = new StAXStreamReader(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -161,7 +161,7 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(content);
         
         Document read;
-        JDOMStreamReader instance = new JDOMStreamReader(doc);
+        StAXStreamReader instance = new StAXStreamReader(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -194,7 +194,7 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(new CDATA("post-element text"));
         
         Document read;
-        JDOMStreamReader instance = new JDOMStreamReader(doc);
+        StAXStreamReader instance = new StAXStreamReader(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);

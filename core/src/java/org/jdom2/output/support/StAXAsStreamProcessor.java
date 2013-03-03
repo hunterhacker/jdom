@@ -57,14 +57,14 @@ package org.jdom2.output.support;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
-import org.jdom2.jaxb.JDOMStreamReader;
+import org.jdom2.input.StAXStreamReader;
 import org.jdom2.output.Format;
 
 /**
  * A simple interface that allows the implementation of a StAX XMLStreamReader
  * instance for representing a JDOM Document. If a user needs to create a custom
  * way to output as an XMLStreamReader they can implement their own XMLStreamReader
- * class (perhaps by extending {@link JDOMStreamReader}) and then creating an
+ * class (perhaps by extending {@link StAXStreamReader}) and then creating an
  * implementation of this class that creates their own custom XMLStreamReader
  * version. The implementation of this class could then be given to the
  * StAXAsStreamReader.
