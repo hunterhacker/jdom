@@ -52,7 +52,7 @@
 
  */
 
-package org.jdom2.input;
+package org.jdom2.output;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -76,9 +76,7 @@ import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Verifier;
 import org.jdom2.internal.ArrayCopy;
-import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
-import org.jdom2.output.XMLOutputter;
 import org.jdom2.output.support.AbstractOutputProcessor;
 import org.jdom2.output.support.FormatStack;
 import org.jdom2.output.support.Walker;

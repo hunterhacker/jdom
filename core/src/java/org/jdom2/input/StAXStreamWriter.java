@@ -51,7 +51,7 @@
  on the JDOM Project, please see <http://www.jdom.org/>.
 
  */
-package org.jdom2.output;
+package org.jdom2.input;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

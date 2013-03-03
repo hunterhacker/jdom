@@ -57,8 +57,8 @@ package org.jdom2.output.support;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
-import org.jdom2.input.StAXStreamReader;
 import org.jdom2.output.Format;
+import org.jdom2.output.StAXStreamReader;
 
 /**
  * A simple interface that allows the implementation of a StAX XMLStreamReader

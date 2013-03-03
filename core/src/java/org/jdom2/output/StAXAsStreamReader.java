@@ -57,7 +57,6 @@ package org.jdom2.output;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
-import org.jdom2.input.StAXStreamReader;
 import org.jdom2.output.support.AbstractStAXAsStreamProcessor;
 import org.jdom2.output.support.StAXAsStreamProcessor;
 

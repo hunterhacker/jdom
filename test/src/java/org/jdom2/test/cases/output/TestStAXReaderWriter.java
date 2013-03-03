@@ -3,7 +3,7 @@ package org.jdom2.test.cases.output;
 import javax.xml.stream.XMLStreamException;
 
 import org.jdom2.Document;
-import org.jdom2.output.StAXStreamWriter;
+import org.jdom2.input.StAXStreamWriter;
 import org.jdom2.output.StAXStreamOutputter;
 
 @SuppressWarnings("javadoc")
