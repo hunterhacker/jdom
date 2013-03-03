@@ -98,11 +98,13 @@ import org.jdom2.output.support.XMLOutputProcessor;
  * <b>Warning</b>: When outputting to a Writer, make sure the writer's encoding
  * matches the encoding setting in the Format object. This ensures the encoding
  * in which the content is written (controlled by the Writer configuration)
- * matches the encoding placed in the document's XML declaration (controlled by
- * the XMLOutputter). Because a Writer cannot be queried for its encoding, the
+ * matches the XML Character escaping as well as the encoding placed in the
+ * document's XML declaration (controlled by the XMLOutputter).
+ * Because a Writer cannot be queried for its encoding, the
  * information must be passed to the Format manually in its constructor or via
  * the <code>{@link Format#setEncoding}</code> method. The default encoding is
- * UTF-8.
+ * UTF-8. If the default encoding of the platform is not UTF-8 and a default Format
+ * encoding is used, then there may be incorrectly formed characters in the output.
  * <p>
  * The methods <code>{@link #outputString outputString(...)}</code> are for
  * convenience only; for top performance you should call one of the <code>{@link
@@ -142,6 +144,7 @@ import org.jdom2.output.support.XMLOutputProcessor;
  * @author Dan Schaffer
  * @author Alex Chaffee
  * @author Bradley S. Huffman
+ * @author Rolf Lear
  */
 
 public final class XMLOutputter implements Cloneable {
@@ -804,10 +807,9 @@ public final class XMLOutputter implements Cloneable {
 	/**
 	 * This will print the <code>Document</code> to the given Writer.
 	 * <p>
-	 * Warning: using your own Writer may cause the outputter's preferred
-	 * character encoding to be ignored. If you use encodings other than UTF-8,
-	 * we recommend using the method that takes an OutputStream instead.
-	 * </p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param doc
 	 *        <code>Document</code> to format.
@@ -825,6 +827,10 @@ public final class XMLOutputter implements Cloneable {
 
 	/**
 	 * Print out the <code>{@link DocType}</code>.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param doctype
 	 *        <code>DocType</code> to output.
@@ -843,6 +849,10 @@ public final class XMLOutputter implements Cloneable {
 	/**
 	 * Print out an <code>{@link Element}</code>, including its
 	 * <code>{@link Attribute}</code>s, and all contained (child) elements, etc.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param element
 	 *        <code>Element</code> to output.
@@ -866,6 +876,10 @@ public final class XMLOutputter implements Cloneable {
 	 * This can be useful for printing the content of an element that contains
 	 * HTML, like "&lt;description&gt;JDOM is
 	 * &lt;b&gt;fun&gt;!&lt;/description&gt;".
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param element
 	 *        <code>Element</code> to output.
@@ -886,6 +900,10 @@ public final class XMLOutputter implements Cloneable {
 	 * This will handle printing out a list of nodes. This can be useful for
 	 * printing the content of an element that contains HTML, like
 	 * "&lt;description&gt;JDOM is &lt;b&gt;fun&gt;!&lt;/description&gt;".
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param list
 	 *        <code>List</code> of nodes.
@@ -904,6 +922,10 @@ public final class XMLOutputter implements Cloneable {
 
 	/**
 	 * Print out a <code>{@link CDATA}</code> node.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param cdata
 	 *        <code>CDATA</code> to output.
@@ -922,6 +944,10 @@ public final class XMLOutputter implements Cloneable {
 	/**
 	 * Print out a <code>{@link Text}</code> node. Perfoms the necessary entity
 	 * escaping and whitespace stripping.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param text
 	 *        <code>Text</code> to output.
@@ -939,6 +965,10 @@ public final class XMLOutputter implements Cloneable {
 
 	/**
 	 * Print out a <code>{@link Comment}</code>.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param comment
 	 *        <code>Comment</code> to output.
@@ -956,6 +986,10 @@ public final class XMLOutputter implements Cloneable {
 
 	/**
 	 * Print out a <code>{@link ProcessingInstruction}</code>.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param pi
 	 *        <code>ProcessingInstruction</code> to output.
@@ -974,6 +1008,10 @@ public final class XMLOutputter implements Cloneable {
 
 	/**
 	 * Print out an <code>{@link EntityRef}</code>.
+	 * <p>
+	 * <strong>Note:</strong> ensure the character encoding of the
+	 * <code>out</code> Writer is set the same as the {@link Format}'s encoding
+	 * (see 'warning' on {@link XMLOutputter}).
 	 * 
 	 * @param entity
 	 *        <code>EntityRef</code> to output.
