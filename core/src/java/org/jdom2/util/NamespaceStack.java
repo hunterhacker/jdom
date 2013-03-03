@@ -56,6 +56,7 @@ package org.jdom2.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -227,6 +228,9 @@ public final class NamespaceStack implements Iterable<Namespace> {
 
 	/** A simple empty Namespace Array to avoid redundant empty instances */
 	private static final Namespace[] EMPTY = new Namespace[0];
+	
+	private static final List<Namespace> EMPTYLIST = Collections.emptyList();
+	
 	/** A simple Iterable instance that is always empty. Saves some memory */
 	private static final Iterable<Namespace> EMPTYITER = new EmptyIterable();
 
@@ -474,6 +478,51 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		pushStack(mns, newscope, toadd);
 	}
 
+	/**
+	 * Create a new in-scope level for the Stack based on an arbitrary set of Namespaces.
+	 * @param namespaces The Iterable format for the Namespaces.
+	 */
+	public void push(Iterable<Namespace> namespaces) {
+
+		// how many times do you add more than 8 namespaces in one go...
+		// we can add more if we need to...
+		final List<Namespace> toadd = new ArrayList<Namespace>(8);
+		Namespace[] newscope = scope[depth];
+		for (final Namespace ns : namespaces) {
+			// check to see whether the Namespace is new-to-scope.
+			newscope = checkNamespace(toadd, ns, newscope);
+		}
+		
+		pushStack(Namespace.XML_NAMESPACE, newscope, toadd);
+	}
+	
+	/**
+	 * Create a new in-scope level for the Stack based on an arbitrary set of Namespaces.
+	 * The first Namespace in the list will be considered the 'primary' namespace for this scope
+	 * and will be sorted to the front. If no namespaces are supplied then the 'current' scope will
+	 * be duplicated (including sort order) as the new scope. 
+	 * @param namespaces The array of Namespaces.
+	 */
+	public void push(Namespace ... namespaces) {
+
+		if (namespaces == null || namespaces.length == 0) {
+			// duplicate the current level to the new one.
+			pushStack(scope[depth][0], scope[depth], EMPTYLIST);
+			return;
+		}
+		
+		// how many times do you add more than 8 namespaces in one go...
+		// we can add more if we need to...
+		final List<Namespace> toadd = new ArrayList<Namespace>(8);
+		Namespace[] newscope = scope[depth];
+		for (final Namespace ns : namespaces) {
+			// check to see whether the Namespace is new-to-scope.
+			newscope = checkNamespace(toadd, ns, newscope);
+		}
+		
+		pushStack(namespaces[0], newscope, toadd);
+	}
+	
 	private final void pushStack(final Namespace mns, Namespace[] newscope, 
 			final List<Namespace> toadd) {
 		// OK, we've checked the namespaces in the Element, and 'toadd' contains
@@ -601,6 +650,59 @@ public final class NamespaceStack implements Iterable<Namespace> {
 			return ns == scope[depth][ip];
 		}
 		return false;
+	}
+	
+	/**
+	 * Get the Namespace in the current scope with the specified prefix.
+	 * @param prefix The prefix to get the namespace for (null is treated the same as "").
+	 * @return The Namespace with the specified prefix, or null if the prefix is not in scope.
+	 */
+	public Namespace getNamespaceForPrefix(final String prefix) {
+		if (prefix == null) {
+			return getNamespaceForPrefix("");
+		}
+		final Namespace[] nsa = scope[depth];
+		for (final Namespace ns : nsa) {
+			if (prefix.equals(ns.getPrefix())) {
+				return ns;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the <strong>first</strong> Namespace in the current scope that is bound to the specified URI.
+	 * @param uri The URI to get the first prefix for (null is treated the same as "").
+	 * @return The first bound Namespace for the specified URI, or null if the URI is not bound.
+	 */
+	public Namespace getFirstNamespaceForURI(final String uri) {
+		if (uri == null) {
+			return getFirstNamespaceForURI("");
+		}
+		for (final Namespace ns : scope[depth]) {
+			if (uri.equals(ns.getURI())) {
+				return ns;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get all prefixes in the current scope that are bound to the specified URI.
+	 * @param uri The URI to get the first prefix for (null is treated the same as "").
+	 * @return All bound prefixes for the specified URI, or an empty array if the URI is not bound.
+	 */
+	public Namespace[] getAllNamespacesForURI(final String uri) {
+		if (uri == null) {
+			return getAllNamespacesForURI("");
+		}
+		ArrayList<Namespace> al = new ArrayList<Namespace>(4);
+		for (final Namespace ns : scope[depth]) {
+			if (uri.equals(ns.getURI())) {
+				al.add(ns);
+			}
+		}
+		return al.toArray(new Namespace[al.size()]);
 	}
 
 }
