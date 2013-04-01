@@ -100,7 +100,8 @@ final class TextBuffer {
 	 */
 	void append(final char[] source, final int start, final int count) {
 		if ((count + arraySize) > array.length) {
-			array = ArrayCopy.copyOf(array, count + arraySize);
+			// grow by 25%
+			array = ArrayCopy.copyOf(array, count + arraySize + (array.length >> 2));
 		}
 		System.arraycopy(source, start, array, arraySize, count);
 		arraySize += count;
