@@ -603,13 +603,15 @@ public abstract class AbstractStAXStreamProcessor
 			
 			if (expandit) {
 				Namespace ns = element.getNamespace();
-				if (ns == Namespace.NO_NAMESPACE) {
-					out.writeStartElement(element.getName());
-				} else if ("".equals(ns.getPrefix())) {
-					out.writeStartElement(ns.getURI(), element.getName());
-				} else {
-					out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
-				}
+//				out.setPrefix(ns.getPrefix(), ns.getURI());
+				out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
+//				if (ns == Namespace.NO_NAMESPACE) {
+//					out.writeStartElement(element.getName());
+//				} else if ("".equals(ns.getPrefix())) {
+//					out.writeStartElement(ns.getURI(), element.getName());
+//				} else {
+//					out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
+//				}
 				
 				// Print the element's namespace, if appropriate
 				for (final Namespace nsd : nstack.addedForward()) {
@@ -659,13 +661,15 @@ public abstract class AbstractStAXStreamProcessor
 				//           and whiteonly == true
 				
 				Namespace ns = element.getNamespace();
-				if (ns == Namespace.NO_NAMESPACE) {
-					out.writeEmptyElement(element.getName());
-				} else if ("".equals(ns.getPrefix())) {
-					out.writeEmptyElement("", element.getName(), ns.getURI());
-				} else {
-					out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
-				}
+//				out.setPrefix(ns.getPrefix(), ns.getURI());
+				out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
+//				if (ns == Namespace.NO_NAMESPACE) {
+//					out.writeEmptyElement(element.getName());
+//				} else if ("".equals(ns.getPrefix())) {
+//					out.writeEmptyElement("", element.getName(), ns.getURI());
+//				} else {
+//					out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
+//				}
 				
 				// Print the element's namespace, if appropriate
 				for (final Namespace nsd : nstack.addedForward()) {
