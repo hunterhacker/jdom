@@ -1234,8 +1234,18 @@ public class SAXBuilder implements SAXEngine {
 
 	/**
 	 * <p>
-	 * This builds a document from the supplied URI.
+	 * This builds a document from the supplied URI. The URI is typically a file name, or a URL.
+	 * Do not use this method for parsing XML content that is in a Java String variable.
+	 * <p>
+	 * <ul>
+	 * <li><Strong>Right:</Strong> <code>....build("path/to/file.xml");</code>
+	 * <li><Strong>Right:</Strong> <code>....build("http://my.example.com/xmlfile");</code>
+	 * <li><Strong>Wrong:</Strong> <code>....build("&lt;root>data&lt/root>");</code>
+	 * </ul>
 	 * </p>
+	 * If your XML content is in a Java String variable and you want to parse it, then use:<br/>
+	 * <code>    ....build(new StringReader("&lt;root>data&lt/root>"));</code>
+	 * <p>
 	 * 
 	 * @param systemId
 	 *        URI for the input
