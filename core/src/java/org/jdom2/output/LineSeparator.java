@@ -168,13 +168,21 @@ public enum LineSeparator {
 			// or in an unlikely instance when someone sets
 			// -Dorg.jdom2.output.LineSeparator=DEFAULT
 			// which would create some sort of loop to happen....
-			return DOS.value();
-		}
-		try {
-			final LineSeparator sep = Enum.valueOf(LineSeparator.class, prop);
-			return sep.value();
-		} catch (Exception e) {
-			// ignore it, just use the prop.
+			return "\r\n";
+		} else if ("SYSTEM".equals(prop)) {
+			return System.getProperty("line.separator");
+		} else if ("CRNL".equals(prop)) {
+			return "\r\n";
+		} else if ("NL".equals(prop)) {
+			return "\n";
+		} else if ("CR".equals(prop)) {
+			return "\r";
+		} else if ("DOS".equals(prop)) {
+			return "\r\n";
+		} else if ("UNIX".equals(prop)) {
+			return "\n";
+		} else if ("NONE".equals(prop)) {
+			return null;
 		}
 		return prop;
 	}
