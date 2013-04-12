@@ -392,8 +392,8 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
 		root.addContent(new Text("&"));
 		String expect = "<root>&amp; && &amp;</root>";
 		String excompact = "<root>&amp;&&&amp;</root>";
-		String expretty = "<root>\n  &amp;\n  \n  &&\n  \n  &amp;\n</root>";
-		String extfw = "<root>\n  &amp;\n  \n   && \n  \n  &amp;\n</root>";
+		String expretty = "<root>\n  &amp;\n  &&\n  &amp;\n</root>";
+		String extfw = "<root>\n  &amp;\n   && \n  &amp;\n</root>";
 		checkOutput(root,
 				expect, 
 				excompact, 

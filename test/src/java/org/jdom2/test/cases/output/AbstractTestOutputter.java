@@ -1274,6 +1274,30 @@ public abstract class AbstractTestOutputter {
 				"<root>\n  <!--Boo-->\n   xx &lt;emb&gt; xx \n</root>");
 	}
 
+	@Test
+	public void testOutputLotsOfMixedMultiText() {
+		// this test has many text content members.
+		Element root = new Element("root");
+		StringBuilder sb = new StringBuilder();
+		sb.append("<root>i");
+		root.addContent("i");
+		for (int i = 0; i < 100; i++) {
+			sb.append("&ent;");
+			sb.append(i);
+			root.addContent(new EntityRef("ent"));
+			root.addContent("" + i);
+		}
+		sb.append("</root>");
+		FormatSetup fs = new FormatSetup() {
+			@Override
+			public void setup(Format fmt) {
+				fmt.setExpandEmptyElements(true);
+			}
+		};
+		final String expect = sb.toString();
+		checkOutput(root, fs, expect, expect, expect, expect, expect); 
+	}
+
 	
 	
 	protected void checkOutput(Object content, String raw, String compact, String pretty, String tso, String trimfw) {
