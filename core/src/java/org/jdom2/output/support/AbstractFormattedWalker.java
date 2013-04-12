@@ -3,11 +3,11 @@
  Copyright (C) 2012 Jason Hunter & Brett McLaughlin.
  All rights reserved.
 
- Redistribution and use in source and binary forms, with or without
+ Redistribution and use in mtsource and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
 
- 1. Redistributions of source code must retain the above copyright
+ 1. Redistributions of mtsource code must retain the above copyright
     notice, this list of conditions, and the following disclaimer.
 
  2. Redistributions in binary form must reproduce the above copyright
@@ -54,12 +54,12 @@
 
 package org.jdom2.output.support;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.jdom2.CDATA;
 import org.jdom2.Content;
-import org.jdom2.Content.CType;
 import org.jdom2.internal.ArrayCopy;
 import org.jdom2.output.EscapeStrategy;
 import org.jdom2.output.Format;
@@ -115,6 +115,23 @@ public abstract class AbstractFormattedWalker implements Walker {
 		NONE
 	}
 	
+	private static final Iterator<Content> EMPTYIT = new Iterator<Content>() {
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public Content next() {
+			throw new NoSuchElementException("Cannot call next() on an empty iterator.");
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException("Cannot remove from an empty iterator.");
+		}
+	};
+	
 	/**
 	 * Collect together the items that constitute formatted Text-like content.
 	 * 
@@ -123,51 +140,20 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 */
 	protected final class MultiText {
 		
-		// what the walker's cursor will be when this text is complete
-		private final int nextcursor;
-		// if there should be indenting after this text.
-		private final boolean postpad;
-		// indicate whether there is something actually added.
-		private boolean gottext = false;
-		// the number of mixed content values.
-		private int msize = 0;
-		// the location of the processed content.
-		private Content[] data;
-		// whether the mixed content should be returned as raw JDOM objects
-		private String[] ctext;
-		// the current cursor in the mixed content.
-		private int mpos = -1;
-		// we cheat here by using Boolean as a three-state option...
-		// we expect it to be null often.
-		private final Boolean wasescape;
 		
 		/**
 		 * This is private so only this abstract class can create instances.
-		 * @param nextcursor The cursor of the next non-text-like content
-		 * @param prepad True if this text sequence should be prepadded
-		 * @param postpad True if this text sequence should be postpadded
-		 * @param guess The approximate number of resulting text-like items
 		 */
-		private MultiText(final int nextcursor, final boolean prepad,
-				final boolean postpad, final int guess, final Boolean wasescape) {
-			this.nextcursor = nextcursor;
-			this.postpad = postpad;
-			this.wasescape = wasescape;
-			buffer.setLength(0);
-			if (prepad && newlineindent != null) {
-				buffer.append(newlineindent);
-			}
-			data = new Content[guess];
-			ctext = new String[guess];
+		private MultiText() {
 		}
 		
 		/**
 		 * Ensure we have space for at least one more text-like item.
 		 */
 		private void ensurespace() {
-			if (msize >= data.length) {
-				data = ArrayCopy.copyOf(data, msize + 4);
-				ctext = ArrayCopy.copyOf(ctext, data.length);
+			if (mtsize >= mtdata.length) {
+				mtdata = ArrayCopy.copyOf(mtdata, mtsize + 1 + (mtsize / 2));
+				mttext = ArrayCopy.copyOf(mttext, mtdata.length);
 			}
 		}
 		
@@ -177,13 +163,14 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * @param postspace true if the last char in the text should be a space
 		 */
 		private void closeText() {
-			if (buffer.length() == 0) {
+			if (mtbuffer.length() == 0) {
 				// empty text does not need adding at all.
 				return;
 			}
 			ensurespace();
-			ctext[msize++] = buffer.toString();
-			buffer.setLength(0);
+			mtdata[mtsize] = null;
+			mttext[mtsize++] = mtbuffer.toString();
+			mtbuffer.setLength(0);
 		}
 		
 		/**
@@ -220,8 +207,8 @@ public abstract class AbstractFormattedWalker implements Walker {
 			}
 			if (toadd != null) {
 				toadd = escapeText(toadd);
-				buffer.append(toadd);
-				gottext = true;
+				mtbuffer.append(toadd);
+				mtgottext = true;
 			}
 		}
 		
@@ -245,7 +232,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * @param text The actual CDATA content.
 		 */
 		public void appendCDATA(final Trim trim, final String text) {
-			// this resets the buffer too.
+			// this resets the mtbuffer too.
 			closeText();
 			String toadd = null;
 			switch (trim) {
@@ -269,10 +256,10 @@ public abstract class AbstractFormattedWalker implements Walker {
 			toadd = escapeCDATA(toadd);
 			ensurespace();
 			// mark this as being CDATA text
-			data[msize] = CDATATOKEN;
-			ctext[msize++] = toadd;
+			mtdata[mtsize] = CDATATOKEN;
+			mttext[mtsize++] = toadd;
 
-			gottext = true;
+			mtgottext = true;
 
 		}
 		
@@ -282,8 +269,8 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * @param text
 		 */
 		private void forceAppend(final String text) {
-			gottext = true;
-			buffer.append(text);
+			mtgottext = true;
+			mtbuffer.append(text);
 		}
 		
 		/**
@@ -294,8 +281,9 @@ public abstract class AbstractFormattedWalker implements Walker {
 		public void appendRaw(final Content c) {
 			closeText();
 			ensurespace();
-			data[msize++] = c;
-			buffer.setLength(0);
+			mttext[mtsize] = null;
+			mtdata[mtsize++] = c;
+			mtbuffer.setLength(0);
 
 		}
 		
@@ -304,76 +292,110 @@ public abstract class AbstractFormattedWalker implements Walker {
 		 * text-like sequence.
 		 */
 		public void done() {
-			if (postpad && newlineindent != null) {
+			if (mtpostpad && newlineindent != null) {
 				// this will be ignored if there was not some content.
-				buffer.append(newlineindent);
+				mtbuffer.append(newlineindent);
 			}
-			if (gottext) {
+			if (mtgottext) {
 				closeText();
 			}
-			buffer.setLength(0);
+			mtbuffer.setLength(0);
 		}
-		
+
 	}
 	
 	
 	
 	
-	private final int size;
-	private final List<? extends Content> content;
+	private Content pending = null;
+	private final Iterator<? extends Content> content;
 	private final boolean alltext;
 	private final boolean allwhite;
 	private final String newlineindent;
 	private final String endofline;
-	private final StringBuilder buffer = new StringBuilder();
 	private final EscapeStrategy escape;
 	private final FormatStack fstack;
 	private boolean hasnext = true;
 
-	private int cursor = 0;
+	
+	// MultiText handling changed in 2.0.5
+	// MultiText is something quite complicated, but it goes something like this:
+	// XML Content is either text-like, or its not. If we encounter text-like content
+	// then we find out how many text-like contents are in a row, and we add them to a
+	// multi-text. We then either get to the end of the content, or a non-text content.
+	// If we complete the multitext, we then move on to the non-text item, and we set multitext
+	// to null. Both multitect and pendingmt are thus null.
+	// If the content following the non-text is then text-like, we populate pendingmt.
+	// bottom line is that multitext and pendingmt can never both be set.
+	// we use one set of variables to back up both of them. This is fast, and safe in a single
+	// threaded environment (which the Walkers are guaranteed to be in).
+	// all MultiText-specific variables have the names mt*
 	private MultiText multitext = null;
 	private MultiText pendingmt = null;
+	private final MultiText holdingmt = new MultiText();
 	
+	private final StringBuilder mtbuffer = new StringBuilder();
+	// if there should be indenting after this text.
+	private boolean mtpostpad;
+	// indicate whether there is something actually added.
+	private boolean mtgottext = false;
+	// the number of mixed content values.
+	private int mtsize = 0;
+	private int mtsourcesize = 0;
+	private Content[] mtsource = new Content[8];
+	// the location of the processed content.
+	private Content[] mtdata = new Content[8];
+	// whether the mixed content should be returned as raw JDOM objects
+	private String[] mttext = new String[8];
+	
+	// the current cursor in the mixed content.
+	private int mtpos = -1;
+	// we cheat here by using Boolean as a three-state option...
+	// we expect it to be null often.
+	private Boolean mtwasescape;
+
 	/**
 	 * Create a Walker that preserves all content in its raw state.
-	 * @param content the content to walk.
+	 * @param xx the content to walk.
 	 * @param fstack the current FormatStack
 	 * @param doescape Whether Text values should be escaped.
 	 */
-	public AbstractFormattedWalker(final List<? extends Content> content,
+	public AbstractFormattedWalker(final List<? extends Content> xx,
 			final FormatStack fstack, final boolean doescape) {
 		super();
 		this.fstack = fstack;
-		this.content = content;
+		this.content = xx.isEmpty() ? EMPTYIT : xx.iterator();
 		this.escape = doescape ? fstack.getEscapeStrategy() : null;
-		size = content.size();
 		newlineindent = fstack.getPadBetween();
 		endofline = fstack.getLevelEOL();
-		if (size == 0) {
+		if (!content.hasNext()) {
 			alltext = true;
 			allwhite = true;
 		} else {
 			boolean atext = false;
 			boolean awhite = false;
-			if (isTextLike(0)) {
+			pending = content.next();
+			if (isTextLike(pending)) {
 				// the first item in the list is Text-like, and we pre-check
 				// to see whether all content is text.... and whether it amounts
 				// to something.
-				pendingmt = buildMultiText();
-				if (pendingmt.nextcursor >= size) {
+				pendingmt = buildMultiText(true);
+				analyzeMultiText(pendingmt, 0, mtsourcesize);
+				pendingmt.done();
+
+				if (pending == null) {
 					atext = true;
-					awhite = pendingmt.msize == 0;
+					awhite = mtsize == 0;
 				}
-				if (pendingmt.msize == 0) {
+				if (mtsize == 0) {
 					// first content in list is ignorable.
-					cursor = pendingmt.nextcursor;
 					pendingmt = null;
 				}
 			}
 			alltext = atext;
 			allwhite = awhite;
 		}
-		hasnext = cursor < size;
+		hasnext = pendingmt != null || pending != null;
 	}
 
 	@Override
@@ -383,21 +405,23 @@ public abstract class AbstractFormattedWalker implements Walker {
 			throw new NoSuchElementException("Cannot walk off end of Content");
 		}
 		
-		if (multitext != null && multitext.mpos + 1 >= multitext.msize) {
+		if (multitext != null && mtpos + 1 >= mtsize) {
 			// finished this multitext. need to move on.
-			cursor = multitext.nextcursor;
 			multitext = null;
+			resetMultiText();
 		}
-
 		if (pendingmt != null) {
 			// we have a multi-text pending from the last block
 			// this will only be the case when the previous value was non-text.
-			if (pendingmt.wasescape != null && 
-					fstack.getEscapeOutput() != pendingmt.wasescape.booleanValue()) {
+			if (mtwasescape != null && 
+					fstack.getEscapeOutput() != mtwasescape.booleanValue()) {
 				// we calculated pending with one escape strategy, but it changed...
 				// we need to recalculate it....
-				pendingmt = buildMultiText();
-				//analyzeMultiText(mtext, offset, len)
+
+				mtsize = 0;
+				mtwasescape = fstack.getEscapeOutput();
+				analyzeMultiText(pendingmt, 0, mtsourcesize);
+				pendingmt.done();
 			}
 			multitext = pendingmt;
 			pendingmt = null;
@@ -408,58 +432,62 @@ public abstract class AbstractFormattedWalker implements Walker {
 			// OK, we have text-like content to push back.
 			// and it still has values in it.
 			// advance the cursor
-			multitext.mpos++;
+			mtpos++;
 			
-			final Content ret = multitext.ctext[multitext.mpos] == null
-					? multitext.data[multitext.mpos] : null;
+			final Content ret = mttext[mtpos] == null
+					? mtdata[mtpos] : null;
 
 			
 			// we can calculate the hasnext
-			hasnext = multitext.mpos + 1 < multitext.msize || 
-					multitext.nextcursor < size;
+			hasnext = mtpos + 1 < mtsize || 
+					pending != null;
 			
 			// return null to indicate text content.
 			return ret;
 		}
 		
 		// non-text, increment and return content.
-		final Content ret = content.get(cursor++);
+		final Content ret = pending;
+		pending = content.hasNext() ? content.next() : null;
 		
 		// OK, we are returning some content.
 		// we need to determine the state of the next loop.
 		// cursor at this point has been advanced!
-		if (cursor >= size) {
+		if (pending == null) {
 			hasnext = false;
 		} else {
 			// there is some more content.
 			// we need to inspect it to determine whether it is good
-			if (isTextLike(cursor)) {
+			if (isTextLike(pending)) {
 				// calculate what this next text-like content looks like.
-				pendingmt = buildMultiText();
-				if (pendingmt.msize > 0) {
+				pendingmt = buildMultiText(false);
+				analyzeMultiText(pendingmt, 0, mtsourcesize);
+				pendingmt.done();
+
+				if (mtsize > 0) {
 					hasnext = true;
 				} else {
 					// all white text... perhaps we need indenting anyway.
-					if (pendingmt.nextcursor < size && 
-							newlineindent != null) {
+					// buildMultiText has moved on the pending value....
+					if (pending != null && newlineindent != null) {
 						// yes, we need indenting.
-						final int nc = pendingmt.nextcursor;
 						// redefine the pending.
-						pendingmt = new MultiText(nc, false, false, 1, null);
+						resetMultiText();
+						pendingmt = holdingmt;
 						pendingmt.forceAppend(newlineindent);
 						pendingmt.done();
 						hasnext = true;
 					} else {
-						cursor = pendingmt.nextcursor;
 						pendingmt = null;
-						hasnext = cursor < size;
+						hasnext = pending != null;
 					}
 				}
 			} else {
 				// it is non-text content... we have more content.
 				// but, we just returned non-text content. We may need to indent
 				if (newlineindent != null) {
-					pendingmt = new MultiText(cursor, false, false, 1, null);
+					resetMultiText();
+					pendingmt = holdingmt;
 					pendingmt.forceAppend(newlineindent);
 					pendingmt.done();
 				}
@@ -467,6 +495,16 @@ public abstract class AbstractFormattedWalker implements Walker {
 			}
 		}
 		return ret;
+	}
+
+	private void resetMultiText() {
+		mtsourcesize = 0;
+		mtpos = -1;
+		mtsize = 0;
+		mtgottext = false;
+		mtpostpad = false;
+		mtwasescape = null;
+		mtbuffer.setLength(0);
 	}
 
 	/**
@@ -484,7 +522,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * @return the content at the index.
 	 */
 	protected final Content get(final int index) {
-		return content.get(index);
+		return mtsource[index];
 	}
 	
 	@Override
@@ -497,45 +535,51 @@ public abstract class AbstractFormattedWalker implements Walker {
 		return hasnext;
 	}
 
-	private final MultiText buildMultiText() {
+	/**
+	 * This method was changed in 2.0.5
+	 * It now is only called when building the content of the variable pendingmt
+	 * This is important, because only pendingmt can be referenced when analyzing
+	 * the MultiText content.
+	 * @param first
+	 * @return
+	 */
+	private final MultiText buildMultiText(final boolean first) {
 		// set up a sequence where the next bunch of stuff is text.
-		int i = cursor - 1;
-		wloop: while (++i < size) {
-			final CType ctype = content.get(i).getCType();
-			switch (ctype) {
-				case Text :
-				case CDATA :
-				case EntityRef:
-					break; //switch
-				default :
-					break wloop; //while loop
-			}
+		if (!first && newlineindent != null) {
+			mtbuffer.append(newlineindent);
 		}
-		final MultiText mt = new MultiText(i, cursor > 0, i < size, 
-				(i - cursor) * 2 + 1, fstack.getEscapeOutput());
-		analyzeMultiText(mt, cursor, i - cursor);
-		mt.done();
-		return mt;
+		mtsourcesize = 0;
+		do {
+			if (mtsourcesize >= mtsource.length) {
+				mtsource = ArrayCopy.copyOf(mtsource, mtsource.length * 2);
+			}
+			mtsource[mtsourcesize++] = pending;
+			pending = content.hasNext() ? content.next() : null;
+		} while (pending != null && isTextLike(pending));
+		
+		mtpostpad = pending != null;
+		mtwasescape = fstack.getEscapeOutput();
+		return holdingmt;
 	}
 
 	@Override
 	public final String text() {
-		if (multitext == null || multitext.mpos >= multitext.msize) {
+		if (multitext == null || mtpos >= mtsize) {
 			return null;
 		}
-		return multitext.ctext[multitext.mpos];
+		return mttext[mtpos];
 	}
 
 	@Override
 	public final boolean isCDATA() {
-		if (multitext == null || multitext.mpos >= multitext.msize) {
+		if (multitext == null || mtpos >= mtsize) {
 			return false;
 		}
-		if (multitext.ctext[multitext.mpos] == null) {
+		if (mttext[mtpos] == null) {
 			return false;
 		}
 		
-		return multitext.data[multitext.mpos] == CDATATOKEN;
+		return mtdata[mtpos] == CDATATOKEN;
 	}
 
 	@Override
@@ -543,8 +587,8 @@ public abstract class AbstractFormattedWalker implements Walker {
 		return allwhite;
 	}
 
-	private final boolean isTextLike(final int pos) {
-		switch (get(pos).getCType()) {
+	private final boolean isTextLike(final Content c) {
+		switch (c.getCType()) {
 			case Text:
 			case CDATA:
 			case EntityRef:

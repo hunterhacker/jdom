@@ -54,6 +54,7 @@
 
 package org.jdom2.output.support;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -70,37 +71,40 @@ import org.jdom2.Content;
  */
 public class WalkerPRESERVE implements Walker {
 	
-	private int cursor = 0;
-	private final int size;
-	private final List<? extends Content> content;
+	private static final Iterator<Content> EMPTYIT = new Iterator<Content>() {
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public Content next() {
+			throw new NoSuchElementException("Cannot call next() on an empty iterator.");
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException("Cannot remove from an empty iterator.");
+		}
+	};
+	
+	private final Iterator<? extends Content> iter;
 	private final boolean alltext;
 	
 	/**
 	 * Create a Walker that preserves all content in its raw state.
 	 * @param content the content to walk.
 	 */
-	public WalkerPRESERVE(List<? extends Content> content) {
+	public WalkerPRESERVE(final List<? extends Content> content) {
 		super();
-		size = content.size();
-		if (size == 0) {
+		if (content.isEmpty()) {
 			alltext = true;
+			iter = EMPTYIT;
 		} else {
-			boolean atext = true;
-			int i = size;
-			while (--i > 0 && atext) {
-				switch (content.get(i).getCType()) {
-					case Text :
-					case CDATA :
-					case EntityRef :
-						break;
-					default :
-						atext = false;
-				}
-			}
-			alltext = atext;
+			iter = content.iterator();
+			alltext = false;
 		}
 		
-		this.content = content;
 	}
 
 	@Override
@@ -110,15 +114,12 @@ public class WalkerPRESERVE implements Walker {
 
 	@Override
 	public boolean hasNext() {
-		return cursor < size;
+		return iter.hasNext();
 	}
 
 	@Override
 	public Content next() {
-		if (cursor >= size) {
-			throw new NoSuchElementException("Cannot walk off end of Content");
-		}
-		return content.get(cursor++);
+		return iter.next();
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public class WalkerPRESERVE implements Walker {
 
 	@Override
 	public boolean isAllWhitespace() {
-		return size == 0;
+		return alltext;
 	}
 
 }
