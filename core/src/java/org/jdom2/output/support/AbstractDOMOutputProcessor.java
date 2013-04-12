@@ -66,6 +66,7 @@ import org.jdom2.Content.CType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.EntityRef;
+import org.jdom2.JDOMConstants;
 import org.jdom2.Namespace;
 import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
@@ -462,7 +463,7 @@ public abstract class AbstractDOMOutputProcessor extends
 				if (ns == Namespace.XML_NAMESPACE) {
 					continue;
 				}
-				ret.setAttribute(getXmlnsTagFor(ns), ns.getURI());
+				ret.setAttributeNS(JDOMConstants.NS_URI_XMLNS, getXmlnsTagFor(ns), ns.getURI());
 			}
 
 			if (element.hasAttributes()) {
