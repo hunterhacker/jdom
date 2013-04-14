@@ -71,6 +71,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Namespace;
+import org.jdom2.Verifier;
 import org.jdom2.input.stax.DTDParser;
 import org.jdom2.input.stax.StAXFilter;
 
@@ -160,9 +161,16 @@ public class StAXStreamBuilder {
 					case CDATA:
 						throw new JDOMException("Unexpected XMLStream event at Document level: CDATA");
 					case SPACE:
-						throw new JDOMException("Unexpected XMLStream event at Document level: SPACE");
+						// I have not been able to identify a StAX Stream handler that produces
+						// space data outside the root element, but just in case, we ignore it.
+						break; //throw new JDOMException("Unexpected XMLStream event at Document level: SPACE");
 					case CHARACTERS:
-						throw new JDOMException("Unexpected XMLStream event at Document level: CHARACTERS");
+						final String badtxt = stream.getText();
+						if (!Verifier.isAllXMLWhitespace(badtxt)) {
+							throw new JDOMException("Unexpected XMLStream event at Document level: CHARACTERS (" + badtxt + ")");
+						}
+						// otherwise ignore the chars.
+						break;
 
 					case COMMENT:
 						document.addContent(

@@ -162,7 +162,9 @@ public class StAXEventBuilder {
 						current.addContent(emt);
 					}
 					current = emt;
-				} else if (event.isCharacters()) {
+				} else if (event.isCharacters() && current != null) {
+					// ignore any character-based content (should only be spaces)
+					// outside of the root element.
 					final Characters chars = event.asCharacters();
 					if (chars.isCData()) {
 						current.addContent(factory.cdata(
