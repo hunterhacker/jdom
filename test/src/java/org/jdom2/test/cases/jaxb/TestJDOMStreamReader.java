@@ -58,6 +58,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import javax.xml.stream.XMLStreamReader;
+
 import org.junit.Test;
 
 import org.jdom2.CDATA;
@@ -68,9 +70,10 @@ import org.jdom2.Namespace;
 import org.jdom2.Text;
 import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.output.StAXStreamReader;
+import org.jdom2.output.support.AbstractStAXStreamReader;
 
 /**
- * Tests for {@link StAXStreamReader}
+ * Tests for {@link AbstractStAXStreamReader}
  * @author gordon burgett https://github.com/gburgett
  */
 @SuppressWarnings("javadoc")
@@ -86,8 +89,9 @@ public class TestJDOMStreamReader {
         Document doc = new Document();
         doc.setRootElement(new Element("simple"));
         
+        StAXStreamReader reader = new StAXStreamReader();
+        XMLStreamReader instance = reader.output(doc);
         Document read;
-        StAXStreamReader instance = new StAXStreamReader(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -117,7 +121,8 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(content);
         
         Document read;
-        StAXStreamReader instance = new StAXStreamReader(doc);
+        StAXStreamReader reader = new StAXStreamReader();
+        XMLStreamReader instance = reader.output(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -161,7 +166,8 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(content);
         
         Document read;
-        StAXStreamReader instance = new StAXStreamReader(doc);
+        StAXStreamReader reader = new StAXStreamReader();
+        XMLStreamReader instance = reader.output(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);
@@ -194,7 +200,8 @@ public class TestJDOMStreamReader {
         doc.getRootElement().addContent(new CDATA("post-element text"));
         
         Document read;
-        StAXStreamReader instance = new StAXStreamReader(doc);
+        StAXStreamReader reader = new StAXStreamReader();
+        XMLStreamReader instance = reader.output(doc);
         try{
             StAXStreamBuilder builder = new StAXStreamBuilder();
             read = builder.build(instance);

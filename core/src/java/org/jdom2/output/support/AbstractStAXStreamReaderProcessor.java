@@ -58,28 +58,30 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
-import org.jdom2.output.StAXStreamReader;
 
 /**
- * A simple interface that allows the implementation of a StAX XMLStreamReader
- * instance for representing a JDOM Document. If a user needs to create a custom
- * way to output as an XMLStreamReader they can implement their own XMLStreamReader
- * class (perhaps by extending {@link StAXStreamReader}) and then creating an
- * implementation of this class that creates their own custom XMLStreamReader
- * version. The implementation of this class could then be given to the
- * StAXAsStreamReader.
+ * A complete (but still abstract) implementation of a class that produces
+ * XMLStreamReaders based on the class AbstractXMLStreamReader. Users who need
+ * to make changes to the output format that are not possible with just the
+ * Format class, may need to extend this class to create instances of their own
+ * XMLStreamReader. Their own implementation could in turn extend the AbstractXMLReader
+ * class which contains the bulk of the StAX Logic. 
  *  
  * @author Rolf Lear
  *
  */
-public interface StAXAsStreamProcessor {
-	/**
-	 * Return an implementation of an XMLStreamReader that represents
-	 * a JDOM Document.
-	 * 
-	 * @param doc The Document to represent.
-	 * @param format The Format to apply to the document.
-	 * @return The XMLStreamReader that expresses the JDOM Document.
-	 */
-	public XMLStreamReader buildReader(Document doc, Format format);
+public class AbstractStAXStreamReaderProcessor implements StAXStreamReaderProcessor {
+	
+	private static final class DefaultXMLStreamReader extends AbstractStAXStreamReader {
+
+		public DefaultXMLStreamReader(final Document doc, final Format format) {
+			super(doc, format);
+		}
+	}
+
+	@Override
+	public XMLStreamReader buildReader(final Document doc, final Format format) {
+		return new DefaultXMLStreamReader(doc, format);
+	}
+
 }
