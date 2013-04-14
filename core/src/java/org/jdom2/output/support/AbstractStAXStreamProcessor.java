@@ -603,7 +603,7 @@ public abstract class AbstractStAXStreamProcessor
 			
 			if (expandit) {
 				Namespace ns = element.getNamespace();
-				out.setPrefix(ns.getPrefix(), ns.getURI());
+//				out.setPrefix(ns.getPrefix(), ns.getURI());
 				out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
 //				if (ns == Namespace.NO_NAMESPACE) {
 //					out.writeStartElement(element.getName());
@@ -661,7 +661,7 @@ public abstract class AbstractStAXStreamProcessor
 				//           and whiteonly == true
 				
 				Namespace ns = element.getNamespace();
-				out.setPrefix(ns.getPrefix(), ns.getURI());
+//				out.setPrefix(ns.getPrefix(), ns.getURI());
 				out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
 //				if (ns == Namespace.NO_NAMESPACE) {
 //					out.writeEmptyElement(element.getName());

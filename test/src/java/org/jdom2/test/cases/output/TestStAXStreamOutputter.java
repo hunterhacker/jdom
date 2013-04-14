@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
-import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -47,10 +46,11 @@ import org.jdom2.input.StAXStreamBuilder;
 import org.jdom2.input.stax.DefaultStAXFilter;
 import org.jdom2.output.Format;
 import org.jdom2.output.Format.TextMode;
-import org.jdom2.output.support.AbstractStAXStreamProcessor;
-import org.jdom2.output.support.StAXStreamProcessor;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.StAXStreamOutputter;
+import org.jdom2.output.support.AbstractStAXStreamProcessor;
+import org.jdom2.output.support.StAXStreamProcessor;
+import org.jdom2.test.util.UnitTestUtil;
 
 @SuppressWarnings("javadoc")
 public final class TestStAXStreamOutputter extends AbstractTestOutputter {
@@ -547,6 +547,11 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 	 */
 	
     private void roundTripDocument(Document doc) {
+    	roundTripDocument(doc, true);
+    	roundTripDocument(doc, false);
+    }
+
+    private void roundTripDocument(Document doc, boolean repairing) {
     	StAXStreamOutputter xout = new StAXStreamOutputter(Format.getRawFormat());
     	// create a String representation of the input.
     	if (doc.hasRootElement()) {
@@ -555,32 +560,24 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
     	
     	try {
     		StringWriter sw = new StringWriter();
+    		soutfactory.setProperty("javax.xml.stream.isRepairingNamespaces", repairing);
     		XMLStreamWriter xsw = soutfactory.createXMLStreamWriter(sw);
         	xout.output(doc, xsw);
         	xsw.close();
-        	String expect = sw.toString();
-        	
+        	Document expect = new SAXBuilder().build(new StringReader(sw.toString()));
     		// convert the input to a SAX Stream
+	    	UnitTestUtil.compare(doc, expect);
 
         	StAXStreamBuilder sbuilder = new StAXStreamBuilder();
         	
-        	char[] chars = expect.toCharArray();
-        	CharArrayReader car = new CharArrayReader(chars);
+        	StringReader car = new StringReader(sw.toString());
         	XMLStreamReader xsr = sinfactory.createXMLStreamReader(car);
         	
 			Document backagain = sbuilder.build(xsr);
 			xsr.close();
 			
-			// get a String representation of the round-trip.
-	    	if (backagain.hasRootElement()) {
-	    		normalizeAttributes(backagain.getRootElement());
-	    	}
-	    	StringWriter swb = new StringWriter();
-	    	xsw = soutfactory.createXMLStreamWriter(swb);
-			xout.output(backagain, xsw);
-			String actual = swb.toString();
+	    	UnitTestUtil.compare(expect, backagain);
 			
-	    	assertEquals(expect, actual);
 		} catch (Exception e) {
 			failException("Failed to round-trip the document with exception: " 
 					+ e.getMessage(), e);
@@ -738,6 +735,13 @@ public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 	@Test
 	public void testRTOutputDocumentSimple() {
 		Document doc = new Document(new Element("root"));
+		roundTripDocument(doc);
+	}
+
+	@Test
+	public void testRTOutputDocumentDefaultNS() {
+		Element root = new Element("root", "http://jdom/noprefix");
+		Document doc = new Document(root);
 		roundTripDocument(doc);
 	}
 

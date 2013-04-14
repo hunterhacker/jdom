@@ -15,10 +15,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jdom2.Attribute;
@@ -210,16 +210,12 @@ public class UnitTestUtil {
 		if (!emt.hasAttributes()) {
 			return;
 		}
-		TreeMap<String,Attribute> sorted = new TreeMap<String, Attribute>();
-		List<?> atts = emt.getAttributes();
-		for (Object o : atts.toArray()) {
-			Attribute a = (Attribute)o;
-			sorted.put(a.getQualifiedName(), a);
-			a.detach();
-		}
-		for (Attribute a : sorted.values()) {
-			emt.setAttribute(a);
-		}
+		emt.sortAttributes(new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getQualifiedName().compareTo(o2.getQualifiedName());
+			}
+		});
 		for (Object o : emt.getChildren()) {
 			normalizeAttributes((Element)o);
 		}
