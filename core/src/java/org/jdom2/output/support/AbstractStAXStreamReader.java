@@ -338,9 +338,11 @@ public abstract class AbstractStAXStreamReader extends AbstractOutputProcessor i
     public QName getName() {
     	switch (currentEvt) {
     		case START_ELEMENT:
+    			final Element emts = emtstack[depth];
+    			return new QName(emts.getNamespaceURI(), emts.getName(), emts.getNamespacePrefix());
     		case END_ELEMENT:
-    			final Element emt = emtstack[depth];
-    			return new QName(emt.getNamespaceURI(), emt.getName(), emt.getNamespacePrefix());
+    			final Element emte = emtstack[depth + 1];
+    			return new QName(emte.getNamespaceURI(), emte.getName(), emte.getNamespacePrefix());
     		default:
     			throw new IllegalStateException("getName not supported for event " + currentEvt);
         }

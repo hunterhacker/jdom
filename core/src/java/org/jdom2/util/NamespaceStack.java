@@ -656,6 +656,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * Get the Namespace in the current scope with the specified prefix.
 	 * @param prefix The prefix to get the namespace for (null is treated the same as "").
 	 * @return The Namespace with the specified prefix, or null if the prefix is not in scope.
+	 * @since JDOM 2.1.0
 	 */
 	public Namespace getNamespaceForPrefix(final String prefix) {
 		if (prefix == null) {
@@ -674,6 +675,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * Get the <strong>first</strong> Namespace in the current scope that is bound to the specified URI.
 	 * @param uri The URI to get the first prefix for (null is treated the same as "").
 	 * @return The first bound Namespace for the specified URI, or null if the URI is not bound.
+	 * @since JDOM 2.1.0
 	 */
 	public Namespace getFirstNamespaceForURI(final String uri) {
 		if (uri == null) {
@@ -691,6 +693,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * Get all prefixes in the current scope that are bound to the specified URI.
 	 * @param uri The URI to get the first prefix for (null is treated the same as "").
 	 * @return All bound prefixes for the specified URI, or an empty array if the URI is not bound.
+	 * @since JDOM 2.1.0
 	 */
 	public Namespace[] getAllNamespacesForURI(final String uri) {
 		if (uri == null) {
@@ -705,4 +708,29 @@ public final class NamespaceStack implements Iterable<Namespace> {
 		return al.toArray(new Namespace[al.size()]);
 	}
 
+	/**
+	 * If the specified prefix was bound in the previous bind level, and has
+	 * been rebound to a different URI in the current level, then return the
+	 * Namespace the the prefix <strong>was bound to</strong> before.
+	 * @param prefix The prefix to check for re-binding
+	 * @return the previous binding for the specified prefix, or null if the prefix was
+	 *         not previously bound, or was not changed in this level of the stack.
+	 * @since JDOM 2.1.0
+	 */
+	public Namespace getRebound(final String prefix) {
+		if (depth <= 0) {
+			return null;
+		}
+		for (Namespace nsa : added[depth]) {
+			if (nsa.getPrefix().equals(prefix)) {
+				for (Namespace nsp : scope[depth - 1]) {
+					if (nsp.getPrefix().equals(prefix)) {
+						return nsp;
+					}
+				}
+				return null;
+			}
+		}
+		return null;
+	}
 }

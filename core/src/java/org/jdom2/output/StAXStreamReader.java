@@ -87,6 +87,7 @@ import org.jdom2.output.support.StAXStreamReaderProcessor;
  * your needs if all you want to do is tweak some details.
  * 
  * @author Rolf Lear
+ * @since JDOM 2.1.0
  */
 
 public final class StAXStreamReader implements Cloneable {

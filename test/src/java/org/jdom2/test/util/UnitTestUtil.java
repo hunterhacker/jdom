@@ -411,7 +411,9 @@ public class UnitTestUtil {
     		Document b = (Document)bp;
     		assertEquals(a.getBaseURI(), b.getBaseURI());
     		final int sz = a.getContentSize();
-    		assertTrue(sz == b.getContentSize());
+    		if (sz != b.getContentSize()) {
+    			fail (String.format("We expected %d members in the Document content, but got %d", sz, b.getContentSize()));
+    		}
     		for (int i = 0; i < sz; i++) {
     			compare(a.getContent(i), b.getContent(i));
     		}

@@ -79,6 +79,9 @@ import org.jdom2.util.NamespaceStack;
  * this class is written to (it's an XMLStreamWriter implementation) to create a JDOM
  * Document whereas the StAXStreamBuilder <strong>reads from</strong> a user-supplied
  * XMLStreamReader. It is the difference between a 'push' concept and a 'pull' concept.
+ * <p>
+ * An interesting read for people using this class:
+ * <a href="http://ws.apache.org/axiom/devguide/ch05.html">Apache Axiom notes on setPrefix()</a>.
  * 
  * @author gordon burgett https://github.com/gburgett
  * @author Rolf Lear
@@ -219,6 +222,9 @@ public class StAXStreamWriter implements XMLStreamWriter {
 		if (prefix == null) {
 			throw new IllegalArgumentException("prefix may not be null");
 		}
+		if (prefix.equals(JDOMConstants.NS_PREFIX_XMLNS)) {
+			return;
+		}
 		if (document == null || done) {
 			throw new IllegalStateException(
 					"Attempt to set prefix at an illegal stream state.");
@@ -265,7 +271,12 @@ public class StAXStreamWriter implements XMLStreamWriter {
 
 	@Override
 	public void writeStartElement(final String localName) throws XMLStreamException {
-		writeStartElement("", localName);
+		final int pos = localName.indexOf(':');
+		if (pos >= 0) {
+			writeStartElement(localName.substring(0, pos), localName.substring(pos + 1));
+		} else {
+			writeStartElement("", localName);
+		}
 	}
 
 	@Override
@@ -277,7 +288,12 @@ public class StAXStreamWriter implements XMLStreamWriter {
 		if (localName == null) {
 			throw new XMLStreamException("Cannot have a null localname");
 		}
-		this.buildElement("", localName, namespaceURI, false, false);
+		final int pos = localName.indexOf(':');
+		if (pos >= 0) {
+			this.buildElement(localName.substring(0, pos), localName.substring(pos + 1), namespaceURI, false, false);
+		} else {
+			this.buildElement("", localName, namespaceURI, false, false);
+		}
 	}
 
 	@Override
@@ -346,6 +362,14 @@ public class StAXStreamWriter implements XMLStreamWriter {
 		}
 		if (prefix == null || JDOMConstants.NS_PREFIX_XMLNS.equals(prefix)) {
 			// recurse with the "" prefix.
+			// yet another special case....
+			// if the element itself was written out without a prefix, and without a namespace
+			// then we update the element to have the same namespace as we have here.
+			// this is required to support some native Java Transform engines that do not
+			// supply content in the right order.
+			if ("".equals(activeelement.getNamespacePrefix())) {
+				activeelement.setNamespace(Namespace.getNamespace("", namespaceURI));
+			}
 			writeNamespace("", namespaceURI);
 		} else {
 			pendingns.add(Namespace.getNamespace(prefix, namespaceURI));
@@ -514,6 +538,7 @@ public class StAXStreamWriter implements XMLStreamWriter {
 	 * @param prefix The namespace prefix (may be null).
 	 * @param localName The Element tag
 	 * @param namespaceURI The namespace URI (may be null).
+	 * @param withpfx whether the prefix is user-specified
 	 * @param empty Is this an Empty element (expecting children?)
 	 * @throws XMLStreamException If the stream is not in an appropriate state for a new Element.
 	 */
@@ -558,8 +583,21 @@ public class StAXStreamWriter implements XMLStreamWriter {
 			final Namespace defns = boundstack.getNamespaceForPrefix("");
 			if(Namespace.NO_NAMESPACE != defns) {
 				// inconsistency in XMLStreamWriter specification....
-				// In theory the repairing code should create a generated prefic for unbound
+				// In theory the repairing code should create a generated prefix for unbound
 				// namespace URI, but you can't create a prefixed ""-URI namespace.
+				//
+				// It next makes sense to throw an exception for this, and insist that the
+				// "" URI must be explicitly bound using a prior setPrefix("","") call,
+				// but, broken though it is, the better option is to replicate the undocumented
+				// special-case handling that the BEA Reference implementation does ....
+				// if you have the prefix (in this case "") bound already, and now you are trying
+				// to bind the "" URI against the "" prefix, we let you do that as a special case
+				// but be warned that "" is no longer bound to the previous URI in this Element's
+				// scope.
+				// http://svn.stax.codehaus.org/browse/stax/trunk/dev/src/com/bea/xml/stream/XMLWriterBase.java?r=4&r=4&r=124#to278
+				if (repairnamespace) {
+					return Namespace.NO_NAMESPACE;
+				}
 				throw new XMLStreamException("This attempt to use the empty URI \"\" as an " +
 						"Element Namespace is illegal because the default Namespace is already " +
 						"bound to the URI '" + defns.getURI() + "'. You must call " +

@@ -66,6 +66,7 @@ import org.jdom2.Attribute;
 import org.jdom2.CDATA;
 import org.jdom2.Comment;
 import org.jdom2.Content;
+import org.jdom2.JDOMConstants;
 import org.jdom2.Content.CType;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -113,7 +114,9 @@ import org.jdom2.util.NamespaceStack;
  * {@link #printContent(XMLStreamWriter, FormatStack, NamespaceStack, Walker)} methods, but
  * the FormatStack is pushed through to all print* Methods.
  * <p>
- * 
+ * An interesting read for people using this class:
+ * <a href="http://ws.apache.org/axiom/devguide/ch05.html">Apache Axiom notes on setPrefix()</a>.
+ *
  * @see StAXStreamOutputter
  * @see StAXStreamProcessor
  * @since JDOM2
@@ -554,6 +557,13 @@ public abstract class AbstractStAXStreamProcessor
 
 		nstack.push(element);
 		try {
+			for (Namespace nsa : nstack.addedForward()) {
+				if (JDOMConstants.NS_PREFIX_DEFAULT.equals(nsa.getPrefix())) {
+					out.setDefaultNamespace(nsa.getURI());
+				} else {
+					out.setPrefix(nsa.getPrefix(), nsa.getURI());
+				}
+			}
 			
 			final List<Content> content = element.getContent();
 
@@ -601,17 +611,9 @@ public abstract class AbstractStAXStreamProcessor
 			// then we must expand.
 			boolean expandit = walker != null || fstack.isExpandEmptyElements();
 			
+			final Namespace ns = element.getNamespace();
 			if (expandit) {
-				Namespace ns = element.getNamespace();
-//				out.setPrefix(ns.getPrefix(), ns.getURI());
 				out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
-//				if (ns == Namespace.NO_NAMESPACE) {
-//					out.writeStartElement(element.getName());
-//				} else if ("".equals(ns.getPrefix())) {
-//					out.writeStartElement(ns.getURI(), element.getName());
-//				} else {
-//					out.writeStartElement(ns.getPrefix(), element.getName(), ns.getURI());
-//				}
 				
 				// Print the element's namespace, if appropriate
 				for (final Namespace nsd : nstack.addedForward()) {
@@ -625,6 +627,11 @@ public abstract class AbstractStAXStreamProcessor
 					}
 				}
 				
+				// This neatens up the output stream for some reason - bug in standard StAX
+				// implementation requires us to close off the Element start tag before we
+				// start adding new Namespaces to child contexts...
+				out.writeCharacters("");
+
 				// OK, now we print out the meat of the Element
 				if (walker != null) {
 					// we need to re-create the walker/fstack.
@@ -651,7 +658,6 @@ public abstract class AbstractStAXStreamProcessor
 			
 				out.writeEndElement();
 				
-				
 			} else {
 				// implies:
 				//      fstack.isExpandEmpty... is false
@@ -660,16 +666,7 @@ public abstract class AbstractStAXStreamProcessor
 				//           and preserve == false
 				//           and whiteonly == true
 				
-				Namespace ns = element.getNamespace();
-//				out.setPrefix(ns.getPrefix(), ns.getURI());
 				out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
-//				if (ns == Namespace.NO_NAMESPACE) {
-//					out.writeEmptyElement(element.getName());
-//				} else if ("".equals(ns.getPrefix())) {
-//					out.writeEmptyElement("", element.getName(), ns.getURI());
-//				} else {
-//					out.writeEmptyElement(ns.getPrefix(), element.getName(), ns.getURI());
-//				}
 				
 				// Print the element's namespace, if appropriate
 				for (final Namespace nsd : nstack.addedForward()) {
@@ -680,12 +677,21 @@ public abstract class AbstractStAXStreamProcessor
 				for (final Attribute attribute : element.getAttributes()) {
 					printAttribute(out, fstack, attribute);
 				}
-
 				// This neatens up the output stream for some reason.
 				out.writeCharacters("");
 			}
-		
+
 		} finally {
+			for (Namespace nsr : nstack.addedForward()) {
+				Namespace nsa = nstack.getRebound(nsr.getPrefix());
+				if (nsa != null) {
+					if (JDOMConstants.NS_PREFIX_DEFAULT.equals(nsa.getPrefix())) {
+						out.setDefaultNamespace(nsa.getURI());
+					} else {
+						out.setPrefix(nsa.getPrefix(), nsa.getURI());
+					}
+				}
+			}
 			nstack.pop();
 		}
 	}

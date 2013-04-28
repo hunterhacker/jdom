@@ -19,7 +19,10 @@ public abstract class AbstractTestRoundTrip {
 
 	abstract Document roundTrip(Document doc);
 	
-	private final void checkRoundTrip(final Document doc) {
+	abstract Document prepare(Document doc);
+	
+	private final void checkRoundTrip(final Document indoc) {
+		final Document doc = prepare(indoc);
 		final Document rtdoc = roundTrip(doc);
 		assertTrue(rtdoc != null);
 		try {
@@ -38,6 +41,14 @@ public abstract class AbstractTestRoundTrip {
 	@Test
 	public void testBasic() {
 		Document doc = new Document(new Element("root"));
+		checkRoundTrip(doc);
+	}
+	
+	@Test
+	public void testDefaultNamespace() {
+		Element emt = new Element("root", "ns:1");
+		emt.addContent(new Element("child")); // note, no namespace.
+		Document doc = new Document(emt);
 		checkRoundTrip(doc);
 	}
 

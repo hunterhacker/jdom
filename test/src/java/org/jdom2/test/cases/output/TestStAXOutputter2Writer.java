@@ -7,7 +7,12 @@ import org.jdom2.input.StAXStreamWriter;
 import org.jdom2.output.StAXStreamOutputter;
 
 @SuppressWarnings("javadoc")
-public class TestStAXReaderWriter extends AbstractTestRoundTrip {
+public class TestStAXOutputter2Writer extends AbstractTestRoundTrip {
+
+	@Override
+	Document prepare(Document doc) {
+		return doc;
+	}
 
 	@Override
 	Document roundTrip(final Document doc) {
