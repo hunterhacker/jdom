@@ -156,6 +156,16 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 		xPath.setVariableContext(this);
 	}
 
+	/**
+	 * Make a copy-constructor available to the clone() method.
+	 * This is simpler than trying to do a deep clone anyway.
+	 * 
+	 * @param toclone The JaxenCompiled instance to clone
+	 */
+	private JaxenCompiled(JaxenCompiled<T> toclone) {
+		this(toclone.getExpression(), toclone.getFilter(), toclone.getVariables(), toclone.getNamespaces());
+	}
+
 	@Override
 	public String translateNamespacePrefixToUri(String prefix) {
 		return getNamespace(prefix).getURI();
@@ -200,6 +210,15 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 			throw new IllegalStateException(
 					"Unable to evaluate expression. See cause", e);
 		}
+	}
+	
+	@Override
+	public JaxenCompiled<T> clone() {
+		// Use a copy-constructor instead of a deep clone.
+		// we have a couple of final variables on this class that we cannot share
+		// between instances, and the Jaxen xpath variable is pretty complicated to reconstruct
+		// anyway. Easier to just reconstruct it.
+		return new JaxenCompiled<T>(this);
 	}
 
 }
