@@ -88,6 +88,21 @@ public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
 	
 	private static final NamespaceComparator NSSORT = new NamespaceComparator();
 
+	/**
+	 * Utility method to find a Namespace that has a given URI, and return the prefix.
+	 * @param uri the URI to search for
+	 * @param nsa the array of namespaces to search through
+	 * @return the prefix of the namespace
+	 */
+	private static final String getPrefixForURI(final String uri, final Namespace[] nsa) {
+		for (final Namespace ns : nsa) {
+			if (ns.getURI().equals(uri)) {
+				return ns.getPrefix();
+			}
+		}
+		throw new IllegalStateException("No namespace defined with URI " + uri);
+	}
+	
 	private final Map<String, Namespace> xnamespaces = new HashMap<String, Namespace>();
 	// Not final to support cloning.
 	private Map<String, Map<String, Object>> xvariables = new HashMap<String, Map<String, Object>>();
@@ -307,6 +322,28 @@ public abstract class AbstractXPathCompiled<T> implements XPathExpression<T> {
 					getNamespace(qname.substring(0,  pos)), value);
 		}
 		return setVariable(qname, Namespace.NO_NAMESPACE, value);
+	}
+
+	/**
+	 * utility method that allows descendant classes to access the variables
+	 * that were set on this expression, in a format that can be used in a constructor (qname/value).
+	 * @return the variables set on this instance.
+	 */
+	protected Map<String,Object> getVariables() {
+		HashMap<String,Object> vars = new HashMap<String, Object>();
+		Namespace[] nsa = getNamespaces();
+		for (Map.Entry<String, Map<String,Object>> ue : xvariables.entrySet()) {
+			final String uri = ue.getKey();
+			final String pfx = getPrefixForURI(uri, nsa);
+			for (Map.Entry<String, Object> ve : ue.getValue().entrySet()) {
+				if ("".equals(pfx)) {
+					vars.put(ve.getKey(), ve.getValue());
+				} else {
+					vars.put(pfx + ":" + ve.getKey(), ve.getValue());
+				}
+			}
+		}
+		return vars;
 	}
 
 	@Override

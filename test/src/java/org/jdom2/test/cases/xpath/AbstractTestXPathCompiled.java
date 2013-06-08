@@ -753,6 +753,42 @@ public abstract class AbstractTestXPathCompiled {
 	}
 	
 	@Test
+	public void testCloneVariables() {
+		List<Element> lst = null;
+		HashMap<String,Object> vars = new HashMap<String,Object>();
+		vars.put("vns:vname", "1");
+		Namespace vns = Namespace.getNamespace("vns", "http://jdom.org/xpath_variable_namespace");
+		XPathExpression<Element> xpathhc = XPathFactory.instance().compile(
+				"/main/child[1]", Filters.element());
+		lst = xpathhc.evaluate(doc);
+		assertTrue(1 == lst.size());
+		assertTrue(child1emt == lst.get(0));
+		
+		XPathExpression<Element> xpath = XPathFactory.instance().compile(
+				"/main/child[position() = $vns:vname]", Filters.element(), vars, vns);
+		lst = xpath.evaluate(doc);
+		assertTrue(1 == lst.size());
+		assertTrue(child1emt == lst.get(0));
+		xpath.setVariable("vns:vname", "2");
+		assertTrue("2" == xpath.getVariable("vname", vns));
+		lst = xpath.evaluate(doc);
+		assertTrue(1 == lst.size());
+		assertTrue(child2emt == lst.get(0));
+		
+		XPathExpression<Element> cloned = xpath.clone();
+		lst = cloned.evaluate(doc);
+		assertTrue(1 == lst.size());
+		assertTrue(child2emt == lst.get(0));
+		
+		cloned.setVariable("vns:vname", "1");
+		assertTrue("2" == xpath.getVariable("vname", vns));
+		assertTrue("1" == cloned.getVariable("vname", vns));
+		lst = cloned.evaluate(doc);
+		assertTrue(1 == lst.size());
+		assertTrue(child1emt == lst.get(0));
+	}
+	
+	@Test
 	public void testSelectDocumentDoc() {
 		checkXPath("/", doc, mainvalue, doc);
 	}
