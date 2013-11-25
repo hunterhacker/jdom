@@ -731,7 +731,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
         if (suppress || (length == 0))
             return;
 
-        if (previousCDATA != inCDATA) {
+        if (previousCDATA != inCDATA || (ch[start] == '>' || (ch[start] == ']' && length > 1 && ch[start+1] == '>') )) {
             flushCharacters();
         }
 
