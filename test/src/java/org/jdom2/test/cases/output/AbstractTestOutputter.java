@@ -284,6 +284,7 @@ public abstract class AbstractTestOutputter {
 	public abstract String outputElementContentString(Format format, Element element);
 
 	protected static final Format fraw = Format.getRawFormat();
+    protected static final Format frawfp = Format.getPrettyFormat().setTextMode(TextMode.PRESERVE);
 	protected static final Format fcompact = Format.getCompactFormat();
 	protected static final Format fpretty = Format.getPrettyFormat();
 	protected static final Format ftso = Format.getPrettyFormat();
@@ -291,6 +292,7 @@ public abstract class AbstractTestOutputter {
 	
 	static {
 		fraw.setLineSeparator("\n");
+		frawfp.setLineSeparator("\n");
 		fcompact.setLineSeparator("\n");
 		fpretty.setLineSeparator("\n");
 		ftso.setLineSeparator("\n");
@@ -304,6 +306,7 @@ public abstract class AbstractTestOutputter {
 	public void testTextEmpty() {
 		Text content = new Text("");
 		assertEquals("", outputString(fraw,     content));
+        assertEquals("", outputString(frawfp,   content));
 		assertEquals("", outputString(fcompact, content));
 		assertEquals("", outputString(fpretty,  content));
 		assertEquals("", outputString(ftso,     content));
@@ -315,6 +318,8 @@ public abstract class AbstractTestOutputter {
 		Text content = new Text(" \r \n \t ");
 		assertEquals(expect(" \r \n \t "), 
 				outputString(fraw,     content));
+        assertEquals(expect(" \r \n \t "), 
+                outputString(frawfp,   content));
 		assertEquals("", 
 				outputString(fcompact, content));
 		assertEquals("", 
@@ -330,6 +335,8 @@ public abstract class AbstractTestOutputter {
 		Text content = new Text(" \r & \n \t ");
 		assertEquals(expect(" \r &amp; \n \t "), 
 				outputString(fraw,     content));
+        assertEquals(expect(" \r &amp; \n \t "), 
+                outputString(frawfp,   content));
 		assertEquals(expect("&amp;"), 
 				outputString(fcompact, content));
 		assertEquals(expect("&amp;"), 
@@ -345,6 +352,8 @@ public abstract class AbstractTestOutputter {
 		CDATA content = new CDATA("");
 		assertEquals("<![CDATA[]]>", 
 				outputString(fraw,     content));
+        assertEquals("<![CDATA[]]>", 
+                outputString(frawfp,   content));
 		assertEquals("",
 				outputString(fcompact, content));
 		assertEquals("",
@@ -360,6 +369,8 @@ public abstract class AbstractTestOutputter {
 		CDATA content = new CDATA(" \r \n \t ");
 		assertEquals("<![CDATA[ \r \n \t ]]>", 
 				outputString(fraw,     content));
+        assertEquals("<![CDATA[ \r \n \t ]]>", 
+                outputString(frawfp,   content));
 		assertEquals("", 
 				outputString(fcompact, content));
 		assertEquals("", 
@@ -375,6 +386,8 @@ public abstract class AbstractTestOutputter {
 		CDATA content = new CDATA(" \r & \n \t ");
 		assertEquals("<![CDATA[ \r & \n \t ]]>", 
 				outputString(fraw,     content));
+        assertEquals("<![CDATA[ \r & \n \t ]]>", 
+                outputString(frawfp,   content));
 		assertEquals("<![CDATA[&]]>", 
 				outputString(fcompact, content));
 		assertEquals("<![CDATA[&]]>", 
@@ -390,6 +403,8 @@ public abstract class AbstractTestOutputter {
 		EntityRef content = new EntityRef("ref");
 		assertEquals("&ref;", 
 				outputString(fraw,     content));
+        assertEquals("&ref;", 
+                outputString(frawfp,   content));
 		assertEquals("&ref;", 
 				outputString(fcompact, content));
 		assertEquals("&ref;", 
@@ -405,6 +420,8 @@ public abstract class AbstractTestOutputter {
 		ProcessingInstruction content = new ProcessingInstruction("target");
 		assertEquals(expect("<?target?>"), 
 				outputString(fraw,     content));
+        assertEquals(expect("<?target?>"), 
+                outputString(frawfp,   content));
 		assertEquals(expect("<?target?>"), 
 				outputString(fcompact, content));
 		assertEquals(expect("<?target?>"), 
@@ -419,6 +436,8 @@ public abstract class AbstractTestOutputter {
 				new ProcessingInstruction("target", "data");
 		assertEquals("<?target data?>", 
 				outputString(fraw,     content));
+        assertEquals("<?target data?>", 
+                outputString(frawfp,   content));
 		assertEquals("<?target data?>", 
 				outputString(fcompact, content));
 		assertEquals("<?target data?>", 
@@ -434,6 +453,8 @@ public abstract class AbstractTestOutputter {
 		Comment content = new Comment("comment");
 		assertEquals("<!--comment-->", 
 				outputString(fraw,     content));
+        assertEquals("<!--comment-->", 
+                outputString(frawfp,   content));
 		assertEquals("<!--comment-->", 
 				outputString(fcompact, content));
 		assertEquals("<!--comment-->", 
@@ -450,6 +471,8 @@ public abstract class AbstractTestOutputter {
 		DocType content = new DocType("root");
 		assertEquals("<!DOCTYPE root>", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root>", 
+                outputString(frawfp,   content));
 		assertEquals("<!DOCTYPE root>", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root>", 
@@ -466,6 +489,8 @@ public abstract class AbstractTestOutputter {
 		content.setInternalSubset("<!ENTITY name \"value\">");
 		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
+                outputString(frawfp,   content));
 		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root [\n<!ENTITY name \"value\">]>", 
@@ -481,6 +506,8 @@ public abstract class AbstractTestOutputter {
 		DocType content = new DocType("root", "sysid");
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\">", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root SYSTEM \"sysid\">", 
+                outputString(frawfp,   content));
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\">", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\">", 
@@ -497,6 +524,8 @@ public abstract class AbstractTestOutputter {
 		content.setInternalSubset("internal");
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\" [\ninternal]>", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root SYSTEM \"sysid\" [\ninternal]>", 
+                outputString(frawfp,   content));
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\" [\ninternal]>", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root SYSTEM \"sysid\" [\ninternal]>", 
@@ -512,6 +541,8 @@ public abstract class AbstractTestOutputter {
 		DocType content = new DocType("root", "pubid", "sysid");
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\">", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\">", 
+                outputString(frawfp,   content));
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\">", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\">", 
@@ -528,6 +559,8 @@ public abstract class AbstractTestOutputter {
 		content.setInternalSubset("internal");
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\" [\ninternal]>", 
 				outputString(fraw,     content));
+        assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\" [\ninternal]>", 
+                outputString(frawfp,     content));
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\" [\ninternal]>", 
 				outputString(fcompact, content));
 		assertEquals("<!DOCTYPE root PUBLIC \"pubid\" \"sysid\" [\ninternal]>", 
@@ -551,6 +584,8 @@ public abstract class AbstractTestOutputter {
 		root.addContent(new Text("  "));
 		assertEquals(expect("<root><![CDATA[ ]]>        \n \n   \t   </root>"), 
 				outputString(fraw,     root));
+        assertEquals(expect("<root><![CDATA[ ]]>        \n \n   \t   </root>"), 
+                outputString(frawfp,   root));
 		assertEquals(expect("<root/>"), 
 				outputString(fcompact, root));
 		assertEquals(expect("<root/>"), 
@@ -574,6 +609,8 @@ public abstract class AbstractTestOutputter {
 		root.addContent(new Text("  "));
 		assertEquals(expect("<root><![CDATA[ ]]>     X  \n \n   \t   </root>"), 
 				outputString(fraw,     root));
+        assertEquals(expect("<root><![CDATA[ ]]>     X  \n \n   \t   </root>"), 
+                outputString(frawfp,   root));
 		assertEquals(expect("<root>X</root>"), 
 				outputString(fcompact, root));
 		assertEquals(expect("<root>X</root>"), 
@@ -589,6 +626,8 @@ public abstract class AbstractTestOutputter {
 		Document content = new Document();
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
 				outputString(fraw,     content));
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
+                outputString(frawfp,   content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
 				outputString(fcompact, content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", 
@@ -605,6 +644,8 @@ public abstract class AbstractTestOutputter {
 		content.setDocType(new DocType("root"));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
 				outputString(fraw,     content));
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
+                outputString(frawfp,   content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
 				outputString(fcompact, content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE root>\n", 
@@ -621,6 +662,8 @@ public abstract class AbstractTestOutputter {
 		content.addContent(new Comment("comment"));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
 				outputString(fraw,     content));
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
+                outputString(frawfp,   content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
 				outputString(fcompact, content));
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--comment-->\n", 
@@ -645,6 +688,8 @@ public abstract class AbstractTestOutputter {
 		Text content = new Text("");
 		assertEquals("", 
 				outputString(fraw,     content));
+        assertEquals("", 
+                outputString(frawfp,     content));
 		assertEquals("", 
 				outputString(fcompact, content));
 		assertEquals("", 
@@ -1337,20 +1382,21 @@ public abstract class AbstractTestOutputter {
 			return;
 		}
 		
-		String[] descn   = new String[] {"Raw", "Compact", "Pretty", "PrettySpecifiedOnly", "TrimFullWhite"};
+		String[] descn   = new String[] {"Raw", "PrettyPreserve", "Compact", "Pretty", "PrettySpecifiedOnly", "TrimFullWhite"};
 		Format ftrimfw = Format.getPrettyFormat();
 		ftrimfw.setTextMode(TextMode.TRIM_FULL_WHITE);
 		Format fattspec = Format.getPrettyFormat();
 		fattspec.setSpecifiedAttributesOnly(true);
 		Format[] formats = new Format[] {
 				getFormat(setup, Format.getRawFormat()), 
+                getFormat(setup, Format.getPrettyFormat().setTextMode(TextMode.PRESERVE)), 
 				getFormat(setup, Format.getCompactFormat()),
 				getFormat(setup, Format.getPrettyFormat()),
 				getFormat(setup, fattspec),
 				getFormat(setup, ftrimfw)};
-		String[] result  = new String[] {raw, compact, pretty, tso, trimfw};
+		String[] result  = new String[] {raw, raw, compact, pretty, tso, trimfw};
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < result.length; i++) {
 			
 			String mstring;
 			try {
