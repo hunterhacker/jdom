@@ -103,6 +103,20 @@ public class WalkerPRESERVE implements Walker {
 		} else {
 			iter = content.iterator();
 			alltext = false;
+//			final int len = content.size();
+//			boolean at = true;
+//			for (int i = 0 ; i < len && at ; i++) {
+//			    switch (content.get(i).getCType()) {
+//			        case Text:
+//			        case CDATA:
+//			        case EntityRef:
+//			            break;
+//			        default :
+//			            at = false;
+//			            break;
+//			    }
+//			}
+//			alltext = at;
 		}
 		
 	}

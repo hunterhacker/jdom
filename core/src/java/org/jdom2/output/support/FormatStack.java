@@ -173,15 +173,23 @@ public final class FormatStack {
 		defaultMode = format.getTextMode();
 		specifiedAttributesOnly = format.isSpecifiedAttributesOnly();
 
-		levelIndent[depth] = format.getIndent() == null
-				? null : "";
-		levelEOL[depth] = format.getLineSeparator();
-		levelEOLIndent[depth] = levelIndent[depth] == null ?  
-				null : levelEOL[depth];
-		termEOLIndent[depth] = levelEOLIndent[depth];
-		
+        mode[depth] = format.getTextMode();
+        if (mode[depth] == TextMode.PRESERVE) {
+            // undo any special indenting and end-of-line management:
+            levelIndent[depth] = null;
+            levelEOL[depth] = null;
+            levelEOLIndent[depth] = null;
+            termEOLIndent[depth] = null;
+        } else {
+            levelIndent[depth] = format.getIndent() == null
+                    ? null : "";
+            levelEOL[depth] = format.getLineSeparator();
+            levelEOLIndent[depth] = levelIndent[depth] == null ?  
+                    null : levelEOL[depth];
+            termEOLIndent[depth] = levelEOLIndent[depth];
+            
+        }
 		ignoreTrAXEscapingPIs[depth] = format.getIgnoreTrAXEscapingPIs();
-		mode[depth] = format.getTextMode();
 		escapeOutput[depth] = true;
 	}
 
