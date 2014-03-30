@@ -98,6 +98,8 @@ public final class Namespace implements Serializable {
 	public static final Namespace XML_NAMESPACE = new Namespace(NS_PREFIX_XML, 
 			NS_URI_XML);
 	
+	private static final Namespace XMLNS_NAMESPACE = new Namespace(NS_PREFIX_XMLNS,
+	        NS_URI_XMLNS);
 	
 	static {
 		// pre-populate the map with the constant namespaces that would 
@@ -111,6 +113,11 @@ public final class Namespace implements Serializable {
 				new ConcurrentHashMap<String, Namespace>();
 		xmap.put(XML_NAMESPACE.getPrefix(), XML_NAMESPACE);
 		namespacemap.put(XML_NAMESPACE.getURI(), xmap);
+
+		final ConcurrentMap<String,Namespace> xnsmap = 
+		        new ConcurrentHashMap<String, Namespace>();
+		xnsmap.put(XMLNS_NAMESPACE.getPrefix(), XMLNS_NAMESPACE);
+		namespacemap.put(XMLNS_NAMESPACE.getURI(), xnsmap);
 	}
 
 	/**
@@ -188,6 +195,7 @@ public final class Namespace implements Serializable {
 					"Namespace URIs must be non-null and non-empty Strings");
 		}
 		
+        // http://www.w3.org/TR/REC-xml-names/#xmlReserved 
 		// The erratum to Namespaces in XML 1.0 that suggests this 
 		// next check is controversial. Not everyone accepts it. 
 		if (NS_URI_XML.equals(uri)) {
@@ -196,10 +204,36 @@ public final class Namespace implements Serializable {
 					"only the '" + NS_PREFIX_XML + "' prefix.");        
 		}
 
+        // http://www.w3.org/TR/REC-xml-names/#xmlReserved 
+        if (NS_URI_XMLNS.equals(uri)) {
+            throw new IllegalNameException(uri, "Namespace URI",
+                    "The " + NS_URI_XMLNS + " must be bound to " +
+                    "only the '" + NS_PREFIX_XMLNS + "' prefix.");        
+        }
+
 		// no namespace found, we validate the prefix
 		final String pfx = prefix == null ? NS_PREFIX_DEFAULT : prefix;
 		
 		String reason;
+		
+        // http://www.w3.org/TR/REC-xml-names/#xmlReserved 
+		// checkNamespacePrefix no longer checks for xml prefix
+		if (NS_PREFIX_XML.equals(pfx)) {
+		    // The xml namespace prefix was in the map. attempts to rebind it are illegal
+		    throw new IllegalNameException(uri, "Namespace prefix",
+                    "The prefix " + NS_PREFIX_XML + " (any case) can only be bound to " +
+                    "only the '" + NS_URI_XML + "' uri.");
+		}
+		
+        // http://www.w3.org/TR/REC-xml-names/#xmlReserved 
+        // checkNamespacePrefix no longer checks for xmlns prefix
+        if (NS_PREFIX_XMLNS.equals(pfx)) {
+            // The xml namespace prefix was in the map. attempts to rebind it are illegal
+            throw new IllegalNameException(uri, "Namespace prefix",
+                    "The prefix " + NS_PREFIX_XMLNS + " (any case) can only be bound to " +
+                    "only the '" + NS_URI_XMLNS + "' uri.");
+        }
+        
 		if ((reason = Verifier.checkNamespacePrefix(pfx)) != null) {
 			throw new IllegalNameException(pfx, "Namespace prefix", reason);
 		}

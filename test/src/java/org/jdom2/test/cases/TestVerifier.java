@@ -256,17 +256,18 @@ public final class TestVerifier {
 
 		//invalid start characters
 		assertNotNull("validated invalid name with startin -", Verifier.checkNamespacePrefix('-' + "test"));
-		assertNotNull("validated invalid name with xmlns", Verifier.checkNamespacePrefix("xmlns"));
 		assertNotNull("validated invalid name with startin :", Verifier.checkNamespacePrefix(':' + "test"));
 		assertNotNull("validated invalid name with starting digit", Verifier.checkNamespacePrefix("9"));
 		assertNotNull("validated invalid name with starting $", Verifier.checkNamespacePrefix("$"));
 		assertNotNull("validated invalid name with starting .", Verifier.checkNamespacePrefix("."));
 		
 		// cannot start with xml (case insensitive).
-		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmlabc"));
-		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmLabc"));
-		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xMlabc"));
-		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("Xmlabc"));
+		// See issue 126: https://github.com/hunterhacker/jdom/issues/126
+//      assertNotNull("validated invalid name with xmlns", Verifier.checkNamespacePrefix("xmlns"));
+//		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmlabc"));
+//		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmLabc"));
+//		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("xMlabc"));
+//		assertNotNull("validated invalid name beginning with xml", Verifier.checkNamespacePrefix("Xmlabc"));
 		
 
 		//valid tests
@@ -282,6 +283,17 @@ public final class TestVerifier {
 		assertNull("invalidated valid name with xml embedded", Verifier.checkNamespacePrefix("txml"));
 		assertNull("invalidated valid name with xml embedded", Verifier.checkNamespacePrefix("xmml"));
 
+		// These tests all used to be NotNull tests, but the Verifier as been changed to pass them
+		// See issue 126: https://github.com/hunterhacker/jdom/issues/126
+		assertNull("invalidated invalid name with xmlns", Verifier.checkNamespacePrefix("xmlns"));
+		assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmlabc"));
+		assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("xmLabc"));
+		assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("xMlabc"));
+		assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("Xmlabc"));
+
+		assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("XML"));
+        assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("XMLNS"));
+        assertNull("invalidated invalid name beginning with xml", Verifier.checkNamespacePrefix("XmL"));
 	}
 
     /**
