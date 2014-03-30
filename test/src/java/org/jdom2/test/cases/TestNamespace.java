@@ -263,6 +263,12 @@ public final class TestNamespace {
 
 	}
 	
+    @Test
+    public void testXMLNamespaceGood() {
+        Namespace ns = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
+        assertTrue(ns == Namespace.XML_NAMESPACE);
+    }
+    
 	@Test
 	public void testXMLNamespacePrefix() {
 		try {
@@ -276,4 +282,77 @@ public final class TestNamespace {
 		}
 	}
 	
+    @Test
+    public void testXMLNamespaceOnlyPrefix() {
+        try {
+            Namespace.getNamespace("other", JDOMConstants.NS_URI_XML);
+            fail("Should not be able to have XML Namespace URI mapped to other prefix.");
+        } catch (IllegalNameException ine) {
+            // good
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("We expect IllegalNameException not " + e.getClass());
+        }
+    }
+    
+    @Test
+    public void testXMLNamespaceDefault() {
+        try {
+            Namespace.getNamespace(JDOMConstants.NS_URI_XML);
+            fail("Should not be able to have XML Namespace URI mapped the default namespace.");
+        } catch (IllegalNameException ine) {
+            // good
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("We expect IllegalNameException not " + e.getClass());
+        }
+    }
+    
+    
+    @Test
+    public void testXMLNSNamespaceGood() {
+        Namespace ns = Namespace.getNamespace("xmlns", "http://www.w3.org/2000/xmlns/");
+        assertTrue("xmlns".equals(ns.getPrefix()));
+    }
+    
+    @Test
+    public void testXMLNSNamespacePrefix() {
+        try {
+            Namespace.getNamespace("xmlns", "not right");
+            fail("Should not be able to redefine 'xmlns' prefix.");
+        } catch (IllegalNameException ine) {
+            // good
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("We expect IllegalNameException not " + e.getClass());
+        }
+    }
+    
+    @Test
+    public void testXMLNSNamespaceOnlyPrefix() {
+        try {
+            Namespace.getNamespace("other", JDOMConstants.NS_URI_XMLNS);
+            fail("Should not be able to have XMLNS Namespace URI mapped to other prefix.");
+        } catch (IllegalNameException ine) {
+            // good
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("We expect IllegalNameException not " + e.getClass());
+        }
+    }
+    
+    @Test
+    public void testXMLNSNamespaceDefault() {
+        try {
+            Namespace.getNamespace(JDOMConstants.NS_URI_XMLNS);
+            fail("Should not be able to have XMLNS Namespace URI mapped the default namespace.");
+        } catch (IllegalNameException ine) {
+            // good
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("We expect IllegalNameException not " + e.getClass());
+        }
+    }
+    
+    
 }
