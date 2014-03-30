@@ -477,7 +477,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     }
     
 	@Override
-	public String outputString(Format format, Document doc) {
+	public String outputDocumentAsString(Format format, Document doc) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			String opta = nodeToString(out.output(doc));
@@ -489,7 +489,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, DocType doctype) {
+	public String outputDocTypeAsString(Format format, DocType doctype) {
 		try {
 			DOMOutputter out = getOutputter(format);
 //			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -504,7 +504,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Element element) {
+	public String outputElementAsString(Format format, Element element) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -519,7 +519,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, List<? extends Content> list) {
+	public String outputListAsString(Format format, List<? extends Content> list) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -534,7 +534,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, CDATA cdata) {
+	public String outputCDataAsString(Format format, CDATA cdata) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -549,7 +549,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Text text) {
+	public String outputTextAsString(Format format, Text text) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -564,7 +564,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Comment comment) {
+	public String outputCommentAsString(Format format, Comment comment) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -579,7 +579,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, ProcessingInstruction pi) {
+	public String outputPIAsString(Format format, ProcessingInstruction pi) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();
@@ -594,7 +594,7 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, EntityRef entity) {
+	public String outputEntityRefAsString(Format format, EntityRef entity) {
 		try {
 			DOMOutputter out = getOutputter(format);
 			org.w3c.dom.Document doc = out.getDOMAdapter().createDocument();

@@ -193,7 +193,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	
 	
 	@Override
-	public String outputString(Format format, Document doc) {
+	public String outputDocumentAsString(Format format, Document doc) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.getStax().output(doc, ow.getStream());
@@ -208,7 +208,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 
 
 	@Override
-	public String outputString(Format format, DocType doctype) {
+	public String outputDocTypeAsString(Format format, DocType doctype) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setDocumentMarkFrom();
@@ -222,7 +222,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Element element) {
+	public String outputElementAsString(Format format, Element element) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setDocumentMarkFrom();
@@ -236,7 +236,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, List<? extends Content> list) {
+	public String outputListAsString(Format format, List<? extends Content> list) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setElementMarkFrom();
@@ -250,7 +250,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, CDATA cdata) {
+	public String outputCDataAsString(Format format, CDATA cdata) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setElementMarkFrom();
@@ -264,7 +264,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Text text) {
+	public String outputTextAsString(Format format, Text text) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setElementMarkFrom();
@@ -278,7 +278,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Comment comment) {
+	public String outputCommentAsString(Format format, Comment comment) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setDocumentMarkFrom();
@@ -292,7 +292,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, ProcessingInstruction pi) {
+	public String outputPIAsString(Format format, ProcessingInstruction pi) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setDocumentMarkFrom();
@@ -306,7 +306,7 @@ public final class TestStAXEventOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, EntityRef entity) {
+	public String outputEntityRefAsString(Format format, EntityRef entity) {
 		OutWrapper ow = new OutWrapper(format);
 		try {
 			ow.setElementMarkFrom();

@@ -819,7 +819,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
     }
     
 	@Override
-	public String outputString(Format format, Document doc) {
+	public String outputDocumentAsString(Format format, Document doc) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -834,7 +834,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, DocType doctype) {
+	public String outputDocTypeAsString(Format format, DocType doctype) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -853,7 +853,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Element element) {
+	public String outputElementAsString(Format format, Element element) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -869,7 +869,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, List<? extends Content> list) {
+	public String outputListAsString(Format format, List<? extends Content> list) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -889,7 +889,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, CDATA cdata) {
+	public String outputCDataAsString(Format format, CDATA cdata) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -909,7 +909,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Text text) {
+	public String outputTextAsString(Format format, Text text) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -929,7 +929,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, Comment comment) {
+	public String outputCommentAsString(Format format, Comment comment) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -949,7 +949,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, ProcessingInstruction pi) {
+	public String outputPIAsString(Format format, ProcessingInstruction pi) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
@@ -969,7 +969,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 	}
 
 	@Override
-	public String outputString(Format format, EntityRef entity) {
+	public String outputEntityRefAsString(Format format, EntityRef entity) {
 		SAXHandler handler = new SAXHandler();
 		SAXOutputter saxout = new SAXOutputter(null, format, handler, handler, 
 				handler, handler, handler);
