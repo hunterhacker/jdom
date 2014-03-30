@@ -539,6 +539,7 @@ final public class Verifier {
 		}
 		
 		// Cannot start with "xml" in any character case
+		/* See Issue 126 - https://github.com/hunterhacker/jdom/issues/126
 		if (prefix.length() >= 3) {
 			if (prefix.charAt(0) == 'x' || prefix.charAt(0) == 'X') {
 				if (prefix.charAt(1) == 'm' || prefix.charAt(1) == 'M') {
@@ -549,6 +550,7 @@ final public class Verifier {
 				}
 			}
 		}
+		*/
 
 		// If we got here, everything is OK
 		return null;
