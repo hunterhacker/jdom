@@ -68,47 +68,47 @@ public final class TestXMLOutputter extends AbstractTestOutputter {
     }
 
     @Override
-	public String outputString(Format format, Document doc) {
+	public String outputDocumentAsString(Format format, Document doc) {
 		return getOutputter(format).outputString(doc);
 	}
 
 	@Override
-	public String outputString(Format format, DocType doctype) {
+	public String outputDocTypeAsString(Format format, DocType doctype) {
 		return getOutputter(format).outputString(doctype);
 	}
 
 	@Override
-	public String outputString(Format format, Element element) {
+	public String outputElementAsString(Format format, Element element) {
 		return getOutputter(format).outputString(element);
 	}
 
 	@Override
-	public String outputString(Format format, List<? extends Content> list) {
+	public String outputListAsString(Format format, List<? extends Content> list) {
 		return getOutputter(format).outputString(list);
 	}
 
 	@Override
-	public String outputString(Format format, CDATA cdata) {
+	public String outputCDataAsString(Format format, CDATA cdata) {
 		return getOutputter(format).outputString(cdata);
 	}
 
 	@Override
-	public String outputString(Format format, Text text) {
+	public String outputTextAsString(Format format, Text text) {
 		return getOutputter(format).outputString(text);
 	}
 
 	@Override
-	public String outputString(Format format, Comment comment) {
+	public String outputCommentAsString(Format format, Comment comment) {
 		return getOutputter(format).outputString(comment);
 	}
 
 	@Override
-	public String outputString(Format format, ProcessingInstruction pi) {
+	public String outputPIAsString(Format format, ProcessingInstruction pi) {
 		return getOutputter(format).outputString(pi);
 	}
 
 	@Override
-	public String outputString(Format format, EntityRef entity) {
+	public String outputEntityRefAsString(Format format, EntityRef entity) {
 		return getOutputter(format).outputString(entity);
 	}
 
