@@ -131,8 +131,8 @@ public class JDOMBean {
     /** file cache **/
     private Map<String, FileInfo> files = new HashMap<String, FileInfo>();
 
-    /** where to locate files **/
-    private File fileRoot;
+//    /** where to locate files **/
+//    private File fileRoot;
 
     /**
      * default constructor, uses "org.apache.xerces.parsers.SAXParser"
@@ -174,21 +174,21 @@ public class JDOMBean {
      * @param root the path (absolute or relative) to the document root
      **/
     public void setFileRoot(String root) {
-        if (!root.endsWith("/")) {
-            root = root + "/";
-        }
-        this.fileRoot = new File(root);
-        System.out.println("fileroot=" + fileRoot);
+//        if (!root.endsWith("/")) {
+//            root = root + "/";
+//        }
+//        this.fileRoot = new File(root);
+//        System.out.println("fileroot=" + fileRoot);
     }
 
     /**
      * @return the path (absolute or relative) to the document root
      **/
     public String getFileRoot() {
-        if (fileRoot == null) { 
+//        if (fileRoot == null) { 
         	return null;
-        }
-        return fileRoot.getAbsolutePath();
+//        }
+//        return fileRoot.getAbsolutePath();
     }
     
     /**
@@ -232,10 +232,10 @@ public class JDOMBean {
     }
 
     private File getFile(String filename) {
-        if (fileRoot == null) {
+//        if (fileRoot == null) {
             return new File(filename);
-        }
-        return new File(fileRoot, filename);
+//        }
+//        return new File(fileRoot, filename);
     }
     
     /**
