@@ -1121,6 +1121,19 @@ public final class TestSAXBuilder {
 	}
 	
 	@Test
+	public void testSplitCDATAinCDATA() throws JDOMException, IOException {
+	    // Note the ]]><![CDATA[ in the middle
+	    String toparse = "<message><![CDATA[  expected:<[[D/0]]]]><![CDATA[> but was:<[null]>  ]]></message>";
+	    
+	    SAXBuilder sb = new SAXBuilder();
+	    Document doc = sb.build(new CharArrayReader(toparse.toCharArray()));
+	    
+	    assertEquals("Should match:   expected:<[[D/0]]> but was:<[null]>", "  expected:<[[D/0]]> but was:<[null]>  " , doc.getRootElement().getValue());
+	    
+	    
+	}
+	
+	@Test
 	public void testParserFactory() throws JDOMException, IOException {
 		if (System.getProperty("org.jdom2.performance") == null) {
 			// for android.
