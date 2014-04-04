@@ -628,7 +628,7 @@ final class ContentList extends AbstractList<Content>
 		return left;
 	}
 	
-	final void sort(final Comparator<? super Content> comp) {
+	public final void sort(final Comparator<? super Content> comp) {
 		final int sz = size;
 		int[] indexes = new int[sz];
 		for (int i = 0 ; i < sz; i++) {
@@ -1238,7 +1238,7 @@ final class ContentList extends AbstractList<Content>
 		}
 		
 
-		final void sort(final Comparator<? super F> comp) {
+		public final void sort(final Comparator<? super F> comp) {
 			// this size() forces a full scan/update of the list.
 			final int sz = size();
 			final int[] indexes = new int[sz];
