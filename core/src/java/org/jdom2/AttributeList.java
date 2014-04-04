@@ -606,7 +606,7 @@ final class AttributeList extends AbstractList<Attribute>
 	 * 
 	 * @param comp The Comparator to use for sorting.
 	 */
-	void sort(Comparator<? super Attribute> comp) {
+	public void sort(Comparator<? super Attribute> comp) {
 		final int sz = size;
 		int[] indexes = new int[sz];
 		for (int i = 0 ; i < sz; i++) {
