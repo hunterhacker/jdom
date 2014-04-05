@@ -1904,6 +1904,9 @@ public class Element extends Content implements Parent {
 	 * parent before detaching first.
 	 * <p>
 	 * This method provides a safe means to conveniently sort the content.
+	 * <p>
+	 * A null comparator will sort the Attributes alphabetically first by prefix,
+	 * then by name
 	 * 
 	 * @param comparator The Comparator to use for the sorting.
 	 */

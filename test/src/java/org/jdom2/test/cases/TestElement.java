@@ -2690,6 +2690,23 @@ public final class TestElement {
 		assertEquals(cdata, emt.getContent(4));
 	}
 	
+    @Test
+    public void testSortContentNullComp() {
+        Element emt = new Element("root");
+        CDATA cdata = new CDATA("XXX");
+        emt.addContent(new Text("d"));
+        emt.addContent(cdata);
+        emt.addContent(new Text("c"));
+        emt.addContent(new Text("b"));
+        emt.addContent(new Text("a"));
+        assertEquals("dXXXcba", emt.getText());
+        
+        emt.sortContent(null);
+        
+        assertEquals("dXXXcba", emt.getText());
+        assertEquals(cdata, emt.getContent(1));
+    }
+    
 	@Test
 	public void testSortElementContent() {
 		final Element emt = new Element("root");
@@ -2828,6 +2845,9 @@ public final class TestElement {
 		final Attribute att3 = new Attribute("three", "003", Namespace.getNamespace("x", "uri1"));
 		final Attribute att4 = new Attribute("four",  "004", Namespace.getNamespace("w", "uri2"));
 		final Attribute att5 = new Attribute("five",  "005", Namespace.getNamespace("v", "uri2"));
+		
+		final Attribute att6 = new Attribute("six",   "006", Namespace.getNamespace("x", "uri1"));
+        
 		emt.setAttribute(att5);
 		emt.setAttribute(att4);
 		emt.setAttribute(att3);
@@ -2892,6 +2912,21 @@ public final class TestElement {
 		// Values are in order
 		checkAttOrder(emt.getAttributes(), att4, att5, att1, att2, att3);
 		
+        // use null sort on attributes... which sorts alphabetically by pfx:name
+        emt.sortAttributes(null);
+        
+        // Values are in order
+        checkAttOrder(emt.getAttributes(), att5, att4, att3, att2, att1);
+
+        emt.setAttribute(att6);
+        
+        checkAttOrder(emt.getAttributes(), att5, att4, att3, att2, att1, att6);
+
+        // alpha should sort att6 to before att3 (same prefix, six comes before three)
+        emt.sortAttributes(null);
+        
+        checkAttOrder(emt.getAttributes(), att5, att4, att6, att3, att2, att1);
+        
 	}
 	
 	@Test
