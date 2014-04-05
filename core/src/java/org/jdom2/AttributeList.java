@@ -86,6 +86,19 @@ final class AttributeList extends AbstractList<Attribute>
 
 	/** The parent Element */
 	private final Element parent;
+	
+	private static final Comparator<Attribute> ATTRIBUTE_NATURAL = new Comparator<Attribute>() {
+
+        @Override
+        public int compare(Attribute a1, Attribute a2) {
+            int pcomp = a1.getNamespacePrefix().compareTo(a2.getNamespacePrefix());
+            if (pcomp != 0) {
+                return pcomp;
+            }
+            return a1.getName().compareTo(a2.getName());
+        }
+	    
+	};
 
 	/**
 	 * Create a new instance of the AttributeList representing <i>parent</i>
@@ -607,6 +620,9 @@ final class AttributeList extends AbstractList<Attribute>
 	 * @param comp The Comparator to use for sorting.
 	 */
 	public void sort(Comparator<? super Attribute> comp) {
+	    if (comp == null) {
+	        comp = ATTRIBUTE_NATURAL;
+	    }
 		final int sz = size;
 		int[] indexes = new int[sz];
 		for (int i = 0 ; i < sz; i++) {

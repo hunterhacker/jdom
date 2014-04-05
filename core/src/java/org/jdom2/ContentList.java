@@ -628,7 +628,22 @@ final class ContentList extends AbstractList<Content>
 		return left;
 	}
 	
+    /**
+     * Sorts this list using the supplied Comparator to compare elements.
+     * 
+     * @param comp - the Comparator used to compare list elements. A null value indicates that the elements' natural ordering should be used
+     * @Since 2.0.6
+     */
+	// @Override - only in Java8
 	public final void sort(final Comparator<? super Content> comp) {
+
+	    if (comp == null) {
+            // sort by the 'natural order', which, there is none.
+            // options, throw exception, or let the current-order represent the natural order.
+            // do nothing is the better alternative.
+            return;
+        }
+
 		final int sz = size;
 		int[] indexes = new int[sz];
 		for (int i = 0 ; i < sz; i++) {
@@ -1238,8 +1253,21 @@ final class ContentList extends AbstractList<Content>
 		}
 		
 
+		/**
+		 * Sorts this list using the supplied Comparator to compare elements.
+		 * 
+		 * @param comp - the Comparator used to compare list elements. A null value indicates that the elements' natural ordering should be used
+         * @Since 2.0.6
+		 */
+		//Not till Java8 @Override
 		public final void sort(final Comparator<? super F> comp) {
 			// this size() forces a full scan/update of the list.
+		    if (comp == null) {
+		        // sort by the 'natural order', which, there is none.
+		        // options, throw exception, or let the current-order represent the natural order.
+		        // do nothing is the better alternative.
+		        return;
+		    }
 			final int sz = size();
 			final int[] indexes = new int[sz];
 			for (int i = 0 ; i < sz; i++) {
