@@ -1094,6 +1094,18 @@ public final class TestSAXBuilder {
 			}
 		}
 	}
+
+	@Test
+    public void testXMLNamesVariants() throws JDOMException, IOException {
+        String toparse = "<xMl:xml xmlns:xMl='MyURI' xml='xml'/>";
+        
+        SAXBuilder sb = new SAXBuilder();
+        Document doc = sb.build(new CharArrayReader(toparse.toCharArray()));
+        
+        assertEquals("Should match:   xml", "xml" , doc.getRootElement().getAttributeValue("xml"));
+        
+        
+    }
 	
 	@Test
 	public void testBuildStringNegativeActualXML() {
