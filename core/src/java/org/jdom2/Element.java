@@ -1509,10 +1509,8 @@ public class Element extends Content implements Parent {
 	 * would have to be obtained with:
 	 * <pre>
 	 * <code>
-	 *   Iterator itr = (currentElement.getChildren()).iterator();
-	 *   while(itr.hasNext()) {
-	 *     Element oneLevelDeep = (Element)itr.next();
-	 *     List twoLevelsDeep = oneLevelDeep.getChildren();
+	 *   for(Element oneLevelDeep : topElement.getChildren()) {
+	 *     List&lt;Element&gt; twoLevelsDeep = oneLevelDeep.getChildren();
 	 *     // Do something with these children
 	 *   }
 	 * </code>
