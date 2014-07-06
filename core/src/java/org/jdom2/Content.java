@@ -54,6 +54,8 @@
 
 package org.jdom2;
 
+import org.jdom2.nodes.Node;
+
 import java.io.*;
 import java.util.Collections;
 import java.util.List;
@@ -75,7 +77,7 @@ import java.util.List;
  * @author Rolf Lear
  */
 public abstract class Content extends CloneBase
-		implements Serializable, NamespaceAware {
+		implements Serializable, NamespaceAware, Node {
 
 	/**
 	 * JDOM2 Serialization. 
@@ -231,12 +233,6 @@ public abstract class Content extends CloneBase
 		return parent.getDocument();
 	}
 
-
-	/**
-	 * Returns the XPath 1.0 string value of this child.
-	 *
-	 * @return xpath string value of this child.
-	 */
 	public abstract String getValue();
 
 	@Override

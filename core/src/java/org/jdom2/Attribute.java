@@ -54,6 +54,8 @@
 
 package org.jdom2;
 
+import org.jdom2.nodes.Node;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +82,7 @@ import java.util.TreeMap;
  * @author  Rolf Lear
  */
 public class Attribute extends CloneBase
-	implements NamespaceAware, Serializable, Cloneable {
+	implements NamespaceAware, Serializable, Cloneable, Node {
 
 	/**
 	 * JDOM 2.0.0 Serialization version. Attribute is simple
@@ -464,6 +466,7 @@ public class Attribute extends CloneBase
 	 *
 	 * @return <code>String</code> - value for this attribute.
 	 */
+    @Override
 	public String getValue() {
 		return value;
 	}
