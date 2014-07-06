@@ -466,7 +466,7 @@ public class Attribute extends CloneBase
 	 *
 	 * @return <code>String</code> - value for this attribute.
 	 */
-    @Override
+	@Override
 	public String getValue() {
 		return value;
 	}
