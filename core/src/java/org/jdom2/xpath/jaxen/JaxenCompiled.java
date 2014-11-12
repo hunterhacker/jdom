@@ -188,7 +188,7 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 		} catch (IllegalArgumentException e) {
 			throw new UnresolvableException("Unable to resolve variable " + 
 					localName + " in namespace '" + namespaceURI + 
-					"' to a vaulue.");
+					"' to a value.");
 		}
 	}
 
