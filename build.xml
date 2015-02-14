@@ -107,8 +107,8 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<property name="jaxen.jar"         value="${lib.dir}/jaxen-1.1.6.jar" />
 	<property name="junit.jar"         value="${lib.dir}/junit-4.8.2.jar" />
 	<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
-	<property name="xalan.jar"         value="${lib.dir}/xalan/xalan-2.7.1.jar" />
-	<property name="xalanser.jar"      value="${lib.dir}/xalan/serializer-2.7.1.jar" />
+	<property name="xalan.jar"         value="${lib.dir}/xalan/xalan-2.7.2.jar" />
+	<property name="xalanser.jar"      value="${lib.dir}/xalan/serializer-2.7.2.jar" />
 
 	<!-- Compilation class path -->
 	<path id="base.class.path">
