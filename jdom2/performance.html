@@ -74,6 +74,50 @@
 	
 	<h2>JDOM 2 Results</h2>
 
+		<hr/>
+	<p/>
+	JDOM 2.0.6 run with Java8u31
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.94ms</td><td>1.77ms</td><td>5.13ms</td><td>1.88ms</td><td>3.30ms</td><td>0.91ms</td><td>6.13ms</td><td>1.88ms</td><td>1.24ms</td><td>9.48ms</td><td>4.99ms</td><td>28.46ms</td><td>6.08ms</td><td>5.48ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.64ms</td><td>1.48ms</td><td>5.08ms</td><td>1.71ms</td><td>3.28ms</td><td>0.93ms</td><td>6.09ms</td><td>2.07ms</td><td>1.28ms</td><td>9.51ms</td><td>4.84ms</td><td>27.92ms</td><td>6.15ms</td><td>5.57ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.93ms</td><td>1.37ms</td><td>5.30ms</td><td>2.01ms</td><td>3.32ms</td><td>0.87ms</td><td>6.00ms</td><td>2.13ms</td><td>1.17ms</td><td>9.43ms</td><td>4.90ms</td><td>27.90ms</td><td>6.18ms</td><td>6.77ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.39ms</td><td>1.17ms</td><td>5.32ms</td><td>2.09ms</td><td>3.27ms</td><td>0.73ms</td><td>6.14ms</td><td>2.28ms</td><td>1.21ms</td><td>10.39ms</td><td>4.84ms</td><td>30.51ms</td><td>8.27ms</td><td>5.54ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.25ms</td><td>1.09ms</td><td>5.17ms</td><td>2.05ms</td><td>3.31ms</td><td>1.02ms</td><td>6.06ms</td><td>2.18ms</td><td>1.21ms</td><td>9.19ms</td><td>4.74ms</td><td>29.06ms</td><td>6.07ms</td><td>5.41ms</td></tr>
+	</table>
+
+	<hr/>
+	<p/>
+	JDOM 2.0.6 run with Java7u21
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.64ms</td><td>1.29ms</td><td>6.52ms</td><td>2.95ms</td><td>3.63ms</td><td>1.16ms</td><td>7.07ms</td><td>2.70ms</td><td>1.22ms</td><td>12.76ms</td><td>4.83ms</td><td>29.25ms</td><td>6.65ms</td><td>5.76ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>4.33ms</td><td>1.99ms</td><td>5.78ms</td><td>2.26ms</td><td>3.48ms</td><td>0.80ms</td><td>6.87ms</td><td>2.52ms</td><td>1.64ms</td><td>10.01ms</td><td>4.84ms</td><td>28.53ms</td><td>6.28ms</td><td>5.79ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.72ms</td><td>1.40ms</td><td>5.69ms</td><td>2.24ms</td><td>3.41ms</td><td>0.97ms</td><td>6.81ms</td><td>2.43ms</td><td>1.35ms</td><td>10.30ms</td><td>4.76ms</td><td>29.08ms</td><td>6.39ms</td><td>5.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.57ms</td><td>1.29ms</td><td>5.64ms</td><td>2.18ms</td><td>3.39ms</td><td>0.96ms</td><td>6.96ms</td><td>2.58ms</td><td>1.52ms</td><td>10.28ms</td><td>4.74ms</td><td>29.05ms</td><td>6.34ms</td><td>5.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.58ms</td><td>1.27ms</td><td>5.57ms</td><td>2.12ms</td><td>3.51ms</td><td>1.14ms</td><td>6.76ms</td><td>2.20ms</td><td>1.65ms</td><td>10.14ms</td><td>4.84ms</td><td>28.46ms</td><td>6.29ms</td><td>5.73ms</td></tr>
+	</table>
+	
+	<hr/>
+	<p/>
+	<strong>RE BASELINE</strong>
+	<p/>
+	JDOM 2.0.5 run with Java7u21 on a new laptop - much faster.
+	<br />
+	<table border="1">
+		<tr><th>Input</th><th>JDOM</th><th>SAX</th><th>SAXJ</th><th>DOM</th><th>DOMJ</th><th>StAXS</th><th>StAXSJ</th><th>StAXE</th><th>StAXEJ</th><th>Scan</th><th>Dump</th><th>Dupe</th><th>XPath</th><th>Checked</th><th>UnChecked</th></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>4.11ms</td><td>1.24ms</td><td>5.77ms</td><td>0.82ms</td><td>3.44ms</td><td>0.58ms</td><td>8.12ms</td><td>1.69ms</td><td>1.43ms</td><td>13.28ms</td><td>6.29ms</td><td>33.67ms</td><td>6.82ms</td><td>7.44ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.92ms</td><td>0.77ms</td><td>6.18ms</td><td>2.03ms</td><td>3.94ms</td><td>0.25ms</td><td>8.12ms</td><td>2.86ms</td><td>1.45ms</td><td>12.29ms</td><td>5.01ms</td><td>29.84ms</td><td>8.91ms</td><td>6.61ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>4.58ms</td><td>1.63ms</td><td>6.58ms</td><td>2.22ms</td><td>4.63ms</td><td>1.75ms</td><td>7.05ms</td><td>2.14ms</td><td>1.45ms</td><td>12.44ms</td><td>5.55ms</td><td>32.19ms</td><td>6.91ms</td><td>6.88ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>3.87ms</td><td>0.28ms</td><td>5.82ms</td><td>2.24ms</td><td>3.51ms</td><td>0.75ms</td><td>7.68ms</td><td>2.77ms</td><td>1.88ms</td><td>11.68ms</td><td>5.67ms</td><td>31.18ms</td><td>6.43ms</td><td>5.78ms</td></tr>
+		<tr><td>273.14KiB</td><td>1.97MiB</td><td>5.48ms</td><td>3.06ms</td><td>6.24ms</td><td>2.57ms</td><td>4.33ms</td><td>1.84ms</td><td>7.32ms</td><td>0.67ms</td><td>1.51ms</td><td>11.10ms</td><td>4.92ms</td><td>33.44ms</td><td>8.05ms</td><td>8.30ms</td></tr>
+	</table>
+	
+	<hr/>
+	<p/>
+	<h2>Preparing for JDOM 2.0.6</h2>
 	<hr/>
 	<p/>
 	JDOM 2.0.5 - run with Java7u7
