@@ -541,7 +541,7 @@ public abstract class AbstractFormattedWalker implements Walker {
 	 * This is important, because only pendingmt can be referenced when analyzing
 	 * the MultiText content.
 	 * @param first
-	 * @return
+	 * @return The updated MultiText containing the correct sequence of Text-like content
 	 */
 	private final MultiText buildMultiText(final boolean first) {
 		// set up a sequence where the next bunch of stuff is text.
