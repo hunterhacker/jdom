@@ -8,12 +8,15 @@ import static org.junit.Assert.assertTrue;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 
-import org.junit.Test;
+import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.junit.Test;
+import org.jdom2.Attribute;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.Namespace;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
@@ -69,6 +72,32 @@ public class TestDOMBuilder {
 	@Test
 	public void testXSDDocument() {
 		checkDOM("/xsdcomplex/input.xml", true);
+	}
+	
+	@Test
+	public void testNoNamespaceDOM() throws Exception {
+		// https://github.com/hunterhacker/jdom/issues/138
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		org.w3c.dom.Document doc = dbFactory.newDocumentBuilder().newDocument();
+		doc.setXmlVersion("1.0");
+
+		org.w3c.dom.Element root = doc.createElement("Document");
+
+		root.setAttribute("xmlns", "urn:iso:foo");
+		root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		root.setAttribute("xsi:schemaLocation", "urn:iso:foo bar.xsd");
+		doc.appendChild(root);
+
+		// The above is a badly-formed DOM document without the correct
+		// namespaceing. The second attribute should use root.setAttributeNS
+		DOMBuilder dbuilder = new DOMBuilder();
+		Document jdoc = dbuilder.build(doc);
+
+		Namespace xsi = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		Attribute att = jdoc.getRootElement().getAttribute("schemaLocation", xsi);
+		assertTrue(att != null);
+		assertTrue("xsi".equals(att.getNamespacePrefix()));
+
 	}
 	
 	private void checkDOM(String resname, boolean xsdvalidate) {
