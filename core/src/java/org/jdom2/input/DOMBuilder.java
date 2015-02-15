@@ -342,7 +342,7 @@ public class DOMBuilder {
 						// Get attribute's namespace
 						Namespace attNS = null;
 						String attURI = att.getNamespaceURI(); 
-						if (attURI == null || NS_URI_DEFAULT.equals(attURI)) {
+						if (attPrefix.isEmpty() && (attURI == null || NS_URI_DEFAULT.equals(attURI))) {
 							attNS = Namespace.NO_NAMESPACE;
 						} else {
 							// various conditions can lead here.
@@ -361,7 +361,17 @@ public class DOMBuilder {
 								// then we re-declare it. If redeclaring it screws up
 								// other attributes in this Element, then the DOM
 								// was broken to start with.
-								attNS = Namespace.getNamespace(attPrefix, attURI);
+								if (attURI == null) {
+									// this can happen when the DOM is created
+									// without being namespace aware. we have a
+									// prefix, but the URI is not embedded in
+									// the Attribute itself. It must be declared
+									// on the element somewhere....
+									// https://github.com/hunterhacker/jdom/issues/138
+									attNS = element.getNamespace(attPrefix);
+								} else {
+									attNS = Namespace.getNamespace(attPrefix, attURI);
+								}
 							} else {
 								// OK, no prefix.
 								// must be a defaulted value from an XSD.
