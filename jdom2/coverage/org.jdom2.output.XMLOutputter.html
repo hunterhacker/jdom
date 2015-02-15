@@ -479,12 +479,12 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">// For normal output</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;1572</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Format myFormat = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;236</td>  <td class="nbHitsCovered">&nbsp;1794</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Format myFormat = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">// The actual XMLOutputProcessor to delegate to.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered">&nbsp;1572</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> XMLOutputProcessor myProcessor = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsCovered">&nbsp;1794</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> XMLOutputProcessor myProcessor = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;240</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
@@ -535,10 +535,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         *        XMLOutputter will use the default XMLOutputProcessor.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;264</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;265</td>  <td class="nbHitsCovered">&nbsp;1572</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> XMLOutputter(Format format, XMLOutputProcessor processor) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered"><a title="Line 266: Conditional coverage 100% (2/2).">&nbsp;1572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 266: Conditional coverage 100% (2/2).">                myFormat = format == <span class="keyword">null</span> ? Format.getRawFormat() : format.clone();</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;267</td>  <td class="nbHitsCovered"><a title="Line 267: Conditional coverage 100% (2/2).">&nbsp;1572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 267: Conditional coverage 100% (2/2).">                myProcessor = processor == <span class="keyword">null</span> ? DEFAULTPROCESSOR : processor;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;268</td>  <td class="nbHitsCovered">&nbsp;1572</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;265</td>  <td class="nbHitsCovered">&nbsp;1794</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> XMLOutputter(Format format, XMLOutputProcessor processor) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsCovered"><a title="Line 266: Conditional coverage 100% (2/2).">&nbsp;1794</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 266: Conditional coverage 100% (2/2).">                myFormat = format == <span class="keyword">null</span> ? Format.getRawFormat() : format.clone();</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;267</td>  <td class="nbHitsCovered"><a title="Line 267: Conditional coverage 100% (2/2).">&nbsp;1794</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 267: Conditional coverage 100% (2/2).">                myProcessor = processor == <span class="keyword">null</span> ? DEFAULTPROCESSOR : processor;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;268</td>  <td class="nbHitsCovered">&nbsp;1794</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;269</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;270</td>  <td class="nbHits">&nbsp;</td>
@@ -551,8 +551,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;274</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> XMLOutputter() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered">&nbsp;821</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;276</td>  <td class="nbHitsCovered">&nbsp;821</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered">&nbsp;979</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;276</td>  <td class="nbHitsCovered">&nbsp;979</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;277</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
@@ -607,8 +607,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;304</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> XMLOutputter(Format format) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered">&nbsp;749</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(format, <span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;306</td>  <td class="nbHitsCovered">&nbsp;749</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;305</td>  <td class="nbHitsCovered">&nbsp;813</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(format, <span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;306</td>  <td class="nbHitsCovered">&nbsp;813</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
@@ -685,7 +685,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;346</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Format getFormat() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;347</td>  <td class="nbHitsCovered">&nbsp;732</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> myFormat;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;347</td>  <td class="nbHitsCovered">&nbsp;886</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> myFormat;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;348</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
@@ -1127,15 +1127,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;579</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(Document doc) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;580</td>  <td class="nbHitsCovered">&nbsp;190</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;580</td>  <td class="nbHitsCovered">&nbsp;209</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;581</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;582</td>  <td class="nbHitsCovered">&nbsp;190</td>  <td class="src"><pre class="src">&nbsp;                        output(doc, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;582</td>  <td class="nbHitsCovered">&nbsp;209</td>  <td class="src"><pre class="src">&nbsp;                        output(doc, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;583</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;584</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;585</td>  <td class="nbHitsCovered">&nbsp;190</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;586</td>  <td class="nbHitsCovered">&nbsp;190</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;585</td>  <td class="nbHitsCovered">&nbsp;209</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;586</td>  <td class="nbHitsCovered">&nbsp;209</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;587</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;588</td>  <td class="nbHits">&nbsp;</td>
@@ -1166,15 +1166,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;601</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(DocType doctype) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;602</td>  <td class="nbHitsCovered">&nbsp;186</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;602</td>  <td class="nbHitsCovered">&nbsp;214</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;603</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;604</td>  <td class="nbHitsCovered">&nbsp;186</td>  <td class="src"><pre class="src">&nbsp;                        output(doctype, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;604</td>  <td class="nbHitsCovered">&nbsp;214</td>  <td class="src"><pre class="src">&nbsp;                        output(doctype, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;605</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;606</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;607</td>  <td class="nbHitsCovered">&nbsp;186</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;608</td>  <td class="nbHitsCovered">&nbsp;186</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;607</td>  <td class="nbHitsCovered">&nbsp;214</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;608</td>  <td class="nbHitsCovered">&nbsp;214</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;609</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;610</td>  <td class="nbHits">&nbsp;</td>
@@ -1205,15 +1205,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;623</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(Element element) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;624</td>  <td class="nbHitsCovered">&nbsp;610</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;624</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;625</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;626</td>  <td class="nbHitsCovered">&nbsp;610</td>  <td class="src"><pre class="src">&nbsp;                        output(element, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;626</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                        output(element, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;627</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;628</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;629</td>  <td class="nbHitsCovered">&nbsp;610</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;630</td>  <td class="nbHitsCovered">&nbsp;610</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;629</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;630</td>  <td class="nbHitsCovered">&nbsp;710</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;631</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;632</td>  <td class="nbHits">&nbsp;</td>
@@ -1254,15 +1254,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;650</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(List&lt;? <span class="keyword">extends</span> Content&gt; list) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;651</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;651</td>  <td class="nbHitsCovered">&nbsp;117</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;652</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                        output(list, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered">&nbsp;117</td>  <td class="src"><pre class="src">&nbsp;                        output(list, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;654</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;655</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;656</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;657</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;656</td>  <td class="nbHitsCovered">&nbsp;117</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;657</td>  <td class="nbHitsCovered">&nbsp;117</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;658</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;659</td>  <td class="nbHits">&nbsp;</td>
@@ -1293,15 +1293,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;672</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(CDATA cdata) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;673</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;673</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;674</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;675</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                        output(cdata, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;675</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                        output(cdata, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;676</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;677</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;678</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;679</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;678</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;679</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;680</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;681</td>  <td class="nbHits">&nbsp;</td>
@@ -1332,15 +1332,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;694</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(Text text) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;695</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;695</td>  <td class="nbHitsCovered">&nbsp;69</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;696</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;697</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                        output(text, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;697</td>  <td class="nbHitsCovered">&nbsp;69</td>  <td class="src"><pre class="src">&nbsp;                        output(text, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;698</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;699</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;700</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;701</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;700</td>  <td class="nbHitsCovered">&nbsp;69</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;701</td>  <td class="nbHitsCovered">&nbsp;69</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;702</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;703</td>  <td class="nbHits">&nbsp;</td>
@@ -1371,15 +1371,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;716</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(Comment comment) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;717</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;717</td>  <td class="nbHitsCovered">&nbsp;52</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;718</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;719</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                        output(comment, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;719</td>  <td class="nbHitsCovered">&nbsp;52</td>  <td class="src"><pre class="src">&nbsp;                        output(comment, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;720</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;721</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;722</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;723</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;722</td>  <td class="nbHitsCovered">&nbsp;52</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;723</td>  <td class="nbHitsCovered">&nbsp;52</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;724</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;725</td>  <td class="nbHits">&nbsp;</td>
@@ -1410,15 +1410,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;738</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(ProcessingInstruction pi) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;739</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;739</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;740</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;741</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                        output(pi, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;741</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                        output(pi, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;742</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;743</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;744</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;745</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;744</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;745</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;746</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;747</td>  <td class="nbHits">&nbsp;</td>
@@ -1449,15 +1449,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;760</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputString(EntityRef entity) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;761</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;761</td>  <td class="nbHitsCovered">&nbsp;40</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;762</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;763</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                        output(entity, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;763</td>  <td class="nbHitsCovered">&nbsp;40</td>  <td class="src"><pre class="src">&nbsp;                        output(entity, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;764</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;765</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;766</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;767</td>  <td class="nbHitsCovered">&nbsp;34</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;766</td>  <td class="nbHitsCovered">&nbsp;40</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;767</td>  <td class="nbHitsCovered">&nbsp;40</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;768</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;769</td>  <td class="nbHits">&nbsp;</td>
@@ -1496,15 +1496,15 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;786</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> String outputElementContentString(Element element) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;787</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;787</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                StringWriter out = <span class="keyword">new</span> StringWriter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;788</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;789</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                        outputElementContent(element, out); <span class="comment">// output() flushes</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;789</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                        outputElementContent(element, out); <span class="comment">// output() flushes</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;790</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (IOException e) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;791</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// swallow - will never happen.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;792</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;793</td>  <td class="nbHitsCovered">&nbsp;9</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;792</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;793</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> out.toString();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;794</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;795</td>  <td class="nbHits">&nbsp;</td>
@@ -1561,9 +1561,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;821</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Document doc, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;822</td>  <td class="nbHitsCovered">&nbsp;365</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, doc);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;823</td>  <td class="nbHitsCovered">&nbsp;364</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;824</td>  <td class="nbHitsCovered">&nbsp;364</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;822</td>  <td class="nbHitsCovered">&nbsp;384</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, doc);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;823</td>  <td class="nbHitsCovered">&nbsp;383</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;824</td>  <td class="nbHitsCovered">&nbsp;383</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;825</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;826</td>  <td class="nbHits">&nbsp;</td>
@@ -1592,9 +1592,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;838</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(DocType doctype, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;839</td>  <td class="nbHitsCovered">&nbsp;226</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, doctype);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;840</td>  <td class="nbHitsCovered">&nbsp;226</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;841</td>  <td class="nbHitsCovered">&nbsp;226</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;839</td>  <td class="nbHitsCovered">&nbsp;254</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, doctype);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;840</td>  <td class="nbHitsCovered">&nbsp;254</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;841</td>  <td class="nbHitsCovered">&nbsp;254</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;842</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;843</td>  <td class="nbHits">&nbsp;</td>
@@ -1629,9 +1629,9 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If this is the root element we could pre-initialize the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;858</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// namespace stack with the namespaces</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;859</td>  <td class="nbHitsCovered">&nbsp;893</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, element);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;860</td>  <td class="nbHitsCovered">&nbsp;893</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;861</td>  <td class="nbHitsCovered">&nbsp;893</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;859</td>  <td class="nbHitsCovered">&nbsp;993</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, element);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;860</td>  <td class="nbHitsCovered">&nbsp;993</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;861</td>  <td class="nbHitsCovered">&nbsp;993</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;862</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;863</td>  <td class="nbHits">&nbsp;</td>
@@ -1670,9 +1670,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> outputElementContent(Element element, Writer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;880</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;881</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, element.getContent());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;882</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;883</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;881</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, element.getContent());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;882</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;883</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;884</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;885</td>  <td class="nbHits">&nbsp;</td>
@@ -1707,9 +1707,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(List&lt;? <span class="keyword">extends</span> Content&gt; list, Writer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;900</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;901</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, list);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;902</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;903</td>  <td class="nbHitsCovered">&nbsp;106</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;901</td>  <td class="nbHitsCovered">&nbsp;125</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, list);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;902</td>  <td class="nbHitsCovered">&nbsp;125</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;903</td>  <td class="nbHitsCovered">&nbsp;125</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;904</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;905</td>  <td class="nbHits">&nbsp;</td>
@@ -1738,9 +1738,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;917</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(CDATA cdata, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;918</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, cdata);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;919</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;920</td>  <td class="nbHitsCovered">&nbsp;56</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;918</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, cdata);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;919</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;920</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;921</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;922</td>  <td class="nbHits">&nbsp;</td>
@@ -1771,9 +1771,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;935</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Text text, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;936</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, text);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;937</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;938</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;936</td>  <td class="nbHitsCovered">&nbsp;77</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, text);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;937</td>  <td class="nbHitsCovered">&nbsp;77</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;938</td>  <td class="nbHitsCovered">&nbsp;77</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;939</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;940</td>  <td class="nbHits">&nbsp;</td>
@@ -1802,9 +1802,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;952</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Comment comment, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;953</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, comment);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;954</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;955</td>  <td class="nbHitsCovered">&nbsp;54</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;953</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, comment);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;954</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;955</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;956</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;957</td>  <td class="nbHits">&nbsp;</td>
@@ -1835,9 +1835,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(ProcessingInstruction pi, Writer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;970</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;971</td>  <td class="nbHitsCovered">&nbsp;89</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, pi);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;972</td>  <td class="nbHitsCovered">&nbsp;89</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;973</td>  <td class="nbHitsCovered">&nbsp;89</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;971</td>  <td class="nbHitsCovered">&nbsp;101</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, pi);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;972</td>  <td class="nbHitsCovered">&nbsp;101</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;973</td>  <td class="nbHitsCovered">&nbsp;101</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;974</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;975</td>  <td class="nbHits">&nbsp;</td>
@@ -1866,9 +1866,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;987</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(EntityRef entity, Writer out) <span class="keyword">throws</span> IOException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;988</td>  <td class="nbHitsCovered">&nbsp;42</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, entity);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;989</td>  <td class="nbHitsCovered">&nbsp;42</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;990</td>  <td class="nbHitsCovered">&nbsp;42</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;988</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, entity);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;989</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                out.flush();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;990</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;991</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;992</td>  <td class="nbHits">&nbsp;</td>
@@ -2047,6 +2047,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 28/04/13 1:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 15/02/15 3:29 PM.</div>
 </body>
 </html>

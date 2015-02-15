@@ -175,9 +175,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> &lt;E&gt; E[] copyOf(<span class="keyword">final</span> E[] source, <span class="keyword">final</span> <span class="keyword">int</span> len) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                @SuppressWarnings(<span class="string">"unchecked"</span>)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;81253</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> E[] dest = (E[])Array.newInstance(source.getClass().getComponentType(), len);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered"><a title="Line 82: Conditional coverage 100% (2/2).">&nbsp;81253</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 82: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;81253</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;81491</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> E[] dest = (E[])Array.newInstance(source.getClass().getComponentType(), len);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered"><a title="Line 82: Conditional coverage 100% (2/2).">&nbsp;81491</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 82: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsCovered">&nbsp;81491</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;85</td>  <td class="nbHits">&nbsp;</td>
@@ -250,9 +250,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span>[] copyOf(<span class="keyword">final</span> <span class="keyword">int</span>[] source, <span class="keyword">final</span> <span class="keyword">int</span> len) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered">&nbsp;961</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span>[] dest = <span class="keyword">new</span> <span class="keyword">int</span>[len];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered"><a title="Line 126: Conditional coverage 100% (2/2).">&nbsp;961</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 126: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered">&nbsp;961</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsCovered">&nbsp;963</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">int</span>[] dest = <span class="keyword">new</span> <span class="keyword">int</span>[len];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;126</td>  <td class="nbHitsCovered"><a title="Line 126: Conditional coverage 100% (2/2).">&nbsp;963</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 126: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered">&nbsp;963</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;128</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;129</td>  <td class="nbHits">&nbsp;</td>
@@ -271,9 +271,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;136</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span>[] copyOf(<span class="keyword">final</span> <span class="keyword">boolean</span>[] source, <span class="keyword">final</span> <span class="keyword">int</span> len) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;137</td>  <td class="nbHitsCovered">&nbsp;191</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">boolean</span>[] dest = <span class="keyword">new</span> <span class="keyword">boolean</span>[len];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsCovered"><a title="Line 138: Conditional coverage 100% (2/2).">&nbsp;191</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 138: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered">&nbsp;191</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;137</td>  <td class="nbHitsCovered">&nbsp;219</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">final</span> <span class="keyword">boolean</span>[] dest = <span class="keyword">new</span> <span class="keyword">boolean</span>[len];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsCovered"><a title="Line 138: Conditional coverage 100% (2/2).">&nbsp;219</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 138: Conditional coverage 100% (2/2).">                System.arraycopy(source, 0, dest, 0, len &lt; source.length ? len : source.length);</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsCovered">&nbsp;219</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> dest;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;140</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
@@ -284,6 +284,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 28/04/13 1:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 15/02/15 3:29 PM.</div>
 </body>
 </html>

@@ -12,7 +12,7 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="org.jdom2.input.DOMBuilder.html">DOMBuilder</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">118/119</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">91%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:91px"><span class="text">56/61</span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.8333333333333335;</span>3.833</td></tr>
+  <tr><td><a href="org.jdom2.input.DOMBuilder.html">DOMBuilder</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">99%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:99px"><span class="text">121/122</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">92%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:92px"><span class="text">60/65</span></div></div></td></tr></table></td><td class="value"><span class="hidden">4.0;</span>4</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -227,7 +227,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;105</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">/** The factory for creating new JDOM objects */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsCovered">&nbsp;502</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> JDOMFactory factory = <span class="keyword">new</span> DefaultJDOMFactory();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsCovered">&nbsp;608</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> JDOMFactory factory = <span class="keyword">new</span> DefaultJDOMFactory();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;108</td>  <td class="nbHits">&nbsp;</td>
@@ -238,8 +238,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         * to build the JDOM content.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered">&nbsp;502</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> DOMBuilder() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsCovered">&nbsp;502</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsCovered">&nbsp;608</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> DOMBuilder() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsCovered">&nbsp;608</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
@@ -289,9 +289,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;139</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Document build(org.w3c.dom.Document domDocument) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                Document doc = factory.document(<span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                buildTree(domDocument, doc, <span class="keyword">null</span>, <span class="keyword">true</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> doc;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                Document doc = factory.document(<span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                buildTree(domDocument, doc, <span class="keyword">null</span>, <span class="keyword">true</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> doc;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;143</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
@@ -310,9 +310,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;151</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.Element build(org.w3c.dom.Element domElement) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered">&nbsp;257</td>  <td class="src"><pre class="src">&nbsp;                Document doc = factory.document(<span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered">&nbsp;257</td>  <td class="src"><pre class="src">&nbsp;                buildTree(domElement, doc, <span class="keyword">null</span>, <span class="keyword">true</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;154</td>  <td class="nbHitsCovered">&nbsp;257</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> doc.getRootElement();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsCovered">&nbsp;307</td>  <td class="src"><pre class="src">&nbsp;                Document doc = factory.document(<span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsCovered">&nbsp;307</td>  <td class="src"><pre class="src">&nbsp;                buildTree(domElement, doc, <span class="keyword">null</span>, <span class="keyword">true</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;154</td>  <td class="nbHitsCovered">&nbsp;307</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> doc.getRootElement();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;155</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
@@ -333,7 +333,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;164</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.CDATA build(org.w3c.dom.CDATASection cdata) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;165</td>  <td class="nbHitsCovered">&nbsp;82</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.cdata(cdata.getNodeValue());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;165</td>  <td class="nbHitsCovered">&nbsp;108</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.cdata(cdata.getNodeValue());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;166</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;167</td>  <td class="nbHits">&nbsp;</td>
@@ -354,7 +354,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.Text build(org.w3c.dom.Text text) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;176</td>  <td class="nbHitsCovered">&nbsp;1700</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.text(text.getNodeValue());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;176</td>  <td class="nbHitsCovered">&nbsp;2032</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.text(text.getNodeValue());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;177</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;178</td>  <td class="nbHits">&nbsp;</td>
@@ -375,7 +375,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;186</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.Comment build(org.w3c.dom.Comment comment) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;187</td>  <td class="nbHitsCovered">&nbsp;136</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.comment(comment.getNodeValue());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;187</td>  <td class="nbHitsCovered">&nbsp;162</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.comment(comment.getNodeValue());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;188</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;189</td>  <td class="nbHits">&nbsp;</td>
@@ -396,7 +396,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;197</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.ProcessingInstruction build(org.w3c.dom.ProcessingInstruction pi) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;59</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.processingInstruction(pi.getTarget(), pi.getData());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;70</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.processingInstruction(pi.getTarget(), pi.getData());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;199</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
@@ -417,7 +417,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.EntityRef build(org.w3c.dom.EntityReference er) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;1064</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.entityRef(er.getNodeName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;1276</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> factory.entityRef(er.getNodeName());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;211</td>  <td class="nbHits">&nbsp;</td>
@@ -438,16 +438,16 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;219</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> org.jdom2.DocType build(org.w3c.dom.DocumentType doctype) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;220</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                String publicID = doctype.getPublicId();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;221</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                String systemID = doctype.getSystemId();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                String internalDTD = doctype.getInternalSubset();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;220</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                String publicID = doctype.getPublicId();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;221</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                String systemID = doctype.getSystemId();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                String internalDTD = doctype.getInternalSubset();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;223</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                DocType docType = factory.docType(doctype.getName());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;225</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                docType.setPublicID(publicID);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                docType.setSystemID(systemID);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;227</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                docType.setInternalSubset(internalDTD);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered">&nbsp;73</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> docType;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                DocType docType = factory.docType(doctype.getName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;225</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                docType.setPublicID(publicID);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                docType.setSystemID(systemID);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;227</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                docType.setInternalSubset(internalDTD);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> docType;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;229</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
@@ -486,87 +486,87 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">boolean</span> atRoot) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Recurse through the tree</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered"><a title="Line 248: Conditional coverage 81% (9/11).">&nbsp;3549</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 248: Conditional coverage 81% (9/11).">                <span class="keyword">switch</span> (node.getNodeType()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered"><a title="Line 248: Conditional coverage 81% (9/11).">&nbsp;4236</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 248: Conditional coverage 81% (9/11).">                <span class="keyword">switch</span> (node.getNodeType()) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;249</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.DOCUMENT_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;250</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NodeList nodes = node.getChildNodes();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsCovered"><a title="Line 251: Conditional coverage 100% (2/2).">&nbsp;114</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 251: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i=0, size=nodes.getLength(); i&lt;size; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;252</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                                        buildTree(nodes.item(i), doc, current, <span class="keyword">true</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;250</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NodeList nodes = node.getChildNodes();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsCovered"><a title="Line 251: Conditional coverage 100% (2/2).">&nbsp;131</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 251: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i=0, size=nodes.getLength(); i&lt;size; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;252</td>  <td class="nbHitsCovered">&nbsp;78</td>  <td class="src"><pre class="src">&nbsp;                                        buildTree(nodes.item(i), doc, current, <span class="keyword">true</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;253</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;254</td>  <td class="nbHitsCovered">&nbsp;46</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;254</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;255</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.ELEMENT_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                String nodeName = node.getNodeName();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;258</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                String prefix = NS_PREFIX_DEFAULT;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;259</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                String localName = nodeName;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;260</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">int</span> colon = nodeName.indexOf(<span class="string">':'</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;261</td>  <td class="nbHitsCovered"><a title="Line 261: Conditional coverage 100% (2/2).">&nbsp;572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 261: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;262</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                        prefix = nodeName.substring(0, colon);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;263</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                        localName = nodeName.substring(colon + 1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                String nodeName = node.getNodeName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;258</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                String prefix = NS_PREFIX_DEFAULT;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;259</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                String localName = nodeName;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;260</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">int</span> colon = nodeName.indexOf(<span class="string">':'</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;261</td>  <td class="nbHitsCovered"><a title="Line 261: Conditional coverage 100% (2/2).">&nbsp;676</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 261: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;262</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                        prefix = nodeName.substring(0, colon);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;263</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                        localName = nodeName.substring(colon + 1);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;264</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;265</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;266</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Get element's namespace</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;267</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                Namespace ns = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;268</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                String uri = node.getNamespaceURI();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;269</td>  <td class="nbHitsCovered"><a title="Line 269: Conditional coverage 100% (2/2).">&nbsp;572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 269: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (uri == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;270</td>  <td class="nbHitsCovered"><a title="Line 270: Conditional coverage 100% (2/2).">&nbsp;539</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 270: Conditional coverage 100% (2/2).">                                        ns = (current == <span class="keyword">null</span>) ? Namespace.NO_NAMESPACE</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;267</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                Namespace ns = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;268</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                String uri = node.getNamespaceURI();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;269</td>  <td class="nbHitsCovered"><a title="Line 269: Conditional coverage 100% (2/2).">&nbsp;676</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 269: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (uri == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;270</td>  <td class="nbHitsCovered"><a title="Line 270: Conditional coverage 100% (2/2).">&nbsp;641</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 270: Conditional coverage 100% (2/2).">                                        ns = (current == <span class="keyword">null</span>) ? Namespace.NO_NAMESPACE</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;271</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        : current.getNamespace(prefix);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;272</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;33</td>  <td class="src"><pre class="src">&nbsp;                                        ns = Namespace.getNamespace(prefix, uri);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                                        ns = Namespace.getNamespace(prefix, uri);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;275</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                Element element = factory.element(localName, ns);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                Element element = factory.element(localName, ns);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;279</td>  <td class="nbHitsCovered"><a title="Line 279: Conditional coverage 100% (2/2).">&nbsp;572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 279: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;279</td>  <td class="nbHitsCovered"><a title="Line 279: Conditional coverage 100% (2/2).">&nbsp;676</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 279: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;280</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="comment">// If at root, set as document root</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered">&nbsp;288</td>  <td class="src"><pre class="src">&nbsp;                                        factory.setRoot(doc, element);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered">&nbsp;342</td>  <td class="src"><pre class="src">&nbsp;                                        factory.setRoot(doc, element);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;282</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                } <span class="keyword">else</span> {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        <span class="comment">// else add to parent element</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;284</td>  <td class="nbHitsCovered">&nbsp;284</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, element);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;284</td>  <td class="nbHitsCovered">&nbsp;334</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, element);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;286</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Add namespaces</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NamedNodeMap attributeList = node.getAttributes();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">int</span> attsize = attributeList.getLength();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NamedNodeMap attributeList = node.getAttributes();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;289</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">int</span> attsize = attributeList.getLength();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered"><a title="Line 291: Conditional coverage 100% (2/2).">&nbsp;790</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 291: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; attsize; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;218</td>  <td class="src"><pre class="src">&nbsp;                                        org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered"><a title="Line 291: Conditional coverage 100% (2/2).">&nbsp;919</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 291: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; attsize; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsCovered">&nbsp;243</td>  <td class="src"><pre class="src">&nbsp;                                        org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;218</td>  <td class="src"><pre class="src">&nbsp;                                        String attname = att.getName();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered"><a title="Line 295: Conditional coverage 100% (2/2).">&nbsp;218</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 295: Conditional coverage 100% (2/2).">                                        <span class="keyword">if</span> (attname.startsWith(NS_PREFIX_XMLNS)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                                                String attPrefix = NS_PREFIX_DEFAULT;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;297</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                                                colon = attname.indexOf(<span class="string">':'</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsCovered"><a title="Line 298: Conditional coverage 100% (2/2).">&nbsp;60</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 298: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                                        attPrefix = attname.substring(colon + 1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;294</td>  <td class="nbHitsCovered">&nbsp;243</td>  <td class="src"><pre class="src">&nbsp;                                        String attname = att.getName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered"><a title="Line 295: Conditional coverage 100% (2/2).">&nbsp;243</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 295: Conditional coverage 100% (2/2).">                                        <span class="keyword">if</span> (attname.startsWith(NS_PREFIX_XMLNS)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                                                String attPrefix = NS_PREFIX_DEFAULT;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;297</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                                                colon = attname.indexOf(<span class="string">':'</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsCovered"><a title="Line 298: Conditional coverage 100% (2/2).">&nbsp;68</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 298: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                                                        attPrefix = attname.substring(colon + 1);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;300</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                                                String attvalue = att.getValue();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;302</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                                                String attvalue = att.getValue();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;                                                Namespace declaredNS =</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsCovered">&nbsp;68</td>  <td class="src"><pre class="src">&nbsp;                                                Namespace declaredNS =</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;305</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                                Namespace.getNamespace(attPrefix, attvalue);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
@@ -581,7 +581,7 @@
   <td class="src"><pre class="src">&nbsp;                                                <span class="comment">// it's been done already, but it probably doesn't</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;311</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                <span class="comment">// matter)</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;312</td>  <td class="nbHitsCovered"><a title="Line 312: Conditional coverage 100% (2/2).">&nbsp;60</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 312: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (prefix.equals(attPrefix)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;312</td>  <td class="nbHitsCovered"><a title="Line 312: Conditional coverage 100% (2/2).">&nbsp;68</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 312: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (prefix.equals(attPrefix)) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;313</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        <span class="comment">// RL: note, it should also be true that uri.equals(attvalue)</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;314</td>  <td class="nbHits">&nbsp;</td>
@@ -590,12 +590,12 @@
   <td class="src"><pre class="src">&nbsp;                                                        <span class="comment">// further, declaredNS should be exactly the same as ns</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;316</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        <span class="comment">// so the following should in fact do nothing.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;21</td>  <td class="src"><pre class="src">&nbsp;                                                        element.setNamespace(declaredNS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;317</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                                                        element.setNamespace(declaredNS);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;319</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;320</td>  <td class="nbHitsCovered">&nbsp;39</td>  <td class="src"><pre class="src">&nbsp;                                                        factory.addNamespaceDeclaration(element, declaredNS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;320</td>  <td class="nbHitsCovered">&nbsp;44</td>  <td class="src"><pre class="src">&nbsp;                                                        factory.addNamespaceDeclaration(element, declaredNS);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;321</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;322</td>  <td class="nbHits">&nbsp;</td>
@@ -606,33 +606,33 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;325</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Add attributes</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered"><a title="Line 326: Conditional coverage 100% (2/2).">&nbsp;790</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 326: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; attsize; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;218</td>  <td class="src"><pre class="src">&nbsp;                                        org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered"><a title="Line 326: Conditional coverage 100% (2/2).">&nbsp;919</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 326: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; attsize; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;243</td>  <td class="src"><pre class="src">&nbsp;                                        org.w3c.dom.Attr att = (org.w3c.dom.Attr) attributeList.item(i);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;328</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;218</td>  <td class="src"><pre class="src">&nbsp;                                        String attname = att.getName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;243</td>  <td class="src"><pre class="src">&nbsp;                                        String attname = att.getName();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;330</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered"><a title="Line 331: Conditional coverage 100% (2/2).">&nbsp;218</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 331: Conditional coverage 100% (2/2).">                                        <span class="keyword">if</span> ( !attname.startsWith(NS_PREFIX_XMLNS)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;332</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                String attPrefix = NS_PREFIX_DEFAULT;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                String attLocalName = attname;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                colon = attname.indexOf(<span class="string">':'</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered"><a title="Line 335: Conditional coverage 100% (2/2).">&nbsp;158</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 335: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                                        attPrefix = attname.substring(0, colon);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                                        attLocalName = attname.substring(colon + 1);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered"><a title="Line 331: Conditional coverage 100% (2/2).">&nbsp;243</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 331: Conditional coverage 100% (2/2).">                                        <span class="keyword">if</span> ( !attname.startsWith(NS_PREFIX_XMLNS)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;332</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                String attPrefix = NS_PREFIX_DEFAULT;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                String attLocalName = attname;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                colon = attname.indexOf(<span class="string">':'</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered"><a title="Line 335: Conditional coverage 100% (2/2).">&nbsp;175</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 335: Conditional coverage 100% (2/2).">                                                <span class="keyword">if</span> (colon &gt;= 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                                                        attPrefix = attname.substring(0, colon);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;62</td>  <td class="src"><pre class="src">&nbsp;                                                        attLocalName = attname.substring(colon + 1);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;338</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;340</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                String attvalue = att.getValue();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;340</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                String attvalue = att.getValue();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;341</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                <span class="comment">// Get attribute's namespace</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                Namespace attNS = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                String attURI = att.getNamespaceURI(); </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;345</td>  <td class="nbHitsUncovered"><a title="Line 345: Conditional coverage 75% (3/4) [each condition: 100%, 50%].">&nbsp;158</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 345: Conditional coverage 75% (3/4) [each condition: 100%, 50%].">                                                <span class="keyword">if</span> (attURI == <span class="keyword">null</span> || NS_URI_DEFAULT.equals(attURI)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;346</td>  <td class="nbHitsCovered">&nbsp;83</td>  <td class="src"><pre class="src">&nbsp;                                                        attNS = Namespace.NO_NAMESPACE;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;343</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                Namespace attNS = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;344</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                String attURI = att.getNamespaceURI(); </pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;345</td>  <td class="nbHitsUncovered"><a title="Line 345: Conditional coverage 83% (5/6) [each condition: 100%, 100%, 50%].">&nbsp;175</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 345: Conditional coverage 83% (5/6) [each condition: 100%, 100%, 50%].">                                                <span class="keyword">if</span> (attPrefix.isEmpty() &amp;&amp; (attURI == <span class="keyword">null</span> || NS_URI_DEFAULT.equals(attURI))) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;346</td>  <td class="nbHitsCovered">&nbsp;91</td>  <td class="src"><pre class="src">&nbsp;                                                        attNS = Namespace.NO_NAMESPACE;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;347</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                } <span class="keyword">else</span> {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;348</td>  <td class="nbHits">&nbsp;</td>
@@ -653,7 +653,7 @@
   <td class="src"><pre class="src">&nbsp;                                                        <span class="comment">// There's also the possibility the DOM contains</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;356</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                        <span class="comment">// garbage.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;357</td>  <td class="nbHitsCovered"><a title="Line 357: Conditional coverage 100% (2/2).">&nbsp;75</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 357: Conditional coverage 100% (2/2).">                                                        <span class="keyword">if</span> (attPrefix.length() &gt; 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;357</td>  <td class="nbHitsCovered"><a title="Line 357: Conditional coverage 100% (2/2).">&nbsp;84</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 357: Conditional coverage 100% (2/2).">                                                        <span class="keyword">if</span> (attPrefix.length() &gt; 0) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;358</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// If the att has a prefix, we can assume that</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;359</td>  <td class="nbHits">&nbsp;</td>
@@ -666,164 +666,181 @@
   <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// other attributes in this Element, then the DOM</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;363</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// was broken to start with.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;364</td>  <td class="nbHitsCovered">&nbsp;53</td>  <td class="src"><pre class="src">&nbsp;                                                                attNS = Namespace.getNamespace(attPrefix, attURI);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;364</td>  <td class="nbHitsCovered"><a title="Line 364: Conditional coverage 100% (2/2).">&nbsp;62</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 364: Conditional coverage 100% (2/2).">                                                                <span class="keyword">if</span> (attURI == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;365</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        } <span class="keyword">else</span> {</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// this can happen when the DOM is created</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;366</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// OK, no prefix.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// without being namespace aware. we have a</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;367</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// must be a defaulted value from an XSD.</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// prefix, but the URI is not embedded in</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;368</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// perhaps we can find the namespace in our</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// the Attribute itself. It must be declared</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;369</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// element's ancestry, and use the prefix from that.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;370</td>  <td class="nbHitsCovered">&nbsp;22</td>  <td class="src"><pre class="src">&nbsp;                                                                HashMap&lt;String, Namespace&gt; tmpmap = <span class="keyword">new</span> HashMap&lt;String, Namespace&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;371</td>  <td class="nbHitsCovered"><a title="Line 371: Conditional coverage 100% (2/2).">&nbsp;22</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 371: Conditional coverage 100% (2/2).">                                                                <span class="keyword">for</span>(Namespace nss : element.getNamespacesInScope()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;372</td>  <td class="nbHitsCovered"><a title="Line 372: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;68</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 372: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                                                        <span class="keyword">if</span> (nss.getPrefix().length() &gt; 0 &amp;&amp; nss.getURI().equals(attURI)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;373</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                                                                attNS = nss;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                                                                <span class="keyword">break</span>;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// on the element somewhere....</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;370</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// https://github.com/hunterhacker/jdom/issues/138</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;371</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                                                        attNS = element.getNamespace(attPrefix);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;372</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;373</td>  <td class="nbHitsCovered">&nbsp;61</td>  <td class="src"><pre class="src">&nbsp;                                                                        attNS = Namespace.getNamespace(attPrefix, attURI);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;374</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;375</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;376</td>  <td class="nbHitsCovered">&nbsp;50</td>  <td class="src"><pre class="src">&nbsp;                                                                        tmpmap.put(nss.getPrefix(), nss);</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                        } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;376</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// OK, no prefix.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;377</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;378</td>  <td class="nbHitsCovered"><a title="Line 378: Conditional coverage 100% (2/2).">&nbsp;22</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 378: Conditional coverage 100% (2/2).">                                                                <span class="keyword">if</span> (attNS == <span class="keyword">null</span>) {</a></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// must be a defaulted value from an XSD.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;378</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// perhaps we can find the namespace in our</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;379</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// we cannot find a 'prevailing' namespace that has a prefix</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;380</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// that is for this namespace.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;381</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// This basically means that there's an XMLSchema, for the</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;382</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// DEFAULT namespace, and there's a defaulted/fixed</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;383</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// attribute definition in the XMLSchema that's targeted</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;384</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// for this namespace,... but, the user has either not</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                <span class="comment">// element's ancestry, and use the prefix from that.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;380</td>  <td class="nbHitsCovered">&nbsp;22</td>  <td class="src"><pre class="src">&nbsp;                                                                HashMap&lt;String, Namespace&gt; tmpmap = <span class="keyword">new</span> HashMap&lt;String, Namespace&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;381</td>  <td class="nbHitsCovered"><a title="Line 381: Conditional coverage 100% (2/2).">&nbsp;22</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 381: Conditional coverage 100% (2/2).">                                                                <span class="keyword">for</span>(Namespace nss : element.getNamespacesInScope()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;382</td>  <td class="nbHitsCovered"><a title="Line 382: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;68</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 382: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                                                        <span class="keyword">if</span> (nss.getPrefix().length() &gt; 0 &amp;&amp; nss.getURI().equals(attURI)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;383</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                                                                attNS = nss;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;384</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                                                                <span class="keyword">break</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;385</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// declared a prefixed version of the namespace, or has</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;386</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// re-declared the same prefix at a lower level with a</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;387</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// different namespace.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;388</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// All of these things are possible.</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;389</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// Create some sort of default prefix.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        <span class="keyword">int</span> cnt = 0;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        String base = <span class="string">"attns"</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;392</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        String pfx = base + cnt;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;393</td>  <td class="nbHitsCovered"><a title="Line 393: Conditional coverage 100% (2/2).">&nbsp;6</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 393: Conditional coverage 100% (2/2).">                                                                        <span class="keyword">while</span> (tmpmap.containsKey(pfx)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;394</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                                                                                cnt++;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;395</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                                                                                pfx = base + cnt;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;396</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;397</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        attNS = Namespace.getNamespace(pfx, attURI);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;386</td>  <td class="nbHitsCovered">&nbsp;50</td>  <td class="src"><pre class="src">&nbsp;                                                                        tmpmap.put(nss.getPrefix(), nss);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;387</td>  <td class="nbHitsCovered">&nbsp;50</td>  <td class="src"><pre class="src">&nbsp;                                                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;388</td>  <td class="nbHitsCovered"><a title="Line 388: Conditional coverage 100% (2/2).">&nbsp;22</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 388: Conditional coverage 100% (2/2).">                                                                <span class="keyword">if</span> (attNS == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;389</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// we cannot find a 'prevailing' namespace that has a prefix</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;390</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// that is for this namespace.</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;391</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// This basically means that there's an XMLSchema, for the</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;392</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// DEFAULT namespace, and there's a defaulted/fixed</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;393</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// attribute definition in the XMLSchema that's targeted</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;394</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// for this namespace,... but, the user has either not</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;395</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// declared a prefixed version of the namespace, or has</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;396</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// re-declared the same prefix at a lower level with a</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;397</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// different namespace.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;398</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                }</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// All of these things are possible.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;399</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;400</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;401</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;402</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                Attribute attribute =</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;403</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                factory.attribute(attLocalName, attvalue, attNS);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;404</td>  <td class="nbHitsCovered">&nbsp;158</td>  <td class="src"><pre class="src">&nbsp;                                                factory.setAttribute(element, attribute);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;405</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        <span class="comment">// Create some sort of default prefix.</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;400</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        <span class="keyword">int</span> cnt = 0;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;401</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        String base = <span class="string">"attns"</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;402</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        String pfx = base + cnt;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;403</td>  <td class="nbHitsCovered"><a title="Line 403: Conditional coverage 100% (2/2).">&nbsp;6</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 403: Conditional coverage 100% (2/2).">                                                                        <span class="keyword">while</span> (tmpmap.containsKey(pfx)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;404</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                                                                                cnt++;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;405</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                                                                                pfx = base + cnt;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;406</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;407</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;407</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                                                        attNS = Namespace.getNamespace(pfx, attURI);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;408</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Recurse on child nodes</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;409</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// The list should never be null nor should it ever contain</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;410</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// null nodes, but some DOM impls are broken</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;411</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NodeList children = node.getChildNodes();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;412</td>  <td class="nbHitsUncovered"><a title="Line 412: Conditional coverage 50% (1/2).">&nbsp;572</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 412: Conditional coverage 50% (1/2).">                                <span class="keyword">if</span> (children != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;413</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">int</span> size = children.getLength();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered"><a title="Line 414: Conditional coverage 100% (2/2).">&nbsp;3750</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 414: Conditional coverage 100% (2/2).">                                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;415</td>  <td class="nbHitsCovered">&nbsp;3178</td>  <td class="src"><pre class="src">&nbsp;                                                org.w3c.dom.Node item = children.item(i);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;416</td>  <td class="nbHitsUncovered"><a title="Line 416: Conditional coverage 50% (1/2).">&nbsp;3178</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 416: Conditional coverage 50% (1/2).">                                                <span class="keyword">if</span> (item != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;417</td>  <td class="nbHitsCovered">&nbsp;3178</td>  <td class="src"><pre class="src">&nbsp;                                                        buildTree(item, doc, element, <span class="keyword">false</span>);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;418</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;419</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;411</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;412</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                Attribute attribute =</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;413</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                factory.attribute(attLocalName, attvalue, attNS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered">&nbsp;175</td>  <td class="src"><pre class="src">&nbsp;                                                factory.setAttribute(element, attribute);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;415</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;420</td>  <td class="nbHitsCovered">&nbsp;572</td>  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;421</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;422</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;416</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;417</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;423</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.TEXT_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;424</td>  <td class="nbHitsCovered">&nbsp;1674</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.Text)node));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;425</td>  <td class="nbHitsCovered">&nbsp;1674</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;426</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;427</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.CDATA_SECTION_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;428</td>  <td class="nbHitsCovered">&nbsp;58</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.CDATASection)node));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;429</td>  <td class="nbHitsCovered">&nbsp;58</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;430</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;418</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// Recurse on child nodes</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;419</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// The list should never be null nor should it ever contain</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;420</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// null nodes, but some DOM impls are broken</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;421</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                org.w3c.dom.NodeList children = node.getChildNodes();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;422</td>  <td class="nbHitsUncovered"><a title="Line 422: Conditional coverage 50% (1/2).">&nbsp;676</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 422: Conditional coverage 50% (1/2).">                                <span class="keyword">if</span> (children != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;423</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">int</span> size = children.getLength();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;424</td>  <td class="nbHitsCovered"><a title="Line 424: Conditional coverage 100% (2/2).">&nbsp;4474</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 424: Conditional coverage 100% (2/2).">                                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; size; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;425</td>  <td class="nbHitsCovered">&nbsp;3798</td>  <td class="src"><pre class="src">&nbsp;                                                org.w3c.dom.Node item = children.item(i);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;426</td>  <td class="nbHitsUncovered"><a title="Line 426: Conditional coverage 50% (1/2).">&nbsp;3798</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 426: Conditional coverage 50% (1/2).">                                                <span class="keyword">if</span> (item != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;427</td>  <td class="nbHitsCovered">&nbsp;3798</td>  <td class="src"><pre class="src">&nbsp;                                                        buildTree(item, doc, element, <span class="keyword">false</span>);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;428</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;429</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;676</td>  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;431</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;432</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered"><a title="Line 433: Conditional coverage 100% (2/2).">&nbsp;21</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 433: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;434</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(doc, build((org.w3c.dom.ProcessingInstruction)node));</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;435</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;436</td>  <td class="nbHitsCovered">&nbsp;14</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, build((org.w3c.dom.ProcessingInstruction)node));</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;433</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.TEXT_NODE:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;434</td>  <td class="nbHitsCovered">&nbsp;1996</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.Text)node));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;435</td>  <td class="nbHitsCovered">&nbsp;1996</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;436</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;437</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered">&nbsp;14</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;439</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.CDATA_SECTION_NODE:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;438</td>  <td class="nbHitsCovered">&nbsp;76</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.CDATASection)node));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;439</td>  <td class="nbHitsCovered">&nbsp;76</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;440</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.COMMENT_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;441</td>  <td class="nbHitsCovered"><a title="Line 441: Conditional coverage 100% (2/2).">&nbsp;116</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 441: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;442</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(doc, build((org.w3c.dom.Comment)node));</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;443</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;444</td>  <td class="nbHitsCovered">&nbsp;104</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, build((org.w3c.dom.Comment)node));</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;441</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;442</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;443</td>  <td class="nbHitsCovered"><a title="Line 443: Conditional coverage 100% (2/2).">&nbsp;24</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 443: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;444</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(doc, build((org.w3c.dom.ProcessingInstruction)node));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;445</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;446</td>  <td class="nbHitsCovered">&nbsp;104</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;446</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, build((org.w3c.dom.ProcessingInstruction)node));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;447</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;448</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;449</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;448</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.ENTITY_REFERENCE_NODE:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsCovered">&nbsp;1044</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.EntityReference)node));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;450</td>  <td class="nbHitsCovered">&nbsp;1044</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;451</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;452</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.ENTITY_NODE:</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;450</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.COMMENT_NODE:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;451</td>  <td class="nbHitsCovered"><a title="Line 451: Conditional coverage 100% (2/2).">&nbsp;138</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 451: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (atRoot) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;452</td>  <td class="nbHitsCovered">&nbsp;14</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(doc, build((org.w3c.dom.Comment)node));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;453</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// ??</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">break</span>;</span></pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;124</td>  <td class="src"><pre class="src">&nbsp;                                        factory.addContent(current, build((org.w3c.dom.Comment)node));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;455</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;456</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.DOCUMENT_TYPE_NODE:</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;456</td>  <td class="nbHitsCovered">&nbsp;124</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;457</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;458</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(doc, build((org.w3c.dom.DocumentType)node));</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;459</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;460</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;461</td>  <td class="nbHitsCovered">&nbsp;3549</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;458</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.ENTITY_REFERENCE_NODE:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;459</td>  <td class="nbHitsCovered">&nbsp;1252</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(current, build((org.w3c.dom.EntityReference)node));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;1252</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;461</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;462</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.ENTITY_NODE:</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;463</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="comment">// ??</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;464</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">break</span>;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;465</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;466</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">case</span> org.w3c.dom.Node.DOCUMENT_TYPE_NODE:</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered">&nbsp;21</td>  <td class="src"><pre class="src">&nbsp;                                factory.addContent(doc, build((org.w3c.dom.DocumentType)node));</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;469</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">break</span>;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;470</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;4236</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;472</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 28/04/13 1:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 15/02/15 3:29 PM.</div>
 </body>
 </html>

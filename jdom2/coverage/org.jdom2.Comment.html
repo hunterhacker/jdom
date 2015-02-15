@@ -145,7 +145,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author  Jason Hunter</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;64</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;65</td>  <td class="nbHitsCovered">&nbsp;1310</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> Comment <span class="keyword">extends</span> Content {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;65</td>  <td class="nbHitsCovered">&nbsp;1352</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> Comment <span class="keyword">extends</span> Content {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;66</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
 <tr>  <td class="numLine">&nbsp;67</td>  <td class="nbHits">&nbsp;</td>
@@ -188,9 +188,9 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Comment(String text) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;1340</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">super</span>(CType.Comment);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsCovered">&nbsp;1340</td>  <td class="src"><pre class="src">&nbsp;                setText(text);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;1338</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;1386</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">super</span>(CType.Comment);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsCovered">&nbsp;1386</td>  <td class="src"><pre class="src">&nbsp;                setText(text);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsCovered">&nbsp;1384</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
@@ -228,7 +228,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> String getText() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered">&nbsp;875</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> text;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsCovered">&nbsp;997</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> text;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;112</td>  <td class="nbHits">&nbsp;</td>
@@ -253,14 +253,14 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Comment setText(String text) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                String reason;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;123</td>  <td class="nbHitsCovered"><a title="Line 123: Conditional coverage 100% (2/2).">&nbsp;1344</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 123: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = Verifier.checkCommentData(text)) != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;123</td>  <td class="nbHitsCovered"><a title="Line 123: Conditional coverage 100% (2/2).">&nbsp;1390</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 123: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> ((reason = Verifier.checkCommentData(text)) != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalDataException(text, <span class="string">"comment"</span>, reason);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;125</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered">&nbsp;1340</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.text = text;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered">&nbsp;1340</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">this</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsCovered">&nbsp;1386</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.text = text;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsCovered">&nbsp;1386</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">this</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;129</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
@@ -287,7 +287,7 @@
   <td class="src"><pre class="src">&nbsp;        @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">protected</span> Comment setParent(Parent parent) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;1289</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (Comment)<span class="keyword">super</span>.setParent(parent);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;1331</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (Comment)<span class="keyword">super</span>.setParent(parent);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
@@ -333,6 +333,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 28/04/13 1:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 15/02/15 3:29 PM.</div>
 </body>
 </html>

@@ -323,15 +323,15 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;154</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">// For normal output</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsCovered">&nbsp;328</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Format myFormat = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsCovered">&nbsp;390</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Format myFormat = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;157</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">// The actual StAXEventProcessor to delegate to.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;328</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> StAXEventProcessor myProcessor = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered">&nbsp;390</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> StAXEventProcessor myProcessor = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsCovered">&nbsp;328</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> XMLEventFactory myEventFactory = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsCovered">&nbsp;390</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> XMLEventFactory myEventFactory = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;161</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
@@ -386,11 +386,11 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         *                   The factory to use to create XMLEvent instances.</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsCovered">&nbsp;328</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> StAXEventOutputter(Format format, StAXEventProcessor processor, XMLEventFactory eventfactory) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered"><a title="Line 189: Conditional coverage 100% (2/2).">&nbsp;328</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 189: Conditional coverage 100% (2/2).">                myFormat = format == <span class="keyword">null</span> ? Format.getRawFormat() : format.clone();</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered"><a title="Line 190: Conditional coverage 100% (2/2).">&nbsp;328</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 190: Conditional coverage 100% (2/2).">                myProcessor = processor == <span class="keyword">null</span> ? DEFAULTPROCESSOR : processor;</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;191</td>  <td class="nbHitsUncovered"><a title="Line 191: Conditional coverage 50% (1/2).">&nbsp;328</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 191: Conditional coverage 50% (1/2).">                myEventFactory = eventfactory == <span class="keyword">null</span> ? DEFAULTEVENTFACTORY : eventfactory;</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered">&nbsp;328</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsCovered">&nbsp;390</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> StAXEventOutputter(Format format, StAXEventProcessor processor, XMLEventFactory eventfactory) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered"><a title="Line 189: Conditional coverage 100% (2/2).">&nbsp;390</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 189: Conditional coverage 100% (2/2).">                myFormat = format == <span class="keyword">null</span> ? Format.getRawFormat() : format.clone();</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered"><a title="Line 190: Conditional coverage 100% (2/2).">&nbsp;390</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 190: Conditional coverage 100% (2/2).">                myProcessor = processor == <span class="keyword">null</span> ? DEFAULTPROCESSOR : processor;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;191</td>  <td class="nbHitsUncovered"><a title="Line 191: Conditional coverage 50% (1/2).">&nbsp;390</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 191: Conditional coverage 50% (1/2).">                myEventFactory = eventfactory == <span class="keyword">null</span> ? DEFAULTEVENTFACTORY : eventfactory;</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered">&nbsp;390</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
@@ -435,8 +435,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;215</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> StAXEventOutputter(Format format) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;323</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(format, <span class="keyword">null</span>, <span class="keyword">null</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;323</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;385</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>(format, <span class="keyword">null</span>, <span class="keyword">null</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;385</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;218</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;219</td>  <td class="nbHits">&nbsp;</td>
@@ -658,10 +658,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;334</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Document doc, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, doc);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;55</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, doc);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;336</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;48</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsCovered">&nbsp;55</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;338</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;339</td>  <td class="nbHits">&nbsp;</td>
@@ -690,10 +690,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;351</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(DocType doctype, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;55</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, doctype);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;352</td>  <td class="nbHitsCovered">&nbsp;66</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, doctype);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;353</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered">&nbsp;55</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered">&nbsp;66</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;355</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;356</td>  <td class="nbHits">&nbsp;</td>
@@ -728,10 +728,10 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// If this is the root element we could pre-initialize the</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;371</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// namespace stack with the namespaces</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;372</td>  <td class="nbHitsCovered">&nbsp;130</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, element);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;372</td>  <td class="nbHitsCovered">&nbsp;155</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, element);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;373</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;130</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;374</td>  <td class="nbHitsCovered">&nbsp;155</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;375</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;376</td>  <td class="nbHits">&nbsp;</td>
@@ -770,10 +770,10 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> outputElementContent(Element element, XMLEventConsumer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;393</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;394</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, element.getContent());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;394</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, element.getContent());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;395</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;397</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;398</td>  <td class="nbHits">&nbsp;</td>
@@ -808,10 +808,10 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(List&lt;? <span class="keyword">extends</span> Content&gt; list, XMLEventConsumer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;413</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, list);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;414</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, list);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;415</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;416</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;416</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;417</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;418</td>  <td class="nbHits">&nbsp;</td>
@@ -840,10 +840,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;430</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(CDATA cdata, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;431</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, cdata);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;431</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, cdata);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;432</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;434</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;435</td>  <td class="nbHits">&nbsp;</td>
@@ -874,10 +874,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;448</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Text text, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, text);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsCovered">&nbsp;29</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, text);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;450</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;451</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;451</td>  <td class="nbHitsCovered">&nbsp;29</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;452</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;453</td>  <td class="nbHits">&nbsp;</td>
@@ -906,10 +906,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;465</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(Comment comment, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;466</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, comment);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;466</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, comment);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;468</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;469</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;470</td>  <td class="nbHits">&nbsp;</td>
@@ -940,10 +940,10 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(ProcessingInstruction pi, XMLEventConsumer out)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;483</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;484</td>  <td class="nbHitsCovered">&nbsp;19</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, pi);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;484</td>  <td class="nbHitsCovered">&nbsp;23</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, pi);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;485</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;486</td>  <td class="nbHitsCovered">&nbsp;19</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;486</td>  <td class="nbHitsCovered">&nbsp;23</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;487</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;488</td>  <td class="nbHits">&nbsp;</td>
@@ -972,10 +972,10 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;500</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> output(EntityRef entity, XMLEventConsumer out) <span class="keyword">throws</span> XMLStreamException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, entity);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;                myProcessor.process(out, myFormat, myEventFactory, entity);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;502</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">//out.flush();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;503</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;503</td>  <td class="nbHitsCovered">&nbsp;12</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;504</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;505</td>  <td class="nbHits">&nbsp;</td>
@@ -1096,6 +1096,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 28/04/13 1:09 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 15/02/15 3:29 PM.</div>
 </body>
 </html>
