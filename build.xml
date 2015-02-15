@@ -375,7 +375,7 @@ For instructions on how to build JDOM, please view the README.txt file.
           description="Creates the class package">
 		<zip destfile="${package}/${jarbase}.zip">
 			<fileset dir="${package}" includes="${jarbase}*.jar" />
-			<fileset dir="${basedir}" includes="lib/xerces* lib/jaxen* lib/xml*" />
+			<fileset dir="${basedir}" includes="lib/xerces* lib/jaxen* lib/xml* lib/xalan/**" />
 			<fileset dir="${basedir}" includes="LICENSE.txt README.txt" />
 		</zip>
 	</target>
