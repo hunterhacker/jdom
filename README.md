@@ -7,6 +7,7 @@ and GitHub repository at https://github.com/hunterhacker/jdom/
 Quick-Start for JDOM
 =====================
 See the github wiki for a Primer on using JDOM:
+
 https://github.com/hunterhacker/jdom/wiki/JDOM2-A-Primer
 
 Also see the web site http://jdom.org/downloads/docs.html.  It has links to
@@ -24,21 +25,21 @@ The only thing that you have to make sure of is that the "JAVA_HOME"
 environment property is set to match the top level directory containing the
 JVM you want to use. For example:
 
-C:\> set JAVA_HOME=C:\jdk1.6
+    C:\> set JAVA_HOME=C:\jdk1.6
 
 or on Mac:
 
-% setenv JAVA_HOME /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
-  (csh)
-> JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home; export JAVA_HOME
-  (ksh, bash)
+	% setenv JAVA_HOME /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
+	  (csh)
+	> JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home; export JAVA_HOME
+	  (ksh, bash)
 
 or on Unix:
 
-% setenv JAVA_HOME /usr/local/java
-  (csh)
-> JAVA_HOME=/usr/java; export JAVA_HOME
-  (ksh, bash)
+	% setenv JAVA_HOME /usr/local/java
+	  (csh)
+	> JAVA_HOME=/usr/java; export JAVA_HOME
+	  (ksh, bash)
 
 That's it!
 
@@ -67,7 +68,7 @@ the two ant properties 'name' and 'version'. The package is called
 creating a file 'build.properties' in the 'top' folder of the JDOM code, and
 it contains the single line (or whatever the appropriate version is):
 
-version=2.0.0
+    version=2.0.0
 
 If your favourite Java IDE happens to be Eclipse, you can run the 'eclipse' ant
 target, and that will configure your Eclipse project to have all the right
