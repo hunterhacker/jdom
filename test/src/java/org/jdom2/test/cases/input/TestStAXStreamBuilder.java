@@ -6,7 +6,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -113,16 +116,39 @@ public class TestStAXStreamBuilder {
 	public void testComplexDocument() {
 		checkStAX("/DOMBuilder/complex.xml", false);
 	}
-	
+
+	@Test
+	public void testReportPrologWsDocument() throws Exception {
+		URLClassLoader classLoader = new URLClassLoader(
+				new URL[] { new File("lib/woodstox-core-5.0.2.jar").toURI().toURL(),
+							new File("lib/stax2-api-3.1.4.jar").toURI().toURL() });
+		
+		checkStAX("/DOMBuilder/report_prolog_ws.xml", false, "javax.xml.stream.XMLInputFactory", classLoader, 5);
+	}
+
 	@Test
 	public void testXSDDocument() {
 		checkStAX("/xsdcomplex/input.xml", false);
 	}
 	
-	private void checkStAX(String resname, boolean expand) {
+	private void checkStAX(String resname, boolean expand)
+	{
+		checkStAX(resname, expand, null, null, -1);
+	}
+	
+	private void checkStAX(String resname, boolean expand, String factoryId, ClassLoader classLoader, int contentSize ) {
 		try {
 			StAXStreamBuilder stxb = new StAXStreamBuilder();
-			XMLInputFactory inputfac = XMLInputFactory.newInstance();
+			XMLInputFactory inputfac;
+			if ( factoryId != null)
+			{
+				inputfac = XMLInputFactory.newInstance( factoryId, classLoader );
+				inputfac.setProperty( "org.codehaus.stax2.reportPrologWhitespace", Boolean.TRUE );
+			}
+			else
+			{
+				inputfac = XMLInputFactory.newInstance();
+			}
 			inputfac.setProperty(
 					"javax.xml.stream.isReplacingEntityReferences", Boolean.valueOf(expand));
 			inputfac.setProperty("http://java.sun.com/xml/stream/properties/report-cdata-event", Boolean.TRUE);
@@ -146,6 +172,11 @@ public class TestStAXStreamBuilder {
 			assertEquals("ROOT SAX to StAXReader", toString(saxroot), toString(staxroot));
 			assertEquals("DOC SAX to StAXReader FragmentList", toString(saxbuild), toString(fragbuild));
 			assertEquals("ROOT SAX to StAXReader FragmentList", toString(saxroot), toString(fragroot));
+			
+			if (contentSize >= 0)
+			{
+				assertEquals( contentSize, staxbuild.getContent().size() );
+			}
 			
 		} catch (Exception e) {
 			UnitTestUtil.failException("Could not parse file '" + resname + "': " + e.getMessage(), e);
