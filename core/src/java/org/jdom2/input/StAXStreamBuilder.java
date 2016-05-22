@@ -161,9 +161,9 @@ public class StAXStreamBuilder {
 					case CDATA:
 						throw new JDOMException("Unexpected XMLStream event at Document level: CDATA");
 					case SPACE:
-						// I have not been able to identify a StAX Stream handler that produces
-						// space data outside the root element, but just in case, we ignore it.
-						break; //throw new JDOMException("Unexpected XMLStream event at Document level: SPACE");
+						// Can happen when XMLInputFactory2.P_REPORT_PROLOG_WHITESPACE is set to true
+						document.addContent(factory.text(stream.getText()));
+						break;
 					case CHARACTERS:
 						final String badtxt = stream.getText();
 						if (!Verifier.isAllXMLWhitespace(badtxt)) {

@@ -826,6 +826,11 @@ public class Document extends CloneBase implements Parent {
 		}
 
 		if (child instanceof Text) {
+			if( "".equals(((Text) child).getTextTrim()))
+			{
+				// only whitespace, not a problem.
+				return;
+			}
 			throw new IllegalAddException("A Text is not allowed at the document root");
 		}
 
