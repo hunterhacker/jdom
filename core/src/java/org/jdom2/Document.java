@@ -826,8 +826,7 @@ public class Document extends CloneBase implements Parent {
 		}
 
 		if (child instanceof Text) {
-			if( "".equals(((Text) child).getTextTrim()))
-			{
+			if(Verifier.isAllXMLWhitespace(((Text) child).getText())) {
 				// only whitespace, not a problem.
 				return;
 			}
