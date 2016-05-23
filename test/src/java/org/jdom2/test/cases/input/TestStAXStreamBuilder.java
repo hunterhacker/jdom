@@ -119,9 +119,12 @@ public class TestStAXStreamBuilder {
 
 	@Test
 	public void testReportPrologWsDocument() throws Exception {
-		URLClassLoader classLoader = new URLClassLoader(
-				new URL[] { new File("lib/woodstox-core-5.0.2.jar").toURI().toURL(),
-							new File("lib/stax2-api-3.1.4.jar").toURI().toURL() });
+		URL wsurl = new File("lib/woodstox-core-5.0.2.jar").toURI().toURL();
+		URL staxurl = new File("lib/stax2-api-3.1.4.jar").toURI().toURL();
+		
+		URLClassLoader classLoader = new URLClassLoader(new URL[] { wsurl, staxurl});
+		
+		System.out.println("Special case prolog whitespace StAX URLs are " + wsurl + " and " + staxurl + ": " + classLoader);
 		
 		checkStAX("/DOMBuilder/report_prolog_ws.xml", false, "javax.xml.stream.XMLInputFactory", classLoader, 5);
 	}
@@ -131,8 +134,7 @@ public class TestStAXStreamBuilder {
 		checkStAX("/xsdcomplex/input.xml", false);
 	}
 	
-	private void checkStAX(String resname, boolean expand)
-	{
+	private void checkStAX(String resname, boolean expand) {
 		checkStAX(resname, expand, null, null, -1);
 	}
 	
