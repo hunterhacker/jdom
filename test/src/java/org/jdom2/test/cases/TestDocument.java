@@ -994,7 +994,6 @@ public final class TestDocument {
 	@Test
 	public void testSPaceInProlog() throws IOException {
 		Document doc = new Document();
-		XMLOutputter out = new XMLOutputter();
 		
 		doc.addContent(new Text(" "));
 		assertTrue(doc.getContentSize() == 1);
@@ -1014,12 +1013,14 @@ public final class TestDocument {
 			// good
 		}
 		
+		XMLOutputter out = new XMLOutputter();
+		out.getFormat().setLineSeparator(LineSeparator.NL);
 		StringWriter sw = new StringWriter();
 		out.output(doc, sw);
 				
 		//System.out.println(sw.toString());
 		
-		assertEquals("Space-in-prolog output", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n <root />\n<!--foo--><!--bar-->\r\n", sw.toString());
+		assertEquals("Space-in-prolog output", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <root />\n<!--foo--><!--bar-->\n", sw.toString());
 	}
 
 //	@Test
