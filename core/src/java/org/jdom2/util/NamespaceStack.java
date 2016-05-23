@@ -260,16 +260,12 @@ public final class NamespaceStack implements Iterable<Namespace> {
 	 * @param left The left side of the range to search <b>INCLUSIVE</b>
 	 * @param right The right side of the range to search <b>EXCLUSIVE</b>
 	 * @param key The Namespace to search for.
-	 * @return the 'insertion point' - the following is copied from the Java
-	 * 			Javadoc for Arrays.binarySearch()
-	 * 		<br><i>
-	 *      index of the search key, if it is contained in the array; otherwise,
-	 *      <code> (-(insertion point) - 1) </code>. The insertion point is
-	 *      defined as the point at which the key would be inserted into the
-	 *      array: the index of the first element greater than the key, or
-	 *      a.length if all elements in the array are less than the specified
-	 *      key. Note that this guarantees that the return value will be >= 0
-	 *      if and only if the key is found.
+	 * @return the 'insertion point' - This return value follows the same convention
+	 *      as the standard Java BinarySearch methods (see the JavaDoc for Arrays.binarySearch().
+	 *      In summary, if the value exists then the return value is the index of the existing value.
+	 *      If the value was not found, then the return value will be negative, and the
+	 *      place where the missing value should be inserted, can be determined by
+	 *      adding 1, and converting back to positive (or converting to positive, and subtracting 1).
 	 *      </i>
 	 */
 	private static final int binarySearch(final Namespace[] data,
