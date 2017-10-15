@@ -87,10 +87,23 @@ import org.jdom2.JDOMException;
 public class XMLReaderXSDFactory extends AbstractReaderXSDFactory {
 	
 	private static final SchemaFactoryProvider xsdschemas = new SchemaFactoryProvider() {
+	    /**
+	     * Use a Thread-Local system to manage SchemaFactory. SchemaFactory is not
+	     * thread-safe, so we need some mechanism to isolate it, and thread-local is
+	     * a logical way because it only creates an instance when needed in each
+	     * thread, and they die when the thread dies. Does not need any
+	     * synchronisation either.
+	     */
+	    private final ThreadLocal<SchemaFactory> schemafactl = new ThreadLocal<SchemaFactory>();
+	    
 		@Override
 		public SchemaFactory getSchemaFactory() {
-			return SchemaFactory.newInstance(
-					XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            SchemaFactory sfac = schemafactl.get();
+            if (sfac == null) {
+                sfac = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                schemafactl.set(sfac);
+            }
+			return sfac;
 		}
 	};
 

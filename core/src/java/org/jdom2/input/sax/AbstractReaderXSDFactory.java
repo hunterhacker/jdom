@@ -104,15 +104,6 @@ public class AbstractReaderXSDFactory extends AbstractReaderSchemaFactory {
 	}
 
 	/**
-	 * Use a Thread-Local system to manage SchemaFactory. SchemaFactory is not
-	 * thread-safe, so we need some mechanism to isolate it, and thread-local is
-	 * a logical way because it only creates an instance when needed in each
-	 * thread, and they die when the thread dies. Does not need any
-	 * synchronisation either.
-	 */
-	private static final ThreadLocal<SchemaFactory> schemafactl = new ThreadLocal<SchemaFactory>();
-	
-	/**
 	 * Compile an array of String URLs in to Sources which are then compiled in
 	 * to a single Schema
 	 * 
@@ -239,11 +230,7 @@ public class AbstractReaderXSDFactory extends AbstractReaderSchemaFactory {
 					"XSD Source for an XML Schema validator");
 		}
 		try {
-			SchemaFactory sfac = schemafactl.get();
-			if (sfac == null) {
-				sfac = sfp.getSchemaFactory();
-				schemafactl.set(sfac);
-			}
+			SchemaFactory sfac = sfp.getSchemaFactory();
 			if (sfac == null) {
 				throw new JDOMException("Unable to create XSDSchema validator.");
 			}
