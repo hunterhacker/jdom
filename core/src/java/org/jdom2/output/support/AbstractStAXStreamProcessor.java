@@ -438,7 +438,7 @@ public abstract class AbstractStAXStreamProcessor
 		}
 		sw.write(">");
 		
-		// DocType does not write it's own EOL
+		// DocType does not write its own EOL
 		// for compatibility reasons. Only
 		// when output from inside a Content set.
 		// write(out, fstack.getLineSeparator());

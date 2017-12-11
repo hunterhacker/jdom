@@ -341,7 +341,7 @@ public final class XMLOutputter implements Cloneable {
 	/**
 	 * Returns the current format in use by the XMLOutputter. Note the Format
 	 * object returned is <b>not</b> a clone of the one used internally, thus,
-	 * an XMLOutputter instance is able to have it's Format changed by changing
+	 * an XMLOutputter instance is able to have its Format changed by changing
 	 * the settings on the Format instance returned by this method.
 	 * 
 	 * @return the current Format instance used by this XMLOutputter.

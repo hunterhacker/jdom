@@ -749,7 +749,7 @@ public class Document extends CloneBase implements Parent {
 
 	/**
 	 * Always returns this Document Instance
-	 * @return 'this' because this Document is it's own Document
+	 * @return 'this' because this Document is its own Document
 	 */
 	@Override
 	public Document getDocument() {

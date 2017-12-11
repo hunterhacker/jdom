@@ -1235,7 +1235,7 @@ public abstract class AbstractTestOutputter {
 			// most test systems use the XMLOutputter in raw mode to output
 			// the results of the conversion. In Raw mode the XMLOutputter will
 			// not make pretty content outside of the root element (but it will
-			// put the XMLDeclaration on it's own line).
+			// put the XMLDeclaration on its own line).
 			// so, in the cases where the actual pretty format is used, we add
 			// this newline after the DocType...
 			pretty.append(lf);

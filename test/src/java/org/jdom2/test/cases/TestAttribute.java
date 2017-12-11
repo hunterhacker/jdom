@@ -720,7 +720,7 @@ public final class TestAttribute {
 	}
 
     /**
- 	 * Test that an Attribute returns it's correct name.
+ 	 * Test that an Attribute returns its correct name.
 	 */
     @Test
 	public void test_TCM__String_getName() {

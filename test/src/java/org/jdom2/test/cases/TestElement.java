@@ -926,7 +926,7 @@ public final class TestElement {
     }
 
     /**
-     * Test that an element returns the reference to it's enclosing document
+     * Test that an element returns the reference to its enclosing document
      */
     @Test
     public void test_TCM__OrgJdomDocument_getDocument() {
@@ -1161,7 +1161,7 @@ public final class TestElement {
     }
 
     /**
-     * Test test that a child element can return it's parent.
+     * Test test that a child element can return its parent.
      */
     @Test
     public void test_TCM__OrgJdomElement_getParent() {
@@ -1642,7 +1642,7 @@ public final class TestElement {
     }
 
     /**
-     * Test that the Element returns it's primary namespace
+     * Test that the Element returns its primary namespace
      */
     @Test
     public void test_TCM__OrgJdomNamespace_getNamespace() {

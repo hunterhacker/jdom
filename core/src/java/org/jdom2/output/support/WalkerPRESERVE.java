@@ -61,7 +61,7 @@ import java.util.NoSuchElementException;
 import org.jdom2.Content;
 
 /**
- * This Walker implementation walks a list of Content in it's original RAW
+ * This Walker implementation walks a list of Content in its original RAW
  * format. There is no text manipulation, and all content will be returned as
  * the input type. In other words, next() will never be null, and text() will
  * always be null.

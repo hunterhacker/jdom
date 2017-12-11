@@ -195,9 +195,9 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	Content removeContent(int index);
 
 	/**
-	 * Obtain a deep, unattached copy of this parent and it's children.
+	 * Obtain a deep, unattached copy of this parent and its children.
 	 *
-	 * @return a deep copy of this parent and it's children.
+	 * @return a deep copy of this parent and its children.
 	 */
 	Object clone();
 

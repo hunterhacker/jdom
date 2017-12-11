@@ -68,7 +68,7 @@ public class LocatedText extends Text implements Located {
 
 	/**
 	 * This constructor creates a new <code>Text</code> node, with the
-	 * supplied string value as it's character content.
+	 * supplied string value as its character content.
 	 *
 	 * @param str the node's character content.
 	 * @throws IllegalDataException if <code>str</code> contains an

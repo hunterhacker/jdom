@@ -719,7 +719,7 @@ public class Attribute extends CloneBase
 	 * 'default' Namespace that is not the empty Namespace (e.g.
 	 * xmlns="someurl") and this Attribute is also in the default Namespace (has
 	 * no prefix - but for Attributes that means the Namespace URL is ""), then
-	 * this Attribute has a different namespace scope from it's parent Element
+	 * this Attribute has a different namespace scope from its parent Element
 	 * because it does not include the 'someurl' Namespace.
 	 * <p>
 	 * In the above conditions (no-prefix Attribute in an Element with a
