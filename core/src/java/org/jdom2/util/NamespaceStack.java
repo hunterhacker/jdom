@@ -551,7 +551,7 @@ public final class NamespaceStack implements Iterable<Namespace> {
 				newscope = ArrayCopy.copyOf(newscope, newscope.length);
 			}
 			// we need to take the Namespace at position 0, and insert it
-			// in it's place later in the array.
+			// in its place later in the array.
 			// we need to take the mns from later in the array, and move it
 			// to the front.
 			final Namespace tmp = newscope[0];

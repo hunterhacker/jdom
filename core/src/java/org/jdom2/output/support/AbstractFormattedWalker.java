@@ -70,7 +70,7 @@ import org.jdom2.output.Format;
  * <p>
  * The JDOM content can be loosely categorised in to 'Text-like' content
  * (consisting of Text, CDATA, and EntityRef), and everything else. This
- * distinction is significant for for this class and it's sub-classes.
+ * distinction is significant for for this class and its sub-classes.
  * <p>
  * There will be text manipulation, and some (but not necessarily 
  * all) Text-like content will be returned as text() instead of next().

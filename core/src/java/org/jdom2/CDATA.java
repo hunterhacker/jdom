@@ -86,7 +86,7 @@ public class CDATA extends Text {
 
 	/**
 	 * This constructor creates a new <code>CDATA</code> node, with the
-	 * supplied string value as it's character content.
+	 * supplied string value as its character content.
 	 *
 	 * @param string the node's character content.
 	 * @throws IllegalDataException if <code>str</code> contains an 

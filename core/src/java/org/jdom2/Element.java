@@ -1707,9 +1707,9 @@ public class Element extends Content implements Parent {
 	 * encountered for this Element then {@link Namespace#NO_NAMESPACE} is
 	 * included.
 	 * </ul> 
-	 * The Element's Namespace scope consist of it's inherited Namespaces and
+	 * The Element's Namespace scope consist of its inherited Namespaces and
 	 * any modifications to that scope derived from the Element itself. If the
-	 * element is detached then it's inherited scope consists of just 
+	 * element is detached then its inherited scope consists of just 
 	 * If an element has no parent then 
 	 * <p>
 	 * Note that the Element's Namespace will always be reported first.

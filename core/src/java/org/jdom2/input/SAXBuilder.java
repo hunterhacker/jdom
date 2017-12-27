@@ -609,7 +609,7 @@ public class SAXBuilder implements SAXEngine {
 	 * XMLReaders that may be created, and these may (depending on SAXBuilder
 	 * usage) be accessed concurrently. It is the responsibility of the JDOM
 	 * user to ensure that if the XMLFilter is not thread-safe then neither the
-	 * SAXBuilder nor any of it's SAXEngines are accessed concurrently.
+	 * SAXBuilder nor any of its SAXEngines are accessed concurrently.
 	 * 
 	 * @param xmlFilter
 	 *        the XMLFilter to use

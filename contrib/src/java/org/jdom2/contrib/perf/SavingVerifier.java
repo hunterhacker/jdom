@@ -261,7 +261,7 @@ final public class SavingVerifier {
 					lowx = false;
 				} else {
 					// Likely this character can't be easily displayed
-					// because it's a control so we use it's hexadecimal 
+					// because it's a control so we use its hexadecimal 
 					// representation in the reason.
 					return String.format("0x%04x is not a legal XML character",
 							(int)text.charAt(i));

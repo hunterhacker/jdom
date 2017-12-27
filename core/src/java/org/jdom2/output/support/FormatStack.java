@@ -66,7 +66,7 @@ import org.jdom2.output.Format.TextMode;
  * <p>
  * This class is intended as a working-class for in the various outputter
  * implementations. It is inly public so that people extending the
- * Abstract*Processor classes can take advantage of it's functionality.
+ * Abstract*Processor classes can take advantage of its functionality.
  * <p>
  * The value this class adds is:
  * <ul>
