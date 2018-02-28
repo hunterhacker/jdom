@@ -427,8 +427,8 @@ final class AttributeList extends AbstractList<Attribute>
 			final String uri = namespace.getURI();
 			for (int i = 0; i < size; i++) {
 				final Attribute att = attributeData[i];
-				if (uri.equals(att.getNamespaceURI()) &&
-						name.equals(att.getName())) {
+				if (att.getNamespaceURI().equals(uri) &&
+						att.getName().equals(name)) {
 					return i;
 				}
 			}
