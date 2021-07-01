@@ -555,9 +555,11 @@ public abstract class AbstractStAXStreamProcessor
 	protected void printElement(final XMLStreamWriter out, final FormatStack fstack,
 			final NamespaceStack nstack, final Element element) throws XMLStreamException {
 
+		final ArrayList<String> restore = new ArrayList<String>();
 		nstack.push(element);
 		try {
 			for (Namespace nsa : nstack.addedForward()) {
+				restore.add(nsa.getPrefix());
 				if (JDOMConstants.NS_PREFIX_DEFAULT.equals(nsa.getPrefix())) {
 					out.setDefaultNamespace(nsa.getURI());
 				} else {
@@ -682,17 +684,20 @@ public abstract class AbstractStAXStreamProcessor
 			}
 
 		} finally {
-			for (Namespace nsr : nstack.addedForward()) {
-				Namespace nsa = nstack.getRebound(nsr.getPrefix());
-				if (nsa != null) {
-					if (JDOMConstants.NS_PREFIX_DEFAULT.equals(nsa.getPrefix())) {
-						out.setDefaultNamespace(nsa.getURI());
-					} else {
-						out.setPrefix(nsa.getPrefix(), nsa.getURI());
+			nstack.pop();
+			for (String pfx : restore) {
+				for (final Namespace nsa : nstack) {
+					if (nsa.getPrefix().equals(pfx)) {
+						if (JDOMConstants.NS_PREFIX_DEFAULT.equals(nsa.getPrefix())) {
+							out.setDefaultNamespace(nsa.getURI());
+						} else {
+							out.setPrefix(nsa.getPrefix(), nsa.getURI());
+						}
+						break;
 					}
 				}
 			}
-			nstack.pop();
+			
 		}
 	}
 

@@ -74,6 +74,7 @@ import java.util.TreeMap;
 import org.jdom2.ContentList.FilterList;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
 import org.jdom2.util.IteratorIterable;
 
 /**
@@ -773,6 +774,8 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param filter <code>Filter</code> to apply
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return <code>List</code> - filtered Element content
 	 */
 	@Override
@@ -796,6 +799,8 @@ public class Element extends Content implements Parent {
 	 * Remove all child content from this parent matching the supplied filter.
 	 *
 	 * @param filter filter to select which content to remove
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return list of the old children detached from this parent
 	 */
 	@Override
@@ -1494,6 +1499,8 @@ public class Element extends Content implements Parent {
 	 * Comments, only Elements with a given name and/or prefix, and so on.
 	 *
 	 * @param filter filter to select which descendants to see
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
@@ -1943,6 +1950,8 @@ public class Element extends Content implements Parent {
 	 * @param <E> The generic type of the Filter used to select the content to
 	 * sort. 
 	 * @param filter The Filter used to select which child content to sort.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @param comparator The Comparator to use for the sorting.
 	 */
 	public <E extends Content> void sortContent(Filter<E> filter, Comparator <? super E> comparator) {
