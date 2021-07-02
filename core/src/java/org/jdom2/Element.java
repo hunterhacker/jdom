@@ -1590,8 +1590,8 @@ public class Element extends Content implements Parent {
 	 * If no elements exist for the specified name and namespace, null is
 	 * returned.
 	 *
-	 * @param cname local name of child element to match
-	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
+	 * @param cname local name of child element to match. A null implies any name
+	 * @param ns <code>Namespace</code> to search within. A null implies any namespace.
 	 * @return the first matching child element, or null if not found
 	 */
 	public Element getChild(final String cname, final Namespace ns) {
