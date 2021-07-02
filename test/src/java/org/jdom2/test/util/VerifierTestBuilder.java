@@ -16,7 +16,6 @@ import org.jdom2.internal.ArrayCopy;
  * @author Rolf Lear
  *
  */
-@SuppressWarnings("javadoc")
 public class VerifierTestBuilder {
 
 	/**

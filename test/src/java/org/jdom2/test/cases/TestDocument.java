@@ -10,6 +10,7 @@ package org.jdom2.test.cases;
 import org.jdom2.*;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -988,6 +989,38 @@ public final class TestDocument {
 		assertTrue(doc.toString().indexOf("tstdoctype") >= 0);
 		assertTrue(doc.toString().indexOf("root") < 0);
 		assertTrue(doc.toString().indexOf("tstelement") >= 0);
+	}
+	
+	@Test
+	public void testSPaceInProlog() throws IOException {
+		Document doc = new Document();
+		
+		doc.addContent(new Text(" "));
+		assertTrue(doc.getContentSize() == 1);
+		doc.addContent(new Element("root"));
+		assertTrue(doc.getContentSize() == 2);
+		doc.addContent(new Text("\n"));
+		assertTrue(doc.getContentSize() == 3);
+		doc.addContent(new Comment("foo"));
+		assertTrue(doc.getContentSize() == 4);
+		doc.addContent(new Comment("bar"));
+		assertTrue(doc.getContentSize() == 5);
+		
+		try {
+			doc.addContent(new Text("bad"));
+			fail("Expected an add of non-space content to fail, but it did not");
+		} catch (IllegalArgumentException e) {
+			// good
+		}
+		
+		XMLOutputter out = new XMLOutputter();
+		out.getFormat().setLineSeparator(LineSeparator.NL);
+		StringWriter sw = new StringWriter();
+		out.output(doc, sw);
+				
+		//System.out.println(sw.toString());
+		
+		assertEquals("Space-in-prolog output", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <root />\n<!--foo--><!--bar-->\n", sw.toString());
 	}
 
 //	@Test

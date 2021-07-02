@@ -101,6 +101,7 @@ import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.UncheckedJDOMFactory;
@@ -609,11 +610,12 @@ public final class TestSAXBuilder {
 			XMLReader reader = sb.createParser();
 			assertNotNull(reader);
 			assertTrue(reader.getFeature(feature));
+			assertNull(reader.getProperty(JDOMConstants.SAX_PROPERTY_DECLARATION_HANDLER));
 			sb.setFeature(feature, false);
 			reader = sb.createParser();
 			assertNotNull(reader);
 			assertFalse(reader.getFeature(feature));
-
+			assertNotNull(reader.getProperty(JDOMConstants.SAX_PROPERTY_DECLARATION_HANDLER));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Could not create parser: " + e.getMessage());

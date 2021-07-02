@@ -58,6 +58,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
 import org.jdom2.util.IteratorIterable;
 
 /**
@@ -150,7 +151,9 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	 * starting at the beginning each time.
 	 * @param <E> The Generic type of the returned content (the Filter's type)
 	 *
-	 * @param  filter filter to apply
+	 * @param  filter filter to apply.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return a list of the content of the parent matching the filter
 	 * @throws IllegalStateException if parent is a Document
 	 *         and the root element is not set
@@ -171,6 +174,8 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	 * @param <E> The Generic type of the content to remove.
 	 *
 	 * @param  filter filter to apply
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return list of the detached children matching the filter
 	 */
 	<E extends Content> List<E> removeContent(Filter<E> filter);
@@ -256,6 +261,8 @@ public interface Parent extends Cloneable, NamespaceAware, Serializable {
 	 * 
 	 * @param <E> The generic type of the returned descendant data
 	 * @param filter filter to select which descendants to see
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return an iterator to walk descendants that match a filter
 	 */
 	<E extends Content> IteratorIterable<E> getDescendants(Filter<E> filter);

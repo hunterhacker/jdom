@@ -82,6 +82,7 @@ import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
+import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.Verifier;
@@ -797,6 +798,11 @@ public class SAXBuilder implements SAXEngine {
 	public void setFeature(final String name, final boolean value) {
 		// Save the specified feature for later.
 		features.put(name, value ? Boolean.TRUE : Boolean.FALSE);
+		if (JDOMConstants.SAX_FEATURE_EXTERNAL_ENT.equals(name)) {
+			// See issue https://github.com/hunterhacker/jdom/issues/189
+			// And PR https://github.com/hunterhacker/jdom/pull/188
+			setExpandEntities(value);
+		}
 		engine = null;
 	}
 

@@ -426,6 +426,8 @@ public class Document extends CloneBase implements Parent {
 	 * </p>
 	 *
 	 * @param filter <code>Filter</code> to apply
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return <code>List</code> - filtered Document content
 	 * @throws IllegalStateException if the root element hasn't been set
 	 */
@@ -452,6 +454,8 @@ public class Document extends CloneBase implements Parent {
 	 * Remove all child content from this parent matching the supplied filter.
 	 *
 	 * @param filter filter to select which content to remove
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return list of the old children detached from this parent
 	 */
 	@Override
@@ -729,6 +733,8 @@ public class Document extends CloneBase implements Parent {
 	 * Comments, only Elements with a given name and/or prefix, and so on.
 	 *
 	 * @param filter filter to select which descendants to see
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
@@ -826,6 +832,10 @@ public class Document extends CloneBase implements Parent {
 		}
 
 		if (child instanceof Text) {
+			if(Verifier.isAllXMLWhitespace(((Text) child).getText())) {
+				// only whitespace, not a problem.
+				return;
+			}
 			throw new IllegalAddException("A Text is not allowed at the document root");
 		}
 

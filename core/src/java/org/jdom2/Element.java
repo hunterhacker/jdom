@@ -74,6 +74,7 @@ import java.util.TreeMap;
 import org.jdom2.ContentList.FilterList;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
 import org.jdom2.util.IteratorIterable;
 
 /**
@@ -773,6 +774,8 @@ public class Element extends Content implements Parent {
 	 * </p>
 	 *
 	 * @param filter <code>Filter</code> to apply
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return <code>List</code> - filtered Element content
 	 */
 	@Override
@@ -796,6 +799,8 @@ public class Element extends Content implements Parent {
 	 * Remove all child content from this parent matching the supplied filter.
 	 *
 	 * @param filter filter to select which content to remove
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return list of the old children detached from this parent
 	 */
 	@Override
@@ -1494,6 +1499,8 @@ public class Element extends Content implements Parent {
 	 * Comments, only Elements with a given name and/or prefix, and so on.
 	 *
 	 * @param filter filter to select which descendants to see
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return an iterator to walk descendants within a filter
 	 */
 	@Override
@@ -1583,8 +1590,8 @@ public class Element extends Content implements Parent {
 	 * If no elements exist for the specified name and namespace, null is
 	 * returned.
 	 *
-	 * @param cname local name of child element to match
-	 * @param ns <code>Namespace</code> to search within. A null implies Namespace.NO_NAMESPACE.
+	 * @param cname local name of child element to match. A null implies any name
+	 * @param ns <code>Namespace</code> to search within. A null implies any namespace.
 	 * @return the first matching child element, or null if not found
 	 */
 	public Element getChild(final String cname, final Namespace ns) {
@@ -1697,7 +1704,10 @@ public class Element extends Content implements Parent {
 	 * <li>The {@link Namespace#XML_NAMESPACE} is added
 	 * <li>The element's namespace is added (commonly 
 	 * {@link Namespace#NO_NAMESPACE})
-	 * <li>All the attributes are inspected and their Namespaces are included
+	 * <li>All the attributes are inspected and for those that have a namespace
+	 * prefix then their Namespaces are included (the "default" namespace for
+	 * attributes is not the same as the "default" namespace for the element that
+	 * attribute is on).
 	 * <li>All Namespaces declared on this Element using
 	 * {@link #addNamespaceDeclaration(Namespace)} are included.
 	 * <li>If the element has a parent then the parent's Namespace scope is
@@ -1708,9 +1718,7 @@ public class Element extends Content implements Parent {
 	 * included.
 	 * </ul> 
 	 * The Element's Namespace scope consist of its inherited Namespaces and
-	 * any modifications to that scope derived from the Element itself. If the
-	 * element is detached then its inherited scope consists of just 
-	 * If an element has no parent then 
+	 * any modifications to that scope derived from the Element itself.
 	 * <p>
 	 * Note that the Element's Namespace will always be reported first.
 	 * <p>
@@ -1743,7 +1751,7 @@ public class Element extends Content implements Parent {
 		if (attributes != null) {
 			for (Attribute att : getAttributes()) {
 				Namespace ns = att.getNamespace();
-				if (!namespaces.containsKey(ns.getPrefix())) {
+				if (!Namespace.NO_NAMESPACE.equals(ns) && !namespaces.containsKey(ns.getPrefix())) {
 					namespaces.put(ns.getPrefix(), ns);
 				}
 			}
@@ -1943,6 +1951,8 @@ public class Element extends Content implements Parent {
 	 * @param <E> The generic type of the Filter used to select the content to
 	 * sort. 
 	 * @param filter The Filter used to select which child content to sort.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @param comparator The Comparator to use for the sorting.
 	 */
 	public <E extends Content> void sortContent(Filter<E> filter, Comparator <? super E> comparator) {

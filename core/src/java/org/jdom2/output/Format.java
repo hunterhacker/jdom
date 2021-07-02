@@ -56,6 +56,7 @@ package org.jdom2.output;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.Locale;
 
 import org.jdom2.IllegalDataException;
 import org.jdom2.Verifier;
@@ -535,14 +536,15 @@ public class Format implements Cloneable {
 
 	}
 	
-	
 	private static final EscapeStrategy chooseStrategy(String encoding) {
 		if ("UTF-8".equalsIgnoreCase(encoding) ||
 				"UTF-16".equalsIgnoreCase(encoding)) {
 			return UTFEscapeStrategy;
 		}
 		
-		if (encoding.toUpperCase().startsWith("ISO-8859-") ||
+		// Note issue #149: https://github.com/hunterhacker/jdom/issues/149
+		// require locale for case conversion to avoid potential security issue.
+		if (encoding.toUpperCase(Locale.ENGLISH).startsWith("ISO-8859-") ||
 				"Latin1".equalsIgnoreCase(encoding)) {
 			return Bits8EscapeStrategy;
 		}

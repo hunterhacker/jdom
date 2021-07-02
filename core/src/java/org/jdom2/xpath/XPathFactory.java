@@ -156,6 +156,10 @@ public abstract class XPathFactory {
 	 * XPathFactory implementations override this method to implement support
 	 * for the JDOM/XPath API.
 	 * <p>
+	 * A Filter is used to coerce resulting XPath data in to a suitable JDOM generic
+	 * type. Note that the {@link Filters} class has a number of predefined, useful
+	 * filters.
+	 * <p>
 	 * <h2>Namespace</h2> XPath expressions are always namespace aware, and
 	 * expect to be able to resolve prefixes to namespace URIs. In XPath
 	 * expressions the prefix "" always resolves to the empty Namespace URI "".
@@ -211,8 +215,10 @@ public abstract class XPathFactory {
 	 * @param expression
 	 *        The XPath expression.
 	 * @param filter
-	 *        The Filter that is used to coerce the xpath result data in to the
+	 *        The Filter that is used to coerce the XPath result data in to the
 	 *        generic-typed results.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @param variables
 	 *        Any variable values that may be referenced from the query. A null
 	 *        value indicates that there are no variables.
@@ -226,6 +232,7 @@ public abstract class XPathFactory {
 	 * @throws IllegalArgumentException
 	 *         if any two Namespace values share the same prefix, or if there is
 	 *         any other reason that the XPath query cannot be compiled.
+	 * @see    org.jdom2.filter.Filters
 	 */
 	public abstract <T> XPathExpression<T> compile(String expression,
 			Filter<T> filter, Map<String, Object> variables,
@@ -242,6 +249,8 @@ public abstract class XPathFactory {
 	 * @param filter
 	 *        The Filter that is used to coerce the xpath result data in to the
 	 *        generic-typed results.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @param variables
 	 *        Any variable values that may be referenced from the query. A null
 	 *        value indicates that there are no variables.
@@ -272,6 +281,8 @@ public abstract class XPathFactory {
 	 * @param filter
 	 *        The Filter that is used to coerce the xpath result data in to the
 	 *        generic-typed results.
+	 *        Note that the {@link Filters} class has a number of predefined, useful
+	 *        filters.
 	 * @return an XPathExpression&lt;T&gt; instance.
 	 * @throws NullPointerException
 	 *         if the query or filter is null

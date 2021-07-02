@@ -326,9 +326,14 @@ For instructions on how to build JDOM, please view the README.txt file.
 		</jar>
 		<jar destfile="${package}/${jarbase}-javadoc.jar" 
 			basedir="${build.javadocs}" includes="**/*" />
+
 		<jar jarfile="${package}/${jarbase}-sources.jar" >
 			<fileset dir="${core.src}" includes="**/*" />
+		</jar>
+		<jar jarfile="${package}/${jarbase}-junit-sources.jar" >
 			<fileset dir="${junit.src}" includes="**/*" />
+		</jar>
+		<jar jarfile="${package}/${jarbase}-contrib-sources.jar" >
 			<fileset dir="${contrib.src}" includes="**/*" />
 		</jar>
 	    	    
