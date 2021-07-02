@@ -466,7 +466,7 @@ public class ElementScanner extends XMLFilterImpl {
 			this.saxHandler = shandler;
 
 			// Allocate (if not provided) and configure the parent parser.
-			if (this.getParent() != null) {
+			if (this.getParent() == null) {
 				setParent(xreader);
 			}
 
