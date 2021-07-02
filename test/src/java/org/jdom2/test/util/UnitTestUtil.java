@@ -385,7 +385,9 @@ public class UnitTestUtil {
 	    			Element eb = (Element)b;
 	    			assertEquals(ea.getName(), eb.getName());
 	    			compare(ea.getAttributes(), eb.getAttributes());
-	    			assertEquals(ea.getNamespacesInScope(), eb.getNamespacesInScope());
+	    			List<Namespace> ean = ea.getNamespacesInScope();
+	    			List<Namespace> ebn = eb.getNamespacesInScope();
+	    			assertEquals(ean, ebn);
 	        		final int sz = ea.getContentSize();
 	        		if (sz != eb.getContentSize()) {
 	        			fail (String.format("Expected %d members but got %d for Element %s", sz, eb.getContentSize(), ea));
