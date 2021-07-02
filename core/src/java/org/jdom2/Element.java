@@ -1704,7 +1704,10 @@ public class Element extends Content implements Parent {
 	 * <li>The {@link Namespace#XML_NAMESPACE} is added
 	 * <li>The element's namespace is added (commonly 
 	 * {@link Namespace#NO_NAMESPACE})
-	 * <li>All the attributes are inspected and their Namespaces are included
+	 * <li>All the attributes are inspected and for those that have a namespace
+	 * prefix then their Namespaces are included (the "default" namespace for
+	 * attributes is not the same as the "default" namespace for the element that
+	 * attribute is on).
 	 * <li>All Namespaces declared on this Element using
 	 * {@link #addNamespaceDeclaration(Namespace)} are included.
 	 * <li>If the element has a parent then the parent's Namespace scope is
@@ -1715,9 +1718,7 @@ public class Element extends Content implements Parent {
 	 * included.
 	 * </ul> 
 	 * The Element's Namespace scope consist of its inherited Namespaces and
-	 * any modifications to that scope derived from the Element itself. If the
-	 * element is detached then its inherited scope consists of just 
-	 * If an element has no parent then 
+	 * any modifications to that scope derived from the Element itself.
 	 * <p>
 	 * Note that the Element's Namespace will always be reported first.
 	 * <p>
@@ -1750,7 +1751,7 @@ public class Element extends Content implements Parent {
 		if (attributes != null) {
 			for (Attribute att : getAttributes()) {
 				Namespace ns = att.getNamespace();
-				if (!namespaces.containsKey(ns.getPrefix())) {
+				if (!Namespace.NO_NAMESPACE.equals(ns) && !namespaces.containsKey(ns.getPrefix())) {
 					namespaces.put(ns.getPrefix(), ns);
 				}
 			}

@@ -599,7 +599,7 @@ public abstract class AbstractStAXStreamReader extends AbstractOutputProcessor i
         switch(currentEvt){
             case START_ELEMENT:
             case END_ELEMENT:
-            	final Iterator<?> it = nsstack.addedForward().iterator();
+            	final Iterator<?> it = nsstack.iterator();
             	int cnt = 0;
             	while (it.hasNext()) {
             		cnt++;
@@ -612,7 +612,7 @@ public abstract class AbstractStAXStreamReader extends AbstractOutputProcessor i
     }
     
     private final Namespace getNamespaceByIndex(int index) {
-    	final Iterator<Namespace> it = nsstack.addedForward().iterator();
+    	final Iterator<Namespace> it = nsstack.iterator();
     	int cnt = 0;
     	while (it.hasNext()) {
     		if (cnt == index) {
