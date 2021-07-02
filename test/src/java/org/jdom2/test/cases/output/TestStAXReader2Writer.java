@@ -15,6 +15,15 @@ import org.jdom2.output.StAXStreamReader;
 
 @SuppressWarnings("javadoc")
 public class TestStAXReader2Writer extends AbstractTestRoundTrip {
+	
+	// ******************************************************************************
+	// ******************************************************************************
+	// StAX is really ugly - it has broken namespace and comment handling
+	// As a result, some of these test cases fail
+	// testComplex - because StAX ignores a Comment content
+	// testNamespaces - because StAX Can't handle redeclaring default Namespace to ""
+	// ******************************************************************************
+	// ******************************************************************************
 
 	@Override
 	Document prepare(Document doc) {
