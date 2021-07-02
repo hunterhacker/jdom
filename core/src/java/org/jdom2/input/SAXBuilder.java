@@ -54,7 +54,6 @@
 
 package org.jdom2.input;
 
-import static org.jdom2.JDOMConstants.SAX_FEATURE_EXTERNAL_ENT;
 import static org.jdom2.JDOMConstants.SAX_PROPERTY_DECLARATION_HANDLER;
 import static org.jdom2.JDOMConstants.SAX_PROPERTY_LEXICAL_HANDLER;
 import static org.jdom2.JDOMConstants.SAX_PROPERTY_LEXICAL_HANDLER_ALT;
@@ -72,7 +71,6 @@ import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLFilter;
@@ -192,9 +190,6 @@ public class SAXBuilder implements SAXEngine {
 
 	/** XMLFilter instance to use */
 	private XMLFilter saxXMLFilter = null;
-
-	/** Whether expansion of entities should occur */
-	private boolean expand = true;
 
 	/** Whether to ignore ignorable whitespace */
 	private boolean ignoringWhite = false;
@@ -336,6 +331,8 @@ public class SAXBuilder implements SAXEngine {
 	 */
 	public SAXBuilder(final XMLReaderJDOMFactory xmlreaderfactory, final SAXHandlerFactory handlerfactory,
 			final JDOMFactory jdomfactory) {
+		// force default state of Expanding DTD entries, ensures features map has entry to support getExpandEntities
+		setExpandEntities(true);
 		this.readerfac = xmlreaderfactory == null
 				? XMLReaders.NONVALIDATING
 				: xmlreaderfactory;
@@ -691,7 +688,7 @@ public class SAXBuilder implements SAXEngine {
 	 */
 	@Override
 	public boolean getExpandEntities() {
-		return expand;
+		return Boolean.TRUE.equals(features.get(JDOMConstants.SAX_FEATURE_EXTERNAL_ENT));
 	}
 
 	/**
@@ -718,7 +715,7 @@ public class SAXBuilder implements SAXEngine {
 	 *        occur.
 	 */
 	public void setExpandEntities(final boolean expand) {
-		this.expand = expand;
+		features.put(JDOMConstants.SAX_FEATURE_EXTERNAL_ENT, expand ? Boolean.TRUE : Boolean.FALSE);
 		engine = null;
 	}
 
@@ -853,7 +850,7 @@ public class SAXBuilder implements SAXEngine {
 		// Create and configure the content handler.
 		final SAXHandler contentHandler = handlerfac.createSAXHandler(jdomfac);
 
-		contentHandler.setExpandEntities(expand);
+		contentHandler.setExpandEntities(getExpandEntities());
 		contentHandler.setIgnoringElementContentWhitespace(ignoringWhite);
 		contentHandler.setIgnoringBoundaryWhitespace(ignoringBoundaryWhite);
 
@@ -982,22 +979,13 @@ public class SAXBuilder implements SAXEngine {
 			internalSetProperty(parser, me.getKey(), me.getValue(), me.getKey());
 		}
 
-		// Set entity expansion
-		// Note SAXHandler can work regardless of how this is set, but when
-		// entity expansion it's worth it to try to tell the parser not to
-		// even bother with external general entities.
-		// Apparently no parsers yet support this feature.
-		// XXX It might make sense to setEntityResolver() with a resolver
-		// that simply ignores external general entities
-		try {
-			if (parser.getFeature(SAX_FEATURE_EXTERNAL_ENT) != expand) {
-				parser.setFeature(SAX_FEATURE_EXTERNAL_ENT, expand);
-			}
-		} catch (final SAXException e) { /* Ignore... */
+		// Set any user-specified features on the parser (always includes entity expansion true/false).
+		for (final Map.Entry<String, Boolean> me : features.entrySet()) {
+			internalSetFeature(parser, me.getKey(), me.getValue().booleanValue(), me.getKey());
 		}
 
 		// Try setting the DeclHandler if entity expansion is off
-		if (!expand) {
+		if (!getExpandEntities()) {
 			try {
 				parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER,
 						contentHandler);
@@ -1007,10 +995,6 @@ public class SAXBuilder implements SAXEngine {
 			} catch (final SAXNotRecognizedException e) {
 				// No lexical reporting available
 			}
-		}
-		// Set any user-specified features on the parser.
-		for (final Map.Entry<String, Boolean> me : features.entrySet()) {
-			internalSetFeature(parser, me.getKey(), me.getValue().booleanValue(), me.getKey());
 		}
 	}
 
@@ -1024,10 +1008,10 @@ public class SAXBuilder implements SAXEngine {
 			parser.setFeature(feature, value);
 		} catch (final SAXNotSupportedException e) {
 			throw new JDOMException(
-					displayName + " feature not supported for SAX driver " + parser.getClass().getName());
+					displayName + " feature " + feature + " not supported for SAX driver " + parser.getClass().getName());
 		} catch (final SAXNotRecognizedException e) {
 			throw new JDOMException(
-					displayName + " feature not recognized for SAX driver " + parser.getClass().getName());
+					displayName + " feature " + feature + " not recognized for SAX driver " + parser.getClass().getName());
 		}
 	}
 
@@ -1043,10 +1027,10 @@ public class SAXBuilder implements SAXEngine {
 			parser.setProperty(property, value);
 		} catch (final SAXNotSupportedException e) {
 			throw new JDOMException(
-					displayName + " property not supported for SAX driver " + parser.getClass().getName());
+					displayName + " property " + property + " not supported for SAX driver " + parser.getClass().getName());
 		} catch (final SAXNotRecognizedException e) {
 			throw new JDOMException(
-					displayName + " property not recognized for SAX driver " + parser.getClass().getName());
+					displayName + " property " + property + " not recognized for SAX driver " + parser.getClass().getName());
 		}
 	}
 

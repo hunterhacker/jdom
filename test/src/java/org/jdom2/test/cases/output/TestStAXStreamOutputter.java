@@ -55,6 +55,13 @@ import org.jdom2.test.util.UnitTestUtil;
 @SuppressWarnings("javadoc")
 public final class TestStAXStreamOutputter extends AbstractTestOutputter {
 
+	// ******************************************************************************
+	// ******************************************************************************
+	// StAX is really ugly - it breaks SurrogatePair handling with non-UTF8 encoding
+	// As a result, some of these test cases fail in Recent Java versions
+	// - most test*Surrogate*Pair tests.
+	// ******************************************************************************
+	// ******************************************************************************
 
 	private static final XMLOutputFactory soutfactory = XMLOutputFactory.newInstance();
 	private static final XMLInputFactory sinfactory = XMLInputFactory.newInstance();

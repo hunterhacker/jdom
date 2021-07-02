@@ -460,7 +460,7 @@ public class StAXStreamWriter implements XMLStreamWriter {
 		if (parent instanceof Element) {
 			if (activetext != null) {
 				activetext.append(chars);
-			} else {
+			} else if (chars.length() > 0) {
 				activetext = factory.text(chars);
 				factory.addContent(parent, activetext);
 			}
