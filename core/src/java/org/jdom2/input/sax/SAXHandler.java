@@ -835,7 +835,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 			final CDATA cdata = currentLocator == null ? factory.cdata(data)
 					: factory.cdata(lastline, lastcol, data);
 			factory.addContent(getCurrentElement(), cdata);
-		} else {
+		} else if (data.length() > 0) {
 			final Text text = currentLocator == null ? factory.text(data)
 					: factory.text(lastline, lastcol, data);
 			factory.addContent(getCurrentElement(), text);
