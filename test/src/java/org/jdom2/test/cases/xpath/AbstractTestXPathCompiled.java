@@ -396,7 +396,7 @@ public abstract class AbstractTestXPathCompiled {
 	public void testNullQuery() {
 		try {
 			getFactory().compile(null, Filters.element());
-			fail("excpected NPE");
+			fail("expected NPE");
 		} catch (NullPointerException noe) {
 			// great
 		}
@@ -406,7 +406,7 @@ public abstract class AbstractTestXPathCompiled {
 	public void testNullFilter() {
 		try {
 			getFactory().compile("/", null);
-			fail("excpected NPE");
+			fail("expected NPE");
 		} catch (NullPointerException noe) {
 			// great
 		}
@@ -416,7 +416,7 @@ public abstract class AbstractTestXPathCompiled {
 	public void testNullNamespace() {
 		try {
 			getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, null, Namespace.XML_NAMESPACE);
-			fail("excpected NPE");
+			fail("expected NPE");
 		} catch (NullPointerException noe) {
 			// great
 		}
@@ -436,7 +436,7 @@ public abstract class AbstractTestXPathCompiled {
 			vars.put(null, "");
 			vars.put("a", "b");
 			getFactory().compile("/", Filters.element(), vars);
-			fail("excpected NPE");
+			fail("expected NPE");
 		} catch (NullPointerException noe) {
 			// great
 		}
@@ -448,7 +448,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfx", "one");
 			Namespace nsb = Namespace.getNamespace("pfx", "two");
 			getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -460,7 +460,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfx", "one");
 			Namespace nsb = Namespace.getNamespace("", "two");
 			getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -475,7 +475,7 @@ public abstract class AbstractTestXPathCompiled {
 	
 	@Test
 	public void testRedeclareNoPrefixMessageDifferentToPrefix() {
-		// redeclare a namespace, and the defalt namespace. The Default versions should have a
+		// redeclare a namespace, and the default namespace. The Default versions should have a
 		// different message
 		Namespace nsa = Namespace.getNamespace("pfx", "one");
 		Namespace nsb = Namespace.getNamespace("pfx", "two");
@@ -487,7 +487,7 @@ public abstract class AbstractTestXPathCompiled {
 		try {
 			// cannot redeclare "" namespace prefix.
 			getFactory().compile("/", Filters.element(), null, Namespace.NO_NAMESPACE, nsd);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException iae) {
 			ma = iae.getMessage();
 		}
@@ -495,7 +495,7 @@ public abstract class AbstractTestXPathCompiled {
 		try {
 			// cannot redeclare "pfx" namespace prefix.
 			getFactory().compile("/", Filters.element(), null, nsa, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException iae) {
 			mb = iae.getMessage();
 		}
@@ -512,7 +512,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfa", "ns");
 			Namespace nsb = Namespace.getNamespace("pfb", "ns");
 			getFactory().compile("/", Filters.element(), vars, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -527,7 +527,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfa", "ns");
 			Namespace nsb = Namespace.getNamespace("pfb", "ns");
 			getFactory().compile("/", Filters.element(), vars, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -542,7 +542,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfa", "ns");
 			Namespace nsb = Namespace.getNamespace("pfb", "ns");
 			getFactory().compile("/", Filters.element(), vars, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -557,7 +557,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfa", "ns");
 			Namespace nsb = Namespace.getNamespace("pfb", "ns");
 			getFactory().compile("/", Filters.element(), vars, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}
@@ -590,7 +590,7 @@ public abstract class AbstractTestXPathCompiled {
 			Namespace nsa = Namespace.getNamespace("pfa", "ns");
 			Namespace nsb = Namespace.getNamespace("pfb", "ns");
 			getFactory().compile("/", Filters.element(), vars, Namespace.NO_NAMESPACE, nsa, Namespace.XML_NAMESPACE, nsb);
-			fail("excpected IAE");
+			fail("expected IAE");
 		} catch (IllegalArgumentException noe) {
 			// great
 		}

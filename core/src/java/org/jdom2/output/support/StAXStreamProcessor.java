@@ -182,7 +182,7 @@ public interface StAXStreamProcessor {
 	public abstract void process(XMLStreamWriter out, Format format, CDATA cdata) throws XMLStreamException;
 
 	/**
-	 * Print out a <code>{@link Text}</code> node. Perfoms the necessary entity
+	 * Print out a <code>{@link Text}</code> node. Performs the necessary entity
 	 * escaping and whitespace stripping.
 	 * 
 	 * @param out

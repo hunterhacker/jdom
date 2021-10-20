@@ -101,7 +101,7 @@ public class AbstractTestFilter {
 		@Override
 		public boolean isValid(Object c) {
 			// do not want to do short-circuit || logic.
-			// Make seperate statements
+			// Make separate statements
 			boolean one = onecallback.isValid(c);
 			boolean two = twocallback.isValid(c);
 			return one && two;
@@ -117,7 +117,7 @@ public class AbstractTestFilter {
 		@Override
 		public boolean isValid(Object c) {
 			// do not want to do short-circuit || logic.
-			// Make seperate statements
+			// Make separate statements
 			boolean one = onecallback.isValid(c);
 			boolean two = twocallback.isValid(c);
 			return one || two;

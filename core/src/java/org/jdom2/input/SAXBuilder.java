@@ -659,7 +659,7 @@ public class SAXBuilder implements SAXEngine {
 	}
 
 	/**
-	 * Specifies whether or not the parser should elminate boundary whitespace,
+	 * Specifies whether or not the parser should eliminate boundary whitespace,
 	 * a term that indicates whitespace-only text between element tags. This
 	 * feature is a lot like
 	 * {@link #setIgnoringElementContentWhitespace(boolean)} but this feature is

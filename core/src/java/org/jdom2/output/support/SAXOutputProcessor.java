@@ -199,7 +199,7 @@ public interface SAXOutputProcessor {
 			List<? extends Content> list) throws JDOMException;
 
 	/**
-	 * This will handle printing out a list of nodes thats encapsulated in
+	 * This will handle printing out a list of nodes that is encapsulated in
 	 * start/end Document SAX events. This can be useful for printing the
 	 * content of an element that contains HTML, like
 	 * "&lt;description&gt;JDOM is &lt;b&gt;fun&gt;!&lt;/description&gt;".
@@ -238,7 +238,7 @@ public interface SAXOutputProcessor {
 			throws JDOMException;
 
 	/**
-	 * Print out a <code>{@link Text}</code> node. Perfoms the necessary entity
+	 * Print out a <code>{@link Text}</code> node. Performs the necessary entity
 	 * escaping and whitespace stripping.
 	 * 
 	 * @param out

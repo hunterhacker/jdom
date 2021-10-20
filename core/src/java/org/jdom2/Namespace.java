@@ -141,7 +141,7 @@ public final class Namespace implements Serializable {
 		// 1. avoid having to create a new NamespaceKey for each query.
 		// 2. avoid a 'big' synchronisation bottleneck in the Namespace class.
 		// 3. no-memory-lookup for pre-existing Namespaces... (avoid 'new' and
-		//    most String methods that allocte memory (like trim())
+		//    most String methods that allocate memory (like trim())
 
 		if (uri == null) {
 			if (prefix == null || NS_PREFIX_DEFAULT.equals(prefix)) {

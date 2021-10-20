@@ -169,7 +169,7 @@ public class Schema {
      * @param  type     the schema type.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -304,7 +304,7 @@ public class Schema {
      * @return the compiled schema.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -327,7 +327,7 @@ public class Schema {
      * @return the compiled schema.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -353,7 +353,7 @@ public class Schema {
      * @return the compiled schema.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -376,7 +376,7 @@ public class Schema {
      * @return the compiled schema.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -393,14 +393,14 @@ public class Schema {
      * according to the specified schema type and returns a compiled
      * schema object.
      *
-     * @param  source   the SAX inout source to read the schema
+     * @param  source   the SAX input source to read the schema
      *                  definition from.
      * @param  type     the schema type.
      *
      * @return the compiled schema.
      *
      * @throws JDOMException   if the schema document can not be
-     *                         parsed according to the specfied type.
+     *                         parsed according to the specified type.
      * @throws IOException     if an I/O error occurred while reading
      *                         the schema document.
      */
@@ -452,7 +452,7 @@ public class Schema {
         }
 
         /**
-         * Returns the JDOM node currently being ouputted by
+         * Returns the JDOM node currently being outputted by
          * SAXOuputter.
          *
          * @return the current JDOM node.

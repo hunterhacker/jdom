@@ -525,7 +525,7 @@ Added JDOM_FEATURE constants to JDOMSource and JDOMResult which can be used
 with TransformerFactory.getFeature() to determine if the transformer natively
 supports JDOM.
 
-Moved the printing of the line seperator after the doctype up to
+Moved the printing of the line separator after the doctype up to
 output(Document, Writer).  This allows someone who doesn't want a newline
 after the decl to kludge it away.
 
@@ -1052,7 +1052,7 @@ uses an Iterator.  Should lighten the burden on outputting large documents.
 
 Added CVS Id variable to the top of each file for better tracking.
 
-Changed pi.getValue("nonexistant") to return null instead of "".  Also made it
+Changed pi.getValue("nonexistent") to return null instead of "".  Also made it
 so that any parse error aborts and clears the parse results.
 
 Created a new implementations of clone() without any constructor calls.

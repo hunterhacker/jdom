@@ -160,7 +160,7 @@ public class CDATA extends Text {
 		}
 
 		// we have to do late checking since the end of a CDATA section could 
-		// have been created by concating both strings:
+		// have been created by concatenating both strings:
 		// "]" + "]>" 
 		// or 
 		// "]]" + ">"

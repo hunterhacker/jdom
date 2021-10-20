@@ -269,7 +269,7 @@ public final class TestAttribute {
             }
             try {
                 attribute.setAttributeType(attributeType);
-                fail("set unvalid attribute type: "+ attributeType);
+                fail("set invalid attribute type: "+ attributeType);
             }
             catch(final IllegalDataException ignore) {
                 // is expected
@@ -301,7 +301,7 @@ public final class TestAttribute {
 	}
 
     /**
-	 * test the convienience method getBooleanValue();
+	 * test the convenience method getBooleanValue();
 	 */
     @Test
 	public void test_TCM__boolean_getBooleanValue() {
@@ -353,7 +353,7 @@ public final class TestAttribute {
 
 	}
 	/**
-	 * Test convience method for getting doubles from an Attribute
+	 * Test convenience method for getting doubles from an Attribute
 	 */
     @Test
 	public void test_TCM__double_getDoubleValue() {
@@ -483,7 +483,7 @@ public final class TestAttribute {
 	}
 
     /**
-	 * Test the convienience method for returning a long from an Attribute
+	 * Test the convenience method for returning a long from an Attribute
 	 */
     @Test
 	public void test_TCM__long_getLongValue() {
@@ -704,7 +704,7 @@ public final class TestAttribute {
     }
 
 	/**
- 	 * Test that an independantly created Namespace and one
+ 	 * Test that an independently created Namespace and one
   	 * retrieved from an Attribute create with the same namespace
  	 * parameters are the same namespace.
 	 */

@@ -364,7 +364,7 @@ public class JDOMSource extends SAXSource {
 	 * A subclass of the SAX InputSource interface that wraps a JDOM
 	 * Document.
 	 * <p>
-	 * This class is nested in JDOMSource as it is not intented to
+	 * This class is nested in JDOMSource as it is not intended to
 	 * be used independently of its friend: DocumentReader.
 	 * </p>
 	 *

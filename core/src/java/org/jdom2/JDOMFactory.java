@@ -343,7 +343,7 @@ public interface JDOMFactory {
 	 *
 	 * @param rootElement <code>Element</code> for document root.
 	 * @param docType <code>DocType</code> declaration.
-	 * @param baseURI the URI from which this doucment was loaded.
+	 * @param baseURI the URI from which this document was loaded.
 	 * @return the created Document instance
 	 */
 	public Document document(Element rootElement, DocType docType, String baseURI);

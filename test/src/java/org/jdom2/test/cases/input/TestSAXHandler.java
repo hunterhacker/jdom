@@ -967,7 +967,7 @@ public class TestSAXHandler {
 
 	@Test
 	public void testElementAttributesNameXMLNS() {
-		// invalid xmlns attibute.
+		// invalid xmlns attribute.
 		final AttributesSingleOnly atts = new AttributesSingleOnly("", "xmlns", "xmlns", "CDATA", "val");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
@@ -988,7 +988,7 @@ public class TestSAXHandler {
 
 	@Test
 	public void testElementAttributesPrefixXMLNS() {
-		// invalid xmlns attibute.
+		// invalid xmlns attribute.
 		final AttributesSingleOnly atts = new AttributesSingleOnly("", "ns", "xmlns:ns", "CDATA", "uri");
 		Element emt = checkHandlerElement(new Builder() {
 			@Override
@@ -1504,7 +1504,7 @@ public class TestSAXHandler {
 		handler.startDocument();
 		try {
 			handler.getCurrentElement();
-			fail ("Should not be able to append bad element strcuture.");
+			fail ("Should not be able to append bad element structure.");
 		} catch (SAXException se) {
 			// good/.
 		} catch (Exception e) {

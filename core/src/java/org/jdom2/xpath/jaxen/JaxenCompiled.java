@@ -126,7 +126,7 @@ class JaxenCompiled<T> extends AbstractXPathCompiled<T> implements
 	 * <p>
 	 * Because of the need to wrap Namespace, we also need to unwrap namespace.
 	 * Further, we can't re-use the details from one 'selectNodes' to another
-	 * because the Document tree may have been modfied between, and also, we do
+	 * because the Document tree may have been modified between, and also, we do
 	 * not want to be holding on to memory.
 	 * <p>
 	 * Finally, we want to pre-load the NamespaceContext with the namespaces

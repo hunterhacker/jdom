@@ -26,7 +26,7 @@ public class TestStringBin {
 	public void testNegativeCapacity() {
 		try {
 			new StringBin(-1);
-			fail("excpect exception!");
+			fail("expected exception!");
 		} catch (Exception e) {
 			UnitTestUtil.checkException(IllegalArgumentException.class, e);
 		}

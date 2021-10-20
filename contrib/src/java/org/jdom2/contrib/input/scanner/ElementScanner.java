@@ -325,7 +325,7 @@ public class ElementScanner extends XMLFilterImpl {
 	}
 
 	/**
-	 * Specifies whether or not the parser should elminate whitespace
+	 * Specifies whether or not the parser should eliminate whitespace
 	 * in  element content (sometimes known as "ignorable whitespace")
 	 * when building the document.  Only whitespace which is contained
 	 * within element content that has an element only content model

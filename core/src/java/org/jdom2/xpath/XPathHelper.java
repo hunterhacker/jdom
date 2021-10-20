@@ -102,7 +102,7 @@ import org.jdom2.filter.Filters;
  * a parent Element (although it may have a parent Document). As a result, you
  * can use Element data that is not attached to a JDOM Document.
  * <p>
- * Detatched Attributes, and detached non-Element content are not treated the
+ * Detached Attributes, and detached non-Element content are not treated the
  * same. If you try to get an Absolute path to a detached Attribute or
  * non-Element Content you will get an IllegalArgumentException. On the other
  * hand it is legal to get the relative XPath for a detached node to itself (
@@ -158,7 +158,7 @@ public final class XPathHelper {
 					break;
 			}
 			if (position > 1 || i.hasNext()) {
-				// the item is not at the first location, ot there are more
+				// the item is not at the first location, or there are more
 				// locations. in other words, indexing is required.
 				buffer.append('[').append(position).append(']');
 			}

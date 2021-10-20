@@ -131,7 +131,7 @@ public class JDOM2DTM extends DTMDefaultBaseIterators {
 		} else if (nsa instanceof NamespacePointer) {
 			return DTM.NAMESPACE_NODE;
 		}
-		throw new IllegalStateException("Unknonw node type " + nsa);
+		throw new IllegalStateException("Unknown node type " + nsa);
 	}
 	
 	private NamespaceAware[] i_nodes = new NamespaceAware[1024];

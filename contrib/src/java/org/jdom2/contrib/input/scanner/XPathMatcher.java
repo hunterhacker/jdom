@@ -104,7 +104,7 @@ public abstract class XPathMatcher {
                 "org.jdom2.contrib.input.scanner.JakartaRegExpXPathMatcher";
 
    /**
-    * The constructor to instanciate a new XPathMatcher concrete
+    * The constructor to instantiate a new XPathMatcher concrete
     * implementation.
     *
     * @see    #newXPathMatcher
@@ -225,7 +225,7 @@ public abstract class XPathMatcher {
       // It the expression ends with a square backet, a test part is
       // present. => Strip it!
       // Note: Any other sub-expression between square backet is view as
-      //       a RE alphabet definition and proccessed. OK, that's not
+      //       a RE alphabet definition and processed. OK, that's not
       //       XPath compliant but that's very convenient!
       String path = (expr.endsWith("]"))?
                      expr.substring(0, expr.lastIndexOf('[')): expr;

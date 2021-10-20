@@ -103,7 +103,7 @@ public class DateUtils {
 			return new Date(Long.parseLong(s));
 		}
 		catch (NumberFormatException nfe) {
-			// Getting rediculous now...
+			// Getting ridiculous now...
 		}
 
 		ISO8601 iso = parseISO8601(s);

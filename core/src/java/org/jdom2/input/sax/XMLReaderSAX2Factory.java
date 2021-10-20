@@ -132,8 +132,8 @@ public class XMLReaderSAX2Factory implements XMLReaderJDOMFactory {
 	}
 
 	/**
-	 * Get the SAX Driver class name used to boostrap XMLReaders.
-	 * 
+	 * Get the SAX Driver class name used to bootstrap XMLReaders.
+	 *
 	 * @return The name of the SAX Driver class (null for SAX2 default class).
 	 */
 	public String getDriverClassName() {

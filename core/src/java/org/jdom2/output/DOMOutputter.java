@@ -126,7 +126,7 @@ public class DOMOutputter {
 	}
 
 	/**
-	 * This creates a new DOMOutputter which uses the defalt (JAXP) DOM
+	 * This creates a new DOMOutputter which uses the default (JAXP) DOM
 	 * implementation but with a custom processor.
 	 * 
 	 * @param processor

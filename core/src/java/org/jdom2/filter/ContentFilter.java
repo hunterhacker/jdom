@@ -189,7 +189,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>Element</code> objects.
+	 * Set visibility of <code>Element</code> objects.
 	 *
 	 * @param visible whether Elements are visible, <code>true</code>
 	 *        if yes, <code>false</code> if not
@@ -204,7 +204,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>CDATA</code> objects.
+	 * Set visibility of <code>CDATA</code> objects.
 	 *
 	 * @param visible whether CDATA nodes are visible, <code>true</code>
 	 *        if yes, <code>false</code> if not
@@ -219,7 +219,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>Text</code> objects.
+	 * Set visibility of <code>Text</code> objects.
 	 *
 	 * @param visible whether Text nodes are visible, <code>true</code>
 	 *        if yes, <code>false</code> if not
@@ -234,7 +234,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>Comment</code> objects.
+	 * Set visibility of <code>Comment</code> objects.
 	 *
 	 * @param visible whether Comments are visible, <code>true</code>
 	 *        if yes, <code>false</code> if not
@@ -249,7 +249,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>ProcessingInstruction</code> objects.
+	 * Set visibility of <code>ProcessingInstruction</code> objects.
 	 *
 	 * @param visible whether ProcessingInstructions are visible,
 	 *        <code>true</code> if yes, <code>false</code> if not
@@ -264,7 +264,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>EntityRef</code> objects.
+	 * Set visibility of <code>EntityRef</code> objects.
 	 *
 	 * @param visible whether EntityRefs are visible, <code>true</code>
 	 *        if yes, <code>false</code> if not
@@ -279,7 +279,7 @@ public class ContentFilter extends AbstractFilter<Content> {
 	}
 
 	/**
-	 * Set visiblity of <code>DocType</code> objects.
+	 * Set visibility of <code>DocType</code> objects.
 	 *
 	 * @param visible whether the DocType is visible, <code>true</code>
 	 *        if yes, <code>false</code> if not

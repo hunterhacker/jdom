@@ -63,7 +63,7 @@ package org.jdom2;
 class CloneBase implements Cloneable {
 	
 	/**
-	 * Change the permission of the no-arg constructor from public to protcted.
+	 * Change the permission of the no-arg constructor from public to protected.
 	 * <p>
 	 * Otherwise package-private class's constructor is not really public. Changing this to
 	 * 'protected' makes this constructor available to all subclasses regardless of the
@@ -85,7 +85,7 @@ class CloneBase implements Cloneable {
 	 * All JDOM core classes are Cloneable, and never throw
 	 * CloneNotSupportedException. Additionally all Cloneable JDOM classes
 	 * return the correct type of instance from this method and there is no
-	 * need to cast the result (co-variant return vaue).
+	 * need to cast the result (co-variant return value).
 	 * <p>
 	 * Subclasses of this should still call super.clone() in their clone method.
 	 */

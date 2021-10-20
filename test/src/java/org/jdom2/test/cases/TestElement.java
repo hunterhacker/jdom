@@ -1735,7 +1735,7 @@ public final class TestElement {
     }
 
     /**
-     * Test the convience method for retrieving child text.
+     * Test the convenience method for retrieving child text.
      */
     @Test
     public void test_TCM__String_getChildText_String() {
@@ -1748,7 +1748,7 @@ public final class TestElement {
     }
 
     /**
-     * Test the convience method for retrieving child text for a child
+     * Test the convenience method for retrieving child text for a child
      * retrieved by name and namespace
      */
     @Test
@@ -1764,7 +1764,7 @@ public final class TestElement {
     }
 
     /**
-     * Test the convience method for retrieving trimmed child text.
+     * Test the convenience method for retrieving trimmed child text.
      */
     @Test
     public void test_TCM__String_getChildTextTrim_String() {
@@ -1777,7 +1777,7 @@ public final class TestElement {
     }
 
     /**
-     * Test the convience method for retrieving trimmed child text for the
+     * Test the convenience method for retrieving trimmed child text for the
      * child in the given namespace
      */
     @Test

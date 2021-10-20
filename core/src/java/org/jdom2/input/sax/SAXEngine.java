@@ -124,9 +124,9 @@ public interface SAXEngine {
 	public abstract boolean getIgnoringElementContentWhitespace();
 
 	/**
-	 * Returns whether or not the parser will elminate element content
+	 * Returns whether or not the parser will eliminate element content
 	 * containing only whitespace.
-	 * 
+	 *
 	 * @return <code>boolean</code> - whether only whitespace content will be
 	 *         ignored during build.
 	 */

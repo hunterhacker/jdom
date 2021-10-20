@@ -202,7 +202,7 @@ class JavaXPathExpression<T> extends AbstractXPathCompiled <T>
 				case Text:
 					return DOM.wrap((Text)context);
 			}
-			throw new IllegalStateException("Should never break out of swich");
+			throw new IllegalStateException("Should never break out of switch");
 		} else if (context instanceof Attribute) {
 			return DOM.wrap((Attribute)context);
 		} else if (context instanceof Document) {
