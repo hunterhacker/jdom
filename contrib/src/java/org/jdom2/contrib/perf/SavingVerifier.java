@@ -140,7 +140,7 @@ final public class SavingVerifier {
 	}
 	
 	/**
-	 * Ensure instantation cannot occur.
+	 * Ensure instantiation cannot occur.
 	 */
 	private SavingVerifier() { }
 

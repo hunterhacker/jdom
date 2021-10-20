@@ -764,7 +764,7 @@ public class TestSAXOutputter extends AbstractTestOutputter {
 				if (loc instanceof JDOMLocator) {
 					locator = (JDOMLocator)loc;
 				} else {
-					fail ("We excpected the locator to be a JDOMLocator, not " + loc);
+					fail ("We expected the locator to be a JDOMLocator, not " + loc);
 				}
 			}
 			@Override

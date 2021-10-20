@@ -191,7 +191,7 @@ public interface XMLOutputProcessor {
 	public abstract void process(Writer out, Format format, CDATA cdata) throws IOException;
 
 	/**
-	 * Print out a <code>{@link Text}</code> node. Perfoms the necessary entity
+	 * Print out a <code>{@link Text}</code> node. Performs the necessary entity
 	 * escaping and whitespace stripping.
 	 * 
 	 * @param out

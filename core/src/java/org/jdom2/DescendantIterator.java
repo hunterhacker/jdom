@@ -191,7 +191,7 @@ final class DescendantIterator implements IteratorIterable<Content> {
 			// we have a next element, or our next move was up anyway.
 			return;
 		}
-		// our next move was going to be down, or accross, but those are not
+		// our next move was going to be down, or across, but those are not
 		// possible any more, need to check up.
 		// our next will be up.
 		while (ssize > 0) {

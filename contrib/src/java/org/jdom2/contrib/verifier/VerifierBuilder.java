@@ -73,7 +73,7 @@ import org.jdom2.Verifier;
 final public class VerifierBuilder {
 
 	/**
-	 * Ensure instantation cannot occur.
+	 * Ensure instantiation cannot occur.
 	 */
 	private VerifierBuilder() { }
 	
@@ -297,7 +297,7 @@ final public class VerifierBuilder {
 
 		// remove check for || c == ':'
 		// JDOM Attributes and Elements cannot start with ':' since JDOM
-		// seperates the prefix from the name.
+		// separates the prefix from the name.
 		// we do not want ':' in the bitmask, instead we add it later.
 		
 		return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
@@ -320,7 +320,7 @@ final public class VerifierBuilder {
 
 		// remove check for || c == ':'
 		// JDOM Attributes and Elements cannot start with ':' since JDOM
-		// seperates the prefix from the name.
+		// separates the prefix from the name.
 		// we do not want ':' in the bitmask, instead we add it later.
 		
 		return (isXMLLetter(c) || c == '_');

@@ -446,7 +446,7 @@ public class Element extends Content implements Parent {
 	 * (i&#46;e&#46; the text that's left after all references are resolved
 	 * and all other markup is stripped out.)
 	 *
-	 * @return a concatentation of all text node descendants
+	 * @return a concatenation of all text node descendants
 	 */
 	@Override
 	public String getValue() {
@@ -466,7 +466,7 @@ public class Element extends Content implements Parent {
 	 * "attachments" to a parent element or document.
 	 * <p>
 	 * An element is a root element when it has a parent and that parent is a
-	 * Document. In particular, this means that detatched Elements are <b>not</b>
+	 * Document. In particular, this means that detached Elements are <b>not</b>
 	 * root elements.
 	 *
 	 * @return                     whether this is a root element
@@ -876,7 +876,7 @@ public class Element extends Content implements Parent {
 	}
 
 	/**
-	 * Replace the child at the given index whith the supplied
+	 * Replace the child at the given index with the supplied
 	 * collection.
 	 * <p>
 	 * In event of an exception the original content will be unchanged and
@@ -1454,7 +1454,7 @@ public class Element extends Content implements Parent {
 		// clone().
 		// element.parent = null;
 
-		// Reference to content list and attribute lists are copyed by
+		// Reference to content list and attribute lists are copied by
 		// super.clone() so we set it new lists if the original had lists
 		element.content = new ContentList(element);
 		element.attributes = attributes == null ? null : new AttributeList(element);
@@ -1699,7 +1699,7 @@ public class Element extends Content implements Parent {
 	 * most complex rules for the namespaces-in-scope.
 	 * <p>
 	 * The scope is built up from a number of sources following the rules of
-	 * XML namespace inheritence as follows:
+	 * XML namespace inheritance as follows:
 	 * <ul>
 	 * <li>The {@link Namespace#XML_NAMESPACE} is added
 	 * <li>The element's namespace is added (commonly 

@@ -322,7 +322,7 @@ final class AttributeList extends AbstractList<Attribute>
 		final int oldModCount = modCount;
 
 		// clear the current system
-		// we need to detatch before we add so that we don't run in to a problem
+		// we need to detach before we add so that we don't run in to a problem
 		// where an attribute in the to-add list is one that we are 'clearing'
 		// first.
 		while (size > 0) {

@@ -127,7 +127,7 @@ public interface Filter <T> extends java.io.Serializable {
 	 * instance. 
 	 * @param filter The filter to refine our results with.
 	 * @return A Filter that requires content to both match our instance and the
-	 *     refining instance, but the generic type of the retuned data is based
+	 *     refining instance, but the generic type of the returned data is based
 	 *     on the refining instance, not this instance.
 	 */
 	public <R> Filter<R> refine(Filter<R> filter);

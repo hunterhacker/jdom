@@ -66,7 +66,7 @@ import org.jdom2.input.sax.SAXHandler;
 import org.jdom2.input.sax.SAXHandlerFactory;
 
 /**
- * This builder works in parallell with {@link LineNumberElement} 
+ * This builder works in parallel with {@link LineNumberElement}
  * to provide each element with information on its beginning and
  * ending line number in the corresponding source. 
  * This only works for SAX parsers that supply that information, and

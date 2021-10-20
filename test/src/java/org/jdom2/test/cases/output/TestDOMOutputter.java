@@ -368,9 +368,9 @@ public final class TestDOMOutputter extends AbstractTestOutputter {
     	assertEquals("name", doma.getNodeName());
     	assertEquals("name", doma.getLocalName());
     	assertEquals("val", doma.getNodeValue());
-    	// Android can have "" values, xerces has null. Technically it is implementation dependant
+    	// Android can have "" values, xerces has null. Technically it is implementation dependent
     	assertTrue(null == doma.getPrefix() || "".equals(doma.getPrefix()));
-    	// Android can have "" values, xerces has null. Technically it is implementation dependant
+    	// Android can have "" values, xerces has null. Technically it is implementation dependent
     	assertTrue(null == doma.getNamespaceURI() || "".equals(doma.getNamespaceURI()));
     	assertTrue(domdoc != doma.getOwnerDocument());
     	

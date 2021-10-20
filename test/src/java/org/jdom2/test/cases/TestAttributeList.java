@@ -76,7 +76,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 	
 	@Before
 	public void detatchAll () {
-		// make sure all content is detatched before each test.
+		// make sure all content is detached before each test.
 		for (Attribute c : buildSampleContent()) {
 			c.detach();
 		}
@@ -302,7 +302,7 @@ public class TestAttributeList extends AbstractTestList<Attribute> {
 		// same will have an attribute with the same name as att.
 		final Element same = new Element("same");
 		same.setAttribute("att", "val");
-		// other will have an attrubute not the same as att.
+		// other will have an attribute not the same as att.
 		final Element other = new Element("other");
 		other.setAttribute("diff", "other");
 		

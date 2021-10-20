@@ -225,7 +225,7 @@ public class XPathBuilder<T> {
 	 * reference the variable.
 	 * 
 	 * @param qname
-	 *        The variable name to get the vaiable value for.
+	 *        The variable name to get the variable value for.
 	 * @return the variable value, or null if the variable was not defined.
 	 * @throws NullPointerException
 	 *         if the qname is null.

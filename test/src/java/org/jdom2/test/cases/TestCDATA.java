@@ -220,7 +220,7 @@ public final class TestCDATA {
     
         cdata.setText(text);        
         try {
-            final String invalidCDATAString = "some valid <text> with an invlaid CDATA section ending ]]>";
+            final String invalidCDATAString = "some valid <text> with an invalid CDATA section ending ]]>";
 
             cdata.setText(invalidCDATAString);
             fail("Comment setText didn't catch invalid CDATA string");
@@ -562,7 +562,7 @@ public final class TestCDATA {
         
         
         try {
-            // set text with some special characters which sould result into an exception
+            // set text with some special characters which should cause an exception
             final CDATA cdata = new CDATA(specialText);
             assertEquals("incorrect CDATA text", specialText, cdata.getText());
             cdata.append(new Text(specialText));

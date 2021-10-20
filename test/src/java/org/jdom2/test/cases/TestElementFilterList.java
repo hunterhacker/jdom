@@ -52,7 +52,7 @@ public class TestElementFilterList extends AbstractTestList<Element> {
 	
 	@Before
 	public void detatchAll () {
-		// make sure all content is detatched before each test.
+		// make sure all content is detached before each test.
 		for (Content c : buildSampleContent()) {
 			c.detach();
 		}

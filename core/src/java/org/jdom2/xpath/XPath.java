@@ -105,7 +105,7 @@ public abstract class XPath implements Serializable {
 			"http://jdom.org/jaxp/xpath/jdom";
 
 	/**
-	 * The constructor to instanciate a new XPath concrete
+	 * The constructor to instantiate a new XPath concrete
 	 * implementation.
 	 *
 	 * @see    #newInstance

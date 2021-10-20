@@ -124,7 +124,7 @@ public class TestEntityRef {
 		} catch (IllegalNameException ine) {
 			// good
 		} catch (Exception e) {
-			fail("Expeced IllegalNameException, but got " + e.getClass().getName());
+			fail("Expected IllegalNameException, but got " + e.getClass().getName());
 		}
 	
 		try {
@@ -133,7 +133,7 @@ public class TestEntityRef {
 		} catch (IllegalDataException ine) {
 			// good
 		} catch (Exception e) {
-			fail("Expeced IllegalNameException, but got " + e.getClass().getName());
+			fail("Expected IllegalNameException, but got " + e.getClass().getName());
 		}
 
 		try {

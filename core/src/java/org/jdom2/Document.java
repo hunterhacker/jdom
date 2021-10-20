@@ -107,7 +107,7 @@ public class Document extends CloneBase implements Parent {
 	 *
 	 * @param rootElement <code>Element</code> for document root.
 	 * @param docType <code>DocType</code> declaration.
-	 * @param baseURI the URI from which this doucment was loaded.
+	 * @param baseURI the URI from which this document was loaded.
 	 * @throws IllegalAddException if the given docType object
 	 *         is already attached to a document or the given
 	 *         rootElement already has a parent
@@ -555,7 +555,7 @@ public class Document extends CloneBase implements Parent {
 	}
 
 	/**
-	 * Replace the child at the given index whith the supplied
+	 * Replace the child at the given index with the supplied
 	 * collection.
 	 * <p>
 	 * In event of an exception the original content will be unchanged and
@@ -688,7 +688,7 @@ public class Document extends CloneBase implements Parent {
 		final Document doc = (Document) super.clone();
 
 		// The clone has a reference to this object's content list, so
-		// owerwrite with a empty list
+		// overwrite with a empty list
 		doc.content = new ContentList(doc);
 
 		// Add the cloned content to clone

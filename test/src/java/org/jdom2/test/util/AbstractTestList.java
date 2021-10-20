@@ -139,8 +139,8 @@ public abstract class AbstractTestList<T> {
 	/**
 	 * Insert an element in to the content at the specified index.
 	 * @param content The base content to add to.
-	 * @param index The position to insert (items from this position will be 
-	 * 				moved to the right). Using content.lenght will add to the end.
+	 * @param index The position to insert (items from this position will be
+	 * 				moved to the right). Using content.length will add to the end.
 	 * @param insert The value to insert
 	 * @return The amended content array
 	 */

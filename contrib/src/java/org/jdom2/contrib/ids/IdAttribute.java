@@ -103,7 +103,7 @@ public class IdAttribute extends Attribute {
         if (this.getAttributeType() == Attribute.ID_TYPE) {
             Document doc;
 
-            // Udpate the owning document's lookup table.
+            // Update the owning document's lookup table.
             if (oldParent != null) {
                 doc = oldParent.getDocument();
                 if (doc instanceof IdDocument) {
@@ -125,7 +125,7 @@ public class IdAttribute extends Attribute {
         super.setValue(value);
 
         if (this.getAttributeType() == Attribute.ID_TYPE) {
-            // Udpate the owning document's lookup table.
+            // Update the owning document's lookup table.
             Document doc = this.getDocument();
             if (doc instanceof IdDocument) {
                 ((IdDocument)doc).removeId(oldValue);
@@ -142,7 +142,7 @@ public class IdAttribute extends Attribute {
         if (type != oldType) {
             super.setAttributeType(type);
 
-            // Udpate the owning document's lookup table.
+            // Update the owning document's lookup table.
             Document doc = this.getDocument();
             if (doc instanceof IdDocument) {
                 if (oldType == Attribute.ID_TYPE) {
@@ -156,4 +156,3 @@ public class IdAttribute extends Attribute {
         return this;
     }
 }
-

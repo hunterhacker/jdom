@@ -433,7 +433,7 @@ public final class StAXEventOutputter implements Cloneable {
 	}
 
 	/**
-	 * Print out a <code>{@link Text}</code> node. Perfoms the necessary entity
+	 * Print out a <code>{@link Text}</code> node. Performs the necessary entity
 	 * escaping and whitespace stripping.
 	 * 
 	 * @param text

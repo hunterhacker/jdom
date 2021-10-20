@@ -114,8 +114,8 @@ public final class TestVerifier {
 		assertNotNull("validated invalid name with :", Verifier.checkElementName(":abcd"));
 
 		//invalid start characters
-		assertNotNull("validated invalid name with startin -", Verifier.checkElementName('-' + "test"));
-		assertNotNull("validated invalid name with startin :", Verifier.checkElementName(':' + "test"));
+		assertNotNull("validated invalid name with starting -", Verifier.checkElementName('-' + "test"));
+		assertNotNull("validated invalid name with starting :", Verifier.checkElementName(':' + "test"));
 
 		//valid tests
 		assertNull("invalidated valid name with starting _", Verifier.checkElementName('_' + "test"));
@@ -150,9 +150,9 @@ public final class TestVerifier {
 		assertNotNull("validated invalid name with xml:space", Verifier.checkAttributeName("xml:space"));
 
 		//invalid start characters
-		assertNotNull("validated invalid name with startin -", Verifier.checkAttributeName('-' + "test"));
+		assertNotNull("validated invalid name with starting -", Verifier.checkAttributeName('-' + "test"));
 		assertNotNull("validated invalid name with xmlns", Verifier.checkAttributeName("xmlns"));
-		assertNotNull("validated invalid name with startin :", Verifier.checkAttributeName(':' + "test"));
+		assertNotNull("validated invalid name with starting :", Verifier.checkAttributeName(':' + "test"));
 
 		//valid tests
 		assertNull("invalidated valid name with starting _", Verifier.checkAttributeName('_' + "test"));
@@ -255,8 +255,8 @@ public final class TestVerifier {
 		assertNotNull("validated invalid name with :", Verifier.checkNamespacePrefix("test" + ':' + "local"));
 
 		//invalid start characters
-		assertNotNull("validated invalid name with startin -", Verifier.checkNamespacePrefix('-' + "test"));
-		assertNotNull("validated invalid name with startin :", Verifier.checkNamespacePrefix(':' + "test"));
+		assertNotNull("validated invalid name with starting -", Verifier.checkNamespacePrefix('-' + "test"));
+		assertNotNull("validated invalid name with starting :", Verifier.checkNamespacePrefix(':' + "test"));
 		assertNotNull("validated invalid name with starting digit", Verifier.checkNamespacePrefix("9"));
 		assertNotNull("validated invalid name with starting $", Verifier.checkNamespacePrefix("$"));
 		assertNotNull("validated invalid name with starting .", Verifier.checkNamespacePrefix("."));
@@ -309,7 +309,7 @@ public final class TestVerifier {
     @Test
 	public void testCheckNamespaceURI() {
 		//invalid start characters
-		assertNotNull("validated invalid URI with startin -", Verifier.checkNamespaceURI('-' + "test"));
+		assertNotNull("validated invalid URI with starting -", Verifier.checkNamespaceURI('-' + "test"));
 		assertNotNull("validated invalid URI with starting digit", Verifier.checkNamespaceURI("9"));
 		assertNotNull("validated invalid URI with starting $", Verifier.checkNamespaceURI("$"));
 
@@ -328,7 +328,7 @@ public final class TestVerifier {
 
 		/** skip these tests until the time the checks are implemented
 		assertNull("validated invalid URI with xmlns", Verifier.checkNamespaceURI("xmlns"));
-		assertNull("validated invalid URI with startin :", Verifier.checkNamespaceURI(':' + "test"));
+		assertNull("validated invalid URI with starting :", Verifier.checkNamespaceURI(':' + "test"));
 		assertNull("validated invalid URI with starting .", Verifier.checkNamespaceURI("."));
 		
 		assertNull("validated invalid URI with null", Verifier.checkNamespaceURI("test" + (char)0x0));
@@ -364,8 +364,8 @@ public final class TestVerifier {
 		assertNotNull("validated invalid name with xMl", Verifier.checkProcessingInstructionTarget("xMl"));
 
 		//invalid start characters
-		assertNotNull("validated invalid name with startin -", Verifier.checkProcessingInstructionTarget('-' + "test"));
-		assertNotNull("validated invalid name with startin :", Verifier.checkProcessingInstructionTarget(':' + "test"));
+		assertNotNull("validated invalid name with starting -", Verifier.checkProcessingInstructionTarget('-' + "test"));
+		assertNotNull("validated invalid name with starting :", Verifier.checkProcessingInstructionTarget(':' + "test"));
 		//valid tests
 		assertNull("invalidated valid name with starting _", Verifier.checkProcessingInstructionTarget('_' + "test"));
 		assertNull("invalidated valid name with _", Verifier.checkProcessingInstructionTarget("test" + '_'));

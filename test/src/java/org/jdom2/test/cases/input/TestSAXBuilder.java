@@ -769,7 +769,7 @@ public final class TestSAXBuilder {
         builder.setExpandEntities(false);
         Document doc = builder.build(file);
 
-        assertTrue("didnt' get internal subset comments correctly", doc.getDocType().getInternalSubset().indexOf("foo") > 0);
+        assertTrue("did not get internal subset comments correctly", doc.getDocType().getInternalSubset().indexOf("foo") > 0);
 		//assertTrue("didn't get EntityRef for unexpanded attribute entities",
 		//	doc.getRootElement().getAttribute("test").getValue().indexOf("&simple") == 0);
 		

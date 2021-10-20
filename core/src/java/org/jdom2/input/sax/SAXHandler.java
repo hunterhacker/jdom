@@ -309,7 +309,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 	}
 
 	/**
-	 * Specifies whether or not the parser should elminate whitespace in element
+	 * Specifies whether or not the parser should eliminate whitespace in element
 	 * content (sometimes known as "ignorable whitespace") when building the
 	 * document. Only whitespace which is contained within element content that
 	 * has an element only content model will be eliminated (see XML Rec 3.2.1).
@@ -337,7 +337,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 	}
 
 	/**
-	 * Returns whether or not the parser will elminate element content
+	 * Returns whether or not the parser will eliminate element content
 	 * containing only whitespace.
 	 * 
 	 * @return <code>boolean</code> - whether only whitespace content will be
@@ -349,7 +349,7 @@ public class SAXHandler extends DefaultHandler implements LexicalHandler,
 	}
 
 	/**
-	 * Returns whether or not the parser will elminate whitespace in element
+	 * Returns whether or not the parser will eliminate whitespace in element
 	 * content (sometimes known as "ignorable whitespace") when building the
 	 * document.
 	 * 
