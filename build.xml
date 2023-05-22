@@ -104,7 +104,7 @@ For instructions on how to build JDOM, please view the README.txt file.
 	<!-- Default JAR libraries -->
 	<property name="parser.jar"        value="${lib.dir}/xercesImpl.jar" />
 	<property name="xmlapi.jar"        value="${lib.dir}/xml-apis.jar" />
-	<property name="jaxen.jar"         value="${lib.dir}/jaxen-1.2.0.jar" />
+	<property name="jaxen.jar"         value="${lib.dir}/jaxen-2.0.0.jar" />
 	<property name="junit.jar"         value="${lib.dir}/junit-4.8.2.jar" />
 	<property name="isorelax.jar"      value="${contrib}/lib/isorelax.jar" />
 	<property name="xalan.jar"         value="${lib.dir}/xalan/xalan-2.7.2.jar" />
