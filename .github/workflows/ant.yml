@@ -1,0 +1,29 @@
+name: Ant Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build with Java ${{ matrix.jdk }}, target ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        jdk: ['8', '11', '17']
+        target: ['1.7']
+        include:
+          - { jdk: '20', target: '1.8' }
+          - { jdk: '20', target: '11' }
+          - { jdk: '20', target: '17' }
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.jdk }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.jdk }}
+
+      - name: Build with Ant
+        run: ant -Dcompile.source=${{ matrix.target }} -Dcompile.target=${{ matrix.target }}
+
