@@ -70,6 +70,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 import org.jdom2.Document;
+import org.jdom2.IllegalDataException;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.input.JDOMParseException;
@@ -233,6 +234,9 @@ public class SAXBuilderEngine implements SAXEngine {
 					e.getLineNumber() + ": " +
 							e.getMessage(), e, doc);
 		} catch (final SAXException e) {
+			throw new JDOMParseException("Error in building: " +
+					e.getMessage(), e, saxHandler.getDocument());
+		} catch (final IllegalDataException e) {
 			throw new JDOMParseException("Error in building: " +
 					e.getMessage(), e, saxHandler.getDocument());
 		} finally {

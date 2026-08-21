@@ -101,10 +101,12 @@ import org.jdom2.Content;
 import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.Document;
 import org.jdom2.EntityRef;
+import org.jdom2.IllegalDataException;
 import org.jdom2.JDOMConstants;
 import org.jdom2.JDOMException;
 import org.jdom2.JDOMFactory;
 import org.jdom2.UncheckedJDOMFactory;
+import org.jdom2.input.JDOMParseException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.BuilderErrorHandler;
 import org.jdom2.input.sax.SAXEngine;
@@ -1032,6 +1034,19 @@ public final class TestSAXBuilder {
 		} catch (Exception e) {
 			e.printStackTrace();
 			UnitTestUtil.failException("Failed to parse document: " + e.getMessage(), e);
+		}
+	}
+
+	@Test
+	public void testXML11IllegalCharacterIsReportedAsParseException()
+			throws JDOMException, IOException {
+		final String xml = "<?xml version=\"1.1\" encoding=\"UTF-8\"?>" +
+				"<root>char:&#x05;</root>";
+		try {
+			new SAXBuilder().build(new CharArrayReader(xml.toCharArray()));
+			failNoException(JDOMParseException.class);
+		} catch (final JDOMParseException e) {
+			assertTrue(e.getCause() instanceof IllegalDataException);
 		}
 	}
 
