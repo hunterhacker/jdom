@@ -67,6 +67,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -2616,6 +2617,61 @@ public final class TestElement {
 			return 0;
 		}
 	};
+
+	@Test
+	public void testSortContentResynchronizesFilteredList() {
+		Element root = new Element("root");
+		Element a = new Element("a");
+		root.addContent(new Text("text"));
+		root.addContent(new Element("b"));
+		root.addContent(a);
+		List<Element> as = root.getChildren("a");
+		assertEquals(1, as.size());
+
+		root.sortContent(alphaContent);
+
+		assertEquals(1, as.size());
+		assertSame(a, as.get(0));
+		assertSame(a, as.remove(0));
+		assertNull(a.getParent());
+		assertTrue(root.getChildren("a").isEmpty());
+	}
+
+	@Test
+	public void testSortChildrenResynchronizesFilteredList() {
+		Element root = new Element("root");
+		Element a = new Element("a");
+		Text text = new Text("text");
+		root.addContent(new Element("b"));
+		root.addContent(text);
+		root.addContent(a);
+		List<Element> as = root.getChildren("a");
+		assertEquals(1, as.size());
+
+		root.sortChildren(alphaContent);
+
+		assertEquals(1, as.size());
+		assertSame(a, as.get(0));
+		assertSame(text, root.getContent(1));
+	}
+
+	@Test
+	public void testSortFilteredContentResynchronizesOtherFilteredList() {
+		Element root = new Element("root");
+		Element a = new Element("a");
+		Text text = new Text("text");
+		root.addContent(new Element("b"));
+		root.addContent(text);
+		root.addContent(a);
+		List<Element> as = root.getChildren("a");
+		assertEquals(1, as.size());
+
+		root.sortContent(Filters.element(), alphaContent);
+
+		assertEquals(1, as.size());
+		assertSame(a, as.iterator().next());
+		assertSame(text, root.getContent(1));
+	}
 
 	@Test
 	public void testSort() {

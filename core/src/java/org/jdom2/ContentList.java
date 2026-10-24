@@ -594,6 +594,7 @@ final class ContentList extends AbstractList<Content>
 		for (int i = 0; i < indexes.length; i ++) {
 			elementData[unsorted[i]] = usc[i];
 		}
+		incDataModOnly();
 	}
 
 	/**
